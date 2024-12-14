@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
-#define THIS ((EnNnh*)thisx)
-
 void EnNnh_Init(Actor* thisx, PlayState* play);
 void EnNnh_Destroy(Actor* thisx, PlayState* play);
 void EnNnh_Update(Actor* thisx, PlayState* play);
@@ -54,7 +52,7 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 void EnNnh_Init(Actor* thisx, PlayState* play) {
-    EnNnh* this = THIS;
+    EnNnh* this = (EnNnh*)thisx;
 
     Actor_SetScale(&this->actor, 0.01f);
     Collider_InitCylinder(play, &this->collider);
@@ -66,7 +64,7 @@ void EnNnh_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnNnh_Destroy(Actor* thisx, PlayState* play) {
-    EnNnh* this = THIS;
+    EnNnh* this = (EnNnh*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -95,7 +93,7 @@ void EnNnh_Dialogue(EnNnh* this, PlayState* play) {
 }
 
 void EnNnh_Update(Actor* thisx, PlayState* play) {
-    EnNnh* this = THIS;
+    EnNnh* this = (EnNnh*)thisx;
     s32 pad;
 
     this->actionFunc(this, play);

@@ -9,8 +9,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((BgKin2Shelf*)thisx)
-
 void BgKin2Shelf_Init(Actor* thisx, PlayState* play);
 void BgKin2Shelf_Destroy(Actor* thisx, PlayState* play);
 void BgKin2Shelf_Update(Actor* thisx, PlayState* play);
@@ -191,7 +189,7 @@ bool func_80B6FF28(BgKin2Shelf* this, PlayState* play) {
 
 void BgKin2Shelf_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    BgKin2Shelf* this = THIS;
+    BgKin2Shelf* this = (BgKin2Shelf*)thisx;
     s32 sp24 = BGKIN2SHELF_GET_1(&this->dyna.actor);
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
@@ -204,7 +202,7 @@ void BgKin2Shelf_Init(Actor* thisx, PlayState* play) {
         this->dyna.actor.uncullZoneScale = 250.0f;
         this->dyna.actor.uncullZoneDownward = 300.0f;
         Actor_SetScale(&this->dyna.actor, 1.0f);
-        this->dyna.actor.flags |= ACTOR_FLAG_10000000;
+        this->dyna.actor.flags |= ACTOR_FLAG_UCODE_POINT_LIGHT_ENABLED;
     }
 
     DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
@@ -213,7 +211,7 @@ void BgKin2Shelf_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgKin2Shelf_Destroy(Actor* thisx, PlayState* play) {
-    BgKin2Shelf* this = THIS;
+    BgKin2Shelf* this = (BgKin2Shelf*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
@@ -368,7 +366,7 @@ void func_80B704B4(BgKin2Shelf* this, PlayState* play) {
 }
 
 void BgKin2Shelf_Update(Actor* thisx, PlayState* play) {
-    BgKin2Shelf* this = THIS;
+    BgKin2Shelf* this = (BgKin2Shelf*)thisx;
 
     this->actionFunc(this, play);
 }

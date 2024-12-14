@@ -12,8 +12,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10)
 
-#define THIS ((EnFz*)thisx)
-
 void EnFz_Init(Actor* thisx, PlayState* play);
 void EnFz_Destroy(Actor* thisx, PlayState* play);
 void EnFz_Update(Actor* thisx, PlayState* play);
@@ -164,7 +162,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void EnFz_Init(Actor* thisx, PlayState* play) {
-    EnFz* this = THIS;
+    EnFz* this = (EnFz*)thisx;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     this->actor.colChkInfo.damageTable = &sDamageTable;
@@ -235,7 +233,7 @@ void EnFz_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnFz_Destroy(Actor* thisx, PlayState* play) {
-    EnFz* this = THIS;
+    EnFz* this = (EnFz*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider1);
     Collider_DestroyCylinder(play, &this->collider2);
@@ -790,7 +788,7 @@ void func_80933B48(EnFz* this, PlayState* play) {
 void EnFz_Update(Actor* thisx, PlayState* play) {
     static EnFzUnkFunc D_809347AC[] = { func_80932AE8, func_80932AF4, func_80932BD4, func_80932BD4 };
     s32 pad;
-    EnFz* this = THIS;
+    EnFz* this = (EnFz*)thisx;
 
     this->unk_BC6++;
     if (this->unk_BC8 != 0) {
@@ -836,7 +834,7 @@ void EnFz_Update(Actor* thisx, PlayState* play) {
 void EnFz_Draw(Actor* thisx, PlayState* play) {
     static Gfx* D_809347BC[] = { object_fz_DL_001130, object_fz_DL_0021A0, object_fz_DL_002CA0 };
     s32 pad;
-    EnFz* this = THIS;
+    EnFz* this = (EnFz*)thisx;
     s32 sp9C = 3 - this->actor.colChkInfo.health;
 
     OPEN_DISPS(play->state.gfxCtx);

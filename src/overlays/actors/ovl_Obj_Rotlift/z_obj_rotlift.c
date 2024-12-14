@@ -10,8 +10,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((ObjRotlift*)thisx)
-
 void ObjRotlift_Init(Actor* thisx, PlayState* play2);
 void ObjRotlift_Destroy(Actor* thisx, PlayState* play);
 void ObjRotlift_Update(Actor* thisx, PlayState* play);
@@ -83,7 +81,7 @@ void ObjRotlift_MoveDekuFlowers(ObjRotlift* this) {
 
 void ObjRotlift_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    ObjRotlift* this = THIS;
+    ObjRotlift* this = (ObjRotlift*)thisx;
     s32 type = OBJROTLIFT_GET_TYPE(&this->dyna.actor);
     s32 dekuFlowerParams;
     s32 i;
@@ -119,13 +117,13 @@ void ObjRotlift_Init(Actor* thisx, PlayState* play2) {
 }
 
 void ObjRotlift_Destroy(Actor* thisx, PlayState* play) {
-    ObjRotlift* this = THIS;
+    ObjRotlift* this = (ObjRotlift*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
 void ObjRotlift_Update(Actor* thisx, PlayState* play) {
-    ObjRotlift* this = THIS;
+    ObjRotlift* this = (ObjRotlift*)thisx;
     s16 angShift;
     s32 angVelocity;
 
@@ -145,7 +143,7 @@ void ObjRotlift_Update(Actor* thisx, PlayState* play) {
 
 void ObjRotlift_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
-    ObjRotlift* this = THIS;
+    ObjRotlift* this = (ObjRotlift*)thisx;
     ObjRotliftModelInfo* modelInfo = &sModelInfo[OBJROTLIFT_GET_TYPE(&this->dyna.actor)];
 
     // Neither of the displaylists reference other segments, so this call is ultimately pointless.

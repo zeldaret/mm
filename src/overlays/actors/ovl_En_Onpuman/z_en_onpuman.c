@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
-#define THIS ((EnOnpuman*)thisx)
-
 void EnOnpuman_Init(Actor* thisx, PlayState* play);
 void EnOnpuman_Destroy(Actor* thisx, PlayState* play);
 void EnOnpuman_Update(Actor* thisx, PlayState* play);
@@ -49,7 +47,7 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 void EnOnpuman_Init(Actor* thisx, PlayState* play) {
-    EnOnpuman* this = THIS;
+    EnOnpuman* this = (EnOnpuman*)thisx;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
     this->actor.flags |= ACTOR_FLAG_UPDATE_DURING_OCARINA;
@@ -66,7 +64,7 @@ void EnOnpuman_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnOnpuman_Destroy(Actor* thisx, PlayState* play) {
-    EnOnpuman* this = THIS;
+    EnOnpuman* this = (EnOnpuman*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -150,7 +148,7 @@ void func_80B1217C(EnOnpuman* this, PlayState* play) {
 void func_80B121D8(EnOnpuman* this, PlayState* play) {
     s16 yaw;
 
-    if (func_800B8718(&this->actor, &play->state)) {
+    if (Actor_OcarinaInteractionAccepted(&this->actor, &play->state)) {
         this->actionFunc = func_80B1202C;
         Message_StartTextbox(play, 0x8D4, NULL);
         this->unk_2A0 = func_80B11F44(play);
@@ -162,7 +160,7 @@ void func_80B121D8(EnOnpuman* this, PlayState* play) {
             if (ABS_ALT(yaw) <= 0x4300) {
                 this->actor.textId = 0x8D3;
                 Actor_OfferTalk(&this->actor, play, 100.0f);
-                func_800B874C(&this->actor, play, 100.0f, 100.0f);
+                Actor_OfferOcarinaInteraction(&this->actor, play, 100.0f, 100.0f);
             }
         }
     }
@@ -170,7 +168,7 @@ void func_80B121D8(EnOnpuman* this, PlayState* play) {
 
 void EnOnpuman_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnOnpuman* this = THIS;
+    EnOnpuman* this = (EnOnpuman*)thisx;
 
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);

@@ -12,8 +12,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE)
 
-#define THIS ((EnSkb*)thisx)
-
 void EnSkb_Init(Actor* thisx, PlayState* play);
 void EnSkb_Destroy(Actor* thisx, PlayState* play);
 void EnSkb_Update(Actor* thisx, PlayState* play);
@@ -227,7 +225,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void EnSkb_Init(Actor* thisx, PlayState* play) {
-    EnSkb* this = THIS;
+    EnSkb* this = (EnSkb*)thisx;
     s32 pad;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
@@ -274,7 +272,7 @@ void EnSkb_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnSkb_Destroy(Actor* thisx, PlayState* play) {
-    EnSkb* this = THIS;
+    EnSkb* this = (EnSkb*)thisx;
 
     if ((this->actor.parent != NULL) && (this->actor.parent->update != NULL) &&
         (this->actor.parent->id == ACTOR_EN_ENCOUNT4)) {
@@ -1067,7 +1065,7 @@ void func_80996D68(EnSkb* this, PlayState* play) {
 
 void EnSkb_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnSkb* this = THIS;
+    EnSkb* this = (EnSkb*)thisx;
 
     this->actionFunc(this, play);
     if ((this->actionFunc != func_80995E64) && (this->actionFunc != func_80996284) &&
@@ -1090,7 +1088,7 @@ void EnSkb_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnSkb_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnSkb* this = THIS;
+    EnSkb* this = (EnSkb*)thisx;
     s32 pad;
     s16 sins;
 
@@ -1120,7 +1118,7 @@ s32 EnSkb_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 
 void EnSkb_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f D_80997564 = { 800.0f, 1200.0f, 0.0f };
-    EnSkb* this = THIS;
+    EnSkb* this = (EnSkb*)thisx;
 
     Collider_UpdateSpheres(limbIndex, &this->collider);
     if ((this->unk_3D8 & 1) && !(this->unk_3D8 & 2)) {
@@ -1152,7 +1150,7 @@ void EnSkb_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
 }
 
 void EnSkb_Draw(Actor* thisx, PlayState* play) {
-    EnSkb* this = THIS;
+    EnSkb* this = (EnSkb*)thisx;
 
     this->bodyPartsCount = 0;
     Gfx_SetupDL25_Opa(play->state.gfxCtx);

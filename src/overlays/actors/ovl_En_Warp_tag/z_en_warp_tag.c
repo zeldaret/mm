@@ -11,8 +11,6 @@
 #define FLAGS \
     (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_10 | ACTOR_FLAG_UPDATE_DURING_OCARINA | ACTOR_FLAG_LOCK_ON_DISABLED)
 
-#define THIS ((EnWarptag*)thisx)
-
 void EnWarptag_Init(Actor* thisx, PlayState* play);
 void EnWarptag_Destroy(Actor* thisx, PlayState* play);
 void EnWarptag_Update(Actor* thisx, PlayState* play);
@@ -49,7 +47,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void EnWarptag_Init(Actor* thisx, PlayState* play) {
-    EnWarptag* this = THIS;
+    EnWarptag* this = (EnWarptag*)thisx;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     Actor_SetFocus(&this->dyna.actor, 0.0f);
@@ -75,7 +73,7 @@ void EnWarptag_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnWarptag_Destroy(Actor* thisx, PlayState* play) {
-    EnWarptag* this = THIS;
+    EnWarptag* this = (EnWarptag*)thisx;
     if (this->dyna.actor.draw != NULL) {
         DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
     }
@@ -111,17 +109,12 @@ void EnWarpTag_WaitForPlayer(EnWarptag* this, PlayState* play) {
  * Unused ActionFunc: assigned in EnWarpTag_Init, no known variants use.
  */
 void EnWarpTag_Unused809C09A0(EnWarptag* this, PlayState* play) {
-    if (func_800B8718(&this->dyna.actor, &play->state)) {
-        // func above: checks for ACTOR_FLAG_20000000, returns true and resets if set, else return false
-        //   this actor doesnt have that flag set default, or in init, and this is called shortly after init
-        //   and I doubt its set externally by another actor, so I believe this is unused
-        // might be a bug, they might have meant to set actor flag (0x2000 0000) up above but mistyped (0x200 0000)
-        // also WARPTAG_GET_3C0 should always return 2C0 -> 0xF for all known in-game uses, which is OOB
+    if (Actor_OcarinaInteractionAccepted(&this->dyna.actor, &play->state)) {
         Message_DisplayOcarinaStaff(play, D_809C1000[WARPTAG_GET_3C0(&this->dyna.actor)]);
         this->actionFunc = EnWarpTag_Unused809C0A20;
 
     } else {
-        func_800B8804(&this->dyna.actor, play, 50.0f); // updates player->unk_A90
+        Actor_OfferOcarinaInteractionNearby(&this->dyna.actor, play, 50.0f);
     }
 }
 
@@ -255,7 +248,7 @@ void EnWarpTag_GrottoReturn(EnWarptag* this, PlayState* play) {
 }
 
 void EnWarptag_Update(Actor* thisx, PlayState* play) {
-    EnWarptag* this = THIS;
+    EnWarptag* this = (EnWarptag*)thisx;
     this->actionFunc(this, play);
 }
 

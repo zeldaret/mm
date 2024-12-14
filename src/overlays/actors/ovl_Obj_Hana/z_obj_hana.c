@@ -9,8 +9,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((ObjHana*)thisx)
-
 void ObjHana_Init(Actor* thisx, PlayState* play);
 void ObjHana_Destroy(Actor* thisx, PlayState* play);
 void ObjHana_Update(Actor* thisx, PlayState* play);
@@ -36,7 +34,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void ObjHana_Init(Actor* thisx, PlayState* play) {
-    ObjHana* this = THIS;
+    ObjHana* this = (ObjHana*)thisx;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
 }

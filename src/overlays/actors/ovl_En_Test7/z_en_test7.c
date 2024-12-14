@@ -10,8 +10,6 @@
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_100000 | ACTOR_FLAG_200000 | ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
-#define THIS ((EnTest7*)thisx)
-
 void EnTest7_Init(Actor* thisx, PlayState* play2);
 void EnTest7_Destroy(Actor* thisx, PlayState* play);
 void EnTest7_Update(Actor* thisx, PlayState* play);
@@ -371,7 +369,7 @@ void EnTest7_InitWindCapsule(OwlWarpWindCapsule* windCapsule) {
 
 void EnTest7_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnTest7* this = THIS;
+    EnTest7* this = (EnTest7*)thisx;
     Player* player = GET_PLAYER(play);
     Player* player2 = GET_PLAYER(play);
 
@@ -413,7 +411,7 @@ void EnTest7_Init(Actor* thisx, PlayState* play2) {
 }
 
 void EnTest7_Destroy(Actor* thisx, PlayState* play) {
-    EnTest7* this = THIS;
+    EnTest7* this = (EnTest7*)thisx;
 
     CutsceneManager_Stop(play->playerCsIds[PLAYER_CS_ID_SONG_WARP]);
     LightContext_RemoveLight(play, &play->lightCtx, this->lightNode);
@@ -662,7 +660,7 @@ void EnTest7_WarpCsWarp(EnTest7* this, PlayState* play) {
     } else if (OWL_WARP_CS_GET_OCARINA_MODE(&this->actor) == OCARINA_MODE_WARP_TO_ENTRANCE) {
         func_80169F78(play);
         gSaveContext.respawn[RESPAWN_MODE_TOP].playerParams =
-            PLAYER_PARAMS(gSaveContext.respawn[RESPAWN_MODE_TOP].playerParams, PLAYER_START_MODE_6);
+            PLAYER_PARAMS(gSaveContext.respawn[RESPAWN_MODE_TOP].playerParams, PLAYER_START_MODE_OWL);
         gSaveContext.respawnFlag = -6;
     } else {
         play->nextEntrance =
@@ -939,7 +937,7 @@ void EnTest7_ArriveCsPart3(EnTest7* this, PlayState* play) {
 }
 
 void EnTest7_Update(Actor* thisx, PlayState* play) {
-    EnTest7* this = THIS;
+    EnTest7* this = (EnTest7*)thisx;
 
     this->actionFunc(this, play);
 
@@ -955,7 +953,7 @@ void EnTest7_Update(Actor* thisx, PlayState* play) {
 
 s32 EnTest7_OverrideLimbDraw(PlayState* play, KFSkelAnimeFlex* kfSkelAnime, s32 limbIndex, Gfx** dList, u8* flags,
                              void* thisx, Vec3f* scale, Vec3s* rot, Vec3f* pos) {
-    EnTest7* this = THIS;
+    EnTest7* this = (EnTest7*)thisx;
     Vec3f featherPos;
 
     if ((*dList != NULL) && (Rand_ZeroOne() < 0.03f)) {
@@ -967,7 +965,7 @@ s32 EnTest7_OverrideLimbDraw(PlayState* play, KFSkelAnimeFlex* kfSkelAnime, s32 
 
 void EnTest7_Draw(Actor* thisx, PlayState* play) {
     s32 pad[2];
-    EnTest7* this = THIS;
+    EnTest7* this = (EnTest7*)thisx;
     s32 sp40;
 
     // Draw wings

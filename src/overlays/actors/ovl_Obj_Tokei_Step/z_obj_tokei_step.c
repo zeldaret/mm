@@ -9,9 +9,7 @@
 #include "z64rumble.h"
 #include "assets/objects/object_tokei_step/object_tokei_step.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_400000)
-
-#define THIS ((ObjTokeiStep*)thisx)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_IGNORE_LEGACY_POINT_LIGHTS)
 
 void ObjTokeiStep_Init(Actor* thisx, PlayState* play);
 void ObjTokeiStep_Destroy(Actor* thisx, PlayState* play);
@@ -191,7 +189,7 @@ s32 ObjTokeiStep_OpenProcess(ObjTokeiStep* this, PlayState* play) {
 }
 
 void ObjTokeiStep_Init(Actor* thisx, PlayState* play) {
-    ObjTokeiStep* this = THIS;
+    ObjTokeiStep* this = (ObjTokeiStep*)thisx;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 0);
@@ -211,7 +209,7 @@ void ObjTokeiStep_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjTokeiStep_Destroy(Actor* thisx, PlayState* play) {
-    ObjTokeiStep* this = THIS;
+    ObjTokeiStep* this = (ObjTokeiStep*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
@@ -261,19 +259,19 @@ void ObjTokeiStep_DoNothingOpen(ObjTokeiStep* this, PlayState* play) {
 }
 
 void ObjTokeiStep_Update(Actor* thisx, PlayState* play) {
-    ObjTokeiStep* this = THIS;
+    ObjTokeiStep* this = (ObjTokeiStep*)thisx;
 
     this->actionFunc(this, play);
 }
 
 void ObjTokeiStep_Draw(Actor* thisx, PlayState* play) {
-    ObjTokeiStep* this = THIS;
+    ObjTokeiStep* this = (ObjTokeiStep*)thisx;
 
     Gfx_DrawDListOpa(play, gClocktowerPanelDL);
 }
 
 void ObjTokeiStep_DrawOpen(Actor* thisx, PlayState* play) {
-    ObjTokeiStep* this = THIS;
+    ObjTokeiStep* this = (ObjTokeiStep*)thisx;
     s32 i;
     ObjTokeiStepPanel* panel;
     Gfx* gfx;

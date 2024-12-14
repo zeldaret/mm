@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
-#define THIS ((EnMs*)thisx)
-
 void EnMs_Init(Actor* thisx, PlayState* play);
 void EnMs_Destroy(Actor* thisx, PlayState* play);
 void EnMs_Update(Actor* thisx, PlayState* play);
@@ -57,7 +55,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void EnMs_Init(Actor* thisx, PlayState* play) {
-    EnMs* this = THIS;
+    EnMs* this = (EnMs*)thisx;
 
     Actor_ProcessInitChain(thisx, sInitChain);
     SkelAnime_InitFlex(play, &this->skelAnime, &gBeanSalesmanSkel, &gBeanSalesmanEatingAnim, this->jointTable,
@@ -74,7 +72,7 @@ void EnMs_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnMs_Destroy(Actor* thisx, PlayState* play) {
-    EnMs* this = THIS;
+    EnMs* this = (EnMs*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -168,7 +166,7 @@ void EnMs_TalkAfterPurchase(EnMs* this, PlayState* play) {
 
 void EnMs_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnMs* this = THIS;
+    EnMs* this = (EnMs*)thisx;
 
     Actor_SetFocus(&this->actor, 20.0f);
     this->actor.lockOnArrowOffset = 500.0f;
@@ -180,7 +178,7 @@ void EnMs_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnMs_Draw(Actor* thisx, PlayState* play) {
-    EnMs* this = THIS;
+    EnMs* this = (EnMs*)thisx;
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,

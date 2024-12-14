@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
-#define THIS ((EnTrt2*)thisx)
-
 void EnTrt2_Init(Actor* thisx, PlayState* play);
 void EnTrt2_Destroy(Actor* thisx, PlayState* play);
 void EnTrt2_Update(Actor* thisx, PlayState* play);
@@ -805,7 +803,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void EnTrt2_Init(Actor* thisx, PlayState* play) {
-    EnTrt2* this = THIS;
+    EnTrt2* this = (EnTrt2*)thisx;
 
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
@@ -815,14 +813,14 @@ void EnTrt2_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnTrt2_Destroy(Actor* thisx, PlayState* play) {
-    EnTrt2* this = THIS;
+    EnTrt2* this = (EnTrt2*)thisx;
 
     SkelAnime_Free(&this->skelAnime, play);
     Collider_DestroyCylinder(play, &this->collider);
 }
 
 void EnTrt2_Update(Actor* thisx, PlayState* play) {
-    EnTrt2* this = THIS;
+    EnTrt2* this = (EnTrt2*)thisx;
 
     if ((this->unk_3B2 != 6) && (this->unk_3B2 != 10) && (this->unk_3B2 != 13) && (this->unk_3B2 != 14) &&
         (this->unk_3B2 != 16) && (this->unk_3B2 != 8) && (this->unk_3B2 != 9)) {
@@ -888,7 +886,7 @@ void func_80AD5394(s16 arg0, s16 arg1, Vec3f* arg2, Vec3s* arg3, s32 arg4) {
 }
 
 s32 EnTrt2_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnTrt2* this = THIS;
+    EnTrt2* this = (EnTrt2*)thisx;
 
     if ((limbIndex == KOTAKE_LIMB_TORSO_LIMB) || (limbIndex == KOTAKE_LIMB_LEFT_HAND) ||
         (limbIndex == KOTAKE_LIMB_RIGHT_HAND)) {
@@ -899,7 +897,7 @@ s32 EnTrt2_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
 }
 
 void EnTrt2_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnTrt2* this = THIS;
+    EnTrt2* this = (EnTrt2*)thisx;
     Vec3f sp30 = { 0.0f, -30.0f, 0.0f };
     s32 phi_v0 = false;
 
@@ -919,7 +917,7 @@ void EnTrt2_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot
 }
 
 void EnTrt2_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
-    EnTrt2* this = THIS;
+    EnTrt2* this = (EnTrt2*)thisx;
 
     if (limbIndex == KOTAKE_LIMB_HEAD) {
         Matrix_Translate(this->unk_3C8.x, this->unk_3C8.y, this->unk_3C8.z, MTXMODE_NEW);
@@ -937,7 +935,7 @@ void func_80AD56E8(Actor* thisx, PlayState* play) {
         gKotakeEyeClosedTex,
     };
     s32 pad;
-    EnTrt2* this = THIS;
+    EnTrt2* this = (EnTrt2*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

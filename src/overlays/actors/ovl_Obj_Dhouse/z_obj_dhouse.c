@@ -8,9 +8,7 @@
 #include "z64quake.h"
 #include "assets/objects/object_dhouse/object_dhouse.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_400000)
-
-#define THIS ((ObjDhouse*)thisx)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_IGNORE_LEGACY_POINT_LIGHTS)
 
 void ObjDhouse_Init(Actor* thisx, PlayState* play);
 void ObjDhouse_Destroy(Actor* thisx, PlayState* play);
@@ -125,7 +123,7 @@ static InitChainEntry sInitChain[] = {
 Vec3f D_80B13FC4 = { 160.0f, 0.0f, 240.0f };
 
 void ObjDhouse_Init(Actor* thisx, PlayState* play) {
-    ObjDhouse* this = THIS;
+    ObjDhouse* this = (ObjDhouse*)thisx;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
 
@@ -142,7 +140,7 @@ void ObjDhouse_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjDhouse_Destroy(Actor* thisx, PlayState* play) {
-    ObjDhouse* this = THIS;
+    ObjDhouse* this = (ObjDhouse*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
@@ -154,7 +152,7 @@ void func_80B12A50(ObjDhouseStruct1* this, ObjDhouseStruct3* ptr3, Vec3f* arg2) 
 }
 
 void func_80B12A88(Actor* thisx) {
-    ObjDhouse* this = THIS;
+    ObjDhouse* this = (ObjDhouse*)thisx;
     s32 i;
     ObjDhouseStruct1* ptr;
     ObjDhouseStruct3* ptr3;
@@ -487,7 +485,7 @@ void func_80B139F4(ObjDhouse* this, PlayState* play) {
 }
 
 void ObjDhouse_Update(Actor* thisx, PlayState* play) {
-    ObjDhouse* this = THIS;
+    ObjDhouse* this = (ObjDhouse*)thisx;
 
     this->actionFunc(this, play);
 }
@@ -497,7 +495,7 @@ void ObjDhouse_Draw(Actor* thisx, PlayState* play) {
 }
 
 void func_80B13C08(Actor* thisx, PlayState* play) {
-    ObjDhouse* this = THIS;
+    ObjDhouse* this = (ObjDhouse*)thisx;
     ObjDhouseStruct1* ptr;
     ObjDhouseStruct2* ptr2;
     ObjDhouseStruct3* ptr3;

@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_10)
 
-#define THIS ((ObjToge*)thisx)
-
 void ObjToge_Init(Actor* thisx, PlayState* play);
 void ObjToge_Destroy(Actor* thisx, PlayState* play2);
 void ObjToge_Update(Actor* thisx, PlayState* play);
@@ -117,7 +115,7 @@ bool func_809A43EC(ObjToge* this, PlayState* play) {
 
 void ObjToge_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    ObjToge* this = THIS;
+    ObjToge* this = (ObjToge*)thisx;
     Path* path;
     Vec3s* points;
     s16 sp3E;
@@ -184,7 +182,7 @@ void ObjToge_Init(Actor* thisx, PlayState* play) {
 
 void ObjToge_Destroy(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    ObjToge* this = THIS;
+    ObjToge* this = (ObjToge*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -274,7 +272,7 @@ void func_809A48AC(ObjToge* this, PlayState* play) {
 }
 
 void ObjToge_Update(Actor* thisx, PlayState* play) {
-    ObjToge* this = THIS;
+    ObjToge* this = (ObjToge*)thisx;
     ColliderCylinder* collider = &this->collider;
 
     if (this->collider.base.acFlags & AC_HIT) {
@@ -307,7 +305,7 @@ void ObjToge_Update(Actor* thisx, PlayState* play) {
 }
 
 void ObjToge_Draw(Actor* thisx, PlayState* play) {
-    ObjToge* this = THIS;
+    ObjToge* this = (ObjToge*)thisx;
 
     func_800B8050(&this->actor, play, 1);
     Gfx_DrawDListOpa(play, object_trap_DL_001400);

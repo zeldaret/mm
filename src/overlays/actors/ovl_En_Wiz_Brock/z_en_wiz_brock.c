@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_LOCK_ON_DISABLED)
 
-#define THIS ((EnWizBrock*)thisx)
-
 void EnWizBrock_Init(Actor* thisx, PlayState* play);
 void EnWizBrock_Destroy(Actor* thisx, PlayState* play);
 void EnWizBrock_Update(Actor* thisx, PlayState* play);
@@ -34,7 +32,7 @@ ActorProfile En_Wiz_Brock_Profile = {
 };
 
 void EnWizBrock_Init(Actor* thisx, PlayState* play) {
-    EnWizBrock* this = THIS;
+    EnWizBrock* this = (EnWizBrock*)thisx;
     CollisionHeader* colHeader = NULL;
 
     DynaPolyActor_Init(&this->dyna, 0);
@@ -51,7 +49,7 @@ void EnWizBrock_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnWizBrock_Destroy(Actor* thisx, PlayState* play) {
-    EnWizBrock* this = THIS;
+    EnWizBrock* this = (EnWizBrock*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
@@ -87,14 +85,14 @@ void EnWizBrock_UpdateStatus(EnWizBrock* this, PlayState* play) {
 }
 
 void EnWizBrock_Update(Actor* thisx, PlayState* play) {
-    EnWizBrock* this = THIS;
+    EnWizBrock* this = (EnWizBrock*)thisx;
 
     this->actionFunc(this, play);
 }
 
 void EnWizBrock_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnWizBrock* this = THIS;
+    EnWizBrock* this = (EnWizBrock*)thisx;
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);

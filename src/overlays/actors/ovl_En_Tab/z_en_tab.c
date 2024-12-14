@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
-#define THIS ((EnTab*)thisx)
-
 void EnTab_Init(Actor* thisx, PlayState* play);
 void EnTab_Destroy(Actor* thisx, PlayState* play);
 void EnTab_Update(Actor* thisx, PlayState* play);
@@ -455,7 +453,7 @@ s32 func_80BE0D38(Actor* thisx, PlayState* play) {
 }
 
 s32 func_80BE0D60(Actor* thisx, PlayState* play) {
-    EnTab* this = THIS;
+    EnTab* this = (EnTab*)thisx;
     s32 ret = false;
 
     this->unk_320++;
@@ -650,7 +648,7 @@ void func_80BE1348(EnTab* this, PlayState* play) {
 }
 
 void EnTab_Init(Actor* thisx, PlayState* play) {
-    EnTab* this = THIS;
+    EnTab* this = (EnTab*)thisx;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 14.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gBartenSkel, NULL, this->jointTable, this->morphTable, BARTEN_LIMB_MAX);
@@ -671,13 +669,13 @@ void EnTab_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnTab_Destroy(Actor* thisx, PlayState* play) {
-    EnTab* this = THIS;
+    EnTab* this = (EnTab*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
 
 void EnTab_Update(Actor* thisx, PlayState* play) {
-    EnTab* this = THIS;
+    EnTab* this = (EnTab*)thisx;
     f32 radius;
     f32 height;
 
@@ -701,7 +699,7 @@ void EnTab_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnTab_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnTab* this = THIS;
+    EnTab* this = (EnTab*)thisx;
 
     if (limbIndex == BARTEN_LIMB_HEAD) {
         func_80BE0A98(this, play);
@@ -715,7 +713,7 @@ s32 EnTab_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 
 void EnTab_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f D_80BE1B18 = { 800.0f, 0.0f, 0.0f };
-    EnTab* this = THIS;
+    EnTab* this = (EnTab*)thisx;
 
     if (limbIndex == BARTEN_LIMB_HEAD) {
         Matrix_MultVec3f(&D_80BE1B18, &this->actor.focus.pos);
@@ -724,7 +722,7 @@ void EnTab_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
 }
 
 void EnTab_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
-    EnTab* this = THIS;
+    EnTab* this = (EnTab*)thisx;
     s32 rotStep;
     s32 overrideStep;
 
@@ -761,7 +759,7 @@ void EnTab_Draw(Actor* thisx, PlayState* play) {
         gBartenEyeClosedTex,
         gBartenEyeHalfOpenTex,
     };
-    EnTab* this = THIS;
+    EnTab* this = (EnTab*)thisx;
 
     if (this->scheduleResult != 0) {
         OPEN_DISPS(play->state.gfxCtx);

@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
-#define THIS ((DemoSyoten*)thisx)
-
 void DemoSyoten_Init(Actor* thisx, PlayState* play);
 void DemoSyoten_Destroy(Actor* thisx, PlayState* play);
 void DemoSyoten_Update(Actor* thisx, PlayState* play);
@@ -59,7 +57,7 @@ Color_RGBA8 D_80C17834[] = {
 
 void DemoSyoten_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    DemoSyoten* this = THIS;
+    DemoSyoten* this = (DemoSyoten*)thisx;
 
     Actor_SetScale(&this->actor, 0.3f);
 
@@ -128,7 +126,7 @@ void DemoSyoten_Init(Actor* thisx, PlayState* play) {
 }
 
 void DemoSyoten_Destroy(Actor* thisx, PlayState* play) {
-    DemoSyoten* this = THIS;
+    DemoSyoten* this = (DemoSyoten*)thisx;
 
     if (DEMOSYOTEN_GET_F(&this->actor) == DEMOSYOTEN_F_0) {
         Keyframe_DestroyFlex(&this->kfSkelAnime);
@@ -431,7 +429,7 @@ void func_80C17008(DemoSyoten* this, PlayState* play) {
 }
 
 void DemoSyoten_Update(Actor* thisx, PlayState* play) {
-    DemoSyoten* this = THIS;
+    DemoSyoten* this = (DemoSyoten*)thisx;
 
     this->actionFunc(this, play);
 }
@@ -439,7 +437,7 @@ void DemoSyoten_Update(Actor* thisx, PlayState* play) {
 s32 DemoSyoten_OverrideLimbDraw(PlayState* play, KFSkelAnimeFlex* kfSkelAnime, s32 limbIndex, Gfx** dList, u8* flags,
                                 void* thisx, Vec3f* scale, Vec3s* rot, Vec3f* pos) {
     GraphicsContext* gfxCtx = play->state.gfxCtx;
-    DemoSyoten* this = THIS;
+    DemoSyoten* this = (DemoSyoten*)thisx;
 
     OPEN_DISPS(gfxCtx);
 
@@ -483,7 +481,7 @@ s32 DemoSyoten_OverrideLimbDraw(PlayState* play, KFSkelAnimeFlex* kfSkelAnime, s
 
 void func_80C173B4(Actor* thisx, PlayState* play) {
     s32 pad;
-    DemoSyoten* this = THIS;
+    DemoSyoten* this = (DemoSyoten*)thisx;
     Mtx* mtxStack;
 
     AnimatedMat_DrawXlu(play, Lib_SegmentedToVirtual(&object_syoten_Matanimheader_001298));
@@ -514,7 +512,7 @@ void func_80C17468(PlayState* play) {
 
 void DemoSyoten_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
-    DemoSyoten* this = THIS;
+    DemoSyoten* this = (DemoSyoten*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -553,7 +551,7 @@ void DemoSyoten_Draw(Actor* thisx, PlayState* play) {
 
 void func_80C17690(Actor* thisx, PlayState* play) {
     s32 pad;
-    DemoSyoten* this = THIS;
+    DemoSyoten* this = (DemoSyoten*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

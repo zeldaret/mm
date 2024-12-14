@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
-#define THIS ((EnZob*)thisx)
-
 void EnZob_Init(Actor* thisx, PlayState* play);
 void EnZob_Destroy(Actor* thisx, PlayState* play);
 void EnZob_Update(Actor* thisx, PlayState* play);
@@ -94,7 +92,7 @@ static AnimationHeader* sAnimations[ENZOB_ANIM_MAX] = {
 };
 
 void EnZob_Init(Actor* thisx, PlayState* play) {
-    EnZob* this = THIS;
+    EnZob* this = (EnZob*)thisx;
     s32 i;
     s16 csId;
 
@@ -160,7 +158,7 @@ void EnZob_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnZob_Destroy(Actor* thisx, PlayState* play) {
-    EnZob* this = THIS;
+    EnZob* this = (EnZob*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -293,7 +291,7 @@ void func_80B9FCA0(EnZob* this, PlayState* play) {
     this->actionFunc = func_80BA0728;
     this->unk_304 = 0;
     EnZob_ChangeAnim(this, ENZOB_ANIM_6, ANIMMODE_ONCE);
-    func_800B8718(&this->actor, &play->state);
+    Actor_OcarinaInteractionAccepted(&this->actor, &play->state);
 }
 
 void func_80B9FD24(EnZob* this, PlayState* play) {
@@ -543,7 +541,7 @@ void func_80BA0374(EnZob* this, PlayState* play) {
                     case 0x1207:
                         Message_CloseTextbox(play);
                         this->actionFunc = func_80BA0318;
-                        player->unk_A90 = &this->actor;
+                        player->ocarinaInteractionActor = &this->actor;
                         player->stateFlags3 |= PLAYER_STATE3_20;
                         break;
                 }
@@ -581,7 +579,7 @@ void func_80BA0728(EnZob* this, PlayState* play) {
 
     func_80B9F86C(this);
 
-    if (func_800B8718(&this->actor, &play->state)) {
+    if (Actor_OcarinaInteractionAccepted(&this->actor, &play->state)) {
         if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
             Message_StartTextbox(play, 0x1208, NULL);
             SET_WEEKEVENTREG(WEEKEVENTREG_30_08);
@@ -601,7 +599,7 @@ void func_80BA0728(EnZob* this, PlayState* play) {
     } else if ((this->actor.xzDistToPlayer < 180.0f) && (this->actor.xzDistToPlayer > 60.0f) &&
                Player_IsFacingActor(&this->actor, 0x3000, play) && Actor_IsFacingPlayer(&this->actor, 0x3000)) {
         Actor_OfferTalk(&this->actor, play, 150.0f);
-        func_800B874C(&this->actor, play, 200.0f, 150.0f);
+        Actor_OfferOcarinaInteraction(&this->actor, play, 200.0f, 150.0f);
     }
 
     seqPos.x = this->actor.projectedPos.x;
@@ -724,7 +722,7 @@ void func_80BA0CF4(EnZob* this, PlayState* play) {
 
 void EnZob_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnZob* this = THIS;
+    EnZob* this = (EnZob*)thisx;
 
     Actor_MoveWithGravity(&this->actor);
 
@@ -756,7 +754,7 @@ void EnZob_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnZob_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnZob* this = THIS;
+    EnZob* this = (EnZob*)thisx;
 
     if (limbIndex == OBJECT_ZOB_LIMB_09) {
         rot->x += this->headRot.y;
@@ -767,7 +765,7 @@ s32 EnZob_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 
 void EnZob_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f D_80BA1120 = { 300.0f, 900.0f, 0.0f };
-    EnZob* this = THIS;
+    EnZob* this = (EnZob*)thisx;
 
     if (limbIndex == OBJECT_ZOB_LIMB_09) {
         Matrix_MultVec3f(&D_80BA1120, &this->actor.focus.pos);
@@ -775,7 +773,7 @@ void EnZob_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
 }
 
 void EnZob_Draw(Actor* thisx, PlayState* play) {
-    EnZob* this = THIS;
+    EnZob* this = (EnZob*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

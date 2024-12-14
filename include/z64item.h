@@ -322,7 +322,7 @@ typedef enum ItemId {
     /* 0xAE */ ITEM_MAP_POINT_STONE_TOWER,
     // Remaining map points are unique to owl warps
     /* 0xAF */ ITEM_MAP_POINT_GREAT_BAY_COAST,
-    /* 0xBO */ ITEM_MAP_POINT_SOUTHERN_SWAMP,
+    /* 0xB0 */ ITEM_MAP_POINT_SOUTHERN_SWAMP,
     /* 0xB1 */ ITEM_MAP_POINT_MOUNTAIN_VILLAGE,
     /* 0xB2 */ ITEM_MAP_POINT_MILK_ROAD,
     /* 0xB3 */ ITEM_MAP_POINT_ZORA_CAPE,

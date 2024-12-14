@@ -22,8 +22,6 @@
 
 #define FLAGS (ACTOR_FLAG_10)
 
-#define THIS ((DoorShutter*)thisx)
-
 void DoorShutter_Init(Actor* thisx, PlayState* play2);
 void DoorShutter_Destroy(Actor* thisx, PlayState* play);
 void DoorShutter_Update(Actor* thisx, PlayState* play);
@@ -199,7 +197,7 @@ s32 DoorShutter_SetupDoor(DoorShutter* this, PlayState* play) {
 
 void DoorShutter_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    DoorShutter* this = THIS;
+    DoorShutter* this = (DoorShutter*)thisx;
     s32 sp24;
     s32 i;
 
@@ -218,7 +216,7 @@ void DoorShutter_Init(Actor* thisx, PlayState* play2) {
 
         sp24 = shutterSceneInfo->index;
         if (sp24 == 6) {
-            this->slidingDoor.dyna.actor.flags |= ACTOR_FLAG_10000000;
+            this->slidingDoor.dyna.actor.flags |= ACTOR_FLAG_UCODE_POINT_LIGHT_ENABLED;
         }
     } else if (sp24 == 0) {
         BossDoorInfo* bossDoorInfo = &D_808A22A0[0];
@@ -252,7 +250,7 @@ void DoorShutter_Init(Actor* thisx, PlayState* play2) {
 }
 
 void DoorShutter_Destroy(Actor* thisx, PlayState* play) {
-    DoorShutter* this = THIS;
+    DoorShutter* this = (DoorShutter*)thisx;
 
     if (this->slidingDoor.dyna.actor.room >= 0) {
         s32 transitionActorId = DOOR_GET_TRANSITION_ID(&this->slidingDoor.dyna.actor);
@@ -643,7 +641,7 @@ void func_808A1C50(DoorShutter* this, PlayState* play) {
 }
 
 void DoorShutter_Update(Actor* thisx, PlayState* play) {
-    DoorShutter* this = THIS;
+    DoorShutter* this = (DoorShutter*)thisx;
     Player* player = GET_PLAYER(play);
 
     if (!(player->stateFlags1 &
@@ -682,7 +680,7 @@ s32 func_808A1D68(DoorShutter* this, PlayState* play) {
 
 void DoorShutter_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
-    DoorShutter* this = THIS;
+    DoorShutter* this = (DoorShutter*)thisx;
     ShutterInfo* sp44;
 
     if (func_808A1D68(this, play)) {

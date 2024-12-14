@@ -10,8 +10,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE)
 
-#define THIS ((EnPp*)thisx)
-
 void EnPp_Init(Actor* thisx, PlayState* play);
 void EnPp_Destroy(Actor* thisx, PlayState* play);
 void EnPp_Update(Actor* thisx, PlayState* play);
@@ -207,7 +205,7 @@ static Color_RGBA8 sDustPrimColor = { 60, 50, 20, 255 };
 static Color_RGBA8 sDustEnvColor = { 40, 30, 30, 255 };
 
 void EnPp_Init(Actor* thisx, PlayState* play) {
-    EnPp* this = THIS;
+    EnPp* this = (EnPp*)thisx;
     EffectBlureInit1 blureInit;
 
     this->actor.attentionRangeType = ATTENTION_RANGE_4;
@@ -302,7 +300,7 @@ void EnPp_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnPp_Destroy(Actor* thisx, PlayState* play) {
-    EnPp* this = THIS;
+    EnPp* this = (EnPp*)thisx;
 
     if (EN_PP_GET_TYPE(&this->actor) < EN_PP_TYPE_FRAGMENT_BASE) {
         Collider_DestroyJntSph(play, &this->maskCollider);
@@ -1383,7 +1381,7 @@ void EnPp_UpdateDamage(EnPp* this, PlayState* play) {
 
 void EnPp_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnPp* this = THIS;
+    EnPp* this = (EnPp*)thisx;
     WaterBox* waterBox;
     f32 waterSurface;
 
@@ -1468,7 +1466,7 @@ void EnPp_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnPp_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnPp* this = THIS;
+    EnPp* this = (EnPp*)thisx;
 
     if (this->action != EN_PP_ACTION_BODY_PART_MOVE) {
         if ((limbIndex != HIPLOOP_LIMB_MASK) &&
@@ -1498,7 +1496,7 @@ s32 EnPp_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
 void EnPp_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f sVertexOffset1 = { 0.0f, 0.0f, 0.0f };
     static Vec3f sVertexOffset2 = { 0.0f, 0.0f, 0.0f };
-    EnPp* this = THIS;
+    EnPp* this = (EnPp*)thisx;
     Vec3f blureVertex1;
     Vec3f blureVertex2;
 
@@ -1582,7 +1580,7 @@ void EnPp_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 }
 
 void EnPp_Draw(Actor* thisx, PlayState* play) {
-    EnPp* this = THIS;
+    EnPp* this = (EnPp*)thisx;
     MtxF mtxF;
     Vec3f pos;
     f32 scale;

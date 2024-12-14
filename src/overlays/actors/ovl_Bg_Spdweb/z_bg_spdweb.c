@@ -9,8 +9,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((BgSpdweb*)thisx)
-
 void BgSpdweb_Init(Actor* thisx, PlayState* play);
 void BgSpdweb_Destroy(Actor* thisx, PlayState* play);
 void BgSpdweb_Update(Actor* thisx, PlayState* play);
@@ -144,7 +142,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void BgSpdweb_Init(Actor* thisx, PlayState* play) {
-    BgSpdweb* this = THIS;
+    BgSpdweb* this = (BgSpdweb*)thisx;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     this->unk_161 = 0;
@@ -175,7 +173,7 @@ void BgSpdweb_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgSpdweb_Destroy(Actor* thisx, PlayState* play) {
-    BgSpdweb* this = THIS;
+    BgSpdweb* this = (BgSpdweb*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
     Collider_DestroyTris(play, &this->collider);
@@ -485,7 +483,7 @@ void func_809CEEAC(BgSpdweb* this, PlayState* play) {
 }
 
 void BgSpdweb_Update(Actor* thisx, PlayState* play) {
-    BgSpdweb* this = THIS;
+    BgSpdweb* this = (BgSpdweb*)thisx;
 
     this->actionFunc(this, play);
 }

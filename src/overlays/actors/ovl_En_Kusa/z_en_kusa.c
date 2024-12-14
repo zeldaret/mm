@@ -12,8 +12,6 @@
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_THROW_ONLY)
 
-#define THIS ((EnKusa*)thisx)
-
 void EnKusa_Init(Actor* thisx, PlayState* play);
 void EnKusa_Destroy(Actor* thisx, PlayState* play);
 void EnKusa_Update(Actor* thisx, PlayState* play2);
@@ -352,7 +350,7 @@ s32 EnKusa_IsUnderwater(EnKusa* this, PlayState* play) {
 }
 
 void EnKusa_InitCollider(Actor* thisx, PlayState* play) {
-    EnKusa* this = THIS;
+    EnKusa* this = (EnKusa*)thisx;
 
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
@@ -360,7 +358,7 @@ void EnKusa_InitCollider(Actor* thisx, PlayState* play) {
 }
 
 void EnKusa_Init(Actor* thisx, PlayState* play) {
-    EnKusa* this = THIS;
+    EnKusa* this = (EnKusa*)thisx;
     s32 pad;
     s32 kusaType = KUSA_GET_TYPE(&this->actor);
 
@@ -416,7 +414,7 @@ void EnKusa_Init(Actor* thisx, PlayState* play) {
 
 void EnKusa_Destroy(Actor* thisx, PlayState* play) {
     PlayState* play2 = play;
-    EnKusa* this = THIS;
+    EnKusa* this = (EnKusa*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -686,7 +684,7 @@ void EnKusa_Regrow(EnKusa* this, PlayState* play) {
 
 void EnKusa_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnKusa* this = THIS;
+    EnKusa* this = (EnKusa*)thisx;
 
     this->actionFunc(this, play);
 
@@ -703,7 +701,7 @@ void EnKusa_Update(Actor* thisx, PlayState* play2) {
 
 void EnKusa_DrawBush(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnKusa* this = THIS;
+    EnKusa* this = (EnKusa*)thisx;
 
     if ((this->actor.projectedPos.z <= 1200.0f) || ((this->isInWater & 1) && (this->actor.projectedPos.z < 1300.0f))) {
 
@@ -731,7 +729,7 @@ void EnKusa_DrawBush(Actor* thisx, PlayState* play2) {
 }
 
 void EnKusa_DrawGrass(Actor* thisx, PlayState* play) {
-    EnKusa* this = THIS;
+    EnKusa* this = (EnKusa*)thisx;
 
     if (this->isCut) {
         Gfx_DrawDListOpa(play, gKusaStumpDL);

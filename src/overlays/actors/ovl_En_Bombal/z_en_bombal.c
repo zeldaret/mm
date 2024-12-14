@@ -11,8 +11,6 @@
 
 #define FLAGS (ACTOR_FLAG_10)
 
-#define THIS ((EnBombal*)thisx)
-
 void EnBombal_Init(Actor* thisx, PlayState* play);
 void EnBombal_Destroy(Actor* thisx, PlayState* play);
 void EnBombal_Update(Actor* thisx, PlayState* play);
@@ -59,7 +57,7 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 void EnBombal_Init(Actor* thisx, PlayState* play) {
-    EnBombal* this = THIS;
+    EnBombal* this = (EnBombal*)thisx;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
     this->actor.colChkInfo.mass = 0;
@@ -72,7 +70,7 @@ void EnBombal_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnBombal_Destroy(Actor* thisx, PlayState* play) {
-    EnBombal* this = THIS;
+    EnBombal* this = (EnBombal*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -161,7 +159,7 @@ void func_80C05DE8(EnBombal* this, PlayState* play) {
 
 void EnBombal_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnBombal* this = THIS;
+    EnBombal* this = (EnBombal*)thisx;
 
     if (this->timer != 0) {
         this->timer--;
@@ -184,7 +182,7 @@ void EnBombal_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnBombal_Draw(Actor* thisx, PlayState* play) {
-    EnBombal* this = THIS;
+    EnBombal* this = (EnBombal*)thisx;
 
     if (this->isPopped != true) {
         Gfx_DrawDListOpa(play, gMajoraBalloonDL);

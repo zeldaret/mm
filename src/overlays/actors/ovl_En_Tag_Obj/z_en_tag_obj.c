@@ -9,8 +9,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((EnTagObj*)thisx)
-
 void EnTagObj_Init(Actor* thisx, PlayState* play);
 void EnTagObj_Destroy(Actor* thisx, PlayState* play);
 void EnTagObj_Update(Actor* thisx, PlayState* play);
@@ -48,7 +46,7 @@ ActorProfile En_Tag_Obj_Profile = {
 };
 
 void EnTagObj_Init(Actor* thisx, PlayState* play) {
-    EnTagObj* this = THIS;
+    EnTagObj* this = (EnTagObj*)thisx;
 
     this->hasSpawnedSeahorse = false;
 }
@@ -57,7 +55,7 @@ void EnTagObj_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnTagObj_Update(Actor* thisx, PlayState* play) {
-    EnTagObj* this = THIS;
+    EnTagObj* this = (EnTagObj*)thisx;
 
     if (!this->hasSpawnedSeahorse) {
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_OT, this->actor.world.pos.x, this->actor.world.pos.y,

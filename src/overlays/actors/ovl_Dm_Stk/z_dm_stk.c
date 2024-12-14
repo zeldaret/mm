@@ -14,8 +14,6 @@
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
-#define THIS ((DmStk*)thisx)
-
 void DmStk_Init(Actor* thisx, PlayState* play);
 void DmStk_Destroy(Actor* thisx, PlayState* play);
 void DmStk_Update(Actor* thisx, PlayState* play);
@@ -1057,7 +1055,7 @@ void DmStk_PlaySfxForCutscenes(DmStk* this, PlayState* play) {
 
 void DmStk_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    DmStk* this = THIS;
+    DmStk* this = (DmStk*)thisx;
 
     this->shouldDraw = true;
     if (DM_STK_GET_TYPE(&this->actor) != DM_STK_TYPE_MAJORAS_MASK) {
@@ -1809,7 +1807,7 @@ void DmStk_ClockTower_Idle(DmStk* this, PlayState* play) {
 }
 
 void DmStk_Update(Actor* thisx, PlayState* play) {
-    DmStk* this = THIS;
+    DmStk* this = (DmStk*)thisx;
 
     if (DM_STK_GET_TYPE(&this->actor) != DM_STK_TYPE_MAJORAS_MASK) {
         if (this->animIndex == SK_ANIM_CALL_DOWN_MOON_LOOP) {
@@ -1838,10 +1836,11 @@ void DmStk_Update(Actor* thisx, PlayState* play) {
         // This handles the cutscene where the player takes out the Deku Pipes for the first time.
         switch (this->dekuPipesCutsceneState) {
             case SK_DEKU_PIPES_CS_STATE_READY:
-                if (func_800B8718(&this->actor, &play->state)) {
+                if (Actor_OcarinaInteractionAccepted(&this->actor, &play->state)) {
                     this->dekuPipesCutsceneState = SK_DEKU_PIPES_CS_STATE_PLAYER_USED_OCARINA;
                 } else {
-                    func_800B874C(&this->actor, play, this->actor.xzDistToPlayer, fabsf(this->actor.playerHeightRel));
+                    Actor_OfferOcarinaInteraction(&this->actor, play, this->actor.xzDistToPlayer,
+                                                  fabsf(this->actor.playerHeightRel));
                 }
                 break;
 
@@ -1885,7 +1884,7 @@ void DmStk_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 DmStk_OverrideLimbDrawOpa(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    DmStk* this = THIS;
+    DmStk* this = (DmStk*)thisx;
 
     if (limbIndex == SKULL_KID_LIMB_RIGHT_HAND) {
         if ((this->handType == SK_HAND_TYPE_HOLDING_LINK_MASK_AND_FLUTE) ||
@@ -1921,7 +1920,7 @@ s32 DmStk_OverrideLimbDrawOpa(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f
 void DmStk_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     s32 pad;
     s32 pad2;
-    DmStk* this = THIS;
+    DmStk* this = (DmStk*)thisx;
 
     if (limbIndex == SKULL_KID_LIMB_HEAD) {
         Matrix_MultZero(&this->headPos);
@@ -2079,13 +2078,13 @@ void DmStk_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
 }
 
 void DmStk_PostLimbDrawOpa(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    DmStk* this = THIS;
+    DmStk* this = (DmStk*)thisx;
 
     DmStk_PostLimbDraw(play, limbIndex, dList, rot, &this->actor, NULL);
 }
 
 void DmStk_Draw(Actor* thisx, PlayState* play) {
-    DmStk* this = THIS;
+    DmStk* this = (DmStk*)thisx;
 
     if (this->shouldDraw) {
         if (DM_STK_GET_TYPE(&this->actor) == DM_STK_TYPE_MAJORAS_MASK) {

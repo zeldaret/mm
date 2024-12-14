@@ -7,9 +7,7 @@
 #include "z_bg_market_step.h"
 #include "assets/objects/object_market_obj/object_market_obj.h"
 
-#define FLAGS (ACTOR_FLAG_20 | ACTOR_FLAG_10000000)
-
-#define THIS ((BgMarketStep*)thisx)
+#define FLAGS (ACTOR_FLAG_20 | ACTOR_FLAG_UCODE_POINT_LIGHT_ENABLED)
 
 void BgMarketStep_Init(Actor* thisx, PlayState* play);
 void BgMarketStep_Draw(Actor* thisx, PlayState* play);
@@ -44,7 +42,7 @@ Gfx* sBankAdvertisementsAndDoorDLs[] = {
 };
 
 void BgMarketStep_Init(Actor* thisx, PlayState* play) {
-    BgMarketStep* this = THIS;
+    BgMarketStep* this = (BgMarketStep*)thisx;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
 }

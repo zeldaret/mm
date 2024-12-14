@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
-#define THIS ((EnZod*)thisx)
-
 void EnZod_Init(Actor* thisx, PlayState* play);
 void EnZod_Destroy(Actor* thisx, PlayState* play);
 void EnZod_Update(Actor* thisx, PlayState* play);
@@ -88,7 +86,7 @@ static AnimationHeader* sAnimations[ENZOD_ANIM_MAX] = {
 
 void EnZod_Init(Actor* thisx, PlayState* play) {
     s32 i;
-    EnZod* this = THIS;
+    EnZod* this = (EnZod*)thisx;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 60.0f);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
@@ -148,7 +146,7 @@ void EnZod_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnZod_Destroy(Actor* thisx, PlayState* play) {
-    EnZod* this = THIS;
+    EnZod* this = (EnZod*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -527,7 +525,7 @@ void func_80BAFF14(EnZod* this, PlayState* play) {
 
 void EnZod_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnZod* this = THIS;
+    EnZod* this = (EnZod*)thisx;
     Vec3s torsoRot;
 
     Actor_MoveWithGravity(&this->actor);
@@ -565,7 +563,7 @@ void EnZod_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnZod_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnZod* this = THIS;
+    EnZod* this = (EnZod*)thisx;
 
     if (limbIndex == TIJO_LIMB_HEAD) {
         rot->x += this->headRot.y;
@@ -630,7 +628,7 @@ void EnZod_DrawDrums(EnZod* this, PlayState* play) {
 
 void EnZod_Draw(Actor* thisx, PlayState* play) {
     static TexturePtr sTijoEyesTextures[] = { &gTijoEyesOpenTex, &gTijoEyesHalfOpenTex, &gTijoEyesClosedTex };
-    EnZod* this = THIS;
+    EnZod* this = (EnZod*)thisx;
     Gfx* gfx;
 
     OPEN_DISPS(play->state.gfxCtx);

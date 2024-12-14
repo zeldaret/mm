@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
-#define THIS ((OceffWipe7*)thisx)
-
 void OceffWipe7_Init(Actor* thisx, PlayState* play);
 void OceffWipe7_Destroy(Actor* thisx, PlayState* play);
 void OceffWipe7_Update(Actor* thisx, PlayState* play);
@@ -32,7 +30,7 @@ ActorProfile Oceff_Wipe7_Profile = {
 static s32 sBssPad;
 
 void OceffWipe7_Init(Actor* thisx, PlayState* play) {
-    OceffWipe7* this = THIS;
+    OceffWipe7* this = (OceffWipe7*)thisx;
 
     Actor_SetScale(&this->actor, 1.0f);
     this->counter = 0;
@@ -40,14 +38,14 @@ void OceffWipe7_Init(Actor* thisx, PlayState* play) {
 }
 
 void OceffWipe7_Destroy(Actor* thisx, PlayState* play) {
-    OceffWipe7* this = THIS;
+    OceffWipe7* this = (OceffWipe7*)thisx;
 
     Magic_Reset(play);
     play->msgCtx.ocarinaSongEffectActive = false;
 }
 
 void OceffWipe7_Update(Actor* thisx, PlayState* play) {
-    OceffWipe7* this = THIS;
+    OceffWipe7* this = (OceffWipe7*)thisx;
 
     this->actor.world.pos = GET_ACTIVE_CAM(play)->eye;
     if (this->counter < 100) {
@@ -58,7 +56,7 @@ void OceffWipe7_Update(Actor* thisx, PlayState* play) {
 }
 
 void OceffWipe7_Draw(Actor* thisx, PlayState* play) {
-    OceffWipe7* this = THIS;
+    OceffWipe7* this = (OceffWipe7*)thisx;
     f32 z;
     u8 alpha;
     s32 i;

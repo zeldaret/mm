@@ -10,8 +10,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER)
 
-#define THIS ((EnIk*)thisx)
-
 void EnIk_Init(Actor* thisx, PlayState* play);
 void EnIk_Destroy(Actor* thisx, PlayState* play);
 void EnIk_Update(Actor* thisx, PlayState* play2);
@@ -270,7 +268,7 @@ static EffectBlureInit2 sBlureInit = {
 void EnIk_Init(Actor* thisx, PlayState* play) {
     static s32 sDisplayListDesegmented = false;
     s32 i;
-    EnIk* this = THIS;
+    EnIk* this = (EnIk*)thisx;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     SkelAnime_InitFlex(play, &this->skelAnime, &gIronKnuckleSkel, &gIronKnuckleWalkAnim, this->jointTable,
@@ -296,7 +294,7 @@ void EnIk_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnIk_Destroy(Actor* thisx, PlayState* play) {
-    EnIk* this = THIS;
+    EnIk* this = (EnIk*)thisx;
 
     Collider_DestroyTris(play, &this->colliderTris);
     Collider_DestroyCylinder(play, &this->colliderCylinder);
@@ -871,7 +869,7 @@ void EnIk_UpdateArmor(EnIk* this, PlayState* play) {
 
 void EnIk_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnIk* this = THIS;
+    EnIk* this = (EnIk*)thisx;
 
     if (this->actionFunc != EnIk_PlayCutscene) {
         EnIk_UpdateDamage(this, play);
@@ -969,7 +967,7 @@ static s8 sLimbToArmorBodyParts[IRON_KNUCKLE_LIMB_MAX] = {
 };
 
 s32 EnIk_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnIk* this = THIS;
+    EnIk* this = (EnIk*)thisx;
 
     if (this->drawArmorFlags != 0) {
         if (sLimbToArmorBodyParts[limbIndex] >= IRON_KNUCKLE_ARMOR_BODYPART_CHEST_FRONT) {
@@ -1016,7 +1014,7 @@ static s8 sLimbToBodyParts[IRON_KNUCKLE_LIMB_MAX] = {
 };
 
 void EnIk_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnIk* this = THIS;
+    EnIk* this = (EnIk*)thisx;
     s32 armorBodyPart = sLimbToArmorBodyParts[limbIndex];
     Gfx* gfx;
     IronKnuckleEffect* ikEffect;
@@ -1134,7 +1132,7 @@ void EnIk_UpdateArmorDraw(EnIk* this, PlayState* play) {
 
 void EnIk_Draw(Actor* thisx, PlayState* play) {
     static Vec3f sScale = { 0.53f, 0.53f, 0.53f };
-    EnIk* this = THIS;
+    EnIk* this = (EnIk*)thisx;
     Gfx* gfx;
     Gfx** gfxArmorType;
     s32 pad;

@@ -12,8 +12,6 @@
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_THROW_ONLY | ACTOR_FLAG_CAN_PRESS_SWITCHES)
 
-#define THIS ((ObjTsubo*)thisx)
-
 void ObjTsubo_Init(Actor* thisx, PlayState* play);
 void ObjTsubo_Destroy(Actor* thisx, PlayState* play2);
 void ObjTsubo_Update(Actor* thisx, PlayState* play);
@@ -473,10 +471,9 @@ void func_809289E4(ObjTsubo* this, PlayState* play) {
         //! player->currentMask, but in this case is garbage in the collider
         Player_PlaySfx((Player*)&this->actor, NA_SE_PL_PULL_UP_POT);
         func_80928D6C(this);
-    } else if ((this->unk_19B != 0) ||
-               (acHit && (this->cylinderCollider.elem.acHitElem->atDmgInfo.dmgFlags & 0x058BFFBC))) {
+    } else if (this->unk_19B || (acHit && (this->cylinderCollider.elem.acHitElem->atDmgInfo.dmgFlags & 0x058BFFBC))) {
         typeData = &sPotTypeData[type];
-        this->unk_19B = 0;
+        this->unk_19B = false;
         if ((this->actor.bgCheckFlags & BGCHECKFLAG_WATER) && (this->actor.depthInWater > 15.0f)) {
             typeData->breakPot3(this, play);
         } else {

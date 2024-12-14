@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_10)
 
-#define THIS ((BgDblueWaterfall*)thisx)
-
 void BgDblueWaterfall_Init(Actor* thisx, PlayState* play);
 void BgDblueWaterfall_Destroy(Actor* thisx, PlayState* play);
 void BgDblueWaterfall_Update(Actor* thisx, PlayState* play);
@@ -89,7 +87,7 @@ s32 func_80B83D04(BgDblueWaterfall* this, PlayState* play) {
 }
 
 s32 func_80B83D58(Actor* thisx, PlayState* play) {
-    BgDblueWaterfall* this = THIS;
+    BgDblueWaterfall* this = (BgDblueWaterfall*)thisx;
 
     if (Flags_GetSwitch(play, BGDBLUEWATERFALL_GET_SWITCH_FLAG(&this->actor))) {
         return false;
@@ -331,7 +329,7 @@ static InitChainEntry sInitChain[] = {
 
 void BgDblueWaterfall_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    BgDblueWaterfall* this = THIS;
+    BgDblueWaterfall* this = (BgDblueWaterfall*)thisx;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     this->actor.shape.rot.z = 0;
@@ -349,7 +347,7 @@ void BgDblueWaterfall_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgDblueWaterfall_Destroy(Actor* thisx, PlayState* play) {
-    BgDblueWaterfall* this = THIS;
+    BgDblueWaterfall* this = (BgDblueWaterfall*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -576,14 +574,14 @@ void func_80B84F20(BgDblueWaterfall* this, PlayState* play) {
 }
 
 void BgDblueWaterfall_Update(Actor* thisx, PlayState* play) {
-    BgDblueWaterfall* this = THIS;
+    BgDblueWaterfall* this = (BgDblueWaterfall*)thisx;
 
     this->actionFunc(this, play);
 }
 
 void BgDblueWaterfall_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
-    BgDblueWaterfall* this = THIS;
+    BgDblueWaterfall* this = (BgDblueWaterfall*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

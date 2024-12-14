@@ -978,7 +978,7 @@ void TitleCard_Draw(GameState* gameState, TitleCardContext* titleCtx) {
 
 // unused
 s32 func_800B6434(PlayState* play, TitleCardContext* titleCtx) {
-    if ((play->actorCtx.titleCtxt.delayTimer != 0) || (play->actorCtx.titleCtxt.alpha != 0)) {
+    if ((play->actorCtx.titleCtx.delayTimer != 0) || (play->actorCtx.titleCtx.alpha != 0)) {
         titleCtx->durationTimer = 0;
         titleCtx->delayTimer = 0;
         return false;
@@ -2109,42 +2109,49 @@ PlayerItemAction Player_GetExchangeItemAction(PlayState* play) {
     return player->exchangeItemAction;
 }
 
-s32 func_800B8718(Actor* actor, GameState* gameState) {
-    if (actor->flags & ACTOR_FLAG_20000000) {
-        actor->flags &= ~ACTOR_FLAG_20000000;
+/**
+ * When a given ocarina interaction offer is accepted, Player will set `ACTOR_FLAG_OCARINA_INTERACTION` for that actor.
+ * An exception is made for EN_ZOT, see `Player_ActionHandler_13`.
+ * This function serves to acknowledge that the offer was accepted by Player, and notifies the actor
+ * that it should proceed with its own internal processes for handling further interactions.
+ *
+ * @return  true if the ocarina interaction offer was accepted, false otherwise
+ */
+s32 Actor_OcarinaInteractionAccepted(Actor* actor, GameState* gameState) {
+    if (actor->flags & ACTOR_FLAG_OCARINA_INTERACTION) {
+        actor->flags &= ~ACTOR_FLAG_OCARINA_INTERACTION;
         return true;
     }
 
     return false;
 }
 
-// Similar to Actor_OfferTalkExchange
-s32 func_800B874C(Actor* actor, PlayState* play, f32 xzRange, f32 yRange) {
+s32 Actor_OfferOcarinaInteraction(Actor* actor, PlayState* play, f32 xzRange, f32 yRange) {
     Player* player = GET_PLAYER(play);
 
-    if ((player->actor.flags & ACTOR_FLAG_20000000) || Player_InCsMode(play) ||
-        (yRange < fabsf(actor->playerHeightRel)) || ((player->unk_A94 < actor->xzDistToPlayer)) ||
+    if ((player->actor.flags & ACTOR_FLAG_OCARINA_INTERACTION) || Player_InCsMode(play) ||
+        (yRange < fabsf(actor->playerHeightRel)) || ((player->ocarinaInteractionDistance < actor->xzDistToPlayer)) ||
         (xzRange < actor->xzDistToPlayer)) {
         return false;
     }
 
-    player->unk_A90 = actor;
-    player->unk_A94 = actor->xzDistToPlayer;
+    player->ocarinaInteractionActor = actor;
+    player->ocarinaInteractionDistance = actor->xzDistToPlayer;
     return true;
 }
 
-s32 func_800B8804(Actor* actor, PlayState* play, f32 xzRange) {
-    return func_800B874C(actor, play, xzRange, 20.0f);
+s32 Actor_OfferOcarinaInteractionNearby(Actor* actor, PlayState* play, f32 xzRange) {
+    return Actor_OfferOcarinaInteraction(actor, play, xzRange, 20.0f);
 }
 
-s32 func_800B882C(Actor* actor, PlayState* play) {
+s32 Actor_OfferOcarinaInteractionColChkInfoCylinder(Actor* actor, PlayState* play) {
     f32 cylRadius = actor->colChkInfo.cylRadius + 50.0f;
 
-    return func_800B8804(actor, play, cylRadius);
+    return Actor_OfferOcarinaInteractionNearby(actor, play, cylRadius);
 }
 
-s32 func_800B886C(Actor* actor, PlayState* play) {
-    if (!(GET_PLAYER(play)->actor.flags & ACTOR_FLAG_20000000)) {
+s32 Actor_NoOcarinaInteraction(Actor* actor, PlayState* play) {
+    if (!(GET_PLAYER(play)->actor.flags & ACTOR_FLAG_OCARINA_INTERACTION)) {
         return true;
     }
 
@@ -2492,7 +2499,7 @@ void Actor_InitContext(PlayState* play, ActorContext* actorCtx, ActorEntry* acto
     actorCtx->sceneFlags.collectible[0] = cycleFlags->collectible;
     actorCtx->sceneFlags.clearedRoom = cycleFlags->clearedRoom;
 
-    TitleCard_ContextInit(&play->state, &actorCtx->titleCtxt);
+    TitleCard_ContextInit(&play->state, &actorCtx->titleCtx);
     Actor_InitPlayerImpact(play);
 
     actorCtx->absoluteSpace = NULL;
@@ -2752,7 +2759,7 @@ void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
         Attention_Update(&actorCtx->attention, player, actor, play);
     }
 
-    TitleCard_Update(&play->state, &actorCtx->titleCtxt);
+    TitleCard_Update(&play->state, &actorCtx->titleCtx);
     Actor_UpdatePlayerImpact(play);
     DynaPoly_UpdateBgActorTransforms(play, &play->colCtx.dyna);
 }
@@ -2763,12 +2770,16 @@ void Actor_Draw(PlayState* play, Actor* actor) {
     OPEN_DISPS(play->state.gfxCtx);
 
     light = LightContext_NewLights(&play->lightCtx, play->state.gfxCtx);
-    if ((actor->flags & ACTOR_FLAG_10000000) && (play->roomCtx.curRoom.enablePosLights || (MREG(93) != 0))) {
+    if ((actor->flags & ACTOR_FLAG_UCODE_POINT_LIGHT_ENABLED) &&
+        (play->roomCtx.curRoom.enablePosLights || (MREG(93) != 0))) {
         light->enablePosLights = true;
     }
 
     Lights_BindAll(light, play->lightCtx.listHead,
-                   (actor->flags & (ACTOR_FLAG_10000000 | ACTOR_FLAG_400000)) ? NULL : &actor->world.pos, play);
+                   (actor->flags & (ACTOR_FLAG_UCODE_POINT_LIGHT_ENABLED | ACTOR_FLAG_IGNORE_LEGACY_POINT_LIGHTS))
+                       ? NULL
+                       : &actor->world.pos,
+                   play);
     Lights_Draw(light, play->state.gfxCtx);
 
     if (actor->flags & ACTOR_FLAG_IGNORE_QUAKE) {
@@ -3123,7 +3134,7 @@ void Actor_DrawAll(PlayState* play, ActorContext* actorCtx) {
         Lights_DrawGlow(play);
     }
 
-    TitleCard_Draw(&play->state, &actorCtx->titleCtxt);
+    TitleCard_Draw(&play->state, &actorCtx->titleCtx);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }

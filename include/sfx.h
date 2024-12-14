@@ -2,6 +2,7 @@
 #define SFX_H
 
 #include "PR/ultratypes.h"
+#include "libc/assert.h"
 #include "z64math.h"
 
 /**
@@ -23,24 +24,49 @@
 
 typedef enum SfxId {
     NA_SE_NONE, // Requesting a sfx with this id will play no sound
+
     NA_SE_PL_BASE = 0x7FF,
     #include "tables/sfx/playerbank_table.h"
+    NA_SE_PL_END,
+
     NA_SE_IT_BASE = 0x17FF,
     #include "tables/sfx/itembank_table.h"
+    NA_SE_IT_END,
+
     NA_SE_EV_BASE = 0x27FF,
     #include "tables/sfx/environmentbank_table.h"
+    NA_SE_EV_END,
+
     NA_SE_EN_BASE = 0x37FF,
     #include "tables/sfx/enemybank_table.h"
+    NA_SE_EN_END,
+
     NA_SE_SY_BASE = 0x47FF,
     #include "tables/sfx/systembank_table.h"
+    NA_SE_SY_END,
+
     NA_SE_OC_BASE = 0x57FF,
     #include "tables/sfx/ocarinabank_table.h"
+    NA_SE_OC_END,
+
     NA_SE_VO_BASE = 0x67FF,
     #include "tables/sfx/voicebank_table.h"
+    NA_SE_VO_END,
+
     NA_SE_MAX
 } SfxId;
 
 #undef DEFINE_SFX
+
+// These limits are due to the way Sequence 0 is programmed. There is also a global limit of 1024 entries for every bank
+// enforced in Audio_PlayActiveSfx in sfx.c
+static_assert(NA_SE_PL_END - (NA_SE_PL_BASE + 1) <= 512, "Player Bank SFX Table is limited to 512 entries due to Sequence 0");
+static_assert(NA_SE_IT_END - (NA_SE_IT_BASE + 1) <= 128, "Item Bank SFX Table is limited to 128 entries due to Sequence 0");
+static_assert(NA_SE_EV_END - (NA_SE_EV_BASE + 1) <= 512, "Environment Bank SFX Table is limited to 512 entries due to Sequence 0");
+static_assert(NA_SE_EN_END - (NA_SE_EN_BASE + 1) <= 768, "Enemy Bank SFX Table is limited to 768 entries due to Sequence 0");
+static_assert(NA_SE_SY_END - (NA_SE_SY_BASE + 1) <= 128, "System Bank SFX Table is limited to 128 entries due to Sequence 0");
+static_assert(NA_SE_OC_END - (NA_SE_OC_BASE + 1) <= 128, "Ocarina Bank SFX Table is limited to 128 entries due to Sequence 0");
+static_assert(NA_SE_VO_END - (NA_SE_VO_BASE + 1) <= 512, "Voice Bank SFX Table is limited to 512 entries due to Sequence 0");
 
 typedef enum SfxPauseMenu {
     /* 0 */ SFX_PAUSE_MENU_CLOSE,

@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
-#define THIS ((EnDaiku*)thisx)
-
 void EnDaiku_Init(Actor* thisx, PlayState* play);
 void EnDaiku_Destroy(Actor* thisx, PlayState* play);
 void EnDaiku_Update(Actor* thisx, PlayState* play);
@@ -95,7 +93,7 @@ static u8 sAnimationModes[ENDAIKU_ANIM_MAX] = {
 };
 
 void EnDaiku_Init(Actor* thisx, PlayState* play) {
-    EnDaiku* this = THIS;
+    EnDaiku* this = (EnDaiku*)thisx;
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 40.0f);
@@ -153,7 +151,7 @@ void EnDaiku_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnDaiku_Destroy(Actor* thisx, PlayState* play) {
-    EnDaiku* this = THIS;
+    EnDaiku* this = (EnDaiku*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -286,7 +284,7 @@ void func_80943BDC(EnDaiku* this, PlayState* play) {
 }
 
 void EnDaiku_Update(Actor* thisx, PlayState* play) {
-    EnDaiku* this = THIS;
+    EnDaiku* this = (EnDaiku*)thisx;
     s32 pad;
 
     if (this->unk_27E == 0) {
@@ -323,7 +321,7 @@ void EnDaiku_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnDaiku_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnDaiku* this = THIS;
+    EnDaiku* this = (EnDaiku*)thisx;
 
     if (limbIndex == OBJECT_DAIKU_LIMB_0F) {
         rot->x += this->unk_260;
@@ -340,7 +338,7 @@ void EnDaiku_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
         object_daiku_DL_006E80,
         object_daiku_DL_006D70,
     };
-    EnDaiku* this = THIS;
+    EnDaiku* this = (EnDaiku*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -356,7 +354,7 @@ void EnDaiku_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
 }
 
 void EnDaiku_Draw(Actor* thisx, PlayState* play) {
-    EnDaiku* this = THIS;
+    EnDaiku* this = (EnDaiku*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

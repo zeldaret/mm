@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
-#define THIS ((EnMk*)thisx)
-
 void EnMk_Init(Actor* thisx, PlayState* play);
 void EnMk_Destroy(Actor* thisx, PlayState* play);
 void EnMk_Update(Actor* thisx, PlayState* play);
@@ -88,7 +86,7 @@ s32 EnMk_ChangeAnim(EnMk* this, s16 animIndex) {
 }
 
 void EnMk_Init(Actor* thisx, PlayState* play) {
-    EnMk* this = THIS;
+    EnMk* this = (EnMk*)thisx;
     s16 csId;
     s32 i;
 
@@ -127,7 +125,7 @@ void EnMk_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnMk_Destroy(Actor* thisx, PlayState* play) {
-    EnMk* this = THIS;
+    EnMk* this = (EnMk*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -425,7 +423,7 @@ void func_80959E18(EnMk* this, PlayState* play) {
         return;
     }
 
-    if (func_800B8718(&this->actor, &play->state)) {
+    if (Actor_OcarinaInteractionAccepted(&this->actor, &play->state)) {
         play->msgCtx.ocarinaMode = OCARINA_MODE_END;
         this->actionFunc = func_80959D28;
         if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
@@ -446,7 +444,7 @@ void func_80959E18(EnMk* this, PlayState* play) {
         this->unk_27A |= 1;
         Actor_OfferTalk(&this->actor, play, 200.0f);
         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_20_40) && CHECK_WEEKEVENTREG(WEEKEVENTREG_19_40)) {
-            func_800B874C(&this->actor, play, 200.0f, 100.0f);
+            Actor_OfferOcarinaInteraction(&this->actor, play, 200.0f, 100.0f);
         }
     } else {
         this->unk_27A &= ~1;
@@ -456,7 +454,7 @@ void func_80959E18(EnMk* this, PlayState* play) {
 
 void EnMk_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnMk* this = THIS;
+    EnMk* this = (EnMk*)thisx;
     Vec3s torsoRot;
 
     Collider_UpdateCylinder(&this->actor, &this->collider);
@@ -475,7 +473,7 @@ void EnMk_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnMk_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnMk* this = THIS;
+    EnMk* this = (EnMk*)thisx;
 
     if (limbIndex == MARINE_RESEARCHER_LIMB_HEAD) {
         rot->y -= this->headRot.y;
@@ -487,7 +485,7 @@ s32 EnMk_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
 Vec3f D_8095A2A0 = { 1000.0f, -100.0f, 0.0f };
 
 void EnMk_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnMk* this = THIS;
+    EnMk* this = (EnMk*)thisx;
 
     if (limbIndex == MARINE_RESEARCHER_LIMB_HEAD) {
         Matrix_MultVec3f(&D_8095A2A0, &this->actor.focus.pos);
@@ -495,7 +493,7 @@ void EnMk_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 }
 
 void EnMk_Draw(Actor* thisx, PlayState* play) {
-    EnMk* this = THIS;
+    EnMk* this = (EnMk*)thisx;
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,

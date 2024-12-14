@@ -22,8 +22,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
-#define THIS ((BossHakugin*)thisx)
-
 #define GOHT_LIMB_DRAW_FLAG(limbIndex) (1 << ((limbIndex)-1))
 
 void BossHakugin_Init(Actor* thisx, PlayState* play2);
@@ -553,7 +551,7 @@ void BossHakugin_Init(Actor* thisx, PlayState* play2) {
         ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_STOP),
     };
     PlayState* play = play2;
-    BossHakugin* this = THIS;
+    BossHakugin* this = (BossHakugin*)thisx;
     Actor** actorPtr;
     s32 pad;
     s32 i;
@@ -631,7 +629,7 @@ void BossHakugin_Init(Actor* thisx, PlayState* play2) {
 }
 
 void BossHakugin_Destroy(Actor* thisx, PlayState* play) {
-    BossHakugin* this = THIS;
+    BossHakugin* this = (BossHakugin*)thisx;
     s32 pad;
     s32 i;
 
@@ -1763,7 +1761,7 @@ void BossHakugin_IntroCutsceneWakeUp(BossHakugin* this, PlayState* play) {
         }
 
         if (Animation_OnFrame(&this->skelAnime, 65.0f)) {
-            TitleCard_InitBossName(&play->state, &play->actorCtx.titleCtxt, Lib_SegmentedToVirtual(&gGohtTitleCardTex),
+            TitleCard_InitBossName(&play->state, &play->actorCtx.titleCtx, Lib_SegmentedToVirtual(&gGohtTitleCardTex),
                                    160, 180, 128, 40);
         }
 
@@ -2998,7 +2996,7 @@ void BossHakugin_UpdateElectricBalls(BossHakugin* this, PlayState* play) {
 
 void BossHakugin_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    BossHakugin* this = THIS;
+    BossHakugin* this = (BossHakugin*)thisx;
     Vec3s targetRot;
     Player* player = GET_PLAYER(play);
 
@@ -3121,7 +3119,7 @@ s32 BossHakugin_OverrideLimbDraw(struct PlayState* play, s32 limbIndex, Gfx** dL
                                  Actor* thisx) {
     static s32 sCurrentMalfunctionType = GOHT_MALFUNCTION_NUM_TYPES - 1;
     static s32 sCurrentLimbIndex = GOHT_LIMB_FRONT_RIGHT_UPPER_LEG;
-    BossHakugin* this = THIS;
+    BossHakugin* this = (BossHakugin*)thisx;
 
     if (this->actionFunc == BossHakugin_DeathCutsceneCrushedByRocks) {
         if (limbIndex == GOHT_LIMB_ROOT) {
@@ -3160,7 +3158,7 @@ s32 BossHakugin_OverrideLimbDraw(struct PlayState* play, s32 limbIndex, Gfx** dL
 }
 
 void BossHakugin_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    BossHakugin* this = THIS;
+    BossHakugin* this = (BossHakugin*)thisx;
     s8 bodyPartIndex;
     s32 i;
     f32 cos;
@@ -3442,7 +3440,7 @@ void BossHakugin_DrawIce(BossHakugin* this, PlayState* play) {
 
 void BossHakugin_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
-    BossHakugin* this = THIS;
+    BossHakugin* this = (BossHakugin*)thisx;
     u8* tex = GRAPH_ALLOC(play->state.gfxCtx, GOHT_SHADOW_TEX_SIZE);
 
     OPEN_DISPS(play->state.gfxCtx);
@@ -3603,7 +3601,7 @@ void BossHakugin_FillShadowTex(BossHakugin* this, u8* tex, f32 weight) {
             baseY = (u16)((s32)startVec.y * 64);
 
             if (sShadowSizes[i] == GOHT_SHADOW_SIZE_EXTRA_LARGE) {
-                for (y = 0, addY = -0x180; y < ARRAY_COUNT(sShadowExtraLargeMap); y++, addY += 0x40) {
+                for (y = 0, addY = -384; y < ARRAY_COUNT(sShadowExtraLargeMap); y++, addY += 64) {
                     for (x = -sShadowExtraLargeMap[y]; x < sShadowExtraLargeMap[y]; x++) {
                         index = baseX + x + baseY + addY;
                         if ((index >= 0) && (index < GOHT_SHADOW_TEX_SIZE)) {
@@ -3612,7 +3610,7 @@ void BossHakugin_FillShadowTex(BossHakugin* this, u8* tex, f32 weight) {
                     }
                 }
             } else if (sShadowSizes[i] == GOHT_SHADOW_SIZE_LARGE) {
-                for (y = 0, addY = -0x100; y < ARRAY_COUNT(sShadowLargeMap); y++, addY += 0x40) {
+                for (y = 0, addY = -256; y < ARRAY_COUNT(sShadowLargeMap); y++, addY += 64) {
                     for (x = -sShadowLargeMap[y]; x < sShadowLargeMap[y]; x++) {
                         index = baseX + x + baseY + addY;
                         if ((index >= 0) && (index < GOHT_SHADOW_TEX_SIZE)) {
@@ -3621,7 +3619,7 @@ void BossHakugin_FillShadowTex(BossHakugin* this, u8* tex, f32 weight) {
                     }
                 }
             } else if (sShadowSizes[i] == GOHT_SHADOW_SIZE_MEDIUM) {
-                for (y = 0, addY = -0xC0; y < ARRAY_COUNT(sShadowMediumMap); y++, addY += 0x40) {
+                for (y = 0, addY = -192; y < ARRAY_COUNT(sShadowMediumMap); y++, addY += 64) {
                     for (x = -sShadowMediumMap[y]; x < sShadowMediumMap[y]; x++) {
                         index = baseX + x + baseY + addY;
                         if ((index >= 0) && (index < GOHT_SHADOW_TEX_SIZE)) {
@@ -3630,7 +3628,7 @@ void BossHakugin_FillShadowTex(BossHakugin* this, u8* tex, f32 weight) {
                     }
                 }
             } else {
-                for (y = 0, addY = -0x80; y < ARRAY_COUNT(sShadowSmallMap); y++, addY += 0x40) {
+                for (y = 0, addY = -128; y < ARRAY_COUNT(sShadowSmallMap); y++, addY += 64) {
                     for (x = -sShadowSmallMap[y]; x < sShadowSmallMap[y]; x++) {
                         index = baseX + x + baseY + addY;
                         if ((index >= 0) && (index < GOHT_SHADOW_TEX_SIZE)) {
@@ -3807,7 +3805,7 @@ void BossHakugin_UpdateCrushingRocksCollision(BossHakugin* this) {
  */
 void BossHakugin_UpdateStationaryCrushingRocks(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    BossHakugin* this = THIS;
+    BossHakugin* this = (BossHakugin*)thisx;
 
     BossHakugin_UpdateCrushingRocksCollision(this);
     CollisionCheck_SetAC(play, &play->colChkCtx, &this->bodyCollider.base);
@@ -3818,7 +3816,7 @@ void BossHakugin_UpdateStationaryCrushingRocks(Actor* thisx, PlayState* play2) {
  * Draws the rocks that crush Goht, both when they are falling down and after they become stationary.
  */
 void BossHakugin_DrawCrushingRocks(Actor* thisx, PlayState* play) {
-    BossHakugin* this = THIS;
+    BossHakugin* this = (BossHakugin*)thisx;
     s32 i;
     GohtCrushingRock* crushingRock;
 

@@ -291,11 +291,11 @@ asm/non_matchings/code/z_actor/Actor_OfferTalkNearColChkInfoCylinder.s,Actor_Off
 asm/non_matchings/code/z_actor/Actor_TextboxIsClosing.s,Actor_TextboxIsClosing,0x800B867C,0x13
 asm/non_matchings/code/z_actor/Actor_ChangeFocus.s,Actor_ChangeFocus,0x800B86C8,0x10
 asm/non_matchings/code/z_actor/Player_GetExchangeItemId.s,Player_GetExchangeItemId,0x800B8708,0x4
-asm/non_matchings/code/z_actor/func_800B8718.s,func_800B8718,0x800B8718,0xD
-asm/non_matchings/code/z_actor/func_800B874C.s,func_800B874C,0x800B874C,0x2E
-asm/non_matchings/code/z_actor/func_800B8804.s,func_800B8804,0x800B8804,0xA
-asm/non_matchings/code/z_actor/func_800B882C.s,func_800B882C,0x800B882C,0x10
-asm/non_matchings/code/z_actor/func_800B886C.s,func_800B886C,0x800B886C,0xB
+asm/non_matchings/code/z_actor/Actor_OcarinaInteractionAccepted.s,Actor_OcarinaInteractionAccepted,0x800B8718,0xD
+asm/non_matchings/code/z_actor/Actor_OfferOcarinaInteraction.s,Actor_OfferOcarinaInteraction,0x800B874C,0x2E
+asm/non_matchings/code/z_actor/Actor_OfferOcarinaInteractionNearby.s,Actor_OfferOcarinaInteractionNearby,0x800B8804,0xA
+asm/non_matchings/code/z_actor/Actor_OfferOcarinaInteractionColChkInfoCylinder.s,Actor_OfferOcarinaInteractionColChkInfoCylinder,0x800B882C,0x10
+asm/non_matchings/code/z_actor/Actor_NoOcarinaInteraction.s,Actor_NoOcarinaInteraction,0x800B886C,0xB
 asm/non_matchings/code/z_actor/Actor_GetScreenPos.s,Actor_GetScreenPos,0x800B8898,0x27
 asm/non_matchings/code/z_actor/Actor_OnScreen.s,Actor_OnScreen,0x800B8934,0x31
 asm/non_matchings/code/z_actor/Actor_HasParent.s,Actor_HasParent,0x800B89F8,0x9
@@ -1691,7 +1691,7 @@ asm/non_matchings/code/z_player_lib/Player_InitOverrideInput.s,Player_InitOverri
 asm/non_matchings/code/z_player_lib/Player_UpdateOverrideInput.s,Player_UpdateOverrideInput,0x80122760,0x42
 asm/non_matchings/code/z_player_lib/func_80122868.s,func_80122868,0x80122868,0x4E
 asm/non_matchings/code/z_player_lib/func_801229A0.s,func_801229A0,0x801229A0,0x13
-asm/non_matchings/code/z_player_lib/func_801229EC.s,func_801229EC,0x801229EC,0x4
+asm/non_matchings/code/z_player_lib/Player_DoNothing.s,Player_DoNothing,0x801229EC,0x4
 asm/non_matchings/code/z_player_lib/func_801229FC.s,func_801229FC,0x801229FC,0x6A
 asm/non_matchings/code/z_player_lib/func_80122BA4.s,func_80122BA4,0x80122BA4,0x1F
 asm/non_matchings/code/z_player_lib/func_80122C20.s,func_80122C20,0x80122C20,0x49
@@ -2221,7 +2221,7 @@ asm/non_matchings/code/z_sub_s/SubS_ConstructPlane.s,SubS_ConstructPlane,0x8013E
 asm/non_matchings/code/z_sub_s/SubS_LineSegVsPlane.s,SubS_LineSegVsPlane,0x8013E5CC,0x1D
 asm/non_matchings/code/z_sub_s/SubS_FindActorCustom.s,SubS_FindActorCustom,0x8013E640,0x42
 asm/non_matchings/code/z_sub_s/SubS_OfferTalkExchangeCustom.s,SubS_OfferTalkExchangeCustom,0x8013E748,0x1E
-asm/non_matchings/code/z_sub_s/SubS_ActorAndPlayerFaceEachOther.s,SubS_ActorAndPlayerFaceEachOther,0x8013E7C0,0x4E
+asm/non_matchings/code/z_sub_s/SubS_ArePlayerAndActorFacing.s,SubS_ArePlayerAndActorFacing,0x8013E7C0,0x4E
 asm/non_matchings/code/z_sub_s/SubS_OfferTalkExchangeFacing.s,SubS_OfferTalkExchangeFacing,0x8013E8F8,0x16
 asm/non_matchings/code/z_sub_s/SubS_TrackPointStep.s,SubS_TrackPointStep,0x8013E950,0xB0
 asm/non_matchings/code/code_8013EC10/Rumble_Update.s,Rumble_Update,0x8013EC10,0xD

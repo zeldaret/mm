@@ -14,8 +14,6 @@
     (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20 | \
      ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER)
 
-#define THIS ((EnBigpamet*)thisx)
-
 void EnBigpamet_Init(Actor* thisx, PlayState* play);
 void EnBigpamet_Destroy(Actor* thisx, PlayState* play);
 void EnBigpamet_Update(Actor* thisx, PlayState* play);
@@ -138,7 +136,7 @@ Color_RGBA8 D_80A29788 = { 250, 250, 250, 255 };
 Color_RGBA8 D_80A2978C = { 180, 180, 180, 255 };
 
 void EnBigpamet_Init(Actor* thisx, PlayState* play) {
-    EnBigpamet* this = THIS;
+    EnBigpamet* this = (EnBigpamet*)thisx;
     s32 i;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
@@ -165,7 +163,7 @@ void EnBigpamet_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnBigpamet_Destroy(Actor* thisx, PlayState* play) {
-    EnBigpamet* this = THIS;
+    EnBigpamet* this = (EnBigpamet*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -750,7 +748,7 @@ void func_80A29094(EnBigpamet* this) {
 
 void EnBigpamet_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnBigpamet* this = THIS;
+    EnBigpamet* this = (EnBigpamet*)thisx;
 
     func_80A2768C(this);
     func_80A29028(this, play);
@@ -813,7 +811,7 @@ void func_80A292A8(EnBigpamet* this, PlayState* play) {
 }
 
 s32 EnBigpamet_OverrideLimbDraw2(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnBigpamet* this = THIS;
+    EnBigpamet* this = (EnBigpamet*)thisx;
 
     if ((this->actionFunc == func_80A2855C) || (this->actionFunc == func_80A28A98)) {
         if (limbIndex == SNAPPER_LIMB_HEAD) {
@@ -827,7 +825,7 @@ s32 EnBigpamet_OverrideLimbDraw2(PlayState* play, s32 limbIndex, Gfx** dList, Ve
 }
 
 void EnBigpamet_PostLimbDraw2(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnBigpamet* this = THIS;
+    EnBigpamet* this = (EnBigpamet*)thisx;
 
     if (limbIndex == SNAPPER_LIMB_BODY) {
         this->unk_2AC = Matrix_GetCurrent()->yw;
@@ -835,7 +833,7 @@ void EnBigpamet_PostLimbDraw2(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s
 }
 
 void EnBigpamet_Draw(Actor* thisx, PlayState* play) {
-    EnBigpamet* this = THIS;
+    EnBigpamet* this = (EnBigpamet*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -852,7 +850,7 @@ void EnBigpamet_Draw(Actor* thisx, PlayState* play) {
 }
 
 s32 EnBigpamet_OverrideLimbDraw1(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnBigpamet* this = THIS;
+    EnBigpamet* this = (EnBigpamet*)thisx;
 
     if (limbIndex == SPIKED_SNAPPER_LIMB_BODY) {
         if (this->actionFunc == func_80A28D0C) {
@@ -870,7 +868,7 @@ s32 EnBigpamet_OverrideLimbDraw1(PlayState* play, s32 limbIndex, Gfx** dList, Ve
 }
 
 void EnBigpamet_PostLimbDraw1(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnBigpamet* this = THIS;
+    EnBigpamet* this = (EnBigpamet*)thisx;
 
     if (limbIndex == SPIKED_SNAPPER_LIMB_BODY) {
         this->unk_2AC = Matrix_GetCurrent()->yw;
@@ -878,7 +876,7 @@ void EnBigpamet_PostLimbDraw1(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s
 }
 
 void func_80A2966C(Actor* thisx, PlayState* play) {
-    EnBigpamet* this = THIS;
+    EnBigpamet* this = (EnBigpamet*)thisx;
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->spikedSnapperSkelAnime.skeleton, this->spikedSnapperSkelAnime.jointTable,

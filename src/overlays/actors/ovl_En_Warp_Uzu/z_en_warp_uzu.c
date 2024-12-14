@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
-#define THIS ((EnWarpUzu*)thisx)
-
 void EnWarpUzu_Init(Actor* thisx, PlayState* play);
 void EnWarpUzu_Destroy(Actor* thisx, PlayState* play);
 void EnWarpUzu_Update(Actor* thisx, PlayState* play);
@@ -61,7 +59,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void EnWarpUzu_Init(Actor* thisx, PlayState* play) {
-    EnWarpUzu* this = THIS;
+    EnWarpUzu* this = (EnWarpUzu*)thisx;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     Collider_InitAndSetCylinder(play, &this->collider, thisx, &sCylinderInit);
@@ -70,7 +68,7 @@ void EnWarpUzu_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnWarpUzu_Destroy(Actor* thisx, PlayState* play) {
-    EnWarpUzu* this = THIS;
+    EnWarpUzu* this = (EnWarpUzu*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -115,7 +113,7 @@ void EnWarpUzu_DoNothing(EnWarpUzu* this, PlayState* play) {
 }
 
 void EnWarpUzu_Update(Actor* thisx, PlayState* play) {
-    EnWarpUzu* this = THIS;
+    EnWarpUzu* this = (EnWarpUzu*)thisx;
     s32 pad;
 
     this->actor.uncullZoneForward = 1000.0f;

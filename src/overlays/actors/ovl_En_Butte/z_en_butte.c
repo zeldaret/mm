@@ -11,8 +11,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((EnButte*)thisx)
-
 void EnButte_Init(Actor* thisx, PlayState* play);
 void EnButte_Destroy(Actor* thisx, PlayState* play2);
 void EnButte_Update(Actor* thisx, PlayState* play);
@@ -163,7 +161,7 @@ void func_8091C178(EnButte* this, PlayState* play) {
 
 void EnButte_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnButte* this = THIS;
+    EnButte* this = (EnButte*)thisx;
 
     if (BUTTERFLY_GET(&this->actor) == BUTTERFLY_MINUS1) {
         this->actor.params = BUTTERFLY_0;
@@ -199,7 +197,7 @@ void EnButte_Init(Actor* thisx, PlayState* play) {
 
 void EnButte_Destroy(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnButte* this = THIS;
+    EnButte* this = (EnButte*)thisx;
 
     Collider_DestroyJntSph(play, &this->collider);
 }
@@ -402,7 +400,7 @@ void func_8091D090(EnButte* this, PlayState* play) {
 }
 
 void EnButte_Update(Actor* thisx, PlayState* play) {
-    EnButte* this = THIS;
+    EnButte* this = (EnButte*)thisx;
 
     if ((this->actor.child != NULL) && (this->actor.child->update == NULL) && (&this->actor != this->actor.child)) {
         this->actor.child = NULL;
@@ -444,7 +442,7 @@ void EnButte_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnButte_Draw(Actor* thisx, PlayState* play) {
-    EnButte* this = THIS;
+    EnButte* this = (EnButte*)thisx;
 
     if (this->unk_250 != 0) {
         Gfx_SetupDL25_Opa(play->state.gfxCtx);

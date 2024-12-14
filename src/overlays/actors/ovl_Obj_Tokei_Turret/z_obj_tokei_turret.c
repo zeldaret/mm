@@ -9,8 +9,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((ObjTokeiTurret*)thisx)
-
 void ObjTokeiTurret_Init(Actor* thisx, PlayState* play);
 void ObjTokeiTurret_Destroy(Actor* thisx, PlayState* play);
 void ObjTokeiTurret_Update(Actor* thisx, PlayState* play);
@@ -35,7 +33,7 @@ static InitChainEntry sInitChain[] = {
 
 void ObjTokeiTurret_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    ObjTokeiTurret* this = THIS;
+    ObjTokeiTurret* this = (ObjTokeiTurret*)thisx;
     s32 tier;
 
     tier = OBJ_TOKEI_TURRET_TIER_TYPE(thisx);
@@ -56,7 +54,7 @@ void ObjTokeiTurret_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjTokeiTurret_Destroy(Actor* thisx, PlayState* play) {
-    ObjTokeiTurret* this = THIS;
+    ObjTokeiTurret* this = (ObjTokeiTurret*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
@@ -65,7 +63,7 @@ void ObjTokeiTurret_Update(Actor* thisx, PlayState* play) {
 }
 
 void ObjTokeiTurret_Draw(Actor* thisx, PlayState* play) {
-    ObjTokeiTurret* this = THIS;
+    ObjTokeiTurret* this = (ObjTokeiTurret*)thisx;
     Gfx* gfx;
 
     if (OBJ_TOKEI_TURRET_TIER_TYPE(thisx) == TURRET_TIER_TOP) {

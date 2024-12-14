@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
-#define THIS ((DmOpstage*)thisx)
-
 void DmOpstage_Init(Actor* thisx, PlayState* play);
 void DmOpstage_Destroy(Actor* thisx, PlayState* play);
 void DmOpstage_Update(Actor* thisx, PlayState* play);
@@ -39,7 +37,7 @@ void DmOpstage_SetupAction(DmOpstage* this, DmOpstageActionFunc actionFunc) {
 }
 
 void DmOpstage_Init(Actor* thisx, PlayState* play) {
-    DmOpstage* this = THIS;
+    DmOpstage* this = (DmOpstage*)thisx;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DmOpstage_SetupAction(this, DmOpstage_HandleCutscene);
@@ -62,7 +60,7 @@ void DmOpstage_Init(Actor* thisx, PlayState* play) {
 }
 
 void DmOpstage_Destroy(Actor* thisx, PlayState* play) {
-    DmOpstage* this = THIS;
+    DmOpstage* this = (DmOpstage*)thisx;
 
     if (DMOPSTAGE_GET_TYPE(&this->dyna.actor) == DMOPSTAGE_TYPE_GROUND) {
         DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
@@ -92,7 +90,7 @@ void DmOpstage_HandleCutscene(DmOpstage* this, PlayState* play) {
 }
 
 void DmOpstage_Update(Actor* thisx, PlayState* play) {
-    DmOpstage* this = THIS;
+    DmOpstage* this = (DmOpstage*)thisx;
 
     this->actionFunc(this, play);
     if ((play->sceneId == SCENE_SPOT00) && (gSaveContext.sceneLayer == 0) && (play->csCtx.curFrame == 480)) {
@@ -103,7 +101,7 @@ void DmOpstage_Update(Actor* thisx, PlayState* play) {
 }
 
 void DmOpstage_Draw(Actor* thisx, PlayState* play) {
-    DmOpstage* this = THIS;
+    DmOpstage* this = (DmOpstage*)thisx;
 
     if (DMOPSTAGE_GET_TYPE(&this->dyna.actor) > DMOPSTAGE_TYPE_GROUND) {
         // Assumption: worldPos is being manipulated by cutscene

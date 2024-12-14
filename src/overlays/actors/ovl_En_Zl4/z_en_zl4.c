@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
-#define THIS ((EnZl4*)thisx)
-
 void EnZl4_Init(Actor* thisx, PlayState* play);
 void EnZl4_Destroy(Actor* thisx, PlayState* play);
 void EnZl4_Update(Actor* thisx, PlayState* play);
@@ -56,7 +54,7 @@ void EnZl4_ChangeAnim(SkelAnime* skelAnime, AnimationInfo* animInfo, u16 animInd
 }
 
 void EnZl4_Init(Actor* thisx, PlayState* play) {
-    EnZl4* this = THIS;
+    EnZl4* this = (EnZl4*)thisx;
 
     this->unk_2E0 = 0;
     this->alpha = 255;
@@ -75,7 +73,7 @@ void EnZl4_DoNothing(EnZl4* this, PlayState* play) {
 }
 
 void EnZl4_Update(Actor* thisx, PlayState* play) {
-    EnZl4* this = THIS;
+    EnZl4* this = (EnZl4*)thisx;
 
     SkelAnime_Update(&this->skelAnime);
     this->alpha += 0;
@@ -116,7 +114,7 @@ Gfx* func_809A1E28(GraphicsContext* gfxCtx, u32 alpha) {
 }
 
 void EnZl4_Draw(Actor* thisx, PlayState* play) {
-    EnZl4* this = THIS;
+    EnZl4* this = (EnZl4*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

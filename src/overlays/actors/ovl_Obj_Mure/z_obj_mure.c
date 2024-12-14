@@ -12,8 +12,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((ObjMure*)thisx)
-
 void ObjMure_Init(Actor* thisx, PlayState* play);
 void ObjMure_Destroy(Actor* thisx, PlayState* play);
 void ObjMure_Update(Actor* thisx, PlayState* play);
@@ -60,11 +58,11 @@ static s16 sSpawnActorIds[OBJMURE_TYPE_MAX] = {
 };
 
 static s16 sSpawnParams[OBJMURE_TYPE_MAX] = {
-    KUSA_BUSH_PARAMS(false, 0, false),     // OBJMURE_TYPE_GRASS
-    PLAYER_PARAMS(2, PLAYER_START_MODE_0), // OBJMURE_TYPE_UNDEFINED
-    FISH_PARAMS(ENFISH_MINUS1),            // OBJMURE_TYPE_FISH
-    ENINSECT_PARAMS(false),                // OBJMURE_TYPE_BUGS
-    BUTTERFLY_PARAMS(BUTTERFLY_MINUS1),    // OBJMURE_TYPE_BUTTERFLY
+    KUSA_BUSH_PARAMS(false, 0, false),           // OBJMURE_TYPE_GRASS
+    PLAYER_PARAMS(2, PLAYER_START_MODE_NOTHING), // OBJMURE_TYPE_UNDEFINED
+    FISH_PARAMS(ENFISH_MINUS1),                  // OBJMURE_TYPE_FISH
+    ENINSECT_PARAMS(false),                      // OBJMURE_TYPE_BUGS
+    BUTTERFLY_PARAMS(BUTTERFLY_MINUS1),          // OBJMURE_TYPE_BUTTERFLY
 };
 
 static InitChainEntry sInitChain[] = {
@@ -97,7 +95,7 @@ s32 func_808D7928(ObjMure* this, PlayState* play) {
 }
 
 void ObjMure_Init(Actor* thisx, PlayState* play) {
-    ObjMure* this = THIS;
+    ObjMure* this = (ObjMure*)thisx;
 
     this->chNum = OBJ_MURE_GET_CHNUM(&this->actor);
     this->ptn = OBJ_MURE_GET_PTN(&this->actor);
@@ -133,7 +131,7 @@ void ObjMure_GetSpawnPos(Vec3f* outPos, Vec3f* inPos, s32 ptn, s32 idx) {
 }
 
 void ObjMure_SpawnActors0(Actor* thisx, PlayState* play) {
-    ObjMure* this = THIS;
+    ObjMure* this = (ObjMure*)thisx;
     s32 i;
     Vec3f pos;
     s32 pad;
@@ -406,7 +404,7 @@ void ObjMure_ActiveState(ObjMure* this, PlayState* play) {
 }
 
 void ObjMure_Update(Actor* thisx, PlayState* play) {
-    ObjMure* this = THIS;
+    ObjMure* this = (ObjMure*)thisx;
 
     if (this->unk_19C > 0) {
         this->unk_19C--;

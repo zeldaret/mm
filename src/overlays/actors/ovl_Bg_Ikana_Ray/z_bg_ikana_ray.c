@@ -9,8 +9,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((BgIkanaRay*)thisx)
-
 void BgIkanaRay_Init(Actor* thisx, PlayState* play);
 void BgIkanaRay_Destroy(Actor* thisx, PlayState* play);
 void BgIkanaRay_Update(Actor* thisx, PlayState* play);
@@ -61,7 +59,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void BgIkanaRay_Init(Actor* thisx, PlayState* play) {
-    BgIkanaRay* this = THIS;
+    BgIkanaRay* this = (BgIkanaRay*)thisx;
     ColliderCylinder* collision = &this->collision;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
@@ -79,7 +77,7 @@ void BgIkanaRay_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgIkanaRay_Destroy(Actor* thisx, PlayState* play) {
-    BgIkanaRay* this = THIS;
+    BgIkanaRay* this = (BgIkanaRay*)thisx;
 
     ColliderCylinder* collision = &this->collision;
     Collider_DestroyCylinder(play, collision);
@@ -108,13 +106,13 @@ void BgIkanaRay_UpdateActivated(BgIkanaRay* this, PlayState* play) {
 }
 
 void BgIkanaRay_Update(Actor* thisx, PlayState* play) {
-    BgIkanaRay* this = THIS;
+    BgIkanaRay* this = (BgIkanaRay*)thisx;
 
     this->actionFunc(this, play);
 }
 
 void BgIkanaRay_Draw(Actor* thisx, PlayState* play) {
-    BgIkanaRay* this = THIS;
+    BgIkanaRay* this = (BgIkanaRay*)thisx;
 
     AnimatedMat_Draw(play, this->animatedTextures);
     Gfx_DrawDListXlu(play, object_ikana_obj_DL_001100);

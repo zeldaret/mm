@@ -13,8 +13,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
-#define THIS ((EnKakasi*)thisx)
-
 void EnKakasi_Init(Actor* thisx, PlayState* play);
 void EnKakasi_Destroy(Actor* thisx, PlayState* play);
 void EnKakasi_Update(Actor* thisx, PlayState* play);
@@ -153,13 +151,13 @@ static u8 sAnimationModes[ENKAKASI_ANIM_MAX] = {
 };
 
 void EnKakasi_Destroy(Actor* thisx, PlayState* play) {
-    EnKakasi* this = THIS;
+    EnKakasi* this = (EnKakasi*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
 
 void EnKakasi_Init(Actor* thisx, PlayState* play) {
-    EnKakasi* this = THIS;
+    EnKakasi* this = (EnKakasi*)thisx;
     s32 csId;
     s32 i;
 
@@ -353,7 +351,7 @@ void EnKakasi_IdleStanding(EnKakasi* this, PlayState* play) {
 
     // first talk to scarecrow dialogue
     this->picto.actor.textId = 0x1644;
-    if (func_800B8718(&this->picto.actor, &play->state)) {
+    if (Actor_OcarinaInteractionAccepted(&this->picto.actor, &play->state)) {
         this->skelAnime.playSpeed = 1.0f;
         EnKakasi_SetupSongTeach(this, play);
         return;
@@ -386,7 +384,7 @@ void EnKakasi_IdleStanding(EnKakasi* this, PlayState* play) {
     }
     if (this->picto.actor.xzDistToPlayer < 120.0f) {
         Actor_OfferTalk(&this->picto.actor, play, 100.0f);
-        func_800B874C(&this->picto.actor, play, 100.0f, 80.0f);
+        Actor_OfferOcarinaInteraction(&this->picto.actor, play, 100.0f, 80.0f);
     }
 }
 
@@ -1130,7 +1128,7 @@ void EnKakasi_RisenDialogue(EnKakasi* this, PlayState* play) {
 }
 
 void EnKakasi_Update(Actor* thisx, PlayState* play) {
-    EnKakasi* this = THIS;
+    EnKakasi* this = (EnKakasi*)thisx;
     s32 pad;
 
     SkelAnime_Update(&this->skelAnime);
@@ -1168,7 +1166,7 @@ void EnKakasi_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnKakasi_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnKakasi* this = THIS;
+    EnKakasi* this = (EnKakasi*)thisx;
 
     if (limbIndex == OBJECT_KA_LIMB_04) {
         Matrix_MultVec3f(&gZeroVec3f, &this->unk1BC);
@@ -1176,7 +1174,7 @@ void EnKakasi_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* r
 }
 
 void EnKakasi_Draw(Actor* thisx, PlayState* play) {
-    EnKakasi* this = THIS;
+    EnKakasi* this = (EnKakasi*)thisx;
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
                           EnKakasi_PostLimbDraw, &this->picto.actor);

@@ -10,8 +10,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
-#define THIS ((EnCow*)thisx)
-
 void EnCow_Init(Actor* thisx, PlayState* play);
 void EnCow_Destroy(Actor* thisx, PlayState* play);
 void EnCow_Update(Actor* thisx, PlayState* play2);
@@ -101,7 +99,7 @@ void EnCow_SetTailPos(EnCow* this) {
 
 void EnCow_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnCow* this = THIS;
+    EnCow* this = (EnCow*)thisx;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 72.0f);
 
@@ -163,7 +161,7 @@ void EnCow_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnCow_Destroy(Actor* thisx, PlayState* play) {
-    EnCow* this = THIS;
+    EnCow* this = (EnCow*)thisx;
 
     if (this->actor.params == EN_COW_TYPE_DEFAULT) { //! @bug EN_COW_TYPE_ABDUCTED do not destroy their cylinders
         Collider_DestroyCylinder(play, &this->colliders[0]);
@@ -336,7 +334,7 @@ void EnCow_DoTail(EnCow* this, PlayState* play) {
 
 void EnCow_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnCow* this = THIS;
+    EnCow* this = (EnCow*)thisx;
     s16 targetX;
     s16 targetY;
     Player* player = GET_PLAYER(play);
@@ -387,7 +385,7 @@ void EnCow_Update(Actor* thisx, PlayState* play2) {
 
 void EnCow_UpdateTail(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnCow* this = THIS;
+    EnCow* this = (EnCow*)thisx;
 
     if (SkelAnime_Update(&this->skelAnime)) {
         if (this->skelAnime.animation == &gCowTailIdleAnim) {
@@ -403,7 +401,7 @@ void EnCow_UpdateTail(Actor* thisx, PlayState* play) {
 }
 
 s32 EnCow_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnCow* this = THIS;
+    EnCow* this = (EnCow*)thisx;
 
     if (limbIndex == COW_LIMB_HEAD) {
         rot->y += this->headTilt.y;
@@ -417,7 +415,7 @@ s32 EnCow_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 }
 
 void EnCow_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnCow* this = THIS;
+    EnCow* this = (EnCow*)thisx;
 
     if (limbIndex == COW_LIMB_HEAD) {
         Matrix_MultVec3f(&D_8099D63C, &this->actor.focus.pos);
@@ -425,7 +423,7 @@ void EnCow_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
 }
 
 void EnCow_Draw(Actor* thisx, PlayState* play) {
-    EnCow* this = THIS;
+    EnCow* this = (EnCow*)thisx;
 
     Gfx_SetupDL37_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
@@ -433,7 +431,7 @@ void EnCow_Draw(Actor* thisx, PlayState* play) {
 }
 
 void EnCow_DrawTail(Actor* thisx, PlayState* play) {
-    EnCow* this = THIS;
+    EnCow* this = (EnCow*)thisx;
 
     Gfx_SetupDL37_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,

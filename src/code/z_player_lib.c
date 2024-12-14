@@ -155,7 +155,7 @@ void func_801229A0(PlayState* play, Player* player) {
 }
 
 // Update function
-void func_801229EC(Actor* thisx, PlayState* play) {
+void Player_DoNothing(Actor* thisx, PlayState* play) {
 }
 
 s16 sMaskObjectIds[PLAYER_MASK_MAX - 1] = {

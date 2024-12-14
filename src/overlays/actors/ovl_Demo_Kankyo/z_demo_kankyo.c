@@ -10,8 +10,6 @@
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
-#define THIS ((DemoKankyo*)thisx)
-
 void DemoKankyo_Init(Actor* thisx, PlayState* play);
 void DemoKankyo_Destroy(Actor* thisx, PlayState* play);
 void DemoKankyo_Update(Actor* thisx, PlayState* play);
@@ -434,7 +432,7 @@ void DemoKakyo_MoonSparklesActionFunc(DemoKankyo* this, PlayState* play) {
 }
 
 void DemoKankyo_Init(Actor* thisx, PlayState* play) {
-    DemoKankyo* this = THIS;
+    DemoKankyo* this = (DemoKankyo*)thisx;
     s32 pad;
     s32 i;
     s32 objectSlot;
@@ -483,20 +481,20 @@ void DemoKankyo_Init(Actor* thisx, PlayState* play) {
 }
 
 void DemoKankyo_Destroy(Actor* thisx, PlayState* play) {
-    DemoKankyo* this = THIS;
+    DemoKankyo* this = (DemoKankyo*)thisx;
 
     Actor_Kill(&this->actor);
 }
 
 void DemoKankyo_Update(Actor* thisx, PlayState* play) {
-    DemoKankyo* this = THIS;
+    DemoKankyo* this = (DemoKankyo*)thisx;
 
     this->actionFunc(this, play);
 }
 
 void DemoKakyo_DrawLostWoodsSparkle(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    DemoKankyo* this = THIS;
+    DemoKankyo* this = (DemoKankyo*)thisx;
     s16 i;
     f32 scaleAlpha;
     Vec3f worldPos;
@@ -586,7 +584,7 @@ void DemoKakyo_DrawLostWoodsSparkle(Actor* thisx, PlayState* play2) {
 // draw, giants and moon
 void DemoKankyo_DrawMoonAndGiant(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    DemoKankyo* this = THIS;
+    DemoKankyo* this = (DemoKankyo*)thisx;
     s16 i;
     f32 alphaScale;
 
@@ -661,7 +659,7 @@ void DemoKankyo_DrawMoonAndGiant(Actor* thisx, PlayState* play2) {
 }
 
 void DemoKankyo_Draw(Actor* thisx, PlayState* play) {
-    DemoKankyo* this = THIS;
+    DemoKankyo* this = (DemoKankyo*)thisx;
 
     switch (this->actor.params) {
         case DEMO_KANKYO_TYPE_LOSTWOODS:

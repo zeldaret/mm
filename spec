@@ -790,9 +790,7 @@ endseg
 beginseg
     name "buffers"
     flags NOLOAD
-    include "$(BUILD_DIR)/src/buffers/gfxyield.o"
-    include "$(BUILD_DIR)/src/buffers/gfxstack.o"
-    include "$(BUILD_DIR)/src/buffers/gfxpools.o"
+    include "$(BUILD_DIR)/src/buffers/gfxbuffers.o"
     include "$(BUILD_DIR)/src/buffers/audio_heap.o"
 endseg
 
@@ -2512,9 +2510,7 @@ beginseg
     name "ovl_Boss_07"
     compress
     include "$(BUILD_DIR)/src/overlays/actors/ovl_Boss_07/z_boss_07.o"
-    include "$(BUILD_DIR)/data/ovl_Boss_07/ovl_Boss_07.data.o"
-    include "$(BUILD_DIR)/data/ovl_Boss_07/ovl_Boss_07.bss.o"
-    include "$(BUILD_DIR)/data/ovl_Boss_07/ovl_Boss_07.reloc.o"
+    include "$(BUILD_DIR)/src/overlays/actors/ovl_Boss_07/ovl_Boss_07_reloc.o"
 endseg
 
 beginseg
