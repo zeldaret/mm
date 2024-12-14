@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
-#define THIS ((BgIkninside*)thisx)
-
 void BgIkninside_Init(Actor* thisx, PlayState* play);
 void BgIkninside_Destroy(Actor* thisx, PlayState* play);
 void BgIkninside_Update(Actor* thisx, PlayState* play);
@@ -53,7 +51,7 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 void BgIkninside_Init(Actor* thisx, PlayState* play) {
-    BgIkninside* this = THIS;
+    BgIkninside* this = (BgIkninside*)thisx;
     CollisionHeader* colHeader = NULL;
     s32 pad;
 
@@ -70,7 +68,7 @@ void BgIkninside_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgIkninside_Destroy(Actor* thisx, PlayState* play) {
-    BgIkninside* this = THIS;
+    BgIkninside* this = (BgIkninside*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
@@ -142,7 +140,7 @@ void func_80C072D0(BgIkninside* this, PlayState* play) {
 }
 
 void BgIkninside_Update(Actor* thisx, PlayState* play) {
-    BgIkninside* this = THIS;
+    BgIkninside* this = (BgIkninside*)thisx;
 
     this->actionFunc(this, play);
 }

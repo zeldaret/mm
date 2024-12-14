@@ -14,8 +14,6 @@
      ACTOR_FLAG_DRAW_CULLING_DISABLED | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_100000 | ACTOR_FLAG_LOCK_ON_DISABLED | \
      ACTOR_FLAG_MINIMAP_ICON_ENABLED)
 
-#define THIS ((EnWiz*)thisx)
-
 void EnWiz_Init(Actor* thisx, PlayState* play);
 void EnWiz_Destroy(Actor* thisx, PlayState* play);
 void EnWiz_Update(Actor* thisx, PlayState* play);
@@ -312,7 +310,7 @@ static DamageTable sIceWizrobeDamageTable = {
 
 void EnWiz_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnWiz* this = THIS;
+    EnWiz* this = (EnWiz*)thisx;
 
     SkelAnime_InitFlex(play, &this->skelAnime, &gWizrobeSkel, &gWizrobeIdleAnim, this->jointTable, this->morphTable,
                        WIZROBE_LIMB_MAX);
@@ -364,7 +362,7 @@ void EnWiz_Init(Actor* thisx, PlayState* play) {
 
 void EnWiz_Destroy(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnWiz* this = THIS;
+    EnWiz* this = (EnWiz*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
     Collider_DestroyJntSph(play, &this->ghostColliders);
@@ -1318,7 +1316,7 @@ void EnWiz_UpdateDamage(EnWiz* this, PlayState* play) {
 
 void EnWiz_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnWiz* this = THIS;
+    EnWiz* this = (EnWiz*)thisx;
     s32 i;
     s32 j;
 
@@ -1371,7 +1369,7 @@ void EnWiz_Update(Actor* thisx, PlayState* play) {
 
 void EnWiz_PostLimbDrawOpa(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     Vec3f staffFlamePos = { 0.0f, 0.0f, 0.0f };
-    EnWiz* this = THIS;
+    EnWiz* this = (EnWiz*)thisx;
 
     if (limbIndex == WIZROBE_LIMB_STAFF) {
         staffFlamePos.x = 7300.0f;
@@ -1404,7 +1402,7 @@ void EnWiz_PostLimbDrawOpa(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* r
 void EnWiz_PostLimbDrawXlu(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     Vec3f staffFlamePos = { 0.0f, 0.0f, 0.0f };
     s32 pad;
-    EnWiz* this = THIS;
+    EnWiz* this = (EnWiz*)thisx;
 
     if (this->action != EN_WIZ_ACTION_BURST_INTO_FLAMES) {
         if (limbIndex == WIZROBE_LIMB_STAFF) {
@@ -1452,7 +1450,7 @@ void EnWiz_PostLimbDrawXlu(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* r
 
 void EnWiz_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnWiz* this = THIS;
+    EnWiz* this = (EnWiz*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

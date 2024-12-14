@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
-#define THIS ((ObjNozoki*)thisx)
-
 void ObjNozoki_Init(Actor* thisx, PlayState* play);
 void ObjNozoki_Destroy(Actor* thisx, PlayState* play);
 void ObjNozoki_Update(Actor* thisx, PlayState* play);
@@ -64,7 +62,7 @@ void ObjNozoki_SetupAction(ObjNozoki* this, ObjNozokiActionFunc actionFunc) {
 }
 
 void ObjNozoki_Init(Actor* thisx, PlayState* play) {
-    ObjNozoki* this = THIS;
+    ObjNozoki* this = (ObjNozoki*)thisx;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     this->dyna.actor.shape.rot.x = 0;
@@ -85,7 +83,7 @@ void ObjNozoki_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjNozoki_Destroy(Actor* thisx, PlayState* play) {
-    ObjNozoki* this = THIS;
+    ObjNozoki* this = (ObjNozoki*)thisx;
 
     if (this->unk_15C == 0) {
         DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
@@ -448,7 +446,7 @@ void func_80BA3344(ObjNozoki* this, PlayState* play) {
 }
 
 void ObjNozoki_Update(Actor* thisx, PlayState* play) {
-    ObjNozoki* this = THIS;
+    ObjNozoki* this = (ObjNozoki*)thisx;
 
     this->actionFunc(this, play);
 }
@@ -462,7 +460,7 @@ Gfx* D_80BA34FC[] = {
 };
 
 void ObjNozoki_Draw(Actor* thisx, PlayState* play) {
-    ObjNozoki* this = THIS;
+    ObjNozoki* this = (ObjNozoki*)thisx;
 
     if (this->unk_15C == 1) {
         GetItem_Draw(play, GID_MASK_SUN);

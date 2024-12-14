@@ -11,8 +11,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
-#define THIS ((EnKanban*)thisx)
-
 void EnKanban_Init(Actor* thisx, PlayState* play);
 void EnKanban_Destroy(Actor* thisx, PlayState* play);
 void EnKanban_Update(Actor* thisx, PlayState* play);
@@ -143,7 +141,7 @@ void func_80954960(EnKanban* this) {
 }
 
 void EnKanban_Init(Actor* thisx, PlayState* play) {
-    EnKanban* this = THIS;
+    EnKanban* this = (EnKanban*)thisx;
 
     Actor_SetScale(&this->actor, 0.01f);
     if (this->actor.params != ENKANBAN_PIECE) {
@@ -171,7 +169,7 @@ void EnKanban_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnKanban_Destroy(Actor* thisx, PlayState* play) {
-    EnKanban* this = THIS;
+    EnKanban* this = (EnKanban*)thisx;
 
     if (this->actionState == ENKANBAN_SIGN) {
         Collider_DestroyCylinder(play, &this->collider);
@@ -202,7 +200,7 @@ void func_80954BE8(EnKanban* this, PlayState* play) {
 
 void EnKanban_Update(Actor* thisx, PlayState* play) {
     u8 bounced = false;
-    EnKanban* this = THIS;
+    EnKanban* this = (EnKanban*)thisx;
     s32 pad;
     FloorType floorType;
     f32 phi_f0;
@@ -922,7 +920,7 @@ static f32 sCutAngles[] = {
 #include "assets/overlays/ovl_En_Kanban/ovl_En_Kanban.c"
 
 void EnKanban_Draw(Actor* thisx, PlayState* play) {
-    EnKanban* this = THIS;
+    EnKanban* this = (EnKanban*)thisx;
     f32 zShift;
     f32 zShift2;
     s32 i;

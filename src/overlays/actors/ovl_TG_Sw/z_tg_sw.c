@@ -11,8 +11,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
-#define THIS ((TGSw*)thisx)
-
 // Prototypes
 void TGSw_Init(Actor* thisx, PlayState* play);
 void TGSw_Destroy(Actor* thisx, PlayState* play);
@@ -91,7 +89,7 @@ void TGSw_Die(TGSw* this, PlayState* play) {
 }
 
 void TGSw_Init(Actor* thisx, PlayState* play) {
-    TGSw* this = THIS;
+    TGSw* this = (TGSw*)thisx;
 
     this->actor.csId = this->actor.world.rot.z;
     this->actionFunc = TGSw_Idle;
@@ -101,7 +99,7 @@ void TGSw_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void TGSw_Update(Actor* thisx, PlayState* play) {
-    TGSw* this = THIS;
+    TGSw* this = (TGSw*)thisx;
 
     this->actionFunc(this, play);
 }

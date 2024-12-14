@@ -10,8 +10,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER)
 
-#define THIS ((BgNumaHana*)thisx)
-
 void BgNumaHana_Init(Actor* thisx, PlayState* play);
 void BgNumaHana_Destroy(Actor* thisx, PlayState* play);
 void BgNumaHana_Update(Actor* thisx, PlayState* play);
@@ -140,7 +138,7 @@ void BgNumaHana_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     DynaPolyActor* child;
     s32 type;
-    BgNumaHana* this = THIS;
+    BgNumaHana* this = (BgNumaHana*)thisx;
 
     type = BG_NUMA_HANA_GET_TYPE(&this->dyna.actor);
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
@@ -190,7 +188,7 @@ void BgNumaHana_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgNumaHana_Destroy(Actor* thisx, PlayState* play) {
-    BgNumaHana* this = THIS;
+    BgNumaHana* this = (BgNumaHana*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
     if (BG_NUMA_HANA_GET_TYPE(&this->dyna.actor) == BG_NUMA_HANA_TYPE_NORMAL) {
@@ -351,7 +349,7 @@ void BgNumaHana_OpenedIdle(BgNumaHana* this, PlayState* play) {
 
 void BgNumaHana_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    BgNumaHana* this = THIS;
+    BgNumaHana* this = (BgNumaHana*)thisx;
     s32 type = BG_NUMA_HANA_GET_TYPE(&this->dyna.actor);
     Vec3f firePos;
 
@@ -375,7 +373,7 @@ void BgNumaHana_Update(Actor* thisx, PlayState* play) {
 
 void BgNumaHana_Draw(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    BgNumaHana* this = THIS;
+    BgNumaHana* this = (BgNumaHana*)thisx;
     WoodenFlowerPetalPosRot* innerPetalPosRot;
     WoodenFlowerPetalPosRot* outerPetalPosRot;
     s32 objectSlot;

@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
-#define THIS ((ObjIceblock*)thisx)
-
 void ObjIceblock_Init(Actor* thisx, PlayState* play);
 void ObjIceblock_Destroy(Actor* thisx, PlayState* play);
 void ObjIceblock_Update(Actor* thisx, PlayState* play);
@@ -904,7 +902,7 @@ static InitChainEntry sInitChain[] = {
 
 void ObjIceblock_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    ObjIceblock* this = THIS;
+    ObjIceblock* this = (ObjIceblock*)thisx;
     Actor* parent;
     s32 pad2;
 
@@ -960,7 +958,7 @@ void ObjIceblock_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjIceblock_Destroy(Actor* thisx, PlayState* play) {
-    ObjIceblock* this = THIS;
+    ObjIceblock* this = (ObjIceblock*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
     Collider_DestroyCylinder(play, &this->collider);
@@ -1418,7 +1416,7 @@ void func_80A266E0(ObjIceblock* this, PlayState* play) {
 
 void ObjIceblock_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    ObjIceblock* this = THIS;
+    ObjIceblock* this = (ObjIceblock*)thisx;
     Actor* parent = this->dyna.actor.parent;
 
     if (parent != NULL) {
@@ -1557,7 +1555,7 @@ void func_80A26BF8(ObjIceblock* this, PlayState* play) {
 }
 
 void ObjIceblock_Draw(Actor* thisx, PlayState* play) {
-    ObjIceblock* this = THIS;
+    ObjIceblock* this = (ObjIceblock*)thisx;
 
     AnimatedMat_Draw(play, sCubeSublimatingAirTexMat);
     this->extendedDrawFunc(this, play);

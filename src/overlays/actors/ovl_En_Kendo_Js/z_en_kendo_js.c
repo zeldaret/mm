@@ -11,8 +11,6 @@
     (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
      ACTOR_FLAG_UPDATE_DURING_OCARINA | ACTOR_FLAG_LOCK_ON_DISABLED)
 
-#define THIS ((EnKendoJs*)thisx)
-
 void EnKendoJs_Init(Actor* thisx, PlayState* play);
 void EnKendoJs_Destroy(Actor* thisx, PlayState* play);
 void EnKendoJs_Update(Actor* thisx, PlayState* play);
@@ -110,7 +108,7 @@ s16 D_80B27D10[] = {
 
 void EnKendoJs_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnKendoJs* this = THIS;
+    EnKendoJs* this = (EnKendoJs*)thisx;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
 
@@ -154,7 +152,7 @@ void EnKendoJs_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnKendoJs_Destroy(Actor* thisx, PlayState* play) {
-    EnKendoJs* this = THIS;
+    EnKendoJs* this = (EnKendoJs*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
     CLEAR_WEEKEVENTREG(WEEKEVENTREG_82_08);
@@ -774,7 +772,7 @@ void func_80B27A90(EnKendoJs* this, PlayState* play) {
 }
 
 void EnKendoJs_Update(Actor* thisx, PlayState* play) {
-    EnKendoJs* this = THIS;
+    EnKendoJs* this = (EnKendoJs*)thisx;
 
     this->actionFunc(this, play);
 
@@ -785,7 +783,7 @@ void EnKendoJs_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnKendoJs_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnKendoJs* this = THIS;
+    EnKendoJs* this = (EnKendoJs*)thisx;
 
     if (limbIndex == OBJECT_JS_LIMB_0C) {
         rot->y -= this->headRot.y;
@@ -797,7 +795,7 @@ void EnKendoJs_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
 }
 
 void EnKendoJs_Draw(Actor* thisx, PlayState* play) {
-    EnKendoJs* this = THIS;
+    EnKendoJs* this = (EnKendoJs*)thisx;
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,

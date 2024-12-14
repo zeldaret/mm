@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_UPDATE_DURING_OCARINA | ACTOR_FLAG_LOCK_ON_DISABLED)
 
-#define THIS ((EnOkarinaTag*)thisx)
-
 void EnOkarinaTag_Init(Actor* thisx, PlayState* play);
 void EnOkarinaTag_Destroy(Actor* thisx, PlayState* play);
 void EnOkarinaTag_Update(Actor* thisx, PlayState* play);
@@ -33,7 +31,7 @@ void EnOkarinaTag_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnOkarinaTag_Init(Actor* thisx, PlayState* play) {
-    EnOkarinaTag* this = THIS;
+    EnOkarinaTag* this = (EnOkarinaTag*)thisx;
     f32 zRot = 0.0f;
     s32 i = 0;
 
@@ -152,7 +150,7 @@ void func_8093E68C(EnOkarinaTag* this, PlayState* play) {
 }
 
 void EnOkarinaTag_Update(Actor* thisx, PlayState* play) {
-    EnOkarinaTag* this = THIS;
+    EnOkarinaTag* this = (EnOkarinaTag*)thisx;
 
     this->actionFunc(this, play);
 }

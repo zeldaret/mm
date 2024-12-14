@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
-#define THIS ((ObjBell*)thisx)
-
 void ObjBell_Init(Actor* thisx, PlayState* play);
 void ObjBell_Destroy(Actor* thisx, PlayState* play);
 void ObjBell_Update(Actor* thisx, PlayState* play);
@@ -265,7 +263,7 @@ void func_80A35BD4(Actor* thisx, PlayState* play) {
 }
 
 void ObjBell_Init(Actor* thisx, PlayState* play) {
-    ObjBell* this = THIS;
+    ObjBell* this = (ObjBell*)thisx;
 
     DynaPolyActor_Init(&this->dyna, 0);
     DynaPolyActor_LoadMesh(play, &this->dyna, &object_f52_obj_Colheader_001BA8);
@@ -276,7 +274,7 @@ void ObjBell_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjBell_Destroy(Actor* thisx, PlayState* play) {
-    ObjBell* this = THIS;
+    ObjBell* this = (ObjBell*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
     Collider_DestroySphere(play, &this->collider1);
@@ -284,7 +282,7 @@ void ObjBell_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void ObjBell_Update(Actor* thisx, PlayState* play) {
-    ObjBell* this = THIS;
+    ObjBell* this = (ObjBell*)thisx;
 
     if (this->unk_214 != 0) {
         this->unk_214--;
@@ -295,7 +293,7 @@ void ObjBell_Update(Actor* thisx, PlayState* play) {
 }
 
 void ObjBell_Draw(Actor* thisx, PlayState* play) {
-    ObjBell* this = THIS;
+    ObjBell* this = (ObjBell*)thisx;
     Vec3f sp30;
     Vec3f sp24;
 

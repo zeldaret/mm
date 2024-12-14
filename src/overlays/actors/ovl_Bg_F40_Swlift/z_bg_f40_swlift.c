@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
-#define THIS ((BgF40Swlift*)thisx)
-
 void BgF40Swlift_Init(Actor* thisx, PlayState* play);
 void BgF40Swlift_Destroy(Actor* thisx, PlayState* play);
 void BgF40Swlift_Update(Actor* thisx, PlayState* play2);
@@ -38,7 +36,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void BgF40Swlift_Init(Actor* thisx, PlayState* play) {
-    BgF40Swlift* this = THIS;
+    BgF40Swlift* this = (BgF40Swlift*)thisx;
     s32 index;
     s32 pad;
 
@@ -62,14 +60,14 @@ void BgF40Swlift_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgF40Swlift_Destroy(Actor* thisx, PlayState* play) {
-    BgF40Swlift* this = THIS;
+    BgF40Swlift* this = (BgF40Swlift*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
 void BgF40Swlift_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    BgF40Swlift* this = THIS;
+    BgF40Swlift* this = (BgF40Swlift*)thisx;
     s32 i;
 
     for (i = 1; i < ARRAY_COUNT(sSwitchFlags); i++) {
@@ -110,7 +108,7 @@ void BgF40Swlift_Update(Actor* thisx, PlayState* play2) {
 }
 
 void BgF40Swlift_Draw(Actor* thisx, PlayState* play) {
-    BgF40Swlift* this = THIS;
+    BgF40Swlift* this = (BgF40Swlift*)thisx;
 
     Gfx_DrawDListOpa(play, gStoneTowerVerticallyOscillatingPlatformDL);
 }

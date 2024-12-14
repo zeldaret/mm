@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
-#define THIS ((EnBoj05*)thisx)
-
 void EnBoj05_Init(Actor* thisx, PlayState* play);
 void EnBoj05_Destroy(Actor* thisx, PlayState* play);
 void EnBoj05_Update(Actor* thisx, PlayState* play);

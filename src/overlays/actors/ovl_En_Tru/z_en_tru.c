@@ -12,8 +12,6 @@
     (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
      ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
-#define THIS ((EnTru*)thisx)
-
 void EnTru_Init(Actor* thisx, PlayState* play);
 void EnTru_Destroy(Actor* thisx, PlayState* play);
 void EnTru_Update(Actor* thisx, PlayState* play);
@@ -827,7 +825,7 @@ s32 func_80A87400(EnTru* this, PlayState* play) {
 }
 
 s32 func_80A875AC(Actor* thisx, PlayState* play) {
-    EnTru* this = THIS;
+    EnTru* this = (EnTru*)thisx;
     s32 ret = false;
 
     switch (this->unk_364) {
@@ -887,7 +885,7 @@ s32 func_80A875AC(Actor* thisx, PlayState* play) {
 }
 
 s32 func_80A8777C(Actor* thisx, PlayState* play) {
-    EnTru* this = THIS;
+    EnTru* this = (EnTru*)thisx;
     s32 ret = 0;
     PlayerItemAction itemAction;
 
@@ -924,7 +922,7 @@ s32 func_80A8777C(Actor* thisx, PlayState* play) {
 
 s32 func_80A87880(Actor* thisx, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    EnTru* this = THIS;
+    EnTru* this = (EnTru*)thisx;
     s32 ret = false;
 
     switch (this->unk_364) {
@@ -997,7 +995,7 @@ s32 func_80A87880(Actor* thisx, PlayState* play) {
 }
 
 s32 func_80A87B48(Actor* thisx, PlayState* play) {
-    EnTru* this = THIS;
+    EnTru* this = (EnTru*)thisx;
     Player* player = GET_PLAYER(play);
     Vec3f sp4C;
     Vec3f sp40;
@@ -1056,7 +1054,7 @@ s32 func_80A87B48(Actor* thisx, PlayState* play) {
 }
 
 s32 func_80A87DC0(Actor* thisx, PlayState* play) {
-    EnTru* this = THIS;
+    EnTru* this = (EnTru*)thisx;
     s32 ret = false;
 
     switch (this->unk_364) {
@@ -1188,7 +1186,7 @@ void func_80A881E0(EnTru* this, PlayState* play) {
 }
 
 void EnTru_Init(Actor* thisx, PlayState* play) {
-    EnTru* this = THIS;
+    EnTru* this = (EnTru*)thisx;
 
     if ((gSaveContext.save.entrance != ENTRANCE(WOODS_OF_MYSTERY, 0)) || CHECK_WEEKEVENTREG(WEEKEVENTREG_SAVED_KOUME)) {
         Actor_Kill(&this->actor);
@@ -1222,13 +1220,13 @@ void EnTru_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnTru_Destroy(Actor* thisx, PlayState* play) {
-    EnTru* this = THIS;
+    EnTru* this = (EnTru*)thisx;
 
     Collider_DestroySphere(play, &this->collider);
 }
 
 void EnTru_Update(Actor* thisx, PlayState* play) {
-    EnTru* this = THIS;
+    EnTru* this = (EnTru*)thisx;
     f32 radius;
 
     func_80A872AC(this, play);
@@ -1250,7 +1248,7 @@ void EnTru_Update(Actor* thisx, PlayState* play) {
 s32 EnTru_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     static Vec3f D_80A8B3FC = { 3000.0f, -800.0f, 0.0f };
     s32 pad;
-    EnTru* this = THIS;
+    EnTru* this = (EnTru*)thisx;
 
     if (limbIndex == KOUME_LIMB_HEAD) {
         Matrix_MultZero(&this->actor.focus.pos);
@@ -1270,7 +1268,7 @@ s32 EnTru_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 }
 
 void EnTru_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnTru* this = THIS;
+    EnTru* this = (EnTru*)thisx;
 
     if (limbIndex == KOUME_LIMB_RIGHT_HAND) {
         func_80A86BAC(this, play);
@@ -1278,7 +1276,7 @@ void EnTru_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
 }
 
 void EnTru_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
-    EnTru* this = THIS;
+    EnTru* this = (EnTru*)thisx;
     s32 pad[3];
     s32 overrideRot;
     s32 stepRot;
@@ -1326,7 +1324,7 @@ void EnTru_Draw(Actor* thisx, PlayState* play) {
         gKoumeEyeHalfTex,
     };
     s32 pad;
-    EnTru* this = THIS;
+    EnTru* this = (EnTru*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

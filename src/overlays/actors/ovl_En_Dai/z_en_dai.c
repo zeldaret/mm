@@ -10,8 +10,6 @@
     (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
      ACTOR_FLAG_DRAW_CULLING_DISABLED | ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
-#define THIS ((EnDai*)thisx)
-
 void EnDai_Init(Actor* thisx, PlayState* play);
 void EnDai_Destroy(Actor* thisx, PlayState* play);
 void EnDai_Update(Actor* thisx, PlayState* play);
@@ -553,7 +551,7 @@ void EnDai_HandleCutscene(EnDai* this, PlayState* play) {
 }
 
 void EnDai_Init(Actor* thisx, PlayState* play) {
-    EnDai* this = THIS;
+    EnDai* this = (EnDai*)thisx;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 0.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &object_dai_Skel_0130D0, NULL, this->jointTable, this->morphTable,
@@ -591,7 +589,7 @@ void EnDai_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnDai_Update(Actor* thisx, PlayState* play) {
-    EnDai* this = THIS;
+    EnDai* this = (EnDai*)thisx;
     s32 pad;
     Player* player = GET_PLAYER(play);
 
@@ -615,7 +613,7 @@ void EnDai_Update(Actor* thisx, PlayState* play) {
 
 s32 EnDai_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
                            Gfx** gfx) {
-    EnDai* this = THIS;
+    EnDai* this = (EnDai*)thisx;
 
     if (!(this->unk_1CE & 0x40)) {
         *dList = NULL;
@@ -635,7 +633,7 @@ s32 EnDai_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 void EnDai_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     static Vec3f D_80B3FE4C = { 0.0f, 0.0f, 0.0f };
 
-    EnDai* this = THIS;
+    EnDai* this = (EnDai*)thisx;
     Vec3s sp64;
     MtxF sp24;
 
@@ -661,7 +659,7 @@ void EnDai_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
 }
 
 void EnDai_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx, Gfx** gfx) {
-    EnDai* this = THIS;
+    EnDai* this = (EnDai*)thisx;
 
     switch (limbIndex) {
         case OBJECT_DAI_LIMB_09:
@@ -772,7 +770,7 @@ void func_80B3F920(EnDai* this, PlayState* play) {
 }
 
 void EnDai_Draw(Actor* thisx, PlayState* play) {
-    EnDai* this = THIS;
+    EnDai* this = (EnDai*)thisx;
 
     if (!(this->unk_1CE & 0x200)) {
         if (this->unk_1CE & 0x20) {

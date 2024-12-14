@@ -11,8 +11,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_MINIMAP_ICON_ENABLED)
 
-#define THIS ((EnAz*)thisx)
-
 typedef struct {
     /* 0x0 */ s16 unk_0;
     /* 0x4 */ f32 unk_4;
@@ -198,7 +196,7 @@ static InitChainEntry sInitChain[3] = {
 void EnAz_Init(Actor* thisx, PlayState* play2) {
     static s16 D_80A9914C[] = { 1, 0, 3, 2, 5, 4, -1 };
     static s16 D_80A9915C[] = { 0, 1, 0, 1, 0, 1, 1 };
-    EnAz* this = THIS;
+    EnAz* this = (EnAz*)thisx;
     PlayState* play = play2;
     s16 sp4E;
     s32 phi_v1;
@@ -264,7 +262,7 @@ void EnAz_Init(Actor* thisx, PlayState* play2) {
     }
     SubS_FillCutscenesList(&this->actor, this->csIdList, ARRAY_COUNT(this->csIdList));
     if (D_80A9913C == NULL) {
-        D_80A9913C = THIS;
+        D_80A9913C = (EnAz*)thisx;
         this->unk_374 |= 1;
     }
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 30.0f);
@@ -417,7 +415,7 @@ void EnAz_Init(Actor* thisx, PlayState* play2) {
 }
 
 void EnAz_Destroy(Actor* thisx, PlayState* play2) {
-    EnAz* this = THIS;
+    EnAz* this = (EnAz*)thisx;
 
     if (gSaveContext.save.entrance != ENTRANCE(WATERFALL_RAPIDS, 1)) {
         gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_STOP;
@@ -1732,7 +1730,7 @@ void func_80A98414(EnAz* this, PlayState* play) {
 
 void EnAz_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnAz* this = THIS;
+    EnAz* this = (EnAz*)thisx;
 
     this->unk_374 &= ~0x100;
     if ((this->actor.bgCheckFlags & BGCHECKFLAG_WATER) && (this->actor.depthInWater > 22.0f)) {
@@ -1888,7 +1886,7 @@ static TexturePtr sYoungerBrotherBeltTextures[] = {
 
 void EnAz_Draw(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnAz* this = THIS;
+    EnAz* this = (EnAz*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -1969,7 +1967,7 @@ void EnAz_Draw(Actor* thisx, PlayState* play2) {
 }
 
 s32 EnAz_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnAz* this = THIS;
+    EnAz* this = (EnAz*)thisx;
 
     if ((limbIndex == BEAVER_OLDER_BROTHER_LIMB_NONE) && ((play->gameplayFrames % 2) != 0)) {
         *dList = NULL;
@@ -1996,7 +1994,7 @@ void EnAz_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
     static Vec3f D_80A99410 = { 700.0f, 0.0f, 0.0f };
     static Vec3f D_80A9941C = { -500.0f, 0.0f, 0.0f };
     static Vec3f D_80A99428 = { -1200.0f, 0.0f, 1000.0f };
-    EnAz* this = THIS;
+    EnAz* this = (EnAz*)thisx;
 
     if (limbIndex == BEAVER_OLDER_BROTHER_LIMB_PELVIS) {
         Matrix_MultVec3f(&D_80A99410, &this->unk_3A8);

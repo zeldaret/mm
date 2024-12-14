@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
-#define THIS ((EnMinifrog*)thisx)
-
 void EnMinifrog_Init(Actor* thisx, PlayState* play);
 void EnMinifrog_Destroy(Actor* thisx, PlayState* play);
 void EnMinifrog_Update(Actor* thisx, PlayState* play);
@@ -79,7 +77,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void EnMinifrog_Init(Actor* thisx, PlayState* play) {
-    EnMinifrog* this = THIS;
+    EnMinifrog* this = (EnMinifrog*)thisx;
     s32 i;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
@@ -147,7 +145,7 @@ void EnMinifrog_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnMinifrog_Destroy(Actor* thisx, PlayState* play) {
-    EnMinifrog* this = THIS;
+    EnMinifrog* this = (EnMinifrog*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
     if (this->flags & 0x100) {
@@ -592,7 +590,7 @@ void EnMinifrog_SetupYellowFrogDialog(EnMinifrog* this, PlayState* play) {
 }
 
 void EnMinifrog_Update(Actor* thisx, PlayState* play) {
-    EnMinifrog* this = THIS;
+    EnMinifrog* this = (EnMinifrog*)thisx;
     s32 pad;
 
     this->actionFunc(this, play);
@@ -606,7 +604,7 @@ void EnMinifrog_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnMinifrog_UpdateMissingFrog(Actor* thisx, PlayState* play) {
-    EnMinifrog* this = THIS;
+    EnMinifrog* this = (EnMinifrog*)thisx;
     EnMinifrog* missingFrog;
 
     missingFrog = this->frog;
@@ -628,7 +626,7 @@ s32 EnMinifrog_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
 }
 
 void EnMinifrog_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnMinifrog* this = THIS;
+    EnMinifrog* this = (EnMinifrog*)thisx;
 
     if ((limbIndex == FROG_LIMB_RIGHT_EYE) || (limbIndex == FROG_LIMB_LEFT_EYE)) {
         OPEN_DISPS(play->state.gfxCtx);
@@ -654,7 +652,7 @@ static Color_RGBA8 sFrogEnvColors[] = {
 };
 
 void EnMinifrog_Draw(Actor* thisx, PlayState* play) {
-    EnMinifrog* this = THIS;
+    EnMinifrog* this = (EnMinifrog*)thisx;
     Color_RGBA8* envColor;
 
     OPEN_DISPS(play->state.gfxCtx);

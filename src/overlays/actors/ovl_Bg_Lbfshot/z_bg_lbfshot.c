@@ -9,8 +9,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((BgLbfshot*)thisx)
-
 void BgLbfshot_Init(Actor* thisx, PlayState* play);
 void BgLbfshot_Destroy(Actor* thisx, PlayState* play);
 void BgLbfshot_Draw(Actor* thisx, PlayState* play);
@@ -32,7 +30,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void BgLbfshot_Init(Actor* thisx, PlayState* play) {
-    BgLbfshot* this = THIS;
+    BgLbfshot* this = (BgLbfshot*)thisx;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     this->dyna.actor.cullingVolumeDistance = 4000.0f;
@@ -40,7 +38,7 @@ void BgLbfshot_Init(Actor* thisx, PlayState* play) {
     DynaPolyActor_LoadMesh(play, &this->dyna, &object_lbfshot_Colheader_0014D8);
 }
 void BgLbfshot_Destroy(Actor* thisx, PlayState* play) {
-    BgLbfshot* this = THIS;
+    BgLbfshot* this = (BgLbfshot*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }

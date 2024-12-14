@@ -47,8 +47,6 @@
 #include "assets/objects/object_link_nuts/object_link_nuts.h"
 #include "assets/objects/object_link_child/object_link_child.h"
 
-#define THIS ((Player*)thisx)
-
 void Player_Init(Actor* thisx, PlayState* play);
 void Player_Destroy(Actor* thisx, PlayState* play);
 void Player_Update(Actor* thisx, PlayState* play);
@@ -8555,7 +8553,7 @@ s32 func_8083A878(PlayState* play, Player* this, f32 arg2) {
  */
 void func_8083A98C(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    Player* this = THIS;
+    Player* this = (Player*)thisx;
     s32 camMode;
 
     if (play->csCtx.state != CS_STATE_IDLE) {
@@ -11084,7 +11082,7 @@ Color_RGBA8 D_8085D33C = { 0, 0, 0, 150 };
 
 void Player_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    Player* this = THIS;
+    Player* this = (Player*)thisx;
     s8 objectSlot;
     s32 respawnFlag;
     s32 var_a1;
@@ -13010,7 +13008,7 @@ Color_RGB8 D_8085D580 = { 255, 255, 255 };
 Color_RGB8 D_8085D584 = { 80, 80, 200 };
 
 void Player_Draw(Actor* thisx, PlayState* play) {
-    Player* this = THIS;
+    Player* this = (Player*)thisx;
     f32 one = 1.0f;
     s32 spEC = false;
 

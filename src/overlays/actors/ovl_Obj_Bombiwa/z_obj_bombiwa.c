@@ -9,8 +9,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((ObjBombiwa*)thisx)
-
 void ObjBombiwa_Init(Actor* thisx, PlayState* play);
 void ObjBombiwa_Destroy(Actor* thisx, PlayState* play2);
 void ObjBombiwa_Update(Actor* thisx, PlayState* play);
@@ -106,7 +104,7 @@ static s16 D_8093A9E0[] = {
 };
 
 s32 func_809393B0(Actor* thisx) {
-    ObjBombiwa* this = THIS;
+    ObjBombiwa* this = (ObjBombiwa*)thisx;
 
     if (this->collider.base.acFlags & AC_HIT) {
         Actor* ac = this->collider.base.ac;
@@ -127,7 +125,7 @@ s32 func_809393B0(Actor* thisx) {
 }
 
 s32 func_80939470(Actor* thisx) {
-    ObjBombiwa* this = THIS;
+    ObjBombiwa* this = (ObjBombiwa*)thisx;
 
     if (this->collider.base.acFlags & AC_HIT) {
         Actor* temp_v0 = this->collider.base.ac;
@@ -175,7 +173,7 @@ void func_80939594(ObjBombiwa* this, PlayState* play) {
 
 void ObjBombiwa_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    ObjBombiwa* this = THIS;
+    ObjBombiwa* this = (ObjBombiwa*)thisx;
     s32 sp34 = OBJBOMBIWA_GET_100(&this->actor);
     s32 pad2;
 
@@ -208,7 +206,7 @@ void ObjBombiwa_Init(Actor* thisx, PlayState* play) {
 
 void ObjBombiwa_Destroy(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    ObjBombiwa* this = THIS;
+    ObjBombiwa* this = (ObjBombiwa*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -444,13 +442,13 @@ void func_8093A1F0(ObjBombiwa* this, PlayState* play) {
 }
 
 void ObjBombiwa_Update(Actor* thisx, PlayState* play) {
-    ObjBombiwa* this = THIS;
+    ObjBombiwa* this = (ObjBombiwa*)thisx;
 
     this->actionFunc(this, play);
 }
 
 void func_8093A418(Actor* thisx, PlayState* play) {
-    ObjBombiwa* this = THIS;
+    ObjBombiwa* this = (ObjBombiwa*)thisx;
     f32 sp28;
 
     if ((this->actor.projectedPos.z <= 2200.0f) || ((this->unk_203 & 1) && (this->actor.projectedPos.z < 2300.0f))) {
@@ -479,7 +477,7 @@ void func_8093A418(Actor* thisx, PlayState* play) {
 
 void func_8093A608(Actor* thisx, PlayState* play) {
     s32 pad[8];
-    ObjBombiwa* this = THIS;
+    ObjBombiwa* this = (ObjBombiwa*)thisx;
     f32 sp38;
     s32 i;
     ObjBombiwaStruct* ptr;

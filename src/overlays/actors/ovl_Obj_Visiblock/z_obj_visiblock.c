@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_REACT_TO_LENS)
 
-#define THIS ((ObjVisiblock*)thisx)
-
 void ObjVisiblock_Init(Actor* thisx, PlayState* play);
 void ObjVisiblock_Destroy(Actor* thisx, PlayState* play);
 void ObjVisiblock_Draw(Actor* thisx, PlayState* play);
@@ -35,7 +33,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void ObjVisiblock_Init(Actor* thisx, PlayState* play) {
-    ObjVisiblock* this = THIS;
+    ObjVisiblock* this = (ObjVisiblock*)thisx;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 0);
@@ -43,7 +41,7 @@ void ObjVisiblock_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjVisiblock_Destroy(Actor* thisx, PlayState* play) {
-    ObjVisiblock* this = THIS;
+    ObjVisiblock* this = (ObjVisiblock*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }

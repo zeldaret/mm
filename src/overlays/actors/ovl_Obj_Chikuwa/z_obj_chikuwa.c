@@ -10,8 +10,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
-#define THIS ((ObjChikuwa*)thisx)
-
 void ObjChikuwa_Init(Actor* thisx, PlayState* play);
 void ObjChikuwa_Destroy(Actor* thisx, PlayState* play);
 void ObjChikuwa_Update(Actor* thisx, PlayState* play);
@@ -40,7 +38,7 @@ Vec3f D_809B1FD0 = { 0.0f, -0.3f, 0.0f };
 Vec3f D_809B1FDC = { 0.0f, 0.7f, 0.0f };
 
 void func_809B1550(Actor* thisx, PlayState* play) {
-    ObjChikuwa* this = THIS;
+    ObjChikuwa* this = (ObjChikuwa*)thisx;
     f32 sp18;
 
     if (this->unk_2A0 < this->unk_29C) {
@@ -54,7 +52,7 @@ void func_809B1550(Actor* thisx, PlayState* play) {
 }
 
 void ObjChikuwa_Init(Actor* thisx, PlayState* play) {
-    ObjChikuwa* this = THIS;
+    ObjChikuwa* this = (ObjChikuwa*)thisx;
     s32 i;
     s32 val;
     ObjChikuwaStruct* temp;
@@ -88,7 +86,7 @@ void ObjChikuwa_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjChikuwa_Destroy(Actor* thisx, PlayState* play) {
-    ObjChikuwa* this = THIS;
+    ObjChikuwa* this = (ObjChikuwa*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
@@ -156,7 +154,7 @@ void func_809B1AA0(ObjChikuwa* this) {
 }
 
 void ObjChikuwa_Update(Actor* thisx, PlayState* play) {
-    ObjChikuwa* this = THIS;
+    ObjChikuwa* this = (ObjChikuwa*)thisx;
     ObjChikuwaStruct* temp;
     f32 temp_fs0;
     s16 quakeVerticalMag;
@@ -192,7 +190,7 @@ void ObjChikuwa_Update(Actor* thisx, PlayState* play) {
 }
 
 void ObjChikuwa_Draw(Actor* thisx, PlayState* play) {
-    ObjChikuwa* this = THIS;
+    ObjChikuwa* this = (ObjChikuwa*)thisx;
     ObjChikuwaStruct* temp;
     ObjChikuwaStruct2* temp2;
     s32 i;

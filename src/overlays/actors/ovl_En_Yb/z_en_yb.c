@@ -11,8 +11,6 @@
     (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
      ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
-#define THIS ((EnYb*)thisx)
-
 void EnYb_Init(Actor* thisx, PlayState* play);
 void EnYb_Destroy(Actor* thisx, PlayState* play);
 void EnYb_Update(Actor* thisx, PlayState* play);
@@ -82,7 +80,7 @@ static Vec3f D_80BFB2F4 = { 500.0f, -500.0f, 0.0f };
 static Vec3f D_80BFB300 = { 500.0f, -500.0f, 0.0f };
 
 void EnYb_Init(Actor* thisx, PlayState* play) {
-    EnYb* this = THIS;
+    EnYb* this = (EnYb*)thisx;
     s16 csId;
     s32 i;
 
@@ -132,7 +130,7 @@ void EnYb_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnYb_Destroy(Actor* thisx, PlayState* play) {
-    EnYb* this = THIS;
+    EnYb* this = (EnYb*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -149,7 +147,7 @@ void func_80BFA2FC(PlayState* play) {
  */
 void EnYb_ActorShadowFunc(Actor* thisx, Lights* mapper, PlayState* play) {
     Vec3f oldPos;
-    EnYb* this = THIS;
+    EnYb* this = (EnYb*)thisx;
 
     if (this->alpha > 0) {
         if (this->animIndex == 2) {
@@ -408,7 +406,7 @@ void EnYb_WaitForMidnight(EnYb* this, PlayState* play) {
 
 void EnYb_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnYb* this = THIS;
+    EnYb* this = (EnYb*)thisx;
 
     if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_ATTENTION_ENABLED)) {
         Collider_UpdateCylinder(&this->actor, &this->collider);
@@ -436,7 +434,7 @@ void EnYb_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnYb_PostLimbDrawOpa(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnYb* this = THIS;
+    EnYb* this = (EnYb*)thisx;
 
     if (limbIndex == YB_LIMB_HEAD) {
         Matrix_MultVec3f(&D_80BFB2F4, &this->actor.focus.pos);
@@ -447,7 +445,7 @@ void EnYb_PostLimbDrawOpa(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
 }
 
 void EnYb_PostLimbDrawXlu(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
-    EnYb* this = THIS;
+    EnYb* this = (EnYb*)thisx;
 
     if (limbIndex == YB_LIMB_HEAD) {
         Matrix_MultVec3f(&D_80BFB300, &this->actor.focus.pos);
@@ -458,7 +456,7 @@ void EnYb_PostLimbDrawXlu(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
 }
 
 void EnYb_Draw(Actor* thisx, PlayState* play) {
-    EnYb* this = THIS;
+    EnYb* this = (EnYb*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

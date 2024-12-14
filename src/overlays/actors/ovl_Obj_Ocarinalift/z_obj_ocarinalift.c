@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
-#define THIS ((ObjOcarinalift*)thisx)
-
 void ObjOcarinalift_Init(Actor* thisx, PlayState* play);
 void ObjOcarinalift_Destroy(Actor* thisx, PlayState* play);
 void ObjOcarinalift_Update(Actor* thisx, PlayState* play);
@@ -57,7 +55,7 @@ void func_80AC94C0(ObjOcarinalift* this, s32 arg1) {
 
 void ObjOcarinalift_Init(Actor* thisx, PlayState* play) {
     Path* path;
-    ObjOcarinalift* this = THIS;
+    ObjOcarinalift* this = (ObjOcarinalift*)thisx;
 
     Actor_ProcessInitChain(thisx, sInitChain);
     this->dyna.actor.shape.rot.x = 0;
@@ -86,7 +84,7 @@ void ObjOcarinalift_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjOcarinalift_Destroy(Actor* thisx, PlayState* play) {
-    ObjOcarinalift* this = THIS;
+    ObjOcarinalift* this = (ObjOcarinalift*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
@@ -253,7 +251,7 @@ void func_80AC9C48(ObjOcarinalift* this, PlayState* play) {
 }
 
 void ObjOcarinalift_Update(Actor* thisx, PlayState* play) {
-    ObjOcarinalift* this = THIS;
+    ObjOcarinalift* this = (ObjOcarinalift*)thisx;
 
     this->actionFunc(this, play);
     Actor_SetFocus(&this->dyna.actor, 10.0f);
@@ -266,7 +264,7 @@ void ObjOcarinalift_Update(Actor* thisx, PlayState* play) {
 }
 
 void ObjOcarinalift_Draw(Actor* thisx, PlayState* play) {
-    ObjOcarinalift* this = THIS;
+    ObjOcarinalift* this = (ObjOcarinalift*)thisx;
 
     Gfx_DrawDListOpa(play, object_raillift_DL_001E40);
     Gfx_DrawDListXlu(play, object_raillift_DL_001DB0);

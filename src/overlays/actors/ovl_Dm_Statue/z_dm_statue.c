@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED | ACTOR_FLAG_CAN_PRESS_SWITCHES)
 
-#define THIS ((DmStatue*)thisx)
-
 void DmStatue_Init(Actor* thisx, PlayState* play);
 void DmStatue_Destroy(Actor* thisx, PlayState* play);
 void DmStatue_Update(Actor* thisx, PlayState* play);
@@ -29,7 +27,7 @@ ActorProfile Dm_Statue_Profile = {
 };
 
 void DmStatue_Init(Actor* thisx, PlayState* play) {
-    DmStatue* this = THIS;
+    DmStatue* this = (DmStatue*)thisx;
 
     Actor_SetScale(&this->actor, 10.0f);
 }

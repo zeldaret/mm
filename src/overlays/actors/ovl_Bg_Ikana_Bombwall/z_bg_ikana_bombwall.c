@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_UCODE_POINT_LIGHT_ENABLED)
 
-#define THIS ((BgIkanaBombwall*)thisx)
-
 void BgIkanaBombwall_Init(Actor* thisx, PlayState* play);
 void BgIkanaBombwall_Destroy(Actor* thisx, PlayState* play);
 void BgIkanaBombwall_Update(Actor* thisx, PlayState* play);
@@ -233,7 +231,7 @@ void func_80BD4A14(BgIkanaBombwall* this, PlayState* play) {
 
 void BgIkanaBombwall_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    BgIkanaBombwall* this = THIS;
+    BgIkanaBombwall* this = (BgIkanaBombwall*)thisx;
     s32 sp2C = BGIKANABOMBWALL_GET_100(&this->dyna.actor);
     CollisionHeader* colHeader;
     ColliderCylinderInit* cylinderInit;
@@ -267,7 +265,7 @@ void BgIkanaBombwall_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgIkanaBombwall_Destroy(Actor* thisx, PlayState* play) {
-    BgIkanaBombwall* this = THIS;
+    BgIkanaBombwall* this = (BgIkanaBombwall*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
     Collider_DestroyCylinder(play, &this->collider);
@@ -365,7 +363,7 @@ void func_80BD5134(BgIkanaBombwall* this, PlayState* play) {
 }
 
 void BgIkanaBombwall_Update(Actor* thisx, PlayState* play) {
-    BgIkanaBombwall* this = THIS;
+    BgIkanaBombwall* this = (BgIkanaBombwall*)thisx;
 
     this->actionFunc(this, play);
 }

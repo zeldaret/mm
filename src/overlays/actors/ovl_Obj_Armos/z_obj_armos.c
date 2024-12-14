@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_CAN_PRESS_SWITCHES)
 
-#define THIS ((ObjArmos*)thisx)
-
 void ObjArmos_Init(Actor* thisx, PlayState* play);
 void ObjArmos_Destroy(Actor* thisx, PlayState* play);
 void ObjArmos_Update(Actor* thisx, PlayState* play2);
@@ -180,7 +178,7 @@ void func_809A518C(ObjArmos* this, s32 arg1) {
 
 void ObjArmos_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    ObjArmos* this = THIS;
+    ObjArmos* this = (ObjArmos*)thisx;
     s32 sp44 = OBJARMOS_GET_ROTZ_7(&this->dyna.actor);
     s32 sp40 = OBJARMOS_GET_ROTX_F(&this->dyna.actor);
     f32 endFrame = Animation_GetLastFrame(&gArmosPushedBackAnim);
@@ -222,7 +220,7 @@ void ObjArmos_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjArmos_Destroy(Actor* thisx, PlayState* play) {
-    ObjArmos* this = THIS;
+    ObjArmos* this = (ObjArmos*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
@@ -318,7 +316,7 @@ void func_809A57F4(ObjArmos* this, PlayState* play) {
 
 void ObjArmos_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    ObjArmos* this = THIS;
+    ObjArmos* this = (ObjArmos*)thisx;
     s32 bgId;
 
     this->actionFunc(this, play);
@@ -387,7 +385,7 @@ void func_809A5A3C(ObjArmos* this, PlayState* play) {
 }
 
 void ObjArmos_Draw(Actor* thisx, PlayState* play) {
-    ObjArmos* this = THIS;
+    ObjArmos* this = (ObjArmos*)thisx;
 
     func_809A5960(this, play);
     func_809A5A3C(this, play);

@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
-#define THIS ((EnPr2*)thisx)
-
 void EnPr2_Init(Actor* thisx, PlayState* play);
 void EnPr2_Destroy(Actor* thisx, PlayState* play);
 void EnPr2_Update(Actor* thisx, PlayState* play);
@@ -116,7 +114,7 @@ s16 D_80A75C3C[] = {
 };
 
 void EnPr2_Init(Actor* thisx, PlayState* play) {
-    EnPr2* this = THIS;
+    EnPr2* this = (EnPr2*)thisx;
 
     this->actor.attentionRangeType = ATTENTION_RANGE_3;
     this->actor.hintId = TATL_HINT_ID_SKULLFISH;
@@ -191,7 +189,7 @@ void EnPr2_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnPr2_Destroy(Actor* thisx, PlayState* play) {
-    EnPr2* this = THIS;
+    EnPr2* this = (EnPr2*)thisx;
 
     if (this->unk_1E0 < 10) {
         Collider_DestroyCylinder(play, &this->collider);
@@ -647,7 +645,7 @@ void func_80A755D8(EnPr2* this, PlayState* play) {
 }
 
 void EnPr2_Update(Actor* thisx, PlayState* play) {
-    EnPr2* this = THIS;
+    EnPr2* this = (EnPr2*)thisx;
     f32 rand;
 
     Actor_SetScale(&this->actor, this->unk_204);
@@ -698,7 +696,7 @@ void EnPr2_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnPr2_OverrideLimbDrawOpa(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnPr2* this = THIS;
+    EnPr2* this = (EnPr2*)thisx;
 
     if (this->unk_1E0 < 10) {
         if (limbIndex == OBJECT_PR_2_LIMB_02) {
@@ -711,7 +709,7 @@ s32 EnPr2_OverrideLimbDrawOpa(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f
 }
 
 void EnPr2_PostLimbDrawOpa(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnPr2* this = THIS;
+    EnPr2* this = (EnPr2*)thisx;
 
     if (this->unk_1E0 < 10) {
         if (limbIndex == OBJECT_PR_2_LIMB_02) {
@@ -724,7 +722,7 @@ void EnPr2_PostLimbDrawOpa(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* r
 
 s32 EnPr2_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
                            Gfx** gfx) {
-    EnPr2* this = THIS;
+    EnPr2* this = (EnPr2*)thisx;
 
     if (this->unk_1E0 < 10) {
         if (limbIndex == OBJECT_PR_2_LIMB_02) {
@@ -737,7 +735,7 @@ s32 EnPr2_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 }
 
 void EnPr2_Draw(Actor* thisx, PlayState* play) {
-    EnPr2* this = THIS;
+    EnPr2* this = (EnPr2*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

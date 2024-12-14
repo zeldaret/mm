@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
-#define THIS ((BgFuKaiten*)thisx)
-
 void BgFuKaiten_Init(Actor* thisx, PlayState* play);
 void BgFuKaiten_Destroy(Actor* thisx, PlayState* play);
 void BgFuKaiten_Update(Actor* thisx, PlayState* play);
@@ -30,7 +28,7 @@ ActorProfile Bg_Fu_Kaiten_Profile = {
 
 void BgFuKaiten_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    BgFuKaiten* this = THIS;
+    BgFuKaiten* this = (BgFuKaiten*)thisx;
     CollisionHeader* header = NULL;
 
     Actor_SetScale(thisx, 1.0f);
@@ -45,7 +43,7 @@ void BgFuKaiten_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgFuKaiten_Destroy(Actor* thisx, PlayState* play) {
-    BgFuKaiten* this = THIS;
+    BgFuKaiten* this = (BgFuKaiten*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
@@ -68,7 +66,7 @@ void BgFuKaiten_UpdateHeight(BgFuKaiten* this) {
 }
 
 void BgFuKaiten_Update(Actor* thisx, PlayState* play) {
-    BgFuKaiten* this = THIS;
+    BgFuKaiten* this = (BgFuKaiten*)thisx;
 
     BgFuKaiten_UpdateRotation(this);
     BgFuKaiten_UpdateHeight(this);

@@ -16,8 +16,6 @@
     (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED | ACTOR_FLAG_200000 | \
      ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
-#define THIS ((EnTest6*)thisx)
-
 void EnTest6_Init(Actor* thisx, PlayState* play2);
 void EnTest6_Destroy(Actor* thisx, PlayState* play2);
 void EnTest6_Update(Actor* thisx, PlayState* play);
@@ -349,7 +347,7 @@ void EnTest6_SetupAction(EnTest6* this, EnTest6ActionFunc actionFunc) {
 
 void EnTest6_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnTest6* this = THIS;
+    EnTest6* this = (EnTest6*)thisx;
     s32 i;
 
     if (((SOTCS_GET_OCARINA_MODE(&this->actor) == OCARINA_MODE_APPLY_INV_SOT_FAST) ||
@@ -377,7 +375,7 @@ void EnTest6_Init(Actor* thisx, PlayState* play2) {
 
 void EnTest6_Destroy(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnTest6* this = THIS;
+    EnTest6* this = (EnTest6*)thisx;
     s32 i;
 
     play->envCtx.adjLightSettings.ambientColor[0] = 0;
@@ -923,7 +921,7 @@ void EnTest6_DoubleSoTCutscene(EnTest6* this, PlayState* play) {
 }
 
 void EnTest6_Update(Actor* thisx, PlayState* play) {
-    EnTest6* this = THIS;
+    EnTest6* this = (EnTest6*)thisx;
 
     this->actionFunc(this, play);
 }
@@ -1425,7 +1423,7 @@ void EnTest6_DrawInvertedSoTCutscene(EnTest6* this, PlayState* play2) {
 }
 
 void EnTest6_Draw(Actor* thisx, PlayState* play) {
-    EnTest6* this = THIS;
+    EnTest6* this = (EnTest6*)thisx;
 
     if (this->cueId != SOTCS_CUEID_NONE) {
         switch (this->drawType) {

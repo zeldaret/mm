@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
-#define THIS ((MirRay2*)thisx)
-
 void MirRay2_Init(Actor* thisx, PlayState* play);
 void MirRay2_Destroy(Actor* thisx, PlayState* play);
 void MirRay2_Update(Actor* thisx, PlayState* play);
@@ -73,7 +71,7 @@ void func_80AF3FE0(MirRay2* this, PlayState* play) {
 
 void MirRay2_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    MirRay2* this = THIS;
+    MirRay2* this = (MirRay2*)thisx;
 
     if (this->actor.home.rot.x <= 0) {
         this->range = 100.0f;
@@ -99,14 +97,14 @@ void MirRay2_Init(Actor* thisx, PlayState* play) {
 }
 
 void MirRay2_Destroy(Actor* thisx, PlayState* play) {
-    MirRay2* this = THIS;
+    MirRay2* this = (MirRay2*)thisx;
 
     LightContext_RemoveLight(play, &play->lightCtx, this->light);
     Collider_DestroyJntSph(play, &this->collider);
 }
 
 void MirRay2_Update(Actor* thisx, PlayState* play) {
-    MirRay2* this = THIS;
+    MirRay2* this = (MirRay2*)thisx;
 
     if (this->unk1A4 & 1) {
         if (Flags_GetSwitch(play, MIRRAY2_GET_SWITCH_FLAG(thisx))) {

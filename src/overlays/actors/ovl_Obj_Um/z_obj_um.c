@@ -14,8 +14,6 @@
     (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
      ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
-#define THIS ((ObjUm*)thisx)
-
 /**
  * weekEventReg flags checked by this actor:
  * - WEEKEVENTREG_DEFENDED_AGAINST_ALIENS: Aliens defeated
@@ -642,7 +640,7 @@ static InitChainEntry sInitChain[] = {
 
 void ObjUm_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    ObjUm* this = THIS;
+    ObjUm* this = (ObjUm*)thisx;
     s32 sp54 = true;
     s32 i;
 
@@ -787,7 +785,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjUm_Destroy(Actor* thisx, PlayState* play) {
-    ObjUm* this = THIS;
+    ObjUm* this = (ObjUm*)thisx;
     s32 i;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
@@ -1711,7 +1709,7 @@ void ObjUm_ChangeAnim(ObjUm* this, PlayState* play, ObjUmAnimation animIndex) {
 }
 
 void ObjUm_Update(Actor* thisx, PlayState* play) {
-    ObjUm* this = THIS;
+    ObjUm* this = (ObjUm*)thisx;
 
     this->actionFunc(this, play);
     this->unk_350++;
@@ -1794,7 +1792,7 @@ void ObjUm_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 ObjUm_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    ObjUm* this = THIS;
+    ObjUm* this = (ObjUm*)thisx;
     Player* player = GET_PLAYER(play);
     s32 pad;
     s16 temp_v0_3;
@@ -1879,7 +1877,7 @@ void ObjUm_SpawnFragments(PlayState* play, Vec3f* potPos) {
 }
 
 void ObjUm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    ObjUm* this = THIS;
+    ObjUm* this = (ObjUm*)thisx;
     GraphicsContext* gfxCtx = play->state.gfxCtx;
     Mtx* mtx;
     Gfx* spFC[] = {
@@ -2017,7 +2015,7 @@ void func_80B7BEA4(Vec3f* cartBedPos, s16 arg1, Vec3f* arg2, u8 alpha, PlayState
 
 void ObjUm_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
-    ObjUm* this = THIS;
+    ObjUm* this = (ObjUm*)thisx;
     Vec3f sp34;
 
     this->flags |= OBJ_UM_FLAG_0001;

@@ -10,8 +10,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_CAN_PRESS_SWITCHES)
 
-#define THIS ((ObjKibako*)thisx)
-
 void ObjKibako_Init(Actor* thisx, PlayState* play2);
 void ObjKibako_Destroy(Actor* thisx, PlayState* play2);
 void ObjKibako_Update(Actor* thisx, PlayState* play);
@@ -134,7 +132,7 @@ void func_80926394(ObjKibako* this, PlayState* play) {
 
 void ObjKibako_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    ObjKibako* this = THIS;
+    ObjKibako* this = (ObjKibako*)thisx;
     s32 objectIndex;
 
     objectIndex = KIBAKO_BANK_INDEX(thisx);
@@ -160,7 +158,7 @@ void ObjKibako_Init(Actor* thisx, PlayState* play2) {
 
 void ObjKibako_Destroy(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    ObjKibako* this = THIS;
+    ObjKibako* this = (ObjKibako*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -419,7 +417,7 @@ void ObjKibako_Thrown(ObjKibako* this, PlayState* play) {
 }
 
 void ObjKibako_Update(Actor* thisx, PlayState* play) {
-    ObjKibako* this = THIS;
+    ObjKibako* this = (ObjKibako*)thisx;
 
     this->actionFunc(this, play);
     ObjKibako_SetShadow(this);

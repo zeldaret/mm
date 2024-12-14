@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
-#define THIS ((ObjSkateblock*)thisx)
-
 void ObjSkateblock_Init(Actor* thisx, PlayState* play);
 void ObjSkateblock_Destroy(Actor* thisx, PlayState* play);
 void ObjSkateblock_Update(Actor* thisx, PlayState* play);
@@ -486,7 +484,7 @@ void func_80A21F74(ObjSkateblock* this, PlayState* play) {
 }
 
 void ObjSkateblock_Init(Actor* thisx, PlayState* play) {
-    ObjSkateblock* this = THIS;
+    ObjSkateblock* this = (ObjSkateblock*)thisx;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
@@ -501,7 +499,7 @@ void ObjSkateblock_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjSkateblock_Destroy(Actor* thisx, PlayState* play) {
-    ObjSkateblock* this = THIS;
+    ObjSkateblock* this = (ObjSkateblock*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
@@ -670,7 +668,7 @@ void func_80A227C0(ObjSkateblock* this, PlayState* play) {
 }
 
 void ObjSkateblock_Update(Actor* thisx, PlayState* play) {
-    ObjSkateblock* this = THIS;
+    ObjSkateblock* this = (ObjSkateblock*)thisx;
 
     D_80A22A10 &= ~(1 << this->unk_1C0);
     this->actionFunc(this, play);
@@ -679,7 +677,7 @@ void ObjSkateblock_Update(Actor* thisx, PlayState* play) {
 
 void ObjSkateblock_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
-    ObjSkateblock* this = THIS;
+    ObjSkateblock* this = (ObjSkateblock*)thisx;
     Color_RGB8* sp2C = &D_80A22B08[OBJSKAEBLOCK_GET_F(&this->dyna.actor)];
 
     OPEN_DISPS(play->state.gfxCtx);

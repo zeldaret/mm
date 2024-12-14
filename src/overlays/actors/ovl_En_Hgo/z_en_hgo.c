@@ -10,8 +10,6 @@
     (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
      ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
-#define THIS ((EnHgo*)thisx)
-
 void EnHgo_Init(Actor* thisx, PlayState* play);
 void EnHgo_Destroy(Actor* thisx, PlayState* play);
 void EnHgo_Update(Actor* thisx, PlayState* play);
@@ -94,7 +92,7 @@ static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
 void EnHgo_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnHgo* this = THIS;
+    EnHgo* this = (EnHgo*)thisx;
 
     ActorShape_Init(&thisx->shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gPamelasFatherHumanSkel, &gPamelasFatherArmsFoldedAnim,
@@ -119,7 +117,7 @@ void EnHgo_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnHgo_Destroy(Actor* thisx, PlayState* play) {
-    EnHgo* this = THIS;
+    EnHgo* this = (EnHgo*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -383,7 +381,7 @@ void EnHgo_UpdateModel(EnHgo* this, PlayState* play) {
 }
 
 void EnHgo_Update(Actor* thisx, PlayState* play) {
-    EnHgo* this = THIS;
+    EnHgo* this = (EnHgo*)thisx;
     s32 pad;
 
     this->actionFunc(this, play);
@@ -400,7 +398,7 @@ void EnHgo_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnHgo_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnHgo* this = THIS;
+    EnHgo* this = (EnHgo*)thisx;
 
     if (limbIndex == PAMELAS_FATHER_HUMAN_LIMB_HEAD) {
         rot->x += this->headRot.y;
@@ -410,7 +408,7 @@ s32 EnHgo_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 }
 
 void EnHgo_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* pos, Actor* thisx) {
-    EnHgo* this = THIS;
+    EnHgo* this = (EnHgo*)thisx;
 
     if (limbIndex == PAMELAS_FATHER_HUMAN_LIMB_HEAD) {
         Matrix_Get(&this->mf);
@@ -425,7 +423,7 @@ static TexturePtr sEyeTextures[] = {
 };
 
 void EnHgo_Draw(Actor* thisx, PlayState* play) {
-    EnHgo* this = THIS;
+    EnHgo* this = (EnHgo*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

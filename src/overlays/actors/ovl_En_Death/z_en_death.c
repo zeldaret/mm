@@ -13,8 +13,6 @@
     (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
      ACTOR_FLAG_DRAW_CULLING_DISABLED | ACTOR_FLAG_IGNORE_QUAKE)
 
-#define THIS ((EnDeath*)thisx)
-
 void EnDeath_Init(Actor* thisx, PlayState* play2);
 void EnDeath_Destroy(Actor* thisx, PlayState* play);
 void EnDeath_Update(Actor* thisx, PlayState* play);
@@ -227,7 +225,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void EnDeath_Init(Actor* thisx, PlayState* play2) {
-    EnDeath* this = THIS;
+    EnDeath* this = (EnDeath*)thisx;
     PlayState* play = play2;
     f32 yOffset = 15.0f;
     s16 yRot = 0;
@@ -292,7 +290,7 @@ void EnDeath_Init(Actor* thisx, PlayState* play2) {
 }
 
 void EnDeath_Destroy(Actor* thisx, PlayState* play) {
-    EnDeath* this = THIS;
+    EnDeath* this = (EnDeath*)thisx;
 
     Collider_DestroySphere(play, &this->coreCollider);
     Collider_DestroyCylinder(play, &this->bodyCollider);
@@ -1246,7 +1244,7 @@ void EnDeath_UpdateDamage(EnDeath* this, PlayState* play) {
 }
 
 void EnDeath_Update(Actor* thisx, PlayState* play) {
-    EnDeath* this = THIS;
+    EnDeath* this = (EnDeath*)thisx;
     ArrowLight* lightArrow;
     s32 pad;
 
@@ -1599,7 +1597,7 @@ void EnDeath_DrawCore(EnDeath* this, PlayState* play) {
 }
 
 s32 EnDeath_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnDeath* this = THIS;
+    EnDeath* this = (EnDeath*)thisx;
 
     if (this->noDrawLimbs[limbIndex] == true) {
         *dList = NULL;
@@ -1633,7 +1631,7 @@ void EnDeath_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
     static s8 sLimbToBodyParts[GOMESS_LIMB_MAX] = {
         -1, -1, -1, 12, -1, 0, -1, -1, -1, -1, -1, -1, -1, 7, 1, 2, 3, 4, 5, 6, -1, -1,
     };
-    EnDeath* this = THIS;
+    EnDeath* this = (EnDeath*)thisx;
     s8 index;
 
     if (limbIndex == GOMESS_LIMB_SCYTHE_BLADE) {
@@ -1717,7 +1715,7 @@ void EnDeath_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
 }
 
 void EnDeath_Draw(Actor* thisx, PlayState* play) {
-    EnDeath* this = THIS;
+    EnDeath* this = (EnDeath*)thisx;
     s32 pad;
 
     OPEN_DISPS(play->state.gfxCtx);

@@ -12,8 +12,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER)
 
-#define THIS ((EnDodongo*)thisx)
-
 void EnDodongo_Init(Actor* thisx, PlayState* play);
 void EnDodongo_Destroy(Actor* thisx, PlayState* play);
 void EnDodongo_Update(Actor* thisx, PlayState* play2);
@@ -295,7 +293,7 @@ void EnDodongo_Init(Actor* thisx, PlayState* play) {
         { 0, 0, 0, 0 },
         { 0, 0, 0, 0 },
     };
-    EnDodongo* this = THIS;
+    EnDodongo* this = (EnDodongo*)thisx;
     s32 i;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
@@ -346,7 +344,7 @@ void EnDodongo_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnDodongo_Destroy(Actor* thisx, PlayState* play) {
-    EnDodongo* this = THIS;
+    EnDodongo* this = (EnDodongo*)thisx;
 
     Effect_Destroy(play, this->unk_338);
     Collider_DestroyJntSph(play, &this->collider2);
@@ -1036,7 +1034,7 @@ void EnDodongo_UpdateDamage(EnDodongo* this, PlayState* play) {
 
 void EnDodongo_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnDodongo* this = THIS;
+    EnDodongo* this = (EnDodongo*)thisx;
 
     EnDodongo_UpdateDamage(this, play);
     this->actionFunc(this, play);
@@ -1075,7 +1073,7 @@ void EnDodongo_Update(Actor* thisx, PlayState* play2) {
 }
 
 s32 EnDodongo_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnDodongo* this = THIS;
+    EnDodongo* this = (EnDodongo*)thisx;
 
     if (limbIndex == OBJECT_DODONGO_LIMB_01) {
         pos->z += 1000.0f;
@@ -1124,7 +1122,7 @@ static s8 sLimbToBodyParts[OBJECT_DODONGO_LIMB_MAX] = {
 };
 
 void EnDodongo_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnDodongo* this = THIS;
+    EnDodongo* this = (EnDodongo*)thisx;
 
     Collider_UpdateSpheres(limbIndex, &this->collider1);
     Collider_UpdateSpheres(limbIndex, &this->collider2);
@@ -1150,7 +1148,7 @@ void EnDodongo_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
 }
 
 void EnDodongo_Draw(Actor* thisx, PlayState* play) {
-    EnDodongo* this = THIS;
+    EnDodongo* this = (EnDodongo*)thisx;
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnDodongo_OverrideLimbDraw,

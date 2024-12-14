@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
-#define THIS ((EnDyExtra*)thisx)
-
 void EnDyExtra_Init(Actor* thisx, PlayState* play);
 void EnDyExtra_Destroy(Actor* thisx, PlayState* play);
 void EnDyExtra_Update(Actor* thisx, PlayState* play);
@@ -35,7 +33,7 @@ void EnDyExtra_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnDyExtra_Init(Actor* thisx, PlayState* play) {
-    EnDyExtra* this = THIS;
+    EnDyExtra* this = (EnDyExtra*)thisx;
 
     this->type = this->actor.params;
     this->actor.scale.x = 0.025f;
@@ -77,7 +75,7 @@ void EnDyExtra_Fall(EnDyExtra* this, PlayState* play) {
 }
 
 void EnDyExtra_Update(Actor* thisx, PlayState* play) {
-    EnDyExtra* this = THIS;
+    EnDyExtra* this = (EnDyExtra*)thisx;
 
     DECR(this->timer);
     Actor_PlaySfx(&this->actor, NA_SE_PL_SPIRAL_HEAL_BEAM - SFX_FLAG);
@@ -100,7 +98,7 @@ static u8 sAlphaTypeIndices[] = {
 
 void EnDyExtra_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnDyExtra* this = THIS;
+    EnDyExtra* this = (EnDyExtra*)thisx;
     GraphicsContext* gfxCtx = play->state.gfxCtx;
     Vtx* vertices = Lib_SegmentedToVirtual(gGreatFairySpiralBeamVtx);
     s32 i;

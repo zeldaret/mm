@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
-#define THIS ((EnBji01*)thisx)
-
 void EnBji01_Init(Actor* thisx, PlayState* play);
 void EnBji01_Destroy(Actor* thisx, PlayState* play);
 void EnBji01_Update(Actor* thisx, PlayState* play);
@@ -373,7 +371,7 @@ void func_809CD77C(EnBji01* this, PlayState* play) {
 }
 
 void EnBji01_Init(Actor* thisx, PlayState* play) {
-    EnBji01* this = THIS;
+    EnBji01* this = (EnBji01*)thisx;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 30.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gShikashiSkel, &object_bji_Anim_000FDC, this->jointTable,
@@ -411,14 +409,14 @@ void EnBji01_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnBji01_Destroy(Actor* thisx, PlayState* play) {
-    EnBji01* this = THIS;
+    EnBji01* this = (EnBji01*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
 
 void EnBji01_Update(Actor* thisx, PlayState* play) {
     static s16 sBlinkSequence[] = { 0, 1, 2, 1, 0, 0 };
-    EnBji01* this = THIS;
+    EnBji01* this = (EnBji01*)thisx;
     s32 pad;
 
     this->actionFunc(this, play);
@@ -441,7 +439,7 @@ void EnBji01_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnBji01_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnBji01* this = THIS;
+    EnBji01* this = (EnBji01*)thisx;
 
     if ((limbIndex == SHIKASHI_LIMB_NONE) && ((play->gameplayFrames % 2) != 0)) {
         *dList = NULL;
@@ -472,7 +470,7 @@ s32 EnBji01_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
 
 void EnBji01_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f D_809CDCC8 = { 1088.0f, 1200.0f, 0.0f };
-    EnBji01* this = THIS;
+    EnBji01* this = (EnBji01*)thisx;
     Vec3f sp20;
     s32 temp_f4 = 0;
 
@@ -487,7 +485,7 @@ void EnBji01_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
 
 void EnBji01_Draw(Actor* thisx, PlayState* play) {
     static TexturePtr sEyeTextures[] = { object_bji_Tex_0049F0, object_bji_Tex_004E70, object_bji_Tex_005270 };
-    EnBji01* this = THIS;
+    EnBji01* this = (EnBji01*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

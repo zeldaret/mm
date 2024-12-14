@@ -11,8 +11,6 @@
     (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
      ACTOR_FLAG_DRAW_CULLING_DISABLED | ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR)
 
-#define THIS ((EnMinislime*)thisx)
-
 void EnMinislime_Init(Actor* thisx, PlayState* play);
 void EnMinislime_Destroy(Actor* thisx, PlayState* play);
 void EnMinislime_Update(Actor* thisx, PlayState* play);
@@ -121,7 +119,7 @@ static DamageTable sDamageTable = {
 };
 
 void EnMinislime_Init(Actor* thisx, PlayState* play) {
-    EnMinislime* this = THIS;
+    EnMinislime* this = (EnMinislime*)thisx;
 
     this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
@@ -132,7 +130,7 @@ void EnMinislime_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnMinislime_Destroy(Actor* thisx, PlayState* play) {
-    EnMinislime* this = THIS;
+    EnMinislime* this = (EnMinislime*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -705,7 +703,7 @@ void EnMinislime_ApplyDamage(EnMinislime* this) {
 }
 
 void EnMinislime_Update(Actor* thisx, PlayState* play) {
-    EnMinislime* this = THIS;
+    EnMinislime* this = (EnMinislime*)thisx;
     Player* player;
     s32 pad;
     Vec3f vec1;

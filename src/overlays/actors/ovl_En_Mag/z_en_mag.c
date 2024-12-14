@@ -12,8 +12,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
-#define THIS ((EnMag*)thisx)
-
 void EnMag_Init(Actor* thisx, PlayState* play);
 void EnMag_Destroy(Actor* thisx, PlayState* play);
 void EnMag_Update(Actor* thisx, PlayState* play);
@@ -101,7 +99,7 @@ ActorProfile En_Mag_Profile = {
 };
 
 void EnMag_Init(Actor* thisx, PlayState* play) {
-    EnMag* this = THIS;
+    EnMag* this = (EnMag*)thisx;
     u16 i;
 
     this->unk11F54 = 6;
@@ -196,7 +194,7 @@ void EnMag_UpdateDisplayEffectColors(Actor* thisx) {
     static s16 sDisplayEffectPrimBlueTargets[] = { 55, 255 };
     static s16 sDisplayEffectEnvRedTargets[] = { 255, 0 };
     static s16 sDisplayEffectEnvBlueTargets[] = { 255, 155 };
-    EnMag* this = THIS;
+    EnMag* this = (EnMag*)thisx;
     s16 colorStep;
 
     TIMED_STEP_TO(this->displayEffectPrimColor[0], sDisplayEffectPrimRedTargets[sZeldaEffectColorTargetIndex],
@@ -234,7 +232,7 @@ void EnMag_Update(Actor* thisx, PlayState* play) {
     static s16 sAppearEffectEnvBlueTargets[] = { 0, 155 };
     s16 step;
     s32 pad[2];
-    EnMag* this = THIS;
+    EnMag* this = (EnMag*)thisx;
 
     if (gSaveContext.fileNum != 0xFEDC) {
         if (this->state == MAG_STATE_INITIAL) {
@@ -702,7 +700,7 @@ void EnMag_DrawInner(Actor* thisx, PlayState* play, Gfx** gfxP) {
     static s16 sTextAlpha = 0; // For drawing both the No Controller message and "PRESS START"
     static s16 sTextAlphaTargets[] = { 255, 0 };
     s32 pad;
-    EnMag* this = THIS;
+    EnMag* this = (EnMag*)thisx;
     Font* font = &this->font;
     Gfx* gfx = *gfxP;
     u16 i;

@@ -39,8 +39,6 @@
     (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
      ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
-#define THIS ((Boss01*)thisx)
-
 #define ODOLWA_EFFECT_COUNT 100
 
 // This actor has an array of timers in its instance, but it only ever uses the first entry.
@@ -869,7 +867,7 @@ void Boss01_SpawnDustAtFeet(Boss01* this, PlayState* play, u8 dustSpawnFrameMask
 }
 
 void Boss01_Init(Actor* thisx, PlayState* play) {
-    Boss01* this = THIS;
+    Boss01* this = (Boss01*)thisx;
     s32 pad;
     s16 i;
 
@@ -2340,7 +2338,7 @@ s32 Boss01_ArePlayerAndActorFacing(Boss01* this, PlayState* play) {
 }
 
 void Boss01_Update(Actor* thisx, PlayState* play2) {
-    Boss01* this = THIS;
+    Boss01* this = (Boss01*)thisx;
     PlayState* play = play2;
     s32 i;
     Player* player = GET_PLAYER(play);
@@ -2644,7 +2642,7 @@ void Boss01_DrawSwordTrail(Boss01* this, PlayState* play) {
 }
 
 s32 Boss01_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    Boss01* this = THIS;
+    Boss01* this = (Boss01*)thisx;
 
     if (limbIndex == ODOLWA_LIMB_HEAD) {
         // The rot variable here is in model space, whereas the headRot variables are in world space.
@@ -2803,7 +2801,7 @@ static s8 sLimbToBodyParts[] = {
 };
 
 void Boss01_PostLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    Boss01* this = THIS;
+    Boss01* this = (Boss01*)thisx;
     PlayState* play = play2;
     s8 bodyPartIndex;
     Vec3f pos;
@@ -2883,7 +2881,7 @@ void Boss01_PostLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3s* ro
 
 void Boss01_Draw(Actor* thisx, PlayState* play) {
     static Vec3f sDefaultPelvisColliderOffset = { 10000.0f, 10000.0f, 10000.0f };
-    Boss01* this = THIS;
+    Boss01* this = (Boss01*)thisx;
     s32 pad;
     u8* tex = GRAPH_ALLOC(play->state.gfxCtx, ODOLWA_SHADOW_TEX_SIZE);
 
@@ -2924,7 +2922,7 @@ void Boss01_Draw(Actor* thisx, PlayState* play) {
 }
 
 void Boss01_Afterimage_Draw(Actor* thisx, PlayState* play) {
-    Boss01* this = THIS;
+    Boss01* this = (Boss01*)thisx;
     s32 pad;
     Boss01* parent = (Boss01*)this->actor.parent;
 
@@ -3306,7 +3304,7 @@ void Boss01_Bug_UpdateDamage(Boss01* this, PlayState* play) {
 }
 
 void Boss01_Bug_Update(Actor* thisx, PlayState* play) {
-    Boss01* this = THIS;
+    Boss01* this = (Boss01*)thisx;
     s32 pad;
     s32 i;
 
@@ -3362,7 +3360,7 @@ s32 Boss01_Bug_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
 }
 
 void Boss01_Bug_Draw(Actor* thisx, PlayState* play) {
-    Boss01* this = THIS;
+    Boss01* this = (Boss01*)thisx;
     s32 pad;
 
     OPEN_DISPS(play->state.gfxCtx);

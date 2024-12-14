@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
-#define THIS ((ObjFireshield*)thisx)
-
 void ObjFireshield_Init(Actor* thisx, PlayState* play);
 void ObjFireshield_Destroy(Actor* thisx, PlayState* play);
 void ObjFireshield_Update(Actor* thisx, PlayState* play);
@@ -140,7 +138,7 @@ void func_80A4CD28(ObjFireshield* this) {
 
 void func_80A4CD34(Actor* thisx, PlayState* play) {
     s32 pad;
-    ObjFireshield* this = THIS;
+    ObjFireshield* this = (ObjFireshield*)thisx;
     s32 isSwitchFlagSet = Flags_GetSwitch(play, OBJFIRESHIELD_GET_FLAGS(&this->actor));
     s32 phi_v1;
     s32 phi_a0;
@@ -268,7 +266,7 @@ void func_80A4D1CC(void) {
 }
 
 void ObjFireshield_Init(Actor* thisx, PlayState* play) {
-    ObjFireshield* this = THIS;
+    ObjFireshield* this = (ObjFireshield*)thisx;
     s32 temp = 0x8000;
     ObjFireshieldStruct* sp2C = &D_80A4D84C[OBJFIRESHIELD_GET_C000(&this->actor)];
     s32 sp28 = OBJFIRESHIELD_GET_ROTX(&this->actor);
@@ -309,14 +307,14 @@ void ObjFireshield_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjFireshield_Destroy(Actor* thisx, PlayState* play) {
-    ObjFireshield* this = THIS;
+    ObjFireshield* this = (ObjFireshield*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
 
 void ObjFireshield_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    ObjFireshield* this = THIS;
+    ObjFireshield* this = (ObjFireshield*)thisx;
     s32 sp44 = OBJFIRESHIELD_GET_ROTX(&this->actor);
     s32 sp40 = OBJFIRESHIELD_GET_FLAGS(&this->actor);
     s32 temp_a0;
@@ -379,7 +377,7 @@ void ObjFireshield_Update(Actor* thisx, PlayState* play) {
 }
 
 void ObjFireshield_Draw(Actor* thisx, PlayState* play) {
-    ObjFireshield* this = THIS;
+    ObjFireshield* this = (ObjFireshield*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

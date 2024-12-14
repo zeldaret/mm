@@ -11,8 +11,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
-#define THIS ((EnHorseGameCheck*)thisx)
-
 void EnHorseGameCheck_Init(Actor* thisx, PlayState* play);
 void EnHorseGameCheck_Destroy(Actor* thisx, PlayState* play);
 void EnHorseGameCheck_Update(Actor* thisx, PlayState* play);
@@ -463,7 +461,7 @@ EnHorseGameCheckUnkFunc D_808F9C5C[] = {
 };
 
 void EnHorseGameCheck_Init(Actor* thisx, PlayState* play) {
-    EnHorseGameCheck* this = THIS;
+    EnHorseGameCheck* this = (EnHorseGameCheck*)thisx;
 
     this->unk_15C = ENHORSEGAMECHECK_GET_FF(&this->dyna.actor);
     this->unk_160 = ENHORSEGAMECHECK_GET_FF00(&this->dyna.actor);
@@ -478,7 +476,7 @@ void EnHorseGameCheck_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnHorseGameCheck_Destroy(Actor* thisx, PlayState* play) {
-    EnHorseGameCheck* this = THIS;
+    EnHorseGameCheck* this = (EnHorseGameCheck*)thisx;
 
     if (D_808F9C0C[this->unk_15C] != NULL) {
         D_808F9C0C[this->unk_15C](this, play);
@@ -486,7 +484,7 @@ void EnHorseGameCheck_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnHorseGameCheck_Update(Actor* thisx, PlayState* play) {
-    EnHorseGameCheck* this = THIS;
+    EnHorseGameCheck* this = (EnHorseGameCheck*)thisx;
 
     if (D_808F9C34[this->unk_15C] != NULL) {
         D_808F9C34[this->unk_15C](this, play);
@@ -494,7 +492,7 @@ void EnHorseGameCheck_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnHorseGameCheck_Draw(Actor* thisx, PlayState* play) {
-    EnHorseGameCheck* this = THIS;
+    EnHorseGameCheck* this = (EnHorseGameCheck*)thisx;
 
     if (D_808F9C5C[this->unk_15C] != NULL) {
         D_808F9C5C[this->unk_15C](this, play);

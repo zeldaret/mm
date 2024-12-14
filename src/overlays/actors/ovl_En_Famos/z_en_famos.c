@@ -11,8 +11,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE)
 
-#define THIS ((EnFamos*)thisx)
-
 void EnFamos_Init(Actor* thisx, PlayState* play);
 void EnFamos_Destroy(Actor* thisx, PlayState* play);
 void EnFamos_Update(Actor* thisx, PlayState* play);
@@ -157,7 +155,7 @@ static InitChainEntry sInitChain[] = {
 static s32 sAnimatedMaterialsDesgmented = false;
 
 void EnFamos_Init(Actor* thisx, PlayState* play) {
-    EnFamos* this = THIS;
+    EnFamos* this = (EnFamos*)thisx;
     Path* path;
     s32 i;
 
@@ -202,7 +200,7 @@ void EnFamos_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnFamos_Destroy(Actor* thisx, PlayState* play) {
-    EnFamos* this = THIS;
+    EnFamos* this = (EnFamos*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider1);
     Collider_DestroyCylinder(play, &this->collider2);
@@ -740,7 +738,7 @@ void EnFamos_UpdateDebrisPosRot(EnFamos* this) {
 
 void EnFamos_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnFamos* this = THIS;
+    EnFamos* this = (EnFamos*)thisx;
     f32 oldHeight;
     s32 oldHoverTimer; // save old value to test if changed
 
@@ -793,7 +791,7 @@ void EnFamos_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnFamos_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnFamos* this = THIS;
+    EnFamos* this = (EnFamos*)thisx;
 
     if (limbIndex == FAMOS_LIMB_BODY) {
         Matrix_Translate(0.0f, 4000.0f, 0.0f, MTXMODE_APPLY);
@@ -810,7 +808,7 @@ s32 EnFamos_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
 }
 
 void EnFamos_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnFamos* this = THIS;
+    EnFamos* this = (EnFamos*)thisx;
 
     if (limbIndex == FAMOS_LIMB_EMBLEM) {
         Matrix_MultZero(&this->actor.focus.pos);
@@ -853,7 +851,7 @@ void EnFamos_DrawDebris(EnFamos* this, PlayState* play) {
 }
 
 void EnFamos_Draw(Actor* thisx, PlayState* play) {
-    EnFamos* this = THIS;
+    EnFamos* this = (EnFamos*)thisx;
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     if (this->actionFunc != EnFamos_DeathFade) {

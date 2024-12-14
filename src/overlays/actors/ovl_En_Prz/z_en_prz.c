@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
-#define THIS ((EnPrz*)thisx)
-
 void EnPrz_Init(Actor* thisx, PlayState* play);
 void EnPrz_Destroy(Actor* thisx, PlayState* play);
 void EnPrz_Update(Actor* thisx, PlayState* play);
@@ -100,7 +98,7 @@ ActorProfile En_Prz_Profile = {
 };
 
 void EnPrz_Init(Actor* thisx, PlayState* play) {
-    EnPrz* this = THIS;
+    EnPrz* this = (EnPrz*)thisx;
 
     this->unk_20C = 0.01f;
     this->unk_1E4 = this->actor.world.rot.y;
@@ -438,7 +436,7 @@ void func_80A76B14(EnPrz* this, PlayState* play) {
 
 void EnPrz_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnPrz* this = THIS;
+    EnPrz* this = (EnPrz*)thisx;
     s32 sp44 = false;
     Vec3f sp38;
 
@@ -499,7 +497,7 @@ void EnPrz_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnPrz_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnPrz* this = THIS;
+    EnPrz* this = (EnPrz*)thisx;
 
     if (limbIndex == OBJECT_PR_2_LIMB_02) {
         rot->y += TRUNCF_BINANG(this->unk_218) * -100;
@@ -509,7 +507,7 @@ s32 EnPrz_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 
 void EnPrz_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     Vec3f sZeroVec = { 0.0f, 0.0f, 0.0f };
-    EnPrz* this = THIS;
+    EnPrz* this = (EnPrz*)thisx;
 
     if (limbIndex == OBJECT_PR_2_LIMB_02) {
         Matrix_Translate(0.0f, 0.0f, 0.0f, MTXMODE_APPLY);
@@ -518,7 +516,7 @@ void EnPrz_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
 }
 
 void EnPrz_Draw(Actor* thisx, PlayState* play) {
-    EnPrz* this = THIS;
+    EnPrz* this = (EnPrz*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

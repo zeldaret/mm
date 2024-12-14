@@ -8,8 +8,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((ObjMure3*)thisx)
-
 void ObjMure3_Init(Actor* thisx, PlayState* play);
 void ObjMure3_Destroy(Actor* thisx, PlayState* play);
 void ObjMure3_Update(Actor* thisx, PlayState* play);
@@ -145,7 +143,7 @@ void func_8098F438(ObjMure3* this, PlayState* play) {
 }
 
 void ObjMure3_Init(Actor* thisx, PlayState* play) {
-    ObjMure3* this = THIS;
+    ObjMure3* this = (ObjMure3*)thisx;
 
     if (Flags_GetSwitch(play, OBJMURE3_GET_SWITCH_FLAG(&this->actor))) {
         Actor_Kill(&this->actor);
@@ -194,7 +192,7 @@ void func_8098F680(ObjMure3* this, PlayState* play) {
 }
 
 void ObjMure3_Update(Actor* thisx, PlayState* play) {
-    ObjMure3* this = THIS;
+    ObjMure3* this = (ObjMure3*)thisx;
 
     this->actionFunc(this, play);
 }

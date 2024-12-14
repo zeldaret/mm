@@ -11,8 +11,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
-#define THIS ((EnTk*)thisx)
-
 void EnTk_Init(Actor* thisx, PlayState* play);
 void EnTk_Destroy(Actor* thisx, PlayState* play);
 void EnTk_Update(Actor* thisx, PlayState* play);
@@ -213,7 +211,7 @@ void func_80AEC658(SkelAnime* skelAnime, f32 animCurFrame, f32 arg2, f32* arg3, 
 
 void EnTk_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnTk* this = THIS;
+    EnTk* this = (EnTk*)thisx;
 
     this->unk_2B0 = ENTK_GET_F(&this->actor);
     this->switchFlag = ENTK_GET_SWITCH_FLAG(&this->actor);
@@ -290,7 +288,7 @@ void EnTk_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnTk_Destroy(Actor* thisx, PlayState* play) {
-    EnTk* this = THIS;
+    EnTk* this = (EnTk*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -1293,7 +1291,7 @@ void func_80AEF2C8(Actor* thisx, PlayState* play) {
 
 void func_80AEF2D8(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnTk* this = THIS;
+    EnTk* this = (EnTk*)thisx;
 
     if (this->actor.draw != NULL) {
         Collider_UpdateCylinder(&this->actor, &this->collider);
@@ -1317,7 +1315,7 @@ void func_80AEF2D8(Actor* thisx, PlayState* play) {
 
 void EnTk_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnTk* this = THIS;
+    EnTk* this = (EnTk*)thisx;
 
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
@@ -1372,7 +1370,7 @@ void EnTk_Update(Actor* thisx, PlayState* play) {
 }
 
 void func_80AEF5F4(Actor* thisx, PlayState* play) {
-    EnTk* this = THIS;
+    EnTk* this = (EnTk*)thisx;
 
     this->unk_316 += 0x46C8;
     this->unk_318 = Math_SinS(this->unk_316) * 900.0f;
@@ -1380,7 +1378,7 @@ void func_80AEF5F4(Actor* thisx, PlayState* play) {
 }
 
 s32 EnTk_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnTk* this = THIS;
+    EnTk* this = (EnTk*)thisx;
 
     if (limbIndex == OBJECT_TK_LIMB_10) {
         rot->z += this->unk_31A;
@@ -1391,7 +1389,7 @@ s32 EnTk_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
 
 void EnTk_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f D_80AEFA84 = { 0.0f, 0.0f, 4600.0f };
-    EnTk* this = THIS;
+    EnTk* this = (EnTk*)thisx;
 
     if (this->unk_2B0 != 2) {
         switch (limbIndex) {
@@ -1423,7 +1421,7 @@ void EnTk_Draw(Actor* thisx, PlayState* play) {
         object_tk_Tex_005390,
     };
     s32 pad;
-    EnTk* this = THIS;
+    EnTk* this = (EnTk*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

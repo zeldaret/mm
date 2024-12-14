@@ -11,8 +11,6 @@
     (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
      ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
-#define THIS ((EnJgameTsn*)thisx)
-
 void EnJgameTsn_Init(Actor* thisx, PlayState* play);
 void EnJgameTsn_Destroy(Actor* thisx, PlayState* play);
 void EnJgameTsn_Update(Actor* thisx, PlayState* play);
@@ -91,7 +89,7 @@ TexturePtr D_80C150A4[] = {
 
 void EnJgameTsn_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnJgameTsn* this = THIS;
+    EnJgameTsn* this = (EnJgameTsn*)thisx;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &object_tsn_Skel_008AB8, &object_tsn_Anim_0092FC, this->jointTable,
@@ -148,7 +146,7 @@ void func_80C13A2C(EnJgameTsn* this, PlayState* play) {
 }
 
 void EnJgameTsn_Destroy(Actor* thisx, PlayState* play) {
-    EnJgameTsn* this = THIS;
+    EnJgameTsn* this = (EnJgameTsn*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
     CLEAR_WEEKEVENTREG(WEEKEVENTREG_90_20);
@@ -617,7 +615,7 @@ void func_80C14D58(EnJgameTsn* this, PlayState* play) {
 }
 
 void EnJgameTsn_Update(Actor* thisx, PlayState* play) {
-    EnJgameTsn* this = THIS;
+    EnJgameTsn* this = (EnJgameTsn*)thisx;
 
     this->actionFunc(this, play);
 
@@ -627,7 +625,7 @@ void EnJgameTsn_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnJgamesTsn_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnJgameTsn* this = THIS;
+    EnJgameTsn* this = (EnJgameTsn*)thisx;
     s16 temp_v0 = this->headRot.x >> 1;
 
     if (limbIndex == OBJECT_TSN_LIMB_0F) {
@@ -647,7 +645,7 @@ void EnJgamesTsn_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s
 }
 
 void EnJgameTsn_Draw(Actor* thisx, PlayState* play) {
-    EnJgameTsn* this = THIS;
+    EnJgameTsn* this = (EnJgameTsn*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

@@ -11,8 +11,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
-#define THIS ((BgHakuginSwitch*)thisx)
-
 void BgHakuginSwitch_Init(Actor* thisx, PlayState* play);
 void BgHakuginSwitch_Destroy(Actor* thisx, PlayState* play);
 void BgHakuginSwitch_Update(Actor* thisx, PlayState* play);
@@ -115,7 +113,7 @@ void func_80B157C4(BgHakuginSwitch* this, u16 arg1) {
 
 void BgHakuginSwitch_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    BgHakuginSwitch* this = THIS;
+    BgHakuginSwitch* this = (BgHakuginSwitch*)thisx;
     s32 sp34 = BGHAKUGINSWITCH_GET_7(&this->dyna.actor);
     s32 sp30;
     s32 pad2;
@@ -181,7 +179,7 @@ void BgHakuginSwitch_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgHakuginSwitch_Destroy(Actor* thisx, PlayState* play) {
-    BgHakuginSwitch* this = THIS;
+    BgHakuginSwitch* this = (BgHakuginSwitch*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
     Collider_DestroyCylinder(play, &this->collider);
@@ -488,7 +486,7 @@ void func_80B165E0(BgHakuginSwitch* this, PlayState* play) {
 
 void BgHakuginSwitch_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    BgHakuginSwitch* this = THIS;
+    BgHakuginSwitch* this = (BgHakuginSwitch*)thisx;
     f32 sp24;
 
     if (this->unk_1B2 > 0) {
@@ -533,7 +531,7 @@ void BgHakuginSwitch_Update(Actor* thisx, PlayState* play) {
 }
 
 void BgHakuginSwitch_Draw(Actor* thisx, PlayState* play) {
-    BgHakuginSwitch* this = THIS;
+    BgHakuginSwitch* this = (BgHakuginSwitch*)thisx;
 
     Gfx_DrawDListOpa(play, this->unk_1A8);
 }

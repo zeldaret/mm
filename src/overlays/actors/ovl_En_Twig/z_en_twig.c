@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
-#define THIS ((EnTwig*)thisx)
-
 void EnTwig_Init(Actor* thisx, PlayState* play2);
 void EnTwig_Destroy(Actor* thisx, PlayState* play2);
 void EnTwig_Update(Actor* thisx, PlayState* play2);
@@ -57,7 +55,7 @@ static InitChainEntry sInitChain[] = {
 
 void EnTwig_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnTwig* this = THIS;
+    EnTwig* this = (EnTwig*)thisx;
     s32 i;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
@@ -110,7 +108,7 @@ void EnTwig_Init(Actor* thisx, PlayState* play2) {
 
 void EnTwig_Destroy(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnTwig* this = THIS;
+    EnTwig* this = (EnTwig*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
@@ -231,13 +229,13 @@ void func_80AC0D2C(EnTwig* this, PlayState* play) {
 
 void EnTwig_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnTwig* this = THIS;
+    EnTwig* this = (EnTwig*)thisx;
 
     this->actionFunc(this, play);
 }
 
 void EnTwig_Draw(Actor* thisx, PlayState* play) {
-    EnTwig* this = THIS;
+    EnTwig* this = (EnTwig*)thisx;
 
     switch (this->unk_160) {
         case 1:

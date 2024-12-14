@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
-#define THIS ((BgFuMizu*)thisx)
-
 void BgFuMizu_Init(Actor* thisx, PlayState* play);
 void BgFuMizu_Destroy(Actor* thisx, PlayState* play);
 void BgFuMizu_Update(Actor* thisx, PlayState* play);
@@ -29,7 +27,7 @@ ActorProfile Bg_Fu_Mizu_Profile = {
 };
 
 void BgFuMizu_Init(Actor* thisx, PlayState* play) {
-    BgFuMizu* this = THIS;
+    BgFuMizu* this = (BgFuMizu*)thisx;
     s32 pad;
     CollisionHeader* colHeader = NULL;
 
@@ -42,7 +40,7 @@ void BgFuMizu_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgFuMizu_Destroy(Actor* thisx, PlayState* play) {
-    BgFuMizu* this = THIS;
+    BgFuMizu* this = (BgFuMizu*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
@@ -62,7 +60,7 @@ s32 func_80ADABA4(BgFuMizu* this, PlayState* play) {
 
 void BgFuMizu_Update(Actor* thisx, PlayState* play) {
     f32 heightTarget;
-    BgFuMizu* this = THIS;
+    BgFuMizu* this = (BgFuMizu*)thisx;
 
     if (this->unk_160 == 0) {
         if (func_80ADABA4(this, play)) {

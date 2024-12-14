@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
-#define THIS ((EnBoom*)thisx)
-
 void EnBoom_Init(Actor* thisx, PlayState* play);
 void EnBoom_Destroy(Actor* thisx, PlayState* play);
 void EnBoom_Update(Actor* thisx, PlayState* play);
@@ -112,7 +110,7 @@ void EnBoom_Init(Actor* thisx, PlayState* play) {
     static u8 D_808A3070[4] = { 255, 255, 100, 0 };
     static u8 D_808A3074[4] = { 255, 255, 100, 0 };
     s32 pad;
-    EnBoom* this = THIS;
+    EnBoom* this = (EnBoom*)thisx;
     EffectBlureInit1 sp30;
     s32 i;
 
@@ -138,7 +136,7 @@ void EnBoom_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnBoom_Destroy(Actor* thisx, PlayState* play) {
-    EnBoom* this = THIS;
+    EnBoom* this = (EnBoom*)thisx;
     Player* player = GET_PLAYER(play);
     Actor* otherZoraBoomerangActor;
 
@@ -284,7 +282,7 @@ void func_808A2918(EnBoom* this, PlayState* play) {
 }
 
 void EnBoom_Update(Actor* thisx, PlayState* play) {
-    EnBoom* this = THIS;
+    EnBoom* this = (EnBoom*)thisx;
     Player* player = GET_PLAYER(play);
     Actor* actor;
 
@@ -319,7 +317,7 @@ EnBoomStruct D_808A3078[] = {
 };
 
 void EnBoom_Draw(Actor* thisx, PlayState* play) {
-    EnBoom* this = THIS;
+    EnBoom* this = (EnBoom*)thisx;
     EnBoomStruct* sp58 = &D_808A3078[this->actor.params];
     Vec3f sp4C;
     Vec3f sp40;

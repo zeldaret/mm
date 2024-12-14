@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
-#define THIS ((ObjAqua*)thisx)
-
 void ObjAqua_Init(Actor* thisx, PlayState* play);
 void ObjAqua_Destroy(Actor* thisx, PlayState* play);
 void ObjAqua_Update(Actor* thisx, PlayState* play);
@@ -144,7 +142,7 @@ s32 ObjAqua_IsUnderwater(ObjAqua* this, PlayState* play) {
 }
 
 void ObjAqua_Init(Actor* thisx, PlayState* play) {
-    ObjAqua* this = THIS;
+    ObjAqua* this = (ObjAqua*)thisx;
     s32 i;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
@@ -171,7 +169,7 @@ void ObjAqua_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjAqua_Destroy(Actor* thisx, PlayState* play) {
-    ObjAqua* this = THIS;
+    ObjAqua* this = (ObjAqua*)thisx;
     Collider_DestroyCylinder(play, &this->collider);
 }
 
@@ -243,7 +241,7 @@ void func_80ACBDFC(ObjAqua* this, PlayState* play) {
 }
 
 void ObjAqua_Update(Actor* thisx, PlayState* play) {
-    ObjAqua* this = THIS;
+    ObjAqua* this = (ObjAqua*)thisx;
     s32 pad;
 
     if (this->counter > 0) {
@@ -270,7 +268,7 @@ void ObjAqua_Update(Actor* thisx, PlayState* play) {
 }
 
 void ObjAqua_Draw(Actor* thisx, PlayState* play) {
-    ObjAqua* this = THIS;
+    ObjAqua* this = (ObjAqua*)thisx;
     s32 framesTemp;
     s32 pad;
     s16 yaw = Camera_GetCamDirYaw(GET_ACTIVE_CAM(play)) + 0x8000;

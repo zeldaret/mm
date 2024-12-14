@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
-#define THIS ((ObjY2lift*)thisx)
-
 void ObjY2lift_Init(Actor* thisx, PlayState* play);
 void ObjY2lift_Destroy(Actor* thisx, PlayState* play);
 void ObjY2lift_Update(Actor* thisx, PlayState* play);
@@ -36,7 +34,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void ObjY2lift_Init(Actor* thisx, PlayState* play) {
-    ObjY2lift* this = THIS;
+    ObjY2lift* this = (ObjY2lift*)thisx;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
@@ -44,13 +42,13 @@ void ObjY2lift_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjY2lift_Destroy(Actor* thisx, PlayState* play) {
-    ObjY2lift* this = THIS;
+    ObjY2lift* this = (ObjY2lift*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
 void ObjY2lift_Update(Actor* thisx, PlayState* play) {
-    ObjY2lift* this = THIS;
+    ObjY2lift* this = (ObjY2lift*)thisx;
     f32 temp_fv0 = this->dyna.actor.world.pos.y;
     f32 targetVelocityY = 0.0f;
     s32 isPlayerOnTop = DynaPolyActor_IsPlayerOnTop(&this->dyna);

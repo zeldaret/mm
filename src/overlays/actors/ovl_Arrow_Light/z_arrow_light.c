@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
-#define THIS ((ArrowLight*)thisx)
-
 void ArrowLight_Init(Actor* thisx, PlayState* play);
 void ArrowLight_Destroy(Actor* thisx, PlayState* play);
 void ArrowLight_Update(Actor* thisx, PlayState* play);
@@ -170,7 +168,7 @@ void ArrowLight_Fly(ArrowLight* this, PlayState* play) {
 }
 
 void ArrowLight_Update(Actor* thisx, PlayState* play) {
-    ArrowLight* this = THIS;
+    ArrowLight* this = (ArrowLight*)thisx;
 
     if ((play->msgCtx.msgMode == MSGMODE_E) || (play->msgCtx.msgMode == MSGMODE_SONG_PLAYED)) {
         Actor_Kill(&this->actor);

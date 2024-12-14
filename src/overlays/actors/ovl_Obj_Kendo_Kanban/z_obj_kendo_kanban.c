@@ -23,8 +23,6 @@
 // Number of bounces the board takes before settling.
 #define MAX_BOUNCE_COUNT (7)
 
-#define THIS ((ObjKendoKanban*)thisx)
-
 typedef enum {
     /* -1 */ OBJKENDOKANBAN_DIR_DOWN = -1,
     /*  0 */ OBJKENDOKANBAN_DIR_UNDETERMINED,
@@ -187,7 +185,7 @@ static Vec3f sUnitVecX = { 1.0f, 0.0f, 0.0f };
 
 void ObjKendoKanban_Init(Actor* thisx, PlayState* play) {
     s32 pad[2];
-    ObjKendoKanban* this = THIS;
+    ObjKendoKanban* this = (ObjKendoKanban*)thisx;
     Vec3f vertices[3];
     s32 i;
     s32 j;
@@ -238,7 +236,7 @@ void ObjKendoKanban_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjKendoKanban_Destroy(Actor* thisx, PlayState* play) {
-    ObjKendoKanban* this = THIS;
+    ObjKendoKanban* this = (ObjKendoKanban*)thisx;
 
     Collider_DestroyCylinder(play, &this->colliderCylinder);
     Collider_DestroyTris(play, &this->colliderTris);
@@ -487,14 +485,14 @@ void ObjKendoKanban_UpdateCollision(ObjKendoKanban* this, PlayState* play) {
 }
 
 void ObjKendoKanban_Update(Actor* thisx, PlayState* play) {
-    ObjKendoKanban* this = THIS;
+    ObjKendoKanban* this = (ObjKendoKanban*)thisx;
 
     this->actionFunc(this, play);
     ObjKendoKanban_UpdateCollision(this, play);
 }
 
 void ObjKendoKanban_Draw(Actor* thisx, PlayState* play) {
-    ObjKendoKanban* this = THIS;
+    ObjKendoKanban* this = (ObjKendoKanban*)thisx;
     s32 i;
 
     OPEN_DISPS(play->state.gfxCtx);

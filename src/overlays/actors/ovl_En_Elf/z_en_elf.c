@@ -10,8 +10,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED | ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
-#define THIS ((EnElf*)thisx)
-
 void EnElf_Init(Actor* thisx, PlayState* play2);
 void EnElf_Destroy(Actor* thisx, PlayState* play);
 void EnElf_Update(Actor* thisx, PlayState* play);
@@ -318,7 +316,7 @@ f32 func_8088CD3C(s32 colorFlag) {
 
 void EnElf_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnElf* this = THIS;
+    EnElf* this = (EnElf*)thisx;
     Player* player = GET_PLAYER(play);
     s32 colorConfig;
     s32 fairyType;
@@ -466,7 +464,7 @@ void EnElf_Init(Actor* thisx, PlayState* play2) {
 
 void EnElf_Destroy(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnElf* this = THIS;
+    EnElf* this = (EnElf*)thisx;
 
     LightContext_RemoveLight(play, &play->lightCtx, this->lightNodeGlow);
     LightContext_RemoveLight(play, &play->lightCtx, this->lightNodeNoGlow);
@@ -1269,7 +1267,7 @@ void func_8088F5F4(EnElf* this, PlayState* play, s32 sparkleLife) {
 }
 
 void func_8088F9E4(Actor* thisx, PlayState* play) {
-    EnElf* this = THIS;
+    EnElf* this = (EnElf*)thisx;
     s32 bgId;
 
     thisx->floorHeight =
@@ -1361,7 +1359,7 @@ void func_8088FDCC(EnElf* this) {
 
 void func_8088FE64(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnElf* this = THIS;
+    EnElf* this = (EnElf*)thisx;
 
     func_8088FA38(this, play);
 
@@ -1455,7 +1453,7 @@ void func_8088FE64(Actor* thisx, PlayState* play2) {
 
 void func_8089010C(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnElf* this = THIS;
+    EnElf* this = (EnElf*)thisx;
     Player* player = GET_PLAYER(play);
     u16 temp_v0 = QuestHint_GetTatlTextId(play);
 
@@ -1538,7 +1536,7 @@ void func_8089010C(Actor* thisx, PlayState* play) {
 }
 
 void EnElf_Update(Actor* thisx, PlayState* play) {
-    EnElf* this = THIS;
+    EnElf* this = (EnElf*)thisx;
 
     this->actionFunc(this, play);
 
@@ -1554,7 +1552,7 @@ s32 EnElf_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
                            Gfx** gfx) {
     static Vec3f sZeroVec = { 0.0f, 0.0f, 0.0f };
     s32 pad;
-    EnElf* this = THIS;
+    EnElf* this = (EnElf*)thisx;
     Vec3f sp34;
     f32 scale;
 
@@ -1581,7 +1579,7 @@ s32 EnElf_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 }
 
 void EnElf_Draw(Actor* thisx, PlayState* play) {
-    EnElf* this = THIS;
+    EnElf* this = (EnElf*)thisx;
     Player* player = GET_PLAYER(play);
     s32 pad;
     s32 pad2;

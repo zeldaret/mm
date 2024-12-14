@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
-#define THIS ((BgCtowerGear*)thisx)
-
 void BgCtowerGear_Init(Actor* thisx, PlayState* play);
 void BgCtowerGear_Destroy(Actor* thisx, PlayState* play);
 void BgCtowerGear_Update(Actor* thisx, PlayState* play);
@@ -113,7 +111,7 @@ void BgCtowerGear_Splash(BgCtowerGear* this, PlayState* play) {
 }
 
 void BgCtowerGear_Init(Actor* thisx, PlayState* play) {
-    BgCtowerGear* this = THIS;
+    BgCtowerGear* this = (BgCtowerGear*)thisx;
     s32 type = BGCTOWERGEAR_GET_TYPE(&this->dyna.actor);
 
     Actor_SetScale(&this->dyna.actor, 0.1f);
@@ -137,7 +135,7 @@ void BgCtowerGear_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgCtowerGear_Destroy(Actor* thisx, PlayState* play) {
-    BgCtowerGear* this = THIS;
+    BgCtowerGear* this = (BgCtowerGear*)thisx;
     s32 type = BGCTOWERGEAR_GET_TYPE(&this->dyna.actor);
 
     if ((type == BGCTOWERGEAR_WATER_WHEEL) || (type == BGCTOWERGEAR_ORGAN)) {
@@ -146,7 +144,7 @@ void BgCtowerGear_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void BgCtowerGear_Update(Actor* thisx, PlayState* play) {
-    BgCtowerGear* this = THIS;
+    BgCtowerGear* this = (BgCtowerGear*)thisx;
     s32 type = BGCTOWERGEAR_GET_TYPE(&this->dyna.actor);
 
     if (type == BGCTOWERGEAR_CEILING_COG) {
@@ -161,7 +159,7 @@ void BgCtowerGear_Update(Actor* thisx, PlayState* play) {
 }
 
 void BgCtowerGear_UpdateOrgan(Actor* thisx, PlayState* play) {
-    BgCtowerGear* this = THIS;
+    BgCtowerGear* this = (BgCtowerGear*)thisx;
 
     if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_104)) {
         switch (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_104)]->id) {

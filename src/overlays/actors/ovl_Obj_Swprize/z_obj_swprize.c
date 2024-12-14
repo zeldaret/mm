@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
-#define THIS ((ObjSwprize*)thisx)
-
 void ObjSwprize_Init(Actor* thisx, PlayState* play);
 void ObjSwprize_Destroy(Actor* thisx, PlayState* play);
 void ObjSwprize_Update(Actor* thisx, PlayState* play);
@@ -82,7 +80,7 @@ void func_80C253D0(ObjSwprize* this, PlayState* play) {
 }
 
 void ObjSwprize_Init(Actor* thisx, PlayState* play) {
-    ObjSwprize* this = THIS;
+    ObjSwprize* this = (ObjSwprize*)thisx;
 
     if (Flags_GetSwitch(play, OBJ_SWPRIZE_GET_SWITCH_FLAG(&this->actor))) {
         ObjSwprize_SetupDoNothing(this);
@@ -141,7 +139,7 @@ void ObjSwprize_DoNothing(ObjSwprize* this, PlayState* play) {
 }
 
 void ObjSwprize_Update(Actor* thisx, PlayState* play) {
-    ObjSwprize* this = THIS;
+    ObjSwprize* this = (ObjSwprize*)thisx;
 
     this->actionFunc(this, play);
 }

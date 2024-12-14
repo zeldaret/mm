@@ -11,8 +11,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
-#define THIS ((EnRailSkb*)thisx)
-
 void EnRailSkb_Init(Actor* thisx, PlayState* play);
 void EnRailSkb_Destroy(Actor* thisx, PlayState* play);
 void EnRailSkb_Update(Actor* thisx, PlayState* play);
@@ -285,7 +283,7 @@ static InitChainEntry sInitChain[] = {
 
 void EnRailSkb_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnRailSkb* this = THIS;
+    EnRailSkb* this = (EnRailSkb*)thisx;
 
     func_80B708C0(this, play);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
@@ -323,7 +321,7 @@ void EnRailSkb_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnRailSkb_Destroy(Actor* thisx, PlayState* play) {
-    EnRailSkb* this = THIS;
+    EnRailSkb* this = (EnRailSkb*)thisx;
 
     Collider_DestroyJntSph(play, &this->collider);
 }
@@ -1091,7 +1089,7 @@ void func_80B72970(EnRailSkb* this, PlayState* play) {
 }
 
 void EnRailSkb_Update(Actor* thisx, PlayState* play) {
-    EnRailSkb* this = THIS;
+    EnRailSkb* this = (EnRailSkb*)thisx;
 
     this->actionFunc(this, play);
 
@@ -1109,7 +1107,7 @@ void EnRailSkb_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnRailSkb_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnRailSkb* this = THIS;
+    EnRailSkb* this = (EnRailSkb*)thisx;
     s16 abs;
 
     if (limbIndex == STALCHILD_LIMB_HEAD) {
@@ -1138,7 +1136,7 @@ s32 EnRailSkb_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
 
 void EnRailSkb_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f D_80B734D0 = { 800.0f, 1200.0f, 0.0f };
-    EnRailSkb* this = THIS;
+    EnRailSkb* this = (EnRailSkb*)thisx;
 
     if (!(this->unk_402 & 0x80)) {
         Collider_UpdateSpheres(limbIndex, &this->collider);
@@ -1170,7 +1168,7 @@ void EnRailSkb_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
 }
 
 void EnRailSkb_Draw(Actor* thisx, PlayState* play) {
-    EnRailSkb* this = THIS;
+    EnRailSkb* this = (EnRailSkb*)thisx;
 
     this->bodyPartsCount = 0;
     Gfx_SetupDL25_Opa(play->state.gfxCtx);

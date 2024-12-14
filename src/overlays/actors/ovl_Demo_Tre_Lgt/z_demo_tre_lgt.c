@@ -10,8 +10,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
-#define THIS ((DemoTreLgt*)thisx)
-
 void DemoTreLgt_Init(Actor* thisx, PlayState* play);
 void DemoTreLgt_Destroy(Actor* thisx, PlayState* play);
 void DemoTreLgt_Update(Actor* thisx, PlayState* play);
@@ -63,7 +61,7 @@ static DemoTreLgtActionFunc sActionFuncs[] = {
 };
 
 void DemoTreLgt_Init(Actor* thisx, PlayState* play) {
-    DemoTreLgt* this = THIS;
+    DemoTreLgt* this = (DemoTreLgt*)thisx;
 
     SkelCurve_Init(play, &this->skelCurve, &gBoxLightCurveSkel, sBoxLightAnimations[0]);
     this->colorAlpha1 = 255;
@@ -79,7 +77,7 @@ void DemoTreLgt_Init(Actor* thisx, PlayState* play) {
 }
 
 void DemoTreLgt_Destroy(Actor* thisx, PlayState* play) {
-    DemoTreLgt* this = THIS;
+    DemoTreLgt* this = (DemoTreLgt*)thisx;
 
     SkelCurve_Destroy(play, &this->skelCurve);
 }
@@ -136,14 +134,14 @@ void DemoTreLgt_Animate(DemoTreLgt* this, PlayState* play) {
 }
 
 void DemoTreLgt_Update(Actor* thisx, PlayState* play) {
-    DemoTreLgt* this = THIS;
+    DemoTreLgt* this = (DemoTreLgt*)thisx;
 
     sActionFuncs[this->action](this, play);
 }
 
 s32 DemoTreLgt_OverrideLimbDraw(PlayState* play, SkelCurve* skelCuve, s32 limbIndex, Actor* thisx) {
     s32 pad;
-    DemoTreLgt* this = THIS;
+    DemoTreLgt* this = (DemoTreLgt*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -165,7 +163,7 @@ s32 DemoTreLgt_OverrideLimbDraw(PlayState* play, SkelCurve* skelCuve, s32 limbIn
 
 void DemoTreLgt_Draw(Actor* thisx, PlayState* play) {
     GraphicsContext* gfxCtx = play->state.gfxCtx;
-    DemoTreLgt* this = THIS;
+    DemoTreLgt* this = (DemoTreLgt*)thisx;
 
     OPEN_DISPS(gfxCtx);
 

@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
-#define THIS ((ElfMsg2*)thisx)
-
 void ElfMsg2_Init(Actor* thisx, PlayState* play);
 void ElfMsg2_Destroy(Actor* thisx, PlayState* play);
 void ElfMsg2_Update(Actor* thisx, PlayState* play);
@@ -72,7 +70,7 @@ s32 func_8096EC4C(ElfMsg2* this, PlayState* play) {
 }
 
 void ElfMsg2_Init(Actor* thisx, PlayState* play) {
-    ElfMsg2* this = THIS;
+    ElfMsg2* this = (ElfMsg2*)thisx;
 
     if (!func_8096EC4C(this, play)) {
         if ((this->actor.home.rot.x > 0) && (this->actor.home.rot.x < 8)) {
@@ -143,7 +141,7 @@ void func_8096EFD0(ElfMsg2* this, PlayState* play) {
 }
 
 void ElfMsg2_Update(Actor* thisx, PlayState* play) {
-    ElfMsg2* this = THIS;
+    ElfMsg2* this = (ElfMsg2*)thisx;
 
     if (!func_8096EC4C(this, play)) {
         this->actionFunc(this, play);

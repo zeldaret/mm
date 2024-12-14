@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
-#define THIS ((DmAh*)thisx)
-
 void DmAh_Init(Actor* thisx, PlayState* play);
 void DmAh_Destroy(Actor* thisx, PlayState* play);
 void DmAh_Update(Actor* thisx, PlayState* play);
@@ -163,7 +161,7 @@ void DmAh_DoNothing(DmAh* this, PlayState* play) {
 }
 
 void DmAh_Init(Actor* thisx, PlayState* play) {
-    DmAh* this = THIS;
+    DmAh* this = (DmAh*)thisx;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &object_ah_Skel_009E70, NULL, this->jointTable, this->morphTable,
@@ -186,7 +184,7 @@ void DmAh_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void DmAh_Update(Actor* thisx, PlayState* play) {
-    DmAh* this = THIS;
+    DmAh* this = (DmAh*)thisx;
 
     this->actionFunc(this, play);
     func_80C1D6E0(this, play);
@@ -205,7 +203,7 @@ void DmAh_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 }
 
 void DmAh_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
-    DmAh* this = THIS;
+    DmAh* this = (DmAh*)thisx;
     s32 stepRot;
     s32 overrideRot;
 
@@ -252,7 +250,7 @@ static TexturePtr D_80C1DE28[] = {
 };
 
 void DmAh_Draw(Actor* thisx, PlayState* play) {
-    DmAh* this = THIS;
+    DmAh* this = (DmAh*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

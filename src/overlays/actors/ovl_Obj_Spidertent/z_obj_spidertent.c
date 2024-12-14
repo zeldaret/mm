@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_UCODE_POINT_LIGHT_ENABLED)
 
-#define THIS ((ObjSpidertent*)thisx)
-
 void ObjSpidertent_Init(Actor* thisx, PlayState* play);
 void ObjSpidertent_Destroy(Actor* thisx, PlayState* play);
 void ObjSpidertent_Update(Actor* thisx, PlayState* play);
@@ -447,7 +445,7 @@ bool func_80B2FC98(TriNorm* triNorm, Vec3f* arg1) {
 }
 
 void func_80B300F4(ObjSpidertent* thisx, PlayState* play, TriNorm* triNorm, Vec3f* arg3, f32 arg4, s32 arg5) {
-    ObjSpidertent* this = THIS;
+    ObjSpidertent* this = (ObjSpidertent*)thisx;
     ObjSpidertentStruct* spE0 = &D_80B31350[OBJSPIDERTENT_GET_1(&this->dyna.actor)];
     f32 temp_f24;
     f32 phi_f22;
@@ -551,7 +549,7 @@ s32 func_80B30480(ObjSpidertent* this, PlayState* play, Vec3f* arg2) {
 
 void ObjSpidertent_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    ObjSpidertent* this = THIS;
+    ObjSpidertent* this = (ObjSpidertent*)thisx;
     s32 temp_s1 = OBJSPIDERTENT_GET_1(&this->dyna.actor);
     ObjSpidertentStruct* ptr = &D_80B31350[temp_s1];
     ColliderTrisElementInit* element;
@@ -597,7 +595,7 @@ void ObjSpidertent_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjSpidertent_Destroy(Actor* thisx, PlayState* play) {
-    ObjSpidertent* this = THIS;
+    ObjSpidertent* this = (ObjSpidertent*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
     Collider_DestroyTris(play, &this->collider);
@@ -797,13 +795,13 @@ void func_80B30AF8(ObjSpidertent* this, PlayState* play) {
 }
 
 void ObjSpidertent_Update(Actor* thisx, PlayState* play) {
-    ObjSpidertent* this = THIS;
+    ObjSpidertent* this = (ObjSpidertent*)thisx;
 
     this->actionFunc(this, play);
 }
 
 void ObjSpidertent_Draw(Actor* thisx, PlayState* play) {
-    ObjSpidertent* this = THIS;
+    ObjSpidertent* this = (ObjSpidertent*)thisx;
     s32 params = OBJSPIDERTENT_GET_1(&this->dyna.actor);
     s32 temp_f18 = this->unk_3C5 * (29.0f / 51);
     Gfx* gfx;

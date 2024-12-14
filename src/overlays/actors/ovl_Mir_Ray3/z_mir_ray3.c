@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
-#define THIS ((MirRay3*)thisx)
-
 void MirRay3_Init(Actor* thisx, PlayState* play);
 void MirRay3_Destroy(Actor* thisx, PlayState* play);
 void MirRay3_Update(Actor* thisx, PlayState* play);
@@ -77,7 +75,7 @@ typedef struct {
 
 void MirRay3_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    MirRay3* this = THIS;
+    MirRay3* this = (MirRay3*)thisx;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
     Actor_SetScale(&this->actor, 1.0f);
@@ -108,7 +106,7 @@ void MirRay3_Init(Actor* thisx, PlayState* play) {
 }
 
 void MirRay3_Destroy(Actor* thisx, PlayState* play) {
-    MirRay3* this = THIS;
+    MirRay3* this = (MirRay3*)thisx;
 
     Collider_DestroyQuad(play, &this->colliderQuad);
     Collider_DestroyCylinder(play, &this->colliderCylinder);
@@ -116,7 +114,7 @@ void MirRay3_Destroy(Actor* thisx, PlayState* play) {
 
 void MirRay3_Update(Actor* thisx, PlayState* play) {
     s32 pad[2];
-    MirRay3* this = THIS;
+    MirRay3* this = (MirRay3*)thisx;
     Player* player = GET_PLAYER(play);
 
     this->unk_210 &= ~1;
@@ -344,7 +342,7 @@ void func_80B9E8D4(MirRay3* this, PlayState* play, MirRay3Struct* ptr) {
 
 void MirRay3_Draw(Actor* thisx, PlayState* play) {
     s32 pad[2];
-    MirRay3* this = THIS;
+    MirRay3* this = (MirRay3*)thisx;
     MirRay3Struct sp8C[6];
     Player* player = GET_PLAYER(play);
     s32 i;

@@ -10,8 +10,6 @@
     (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
      ACTOR_FLAG_DRAW_CULLING_DISABLED | ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
-#define THIS ((EnMa4*)thisx)
-
 void EnMa4_Init(Actor* thisx, PlayState* play);
 void EnMa4_Destroy(Actor* thisx, PlayState* play);
 void EnMa4_Update(Actor* thisx, PlayState* play);
@@ -207,7 +205,7 @@ void EnMa4_InitPath(EnMa4* this, PlayState* play) {
 }
 
 void EnMa4_Init(Actor* thisx, PlayState* play) {
-    EnMa4* this = THIS;
+    EnMa4* this = (EnMa4*)thisx;
     s32 pad;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 18.0f);
@@ -264,7 +262,7 @@ void EnMa4_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnMa4_Destroy(Actor* thisx, PlayState* play) {
-    EnMa4* this = THIS;
+    EnMa4* this = (EnMa4*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
     CLEAR_WEEKEVENTREG(WEEKEVENTREG_08_01);
@@ -1054,7 +1052,7 @@ void EnMa4_InitFaceExpression(EnMa4* this) {
 }
 
 void EnMa4_Update(Actor* thisx, PlayState* play) {
-    EnMa4* this = THIS;
+    EnMa4* this = (EnMa4*)thisx;
     s32 pad;
 
     Collider_UpdateCylinder(&this->actor, &this->collider);
@@ -1066,7 +1064,7 @@ void EnMa4_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnMa4_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnMa4* this = THIS;
+    EnMa4* this = (EnMa4*)thisx;
     Vec3s limbRot;
 
     if (limbIndex == ROMANI_LIMB_HEAD) {
@@ -1084,7 +1082,7 @@ s32 EnMa4_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 }
 
 void EnMa4_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnMa4* this = THIS;
+    EnMa4* this = (EnMa4*)thisx;
     Vec3f sp28 = { 800.0f, 0.0f, 0.0f };
 
     if (limbIndex == ROMANI_LIMB_HEAD) {
@@ -1101,7 +1099,7 @@ void EnMa4_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
 }
 
 void EnMa4_Draw(Actor* thisx, PlayState* play) {
-    EnMa4* this = THIS;
+    EnMa4* this = (EnMa4*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

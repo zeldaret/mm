@@ -34,8 +34,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
-#define THIS ((ObjTokeidai*)thisx)
-
 #define GET_CURRENT_CLOCK_HOUR(this) ((s32)TIME_TO_HOURS_F((this)->clockTime))
 #define GET_CURRENT_CLOCK_MINUTE(this) ((s32)((this)->clockTime * (360 * 2.0f / 0x10000)) % 30)
 #define GET_CLOCK_FACE_ROTATION(currentClockHour) (TRUNCF_BINANG(currentClockHour * (0x10000 / 24.0f)))
@@ -205,7 +203,7 @@ void ObjTokeidai_Counterweight_Init(ObjTokeidai* this, PlayState* play) {
 }
 
 void ObjTokeidai_Init(Actor* thisx, PlayState* play) {
-    ObjTokeidai* this = THIS;
+    ObjTokeidai* this = (ObjTokeidai*)thisx;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     this->actionFunc = ObjTokeidai_DoNothing;
@@ -783,7 +781,7 @@ void ObjTokeidai_Counterweight_Idle(ObjTokeidai* this, PlayState* play) {
 }
 
 void ObjTokeidai_Update(Actor* thisx, PlayState* play) {
-    ObjTokeidai* this = THIS;
+    ObjTokeidai* this = (ObjTokeidai*)thisx;
     this->actionFunc(this, play);
 }
 
@@ -791,7 +789,7 @@ void ObjTokeidai_Update(Actor* thisx, PlayState* play) {
  * Used for TerminaFieldWalls StaircaseToRooftop, and UnusedWall
  */
 void ObjTokeidai_Draw(Actor* thisx, PlayState* play) {
-    ObjTokeidai* this = THIS;
+    ObjTokeidai* this = (ObjTokeidai*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -811,7 +809,7 @@ void ObjTokeidai_Draw(Actor* thisx, PlayState* play) {
 }
 
 void ObjTokeidai_Clock_Draw(Actor* thisx, PlayState* play) {
-    ObjTokeidai* this = THIS;
+    ObjTokeidai* this = (ObjTokeidai*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -851,7 +849,7 @@ void ObjTokeidai_Clock_Draw(Actor* thisx, PlayState* play) {
 void ObjTokeidai_Counterweight_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
     u32 gameplayFrames = play->gameplayFrames;
-    ObjTokeidai* this = THIS;
+    ObjTokeidai* this = (ObjTokeidai*)thisx;
 
     Matrix_RotateYS(-this->actor.shape.rot.y, MTXMODE_APPLY);
     Matrix_Translate(0.0f, this->yTranslation, 0.0f, MTXMODE_APPLY);
@@ -881,7 +879,7 @@ void ObjTokeidai_Counterweight_Draw(Actor* thisx, PlayState* play) {
 }
 
 void ObjTokeidai_ExteriorGear_Draw(Actor* thisx, PlayState* play) {
-    ObjTokeidai* this = THIS;
+    ObjTokeidai* this = (ObjTokeidai*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

@@ -11,8 +11,6 @@
     (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
      ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
-#define THIS ((EnTruMt*)thisx)
-
 void EnTruMt_Init(Actor* thisx, PlayState* play);
 void EnTruMt_Destroy(Actor* thisx, PlayState* play);
 void EnTruMt_Update(Actor* thisx, PlayState* play);
@@ -405,7 +403,7 @@ void func_80B76C38(EnTruMt* this, PlayState* play) {
 
 void EnTruMt_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnTruMt* this = THIS;
+    EnTruMt* this = (EnTruMt*)thisx;
 
     if (!CHECK_EVENTINF(EVENTINF_35)) {
         Actor_Kill(&this->actor);
@@ -439,13 +437,13 @@ void EnTruMt_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnTruMt_Destroy(Actor* thisx, PlayState* play) {
-    EnTruMt* this = THIS;
+    EnTruMt* this = (EnTruMt*)thisx;
 
     Collider_DestroySphere(play, &this->collider);
 }
 
 void EnTruMt_Update(Actor* thisx, PlayState* play) {
-    EnTruMt* this = THIS;
+    EnTruMt* this = (EnTruMt*)thisx;
 
     func_80B768F0(this, play);
     SkelAnime_Update(&this->skelAnime);
@@ -489,7 +487,7 @@ void func_80B76ED4(s16 arg0, s16 arg1, Vec3f* arg2, Vec3s* arg3, s32 arg4) {
 
 s32 EnTruMt_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     static Vec3f D_80B7765C = { 3000.0f, -800.0f, 0.0f };
-    EnTruMt* this = THIS;
+    EnTruMt* this = (EnTruMt*)thisx;
 
     if (limbIndex == KOUME_LIMB_HEAD) {
         Matrix_MultVec3f(&gZeroVec3f, &this->unk_35C);
@@ -504,7 +502,7 @@ s32 EnTruMt_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
 void EnTruMt_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f D_80B77668 = { 0.0f, 0.0f, -3000.0f };
     s32 pad;
-    EnTruMt* this = THIS;
+    EnTruMt* this = (EnTruMt*)thisx;
     MtxF* sp54;
     s32 phi_v0;
 
@@ -558,7 +556,7 @@ void EnTruMt_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
 }
 
 void EnTruMt_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
-    EnTruMt* this = THIS;
+    EnTruMt* this = (EnTruMt*)thisx;
 
     if (limbIndex == KOUME_LIMB_HEAD) {
         Matrix_Translate(this->unk_33C.x, this->unk_33C.y, this->unk_33C.z, MTXMODE_NEW);
@@ -570,7 +568,7 @@ void EnTruMt_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 }
 
 void EnTruMt_Draw(Actor* thisx, PlayState* play) {
-    EnTruMt* this = THIS;
+    EnTruMt* this = (EnTruMt*)thisx;
     TexturePtr eyeTextures[] = {
         gKoumeEyeOpenTex,
         gKoumeEyeHalfTex,

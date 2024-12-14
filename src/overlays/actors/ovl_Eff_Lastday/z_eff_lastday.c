@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
-#define THIS ((EffLastday*)thisx)
-
 void EffLastday_Init(Actor* thisx, PlayState* play2);
 void EffLastday_Destroy(Actor* thisx, PlayState* play);
 void EffLastday_Update(Actor* thisx, PlayState* play);
@@ -42,7 +40,7 @@ ActorProfile Eff_Lastday_Profile = {
 
 void EffLastday_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EffLastday* this = THIS;
+    EffLastday* this = (EffLastday*)thisx;
 
     Actor_SetScale(&this->actor, 0.1f);
     switch (EFFLASTDAY_GET_F(&this->actor)) {
@@ -217,7 +215,7 @@ void func_80BEBF78(EffLastday* this, PlayState* play) {
 }
 
 void EffLastday_Update(Actor* thisx, PlayState* play) {
-    EffLastday* this = THIS;
+    EffLastday* this = (EffLastday*)thisx;
 
     this->actionFunc(this, play);
 }
@@ -232,7 +230,7 @@ void EffLastday_SetVtxAlpha(s16 alpha) {
 }
 
 void EffLastday_Draw(Actor* thisx, PlayState* play) {
-    EffLastday* this = THIS;
+    EffLastday* this = (EffLastday*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

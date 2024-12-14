@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
-#define THIS ((BgLadder*)thisx)
-
 void BgLadder_Init(Actor* thisx, PlayState* play);
 void BgLadder_Destroy(Actor* thisx, PlayState* play);
 void BgLadder_Update(Actor* thisx, PlayState* play);
@@ -44,7 +42,7 @@ static Gfx* sLadderDLists[] = {
 };
 
 void BgLadder_Init(Actor* thisx, PlayState* play) {
-    BgLadder* this = THIS;
+    BgLadder* this = (BgLadder*)thisx;
     BgLadderSize size;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
@@ -82,7 +80,7 @@ void BgLadder_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgLadder_Destroy(Actor* thisx, PlayState* play) {
-    BgLadder* this = THIS;
+    BgLadder* this = (BgLadder*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
@@ -123,13 +121,13 @@ void BgLadder_DoNothing(BgLadder* this, PlayState* play) {
 }
 
 void BgLadder_Update(Actor* thisx, PlayState* play) {
-    BgLadder* this = THIS;
+    BgLadder* this = (BgLadder*)thisx;
 
     this->action(this, play);
 }
 
 void BgLadder_Draw(Actor* thisx, PlayState* play) {
-    BgLadder* this = THIS;
+    BgLadder* this = (BgLadder*)thisx;
     s32 pad;
     Gfx* gfx;
 

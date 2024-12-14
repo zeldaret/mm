@@ -9,8 +9,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((ObjYasi*)thisx)
-
 #define CAN_DROP_NUT(thisx) (thisx->params < 0)
 
 void ObjYasi_Init(Actor* thisx, PlayState* play);
@@ -38,7 +36,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void ObjYasi_Init(Actor* thisx, PlayState* play) {
-    ObjYasi* this = THIS;
+    ObjYasi* this = (ObjYasi*)thisx;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 0);
@@ -53,13 +51,13 @@ void ObjYasi_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjYasi_Destroy(Actor* thisx, PlayState* play) {
-    ObjYasi* this = THIS;
+    ObjYasi* this = (ObjYasi*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
 void ObjYasi_Update(Actor* thisx, PlayState* play) {
-    ObjYasi* this = THIS;
+    ObjYasi* this = (ObjYasi*)thisx;
     s16 temp;
     Vec3f dropPos;
 
@@ -83,7 +81,7 @@ void ObjYasi_Update(Actor* thisx, PlayState* play) {
 }
 
 void ObjYasi_Draw(Actor* thisx, PlayState* play) {
-    ObjYasi* this = THIS;
+    ObjYasi* this = (ObjYasi*)thisx;
 
     Matrix_Translate(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
                      MTXMODE_NEW);

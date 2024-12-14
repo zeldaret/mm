@@ -10,8 +10,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
-#define THIS ((EnPamera*)thisx)
-
 void EnPamera_Init(Actor* thisx, PlayState* play);
 void EnPamera_Destroy(Actor* thisx, PlayState* play);
 void EnPamera_Update(Actor* thisx, PlayState* play);
@@ -149,7 +147,7 @@ static TexturePtr D_80BDA610[] = { object_pamera_Tex_0072E8, object_pamera_Tex_0
 
 void EnPamera_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnPamera* this = THIS;
+    EnPamera* this = (EnPamera*)thisx;
     Vec3f sp44;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 15.0f);
@@ -244,7 +242,7 @@ void func_80BD8658(EnPamera* this) {
 }
 
 void EnPamera_Destroy(Actor* thisx, PlayState* play) {
-    EnPamera* this = THIS;
+    EnPamera* this = (EnPamera*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -538,7 +536,7 @@ void func_80BD94E0(EnPamera* this, PlayState* play) {
 
 void EnPamera_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnPamera* this = THIS;
+    EnPamera* this = (EnPamera*)thisx;
 
     this->actionFunc(this, play);
     SkelAnime_Update(&this->skelAnime);
@@ -551,7 +549,7 @@ void EnPamera_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnPamera_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnPamera* this = THIS;
+    EnPamera* this = (EnPamera*)thisx;
 
     if (limbIndex == PAMELA_LIMB_HEAD) {
         rot->x += this->headRot.y;
@@ -561,7 +559,7 @@ s32 EnPamera_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f
 }
 
 void EnPamera_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnPamera* this = THIS;
+    EnPamera* this = (EnPamera*)thisx;
 
     if (limbIndex == PAMELA_LIMB_HEAD) {
         Matrix_MultVec3f(&D_80BDA5F0, &this->actor.focus.pos);
@@ -569,7 +567,7 @@ void EnPamera_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* r
 }
 
 void EnPamera_Draw(Actor* thisx, PlayState* play) {
-    EnPamera* this = THIS;
+    EnPamera* this = (EnPamera*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -880,7 +878,7 @@ void func_80BDA2E0(EnPamera* this, PlayState* play) {
 
 void func_80BDA344(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnPamera* this = THIS;
+    EnPamera* this = (EnPamera*)thisx;
 
     this->actionFunc(this, play);
     SkelAnime_Update(&this->skelAnime);

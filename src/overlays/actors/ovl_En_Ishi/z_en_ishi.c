@@ -14,8 +14,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_THROW_ONLY)
 
-#define THIS ((EnIshi*)thisx)
-
 void EnIshi_Init(Actor* thisx, PlayState* play);
 void EnIshi_Destroy(Actor* thisx, PlayState* play2);
 void EnIshi_Update(Actor* thisx, PlayState* play);
@@ -146,7 +144,7 @@ static u16 D_8095F7AC[] = { NA_SE_PL_PULL_UP_ROCK, NA_SE_PL_PULL_UP_BIGROCK };
 static EnIshiUnkFunc D_8095F7B0[] = { func_8095F210, func_8095F36C };
 
 void func_8095D6E0(Actor* thisx, PlayState* play) {
-    EnIshi* this = THIS;
+    EnIshi* this = (EnIshi*)thisx;
 
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit[ENISHI_GET_1(&this->actor)]);
@@ -171,7 +169,7 @@ s32 func_8095D758(EnIshi* this, PlayState* play, f32 arg2) {
 }
 
 void func_8095D804(Actor* thisx, PlayState* play) {
-    EnIshi* this = THIS;
+    EnIshi* this = (EnIshi*)thisx;
     s32 i;
     s16 objectId;
     Gfx* phi_s4;
@@ -212,7 +210,7 @@ void func_8095D804(Actor* thisx, PlayState* play) {
 }
 
 void func_8095DABC(Actor* thisx, PlayState* play) {
-    EnIshi* this = THIS;
+    EnIshi* this = (EnIshi*)thisx;
     Vec3f spD8;
     Vec3f spCC;
     f32 temp_f20;
@@ -378,7 +376,7 @@ s32 EnIshi_IsUnderwater(EnIshi* this, PlayState* play) {
 
 void EnIshi_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnIshi* this = THIS;
+    EnIshi* this = (EnIshi*)thisx;
     s32 sp34 = ENISHI_GET_1(&this->actor);
     s32 sp30 = ENISHI_GET_4(&this->actor);
 
@@ -436,7 +434,7 @@ void EnIshi_Init(Actor* thisx, PlayState* play) {
 
 void EnIshi_Destroy(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnIshi* this = THIS;
+    EnIshi* this = (EnIshi*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -695,7 +693,7 @@ void func_8095F194(EnIshi* this, PlayState* play) {
 }
 
 void EnIshi_Update(Actor* thisx, PlayState* play) {
-    EnIshi* this = THIS;
+    EnIshi* this = (EnIshi*)thisx;
 
     this->actionFunc(this, play);
 }
@@ -757,7 +755,7 @@ void func_8095F36C(EnIshi* this, PlayState* play) {
 }
 
 void func_8095F61C(Actor* thisx, PlayState* play) {
-    EnIshi* this = THIS;
+    EnIshi* this = (EnIshi*)thisx;
 
     D_8095F7B0[ENISHI_GET_1(&this->actor)](this, play);
 }

@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
-#define THIS ((ObjJgGakki*)thisx)
-
 void ObjJgGakki_Init(Actor* thisx, PlayState* play2);
 void ObjJgGakki_Destroy(Actor* thisx, PlayState* play);
 void ObjJgGakki_Update(Actor* thisx, PlayState* play);
@@ -30,7 +28,7 @@ ActorProfile Obj_Jg_Gakki_Profile = {
 
 void ObjJgGakki_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    ObjJgGakki* this = THIS;
+    ObjJgGakki* this = (ObjJgGakki*)thisx;
     f32 endFrame = Animation_GetLastFrame(&gGoronElderDrumTakeOutAnim);
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
@@ -47,19 +45,19 @@ void ObjJgGakki_Init(Actor* thisx, PlayState* play2) {
 }
 
 void ObjJgGakki_Destroy(Actor* thisx, PlayState* play) {
-    ObjJgGakki* this = THIS;
+    ObjJgGakki* this = (ObjJgGakki*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
 
 void ObjJgGakki_Update(Actor* thisx, PlayState* play) {
-    ObjJgGakki* this = THIS;
+    ObjJgGakki* this = (ObjJgGakki*)thisx;
 
     SkelAnime_Update(&this->skelAnime);
 }
 
 void ObjJgGakki_Draw(Actor* thisx, PlayState* play) {
-    ObjJgGakki* this = THIS;
+    ObjJgGakki* this = (ObjJgGakki*)thisx;
 
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, NULL, &this->actor);
 }

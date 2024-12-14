@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
-#define THIS ((DmChar04*)thisx)
-
 void DmChar04_Init(Actor* thisx, PlayState* play);
 void DmChar04_Destroy(Actor* thisx, PlayState* play);
 void DmChar04_Update(Actor* thisx, PlayState* play);
@@ -68,7 +66,7 @@ static Color_RGBAf sEnvColors[] = {
 };
 
 void DmChar04_Init(Actor* thisx, PlayState* play) {
-    DmChar04* this = THIS;
+    DmChar04* this = (DmChar04*)thisx;
 
     this->primColors = sPrimColors[this->actor.params];
     this->envColors = sEnvColors[this->actor.params];
@@ -111,7 +109,7 @@ void DmChar04_HandleCutscene(DmChar04* this, PlayState* play) {
 }
 
 void DmChar04_Update(Actor* thisx, PlayState* play) {
-    DmChar04* this = THIS;
+    DmChar04* this = (DmChar04*)thisx;
 
     SkelAnime_Update(&this->skelAnime);
     this->actionFunc(this, play);
@@ -124,7 +122,7 @@ s32 DmChar04_OverrideLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3
     PlayState* play = play2;
     f32 sp28;
     Vec3f sp1C;
-    DmChar04* this = THIS;
+    DmChar04* this = (DmChar04*)thisx;
 
     if (limbIndex == FAIRY_LIMB_6) {
         sp28 = ((Math_SinS(this->timer * 0x1000) * 0.1f) + 1.0f) * 0.012f * (this->actor.scale.x * (1.0f / 0.008f));
@@ -139,7 +137,7 @@ void DmChar04_Draw(Actor* thisx, PlayState* play) {
     Gfx* gfx = GRAPH_ALLOC(play->state.gfxCtx, 4 * sizeof(Gfx));
     s32 alpha;
     s32 pad;
-    DmChar04* this = THIS;
+    DmChar04* this = (DmChar04*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

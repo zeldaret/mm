@@ -17,8 +17,6 @@
     (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
      ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
-#define THIS ((EnDno*)thisx)
-
 void EnDno_Init(Actor* thisx, PlayState* play);
 void EnDno_Destroy(Actor* thisx, PlayState* play);
 void EnDno_Update(Actor* thisx, PlayState* play);
@@ -219,7 +217,7 @@ void func_80A71788(EnDno* this, PlayState* play) {
 }
 
 void EnDno_Init(Actor* thisx, PlayState* play) {
-    EnDno* this = THIS;
+    EnDno* this = (EnDno*)thisx;
     s32 pad;
     Actor* actor = NULL;
 
@@ -293,7 +291,7 @@ void EnDno_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnDno_Destroy(Actor* thisx, PlayState* play) {
-    EnDno* this = THIS;
+    EnDno* this = (EnDno*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
     LightContext_RemoveLight(play, &play->lightCtx, this->lightNode);
@@ -994,7 +992,7 @@ void func_80A73408(EnDno* this, PlayState* play) {
 }
 
 void EnDno_Update(Actor* thisx, PlayState* play) {
-    EnDno* this = THIS;
+    EnDno* this = (EnDno*)thisx;
     s32 pad;
 
     SkelAnime_Update(&this->skelAnime);
@@ -1009,14 +1007,14 @@ void EnDno_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnDno_Draw(Actor* thisx, PlayState* play) {
-    EnDno* this = THIS;
+    EnDno* this = (EnDno*)thisx;
 
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnDno_OverrideLimbDraw, EnDno_PostLimbDraw, &this->actor);
 }
 
 s32 EnDno_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnDno* this = THIS;
+    EnDno* this = (EnDno*)thisx;
 
     *dList = NULL;
     if (limbIndex == DEKU_BUTLER_LIMB_EYES) {
@@ -1030,7 +1028,7 @@ void EnDno_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
     Gfx* gfxOpa;
     Gfx* gfxXlu;
     Vec3f sp84;
-    EnDno* this = THIS;
+    EnDno* this = (EnDno*)thisx;
     s32 pad;
     s32 phi_v0 = false;
 

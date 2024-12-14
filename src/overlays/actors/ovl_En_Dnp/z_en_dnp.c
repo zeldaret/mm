@@ -11,8 +11,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
-#define THIS ((EnDnp*)thisx)
-
 void EnDnp_Init(Actor* thisx, PlayState* play);
 void EnDnp_Destroy(Actor* thisx, PlayState* play);
 void EnDnp_Update(Actor* thisx, PlayState* play);
@@ -415,7 +413,7 @@ void func_80B3D558(EnDnp* this, PlayState* play) {
 }
 
 void EnDnp_Init(Actor* thisx, PlayState* play) {
-    EnDnp* this = THIS;
+    EnDnp* this = (EnDnp*)thisx;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 16.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gDekuPrincessSkel, NULL, this->jointTable, this->morphTable,
@@ -454,13 +452,13 @@ void EnDnp_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnDnp_Destroy(Actor* thisx, PlayState* play) {
-    EnDnp* this = THIS;
+    EnDnp* this = (EnDnp*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
 
 void EnDnp_Update(Actor* thisx, PlayState* play) {
-    EnDnp* this = THIS;
+    EnDnp* this = (EnDnp*)thisx;
     s32 pad;
     f32 sp2C;
     f32 sp28;
@@ -522,7 +520,7 @@ void EnDnp_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
 }
 
 void EnDnp_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
-    EnDnp* this = THIS;
+    EnDnp* this = (EnDnp*)thisx;
     s32 phi_v1;
     s32 phi_v0;
 
@@ -558,7 +556,7 @@ void EnDnp_Draw(Actor* thisx, PlayState* play) {
         gDekuPrincessEyeClosedTex,
         gDekuPrincessEyeAngryTex,
     };
-    EnDnp* this = THIS;
+    EnDnp* this = (EnDnp*)thisx;
 
     if (this->unk_322 & 0x100) {
         OPEN_DISPS(play->state.gfxCtx);

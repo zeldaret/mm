@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
-#define THIS ((EnWeatherTag*)thisx)
-
 void EnWeatherTag_Init(Actor* thisx, PlayState* play);
 void EnWeatherTag_Destroy(Actor* thisx, PlayState* play);
 void EnWeatherTag_Update(Actor* thisx, PlayState* play);
@@ -55,7 +53,7 @@ void EnWeatherTag_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnWeatherTag_Init(Actor* thisx, PlayState* play) {
-    EnWeatherTag* this = THIS;
+    EnWeatherTag* this = (EnWeatherTag*)thisx;
     s32 pad;
     Path* path;
     s32 pathIndex;
@@ -487,7 +485,7 @@ void func_80967608(EnWeatherTag* this, PlayState* play) {
 }
 
 void EnWeatherTag_Update(Actor* thisx, PlayState* play) {
-    EnWeatherTag* this = THIS;
+    EnWeatherTag* this = (EnWeatherTag*)thisx;
 
     this->actionFunc(this, play);
 

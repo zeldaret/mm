@@ -10,8 +10,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
-#define THIS ((ObjLift*)thisx)
-
 void ObjLift_Init(Actor* thisx, PlayState* play);
 void ObjLift_Destroy(Actor* thisx, PlayState* play);
 void ObjLift_Update(Actor* thisx, PlayState* play);
@@ -94,7 +92,7 @@ void func_8093D3C0(ObjLift* this, PlayState* play) {
 
 void ObjLift_Init(Actor* thisx, PlayState* play) {
     f32 temp_fv0;
-    ObjLift* this = THIS;
+    ObjLift* this = (ObjLift*)thisx;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     this->dyna.actor.scale.x = this->dyna.actor.scale.z = D_8093DD98[OBJLIFT_GET_1(&this->dyna.actor)];
@@ -116,7 +114,7 @@ void ObjLift_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjLift_Destroy(Actor* thisx, PlayState* play) {
-    ObjLift* this = THIS;
+    ObjLift* this = (ObjLift*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
@@ -220,7 +218,7 @@ void func_8093DB90(ObjLift* this, PlayState* play) {
 }
 
 void ObjLift_Update(Actor* thisx, PlayState* play) {
-    ObjLift* this = THIS;
+    ObjLift* this = (ObjLift*)thisx;
 
     if (this->timer > 0) {
         this->timer--;
@@ -229,13 +227,13 @@ void ObjLift_Update(Actor* thisx, PlayState* play) {
 }
 
 void ObjLift_Draw(Actor* thisx, PlayState* play) {
-    ObjLift* this = THIS;
+    ObjLift* this = (ObjLift*)thisx;
 
     Gfx_DrawDListOpa(play, gDampeGraveBrownElevatorDL);
 }
 
 void func_8093DC90(Actor* thisx, PlayState* play) {
-    ObjLift* this = THIS;
+    ObjLift* this = (ObjLift*)thisx;
     Vec3f pos;
     Vec3s rot;
 

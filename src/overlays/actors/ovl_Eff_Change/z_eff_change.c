@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
-#define THIS ((EffChange*)thisx)
-
 void EffChange_Init(Actor* thisx, PlayState* play);
 void EffChange_Destroy(Actor* thisx, PlayState* play);
 void EffChange_Update(Actor* thisx, PlayState* play);
@@ -43,7 +41,7 @@ static u8 D_80A4C920[] = {
 };
 
 void EffChange_Init(Actor* thisx, PlayState* play) {
-    EffChange* this = THIS;
+    EffChange* this = (EffChange*)thisx;
 
     this->actionFunc = func_80A4C5CC;
     this->actor.draw = EffChange_Draw;
@@ -60,7 +58,7 @@ void EffChange_Init(Actor* thisx, PlayState* play) {
 }
 
 void EffChange_Destroy(Actor* thisx, PlayState* play) {
-    EffChange* this = THIS;
+    EffChange* this = (EffChange*)thisx;
 
     Keyframe_DestroyFlex(&this->kfSkelAnime);
 }
@@ -119,7 +117,7 @@ void func_80A4C5CC(EffChange* this, PlayState* play) {
 }
 
 void EffChange_Update(Actor* thisx, PlayState* play) {
-    EffChange* this = THIS;
+    EffChange* this = (EffChange*)thisx;
 
     this->actionFunc(this, play);
 }
@@ -127,7 +125,7 @@ void EffChange_Update(Actor* thisx, PlayState* play) {
 void EffChange_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
     Mtx* mtxStack;
-    EffChange* this = THIS;
+    EffChange* this = (EffChange*)thisx;
 
     AnimatedMat_DrawStepXlu(play, Lib_SegmentedToVirtual(&gameplay_keep_Matanimheader_028FEC), this->step);
     mtxStack = GRAPH_ALLOC(play->state.gfxCtx, this->kfSkelAnime.skeleton->dListCount * sizeof(Mtx));

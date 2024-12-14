@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_UCODE_POINT_LIGHT_ENABLED)
 
-#define THIS ((BgKin2Bombwall*)thisx)
-
 void BgKin2Bombwall_Init(Actor* thisx, PlayState* play);
 void BgKin2Bombwall_Destroy(Actor* thisx, PlayState* play);
 void BgKin2Bombwall_Update(Actor* thisx, PlayState* play);
@@ -138,7 +136,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void BgKin2Bombwall_Init(Actor* thisx, PlayState* play) {
-    BgKin2Bombwall* this = THIS;
+    BgKin2Bombwall* this = (BgKin2Bombwall*)thisx;
     ColliderCylinder* bombwallCollider;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
@@ -158,7 +156,7 @@ void BgKin2Bombwall_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgKin2Bombwall_Destroy(Actor* thisx, PlayState* play) {
-    BgKin2Bombwall* this = THIS;
+    BgKin2Bombwall* this = (BgKin2Bombwall*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
     Collider_DestroyCylinder(play, &this->collider);
@@ -211,13 +209,13 @@ void BgKin2Bombwall_EndCutscene(BgKin2Bombwall* this, PlayState* play) {
 }
 
 void BgKin2Bombwall_Update(Actor* thisx, PlayState* play) {
-    BgKin2Bombwall* this = THIS;
+    BgKin2Bombwall* this = (BgKin2Bombwall*)thisx;
 
     this->actionFunc(this, play);
 }
 
 void BgKin2Bombwall_Draw(Actor* thisx, PlayState* play) {
-    BgKin2Bombwall* this = THIS;
+    BgKin2Bombwall* this = (BgKin2Bombwall*)thisx;
 
     Gfx_DrawDListOpa(play, gOceanSpiderHouseBombableWallDL);
     Gfx_DrawDListXlu(play, gOceanSpiderHouseBombableWallCrackDL);

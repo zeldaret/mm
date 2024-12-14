@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
-#define THIS ((BgHakaCurtain*)thisx)
-
 void BgHakaCurtain_Init(Actor* thisx, PlayState* play);
 void BgHakaCurtain_Destroy(Actor* thisx, PlayState* play);
 void BgHakaCurtain_Update(Actor* thisx, PlayState* play);
@@ -46,7 +44,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void BgHakaCurtain_Init(Actor* thisx, PlayState* play) {
-    BgHakaCurtain* this = THIS;
+    BgHakaCurtain* this = (BgHakaCurtain*)thisx;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
@@ -59,7 +57,7 @@ void BgHakaCurtain_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgHakaCurtain_Destroy(Actor* thisx, PlayState* play) {
-    BgHakaCurtain* this = THIS;
+    BgHakaCurtain* this = (BgHakaCurtain*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
@@ -122,7 +120,7 @@ void func_80B6DEA8(BgHakaCurtain* this, PlayState* play) {
 }
 
 void BgHakaCurtain_Update(Actor* thisx, PlayState* play) {
-    BgHakaCurtain* this = THIS;
+    BgHakaCurtain* this = (BgHakaCurtain*)thisx;
     CsCmdActorCue* cue;
 
     if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_469)) {

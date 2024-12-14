@@ -10,8 +10,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
-#define THIS ((EnEstone*)thisx)
-
 void EnEstone_Init(Actor* thisx, PlayState* play);
 void EnEstone_Destroy(Actor* thisx, PlayState* play);
 void EnEstone_Update(Actor* thisx, PlayState* play2);
@@ -56,7 +54,7 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 void EnEstone_Init(Actor* thisx, PlayState* play) {
-    EnEstone* this = THIS;
+    EnEstone* this = (EnEstone*)thisx;
     Vec3f accel;
     Vec3f velocity;
     f32 scale;
@@ -106,7 +104,7 @@ void EnEstone_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnEstone_Destroy(Actor* thisx, PlayState* play) {
-    EnEstone* this = THIS;
+    EnEstone* this = (EnEstone*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -162,7 +160,7 @@ void EnEstone_Inactive(EnEstone* this, PlayState* play) {
 
 void EnEstone_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnEstone* this = THIS;
+    EnEstone* this = (EnEstone*)thisx;
 
     DECR(this->timer);
 
@@ -187,7 +185,7 @@ void EnEstone_Update(Actor* thisx, PlayState* play2) {
 
 void EnEstone_Draw(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnEstone* this = THIS;
+    EnEstone* this = (EnEstone*)thisx;
 
     if (this->inactive != true) {
         Matrix_Push();

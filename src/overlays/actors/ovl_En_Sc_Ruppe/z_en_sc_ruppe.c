@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
-#define THIS ((EnScRuppe*)thisx)
-
 void EnScRuppe_Init(Actor* thisx, PlayState* play);
 void EnScRuppe_Destroy(Actor* thisx, PlayState* play);
 void EnScRuppe_Update(Actor* thisx, PlayState* play);
@@ -145,7 +143,7 @@ void func_80BD6B18(EnScRuppe* this, PlayState* play) {
 }
 
 void EnScRuppe_Init(Actor* thisx, PlayState* play) {
-    EnScRuppe* this = THIS;
+    EnScRuppe* this = (EnScRuppe*)thisx;
     ColliderCylinder* collider = &this->collider;
 
     Collider_InitCylinder(play, collider);
@@ -163,13 +161,13 @@ void EnScRuppe_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnScRuppe_Destroy(Actor* thisx, PlayState* play) {
-    EnScRuppe* this = THIS;
+    EnScRuppe* this = (EnScRuppe*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
 
 void EnScRuppe_Update(Actor* thisx, PlayState* play) {
-    EnScRuppe* this = THIS;
+    EnScRuppe* this = (EnScRuppe*)thisx;
 
     this->actionFunc(this, play);
     EnScRuppe_UpdateCollision(this, play);
@@ -177,7 +175,7 @@ void EnScRuppe_Update(Actor* thisx, PlayState* play) {
 
 void EnScRuppe_Draw(Actor* thisx, PlayState* play) {
     s32* pad;
-    EnScRuppe* this = THIS;
+    EnScRuppe* this = (EnScRuppe*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

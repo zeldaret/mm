@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
-#define THIS ((BgIknvObj*)thisx)
-
 void BgIknvObj_Init(Actor* thisx, PlayState* play);
 void BgIknvObj_Destroy(Actor* thisx, PlayState* play);
 void BgIknvObj_Update(Actor* thisx, PlayState* play);
@@ -55,7 +53,7 @@ static ColliderCylinderInit sCylinderInit = {
 
 void BgIknvObj_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    BgIknvObj* this = THIS;
+    BgIknvObj* this = (BgIknvObj*)thisx;
     CollisionHeader* colHeader = NULL;
 
     Actor_SetScale(&this->dyna.actor, 0.1f);
@@ -97,7 +95,7 @@ void BgIknvObj_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgIknvObj_Destroy(Actor* thisx, PlayState* play) {
-    BgIknvObj* this = THIS;
+    BgIknvObj* this = (BgIknvObj*)thisx;
 
     if (IKNV_OBJ_TYPE(this) != IKNV_OBJ_RAISED_DOOR) {
         if (IKNV_OBJ_TYPE(this) == IKNV_OBJ_SAKON_DOOR) {
@@ -206,13 +204,13 @@ void BgIknvObj_DoNothing(BgIknvObj* this, PlayState* play) {
 }
 
 void BgIknvObj_Update(Actor* thisx, PlayState* play) {
-    BgIknvObj* this = THIS;
+    BgIknvObj* this = (BgIknvObj*)thisx;
 
     this->actionFunc(this, play);
 }
 
 void BgIknvObj_Draw(Actor* thisx, PlayState* play) {
-    BgIknvObj* this = THIS;
+    BgIknvObj* this = (BgIknvObj*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

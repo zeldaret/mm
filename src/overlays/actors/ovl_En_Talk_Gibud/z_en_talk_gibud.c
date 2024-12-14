@@ -11,8 +11,6 @@
     (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
      ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER)
 
-#define THIS ((EnTalkGibud*)thisx)
-
 void EnTalkGibud_Init(Actor* thisx, PlayState* play);
 void EnTalkGibud_Destroy(Actor* thisx, PlayState* play);
 void EnTalkGibud_Update(Actor* thisx, PlayState* play);
@@ -227,7 +225,7 @@ static Vec3f sAccel = { 0.0f, 0.600000023842f, 0.0f };
 
 void EnTalkGibud_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnTalkGibud* this = THIS;
+    EnTalkGibud* this = (EnTalkGibud*)thisx;
     s32 i;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
@@ -279,7 +277,7 @@ void EnTalkGibud_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnTalkGibud_Destroy(Actor* thisx, PlayState* play) {
-    EnTalkGibud* this = THIS;
+    EnTalkGibud* this = (EnTalkGibud*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -1149,7 +1147,7 @@ void EnTalkGibud_UpdateEffect(EnTalkGibud* this, PlayState* play) {
 }
 
 void EnTalkGibud_Update(Actor* thisx, PlayState* play) {
-    EnTalkGibud* this = THIS;
+    EnTalkGibud* this = (EnTalkGibud*)thisx;
 
     EnTalkGibud_CheckForGibdoMask(this, play);
     EnTalkGibud_UpdateDamage(this, play);
@@ -1168,7 +1166,7 @@ void EnTalkGibud_Update(Actor* thisx, PlayState* play) {
 
 s32 EnTalkGibud_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
                                  Gfx** gfx) {
-    EnTalkGibud* this = THIS;
+    EnTalkGibud* this = (EnTalkGibud*)thisx;
 
     if (limbIndex == GIBDO_LIMB_UPPER_BODY_ROOT) {
         rot->y += this->torsoRot.y;
@@ -1180,7 +1178,7 @@ s32 EnTalkGibud_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Ve
 }
 
 void EnTalkGibud_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
-    EnTalkGibud* this = THIS;
+    EnTalkGibud* this = (EnTalkGibud*)thisx;
 
     if ((this->drawDmgEffTimer != 0) &&
         ((limbIndex == GIBDO_LIMB_LEFT_THIGH) || (limbIndex == GIBDO_LIMB_LEFT_SHIN) ||
@@ -1196,7 +1194,7 @@ void EnTalkGibud_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s
 }
 
 void EnTalkGibud_Draw(Actor* thisx, PlayState* play) {
-    EnTalkGibud* this = THIS;
+    EnTalkGibud* this = (EnTalkGibud*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

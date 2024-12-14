@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
-#define THIS ((EnTanron4*)thisx)
-
 void EnTanron4_Init(Actor* thisx, PlayState* play2);
 void EnTanron4_Destroy(Actor* thisx, PlayState* play);
 void EnTanron4_Update(Actor* thisx, PlayState* play);
@@ -45,7 +43,7 @@ ActorProfile En_Tanron4_Profile = {
 
 void EnTanron4_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnTanron4* this = THIS;
+    EnTanron4* this = (EnTanron4*)thisx;
 
     SkelAnime_InitFlex(play, &this->skelAnime, &gSeagullSkel, &gSeagullFlapAnim, this->jointTable, this->morphTable,
                        SEAGULL_LIMB_RIGHT_WING_MAX);
@@ -253,7 +251,7 @@ void EnTanron4_FlyNearActor(EnTanron4* this, PlayState* play) {
 }
 
 void EnTanron4_Update(Actor* thisx, PlayState* play) {
-    EnTanron4* this = THIS;
+    EnTanron4* this = (EnTanron4*)thisx;
 
     Actor_SetScale(&this->actor, 0.001f * KREG(16) + 0.01f);
 
@@ -276,7 +274,7 @@ void EnTanron4_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnTanron4_Draw(Actor* thisx, PlayState* play) {
-    EnTanron4* this = THIS;
+    EnTanron4* this = (EnTanron4*)thisx;
 
     if (this->timeInfluence < 1400.0f) {
         Matrix_RotateZS(this->roll, MTXMODE_APPLY);

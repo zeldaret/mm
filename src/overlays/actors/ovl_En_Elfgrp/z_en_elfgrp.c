@@ -36,8 +36,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
-#define THIS ((EnElfgrp*)thisx)
-
 //! TODO: this file require macros for its uses of weekEventReg
 
 void EnElfgrp_Init(Actor* thisx, PlayState* play);
@@ -99,7 +97,7 @@ void EnElfgrp_SetCutscene(EnElfgrp* this, s32 numCutscenes) {
 
 void EnElfgrp_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnElfgrp* this = THIS;
+    EnElfgrp* this = (EnElfgrp*)thisx;
     s32 numberInFountain;
 
     this->type = ENELFGRP_GET_TYPE(&this->actor);
@@ -642,7 +640,7 @@ void func_80A3A8F8(EnElfgrp* this, PlayState* play) {
 }
 
 void EnElfgrp_Update(Actor* thisx, PlayState* play) {
-    EnElfgrp* this = THIS;
+    EnElfgrp* this = (EnElfgrp*)thisx;
 
     this->actionFunc(this, play);
 

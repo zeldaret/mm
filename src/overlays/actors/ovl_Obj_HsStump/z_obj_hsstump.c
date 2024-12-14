@@ -10,8 +10,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
-#define THIS ((ObjHsStump*)thisx)
-
 void ObjHsStump_Init(Actor* thisx, PlayState* play);
 void ObjHsStump_Destroy(Actor* thisx, PlayState* play);
 void ObjHsStump_Update(Actor* thisx, PlayState* play);
@@ -41,7 +39,7 @@ static InitChainEntry sInitChain[] = {
 static Vec3f sIceSmokeAccel = { 0.0f, 0.0f, 0.0f };
 
 void ObjHsStump_Init(Actor* thisx, PlayState* play) {
-    ObjHsStump* this = THIS;
+    ObjHsStump* this = (ObjHsStump*)thisx;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     this->isHidden = OBJHSSTUMP_GET_ISHIDDEN(thisx);
@@ -137,13 +135,13 @@ void ObjHsStump_Appear(ObjHsStump* this, PlayState* play) {
 }
 
 void ObjHsStump_Destroy(Actor* thisx, PlayState* play) {
-    ObjHsStump* this = THIS;
+    ObjHsStump* this = (ObjHsStump*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
 void ObjHsStump_Update(Actor* thisx, PlayState* play) {
-    ObjHsStump* this = THIS;
+    ObjHsStump* this = (ObjHsStump*)thisx;
 
     this->actionFunc(this, play);
 }

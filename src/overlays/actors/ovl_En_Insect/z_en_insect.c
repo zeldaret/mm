@@ -8,8 +8,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((EnInsect*)thisx)
-
 void EnInsect_Init(Actor* thisx, PlayState* play);
 void EnInsect_Destroy(Actor* thisx, PlayState* play2);
 void EnInsect_Update(Actor* thisx, PlayState* play);
@@ -120,7 +118,7 @@ void func_8091A9E4(EnInsect* this) {
 }
 
 void EnInsect_Init(Actor* thisx, PlayState* play) {
-    EnInsect* this = THIS;
+    EnInsect* this = (EnInsect*)thisx;
     f32 rand;
 
     this->actor.world.rot.y = Rand_Next() & 0xFFFF;
@@ -166,7 +164,7 @@ void EnInsect_Init(Actor* thisx, PlayState* play) {
 
 void EnInsect_Destroy(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnInsect* this = THIS;
+    EnInsect* this = (EnInsect*)thisx;
 
     Collider_DestroyJntSph(play, &this->collider);
 }
@@ -442,7 +440,7 @@ void func_8091B984(EnInsect* this, PlayState* play) {
 }
 
 void EnInsect_Update(Actor* thisx, PlayState* play) {
-    EnInsect* this = THIS;
+    EnInsect* this = (EnInsect*)thisx;
     s32 updBgCheckInfoFlags;
 
     if ((this->actor.child != NULL) && (this->actor.child->update == NULL) && (&this->actor != this->actor.child)) {
@@ -505,7 +503,7 @@ void EnInsect_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnInsect_Draw(Actor* thisx, PlayState* play) {
-    EnInsect* this = THIS;
+    EnInsect* this = (EnInsect*)thisx;
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, NULL, NULL);

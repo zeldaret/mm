@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
-#define THIS ((ObjLupygamelift*)thisx)
-
 void ObjLupygamelift_Init(Actor* thisx, PlayState* play);
 void ObjLupygamelift_Destroy(Actor* thisx, PlayState* play);
 void ObjLupygamelift_Update(Actor* thisx, PlayState* play);
@@ -42,7 +40,7 @@ static InitChainEntry sInitChain[] = {
 
 void ObjLupygamelift_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    ObjLupygamelift* this = THIS;
+    ObjLupygamelift* this = (ObjLupygamelift*)thisx;
     Path* path;
     s32 params;
 
@@ -86,7 +84,7 @@ void ObjLupygamelift_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjLupygamelift_Destroy(Actor* thisx, PlayState* play) {
-    ObjLupygamelift* this = THIS;
+    ObjLupygamelift* this = (ObjLupygamelift*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
@@ -164,7 +162,7 @@ void func_80AF0530(ObjLupygamelift* this, PlayState* play) {
 }
 
 void ObjLupygamelift_Update(Actor* thisx, PlayState* play) {
-    ObjLupygamelift* this = THIS;
+    ObjLupygamelift* this = (ObjLupygamelift*)thisx;
 
     this->actionFunc(this, play);
 }

@@ -10,8 +10,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
-#define THIS ((ObjSpinyroll*)thisx)
-
 void ObjSpinyroll_Init(Actor* thisx, PlayState* play);
 void ObjSpinyroll_Destroy(Actor* thisx, PlayState* play);
 void ObjSpinyroll_Update(Actor* thisx, PlayState* play2);
@@ -163,7 +161,7 @@ void func_80A1DAAC(Vec3f* arg0, Vec3f* arg1, s16 arg2) {
 }
 
 void func_80A1DB2C(Actor* thisx) {
-    ObjSpinyroll* this = THIS;
+    ObjSpinyroll* this = (ObjSpinyroll*)thisx;
     s32 i;
     s32 j;
     s32 params = OBJSPINYROLL_GET_C000(&this->dyna.actor);
@@ -449,7 +447,7 @@ s32 func_80A1E6D4(ObjSpinyroll* this, PlayState* play) {
 
 void ObjSpinyroll_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    ObjSpinyroll* this = THIS;
+    ObjSpinyroll* this = (ObjSpinyroll*)thisx;
     f32 sp44;
     Path* path;
     s32 pad2;
@@ -511,7 +509,7 @@ void ObjSpinyroll_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjSpinyroll_Destroy(Actor* thisx, PlayState* play) {
-    ObjSpinyroll* this = THIS;
+    ObjSpinyroll* this = (ObjSpinyroll*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
     Collider_DestroyTris(play, &this->collider);
@@ -629,7 +627,7 @@ void func_80A1ECD4(ObjSpinyroll* this, PlayState* play) {
 
 void ObjSpinyroll_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    ObjSpinyroll* this = THIS;
+    ObjSpinyroll* this = (ObjSpinyroll*)thisx;
 
     if (this->collider.base.atFlags & AT_HIT) {
         this->collider.base.atFlags &= ~AT_HIT;
@@ -647,7 +645,7 @@ void ObjSpinyroll_Update(Actor* thisx, PlayState* play2) {
 }
 
 void ObjSpinyroll_Draw(Actor* thisx, PlayState* play) {
-    ObjSpinyroll* this = THIS;
+    ObjSpinyroll* this = (ObjSpinyroll*)thisx;
     f32 temp_f26;
     f32 temp_f28;
     s32 temp_s1 = OBJSPINYROLL_GET_C000(&this->dyna.actor);

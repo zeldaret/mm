@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
-#define THIS ((EnHs*)thisx)
-
 void EnHs_Init(Actor* thisx, PlayState* play);
 void EnHs_Destroy(Actor* thisx, PlayState* play);
 void EnHs_Update(Actor* thisx, PlayState* play);
@@ -71,7 +69,7 @@ void func_80952C50(EnHs* this, PlayState* play) {
 
 void EnHs_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnHs* this = THIS;
+    EnHs* this = (EnHs*)thisx;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gHsSkel, &gHsIdleAnim, this->jointTable, this->morphTable,
@@ -92,7 +90,7 @@ void EnHs_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnHs_Destroy(Actor* thisx, PlayState* play) {
-    EnHs* this = THIS;
+    EnHs* this = (EnHs*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -276,7 +274,7 @@ void func_8095345C(EnHs* this, PlayState* play) {
 
 void EnHs_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnHs* this = THIS;
+    EnHs* this = (EnHs*)thisx;
 
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
@@ -307,7 +305,7 @@ void EnHs_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnHs_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnHs* this = THIS;
+    EnHs* this = (EnHs*)thisx;
 
     switch (limbIndex) {
         case HS_LIMB_HEAD:
@@ -349,7 +347,7 @@ s32 EnHs_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
 }
 
 void EnHs_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnHs* this = THIS;
+    EnHs* this = (EnHs*)thisx;
 
     if (limbIndex == HS_LIMB_HEAD) {
         Matrix_MultVec3f(&D_8095393C, &this->actor.focus.pos);
@@ -357,7 +355,7 @@ void EnHs_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 }
 
 void EnHs_Draw(Actor* thisx, PlayState* play) {
-    EnHs* this = THIS;
+    EnHs* this = (EnHs*)thisx;
 
     Gfx_SetupDL37_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,

@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_DRAW_CULLING_DISABLED | ACTOR_FLAG_UCODE_POINT_LIGHT_ENABLED)
 
-#define THIS ((BgMarketStep*)thisx)
-
 void BgMarketStep_Init(Actor* thisx, PlayState* play);
 void BgMarketStep_Draw(Actor* thisx, PlayState* play);
 
@@ -44,7 +42,7 @@ Gfx* sBankAdvertisementsAndDoorDLs[] = {
 };
 
 void BgMarketStep_Init(Actor* thisx, PlayState* play) {
-    BgMarketStep* this = THIS;
+    BgMarketStep* this = (BgMarketStep*)thisx;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
 }

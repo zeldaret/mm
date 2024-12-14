@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
-#define THIS ((EnMm*)thisx)
-
 void EnMm_Init(Actor* thisx, PlayState* play);
 void EnMm_Destroy(Actor* thisx, PlayState* play);
 void EnMm_Update(Actor* thisx, PlayState* play);
@@ -71,7 +69,7 @@ void func_80965BBC(EnMm* this) {
 }
 
 void EnMm_Init(Actor* thisx, PlayState* play) {
-    EnMm* this = THIS;
+    EnMm* this = (EnMm*)thisx;
     EnMmActionFunc action;
 
     if ((this->actor.params >= 0) && (!CHECK_WEEKEVENTREG(WEEKEVENTREG_37_10) ||
@@ -96,7 +94,7 @@ void EnMm_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnMm_Destroy(Actor* thisx, PlayState* play) {
-    EnMm* this = THIS;
+    EnMm* this = (EnMm*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -197,7 +195,7 @@ void func_8096611C(EnMm* this, PlayState* play) {
 }
 
 void EnMm_Update(Actor* thisx, PlayState* play) {
-    EnMm* this = THIS;
+    EnMm* this = (EnMm*)thisx;
 
     Collider_ResetCylinderAC(play, &this->collider.base);
     this->actionFunc(this, play);
@@ -208,7 +206,7 @@ void EnMm_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnMm_Draw(Actor* thisx, PlayState* play) {
-    EnMm* this = THIS;
+    EnMm* this = (EnMm*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

@@ -10,8 +10,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
-#define THIS ((ObjJgameLight*)thisx)
-
 typedef enum {
     /* 0 */ OBJJGAMELIGHT_NONE,
     /* 1 */ OBJJGAMELIGHT_CORRECT,
@@ -62,7 +60,7 @@ static ColliderCylinderInit sCylinderInit = {
 #include "assets/overlays/ovl_Obj_Jgame_Light/ovl_Obj_Jgame_Light.c"
 
 void ObjJgameLight_Init(Actor* thisx, PlayState* play) {
-    ObjJgameLight* this = THIS;
+    ObjJgameLight* this = (ObjJgameLight*)thisx;
     LightInfo* lights = &this->lightInfo;
 
     Actor_SetScale(&this->actor, 1.0f);
@@ -84,7 +82,7 @@ void ObjJgameLight_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjJgameLight_Destroy(Actor* thisx, PlayState* play) {
-    ObjJgameLight* this = THIS;
+    ObjJgameLight* this = (ObjJgameLight*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
     LightContext_RemoveLight(play, &play->lightCtx, this->lightNode);
@@ -158,7 +156,7 @@ void func_80C15718(ObjJgameLight* this, PlayState* play) {
 }
 
 void ObjJgameLight_Update(Actor* thisx, PlayState* play) {
-    ObjJgameLight* this = THIS;
+    ObjJgameLight* this = (ObjJgameLight*)thisx;
 
     func_80C15718(this, play);
     func_80C15474(this, play);
@@ -168,7 +166,7 @@ void ObjJgameLight_Update(Actor* thisx, PlayState* play) {
 
 void ObjJgameLight_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
-    ObjJgameLight* this = THIS;
+    ObjJgameLight* this = (ObjJgameLight*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

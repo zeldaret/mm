@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
-#define THIS ((ObjLightswitch*)thisx)
-
 void ObjLightswitch_Init(Actor* thisx, PlayState* play);
 void ObjLightswitch_Destroy(Actor* thisx, PlayState* play);
 void ObjLightswitch_Update(Actor* thisx, PlayState* play);
@@ -145,7 +143,7 @@ void ObjLightswitch_SpawnEffects(ObjLightswitch* this, PlayState* play) {
 }
 
 void ObjLightswitch_Init(Actor* thisx, PlayState* play) {
-    ObjLightswitch* this = THIS;
+    ObjLightswitch* this = (ObjLightswitch*)thisx;
     s32 pad;
     u32 isSwitchActivated;
     s32 isTriggered;
@@ -178,7 +176,7 @@ void ObjLightswitch_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjLightswitch_Destroy(Actor* thisx, PlayState* play) {
-    ObjLightswitch* this = THIS;
+    ObjLightswitch* this = (ObjLightswitch*)thisx;
     Collider_DestroyJntSph(play, &this->collider);
 }
 
@@ -323,7 +321,7 @@ void ObjLightSwitch_Fade(ObjLightswitch* this, PlayState* play) {
 }
 
 void ObjLightswitch_Update(Actor* thisx, PlayState* play) {
-    ObjLightswitch* this = THIS;
+    ObjLightswitch* this = (ObjLightswitch*)thisx;
     s32 pad;
 
     if (this->collider.base.acFlags & AC_HIT) {
@@ -436,7 +434,7 @@ void ObjLightSwitch_DrawXlu(ObjLightswitch* this, PlayState* play) {
 }
 
 void ObjLightswitch_Draw(Actor* thisx, PlayState* play) {
-    ObjLightswitch* this = THIS;
+    ObjLightswitch* this = (ObjLightswitch*)thisx;
     s32 alpha = (u8)(this->colorAlpha >> 6);
 
     if ((LIGHTSWITCH_GET_TYPE(&this->actor) == LIGHTSWITCH_TYPE_FAKE) && (alpha > 0) && (alpha < 255)) {

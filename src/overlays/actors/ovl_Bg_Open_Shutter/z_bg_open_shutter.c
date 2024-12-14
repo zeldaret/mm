@@ -11,8 +11,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
-#define THIS ((BgOpenShutter*)thisx)
-
 void BgOpenShutter_Init(Actor* thisx, PlayState* play);
 void BgOpenShutter_Destroy(Actor* thisx, PlayState* play);
 void BgOpenShutter_Update(Actor* thisx, PlayState* play2);
@@ -89,7 +87,7 @@ s8 func_80ACABA8(BgOpenShutter* this, PlayState* play) {
 }
 
 void BgOpenShutter_Init(Actor* thisx, PlayState* play) {
-    BgOpenShutter* this = THIS;
+    BgOpenShutter* this = (BgOpenShutter*)thisx;
 
     Actor_ProcessInitChain(&this->slidingDoor.dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->slidingDoor.dyna, DYNA_TRANSFORM_POS);
@@ -98,7 +96,7 @@ void BgOpenShutter_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgOpenShutter_Destroy(Actor* thisx, PlayState* play) {
-    BgOpenShutter* this = THIS;
+    BgOpenShutter* this = (BgOpenShutter*)thisx;
     s32 transition = DOOR_GET_TRANSITION_ID(thisx);
 
     play->transitionActors.list[transition].id = -play->transitionActors.list[transition].id;
@@ -167,7 +165,7 @@ void func_80ACAEF0(BgOpenShutter* this, PlayState* play) {
 }
 
 void BgOpenShutter_Update(Actor* thisx, PlayState* play2) {
-    BgOpenShutter* this = THIS;
+    BgOpenShutter* this = (BgOpenShutter*)thisx;
     PlayState* play = play2;
     s32 cueChannel;
 

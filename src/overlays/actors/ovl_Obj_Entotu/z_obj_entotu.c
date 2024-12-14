@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
-#define THIS ((ObjEntotu*)thisx)
-
 void ObjEntotu_Init(Actor* thisx, PlayState* play);
 void ObjEntotu_Destroy(Actor* thisx, PlayState* play);
 void ObjEntotu_Update(Actor* thisx, PlayState* play);
@@ -149,7 +147,7 @@ void func_80A34B28(ObjEntotu* this, PlayState* play) {
 }
 
 void ObjEntotu_Init(Actor* thisx, PlayState* play) {
-    ObjEntotu* this = THIS;
+    ObjEntotu* this = (ObjEntotu*)thisx;
 
     Lib_MemCpy(this->unk_148, ovl_Obj_Entotu_Vtx_000D10, sizeof(ovl_Obj_Entotu_Vtx_000D10));
     this->unk_1C6 = Rand_S16Offset(0, 59);
@@ -160,13 +158,13 @@ void ObjEntotu_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void ObjEntotu_Update(Actor* thisx, PlayState* play) {
-    ObjEntotu* this = THIS;
+    ObjEntotu* this = (ObjEntotu*)thisx;
 
     func_80A349C0(this);
 }
 
 void ObjEntotu_Draw(Actor* thisx, PlayState* play) {
-    ObjEntotu* this = THIS;
+    ObjEntotu* this = (ObjEntotu*)thisx;
 
     func_80A34B28(this, play);
     func_80A34A44(this, play);

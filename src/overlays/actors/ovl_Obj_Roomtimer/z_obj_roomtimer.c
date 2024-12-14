@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
-#define THIS ((ObjRoomtimer*)thisx)
-
 void ObjRoomtimer_Init(Actor* thisx, PlayState* play);
 void ObjRoomtimer_Destroy(Actor* thisx, PlayState* play);
 void ObjRoomtimer_Update(Actor* thisx, PlayState* play);
@@ -31,7 +29,7 @@ ActorProfile Obj_Roomtimer_Profile = {
 };
 
 void ObjRoomtimer_Init(Actor* thisx, PlayState* play) {
-    ObjRoomtimer* this = THIS;
+    ObjRoomtimer* this = (ObjRoomtimer*)thisx;
 
     this->switchFlag = ROOMTIMER_GET_SWITCH_FLAG(thisx);
     this->actor.params &= 0x1FF;
@@ -43,7 +41,7 @@ void ObjRoomtimer_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjRoomtimer_Destroy(Actor* thisx, PlayState* play) {
-    ObjRoomtimer* this = THIS;
+    ObjRoomtimer* this = (ObjRoomtimer*)thisx;
 
     if ((this->actor.params != 0x1FF) && (gSaveContext.timerStates[TIMER_ID_MINIGAME_2] >= TIMER_STATE_START)) {
         gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_STOP;
@@ -88,7 +86,7 @@ void func_80973DE0(ObjRoomtimer* this, PlayState* play) {
 }
 
 void ObjRoomtimer_Update(Actor* thisx, PlayState* play) {
-    ObjRoomtimer* this = THIS;
+    ObjRoomtimer* this = (ObjRoomtimer*)thisx;
 
     this->actionFunc(this, play);
 }

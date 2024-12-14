@@ -10,8 +10,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
-#define THIS ((EnJg*)thisx)
-
 #define FLAG_SHRINE_GORON_ARMS_RAISED (1 << 0)
 #define FLAG_LOOKING_AT_PLAYER (1 << 2)
 #define FLAG_DRUM_SPAWNED (1 << 3)
@@ -942,7 +940,7 @@ void EnJg_CheckIfTalkingToPlayerAndHandleFreezeTimer(EnJg* this, PlayState* play
 
 void EnJg_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnJg* this = THIS;
+    EnJg* this = (EnJg*)thisx;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gGoronElderSkel, &gGoronElderIdleAnim, this->jointTable,
@@ -981,13 +979,13 @@ void EnJg_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnJg_Destroy(Actor* thisx, PlayState* play) {
-    EnJg* this = THIS;
+    EnJg* this = (EnJg*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
 
 void EnJg_Update(Actor* thisx, PlayState* play) {
-    EnJg* this = THIS;
+    EnJg* this = (EnJg*)thisx;
 
     if ((this->actionFunc != EnJg_FrozenIdle) && (this->actionFunc != EnJg_EndFrozenInteraction)) {
         EnJg_UpdateCollision(this, play);
@@ -1004,7 +1002,7 @@ void EnJg_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnJg_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnJg* this = THIS;
+    EnJg* this = (EnJg*)thisx;
 
     if (limbIndex == GORON_ELDER_LIMB_ROOT) {
         if (this->flags & FLAG_LOOKING_AT_PLAYER) {
@@ -1021,7 +1019,7 @@ s32 EnJg_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
 }
 
 void EnJg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnJg* this = THIS;
+    EnJg* this = (EnJg*)thisx;
 
     if (limbIndex == GORON_ELDER_LIMB_HEAD) {
         Matrix_MultVec3f(&sFocusOffset, &this->actor.focus.pos);
@@ -1036,7 +1034,7 @@ void EnJg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 }
 
 void EnJg_Draw(Actor* thisx, PlayState* play) {
-    EnJg* this = THIS;
+    EnJg* this = (EnJg*)thisx;
 
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnJg_OverrideLimbDraw, EnJg_PostLimbDraw, &this->actor);

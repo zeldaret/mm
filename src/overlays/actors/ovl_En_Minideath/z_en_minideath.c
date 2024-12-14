@@ -10,8 +10,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
-#define THIS ((EnMinideath*)thisx)
-
 void EnMinideath_Init(Actor* thisx, PlayState* play);
 void EnMinideath_Destroy(Actor* thisx, PlayState* play);
 void EnMinideath_Update(Actor* thisx, PlayState* play);
@@ -157,7 +155,7 @@ static s32 sScatterTimer;
 static s32 sPlayedDeathSfx;
 
 void EnMinideath_Init(Actor* thisx, PlayState* play) {
-    EnMinideath* this = THIS;
+    EnMinideath* this = (EnMinideath*)thisx;
     s32 i;
 
     Actor_ProcessInitChain(thisx, sInitChain);
@@ -199,7 +197,7 @@ void EnMinideath_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnMinideath_Destroy(Actor* thisx, PlayState* play) {
-    EnMinideath* this = THIS;
+    EnMinideath* this = (EnMinideath*)thisx;
 
     Collider_DestroyJntSph(play, &this->collider);
 }
@@ -789,7 +787,7 @@ void EnMinideath_UpdateDamage(EnMinideath* this, PlayState* play) {
 }
 
 void EnMinideath_Update(Actor* thisx, PlayState* play) {
-    EnMinideath* this = THIS;
+    EnMinideath* this = (EnMinideath*)thisx;
     s32 pad;
     ColliderJntSphElement* jntSphElem;
     s32 temp;

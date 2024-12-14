@@ -10,8 +10,6 @@
     (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
      ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
-#define THIS ((EnTanron1*)thisx)
-
 void EnTanron1_Init(Actor* thisx, PlayState* play);
 void EnTanron1_Destroy(Actor* thisx, PlayState* play);
 void EnTanron1_Update(Actor* thisx, PlayState* play);
@@ -37,7 +35,7 @@ static s32 sPad = 0;
 #include "assets/overlays/ovl_En_Tanron1/ovl_En_Tanron1.c"
 
 void EnTanron1_Init(Actor* thisx, PlayState* play) {
-    EnTanron1* this = THIS;
+    EnTanron1* this = (EnTanron1*)thisx;
 
     this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     if (!ENTANRON1_GET_100(&this->actor)) {
@@ -74,7 +72,7 @@ void func_80BB4E50(EnTanron1Struct* arg0, Vec3f* arg1, s16 arg2) {
 }
 
 void EnTanron1_Update(Actor* thisx, PlayState* play) {
-    EnTanron1* this = THIS;
+    EnTanron1* this = (EnTanron1*)thisx;
     Actor* temp_a0;
     Player* player = GET_PLAYER(play);
     s16 i;
@@ -188,7 +186,7 @@ void EnTanron1_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnTanron1_Draw(Actor* thisx, PlayState* play) {
-    EnTanron1* this = THIS;
+    EnTanron1* this = (EnTanron1*)thisx;
 
     func_80BB5AAC(this, play);
 }

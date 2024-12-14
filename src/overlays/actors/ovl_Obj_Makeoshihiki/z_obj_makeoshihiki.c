@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
-#define THIS ((ObjMakeoshihiki*)thisx)
-
 void ObjMakeoshihiki_Init(Actor* thisx, PlayState* play);
 void ObjMakeoshihiki_Update(Actor* thisx, PlayState* play);
 
@@ -56,7 +54,7 @@ void ObjMakeoshihiki_SetSwitchFlags(ObjMakeoshihiki* this, PlayState* play, s32 
 }
 
 void ObjMakeoshihiki_Init(Actor* thisx, PlayState* play) {
-    ObjMakeoshihiki* this = THIS;
+    ObjMakeoshihiki* this = (ObjMakeoshihiki*)thisx;
     Vec3s* childPoint;
     Path* path;
     s32 childPointIndex;
@@ -73,7 +71,7 @@ void ObjMakeoshihiki_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjMakeoshihiki_Update(Actor* thisx, PlayState* play) {
-    ObjMakeoshihiki* this = THIS;
+    ObjMakeoshihiki* this = (ObjMakeoshihiki*)thisx;
     Actor* child;
     s32 loopPathIndex;
     Vec3f pathPointF;

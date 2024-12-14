@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
-#define THIS ((ElfMsg6*)thisx)
-
 void ElfMsg6_Init(Actor* thisx, PlayState* play);
 void ElfMsg6_Destroy(Actor* thisx, PlayState* play);
 void ElfMsg6_Update(Actor* thisx, PlayState* play);
@@ -124,7 +122,7 @@ s32 func_80BA16F4(ElfMsg6* this, PlayState* play) {
 }
 
 void ElfMsg6_Init(Actor* thisx, PlayState* play) {
-    ElfMsg6* this = THIS;
+    ElfMsg6* this = (ElfMsg6*)thisx;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
 
@@ -409,7 +407,7 @@ void func_80BA21C4(ElfMsg6* this, PlayState* play) {
 }
 
 void ElfMsg6_Update(Actor* thisx, PlayState* play) {
-    ElfMsg6* this = THIS;
+    ElfMsg6* this = (ElfMsg6*)thisx;
 
     this->actionFunc(this, play);
 }

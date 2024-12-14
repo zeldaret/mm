@@ -11,8 +11,6 @@
     (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
      ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
-#define THIS ((EnTakaraya*)thisx)
-
 void EnTakaraya_Init(Actor* thisx, PlayState* play);
 void EnTakaraya_Destroy(Actor* thisx, PlayState* play);
 void EnTakaraya_Update(Actor* thisx, PlayState* play);
@@ -99,7 +97,7 @@ u16 D_80ADFB50[PLAYER_FORM_MAX] = {
 };
 
 void EnTakaraya_Init(Actor* thisx, PlayState* play) {
-    EnTakaraya* this = THIS;
+    EnTakaraya* this = (EnTakaraya*)thisx;
     s32 i;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
@@ -140,7 +138,7 @@ void EnTakaraya_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnTakaraya_Destroy(Actor* thisx, PlayState* play) {
-    EnTakaraya* this = THIS;
+    EnTakaraya* this = (EnTakaraya*)thisx;
 
     Flags_UnsetSwitch(play, 5);
     if (!this->unk2AD) {
@@ -393,7 +391,7 @@ void func_80ADF7CC(EnTakaraya* this, PlayState* play) {
 }
 
 void EnTakaraya_Update(Actor* thisx, PlayState* play) {
-    EnTakaraya* this = THIS;
+    EnTakaraya* this = (EnTakaraya*)thisx;
     s32 pad;
     Vec3s torsoRot;
 
@@ -403,7 +401,7 @@ void EnTakaraya_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnTakaraya_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnTakaraya* this = THIS;
+    EnTakaraya* this = (EnTakaraya*)thisx;
 
     if (limbIndex == TREASURE_CHEST_SHOP_GAL_LIMB_HEAD) {
         rot->x += this->headRot.y;
@@ -412,7 +410,7 @@ s32 EnTakaraya_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
 }
 
 void EnTakaraya_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
-    EnTakaraya* this = THIS;
+    EnTakaraya* this = (EnTakaraya*)thisx;
 
     if (limbIndex == TREASURE_CHEST_SHOP_GAL_LIMB_HEAD) {
         Matrix_RotateYS(0x400 - this->headRot.x, MTXMODE_APPLY);
@@ -421,7 +419,7 @@ void EnTakaraya_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) 
 }
 
 void EnTakaraya_Draw(Actor* thisx, PlayState* play) {
-    EnTakaraya* this = THIS;
+    EnTakaraya* this = (EnTakaraya*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
     Gfx_SetupDL25_Opa(play->state.gfxCtx);

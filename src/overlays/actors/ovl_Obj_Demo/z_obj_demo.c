@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
-#define THIS ((ObjDemo*)thisx)
-
 void ObjDemo_Init(Actor* thisx, PlayState* play);
 void ObjDemo_Update(Actor* thisx, PlayState* play);
 
@@ -30,7 +28,7 @@ ActorProfile Obj_Demo_Profile = {
 };
 
 void ObjDemo_Init(Actor* thisx, PlayState* play) {
-    ObjDemo* this = THIS;
+    ObjDemo* this = (ObjDemo*)thisx;
 
     thisx->params = OBJDEMO_GET_SWITCH_FLAG_MASK(thisx);
     if ((OBJDEMO_GET_SWITCH_FLAG(thisx) != 0xFF) && Flags_GetSwitch(play, OBJDEMO_GET_SWITCH_FLAG(thisx))) {
@@ -106,7 +104,7 @@ void func_80983704(ObjDemo* this, PlayState* play) {
 }
 
 void ObjDemo_Update(Actor* thisx, PlayState* play) {
-    ObjDemo* this = THIS;
+    ObjDemo* this = (ObjDemo*)thisx;
 
     if ((OBJDEMO_GET_SWITCH_FLAG(&this->actor) != 0xFF) &&
         Flags_GetSwitch(play, OBJDEMO_GET_SWITCH_FLAG(&this->actor))) {

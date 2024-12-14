@@ -10,8 +10,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
-#define THIS ((EffDust*)thisx)
-
 void EffDust_Init(Actor* thisx, PlayState* play);
 void EffDust_Destroy(Actor* thisx, PlayState* play);
 void EffDust_Update(Actor* thisx, PlayState* play);
@@ -50,7 +48,7 @@ void func_80918B40(EffDust* this) {
 }
 
 void EffDust_Init(Actor* thisx, PlayState* play) {
-    EffDust* this = THIS;
+    EffDust* this = (EffDust*)thisx;
     u32 type = this->actor.params;
 
     func_80918B40(this);
@@ -252,7 +250,7 @@ void func_80919230(EffDust* this, PlayState* play) {
 }
 
 void EffDust_Update(Actor* thisx, PlayState* play) {
-    EffDust* this = THIS;
+    EffDust* this = (EffDust*)thisx;
 
     this->actionFunc(this, play);
 }
@@ -262,7 +260,7 @@ Gfx D_80919DB0[] = {
 };
 
 void func_80919768(Actor* thisx, PlayState* play2) {
-    EffDust* this = THIS;
+    EffDust* this = (EffDust*)thisx;
     PlayState* play = play2;
     GraphicsContext* gfxCtx = play2->state.gfxCtx;
     f32* distanceTraveled;
@@ -317,7 +315,7 @@ void func_80919768(Actor* thisx, PlayState* play2) {
 }
 
 void func_809199FC(Actor* thisx, PlayState* play2) {
-    EffDust* this = THIS;
+    EffDust* this = (EffDust*)thisx;
     PlayState* play = play2;
     GraphicsContext* gfxCtx = play2->state.gfxCtx;
     f32* distanceTraveled;
@@ -374,7 +372,7 @@ void func_809199FC(Actor* thisx, PlayState* play2) {
 }
 
 void EffDust_Draw(Actor* thisx, PlayState* play) {
-    EffDust* this = THIS;
+    EffDust* this = (EffDust*)thisx;
 
     this->drawFunc(thisx, play);
 }

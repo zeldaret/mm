@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
-#define THIS ((EnZov*)thisx)
-
 void EnZov_Init(Actor* thisx, PlayState* play);
 void EnZov_Destroy(Actor* thisx, PlayState* play);
 void EnZov_Update(Actor* thisx, PlayState* play);
@@ -96,7 +94,7 @@ static AnimationHeader* sAnimations[LULU_ANIM_MAX] = {
 };
 
 void EnZov_Init(Actor* thisx, PlayState* play) {
-    EnZov* this = THIS;
+    EnZov* this = (EnZov*)thisx;
 
     ActorShape_Init(&this->picto.actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
     this->picto.actor.colChkInfo.mass = MASS_IMMOVABLE;
@@ -144,7 +142,7 @@ void EnZov_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnZov_Destroy(Actor* thisx, PlayState* play) {
-    EnZov* this = THIS;
+    EnZov* this = (EnZov*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -476,7 +474,7 @@ void func_80BD1F1C(EnZov* this, PlayState* play) {
 
 s32 EnZov_ValidatePictograph(PlayState* play, Actor* thisx) {
     s32 ret;
-    EnZov* this = THIS;
+    EnZov* this = (EnZov*)thisx;
 
     ret = Snap_ValidatePictograph(play, &this->picto.actor, PICTO_VALID_LULU_HEAD, &this->picto.actor.focus.pos,
                                   &this->picto.actor.shape.rot, 10.0f, 300.0f, -1);
@@ -489,7 +487,7 @@ s32 EnZov_ValidatePictograph(PlayState* play, Actor* thisx) {
 
 void EnZov_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnZov* this = THIS;
+    EnZov* this = (EnZov*)thisx;
 
     Actor_MoveWithGravity(&this->picto.actor);
     Collider_UpdateCylinder(&this->picto.actor, &this->collider);
@@ -537,7 +535,7 @@ void EnZov_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnZov_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnZov* this = THIS;
+    EnZov* this = (EnZov*)thisx;
 
     if (limbIndex == LULU_LIMB_HEAD) {
         rot->x += this->headRot.y;
@@ -555,7 +553,7 @@ s32 EnZov_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 void EnZov_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f D_80BD2744 = { 400.0f, 600.0f, 0.0f };
     static Vec3f D_80BD2750 = { 400.0f, 600.0f, 0.0f };
-    EnZov* this = THIS;
+    EnZov* this = (EnZov*)thisx;
 
     if (limbIndex == LULU_LIMB_HEAD) {
         Matrix_MultVec3f(&D_80BD2744, &this->picto.actor.focus.pos);
@@ -578,7 +576,7 @@ void EnZov_Draw(Actor* thisx, PlayState* play) {
     static s8 D_80BD2770[] = {
         1, 2, 1, 0, 0, 1, 2, 1,
     };
-    EnZov* this = THIS;
+    EnZov* this = (EnZov*)thisx;
     Gfx* gfx;
     s32 curFrame;
     s32 phi_a1;

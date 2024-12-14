@@ -12,8 +12,6 @@
     (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
      ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
-#define THIS ((EnPm*)thisx)
-
 void EnPm_Init(Actor* thisx, PlayState* play);
 void EnPm_Destroy(Actor* thisx, PlayState* play);
 void EnPm_Update(Actor* thisx, PlayState* play);
@@ -655,7 +653,7 @@ s16 func_80AF8170(EnPm* this, s32 numCutscenes) {
 }
 
 s32 func_80AF81E8(Actor* thisx, PlayState* play) {
-    EnPm* this = THIS;
+    EnPm* this = (EnPm*)thisx;
     s16 csId = func_80AF8170(this, 0);
     s32 ret = false;
 
@@ -698,7 +696,7 @@ s32 func_80AF81E8(Actor* thisx, PlayState* play) {
 }
 
 s32 func_80AF8348(Actor* thisx, PlayState* play) {
-    EnPm* this = THIS;
+    EnPm* this = (EnPm*)thisx;
     s16 csId = func_80AF8170(this, 0);
     s32 ret = false;
 
@@ -740,7 +738,7 @@ s32 func_80AF8348(Actor* thisx, PlayState* play) {
 }
 
 s32 func_80AF8478(Actor* thisx, PlayState* play) {
-    EnPm* this = THIS;
+    EnPm* this = (EnPm*)thisx;
     s32 ret = false;
 
     switch (this->unk_378) {
@@ -1895,7 +1893,7 @@ void func_80AFA724(EnPm* this, PlayState* play) {
 }
 
 void EnPm_Init(Actor* thisx, PlayState* play) {
-    EnPm* this = THIS;
+    EnPm* this = (EnPm*)thisx;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 14.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &object_mm_Skel_0096E8, NULL, this->jointTable, this->morphTable,
@@ -1914,14 +1912,14 @@ void EnPm_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnPm_Destroy(Actor* thisx, PlayState* play) {
-    EnPm* this = THIS;
+    EnPm* this = (EnPm*)thisx;
 
     Collider_DestroyCylinder(play, &this->colliderCylinder);
     Collider_DestroySphere(play, &this->colliderSphere);
 }
 
 void EnPm_Update(Actor* thisx, PlayState* play) {
-    EnPm* this = THIS;
+    EnPm* this = (EnPm*)thisx;
 
     if (!func_80AF86F0(this, play) && func_80AF87C4(this, play)) {
         func_80AFA724(this, play);
@@ -1944,7 +1942,7 @@ void EnPm_Update(Actor* thisx, PlayState* play) {
 
 s32 EnPm_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
                           Gfx** gfx) {
-    EnPm* this = THIS;
+    EnPm* this = (EnPm*)thisx;
 
     if (limbIndex == OBJECT_MM_LIMB_0F) {
         func_80AF8C68(this, play);
@@ -1953,7 +1951,7 @@ s32 EnPm_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
 }
 
 void EnPm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
-    EnPm* this = THIS;
+    EnPm* this = (EnPm*)thisx;
     s32 pad;
     Vec3f sp2C;
 
@@ -1992,7 +1990,7 @@ void EnPm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 }
 
 void EnPm_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx, Gfx** gfx) {
-    EnPm* this = THIS;
+    EnPm* this = (EnPm*)thisx;
     s32 stepRot;
     s32 overrideRot;
 
@@ -2026,7 +2024,7 @@ void EnPm_Draw(Actor* thisx, PlayState* play) {
         object_mm_Tex_002950,
         object_mm_Tex_002750,
     };
-    EnPm* this = THIS;
+    EnPm* this = (EnPm*)thisx;
     s32 pad;
 
     if (this->scheduleResult != 0) {

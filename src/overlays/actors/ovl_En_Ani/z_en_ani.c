@@ -10,8 +10,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
-#define THIS ((EnAni*)thisx)
-
 // clang-format off
 #define ANI_STATE_STANDING  (0)
 #define ANI_STATE_UNK       (1 << 0)
@@ -113,7 +111,7 @@ void EnAni_WaitForEyeOpen(EnAni* this) {
 
 void EnAni_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnAni* this = THIS;
+    EnAni* this = (EnAni*)thisx;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
@@ -152,7 +150,7 @@ void EnAni_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnAni_Destroy(Actor* thisx, PlayState* play) {
-    EnAni* this = THIS;
+    EnAni* this = (EnAni*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider1);
     Collider_DestroyCylinder(play, &this->collider2);
@@ -274,7 +272,7 @@ void EnAni_HangInTree(EnAni* this, PlayState* play) {
 }
 
 void EnAni_Update(Actor* thisx, PlayState* play) {
-    EnAni* this = THIS;
+    EnAni* this = (EnAni*)thisx;
     f32 minVelocity;
 
     Collider_UpdateCylinder(&this->actor, &this->collider1);
@@ -319,7 +317,7 @@ void EnAni_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnAni_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnAni* this = THIS;
+    EnAni* this = (EnAni*)thisx;
 
     if (limbIndex == ANI_LIMB_HEAD) {
         rot->x += this->headRot.y;
@@ -340,7 +338,7 @@ void EnAni_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
 void EnAni_Draw(Actor* thisx, PlayState* play) {
     static TexturePtr sEyeTextures[] = { gAniOpenEyeTex, gAniClosingEyeTex, gAniClosedEyeTex };
     s32 pad;
-    EnAni* this = THIS;
+    EnAni* this = (EnAni*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

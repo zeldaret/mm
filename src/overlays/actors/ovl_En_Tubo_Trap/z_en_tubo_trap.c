@@ -9,8 +9,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((EnTuboTrap*)thisx)
-
 void EnTuboTrap_Init(Actor* thisx, PlayState* play);
 void EnTuboTrap_Destroy(Actor* thisx, PlayState* play);
 void EnTuboTrap_Update(Actor* thisx, PlayState* play);
@@ -59,7 +57,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void EnTuboTrap_Init(Actor* thisx, PlayState* play) {
-    EnTuboTrap* this = THIS;
+    EnTuboTrap* this = (EnTuboTrap*)thisx;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     this->actor.shape.rot.z = 0;
@@ -71,7 +69,7 @@ void EnTuboTrap_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnTuboTrap_Destroy(Actor* thisx, PlayState* play) {
-    EnTuboTrap* this = THIS;
+    EnTuboTrap* this = (EnTuboTrap*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -287,7 +285,7 @@ void EnTuboTrap_FlyAtPlayer(EnTuboTrap* this, PlayState* play) {
 }
 
 void EnTuboTrap_Update(Actor* thisx, PlayState* play) {
-    EnTuboTrap* this = THIS;
+    EnTuboTrap* this = (EnTuboTrap*)thisx;
     s32 padding;
 
     this->actionFunc(this, play);

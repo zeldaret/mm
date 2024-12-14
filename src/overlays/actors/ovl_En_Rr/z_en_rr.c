@@ -11,8 +11,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER)
 
-#define THIS ((EnRr*)thisx)
-
 void EnRr_Init(Actor* thisx, PlayState* play);
 void EnRr_Destroy(Actor* thisx, PlayState* play);
 void EnRr_Update(Actor* thisx, PlayState* play);
@@ -128,7 +126,7 @@ static InitChainEntry sInitChain[] = {
 
 void EnRr_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnRr* this = THIS;
+    EnRr* this = (EnRr*)thisx;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     Collider_InitAndSetCylinder(play, &this->collider1, &this->actor, &sCylinderInit1);
@@ -164,7 +162,7 @@ void EnRr_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnRr_Destroy(Actor* thisx, PlayState* play) {
-    EnRr* this = THIS;
+    EnRr* this = (EnRr*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider1);
     Collider_DestroyCylinder(play, &this->collider2);
@@ -777,7 +775,7 @@ void func_808FB794(EnRr* this, PlayState* play) {
 }
 
 void EnRr_Update(Actor* thisx, PlayState* play) {
-    EnRr* this = THIS;
+    EnRr* this = (EnRr*)thisx;
     EnRrStruct* ptr;
     s32 i;
 
@@ -879,7 +877,7 @@ void EnRr_Update(Actor* thisx, PlayState* play) {
 
 void EnRr_Draw(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnRr* this = THIS;
+    EnRr* this = (EnRr*)thisx;
     Mtx* mtx = GRAPH_ALLOC(play->state.gfxCtx, 4 * sizeof(Mtx));
     Vec3f* bodyPartPos;
     s32 i;

@@ -41,8 +41,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
-#define THIS ((EnHoll*)thisx)
-
 void EnHoll_Init(Actor* thisx, PlayState* play);
 void EnHoll_Destroy(Actor* thisx, PlayState* play);
 void EnHoll_Update(Actor* thisx, PlayState* play);
@@ -113,7 +111,7 @@ void EnHoll_SetPlayerSide(PlayState* play, EnHoll* this, Vec3f* transformedPlaye
 }
 
 void EnHoll_Init(Actor* thisx, PlayState* play) {
-    EnHoll* this = THIS;
+    EnHoll* this = (EnHoll*)thisx;
     s32 pad;
     Vec3f transformedPlayerPos;
 
@@ -125,7 +123,7 @@ void EnHoll_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnHoll_Destroy(Actor* thisx, PlayState* play) {
-    EnHoll* this = THIS;
+    EnHoll* this = (EnHoll*)thisx;
 
     if (!EN_HOLL_IS_SCENE_CHANGER(this)) {
         u32 enHollId = EN_HOLL_GET_ID(&this->actor);
@@ -308,7 +306,7 @@ void EnHoll_RoomTransitionIdle(EnHoll* this, PlayState* play) {
 }
 
 void EnHoll_Update(Actor* thisx, PlayState* play) {
-    EnHoll* this = THIS;
+    EnHoll* this = (EnHoll*)thisx;
     Player* player = GET_PLAYER(play);
 
     if ((play->transitionTrigger == TRANS_TRIGGER_OFF) && (play->transitionMode == TRANS_MODE_OFF) &&
@@ -318,7 +316,7 @@ void EnHoll_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnHoll_Draw(Actor* thisx, PlayState* play) {
-    EnHoll* this = THIS;
+    EnHoll* this = (EnHoll*)thisx;
     Gfx* gfx;
     u32 setupDListIndex;
 

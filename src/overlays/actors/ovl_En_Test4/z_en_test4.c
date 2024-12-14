@@ -13,8 +13,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED | ACTOR_FLAG_100000)
 
-#define THIS ((EnTest4*)thisx)
-
 void EnTest4_Init(Actor* thisx, PlayState* play);
 void EnTest4_Destroy(Actor* thisx, PlayState* play);
 void EnTest4_Update(Actor* thisx, PlayState* play);
@@ -323,7 +321,7 @@ void EnTest4_GetBellTimeAndShrinkScreenBeforeDay3(EnTest4* this, PlayState* play
 
 void EnTest4_Init(Actor* thisx, PlayState* play) {
     s32 eventDayCount;
-    EnTest4* this = THIS;
+    EnTest4* this = (EnTest4*)thisx;
     Player* player = GET_PLAYER(play);
     s8 csId = this->actor.csId;
 
@@ -622,7 +620,7 @@ void EnTest4_SetSkyboxNumStars(EnTest4* this, PlayState* play) {
 }
 
 void EnTest4_Update(Actor* thisx, PlayState* play) {
-    EnTest4* this = THIS;
+    EnTest4* this = (EnTest4*)thisx;
     Player* player = GET_PLAYER(play);
 
     if (player->stateFlags1 & PLAYER_STATE1_2) {

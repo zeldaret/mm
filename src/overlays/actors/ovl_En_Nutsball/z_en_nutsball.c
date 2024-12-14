@@ -10,8 +10,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
-#define THIS ((EnNutsball*)thisx)
-
 void EnNutsball_Init(Actor* thisx, PlayState* play);
 void EnNutsball_Destroy(Actor* thisx, PlayState* play);
 void EnNutsball_Update(Actor* thisx, PlayState* play2);
@@ -52,7 +50,7 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 void EnNutsball_Init(Actor* thisx, PlayState* play) {
-    EnNutsball* this = THIS;
+    EnNutsball* this = (EnNutsball*)thisx;
 
     ActorShape_Init(&this->actor.shape, 400.0f, ActorShadow_DrawCircle, 13.0f);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
@@ -75,7 +73,7 @@ void EnNutsball_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnNutsball_Destroy(Actor* thisx, PlayState* play) {
-    EnNutsball* this = THIS;
+    EnNutsball* this = (EnNutsball*)thisx;
     Collider_DestroyCylinder(play, &this->collider);
 }
 
@@ -88,7 +86,7 @@ void EnNutsball_InitColliderParams(EnNutsball* this) {
 
 void EnNutsball_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnNutsball* this = THIS;
+    EnNutsball* this = (EnNutsball*)thisx;
     Player* player = GET_PLAYER(play);
     Vec3f worldPos;
     Vec3s worldRot;
@@ -170,7 +168,7 @@ void EnNutsball_Update(Actor* thisx, PlayState* play2) {
 }
 
 void EnNutsball_Draw(Actor* thisx, PlayState* play) {
-    EnNutsball* this = THIS;
+    EnNutsball* this = (EnNutsball*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

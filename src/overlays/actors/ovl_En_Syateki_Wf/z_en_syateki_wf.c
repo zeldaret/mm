@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED | ACTOR_FLAG_LOCK_ON_DISABLED)
 
-#define THIS ((EnSyatekiWf*)thisx)
-
 void EnSyatekiWf_Init(Actor* thisx, PlayState* play);
 void EnSyatekiWf_Destroy(Actor* thisx, PlayState* play);
 void EnSyatekiWf_Update(Actor* thisx, PlayState* play2);
@@ -141,7 +139,7 @@ static InitChainEntry sInitChain[] = {
 
 void EnSyatekiWf_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnSyatekiWf* this = THIS;
+    EnSyatekiWf* this = (EnSyatekiWf*)thisx;
     Path* path;
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
     s32 i;
@@ -192,7 +190,7 @@ void EnSyatekiWf_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnSyatekiWf_Destroy(Actor* thisx, PlayState* play) {
-    EnSyatekiWf* this = THIS;
+    EnSyatekiWf* this = (EnSyatekiWf*)thisx;
 
     Collider_DestroyCylinder(play, &this->bodyCollider);
     Collider_DestroyCylinder(play, &this->tailCollider);
@@ -419,7 +417,7 @@ void EnSyatekiWf_Dead(EnSyatekiWf* this, PlayState* play) {
 
 void EnSyatekiWf_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnSyatekiWf* this = THIS;
+    EnSyatekiWf* this = (EnSyatekiWf*)thisx;
 
     if (this->actionFunc != EnSyatekiWf_WaitForSignal) {
         SkelAnime_Update(&this->skelAnime);
@@ -483,7 +481,7 @@ s32 EnSyatekiWf_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Ve
 
 void EnSyatekiWf_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f sTailColliderOffset = { 1200.0f, 0.0f, 0.0f };
-    EnSyatekiWf* this = THIS;
+    EnSyatekiWf* this = (EnSyatekiWf*)thisx;
     Vec3f tailColliderPos;
 
     Collider_UpdateSpheres(limbIndex, &this->headCollider);
@@ -502,7 +500,7 @@ void EnSyatekiWf_Draw(Actor* thisx, PlayState* play) {
         gWolfosNormalEyeNarrowTex,
         gWolfosNormalEyeHalfTex,
     };
-    EnSyatekiWf* this = THIS;
+    EnSyatekiWf* this = (EnSyatekiWf*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

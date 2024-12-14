@@ -10,8 +10,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((BgDkjailIvy*)thisx)
-
 void BgDkjailIvy_Init(Actor* thisx, PlayState* play);
 void BgDkjailIvy_Destroy(Actor* thisx, PlayState* play);
 void BgDkjailIvy_Update(Actor* thisx, PlayState* play);
@@ -114,7 +112,7 @@ static InitChainEntry sInitChain[] = {
 
 void BgDkjailIvy_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    BgDkjailIvy* this = THIS;
+    BgDkjailIvy* this = (BgDkjailIvy*)thisx;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 0);
@@ -133,7 +131,7 @@ void BgDkjailIvy_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgDkjailIvy_Destroy(Actor* thisx, PlayState* play) {
-    BgDkjailIvy* this = THIS;
+    BgDkjailIvy* this = (BgDkjailIvy*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
     Collider_DestroyCylinder(play, &this->collider);
@@ -191,13 +189,13 @@ void BgDkjailIvy_FadeOut(BgDkjailIvy* this, PlayState* play) {
 }
 
 void BgDkjailIvy_Update(Actor* thisx, PlayState* play) {
-    BgDkjailIvy* this = THIS;
+    BgDkjailIvy* this = (BgDkjailIvy*)thisx;
 
     this->actionFunc(this, play);
 }
 
 void BgDkjailIvy_Draw(Actor* thisx, PlayState* play) {
-    BgDkjailIvy* this = THIS;
+    BgDkjailIvy* this = (BgDkjailIvy*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

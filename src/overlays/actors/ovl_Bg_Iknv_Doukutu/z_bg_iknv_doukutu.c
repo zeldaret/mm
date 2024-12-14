@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
-#define THIS ((BgIknvDoukutu*)thisx)
-
 void BgIknvDoukutu_Init(Actor* thisx, PlayState* play);
 void BgIknvDoukutu_Destroy(Actor* thisx, PlayState* play);
 void BgIknvDoukutu_Update(Actor* thisx, PlayState* play);
@@ -40,7 +38,7 @@ ActorProfile Bg_Iknv_Doukutu_Profile = {
 };
 
 void BgIknvDoukutu_Init(Actor* thisx, PlayState* play) {
-    BgIknvDoukutu* this = THIS;
+    BgIknvDoukutu* this = (BgIknvDoukutu*)thisx;
     CollisionHeader* colHeader = NULL;
     s32 pad;
 
@@ -96,7 +94,7 @@ void BgIknvDoukutu_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgIknvDoukutu_Destroy(Actor* thisx, PlayState* play) {
-    BgIknvDoukutu* this = THIS;
+    BgIknvDoukutu* this = (BgIknvDoukutu*)thisx;
 
     if ((BGIKNVDOUKUTU_GET_F(&this->dyna.actor) == BGIKNVDOUKUTU_F_1) ||
         (BGIKNVDOUKUTU_GET_F(&this->dyna.actor) == BGIKNVDOUKUTU_F_2)) {
@@ -156,13 +154,13 @@ void func_80BD73D0(BgIknvDoukutu* this, PlayState* play) {
 }
 
 void BgIknvDoukutu_Update(Actor* thisx, PlayState* play) {
-    BgIknvDoukutu* this = THIS;
+    BgIknvDoukutu* this = (BgIknvDoukutu*)thisx;
 
     this->actionFunc(this, play);
 }
 
 void BgIknvDoukutu_Draw(Actor* thisx, PlayState* play) {
-    BgIknvDoukutu* this = THIS;
+    BgIknvDoukutu* this = (BgIknvDoukutu*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -184,7 +182,7 @@ void BgIknvDoukutu_Draw(Actor* thisx, PlayState* play) {
 }
 
 void func_80BD7538(Actor* thisx, PlayState* play) {
-    BgIknvDoukutu* this = THIS;
+    BgIknvDoukutu* this = (BgIknvDoukutu*)thisx;
     GraphicsContext* gfxCtx;
     f32 sp54;
 
@@ -218,7 +216,7 @@ void func_80BD7538(Actor* thisx, PlayState* play) {
 }
 
 void func_80BD7768(Actor* thisx, PlayState* play) {
-    BgIknvDoukutu* this = THIS;
+    BgIknvDoukutu* this = (BgIknvDoukutu*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -235,7 +233,7 @@ void func_80BD7768(Actor* thisx, PlayState* play) {
 }
 
 void func_80BD7820(Actor* thisx, PlayState* play) {
-    BgIknvDoukutu* this = THIS;
+    BgIknvDoukutu* this = (BgIknvDoukutu*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -251,7 +249,7 @@ void func_80BD7820(Actor* thisx, PlayState* play) {
 }
 
 void func_80BD78C4(Actor* thisx, PlayState* play) {
-    BgIknvDoukutu* this = THIS;
+    BgIknvDoukutu* this = (BgIknvDoukutu*)thisx;
     f32 sp30 = this->unk_160;
     s32 pad;
 

@@ -13,8 +13,6 @@
     (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
      ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
-#define THIS ((EnDs2n*)thisx)
-
 void EnDs2n_Init(Actor* thisx, PlayState* play);
 void EnDs2n_Destroy(Actor* thisx, PlayState* play);
 void EnDs2n_Update(Actor* thisx, PlayState* play);
@@ -70,7 +68,7 @@ void EnDs2n_UpdateEyes(EnDs2n* this) {
 }
 
 void EnDs2n_Init(Actor* thisx, PlayState* play) {
-    EnDs2n* this = THIS;
+    EnDs2n* this = (EnDs2n*)thisx;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gDs2nSkel, &gDs2nIdleAnim, NULL, NULL, 0);
@@ -78,13 +76,13 @@ void EnDs2n_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnDs2n_Destroy(Actor* thisx, PlayState* play) {
-    EnDs2n* this = THIS;
+    EnDs2n* this = (EnDs2n*)thisx;
 
     SkelAnime_Free(&this->skelAnime, play);
 }
 
 void EnDs2n_Update(Actor* thisx, PlayState* play) {
-    EnDs2n* this = THIS;
+    EnDs2n* this = (EnDs2n*)thisx;
 
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
@@ -95,7 +93,7 @@ void EnDs2n_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnDs2n_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnDs2n* this = THIS;
+    EnDs2n* this = (EnDs2n*)thisx;
 
     if (limbIndex == DS2N_LIMB_HEAD) {
         Matrix_RotateXS(this->headRot.y, MTXMODE_APPLY);
@@ -105,7 +103,7 @@ s32 EnDs2n_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
 }
 
 void EnDs2n_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnDs2n* this = THIS;
+    EnDs2n* this = (EnDs2n*)thisx;
     Vec3f focusOffset = { 0.0f, 0.0f, 0.0f };
 
     if ((limbIndex == DS2N_LIMB_HIPS) || (limbIndex == DS2N_LIMB_LEFT_UPPER_ARM) ||
@@ -122,7 +120,7 @@ void EnDs2n_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot
 static TexturePtr sEyeTextures[] = { gDs2nEyeOpenTex, gDs2nEyeHalfTex, gDs2nEyeClosedTex };
 
 void EnDs2n_Draw(Actor* thisx, PlayState* play) {
-    EnDs2n* this = THIS;
+    EnDs2n* this = (EnDs2n*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

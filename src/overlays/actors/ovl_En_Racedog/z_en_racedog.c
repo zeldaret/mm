@@ -14,8 +14,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_MINIMAP_ICON_ENABLED)
 
-#define THIS ((EnRacedog*)thisx)
-
 void EnRacedog_Init(Actor* thisx, PlayState* play);
 void EnRacedog_Destroy(Actor* thisx, PlayState* play);
 void EnRacedog_Update(Actor* thisx, PlayState* play);
@@ -311,7 +309,7 @@ void EnRacedog_GetFloorRot(EnRacedog* this, Vec3f* floorRot) {
 }
 
 void EnRacedog_Init(Actor* thisx, PlayState* play) {
-    EnRacedog* this = THIS;
+    EnRacedog* this = (EnRacedog*)thisx;
     ColliderCylinder* collider = &this->collider;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
@@ -369,7 +367,7 @@ void EnRacedog_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnRacedog_Destroy(Actor* thisx, PlayState* play) {
-    EnRacedog* this = THIS;
+    EnRacedog* this = (EnRacedog*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -703,7 +701,7 @@ void EnRacedog_PlaySfxWalk(EnRacedog* this) {
 
 void EnRacedog_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnRacedog* this = THIS;
+    EnRacedog* this = (EnRacedog*)thisx;
     Vec3f floorRot = { 0.0f, 0.0f, 0.0f };
 
     this->selectedDogIndex = sSelectedDogInfo.index;
@@ -778,7 +776,7 @@ s32 EnRacedog_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
 
 void EnRacedog_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     s32 pad;
-    EnRacedog* this = THIS;
+    EnRacedog* this = (EnRacedog*)thisx;
     Vec3f focusOffset = { 0.0f, 20.0f, 0.0f };
 
     if (limbIndex == DOG_LIMB_HEAD) {
@@ -791,7 +789,7 @@ void EnRacedog_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
 }
 
 void EnRacedog_Draw(Actor* thisx, PlayState* play) {
-    EnRacedog* this = THIS;
+    EnRacedog* this = (EnRacedog*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

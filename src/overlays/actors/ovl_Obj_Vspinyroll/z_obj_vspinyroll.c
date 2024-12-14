@@ -10,8 +10,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
-#define THIS ((ObjVspinyroll*)thisx)
-
 void ObjVspinyroll_Init(Actor* thisx, PlayState* play);
 void ObjVspinyroll_Destroy(Actor* thisx, PlayState* play);
 void ObjVspinyroll_Update(Actor* thisx, PlayState* play2);
@@ -260,7 +258,7 @@ void func_80A3CC84(f32 arg0) {
 
 void ObjVspinyroll_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    ObjVspinyroll* this = THIS;
+    ObjVspinyroll* this = (ObjVspinyroll*)thisx;
     s32 params = OBJVSPINYROLL_GET_4000(&this->dyna.actor);
     f32 sp40 = D_80A3D450[params];
     s32 pad2;
@@ -316,7 +314,7 @@ void ObjVspinyroll_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjVspinyroll_Destroy(Actor* thisx, PlayState* play) {
-    ObjVspinyroll* this = THIS;
+    ObjVspinyroll* this = (ObjVspinyroll*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
     Collider_DestroyCylinder(play, &this->collider);
@@ -403,7 +401,7 @@ void func_80A3D0FC(ObjVspinyroll* this, PlayState* play) {
 
 void ObjVspinyroll_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    ObjVspinyroll* this = THIS;
+    ObjVspinyroll* this = (ObjVspinyroll*)thisx;
 
     this->actionFunc(this, play);
 
@@ -415,7 +413,7 @@ void ObjVspinyroll_Update(Actor* thisx, PlayState* play2) {
 }
 
 void ObjVspinyroll_Draw(Actor* thisx, PlayState* play) {
-    ObjVspinyroll* this = THIS;
+    ObjVspinyroll* this = (ObjVspinyroll*)thisx;
 
     Matrix_Translate(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y + 60.0f, this->dyna.actor.world.pos.z,
                      MTXMODE_NEW);
@@ -427,7 +425,7 @@ void ObjVspinyroll_Draw(Actor* thisx, PlayState* play) {
 }
 
 void func_80A3D2C0(Actor* thisx, PlayState* play) {
-    ObjVspinyroll* this = THIS;
+    ObjVspinyroll* this = (ObjVspinyroll*)thisx;
     Vec3s sp3C;
 
     OPEN_DISPS(play->state.gfxCtx);

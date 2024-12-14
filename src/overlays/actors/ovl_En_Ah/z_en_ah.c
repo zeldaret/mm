@@ -11,8 +11,6 @@
     (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
      ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
-#define THIS ((EnAh*)thisx)
-
 void EnAh_Init(Actor* thisx, PlayState* play);
 void EnAh_Destroy(Actor* thisx, PlayState* play);
 void EnAh_Update(Actor* thisx, PlayState* play);
@@ -537,7 +535,7 @@ void func_80BD3768(EnAh* this, PlayState* play) {
 }
 
 void EnAh_Init(Actor* thisx, PlayState* play) {
-    EnAh* this = THIS;
+    EnAh* this = (EnAh*)thisx;
 
     if (EnAh_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_AH)) {
         Actor_Kill(&this->actor);
@@ -561,13 +559,13 @@ void EnAh_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnAh_Destroy(Actor* thisx, PlayState* play) {
-    EnAh* this = THIS;
+    EnAh* this = (EnAh*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
 
 void EnAh_Update(Actor* thisx, PlayState* play) {
-    EnAh* this = THIS;
+    EnAh* this = (EnAh*)thisx;
     f32 radius;
     f32 height;
 
@@ -593,7 +591,7 @@ void EnAh_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnAh_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnAh* this = THIS;
+    EnAh* this = (EnAh*)thisx;
 
     if (limbIndex == OBJECT_AH_LIMB_07) {
         Matrix_MultVec3f(&D_80BD3F00, &this->actor.focus.pos);
@@ -602,7 +600,7 @@ void EnAh_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 }
 
 void EnAh_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
-    EnAh* this = THIS;
+    EnAh* this = (EnAh*)thisx;
     s32 stepRot;
     s32 overrideRot;
 
@@ -643,7 +641,7 @@ void EnAh_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 }
 
 void EnAh_Draw(Actor* thisx, PlayState* play) {
-    EnAh* this = THIS;
+    EnAh* this = (EnAh*)thisx;
 
     if (this->scheduleResult != 0) {
         OPEN_DISPS(play->state.gfxCtx);

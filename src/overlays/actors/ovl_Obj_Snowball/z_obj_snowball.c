@@ -10,8 +10,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((ObjSnowball*)thisx)
-
 void ObjSnowball_Init(Actor* thisx, PlayState* play);
 void ObjSnowball_Destroy(Actor* thisx, PlayState* play);
 void ObjSnowball_Update(Actor* thisx, PlayState* play);
@@ -448,7 +446,7 @@ void func_80B03FF8(ObjSnowball* this, PlayState* play) {
 }
 
 void ObjSnowball_Init(Actor* thisx, PlayState* play) {
-    ObjSnowball* this = THIS;
+    ObjSnowball* this = (ObjSnowball*)thisx;
     Sphere16* sphere;
     ColliderJntSphElementDim* elementDim;
     Vec3f sp48;
@@ -515,7 +513,7 @@ void ObjSnowball_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjSnowball_Destroy(Actor* thisx, PlayState* play) {
-    ObjSnowball* this = THIS;
+    ObjSnowball* this = (ObjSnowball*)thisx;
 
     Collider_DestroyJntSph(play, &this->collider);
 }
@@ -751,7 +749,7 @@ void func_80B04B60(ObjSnowball* this, PlayState* play) {
 
 void ObjSnowball_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    ObjSnowball* this = THIS;
+    ObjSnowball* this = (ObjSnowball*)thisx;
     s32 sp24 = false;
 
     if (this->actor.home.rot.y == 1) {
@@ -790,14 +788,14 @@ void ObjSnowball_Update(Actor* thisx, PlayState* play) {
 }
 
 void ObjSnowball_Draw(Actor* thisx, PlayState* play) {
-    ObjSnowball* this = THIS;
+    ObjSnowball* this = (ObjSnowball*)thisx;
 
     Gfx_DrawDListOpa(play, object_goroiwa_DL_008B90);
 }
 
 void func_80B04D34(Actor* thisx, PlayState* play) {
     s32 pad;
-    ObjSnowball* this = THIS;
+    ObjSnowball* this = (ObjSnowball*)thisx;
     ObjSnowballStruct* ptr;
     s32 i;
     MtxF sp88;
