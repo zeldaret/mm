@@ -778,10 +778,7 @@ beginseg
     include "$(BUILD_DIR)/assets/audio/sequence_font_table.o"
     include "$(BUILD_DIR)/src/audio/tables/sequence_table.o"
     include "$(BUILD_DIR)/src/audio/tables/samplebank_table.o"
-    include "$(BUILD_DIR)/data/code/aspMain.rodata.o"
-    include "$(BUILD_DIR)/data/code/gspF3DZEX2.NoN.PosLight.fifo.rodata.o"
-    include "$(BUILD_DIR)/data/code/gspS2DEX2.fifo.rodata.o"
-    include "$(BUILD_DIR)/data/code/njpgdspMain.rodata.o"
+    include "$(BUILD_DIR)/src/code/rspdata.o"
 endseg
 
 // The game expects all the segments after the `code` segment and before the first overlay to be `NOLOAD` ones

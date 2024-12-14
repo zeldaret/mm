@@ -3,10 +3,6 @@
 gFramebufferHiRes1 = gLoBuffer;
 gFramebufferHiRes0 = gHiBuffer;
 
-// Ucode symbols
-
-aspMainDataEnd = aspMainDataStart + 0x2E0;
-
 // Segmented Addresses
 
 // segment 0x01

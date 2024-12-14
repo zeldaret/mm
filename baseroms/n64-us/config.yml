@@ -31,4 +31,24 @@ incbins:
     segment: code
     vram: 0x801AD370
     size: 0xAF0
+  - name: aspMainData
+    segment: code
+    vram: 0x801E1E80
+    size: 0x2E0
+  - name: gspF3DZEX2_NoN_PosLight_fifoText
+    segment: code
+    vram: 0x801E2160
+    size: 0x1630
+  - name: gspF3DZEX2_NoN_PosLight_fifoData
+    segment: code
+    vram: 0x801E3790
+    size: 0x420
+  - name: gspS2DEX2_fifoData
+    segment: code
+    vram: 0x801E3BB0
+    size: 0x390
+  - name: njpgdspMainData
+    segment: code
+    vram: 0x801E3F40
+    size: 0x60
 assets:
