@@ -1,8 +1,6 @@
-#include "ultra64.h"
-#include "stdlib.h"
 #include "string.h"
 
-const char* strchr(const char* s, int c) {
+char* strchr(const char* s, int c) {
     const unsigned char ch = c;
 
     while (*s != ch) {
@@ -12,7 +10,7 @@ const char* strchr(const char* s, int c) {
         s++;
     }
 
-    return s;
+    return (char*)s;
 }
 
 size_t strlen(const char* s) {
@@ -26,8 +24,8 @@ size_t strlen(const char* s) {
 }
 
 void* memcpy(void* s1, const void* s2, size_t n) {
-    unsigned char* su1 = (unsigned char*)s1;
-    const unsigned char* su2 = (const unsigned char*)s2;
+    char* su1 = (char*)s1;
+    const char* su2 = (const char*)s2;
 
     while (n > 0) {
         *su1 = *su2;
@@ -36,5 +34,5 @@ void* memcpy(void* s1, const void* s2, size_t n) {
         n--;
     }
 
-    return s1;
+    return (void*)s1;
 }

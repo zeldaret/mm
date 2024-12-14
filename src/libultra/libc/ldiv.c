@@ -1,4 +1,3 @@
-#include "ultra64.h"
 #include "stdlib.h"
 
 ldiv_t ldiv(long numer, long denom) {
