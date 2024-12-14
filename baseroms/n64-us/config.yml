@@ -51,4 +51,8 @@ incbins:
     segment: code
     vram: 0x801E3F40
     size: 0x60
+  - name: aspMainStack
+    segment: code
+    vram: 0x801D6200
+    size: 0x400
 assets:

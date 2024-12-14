@@ -757,7 +757,7 @@ beginseg
     include "$(BUILD_DIR)/src/audio/lib/playback.o"
     include "$(BUILD_DIR)/src/audio/lib/effects.o"
     include "$(BUILD_DIR)/src/audio/lib/seqplayer.o"
-    include "$(BUILD_DIR)/data/code/audio_dramStack.data.o"
+    include "$(BUILD_DIR)/src/audio/lib/stack.o"
     include "$(BUILD_DIR)/asm/code/code_8019AE40.text.o" // handwritten
     pad_text
     include "$(BUILD_DIR)/asm/code/code_8019AEC0.text.o" // handwritten
