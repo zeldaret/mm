@@ -1,9 +1,9 @@
 <!-- This file is only for extraction of vanilla data. For other purposes see assets/audio/samplebanks/ -->
 <SampleBank Name="SampleBank_2" Index="2">
-    <Sample Name="GoronDrum" FileName="goron_drum" Offset="0x000000" SampleRate="16000" BaseNote="C4"/>
-    <Sample Name="BassSlap" FileName="bass_slap" Offset="0x002540" SampleRate="32000" BaseNote="C4"/>
-    <Sample Name="GoronOoh" FileName="goron_ooh" Offset="0x004800" SampleRate="22050" BaseNote="BF4"/>
-    <Sample Name="GoronOohHigh" FileName="goron_ooh_high" Offset="0x0072D0" SampleRate="16000" BaseNote="DF6"/>
-    <Sample Name="TomDrum" FileName="tom_drum" Offset="0x007B70" SampleRate="22050" BaseNote="B5"/>
-    <Sample Name="ResonantBassMarimba" FileName="resonant_bass_marimba" Offset="0x008630" SampleRate="22050" BaseNote="A3"/>
+    <Sample Name="GoronDrum" FileName="goron_drum" SampleRate="16000" BaseNote="C4"/>
+    <Sample Name="BassSlap" FileName="bass_slap" SampleRate="32000" BaseNote="C4"/>
+    <Sample Name="GoronOoh" FileName="goron_ooh" SampleRate="22050" BaseNote="BF4"/>
+    <Sample Name="GoronOohHigh" FileName="goron_ooh_high" SampleRate="16000" BaseNote="DF6"/>
+    <Sample Name="TomDrum" FileName="tom_drum" SampleRate="22050" BaseNote="B5"/>
+    <Sample Name="ResonantBassMarimba" FileName="resonant_bass_marimba" SampleRate="22050" BaseNote="A3"/>
 </SampleBank>
