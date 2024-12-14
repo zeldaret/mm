@@ -606,9 +606,7 @@ beginseg
     name "code"
     compress
     after "dmadata"
-    include "$(BUILD_DIR)/data/code/aspMain.data.o"
-    include "$(BUILD_DIR)/data/code/gspS2DEX2.fifo.data.o"
-    include "$(BUILD_DIR)/data/code/njpgdspMain.data.o"
+    include "$(BUILD_DIR)/src/code/rsptext.o"
     include "$(BUILD_DIR)/src/code/z_en_a_keep.o"
     include "$(BUILD_DIR)/src/code/z_en_item00.o"
     include "$(BUILD_DIR)/src/code/z_eff_blure.o"

@@ -19,4 +19,16 @@ incbins:
     segment: boot
     vram: 0x800969C0
     size: 0x160
+  - name: aspMainText
+    segment: code
+    vram: 0x801AAAB0
+    size: 0x1000
+  - name: gspS2DEX2_fifoText
+    segment: code
+    vram: 0x801ABAB0
+    size: 0x18C0
+  - name: njpgdspMainText
+    segment: code
+    vram: 0x801AD370
+    size: 0xAF0
 assets:
