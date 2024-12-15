@@ -9,8 +9,9 @@
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/effects/ovl_Effect_Ss_Hitmark/z_eff_ss_hitmark.h"
 
-#define FLAGS \
-    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_100000)
+#define FLAGS                                                                                 \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
+     ACTOR_FLAG_FREEZE_EXCEPTION)
 
 void EnKaizoku_Init(Actor* thisx, PlayState* play);
 void EnKaizoku_Destroy(Actor* thisx, PlayState* play);
@@ -614,7 +615,7 @@ void func_80B85FA8(EnKaizoku* this, PlayState* play) {
                 CutsceneManager_Stop(this->csId);
                 this->unk_59C = 0;
                 this->subCamId = SUB_CAM_ID_DONE;
-                this->picto.actor.flags &= ~ACTOR_FLAG_100000;
+                this->picto.actor.flags &= ~ACTOR_FLAG_FREEZE_EXCEPTION;
                 this->picto.actor.flags &= ~ACTOR_FLAG_LOCK_ON_DISABLED;
                 this->picto.actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
                 func_80B872A4(this);
@@ -1670,7 +1671,7 @@ void func_80B894C0(EnKaizoku* this, PlayState* play) {
 void func_80B8960C(EnKaizoku* this, PlayState* play) {
     Vec3f sp24;
 
-    this->picto.actor.flags |= ACTOR_FLAG_100000;
+    this->picto.actor.flags |= ACTOR_FLAG_FREEZE_EXCEPTION;
     Matrix_RotateYS(this->picto.actor.yawTowardsPlayer, MTXMODE_NEW);
     Matrix_MultVecZ(-10.0f, &sp24);
     Math_Vec3f_Copy(&this->unk_3C4, &sp24);
@@ -1778,7 +1779,7 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
         if ((gSaveContext.save.saveInfo.playerData.health <= 0x10) && (this->action != KAIZOKU_ACTION_16)) {
             this->unk_2D0 = 2;
             this->subCamId = SUB_CAM_ID_DONE;
-            this->picto.actor.flags |= ACTOR_FLAG_100000;
+            this->picto.actor.flags |= ACTOR_FLAG_FREEZE_EXCEPTION;
 
             if (!CutsceneManager_IsNext(this->csId)) {
                 CutsceneManager_Queue(this->csId);
@@ -1796,7 +1797,7 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
                 Health_ChangeBy(play, 0x10);
                 this->unk_2D0 = 2;
                 this->subCamId = SUB_CAM_ID_DONE;
-                this->picto.actor.flags |= ACTOR_FLAG_100000;
+                this->picto.actor.flags |= ACTOR_FLAG_FREEZE_EXCEPTION;
 
                 if (!CutsceneManager_IsNext(this->csId)) {
                     CutsceneManager_Queue(this->csId);

@@ -584,7 +584,7 @@ void EnPamera_Draw(Actor* thisx, PlayState* play) {
 void func_80BD9840(EnPamera* this, PlayState* play) {
     this->actor.update = func_80BDA344;
     this->actor.flags |= ACTOR_FLAG_UPDATE_DURING_OCARINA;
-    this->actor.flags |= ACTOR_FLAG_100000;
+    this->actor.flags |= ACTOR_FLAG_FREEZE_EXCEPTION;
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20) || CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE)) {
         func_80BD9E60(this);
         func_80BD9938(this);

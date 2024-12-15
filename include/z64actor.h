@@ -554,9 +554,10 @@ typedef enum DoorLockType {
 #define ACTOR_FLAG_FOCUS_ACTOR_REFINDABLE (1 << 19)
 
 // 
-#define ACTOR_FLAG_100000        (1 << 20)
+#define ACTOR_FLAG_FREEZE_EXCEPTION        (1 << 20)
+
 // 
-#define ACTOR_FLAG_200000        (1 << 21)
+#define ACTOR_FLAG_UPDATE_DURING_SOT_AND_SOARING_CS (1 << 21)
 
 // Specifies whether the actor can (not) use fake point lights, in the event that ucode point lights are not compatible with its display lists.
 // In F3DZEX2 versions that predate MM, microcode point lights didn't exist so `PointLight_t` could not be used.

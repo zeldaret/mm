@@ -94,7 +94,7 @@ void func_80C05B3C(EnBombal* this, PlayState* play) {
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_75_40) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_73_10) &&
                 !CHECK_WEEKEVENTREG(WEEKEVENTREG_85_02)) {
                 player->stateFlags1 |= ACTOR_FLAG_DRAW_CULLING_DISABLED;
-                this->actor.flags |= ACTOR_FLAG_100000;
+                this->actor.flags |= ACTOR_FLAG_FREEZE_EXCEPTION;
             }
             this->actionFunc = func_80C05C44;
         }

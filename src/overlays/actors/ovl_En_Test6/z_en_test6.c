@@ -12,9 +12,9 @@
 
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS                                                                                    \
-    (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED | ACTOR_FLAG_200000 | \
-     ACTOR_FLAG_UPDATE_DURING_OCARINA)
+#define FLAGS                                                                \
+    (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED | \
+     ACTOR_FLAG_UPDATE_DURING_SOT_AND_SOARING_CS | ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
 void EnTest6_Init(Actor* thisx, PlayState* play2);
 void EnTest6_Destroy(Actor* thisx, PlayState* play2);
@@ -452,7 +452,7 @@ void EnTest6_StopInvertedSoTCutscene(EnTest6* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     player->actor.freezeTimer = 0;
-    play->unk_18844 = false;
+    play->SoTCsOrSoaringCsActive = false;
     CutsceneManager_Stop(play->playerCsIds[PLAYER_CS_ID_SONG_WARP]);
     Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_END);
     EnTest6_DisableMotionBlur();
@@ -534,7 +534,7 @@ void EnTest6_InvertedSoTCutscene(EnTest6* this, PlayState* play) {
                 Distortion_Request(DISTORTION_TYPE_SONG_OF_TIME);
                 Distortion_SetDuration(80);
 
-                play->unk_18844 = true;
+                play->SoTCsOrSoaringCsActive = true;
                 this->cueId = SOTCS_CUEID_INV_CLOCKS;
             }
             break;
@@ -596,7 +596,7 @@ void EnTest6_InvertedSoTCutscene(EnTest6* this, PlayState* play) {
                 this->speed = 0.1f;
                 EnTest6_DisableMotionBlur();
                 Distortion_RemoveRequest(DISTORTION_TYPE_SONG_OF_TIME);
-                play->unk_18844 = false;
+                play->SoTCsOrSoaringCsActive = false;
                 if (this->invSoTParticles != NULL) {
                     ZeldaArena_Free(this->invSoTParticles);
                 }
@@ -706,7 +706,7 @@ void EnTest6_StopDoubleSoTCutscene(EnTest6* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     player->actor.freezeTimer = 0;
-    play->unk_18844 = false;
+    play->SoTCsOrSoaringCsActive = false;
     CutsceneManager_Stop(play->playerCsIds[PLAYER_CS_ID_SONG_WARP]);
     Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_END);
     EnTest6_DisableMotionBlur();
@@ -757,7 +757,7 @@ void EnTest6_DoubleSoTCutscene(EnTest6* this, PlayState* play) {
         Environment_LerpDiffuseColor(play, &sDoubleSoTCsDiffuseColor, 1.0f);
         Environment_LerpFogColor(play, &sDoubleSoTCsFogColor, 1.0f);
         Environment_LerpFog(play, sDoubleSoTCsFogNear, sDoubleSoTCsZFar, 1.0f);
-        play->unk_18844 = true;
+        play->SoTCsOrSoaringCsActive = true;
     }
 
     if (this->timer == 15) {
@@ -765,7 +765,7 @@ void EnTest6_DoubleSoTCutscene(EnTest6* this, PlayState* play) {
         Environment_LerpDiffuseColor(play, &sDoubleSoTCsDiffuseColor, 0.0f);
         Environment_LerpFogColor(play, &sDoubleSoTCsFogColor, 0.0f);
         Environment_LerpFog(play, sDoubleSoTCsFogNear, sDoubleSoTCsZFar, 0.0f);
-        play->unk_18844 = false;
+        play->SoTCsOrSoaringCsActive = false;
     }
 
     if (this->screenFillAlpha >= 20) {
@@ -773,7 +773,7 @@ void EnTest6_DoubleSoTCutscene(EnTest6* this, PlayState* play) {
         Environment_LerpDiffuseColor(play, &sDoubleSoTCsDiffuseColor, this->doubleSoTEnvLerp);
         Environment_LerpFogColor(play, &sDoubleSoTCsFogColor, this->doubleSoTEnvLerp);
         Environment_LerpFog(play, sDoubleSoTCsFogNear, sDoubleSoTCsZFar, this->doubleSoTEnvLerp);
-        play->unk_18844 = false;
+        play->SoTCsOrSoaringCsActive = false;
     }
 
     Actor_PlaySfx_Flagged2(&player->actor, NA_SE_PL_FLYING_AIR - SFX_FLAG);

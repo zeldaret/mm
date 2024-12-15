@@ -7,7 +7,7 @@
 #include "z_obj_hgdoor.h"
 #include "assets/objects/object_hgdoor/object_hgdoor.h"
 
-#define FLAGS (ACTOR_FLAG_100000)
+#define FLAGS (ACTOR_FLAG_FREEZE_EXCEPTION)
 
 void ObjHgdoor_Init(Actor* thisx, PlayState* play);
 void ObjHgdoor_Destroy(Actor* thisx, PlayState* play);
