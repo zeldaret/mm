@@ -12535,7 +12535,7 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
             func_808484F0(this);
         }
 
-        if ((play->SoTCsOrSoaringCsActive == 0) && !(this->skelAnime.moveFlags & ANIM_FLAG_80)) {
+        if (!play->SoTCsOrSoaringCsPlaying && !(this->skelAnime.moveFlags & ANIM_FLAG_80)) {
             if (!(this->stateFlags1 & PLAYER_STATE1_2) && (this->actor.parent == NULL)) {
                 func_80844784(play, this);
             }

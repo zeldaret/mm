@@ -2676,7 +2676,7 @@ void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
     params.player = player;
     params.play = play;
 
-    if (play->SoTCsOrSoaringCsActive) {
+    if (play->SoTCsOrSoaringCsPlaying) {
         params.updateActorFlagsMask = ACTOR_FLAG_UPDATE_DURING_SOT_AND_SOARING_CS;
     } else {
         params.updateActorFlagsMask = ACTOR_FLAG_UPDATE_DURING_SOT_AND_SOARING_CS | ACTOR_FLAG_INSIDE_CULLING_VOLUME |
@@ -3139,7 +3139,7 @@ void Actor_DrawAll(PlayState* play, ActorContext* actorCtx) {
     s32 drawActorFlagsMask;
     s32 category;
 
-    if (play->SoTCsOrSoaringCsActive) {
+    if (play->SoTCsOrSoaringCsPlaying) {
         drawActorFlagsMask = ACTOR_FLAG_UPDATE_DURING_SOT_AND_SOARING_CS;
     } else {
         drawActorFlagsMask = ACTOR_FLAG_UPDATE_DURING_SOT_AND_SOARING_CS | ACTOR_FLAG_INSIDE_CULLING_VOLUME |
@@ -3213,7 +3213,7 @@ void Actor_DrawAll(PlayState* play, ActorContext* actorCtx) {
     gSPBranchList(ref2, &tmp2[1]);
     POLY_XLU_DISP = &tmp2[1];
 
-    if (!play->SoTCsOrSoaringCsActive) {
+    if (!play->SoTCsOrSoaringCsPlaying) {
         Lights_DrawGlow(play);
     }
 

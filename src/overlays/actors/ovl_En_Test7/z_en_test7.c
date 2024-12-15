@@ -425,7 +425,7 @@ void EnTest7_StartWarpCs(EnTest7* this, PlayState* play) {
     } else {
         CutsceneManager_Start(play->playerCsIds[PLAYER_CS_ID_SONG_WARP], NULL);
         EnTest7_SetupAction(this, EnTest7_WarpCsPart1);
-        play->SoTCsOrSoaringCsActive = true;
+        play->SoTCsOrSoaringCsPlaying = true;
     }
 }
 
@@ -592,7 +592,7 @@ void EnTest7_WarpCsPart5(EnTest7* this, PlayState* play) {
         R_PLAY_FILL_SCREEN_G = 255;
         R_PLAY_FILL_SCREEN_B = 255;
         R_PLAY_FILL_SCREEN_ALPHA = 255;
-        play->SoTCsOrSoaringCsActive = false;
+        play->SoTCsOrSoaringCsPlaying = false;
         this->flags &= ~OWL_WARP_FLAGS_DRAW_LENS_FLARE;
         EnTest7_SetupAction(this, EnTest7_WarpCsPart6);
         Play_DisableMotionBlur();
