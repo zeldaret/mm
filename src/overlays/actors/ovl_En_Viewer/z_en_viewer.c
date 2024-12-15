@@ -8,7 +8,7 @@
 
 #define FLAGS                                                                \
     (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED | \
-     ACTOR_FLAG_UPDATE_DURING_SOT_AND_SOARING_CS)
+     ACTOR_FLAG_UPDATE_DURING_SOARING_AND_SOT_CS)
 
 void EnViewer_Init(Actor* thisx, PlayState* play);
 void EnViewer_Destroy(Actor* thisx, PlayState* play);

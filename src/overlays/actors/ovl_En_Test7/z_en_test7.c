@@ -10,7 +10,7 @@
 
 #define FLAGS                                                                                              \
     (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED | ACTOR_FLAG_FREEZE_EXCEPTION | \
-     ACTOR_FLAG_UPDATE_DURING_SOT_AND_SOARING_CS | ACTOR_FLAG_UPDATE_DURING_OCARINA)
+     ACTOR_FLAG_UPDATE_DURING_SOARING_AND_SOT_CS | ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
 void EnTest7_Init(Actor* thisx, PlayState* play2);
 void EnTest7_Destroy(Actor* thisx, PlayState* play);
@@ -425,7 +425,7 @@ void EnTest7_StartWarpCs(EnTest7* this, PlayState* play) {
     } else {
         CutsceneManager_Start(play->playerCsIds[PLAYER_CS_ID_SONG_WARP], NULL);
         EnTest7_SetupAction(this, EnTest7_WarpCsPart1);
-        play->SoTCsOrSoaringCsPlaying = true;
+        play->soaringCsOrSoTCsPlaying = true;
     }
 }
 
@@ -592,7 +592,7 @@ void EnTest7_WarpCsPart5(EnTest7* this, PlayState* play) {
         R_PLAY_FILL_SCREEN_G = 255;
         R_PLAY_FILL_SCREEN_B = 255;
         R_PLAY_FILL_SCREEN_ALPHA = 255;
-        play->SoTCsOrSoaringCsPlaying = false;
+        play->soaringCsOrSoTCsPlaying = false;
         this->flags &= ~OWL_WARP_FLAGS_DRAW_LENS_FLARE;
         EnTest7_SetupAction(this, EnTest7_WarpCsPart6);
         Play_DisableMotionBlur();

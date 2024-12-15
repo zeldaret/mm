@@ -558,10 +558,10 @@ typedef enum DoorLockType {
 // This flag allows a given actor to be an exception.
 #define ACTOR_FLAG_FREEZE_EXCEPTION (1 << 20)
 
-// Actor can update even if the Song of Time Cutscene or the Song of Soaring Cutscene is playing.
-// Typically an actor will halt while the Song of Time Cutscene or the Song of Soaring Cutscene is playing.
+// Actor can update even if the Song of Soaring Cutscene or the Song of Time Cutscene is playing.
+// Typically an actor will halt while the Song of Soaring Cutscene or the Song of Time Cutscene is playing.
 // This flag allows a given actor to be an exception.
-#define ACTOR_FLAG_UPDATE_DURING_SOT_AND_SOARING_CS (1 << 21)
+#define ACTOR_FLAG_UPDATE_DURING_SOARING_AND_SOT_CS (1 << 21)
 
 // Specifies whether the actor can (not) use fake point lights, in the event that ucode point lights are not compatible with its display lists.
 // In F3DZEX2 versions that predate MM, microcode point lights didn't exist so `PointLight_t` could not be used.
