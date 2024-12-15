@@ -8,7 +8,7 @@
 #include "attributes.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void EnOt_Init(Actor* thisx, PlayState* play);
 void EnOt_Destroy(Actor* thisx, PlayState* play);
@@ -106,9 +106,9 @@ static AnimationSpeedInfo sAnimationSpeedInfo[SEAHORSE_ANIM_MAX] = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneScale, 80, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 80, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeScale, 80, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 80, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDistance, 4000, ICHAIN_STOP),
 };
 
 void func_80B5B2E0(PlayState* play, Vec3f* pos, s16 pathIndex, Vec3f* vec, s32* index) {
@@ -974,7 +974,7 @@ void EnOt_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
     if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER) {
         if (DECR(this->unk_354) == 0) {
-            if (this->actor.flags & ACTOR_FLAG_40) {
+            if (this->actor.flags & ACTOR_FLAG_INSIDE_CULLING_VOLUME) {
                 s32 i;
 
                 for (i = 0; i < 2; i++) {

@@ -8,7 +8,7 @@
 #include "assets/objects/object_numa_obj/object_numa_obj.h"
 #include "assets/objects/object_dekucity_obj/object_dekucity_obj.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 void ObjPurify_Init(Actor* thisx, PlayState* play);
 void ObjPurify_Destroy(Actor* thisx, PlayState* play);
@@ -224,7 +224,7 @@ void func_80A850E8(ObjPurify* this, PlayState* play) {
 }
 
 void func_80A8515C(ObjPurify* this) {
-    this->dyna.actor.flags &= ~ACTOR_FLAG_10;
+    this->dyna.actor.flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     this->dyna.actor.draw = func_80A851C8;
     this->gfxIndex = 1;
     this->actionFunc = ObjPurify_DoNothing;

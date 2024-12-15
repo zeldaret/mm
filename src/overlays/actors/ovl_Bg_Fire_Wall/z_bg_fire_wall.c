@@ -72,7 +72,7 @@ void BgFireWall_Init(Actor* thisx, PlayState* play) {
     this->unk_158 = 0.1f;
     this->unk_160 = 300.0f;
     this->texIndex = Rand_S16Offset(0, ARRAY_COUNT(sFlameTextures) - 1);
-    this->actor.flags |= ACTOR_FLAG_10;
+    this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     this->collider.dim.pos.y = this->actor.world.pos.y;
     this->actionFunc = func_809AC638;
 }

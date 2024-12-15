@@ -3,10 +3,15 @@
 
 #include "stdarg.h"
 
-
-void bcopy(void* __src, void* __dest, int __n);
-int bcmp(void* __s1, void* __s2, int __n);
+#ifdef __GNUC__
+void bzero(void* begin, unsigned int length);
+int bcmp(const void* __s1, const void* __s2, unsigned int __n);
+void bcopy(const void* __src, void* __dest, unsigned int __n);
+#else
 void bzero(void* begin, int length);
+int bcmp(const void* __s1, const void* __s2, int __n);
+void bcopy(const void* __src, void* __dest, int __n);
+#endif
 
 void osSyncPrintf(const char* fmt, ...);
 

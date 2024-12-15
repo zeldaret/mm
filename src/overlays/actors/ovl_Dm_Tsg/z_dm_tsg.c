@@ -7,7 +7,7 @@
 #include "z_dm_tsg.h"
 #include "assets/objects/object_open_obj/object_open_obj.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 void DmTsg_Init(Actor* thisx, PlayState* play);
 void DmTsg_Destroy(Actor* thisx, PlayState* play);

@@ -78,9 +78,9 @@ ActorProfile En_Fish_Profile = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 720, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 40, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 40, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeDistance, 720, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 40, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 40, ICHAIN_STOP),
 };
 
 f32 func_8091D630(Vec3f* arg0, Vec3f* arg1) {
@@ -211,7 +211,7 @@ void EnFish_Init(Actor* thisx, PlayState* play) {
     this->unk_246 = Rand_Next() >> 0x10;
 
     if (sp36 == ENFISH_0) {
-        this->actor.flags |= ACTOR_FLAG_10;
+        this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 8.0f);
         func_8091E810(this);
     } else if (sp36 == ENFISH_1) {
@@ -605,7 +605,7 @@ void func_8091ECF4(EnFish* this) {
     this->actor.gravity = 0.0f;
     this->actor.terminalVelocity = 0.0f;
     this->actor.shape.yOffset = 0.0f;
-    this->actor.flags |= ACTOR_FLAG_10;
+    this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     this->unk_240 = 200;
     func_8091D660(this);
     this->unkFunc = func_8091ED70;
@@ -666,7 +666,7 @@ void func_8091EF30(EnFish* this) {
     if (this->actor.velocity.y < -1.0f) {
         this->actor.velocity.y = -1.0f;
     }
-    this->actor.flags |= ACTOR_FLAG_10;
+    this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     this->actor.home.pos.x = this->actor.world.pos.x;
     this->actor.home.pos.y = this->actor.world.pos.y - 20.0f;
     this->actor.home.pos.z = this->actor.world.pos.z;

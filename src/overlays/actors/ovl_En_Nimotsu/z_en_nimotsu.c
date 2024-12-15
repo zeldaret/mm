@@ -7,7 +7,7 @@
 #include "z_en_nimotsu.h"
 #include "assets/objects/object_boj/object_boj.h"
 
-#define FLAGS (ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void EnNimotsu_Init(Actor* thisx, PlayState* play);
 void EnNimotsu_Destroy(Actor* thisx, PlayState* play);

@@ -7,7 +7,7 @@
 #include "z_bg_ikninside.h"
 #include "assets/objects/object_ikninside_obj/object_ikninside_obj.h"
 
-#define FLAGS (ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void BgIkninside_Init(Actor* thisx, PlayState* play);
 void BgIkninside_Destroy(Actor* thisx, PlayState* play);

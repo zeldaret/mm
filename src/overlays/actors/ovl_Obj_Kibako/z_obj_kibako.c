@@ -8,7 +8,7 @@
 #include "assets/objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
 #include "assets/objects/object_kibako/object_kibako.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_CAN_PRESS_SWITCHES)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_CAN_PRESS_SWITCHES)
 
 void ObjKibako_Init(Actor* thisx, PlayState* play2);
 void ObjKibako_Destroy(Actor* thisx, PlayState* play2);
@@ -75,8 +75,8 @@ static Gfx* sDisplayLists[] = { gameplay_dangeon_keep_DL_007890, gSmallCrateDL }
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32_DIV1000(gravity, -1500, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(terminalVelocity, -18000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 60, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 60, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeScale, 60, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 60, ICHAIN_STOP),
 };
 
 void ObjKibako_SpawnCollectible(ObjKibako* this, PlayState* play) {
@@ -139,9 +139,9 @@ void ObjKibako_Init(Actor* thisx, PlayState* play2) {
     Actor_ProcessInitChain(&this->actor, sInitChain);
     Actor_SetScale(&this->actor, 0.15f);
     if (objectIndex == 0) {
-        this->actor.uncullZoneForward = 4000.0f;
+        this->actor.cullingVolumeDistance = 4000.0f;
     } else {
-        this->actor.uncullZoneForward = 800.0f;
+        this->actor.cullingVolumeDistance = 800.0f;
     }
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);

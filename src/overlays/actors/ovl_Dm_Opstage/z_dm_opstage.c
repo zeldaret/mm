@@ -7,7 +7,7 @@
 #include "z_dm_opstage.h"
 #include "assets/objects/object_keikoku_demo/object_keikoku_demo.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 void DmOpstage_Init(Actor* thisx, PlayState* play);
 void DmOpstage_Destroy(Actor* thisx, PlayState* play);
@@ -29,7 +29,7 @@ ActorProfile Dm_Opstage_Profile = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneScale, 300, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeScale, 300, ICHAIN_STOP),
 };
 
 void DmOpstage_SetupAction(DmOpstage* this, DmOpstageActionFunc actionFunc) {

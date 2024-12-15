@@ -12,9 +12,9 @@
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/actors/ovl_En_Col_Man/z_en_col_man.h"
 
-#define FLAGS                                                                                                \
-    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_100000 | \
-     ACTOR_FLAG_MINIMAP_ICON_ENABLED)
+#define FLAGS                                                                                 \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
+     ACTOR_FLAG_DRAW_CULLING_DISABLED | ACTOR_FLAG_100000 | ACTOR_FLAG_MINIMAP_ICON_ENABLED)
 
 void EnJso2_Init(Actor* thisx, PlayState* play);
 void EnJso2_Destroy(Actor* thisx, PlayState* play);

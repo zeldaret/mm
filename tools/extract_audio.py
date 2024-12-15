@@ -7,6 +7,8 @@
 
 import argparse
 
+from version import version_config
+
 from audio.extraction.audio_extract import extract_audio_for_version, GameVersionInfo
 from audio.extraction.disassemble_sequence import MMLVersion, SequenceTableSpec, SqSection
 
@@ -20,12 +22,13 @@ if __name__ == '__main__':
 
     version = args.version
 
-    # TODO move these to config yaml
-    soundfont_table_code_offset, seq_font_table_code_offset, seq_table_code_offset, sample_bank_table_code_offset = {
-        "n64-jp-1.0"     : (0xC97130-0xB5F000, 0xC973C0-0xB5F000, 0xC975D0-0xB5F000, 0xC97DE0-0xB5F000),
-        "n64-us"         : (0xC776C0-0xB3C000, 0xC77960-0xB3C000, 0xC77B70-0xB3C000, 0xC78380-0xB3C000),
-        "n64-eu-1.1-dbg" : (0xE0F7E0-0xC95000, 0xE0FA80-0xC95000, 0xE0FC90-0xC95000, 0xE104A0-0xC95000),
-    }[version]
+    config = version_config.load_version_config(version)
+
+    code_vram = config.dmadata_segments["code"].vram
+    soundfont_table_code_offset = config.variables["gSoundFontTable"] - code_vram
+    seq_font_table_code_offset = config.variables["gSequenceFontTable"] - code_vram
+    seq_table_code_offset = config.variables["gSequenceTable"] - code_vram
+    sample_bank_table_code_offset = config.variables["gSampleBankTable"] - code_vram
 
     # List any sequences that are "handwritten", we don't extract these by
     # default as we want these checked in for documentation.

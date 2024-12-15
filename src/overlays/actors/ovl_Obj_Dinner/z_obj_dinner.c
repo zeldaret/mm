@@ -7,7 +7,7 @@
 #include "z_obj_dinner.h"
 #include "assets/objects/object_obj_dinner/object_obj_dinner.h"
 
-#define FLAGS (ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 void ObjDinner_Init(Actor* thisx, PlayState* play);
 void ObjDinner_Destroy(Actor* thisx, PlayState* play);

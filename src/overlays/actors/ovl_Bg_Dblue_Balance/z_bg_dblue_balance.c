@@ -100,7 +100,7 @@ s8 D_80B83A94[] = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDistance, 4000, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
@@ -309,8 +309,8 @@ void BgDblueBalance_Init(Actor* thisx, PlayState* play) {
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
 
     this->dyna.actor.flags = sTypeInfo[sp2C].unk_08;
-    this->dyna.actor.uncullZoneScale = sTypeInfo[sp2C].unk_0C;
-    this->dyna.actor.uncullZoneDownward = sTypeInfo[sp2C].unk_10;
+    this->dyna.actor.cullingVolumeScale = sTypeInfo[sp2C].unk_0C;
+    this->dyna.actor.cullingVolumeDownward = sTypeInfo[sp2C].unk_10;
     this->dyna.actor.update = sTypeInfo[sp2C].update;
     this->dyna.actor.draw = sTypeInfo[sp2C].draw;
 
@@ -694,7 +694,7 @@ void func_80B83758(Actor* thisx, PlayState* play) {
                                                 temp_f0, 0x20);
     }
 
-    if (this->dyna.actor.flags & ACTOR_FLAG_40) {
+    if (this->dyna.actor.flags & ACTOR_FLAG_INSIDE_CULLING_VOLUME) {
         ptr2 = &sTypeInfo[BGDBLUEBALANCE_GET_300(&this->dyna.actor)];
         Gfx_DrawDListOpa(play, ptr2->opaDList);
 

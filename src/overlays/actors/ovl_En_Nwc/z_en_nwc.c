@@ -11,7 +11,7 @@
 #include "overlays/actors/ovl_En_Niw/z_en_niw.h"
 #include "assets/objects/object_nwc/object_nwc.h"
 
-#define FLAGS (ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void EnNwc_Init(Actor* thisx, PlayState* play);
 void EnNwc_Destroy(Actor* thisx, PlayState* play);

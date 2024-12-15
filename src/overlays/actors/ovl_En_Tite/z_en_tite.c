@@ -637,7 +637,7 @@ void func_80895020(EnTite* this, PlayState* play) {
     this->actor.colorFilterTimer = 0;
     SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EN_TEKU_DEAD);
     this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
-    this->actor.flags |= ACTOR_FLAG_10;
+    this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     this->unk_2BA = 1;
     Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, this->unk_2BE);
     this->unk_2BC = 25;

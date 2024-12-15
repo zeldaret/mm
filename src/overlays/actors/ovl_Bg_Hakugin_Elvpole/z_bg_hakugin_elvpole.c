@@ -7,7 +7,7 @@
 #include "z_bg_hakugin_elvpole.h"
 #include "assets/objects/object_hakugin_obj/object_hakugin_obj.h"
 
-#define FLAGS (ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void BgHakuginElvpole_Init(Actor* thisx, PlayState* play);
 void BgHakuginElvpole_Destroy(Actor* thisx, PlayState* play);

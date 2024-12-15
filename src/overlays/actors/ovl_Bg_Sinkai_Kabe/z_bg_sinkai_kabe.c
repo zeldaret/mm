@@ -15,7 +15,7 @@
 #include "overlays/actors/ovl_En_Ot/z_en_ot.h"
 #include "assets/objects/object_sinkai_kabe/object_sinkai_kabe.h"
 
-#define FLAGS (ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void BgSinkaiKabe_Init(Actor* thisx, PlayState* play);
 void BgSinkaiKabe_Destroy(Actor* thisx, PlayState* play);

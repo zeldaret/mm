@@ -6,7 +6,7 @@
 
 #include "z_dm_char09.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 void DmChar09_Init(Actor* thisx, PlayState* play);
 void DmChar09_Destroy(Actor* thisx, PlayState* play);

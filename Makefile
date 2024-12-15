@@ -159,7 +159,6 @@ SCHC        := $(PYTHON) tools/buildtools/schc.py
 SCHC_FLAGS  :=
 
 # Audio tools
-AUDIO_EXTRACT := $(PYTHON) tools/audio_extraction.py
 SAMPLECONV    := tools/audio/sampleconv/sampleconv
 SBC           := tools/audio/sbc
 SFC           := tools/audio/sfc
@@ -470,6 +469,7 @@ clean:
 assetclean:
 	$(RM) -r $(EXTRACTED_DIR)/assets
 	$(RM) -r $(EXTRACTED_DIR)/text
+	$(RM) -r $(EXTRACTED_DIR)/.extracted-assets.json
 	$(RM) -r $(BUILD_DIR)/assets
 
 distclean: assetclean clean
@@ -485,18 +485,14 @@ venv:
 
 setup:
 	$(MAKE) -C tools
-	$(PYTHON) tools/buildtools/decompress_baserom.py -v $(VERSION)
-	$(PYTHON) tools/buildtools/extract_baserom.py $(BASEROM_DIR)/baserom-decompressed.z64 $(EXTRACTED_DIR)/baserom --dmadata-start `cat $(BASEROM_DIR)/dmadata_start.txt` --dmadata-names $(BASEROM_DIR)/dmadata_names.txt
-	$(PYTHON) tools/buildtools/extract_yars.py $(EXTRACTED_DIR)/baserom -v $(VERSION)
-
-# TODO this is a temporary rule for testing audio, to be removed
-setup-audio:
-	$(AUDIO_EXTRACT) -o $(EXTRACTED_DIR) -v $(VERSION) --read-xml
+	$(PYTHON) tools/decompress_baserom.py -v $(VERSION)
+	$(PYTHON) tools/extract_baserom.py $(BASEROM_DIR)/baserom-decompressed.z64 $(EXTRACTED_DIR)/baserom -v $(VERSION)
+	$(PYTHON) tools/extract_yars.py $(EXTRACTED_DIR)/baserom -v $(VERSION)
 
 assets:
 	$(PYTHON) tools/extract_assets.py $(EXTRACTED_DIR)/baserom $(EXTRACTED_DIR)/assets -j$(N_THREADS) -Z Wno-hardcoded-pointer -v $(VERSION)
-	$(PYTHON) tools/text/msgdis.py $(EXTRACTED_DIR)/baserom $(EXTRACTED_DIR)/text -v $(VERSION)
-	$(AUDIO_EXTRACT) -o $(EXTRACTED_DIR) -v $(VERSION) --read-xml
+	$(PYTHON) tools/extract_text.py $(EXTRACTED_DIR)/baserom $(EXTRACTED_DIR)/text -v $(VERSION)
+	$(PYTHON) tools/extract_audio.py -o $(EXTRACTED_DIR) -v $(VERSION) --read-xml
 
 ## Assembly generation
 disasm:

@@ -707,7 +707,7 @@ void func_80877D90(EnDodongo* this, PlayState* play) {
 
 void func_80877DE0(EnDodongo* this) {
     Animation_Change(&this->skelAnime, &object_dodongo_Anim_0028F0, -1.0f, 35.0f, 0.0f, ANIMMODE_ONCE, -4.0f);
-    this->actor.flags |= ACTOR_FLAG_10;
+    this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     this->timer = 25;
     this->actionFunc = func_80877E60;
     this->actor.speed = 0.0f;
@@ -747,7 +747,7 @@ void func_80877E60(EnDodongo* this, PlayState* play) {
             Actor_Kill(this->actor.child);
             this->actor.child = NULL;
         }
-        this->actor.flags &= ~ACTOR_FLAG_10;
+        this->actor.flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     } else if (this->skelAnime.playSpeed > -0.5f) {
         this->timer--;
         if (this->timer == 10) {

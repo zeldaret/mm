@@ -9,7 +9,7 @@
 #include "z64debug_display.h"
 #include "overlays/actors/ovl_En_Sw/z_en_sw.h"
 
-#define FLAGS (ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 // Prototypes
 void TGSw_Init(Actor* thisx, PlayState* play);

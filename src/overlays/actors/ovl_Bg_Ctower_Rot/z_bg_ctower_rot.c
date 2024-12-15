@@ -7,7 +7,7 @@
 #include "z_bg_ctower_rot.h"
 #include "assets/objects/object_ctower_rot/object_ctower_rot.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 void BgCtowerRot_Init(Actor* thisx, PlayState* play);
 void BgCtowerRot_Destroy(Actor* thisx, PlayState* play);

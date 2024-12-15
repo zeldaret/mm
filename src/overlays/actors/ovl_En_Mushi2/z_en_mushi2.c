@@ -7,7 +7,7 @@
 #include "overlays/actors/ovl_Obj_Bean/z_obj_bean.h"
 #include "z_en_mushi2.h"
 
-#define FLAGS (ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void EnMushi2_Init(Actor* thisx, PlayState* play);
 void EnMushi2_Destroy(Actor* thisx, PlayState* play);
@@ -95,9 +95,9 @@ static MtxF D_80A6B9C4 = {
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneForward, 700, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 20, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 20, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeDistance, 700, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 20, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 20, ICHAIN_STOP),
 };
 
 f32 D_80A6BA14[] = {
@@ -992,7 +992,7 @@ void func_80A6AB08(EnMushi2* this, PlayState* play) {
     Math_ScaledStepToS(&this->actor.world.rot.z, 0, 0xBB8);
     this->actor.shape.rot.z = this->actor.world.rot.z;
 
-    if ((this->actor.flags & ACTOR_FLAG_40) && (Rand_ZeroOne() < 0.03f)) {
+    if ((this->actor.flags & ACTOR_FLAG_INSIDE_CULLING_VOLUME) && (Rand_ZeroOne() < 0.03f)) {
         Vec3f sp3C;
 
         sp3C.x = this->actor.world.pos.x;
@@ -1034,7 +1034,7 @@ void func_80A6AE7C(EnMushi2* this, PlayState* play) {
     func_80A69424(this, play);
     temp_f2 = this->actor.scale.x - (1.0f / 20000.0f);
     Actor_SetScale(&this->actor, CLAMP_MIN(temp_f2, 0.001f));
-    if ((this->actor.flags & ACTOR_FLAG_40) && (this->actor.depthInWater > 5.0f) &&
+    if ((this->actor.flags & ACTOR_FLAG_INSIDE_CULLING_VOLUME) && (this->actor.depthInWater > 5.0f) &&
         (this->actor.depthInWater < 30.0f) && ((s32)(Rand_Next() & 0x1FF) < this->unk_368)) {
         EffectSsBubble_Spawn(play, &this->actor.world.pos, -5.0f, 5.0f, 5.0f,
                              ((Rand_ZeroOne() * 4.0f) + 2.0f) * this->actor.scale.x);
@@ -1083,7 +1083,7 @@ void func_80A6B0D8(EnMushi2* this, PlayState* play) {
     this->actor.velocity.z =
         (this->actor.speed * this->unk_328.z) + (-0.01f * this->unk_31C.z) + (this->unk_310.z * temp_f2);
 
-    if ((this->actor.flags & ACTOR_FLAG_40) && (this->unk_368 > 20) && (Rand_ZeroOne() < 0.15f)) {
+    if ((this->actor.flags & ACTOR_FLAG_INSIDE_CULLING_VOLUME) && (this->unk_368 > 20) && (Rand_ZeroOne() < 0.15f)) {
         Vec3f sp48;
         s32 sp44 = 0;
 
@@ -1197,7 +1197,7 @@ void EnMushi2_Update(Actor* thisx, PlayState* play) {
 
         SkelAnime_Update(&this->skelAnime);
 
-        if (this->actor.flags & ACTOR_FLAG_40) {
+        if (this->actor.flags & ACTOR_FLAG_INSIDE_CULLING_VOLUME) {
             if ((this->actionFunc != func_80A6AE7C) && (this->actionFunc != func_80A6B0D8) &&
                 ((this->actionFunc != func_80A6A36C) || (this->unk_36A < 0xDD)) &&
                 (((this->actionFunc != func_80A6A5C0) && (this->actionFunc != func_80A6A824) &&

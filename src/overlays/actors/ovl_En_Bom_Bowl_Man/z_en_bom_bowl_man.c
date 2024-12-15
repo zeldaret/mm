@@ -410,7 +410,7 @@ void func_809C51B4(EnBomBowlMan* this, PlayState* play) {
 
 void func_809C52B4(EnBomBowlMan* this) {
     this->actor.draw = NULL;
-    this->actor.flags |= ACTOR_FLAG_10;
+    this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
     this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->actor.world.pos.x = 1340.0f;

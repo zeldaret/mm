@@ -7,7 +7,7 @@
 #include "z_obj_bell.h"
 #include "assets/objects/object_f52_obj/object_f52_obj.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 void ObjBell_Init(Actor* thisx, PlayState* play);
 void ObjBell_Destroy(Actor* thisx, PlayState* play);

@@ -6,7 +6,7 @@
 
 #include "z_en_test5.h"
 
-#define FLAGS (ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void EnTest5_Init(Actor* thisx, PlayState* play2);
 void EnTest5_Destroy(Actor* thisx, PlayState* play);

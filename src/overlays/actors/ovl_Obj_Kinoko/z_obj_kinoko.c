@@ -7,7 +7,7 @@
 #include "z_obj_kinoko.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void ObjKinoko_Init(Actor* thisx, PlayState* play);
 void ObjKinoko_Destroy(Actor* thisx, PlayState* play);

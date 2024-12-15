@@ -84,7 +84,7 @@ void EnGe2_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->collider, &this->picto.actor, &sCylinderInit);
     this->picto.actor.colChkInfo.mass = MASS_IMMOVABLE;
     Actor_SetScale(&this->picto.actor, 0.01f);
-    this->picto.actor.uncullZoneForward = 1200.0f;
+    this->picto.actor.cullingVolumeDistance = 1200.0f;
 
     if (this->picto.actor.world.rot.z == 0) {
         this->verticalDetectRange = 40.0f;
@@ -109,9 +109,9 @@ void EnGe2_Init(Actor* thisx, PlayState* play) {
 
     EnGe2_SetupPath(this, play);
 
-    this->picto.actor.flags |= ACTOR_FLAG_10;
+    this->picto.actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     if (play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON) {
-        this->picto.actor.flags |= (ACTOR_FLAG_10 | ACTOR_FLAG_20);
+        this->picto.actor.flags |= (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED);
     }
 
     switch (GERUDO_PURPLE_GET_TYPE(&this->picto.actor)) {
@@ -120,7 +120,7 @@ void EnGe2_Init(Actor* thisx, PlayState* play) {
                              Animation_GetLastFrame(&gGerudoPurpleLookingAboutAnim), ANIMMODE_LOOP, 0.0f);
             this->actionFunc = EnGe2_GuardStationary;
             this->picto.actor.speed = 0.0f;
-            this->picto.actor.uncullZoneForward = 4000.0f;
+            this->picto.actor.cullingVolumeDistance = 4000.0f;
             break;
 
         case GERUDO_PURPLE_TYPE_AVEIL_GUARD:
@@ -711,7 +711,7 @@ void EnGe2_Update(Actor* thisx, PlayState* play) {
         this->actionFunc = EnGe2_PerformCutsceneActions;
         this->stateFlags &= ~GERUDO_PURPLE_STATE_KO;
         this->stateFlags &= ~GERUDO_PURPLE_STATE_PATH_REVERSE;
-        this->picto.actor.flags |= ACTOR_FLAG_20;
+        this->picto.actor.flags |= ACTOR_FLAG_DRAW_CULLING_DISABLED;
         this->picto.actor.speed = 0.0f;
     }
 

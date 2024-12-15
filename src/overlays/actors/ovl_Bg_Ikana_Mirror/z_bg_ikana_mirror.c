@@ -12,7 +12,7 @@
 #include "z_bg_ikana_mirror.h"
 #include "assets/objects/object_ikana_obj/object_ikana_obj.h"
 
-#define FLAGS (ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void BgIkanaMirror_Init(Actor* thisx, PlayState* play2);
 void BgIkanaMirror_Destroy(Actor* thisx, PlayState* play);
@@ -193,9 +193,9 @@ static ColliderQuadInit sLightRaysCollidersInit[] = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 220, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 200, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDistance, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 220, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 200, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
@@ -325,7 +325,7 @@ void BgIkanaMirror_Wait(BgIkanaMirror* this, PlayState* play) {
 }
 
 void BgIkanaMirror_SetupEmitLight(BgIkanaMirror* this) {
-    this->dyna.actor.flags |= ACTOR_FLAG_20;
+    this->dyna.actor.flags |= ACTOR_FLAG_DRAW_CULLING_DISABLED;
     this->actionFunc = BgIkanaMirror_EmitLight;
 }
 
@@ -362,7 +362,7 @@ void BgIkanaMirror_EmitLight(BgIkanaMirror* this, PlayState* play) {
         }
 
     } else {
-        this->dyna.actor.flags &= ~ACTOR_FLAG_20;
+        this->dyna.actor.flags &= ~ACTOR_FLAG_DRAW_CULLING_DISABLED;
         BgIkanaMirror_SetupWait(this);
     }
 }

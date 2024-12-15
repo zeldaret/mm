@@ -6,7 +6,7 @@
 
 #include "z_eff_change.h"
 
-#define FLAGS (ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void EffChange_Init(Actor* thisx, PlayState* play);
 void EffChange_Destroy(Actor* thisx, PlayState* play);

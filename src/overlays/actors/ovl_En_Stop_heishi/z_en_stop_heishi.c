@@ -546,7 +546,7 @@ void EnStopheishi_Update(Actor* thisx, PlayState* play) {
                             UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
                                 UPDBGCHECKINFO_FLAG_10);
     Actor_SetScale(&this->actor, 0.01f);
-    this->actor.uncullZoneForward = 500.0f;
+    this->actor.cullingVolumeDistance = 500.0f;
     Math_Vec3f_Copy(&this->actor.focus.pos, &this->headWorldPos);
     Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.world.rot);
     if (!this->disableCollider) {

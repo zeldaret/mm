@@ -7,7 +7,7 @@
 #include "z_obj_hakaisi.h"
 #include "assets/objects/object_hakaisi/object_hakaisi.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 void ObjHakaisi_Init(Actor* thisx, PlayState* play);
 void ObjHakaisi_Destroy(Actor* thisx, PlayState* play);
