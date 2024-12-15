@@ -553,10 +553,14 @@ typedef enum DoorLockType {
 // When chosen as the next lock-on actor, this flag is unset.
 #define ACTOR_FLAG_FOCUS_ACTOR_REFINDABLE (1 << 19)
 
-// 
-#define ACTOR_FLAG_FREEZE_EXCEPTION        (1 << 20)
+// Actor can update even if Player is currently in one of the `sCategoryFreezeMasks` states.
+// Typically an actor will halt while the player is in one of the `sCategoryFreezeMasks` states (depending on category).
+// This flag allows a given actor to be an exception.
+#define ACTOR_FLAG_FREEZE_EXCEPTION (1 << 20)
 
-// 
+// Actor can update even if the Song of Time Cutscene or the Song of Soaring Cutscene is playing.
+// Typically an actor will halt while the Song of Time Cutscene or the Song of Soaring Cutscene is playing.
+// This flag allows a given actor to be an exception.
 #define ACTOR_FLAG_UPDATE_DURING_SOT_AND_SOARING_CS (1 << 21)
 
 // Specifies whether the actor can (not) use fake point lights, in the event that ucode point lights are not compatible with its display lists.
