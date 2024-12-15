@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void EnGrasshopper_Init(Actor* thisx, PlayState* play);
 void EnGrasshopper_Destroy(Actor* thisx, PlayState* play);
@@ -834,7 +834,7 @@ void EnGrasshopper_Dead(EnGrasshopper* this, PlayState* play) {
     }
 
     if (curFrame >= this->animEndFrame) {
-        this->actor.flags &= ~ACTOR_FLAG_10;
+        this->actor.flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED;
         EnGrasshopper_SetupFall(this);
     }
 }

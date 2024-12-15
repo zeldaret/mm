@@ -8,7 +8,7 @@
 #include "assets/objects/object_spinyroll/object_spinyroll.h"
 #include "overlays/effects/ovl_Effect_Ss_Hitmark/z_eff_ss_hitmark.h"
 
-#define FLAGS (ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void ObjVspinyroll_Init(Actor* thisx, PlayState* play);
 void ObjVspinyroll_Destroy(Actor* thisx, PlayState* play);
@@ -69,8 +69,8 @@ f32 D_80A3D4B4[] = { 1.0f, 1.0f, -1.0f, -1.0f };
 f32 D_80A3D4C4[] = { 29.0f, -29.0f, 29.0f, -29.0f };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 500, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeDistance, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 500, ICHAIN_STOP),
 };
 
 s16 D_80A3D4DC[] = { 0xFA0, -0xFA0 };
@@ -195,7 +195,7 @@ s32 func_80A3C8D8(ObjVspinyroll* this, PlayState* play, Vec3f* arg2, s32 arg3) {
 
         if (BgCheck_EntityLineTest3(&play->colCtx, &spD8, &spCC, &spC0, &unk_1A8->unk_000[i].collisionPoly, true, false,
                                     false, true, &unk_1A8->unk_000[i].bgId, &this->dyna.actor, 0.0f)) {
-            if ((arg3 != 0) && (this->dyna.actor.flags & ACTOR_FLAG_40)) {
+            if ((arg3 != 0) && (this->dyna.actor.flags & ACTOR_FLAG_INSIDE_CULLING_VOLUME)) {
                 spA8.x = ptr->unk_00.x * 0.2f;
                 spA8.y = ptr->unk_00.y;
                 spA8.z = 20.0f;
@@ -275,7 +275,7 @@ void ObjVspinyroll_Init(Actor* thisx, PlayState* play) {
     this->dyna.actor.shape.rot.z = 0;
     this->dyna.actor.scale.y = 0.1f * sp40;
     this->dyna.actor.scale.z = 0.1f;
-    this->dyna.actor.uncullZoneScale = 300.0f * sp40;
+    this->dyna.actor.cullingVolumeScale = 300.0f * sp40;
     this->dyna.actor.scale.x = 0.1f;
 
     DynaPolyActor_Init(&this->dyna, 0);

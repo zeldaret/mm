@@ -7,7 +7,7 @@
 #include "z_en_gamelupy.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void EnGamelupy_Init(Actor* thisx, PlayState* play);
 void EnGamelupy_Destroy(Actor* thisx, PlayState* play);

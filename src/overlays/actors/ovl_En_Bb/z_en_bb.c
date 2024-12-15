@@ -367,7 +367,7 @@ void EnBb_SetupDead(EnBb* this, PlayState* play) {
         bodyPartVelocity->y = Rand_ZeroFloat(3.5f) + 10.0f;
     }
 
-    this->actor.flags |= ACTOR_FLAG_10;
+    this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->actionFunc = EnBb_Dead;
 }
@@ -485,7 +485,7 @@ void EnBb_Revive(EnBb* this, PlayState* play) {
     this->actor.shape.rot.y += 0x1F00;
 
     if (Math_StepToF(&this->actor.scale.x, 0.01f, 0.0005f)) {
-        this->actor.flags &= ~ACTOR_FLAG_10;
+        this->actor.flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED;
         this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
         this->collider.base.acFlags |= AC_ON;
         this->collider.base.atFlags |= AT_ON;

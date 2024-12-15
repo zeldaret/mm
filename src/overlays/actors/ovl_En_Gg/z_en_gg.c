@@ -694,7 +694,7 @@ void EnGg_Init(Actor* thisx, PlayState* play) {
     this->unk_309 = 0;
     this->unk_304 = 0;
     this->unk_30A = 0;
-    this->actor.flags |= ACTOR_FLAG_10;
+    this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     func_80B35B24(&this->unk_344, play);
     func_80B35250(this);
 }

@@ -7,7 +7,7 @@
 #include "z_en_test.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void EnTest_Init(Actor* thisx, PlayState* play2);
 void EnTest_Destroy(Actor* thisx, PlayState* play);

@@ -10,9 +10,9 @@
 #include "overlays/actors/ovl_En_Pametfrog/z_en_pametfrog.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS                                                                            \
-    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20 | \
-     ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER)
+#define FLAGS                                                                                 \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
+     ACTOR_FLAG_DRAW_CULLING_DISABLED | ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER)
 
 void EnBigpamet_Init(Actor* thisx, PlayState* play);
 void EnBigpamet_Destroy(Actor* thisx, PlayState* play);

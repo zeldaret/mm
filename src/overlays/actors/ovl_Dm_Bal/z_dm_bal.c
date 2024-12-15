@@ -6,7 +6,9 @@
 
 #include "z_dm_bal.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_UPDATE_DURING_OCARINA)
+#define FLAGS                                                                                  \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
+     ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
 void DmBal_Init(Actor* thisx, PlayState* play);
 void DmBal_Destroy(Actor* thisx, PlayState* play);
@@ -69,7 +71,7 @@ void DmBal_Init(Actor* thisx, PlayState* play) {
     DmBal* this = (DmBal*)thisx;
 
     this->actor.attentionRangeType = ATTENTION_RANGE_1;
-    this->actor.uncullZoneForward = 3000.0f;
+    this->actor.cullingVolumeDistance = 3000.0f;
     Actor_SetScale(&this->actor, 0.02f);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gTingleSkel, &gTingleFloatIdleAnim, this->jointTable, this->morphTable,

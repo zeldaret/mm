@@ -38,9 +38,9 @@ void EnHata_Init(Actor* thisx, PlayState* play) {
     this->skelAnime.curFrame = rand;
     DynaPolyActor_LoadMesh(play, &this->dyna, &gFlagpoleCol);
     Actor_SetScale(&this->dyna.actor, 0.013f);
-    this->dyna.actor.uncullZoneScale = 500.0f;
-    this->dyna.actor.uncullZoneDownward = 500.0f;
-    this->dyna.actor.uncullZoneForward = 2200.0f;
+    this->dyna.actor.cullingVolumeScale = 500.0f;
+    this->dyna.actor.cullingVolumeDownward = 500.0f;
+    this->dyna.actor.cullingVolumeDistance = 2200.0f;
 }
 
 void EnHata_Destroy(Actor* thisx, PlayState* play) {

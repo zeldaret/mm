@@ -6,7 +6,7 @@
 
 #include "z_en_hit_tag.h"
 
-#define FLAGS (ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void EnHitTag_Init(Actor* thisx, PlayState* play);
 void EnHitTag_Destroy(Actor* thisx, PlayState* play);

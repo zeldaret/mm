@@ -406,7 +406,7 @@ void EnMaYts_DialogueHandler(EnMaYts* this, PlayState* play) {
 }
 
 void EnMaYts_SetupEndCreditsHandler(EnMaYts* this) {
-    this->actor.flags |= ACTOR_FLAG_10;
+    this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     EnMaYts_SetFaceExpression(this, 0, 0);
     this->actionFunc = EnMaYts_EndCreditsHandler;
 }

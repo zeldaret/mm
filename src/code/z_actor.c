@@ -66,7 +66,7 @@ Actor* Actor_SpawnEntry(ActorContext* actorCtx, ActorEntry* actorEntry, PlayStat
 Actor* Actor_Delete(ActorContext* actorCtx, Actor* actor, PlayState* play);
 void Attention_FindActor(PlayState* play, ActorContext* actorCtx, Actor** attentionActorP, Actor** cameraDriftActorP,
                          Player* player);
-s32 func_800BA2FC(PlayState* play, Actor* actor, Vec3f* projectedPos, f32 projectedW);
+s32 Actor_CullingVolumeTest(PlayState* play, Actor* actor, Vec3f* projPos, f32 projW);
 void Actor_AddToCategory(ActorContext* actorCtx, Actor* actor, u8 actorCategory);
 Actor* Actor_RemoveFromCategory(PlayState* play, ActorContext* actorCtx, Actor* actorToRemove);
 
@@ -1157,9 +1157,9 @@ void Actor_Init(Actor* actor, PlayState* play) {
     actor->terminalVelocity = -20.0f;
 
     actor->xyzDistToPlayerSq = FLT_MAX;
-    actor->uncullZoneForward = 1000.0f;
-    actor->uncullZoneScale = 350.0f;
-    actor->uncullZoneDownward = 700.0f;
+    actor->cullingVolumeDistance = 1000.0f;
+    actor->cullingVolumeScale = 350.0f;
+    actor->cullingVolumeDownward = 700.0f;
 
     actor->hintId = TATL_HINT_ID_NONE;
 
@@ -2680,7 +2680,7 @@ void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
     if (play->unk_18844) {
         params.unk_18 = ACTOR_FLAG_200000;
     } else {
-        params.unk_18 = ACTOR_FLAG_200000 | ACTOR_FLAG_40 | ACTOR_FLAG_10;
+        params.unk_18 = ACTOR_FLAG_200000 | ACTOR_FLAG_INSIDE_CULLING_VOLUME | ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     }
 
     Actor_SpawnSetupActors(play, actorCtx);
@@ -3014,31 +3014,113 @@ void Actor_DrawLensActors(PlayState* play, s32 numLensActors, Actor** lensActors
     CLOSE_DISPS(gfxCtx);
 }
 
-s32 func_800BA2D8(PlayState* play, Actor* actor) {
-    return func_800BA2FC(play, actor, &actor->projectedPos, actor->projectedW);
+/**
+ * Checks if an actor should be culled or not, by seeing if it is contained within its own culling volume.
+ * For more details on the culling test, see `Actor_CullingVolumeTest`.
+ *
+ * Returns true if the actor is inside its culling volume. In other words, it should not cull.
+ *
+ * "Culling" in this context refers to the removal of something for the sake of improving performance.
+ * For actors, being culled means that their Update and Draw processes are halted.
+ * While halted, an Actor's update state is frozen and it will not draw, making it invisible.
+ *
+ * Actors that are within the bounds of their culling volume may update and draw, while actors that are
+ * out of bounds of its culling volume may be excluded from updating and drawing until they are within bounds.
+ *
+ * It is possible for actors to opt out of update culling or draw culling.
+ * This is set per-actor with `ACTOR_FLAG_UPDATE_CULLING_DISABLED` and `ACTOR_FLAG_DRAW_CULLING_DISABLED`.
+ *
+ * Note: Even if either `ACTOR_FLAG_UPDATE_CULLING_DISABLED` or `ACTOR_FLAG_DRAW_CULLING_DISABLED` are set, the actor
+ * will still undergo the culling test and set `ACTOR_FLAG_INSIDE_CULLING_VOLUME` accordingly.
+ * So, `ACTOR_FLAG_INSIDE_CULLING_VOLUME` cannot be used on it own to determine if an actor is actually culled.
+ * It simply says whether or not they are physically located within the bounds of the culling volume.
+ */
+s32 Actor_CullingCheck(PlayState* play, Actor* actor) {
+    return Actor_CullingVolumeTest(play, actor, &actor->projectedPos, actor->projectedW);
 }
 
-s32 func_800BA2FC(PlayState* play, Actor* actor, Vec3f* projectedPos, f32 projectedW) {
-    if ((-actor->uncullZoneScale < projectedPos->z) &&
-        (projectedPos->z < (actor->uncullZoneForward + actor->uncullZoneScale))) {
-        f32 phi_f12;
-        f32 phi_f2 = CLAMP_MIN(projectedW, 1.0f);
-        f32 phi_f14;
-        f32 phi_f16;
+/**
+ * Tests if an actor is currently within the bounds of its own culling volume.
+ *
+ * The culling volume is a 3D shape composed of a frustum with a box attached to the end of it. The frustum sits at the
+ * camera's position and projects forward, encompassing the player's current view; the box extrudes behind the camera,
+ * allowing actors in the immediate vicinity behind and to the sides of the camera to be detected.
+ *
+ * This function returns true if the actor is within bounds, false if not.
+ * The comparison is done in projected space against the actor's projected position as the viewing frustum
+ * in world space transforms to a box in projected space, making the calculation easy.
+ *
+ * Every actor can set properties for their own culling volume, changing its dimensions to suit the needs of
+ * it and its environment. These properties are in units of projected space (i.e. compared to the actor's position
+ * after perspective projection is applied) are therefore not directly comparable to world units.
+ * These depend on the current view parameters (aspect, scale, znear, zfar).
+ * The default parameters considered are (4/3, 1.0, 10, 12800).
+ *
+ *    cullingVolumeDistance: Configures how far forward the far plane of the frustum should extend.
+ *                           This along with cullingVolumeScale determines the maximum distance from
+ *                           the camera eye that the actor can be detected at. This quantity is related
+ *                           to world units by a factor of
+ *                                   (znear - zfar) / ((znear + zfar) * scale).
+ *                           For default view parameters, increasing this property by 1 increases the
+ *                           distance by ~0.995 world units.
+ *
+ *    cullingVolumeScale: Scales the entire culling volume in all directions except the downward
+ *                        direction. Both the frustum and the box will scale in size. This quantity is
+ *                        related to world units by different factors based on direction:
+ *                         - For the forward and backward directions, they are related in the same way
+ *                           as above. For default view parameters, increasing this property by 1 increases
+ *                           the forward and backward scales by ~0.995 world units.
+ *                         - For the sideways directions, the relation to world units is
+ *                                   (aspect / scale) * sqrt(3)/3
+ *                           For default view parameters, increasing this property by 1 increases the
+ *                           sideways scales by ~0.77 world units.
+ *                         - For the upward direction, the relation to world units is
+ *                                   (1 / scale) * sqrt(3)/3
+ *                           For default view parameters, increasing this property by 1 increases the
+ *                           scale by ~0.58 world units.
+ *
+ *    cullingVolumeDownward: Sets the height of the culling volume in the downward direction. Increasing
+ *                           this value will make actors below the camera more easily detected. This
+ *                           quantity is related to world units by the same factor as the upward scale.
+ *                           For default view parameters, increasing this property by 1 increases the
+ *                           downward height by ~0.58 world units.
+ *
+ * This interactive 3D graph visualizes the shape of the culling volume and has sliders for the 3 properties mentioned
+ * above: https://www.desmos.com/3d/4ztkxqky2a.
+ */
+s32 Actor_CullingVolumeTest(PlayState* play, Actor* actor, Vec3f* projPos, f32 projW) {
+    if ((projPos->z > -actor->cullingVolumeScale) &&
+        (projPos->z < (actor->cullingVolumeDistance + actor->cullingVolumeScale))) {
+        f32 invW;
+        f32 cullingVolumeScaleX;
+        f32 cullingVolumeScaleY;
+        f32 cullingVolumeDownward;
+
+        // Clamping `projW` affects points behind the camera, so that the culling volume has
+        // a frustum shape in front of the camera and a box shape behind the camera.
+        invW = CLAMP_MIN(projW, 1.0f);
 
         if (play->view.fovy != 60.0f) {
-            phi_f12 = actor->uncullZoneScale * play->projectionMtxFDiagonal.x * 0.76980036f; // sqrt(16/27)
+            // If the fov isn't 60 degrees, make the cull parameters behave as if it were 60 degrees.
+            // To do this, multiply by the ratios of the x and y diagonal elements of the projection matrix.
+            // The x diagonal element is cot(0.5 * fov) / aspect and the y diagonal element is just cot(0.5 * fov).
+            // When the fov is 60 degrees, cot(0.5 * 60 degrees) = sqrt(3) so the x element is 3sqrt(3)/4 and the y
+            // element is sqrt(3). The current diagonal element divided by (or multiplied by their inverse) gives
+            // the ratio.
 
-            phi_f14 = play->projectionMtxFDiagonal.y * 0.57735026f; // 1 / sqrt(3)
-            phi_f16 = actor->uncullZoneScale * phi_f14;
-            phi_f14 *= actor->uncullZoneDownward;
+            cullingVolumeScaleX = actor->cullingVolumeScale * play->projectionMtxFDiagonal.x *
+                                  0.76980036f; // sqrt(16/27) = aspect / cot(0.5 * f) = (4/3) / sqrt(3)
+
+            cullingVolumeDownward = play->projectionMtxFDiagonal.y * 0.57735026f; // 1 / sqrt(3) = 1 / cot(0.5 * f)
+            cullingVolumeScaleY = actor->cullingVolumeScale * cullingVolumeDownward;
+            cullingVolumeDownward *= actor->cullingVolumeDownward;
         } else {
-            phi_f16 = phi_f12 = actor->uncullZoneScale;
-            phi_f14 = actor->uncullZoneDownward;
+            cullingVolumeScaleY = cullingVolumeScaleX = actor->cullingVolumeScale;
+            cullingVolumeDownward = actor->cullingVolumeDownward;
         }
 
-        if (((fabsf(projectedPos->x) - phi_f12) < phi_f2) && ((-phi_f2 < (projectedPos->y + phi_f14))) &&
-            ((projectedPos->y - phi_f16) < phi_f2)) {
+        if (((fabsf(projPos->x) - cullingVolumeScaleX) < invW) && ((-invW < (projPos->y + cullingVolumeDownward))) &&
+            ((projPos->y - cullingVolumeScaleY) < invW)) {
             return true;
         }
     }
@@ -3060,7 +3142,7 @@ void Actor_DrawAll(PlayState* play, ActorContext* actorCtx) {
     if (play->unk_18844) {
         actorFlags = ACTOR_FLAG_200000;
     } else {
-        actorFlags = ACTOR_FLAG_200000 | ACTOR_FLAG_40 | ACTOR_FLAG_20;
+        actorFlags = ACTOR_FLAG_200000 | ACTOR_FLAG_INSIDE_CULLING_VOLUME | ACTOR_FLAG_DRAW_CULLING_DISABLED;
     }
 
     OPEN_DISPS(play->state.gfxCtx);
@@ -3081,10 +3163,10 @@ void Actor_DrawAll(PlayState* play, ActorContext* actorCtx) {
                 Actor_UpdateFlaggedAudio(actor);
             }
 
-            if (func_800BA2D8(play, actor)) {
-                actor->flags |= ACTOR_FLAG_40;
+            if (Actor_CullingCheck(play, actor)) {
+                actor->flags |= ACTOR_FLAG_INSIDE_CULLING_VOLUME;
             } else {
-                actor->flags &= ~ACTOR_FLAG_40;
+                actor->flags &= ~ACTOR_FLAG_INSIDE_CULLING_VOLUME;
             }
 
             actor->isDrawn = false;

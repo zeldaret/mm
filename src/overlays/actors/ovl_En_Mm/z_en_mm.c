@@ -7,7 +7,7 @@
 #include "z_en_mm.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void EnMm_Init(Actor* thisx, PlayState* play);
 void EnMm_Destroy(Actor* thisx, PlayState* play);

@@ -6,7 +6,7 @@
 
 #include "z_en_giant.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 void EnGiant_Init(Actor* thisx, PlayState* play);
 void EnGiant_Destroy(Actor* thisx, PlayState* play);
@@ -163,9 +163,9 @@ void EnGiant_Init(Actor* thisx, PlayState* play) {
     EnGiant* this = (EnGiant*)thisx;
     s32 type = GIANT_TYPE(thisx);
 
-    this->actor.uncullZoneForward = 4000.0f;
-    this->actor.uncullZoneScale = 2000.0f;
-    this->actor.uncullZoneDownward = 2400.0f;
+    this->actor.cullingVolumeDistance = 4000.0f;
+    this->actor.cullingVolumeScale = 2000.0f;
+    this->actor.cullingVolumeDownward = 2400.0f;
     Actor_SetScale(&this->actor, 0.32f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gGiantSkel, &gGiantLargeStrideAnim, this->jointTable, this->morphTable,
                        GIANT_LIMB_MAX);

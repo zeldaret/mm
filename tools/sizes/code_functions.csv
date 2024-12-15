@@ -337,8 +337,8 @@ asm/non_matchings/code/z_actor/Actor_ResetLensActors.s,Actor_ResetLensActors,0x8
 asm/non_matchings/code/z_actor/Actor_AddToLensActors.s,Actor_AddToLensActors,0x800B9E4C,0xE
 asm/non_matchings/code/z_actor/Actor_DrawLensOverlay.s,Actor_DrawLensOverlay,0x800B9E84,0x1C
 asm/non_matchings/code/z_actor/Actor_DrawLensActors.s,Actor_DrawLensActors,0x800B9EF4,0xF9
-asm/non_matchings/code/z_actor/func_800BA2D8.s,func_800BA2D8,0x800BA2D8,0x9
-asm/non_matchings/code/z_actor/func_800BA2FC.s,func_800BA2FC,0x800BA2FC,0x4C
+asm/non_matchings/code/z_actor/Actor_CullingCheck.s,Actor_CullingCheck,0x800BA2D8,0x9
+asm/non_matchings/code/z_actor/Actor_CullingVolumeTest.s,Actor_CullingVolumeTest,0x800BA2FC,0x4C
 asm/non_matchings/code/z_actor/Actor_DrawAll.s,Actor_DrawAll,0x800BA42C,0xB4
 asm/non_matchings/code/z_actor/Actor_KillAllWithMissingObject.s,Actor_KillAllWithMissingObject,0x800BA6FC,0x27
 asm/non_matchings/code/z_actor/func_800BA798.s,func_800BA798,0x800BA798,0x48

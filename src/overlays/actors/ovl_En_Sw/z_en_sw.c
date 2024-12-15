@@ -1174,7 +1174,7 @@ void EnSw_Init(Actor* thisx, PlayState* play) {
 
             case 1:
                 this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
-                this->actor.flags |= ACTOR_FLAG_10;
+                this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
 
                 this->unk_460 = ABS_ALT(thisx->world.rot.z);
 
@@ -1191,7 +1191,7 @@ void EnSw_Init(Actor* thisx, PlayState* play) {
             case 2:
             case 3:
                 this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
-                this->actor.flags |= ACTOR_FLAG_10;
+                this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
 
                 this->unk_460 = ABS_ALT(thisx->world.rot.z);
 

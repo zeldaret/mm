@@ -15,7 +15,7 @@
 #include "z_en_bba_01.h"
 #include "assets/objects/object_bba/object_bba.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void EnBba01_Init(Actor* thisx, PlayState* play);
 void EnBba01_Destroy(Actor* thisx, PlayState* play);

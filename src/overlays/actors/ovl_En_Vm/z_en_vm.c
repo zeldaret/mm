@@ -372,7 +372,7 @@ void func_808CCBE4(EnVm* this, PlayState* play) {
     this->actor.gravity = -0.5f;
     this->actor.speed = Rand_ZeroOne() + 1.0f;
     this->unk_210 = 0;
-    this->actor.flags |= ACTOR_FLAG_10;
+    this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     this->actionFunc = func_808CCCF0;
 }
 

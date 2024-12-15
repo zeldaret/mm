@@ -8,7 +8,7 @@
 #include "attributes.h"
 #include "assets/objects/object_hunsui/object_hunsui.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 void ObjHunsui_Init(Actor* thisx, PlayState* play);
 void ObjHunsui_Destroy(Actor* thisx, PlayState* play);
@@ -59,9 +59,9 @@ ActorProfile Obj_Hunsui_Profile = {
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 400, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 400, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeDistance, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 400, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 400, ICHAIN_STOP),
 };
 
 s32 func_80B9C450(PlayState* play, s32 switchFlagBase, s32 arg2) {
@@ -225,9 +225,9 @@ void ObjHunsui_Init(Actor* thisx, PlayState* play) {
         case OBJHUNSUI_F000_4:
         case OBJHUNSUI_F000_5:
         case OBJHUNSUI_F000_6:
-            this->dyna.actor.uncullZoneScale = 900.0f;
-            this->dyna.actor.uncullZoneDownward = 90.0f;
-            this->dyna.actor.uncullZoneForward = 4000.0f;
+            this->dyna.actor.cullingVolumeScale = 900.0f;
+            this->dyna.actor.cullingVolumeDownward = 90.0f;
+            this->dyna.actor.cullingVolumeDistance = 4000.0f;
             break;
     }
 
@@ -655,7 +655,7 @@ void func_80B9DA60(Actor* thisx, PlayState* play) {
         Audio_PlaySfx_AtPosWithFreq(&this->dyna.actor.projectedPos, NA_SE_EV_WATER_PILLAR - SFX_FLAG, 1.0f + temp);
     }
 
-    if ((this->dyna.actor.flags & ACTOR_FLAG_40) && !(this->unk_172 & 2)) {
+    if ((this->dyna.actor.flags & ACTOR_FLAG_INSIDE_CULLING_VOLUME) && !(this->unk_172 & 2)) {
         if ((this->unk_160 == OBJHUNSUI_F000_6) || (this->unk_160 == OBJHUNSUI_F000_5)) {
             OPEN_DISPS(play->state.gfxCtx);
 

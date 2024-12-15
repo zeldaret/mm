@@ -8,7 +8,7 @@
 #include "z64rumble.h"
 #include "assets/objects/object_f40_switch/object_f40_switch.h"
 
-#define FLAGS (ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void BgF40Switch_Init(Actor* thisx, PlayState* play);
 void BgF40Switch_Destroy(Actor* thisx, PlayState* play);
@@ -97,9 +97,9 @@ void BgF40Switch_CheckAll(BgF40Switch* this, PlayState* play) {
 }
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 200, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 200, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDistance, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 200, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 200, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 123, ICHAIN_STOP),
 };
 

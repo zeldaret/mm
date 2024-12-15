@@ -7,7 +7,7 @@
 #include "z_eff_lastday.h"
 #include "assets/objects/object_lastday/object_lastday.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 void EffLastday_Init(Actor* thisx, PlayState* play2);
 void EffLastday_Destroy(Actor* thisx, PlayState* play);

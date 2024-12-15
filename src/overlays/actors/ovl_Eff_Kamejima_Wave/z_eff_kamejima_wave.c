@@ -7,7 +7,7 @@
 #include "z_eff_kamejima_wave.h"
 #include "assets/objects/object_kamejima/object_kamejima.h"
 
-#define FLAGS (ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void EffKamejimaWave_Init(Actor* thisx, PlayState* play);
 void EffKamejimaWave_Destroy(Actor* thisx, PlayState* play);

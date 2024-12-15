@@ -9,7 +9,7 @@
 #include "assets/objects/object_fusen/object_fusen.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void EnBombal_Init(Actor* thisx, PlayState* play);
 void EnBombal_Destroy(Actor* thisx, PlayState* play);
@@ -93,7 +93,7 @@ void func_80C05B3C(EnBombal* this, PlayState* play) {
             this->collider.base.acFlags &= ~AC_HIT;
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_75_40) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_73_10) &&
                 !CHECK_WEEKEVENTREG(WEEKEVENTREG_85_02)) {
-                player->stateFlags1 |= ACTOR_FLAG_20;
+                player->stateFlags1 |= ACTOR_FLAG_DRAW_CULLING_DISABLED;
                 this->actor.flags |= ACTOR_FLAG_100000;
             }
             this->actionFunc = func_80C05C44;

@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Kendo_Js/z_en_kendo_js.h"
 #include "assets/objects/object_maruta/object_maruta.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void EnMaruta_Init(Actor* thisx, PlayState* play);
 void EnMaruta_Destroy(Actor* thisx, PlayState* play);

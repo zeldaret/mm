@@ -371,7 +371,7 @@ void func_808BDE7C(EnDekunuts* this) {
     this->actor.colChkInfo.mass = 50;
     Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_DAMAGE);
     this->actor.world.rot.x = 0;
-    this->actor.flags |= ACTOR_FLAG_20;
+    this->actor.flags |= ACTOR_FLAG_DRAW_CULLING_DISABLED;
     this->collider.base.acFlags &= ~AC_ON;
     this->actionFunc = func_808BDEF8;
 }
@@ -434,7 +434,7 @@ void func_808BDFB8(EnDekunuts* this, PlayState* play) {
     if ((this->unk_18D == 0) && (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) < 20.0f) &&
         (fabsf(this->actor.world.pos.y - this->actor.home.pos.y) < 2.0f)) {
         this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-        this->actor.flags &= ~ACTOR_FLAG_20;
+        this->actor.flags &= ~ACTOR_FLAG_DRAW_CULLING_DISABLED;
         this->actor.speed = 0.0f;
         func_808BDC9C(this);
     } else if (this->unk_190 == 0) {

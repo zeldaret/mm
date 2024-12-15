@@ -9,7 +9,7 @@
 #include "overlays/actors/ovl_En_Twig/z_en_twig.h"
 #include "overlays/actors/ovl_En_Fish/z_en_fish.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_MINIMAP_ICON_ENABLED)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_MINIMAP_ICON_ENABLED)
 
 typedef struct {
     /* 0x0 */ s16 unk_0;
@@ -188,9 +188,9 @@ s32 func_80A94B98(EnAz* this, PlayState* play) {
 }
 
 static InitChainEntry sInitChain[3] = {
-    ICHAIN_F32(uncullZoneScale, 80, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 80, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeScale, 80, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 80, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDistance, 4000, ICHAIN_STOP),
 };
 
 void EnAz_Init(Actor* thisx, PlayState* play2) {
@@ -1669,10 +1669,10 @@ void func_80A97F9C(EnAz* this, PlayState* play) {
             func_80A97A28(this, play);
         }
         if (this->unk_374 & 0x100) {
-            if (this->actor.flags & ACTOR_FLAG_40) {
+            if (this->actor.flags & ACTOR_FLAG_INSIDE_CULLING_VOLUME) {
                 func_80A98414(this, play);
             }
-            if ((DECR(this->unk_37A) == 0) && (this->actor.flags & ACTOR_FLAG_40)) {
+            if ((DECR(this->unk_37A) == 0) && (this->actor.flags & ACTOR_FLAG_INSIDE_CULLING_VOLUME)) {
                 EffectSsBubble_Spawn(play, &this->actor.world.pos, 0.0f, 20.0f, 20.0f, 0.35f);
                 this->unk_37A = (Rand_ZeroOne() * 70.0f) + 10.0f;
             }

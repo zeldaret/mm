@@ -573,7 +573,7 @@ void EnRat_Revive(EnRat* this, PlayState* play) {
         }
 
         if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
-            this->actor.flags &= ~ACTOR_FLAG_10;
+            this->actor.flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED;
             this->timer = 150;
             EnRat_SetupIdle(this);
         }
@@ -613,7 +613,7 @@ void EnRat_Idle(EnRat* this, PlayState* play) {
 }
 
 void EnRat_SetupSpottedPlayer(EnRat* this) {
-    this->actor.flags |= ACTOR_FLAG_10;
+    this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     Animation_MorphToLoop(&this->skelAnime, &gRealBombchuSpotAnim, -5.0f);
     this->animLoopCounter = 3;
     this->actor.speed = 0.0f;

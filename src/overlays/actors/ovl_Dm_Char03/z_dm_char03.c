@@ -7,7 +7,7 @@
 #include "z_dm_char03.h"
 #include "assets/objects/object_osn/object_osn.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 void DmChar03_Init(Actor* thisx, PlayState* play);
 void DmChar03_Destroy(Actor* thisx, PlayState* play);

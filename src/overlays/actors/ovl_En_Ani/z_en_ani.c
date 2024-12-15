@@ -73,7 +73,7 @@ static ColliderCylinderInit sCylinderInit = {
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneForward, 850, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeDistance, 850, ICHAIN_STOP),
 };
 
 void EnAni_DefaultBlink(EnAni* this) {
@@ -134,7 +134,7 @@ void EnAni_Init(Actor* thisx, PlayState* play) {
         this->actor.velocity.y = 0.0f;
         this->actor.terminalVelocity = 0.0f;
         this->actor.gravity = 0.0f;
-        this->actor.flags |= ACTOR_FLAG_10;
+        this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
         this->stateFlags |= ANI_STATE_CLIMBING;
         CLEAR_EVENTINF(EVENTINF_14);
     } else { // ANI_TYPE_STANDING
@@ -210,7 +210,7 @@ void EnAni_FallToGround(EnAni* this, PlayState* play) {
     s16 quakeIndex;
 
     if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
-        this->actor.flags &= ~ACTOR_FLAG_10;
+        this->actor.flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED;
         this->actionFunc = EnAni_LandOnFoot;
         this->actor.velocity.x = 0.0f;
         this->actor.velocity.z = 0.0f;

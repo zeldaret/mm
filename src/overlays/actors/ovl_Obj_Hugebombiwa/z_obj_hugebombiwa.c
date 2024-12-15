@@ -9,7 +9,7 @@
 #include "z64rumble.h"
 #include "assets/objects/object_bombiwa/object_bombiwa.h"
 
-#define FLAGS (ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void ObjHugebombiwa_Init(Actor* thisx, PlayState* play);
 void ObjHugebombiwa_Destroy(Actor* thisx, PlayState* play2);
@@ -326,9 +326,9 @@ s32 func_80A54A0C(ObjHugebombiwa* this) {
 }
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 3700, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 900, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 900, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeDistance, 3700, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 900, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 900, ICHAIN_STOP),
 };
 
 void ObjHugebombiwa_Init(Actor* thisx, PlayState* play) {

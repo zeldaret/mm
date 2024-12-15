@@ -7,7 +7,7 @@
 #include "z_obj_kzsaku.h"
 #include "assets/objects/object_kzsaku/object_kzsaku.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 void ObjKzsaku_Init(Actor* thisx, PlayState* play);
 void ObjKzsaku_Destroy(Actor* thisx, PlayState* play);

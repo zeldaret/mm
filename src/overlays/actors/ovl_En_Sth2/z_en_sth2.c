@@ -39,7 +39,7 @@ void EnSth2_Init(Actor* thisx, PlayState* play) {
     this->unused = 0;
 
     if (play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON) {
-        this->actor.flags |= (ACTOR_FLAG_10 | ACTOR_FLAG_20);
+        this->actor.flags |= (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED);
     } else {
         Actor_Kill(&this->actor);
         return;

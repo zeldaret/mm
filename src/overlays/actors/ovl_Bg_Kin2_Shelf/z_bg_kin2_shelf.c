@@ -46,7 +46,7 @@ f32 D_80B70770[] = { 10.0f, 15.0f };
 u8 D_80B70778[] = { 0x0F, 0x0A };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeDistance, 4000, ICHAIN_STOP),
 };
 
 CollisionHeader* D_80B70780[] = { &gOceanSpiderHouseChestOfDrawersCol, &gOceanSpiderHouseBookshelfCol };
@@ -195,12 +195,12 @@ void BgKin2Shelf_Init(Actor* thisx, PlayState* play) {
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
 
     if (sp24 == 0) {
-        this->dyna.actor.uncullZoneScale = 150.0f;
-        this->dyna.actor.uncullZoneDownward = 140.0f;
+        this->dyna.actor.cullingVolumeScale = 150.0f;
+        this->dyna.actor.cullingVolumeDownward = 140.0f;
         Actor_SetScale(&this->dyna.actor, 0.1f);
     } else {
-        this->dyna.actor.uncullZoneScale = 250.0f;
-        this->dyna.actor.uncullZoneDownward = 300.0f;
+        this->dyna.actor.cullingVolumeScale = 250.0f;
+        this->dyna.actor.cullingVolumeDownward = 300.0f;
         Actor_SetScale(&this->dyna.actor, 1.0f);
         this->dyna.actor.flags |= ACTOR_FLAG_UCODE_POINT_LIGHT_ENABLED;
     }

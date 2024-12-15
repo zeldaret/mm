@@ -6,7 +6,7 @@
 
 #include "z_obj_demo.h"
 
-#define FLAGS (ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void ObjDemo_Init(Actor* thisx, PlayState* play);
 void ObjDemo_Update(Actor* thisx, PlayState* play);
