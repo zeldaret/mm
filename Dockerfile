@@ -32,7 +32,4 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone &
 WORKDIR /mm
 RUN git config --global --add safe.directory /mm
 
-CMD ["/bin/sh", "-c", \
-    "make -j $(nproc) init && \
-    echo Completed build. Open another terminal and run 'docker-compose exec mm sh' to shell into this running container. && \
-    tail -f /dev/null"]
+ENTRYPOINT ["/bin/bash", "-c"]
