@@ -2,10 +2,10 @@
     <!-- Object for the Zoras -->
     <File Name="object_zo" Segment="6">
         <!-- Animations -->
-        <Animation Name="gZoraHandsOnHipsTappingFootAnim" Offset="0x598" />
-        <Animation Name="gZoraArmsOpenAnim" Offset="0xD48" />
-        <Animation Name="gZoraThrowRupeeAnim" Offset="0x219C" />
-        <Animation Name="gZoraWalkAnim" Offset="0x2898" />
+        <Animation Name="gZoraHandsOnHipsTappingFootAnim" Offset="0x598" /> <!-- Original name is "ZS_z1" -->
+        <Animation Name="gZoraArmsOpenAnim" Offset="0xD48" /> <!-- Original name is "ZS_z2" -->
+        <Animation Name="gZoraThrowRupeeAnim" Offset="0x219C" /> <!-- Original name is "Zola_maku" -->
+        <Animation Name="gZoraWalkAnim" Offset="0x2898" /> <!-- Original name is "zo_aruku" -->
 
         <!-- Effects -->
         <Texture Name="gZoraBubbleTex" OutName="zora_bubble" Format="ia8" Width="16" Height="16" Offset="0x28B0" />
@@ -17,9 +17,9 @@
         <DList Name="gZoraSplashModelDL" Offset="0x2C10" />
 
         <!-- Animations -->
-        <Animation Name="gZoraSurfacingAnim" Offset="0x3610" />
-        <Animation Name="gZoraTreadingWaterAnim" Offset="0x4168" />
-        <Animation Name="gZoraIdleAnim" Offset="0x4248" />
+        <Animation Name="gZoraSurfacingAnim" Offset="0x3610" /> <!-- Original name is "zo_mizu_talk" -->
+        <Animation Name="gZoraTreadingWaterAnim" Offset="0x4168" /> <!-- Original name is "zo_mizuwait" -->
+        <Animation Name="gZoraIdleAnim" Offset="0x4248" /> <!-- Original name is "zo_riku_matsu" -->
 
         <!-- Textures -->
         <Texture Name="gZoraTLUT" OutName="zora_tlut" Format="rgba16" Width="16" Height="16" Offset="0x4260" />
@@ -84,13 +84,13 @@
         <DList Name="object_zo_DL_00D2B8" Offset="0xD2B8" />
 
         <!-- Animations -->
-        <Animation Name="gZoraStandAnim" Offset="0xDE20" />
-        <Animation Name="gZoraListenAnim" Offset="0xDF54" />
-        <Animation Name="gZoraRunAnim" Offset="0xE400" />
-        <Animation Name="gZoraBobHandAnim" Offset="0xEDF0" />
-        <Animation Name="gZoraSitAnim" Offset="0xF4E8" />
-        <Animation Name="gZoraFixSpeakerStartAnim" Offset="0xFDF0" />
-        <Animation Name="gZoraFixSpeakerLoopAnim" Offset="0x10B18" />
-        <Animation Name="gZoraFixSpeakerEndAnim" Offset="0x11424" />
+        <Animation Name="gZoraStandAnim" Offset="0xDE20" /> <!-- Original name is "zo_wait02" -->
+        <Animation Name="gZoraListenAnim" Offset="0xDF54" /> <!-- Original name is "zora_kiku" -->
+        <Animation Name="gZoraRunAnim" Offset="0xE400" /> <!-- Original name is "zora_run" -->
+        <Animation Name="gZoraBobHandAnim" Offset="0xEDF0" /> <!-- Original name is "zora_rythm_loop" -->
+        <Animation Name="gZoraSitAnim" Offset="0xF4E8" /> <!-- Original name is "zora_suwari_wait" -->
+        <Animation Name="gZoraFixSpeakerStartAnim" Offset="0xFDF0" /> <!-- Original name is "zora_syagami" -->
+        <Animation Name="gZoraFixSpeakerLoopAnim" Offset="0x10B18" /> <!-- Original name is "zora_syagami_loop" -->
+        <Animation Name="gZoraFixSpeakerEndAnim" Offset="0x11424" /> <!-- Original name is "zora_syagami_modori" -->
     </File>
 </Root>
