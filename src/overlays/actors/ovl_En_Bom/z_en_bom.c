@@ -301,7 +301,7 @@ void EnBom_Move(EnBom* this, PlayState* play) {
 }
 
 void EnBom_WaitForRelease(EnBom* this, PlayState* play) {
-    // if parent is NULL if bomb has been released
+    // if parent pointer is NULL, the bomb has been released
     if (Actor_HasNoParent(&this->actor, play)) {
         this->actionFunc = EnBom_Move;
         this->actor.room = play->roomCtx.curRoom.num;
