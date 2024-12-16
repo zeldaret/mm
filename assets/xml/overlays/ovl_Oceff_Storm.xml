@@ -7,6 +7,6 @@
             <Vtx/>
         </Array>
         <DList Name="sSongOfStormsCylinderMaterialDL" Offset="0x1A88"/>
-        <DList Name="sSongOfStormsCylinderModelDL" Offset="0x1B30"/>
+        <DList Name="sSongOfStormsCylinderModelDL" Offset="0x1B30"/> <!-- Original name might be "efc_ocarina_2_modelT" or "ocarina_storm_model" -->
     </File>
 </Root>

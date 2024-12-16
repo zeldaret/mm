@@ -4,6 +4,6 @@
         <Array Name="gOceff5Vtx" Count="22" Offset="0x1450"> 
             <Vtx/>
         </Array>
-        <DList Name="gOceff5DL" Offset="0x15B0"/> 
+        <DList Name="gOceff5DL" Offset="0x15B0"/>  <!-- Original name might be "g1T_model" -->
     </File>
 </Root>
