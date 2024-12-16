@@ -5,7 +5,7 @@ ENV LANG=C.UTF-8
 
 # Install Required Dependencies
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone && \
-    # Intall practicerom
+    # Add source for practicerom-dev install
     curl https://practicerom.com/public/packages/debian/pgp.pub | apt-key add - && \ 
     echo deb http://practicerom.com/public/packages/debian staging main >/etc/apt/sources.list.d/practicerom.list &&  \ 
     apt-get update && \
