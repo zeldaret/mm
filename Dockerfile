@@ -5,8 +5,7 @@ ENV LANG=C.UTF-8
 
 # Install Required Dependencies
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone && \
-    apt-get update && \
-    apt-get install -y \
+    apt-get update && apt-get install -y \
     curl \
     build-essential \
     binutils-mips-linux-gnu \
