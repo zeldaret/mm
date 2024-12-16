@@ -26,10 +26,13 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone &
     echo deb http://practicerom.com/public/packages/debian staging main >/etc/apt/sources.list.d/practicerom.list &&  \ 
     apt update && \
     apt-get install -y practicerom-dev && \
-    apt clean && \
+    apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /mm
 RUN git config --global --add safe.directory /mm
 
-ENTRYPOINT ["/bin/bash", "-c"]
+CMD ["/bin/sh", "-c", \
+    "make -j $(nproc) init && \
+    echo Completed build. Open another terminal and run 'docker-compose exec mm sh' to shell into this running container. && \
+    tail -f /dev/null"]
