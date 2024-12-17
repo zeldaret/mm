@@ -5,7 +5,6 @@ gFramebufferHiRes0 = gHiBuffer;
 
 // Ucode symbols
 
-rspbootTextEnd = rspbootTextStart + 0x160;
 aspMainTextEnd = aspMainTextStart + 0x1000;
 aspMainDataEnd = aspMainDataStart + 0x2E0;
 

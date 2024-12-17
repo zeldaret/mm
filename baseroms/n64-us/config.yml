@@ -15,4 +15,8 @@ archives:
   - icon_item_24_static_yar
   - schedule_dma_static_yar
 incbins:
+  - name: rspbootText
+    segment: boot
+    vram: 0x800969C0
+    size: 0x160
 assets:

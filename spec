@@ -21,7 +21,7 @@ beginseg
     name "boot"
     address 0x80080060
     include "$(BUILD_DIR)/src/boot/boot_main.o"
-    include "$(BUILD_DIR)/data/boot/rspboot.data.o"
+    include "$(BUILD_DIR)/src/boot/rspboot.o"
     include "$(BUILD_DIR)/src/boot/idle.o"
     include "$(BUILD_DIR)/src/boot/viconfig.o"
     include "$(BUILD_DIR)/src/boot/carthandle.o"
