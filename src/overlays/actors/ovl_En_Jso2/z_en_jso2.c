@@ -14,7 +14,7 @@
 
 #define FLAGS                                                                                 \
     (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
-     ACTOR_FLAG_DRAW_CULLING_DISABLED | ACTOR_FLAG_100000 | ACTOR_FLAG_MINIMAP_ICON_ENABLED)
+     ACTOR_FLAG_DRAW_CULLING_DISABLED | ACTOR_FLAG_FREEZE_EXCEPTION | ACTOR_FLAG_MINIMAP_ICON_ENABLED)
 
 void EnJso2_Init(Actor* thisx, PlayState* play);
 void EnJso2_Destroy(Actor* thisx, PlayState* play);
@@ -732,7 +732,7 @@ void EnJso2_IntroCutscene(EnJso2* this, PlayState* play) {
             if (curFrame >= this->animEndFrame) {
                 CutsceneManager_Stop(this->actor.csId);
                 this->subCamId = SUB_CAM_ID_DONE;
-                this->actor.flags &= ~ACTOR_FLAG_100000;
+                this->actor.flags &= ~ACTOR_FLAG_FREEZE_EXCEPTION;
                 this->actor.gravity = -3.0f;
                 this->actor.flags &= ~ACTOR_FLAG_LOCK_ON_DISABLED;
                 this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
@@ -751,7 +751,7 @@ void EnJso2_IntroCutscene(EnJso2* this, PlayState* play) {
 void EnJso2_SetupAppear(EnJso2* this) {
     this->swordState = EN_JSO2_SWORD_STATE_NONE_DRAWN;
     this->bodyCollider.base.acFlags |= AC_HARD;
-    this->actor.flags &= ~ACTOR_FLAG_100000;
+    this->actor.flags &= ~ACTOR_FLAG_FREEZE_EXCEPTION;
     EnJso2_ChangeAnim(this, EN_JSO2_ANIM_APPEAR_AND_DRAW_SWORDS);
     this->actionFunc = EnJso2_Appear;
 }
@@ -1333,7 +1333,7 @@ void EnJso2_SetupDeathCutscene(EnJso2* this) {
     this->cutsceneState = EN_JSO2_DEATH_CS_STATE_STARTED;
     this->cutsceneTimer = 0;
     this->subCamId = SUB_CAM_ID_DONE;
-    this->actor.flags |= ACTOR_FLAG_100000;
+    this->actor.flags |= ACTOR_FLAG_FREEZE_EXCEPTION;
     this->timer = 30;
     this->action = EN_JSO2_ACTION_BLOW_UP;
     this->actionFunc = EnJso2_DeathCutscene;

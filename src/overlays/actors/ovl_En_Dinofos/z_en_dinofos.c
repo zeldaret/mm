@@ -318,7 +318,7 @@ void EnDinofos_Init(Actor* thisx, PlayState* play) {
     if (this->actor.csId == CS_ID_NONE) {
         EnDinofos_SetupIdle(this);
     } else {
-        this->actor.flags |= ACTOR_FLAG_100000;
+        this->actor.flags |= ACTOR_FLAG_FREEZE_EXCEPTION;
         this->actor.gravity = 0.0f;
         this->actor.velocity.y = 0.0f;
         sCsId = thisx->csId;
@@ -613,7 +613,7 @@ void EnDinofos_IntroCutsceneYell(EnDinofos* this, PlayState* play) {
 
     if (SkelAnime_Update(&this->skelAnime)) {
         EnDinofos_EndCutscene(this, play);
-        this->actor.flags &= ~ACTOR_FLAG_100000;
+        this->actor.flags &= ~ACTOR_FLAG_FREEZE_EXCEPTION;
         this->actor.csId = CS_ID_NONE;
         EnDinofos_SetupIdle(this);
     }

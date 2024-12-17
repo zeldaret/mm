@@ -314,7 +314,7 @@ void EnRailSkb_Init(Actor* thisx, PlayState* play) {
     }
 
     if ((play->sceneId == SCENE_BOTI) && (gSaveContext.sceneLayer == 1) && (play->csCtx.scriptIndex == 0)) {
-        this->actor.flags |= ACTOR_FLAG_100000;
+        this->actor.flags |= ACTOR_FLAG_FREEZE_EXCEPTION;
     }
 
     func_80B70FA0(this);
@@ -847,7 +847,7 @@ void func_80B72190(EnRailSkb* this, PlayState* play) {
 void func_80B723F8(EnRailSkb* this) {
     this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE);
     this->actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
-    this->actor.flags |= ACTOR_FLAG_100000;
+    this->actor.flags |= ACTOR_FLAG_FREEZE_EXCEPTION;
     this->actor.hintId = TATL_HINT_ID_NONE;
     this->actor.textId = 0;
 }
@@ -948,14 +948,14 @@ void func_80B72880(EnRailSkb* this, PlayState* play) {
             if (Player_GetMask(play) == PLAYER_MASK_CAPTAIN) {
                 this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE);
                 this->actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
-                this->actor.flags |= ACTOR_FLAG_100000;
+                this->actor.flags |= ACTOR_FLAG_FREEZE_EXCEPTION;
                 this->actor.hintId = TATL_HINT_ID_NONE;
                 this->actor.textId = 0;
                 func_80B71650(this);
             }
         } else if (Player_GetMask(play) != PLAYER_MASK_CAPTAIN) {
             this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
-            this->actor.flags &= ~ACTOR_FLAG_100000;
+            this->actor.flags &= ~ACTOR_FLAG_FREEZE_EXCEPTION;
             this->actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE);
             this->actor.hintId = TATL_HINT_ID_STALCHILD;
             this->actor.textId = 0;

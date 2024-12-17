@@ -8,8 +8,8 @@
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/actors/ovl_En_Ma4/z_en_ma4.h"
 
-#define FLAGS                                                                                    \
-    (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED | ACTOR_FLAG_100000 | \
+#define FLAGS                                                                                              \
+    (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED | ACTOR_FLAG_FREEZE_EXCEPTION | \
      ACTOR_FLAG_MINIMAP_ICON_ENABLED)
 
 void EnPoFusen_Init(Actor* thisx, PlayState* play);

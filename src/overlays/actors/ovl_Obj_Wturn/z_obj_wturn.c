@@ -6,7 +6,7 @@
 
 #include "z_obj_wturn.h"
 
-#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_100000 | ACTOR_FLAG_UPDATE_DURING_OCARINA)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_FREEZE_EXCEPTION | ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
 void ObjWturn_Init(Actor* thisx, PlayState* play);
 void ObjWturn_Update(Actor* thisx, PlayState* play);
