@@ -2,10 +2,10 @@
     <!-- Assets for Tijo, the drummer of The Indigo-Go's. -->
     <File Name="object_zod" Segment="6">
         <!-- Tijo Animations -->
-        <Animation Name="gTijoPlayingVivaceAnim" Offset="0x2E8" />
-        <Animation Name="gTijoReadyToPlayAnim" Offset="0x894" />
-        <Animation Name="gTijoArmsFoldedAnim" Offset="0xA9C" />
-        <Animation Name="gTijoPlayingLentoAnim" Offset="0xD94" />
+        <Animation Name="gTijoPlayingVivaceAnim" Offset="0x2E8" /> <!-- Original name is "zD_jitabata" -->
+        <Animation Name="gTijoReadyToPlayAnim" Offset="0x894" /> <!-- Original name is "zD_tokuige" -->
+        <Animation Name="gTijoArmsFoldedAnim" Offset="0xA9C" /> <!-- Original name is "zD_udegumi" -->
+        <Animation Name="gTijoPlayingLentoAnim" Offset="0xD94" /> <!-- Original name is "zD_wait01" -->
 
         <!-- Tijo DisplayLists -->
         <DList Name="gTijoLowerBodyChairDL" Offset="0x39A0" />
@@ -65,6 +65,6 @@
         <Skeleton Name="gTijoSkel" Type="Flex" LimbType="Standard" LimbNone="TIJO_LIMB_NONE" LimbMax="TIJO_LIMB_MAX" EnumName="TijoLimb" Offset="0xD658" />
 
         <!-- Tijo Andantino Animation -->
-        <Animation Name="gTijoPlayingAndantinoAnim" Offset="0xD9B0" />
+        <Animation Name="gTijoPlayingAndantinoAnim" Offset="0xD9B0" /> <!-- Original name is "zD_wait02" -->
     </File>
 </Root>
