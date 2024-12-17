@@ -1,4 +1,7 @@
 ﻿<Root>
+    <!-- Dependencies -->
+    <ExternalFile XmlPath="objects/gameplay_keep.xml" OutPath="assets/objects/gameplay_keep/"/>
+
     <!-- Assets for the Happy Mask Salesman and the cutscene Deku Mask -->
     <File Name="object_osn" Segment="6">
         <!-- Happy Mask Salesman Animations -->

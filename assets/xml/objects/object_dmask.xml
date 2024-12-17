@@ -1,4 +1,7 @@
 ﻿<Root>
+    <!-- Dependencies -->
+    <ExternalFile XmlPath="objects/gameplay_keep.xml" OutPath="assets/objects/gameplay_keep/"/>
+
     <File Name="object_dmask" Segment="6">
         <Animation Name="object_dmask_Anim_00017C" Offset="0x17C" /> <!-- Original name is "gbm_fall" -->
         <Animation Name="object_dmask_Anim_0001A8" Offset="0x1A8" /> <!-- Original name is "gbm_normal" -->
