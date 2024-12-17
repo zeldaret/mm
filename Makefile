@@ -14,17 +14,21 @@ ifeq ($(OS),Windows_NT)
   DETECTED_OS = windows
   MAKE = make
   VENV_BIN_DIR = Scripts
+  ICONV = iconv
 else
   UNAME_S := $(shell uname -s)
   ifeq ($(UNAME_S),Linux)
     DETECTED_OS = linux
     MAKE = make
     VENV_BIN_DIR = bin
+    ICONV = iconv
   endif
   ifeq ($(UNAME_S),Darwin)
     DETECTED_OS = macos
     MAKE = gmake
     VENV_BIN_DIR = bin
+    # The default iconv on macOS has some differences from GNU iconv, so we use the Homebrew version instead
+    ICONV = $(shell brew --prefix)/opt/libiconv/bin/iconv
   endif
 endif
 
@@ -411,7 +415,7 @@ $(BUILD_DIR)/src/libultra/%.o: CC := $(CC_OLD)
 
 ifeq ($(PERMUTER),)  # permuter + preprocess.sh misbehaves, permuter doesn't care about rodata diffs or bss ordering so just don't use it in that case
 # Handle encoding (UTF-8 -> EUC-JP) and custom pragmas
-$(BUILD_DIR)/src/%.o: CC := ./tools/buildtools/preprocess.sh -v $(VERSION) -- $(CC)
+$(BUILD_DIR)/src/%.o: CC := ./tools/buildtools/preprocess.sh -v $(VERSION) -i $(ICONV) -- $(CC)
 endif
 
 $(SHIFTJIS_O_FILES): CC_CHECK_WARNINGS += -Wno-multichar -Wno-type-limits -Wno-overflow
