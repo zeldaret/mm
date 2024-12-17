@@ -15,6 +15,10 @@ archives:
   - icon_item_24_static_yar
   - schedule_dma_static_yar
 incbins:
+  - name: ipl3
+    segment: makerom
+    vram: 0x8007F040
+    size: 0xFC0
   - name: rspbootText
     segment: boot
     vram: 0x800969C0
