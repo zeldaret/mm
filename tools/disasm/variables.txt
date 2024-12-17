@@ -4204,7 +4204,7 @@
     0x80209AA0:("gGfxSPTaskStack","u8","[0x400]",0x400),
     0x80209EA0:("gGfxPools","GfxPool","[2]",0x40620),
     0x8024A4C0:("gAudioHeap","u8","[0x138000]",0x138000),
-    0x803824C0:("gSystemHeap","u8","[UNK_SIZE]",0x3fdb40),
+    0x803824C0:("_buffersSegmentEnd","u8","[UNK_SIZE]",0x3fdb40),
     0x80780000:("gHiBuffer","BufferHigh","",0x80000),
     0x80800860:("titleRotation","s16","",0x2),
     0x80800868:("D_80800868","UNK_TYPE1","",0x1),

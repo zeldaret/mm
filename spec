@@ -795,13 +795,6 @@ beginseg
 endseg
 
 beginseg
-    name "system_heap"
-    flags NOLOAD
-    // This segment is just a dummy that is used to know where the other buffers (non framebuffers) end
-    include "$(BUILD_DIR)/src/buffers/system_heap.o"
-endseg
-
-beginseg
     name "framebuffer_hi"
     flags NOLOAD
     // This has to be fixed location in VRAM. See the FRAMEBUFFERS_START_ADDR define on `buffers.h` for a more in-depth explanation

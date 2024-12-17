@@ -25,7 +25,6 @@ extern u8 gGfxSPTaskYieldBuffer[OS_YIELD_DATA_SIZE];
 extern STACK(gGfxSPTaskStack, 0x400);
 extern GfxPool gGfxPools[2];
 extern u8 gAudioHeap[0x138000];
-extern u8 gSystemHeap[];
 
 
 typedef union {
