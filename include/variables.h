@@ -37,7 +37,11 @@ extern AudioSpec gAudioSpecs[21];
 // rodata
 extern const u16 gAudioEnvironmentalSfx[];
 extern const s16 gAudioTatumInit[];
+#ifndef AVOID_UB
 extern const AudioHeapInitSizes gAudioHeapInitSizes;
+#else
+extern AudioHeapInitSizes gAudioHeapInitSizes;
+#endif
 extern AudioTable gSoundFontTable;
 extern u8 gSequenceFontTable[];
 extern u8 gSequenceTable[];

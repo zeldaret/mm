@@ -26,7 +26,16 @@ const s16 gAudioTatumInit[] = {
 // 0x19BD0
 #define PERMANENT_POOL_SIZE (SFX_SEQ_SIZE + AMBIENCE_SEQ_SIZE + SFX_SOUNDFONTS_SIZE + 0x430)
 
-const AudioHeapInitSizes gAudioHeapInitSizes = {
+#ifndef AVOID_UB
+// Qualifying gAudioHeapInitSizes with const appears to be required for matching, however
+// gAudioHeapInitSizes.permanentPoolSize is written to (see load.c)
+#define CONST const
+#else
+// Avoid UB: gAudioHeapInitSizes isn't really const since it is written to, so do not
+// declare it as const.
+#define CONST
+#endif
+CONST AudioHeapInitSizes gAudioHeapInitSizes = {
     ALIGN16(sizeof(gAudioHeap) - 0x100),                                         // audio heap size
     ALIGN16(PERMANENT_POOL_SIZE + AI_BUFFERS_SIZE + SOUNDFONT_LIST_SIZE + 0x40), // init pool size
     ALIGN16(PERMANENT_POOL_SIZE),                                                // permanent pool size
