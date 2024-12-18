@@ -770,7 +770,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
         // Find the region that player is currently in
         // Loop over region (n) and regionIndex (j)
         while (true) {
-            if ((gSceneIdsPerRegion[n][j] == 0xFFFF)) {
+            if (gSceneIdsPerRegion[n][j] == 0xFFFF) {
                 n++;
                 j = 0;
                 if (n == REGION_MAX) {
