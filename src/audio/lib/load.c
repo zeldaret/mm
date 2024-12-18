@@ -1339,14 +1339,7 @@ void AudioLoad_Init(void* heap, size_t heapSize) {
     }
 
     if (addr = AudioHeap_Alloc(&gAudioCtx.initPool, gAudioHeapInitSizes.permanentPoolSize), addr == NULL) {
-#ifndef AVOID_UB
-        // Cast away const from gAudioHeapInitSizes
-        *((size_t*)&gAudioHeapInitSizes.permanentPoolSize) = 0;
-#else
-        // Avoid UB: gAudioHeapInitSizes isn't really const since it is written to, so do not
-        // declare it as const.
         gAudioHeapInitSizes.permanentPoolSize = 0;
-#endif
     }
 
     AudioHeap_InitPool(&gAudioCtx.permanentPool, addr, gAudioHeapInitSizes.permanentPoolSize);

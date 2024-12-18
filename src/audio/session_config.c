@@ -1,10 +1,4 @@
 #include "global.h"
-#include "buffers.h"
-#include "assets/audio/sequence_sizes.h"
-#include "assets/audio/soundfont_sizes.h"
-#define SFX_SEQ_SIZE Sequence_0_SIZE
-#define AMBIENCE_SEQ_SIZE Sequence_1_SIZE
-#define SFX_SOUNDFONTS_SIZE (Soundfont_0_SIZE + Soundfont_1_SIZE + Soundfont_2_SIZE)
 
 static s32 sBssPad[36];
 AudioContext gAudioCtx;
@@ -13,33 +7,6 @@ AudioCustomSeqFunction gAudioCustomSeqFunction;
 AudioCustomReverbFunction gAudioCustomReverbFunction;
 AudioCustomSynthFunction gAudioCustomSynthFunction;
 static s32 sBssPad2[3];
-
-const s16 gAudioTatumInit[] = {
-    0x1C00,          // unused
-    TATUMS_PER_BEAT, // gTatumsPerBeat
-};
-
-// Sizes of everything on the init pool
-#define AI_BUFFERS_SIZE (AIBUF_SIZE * ARRAY_COUNT(gAudioCtx.aiBuffers))
-#define SOUNDFONT_LIST_SIZE (NUM_SOUNDFONTS * sizeof(SoundFont))
-
-// 0x19BD0
-#define PERMANENT_POOL_SIZE (SFX_SEQ_SIZE + AMBIENCE_SEQ_SIZE + SFX_SOUNDFONTS_SIZE + 0x430)
-
-#ifndef AVOID_UB
-// Qualifying gAudioHeapInitSizes with const appears to be required for matching, however
-// gAudioHeapInitSizes.permanentPoolSize is written to (see load.c)
-#define CONST const
-#else
-// Avoid UB: gAudioHeapInitSizes isn't really const since it is written to, so do not
-// declare it as const.
-#define CONST
-#endif
-CONST AudioHeapInitSizes gAudioHeapInitSizes = {
-    ALIGN16(sizeof(gAudioHeap) - 0x100),                                         // audio heap size
-    ALIGN16(PERMANENT_POOL_SIZE + AI_BUFFERS_SIZE + SOUNDFONT_LIST_SIZE + 0x40), // init pool size
-    ALIGN16(PERMANENT_POOL_SIZE),                                                // permanent pool size
-};
 
 #define REVERB_INDEX_0_SETTINGS \
     { 1, 0x30, 0x3000, 0, 0, 0x7FFF, 0x0000, 0x0000, REVERB_INDEX_NONE, 0x3000, 0, 0 }
