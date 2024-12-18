@@ -5,6 +5,6 @@
         <Array Name="sSongofHealingEffectFrustrumVtx" Count="22" Offset="0xB40">
             <Vtx/>
         </Array>
-        <DList Name="sSongOfHealingEffectFrustumDL" Offset="0xCA0"/>
+        <DList Name="sSongOfHealingEffectFrustumDL" Offset="0xCA0"/> <!-- Original name might be "g1T_model2" -->
     </File>
 </Root>

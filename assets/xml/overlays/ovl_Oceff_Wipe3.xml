@@ -5,6 +5,6 @@
             <Vtx/>
         </Array>
         <DList Name="sSariaSongFrustrumMaterialDL" Offset="0x1590"/>
-        <DList Name="sSariaSongFrustumModelDL" Offset="0x1618"/>
+        <DList Name="sSariaSongFrustumModelDL" Offset="0x1618"/> <!-- Original name might be "efc_ocarina_42_modelT" -->
     </File>
 </Root>

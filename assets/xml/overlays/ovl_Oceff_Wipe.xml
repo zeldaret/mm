@@ -5,6 +5,6 @@
             <Vtx/>
         </Array>
         <DList Name="sSongOfTimeFrustumMaterialDL" Offset="0xB70"/>
-        <DList Name="sSongOfTimeFrustumModelDL" Offset="0xBF8"/>
+        <DList Name="sSongOfTimeFrustumModelDL" Offset="0xBF8"/> <!-- Original name might be "efc_ocarina_3_modelT" or "ocarina_time_model" -->
     </File>
 </Root>
