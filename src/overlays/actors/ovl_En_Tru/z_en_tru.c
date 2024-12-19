@@ -1081,7 +1081,7 @@ s32 func_80A87DC0(Actor* thisx, PlayState* play) {
             Actor_PlaySfx(&this->actor, NA_SE_EN_KOUME_LAUGH);
             EnTru_ChangeAnim(this, KOUME_ANIM_TAKE_OFF);
             this->skelAnime.baseTransl.y = 0;
-            this->skelAnime.movementFlags = 2;
+            this->skelAnime.movementFlags = ANIM_FLAG_UPDATE_Y;
             this->unk_34E &= ~0x8;
             this->unk_34E |= 0x10;
             this->unk_364++;

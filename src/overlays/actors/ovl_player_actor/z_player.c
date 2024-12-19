@@ -4442,11 +4442,11 @@ s32 Player_SetAction(PlayState* play, Player* this, PlayerActionFunc actionFunc,
 }
 
 void Player_SetAction_PreserveMoveFlags(PlayState* play, Player* this, PlayerActionFunc actionFunc, s32 arg3) {
-    s32 movementFlags = this->skelAnime.movementFlags;
+    s32 savedMovementFlags = this->skelAnime.movementFlags;
 
     this->skelAnime.movementFlags = 0;
     Player_SetAction(play, this, actionFunc, arg3);
-    this->skelAnime.movementFlags = movementFlags;
+    this->skelAnime.movementFlags = savedMovementFlags;
 }
 
 void Player_SetAction_PreserveItemAction(PlayState* play, Player* this, PlayerActionFunc actionFunc, s32 arg3) {
@@ -10483,12 +10483,12 @@ void func_808400CC(PlayState* play, Player* this) {
     if (Player_Action_18 != this->actionFunc) {
         func_8082DD2C(play, this);
         if ((this->transformation != PLAYER_FORM_HUMAN) && (this->transformation != PLAYER_FORM_FIERCE_DEITY)) {
-            u8 movementFlags = this->skelAnime.movementFlags;
+            u8 savedMovementFlags = this->skelAnime.movementFlags;
             s32 pad;
 
             this->skelAnime.movementFlags = 0;
             Player_SetAction(play, this, Player_Action_85, 0);
-            this->skelAnime.movementFlags = movementFlags;
+            this->skelAnime.movementFlags = savedMovementFlags;
         } else {
             s32 var_v1;
             s32 pad;
@@ -18355,7 +18355,7 @@ void Player_Action_84(Player* this, PlayState* play) {
                 this->skelAnime.movementFlags &= ~8;
                 func_8085B384(this, play);
             } else {
-                u8 movementFlags = this->skelAnime.movementFlags;
+                u8 savedMovementFlags = this->skelAnime.movementFlags;
 
                 if (this->transformation == PLAYER_FORM_ZORA) {
                     if (Player_ActionHandler_8(this, play)) {
@@ -18371,7 +18371,7 @@ void Player_Action_84(Player* this, PlayState* play) {
                 Player_SetAction(play, this, Player_Action_Idle, 1);
                 Player_Anim_PlayOnceWaterAdjustment(play, this, anim);
                 this->yaw = this->actor.shape.rot.y;
-                this->skelAnime.movementFlags = movementFlags;
+                this->skelAnime.movementFlags = savedMovementFlags;
             }
             this->stateFlags3 |= PLAYER_STATE3_8;
         }
@@ -20921,7 +20921,7 @@ void func_8085AC9C(PlayState* play, Player* this, CsCmdActorCue* cue, PlayerCsAc
         csEntry->csActionFunc(play, this, cue);
     }
 
-    if ((D_80862B6C & 4) && !(this->skelAnime.movementFlags & ANIM_FLAG_4)) {
+    if ((D_80862B6C & ANIM_FLAG_4) && !(this->skelAnime.movementFlags & ANIM_FLAG_4)) {
         this->skelAnime.morphTable[LIMB_ROOT_POS].y /= this->ageProperties->unk_08;
         D_80862B6C = 0;
     }
