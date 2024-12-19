@@ -4,7 +4,6 @@
  * Description: Goron Link Switch
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_bg_hakugin_switch.h"
 #include "z64rumble.h"
 #include "assets/objects/object_goronswitch/object_goronswitch.h"
