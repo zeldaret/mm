@@ -261,4 +261,6 @@ typedef struct AudioContext {
     /* 0x81F4 */ UNK_TYPE1 unk_81F4[4];
 } AudioContext; // size = 0x81F8
 
+extern AudioContext gAudioCtx; // at 0x80200C70
+
 #endif

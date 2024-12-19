@@ -771,6 +771,7 @@ beginseg
     include "$(BUILD_DIR)/src/audio/sfx.o"
     include "$(BUILD_DIR)/src/audio/sequence.o"
     include "$(BUILD_DIR)/src/audio/session_config.o"
+    include "$(BUILD_DIR)/src/audio/session_init.o"
     include "$(BUILD_DIR)/src/code/jpegutils.o"
     include "$(BUILD_DIR)/src/code/jpegdecoder.o"
     include "$(BUILD_DIR)/src/code/z_game_over.o"

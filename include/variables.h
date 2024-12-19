@@ -36,8 +36,8 @@ extern AudioSpec gAudioSpecs[21];
 
 // rodata
 extern const u16 gAudioEnvironmentalSfx[];
-extern const s16 gAudioTatumInit[];
-extern const AudioHeapInitSizes gAudioHeapInitSizes;
+extern s16 gAudioTatumInit[];
+extern AudioHeapInitSizes gAudioHeapInitSizes;
 extern AudioTable gSoundFontTable;
 extern u8 gSequenceFontTable[];
 extern u8 gSequenceTable[];
@@ -47,8 +47,6 @@ extern AudioTable gSampleBankTable;
 
 extern u64* gAudioSPDataPtr;
 extern u32 gAudioSPDataSize;
-
-extern AudioContext gAudioCtx; // at 0x80200C70
 
 // other segments
 extern Mtx D_01000000;
