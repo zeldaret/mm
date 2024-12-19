@@ -9,6 +9,8 @@
 #include "z64dma.h"
 #include "z64thread.h"
 
+#pragma increment_block_number "n64-us:128"
+
 // Variables are put before most headers as a hacky way to bypass bss reordering
 struct IrqMgr gIrqMgr;
 STACK(sIrqMgrStack, 0x500);
