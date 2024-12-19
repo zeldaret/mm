@@ -1063,7 +1063,7 @@ void EnEgol_Damaged(EnEgol* this, PlayState* play) {
             Actor_PlaySfx(&this->actor, NA_SE_EN_EYEGOLE_DEAD);
             this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
             this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
-            this->actor.flags |= ACTOR_FLAG_100000;
+            this->actor.flags |= ACTOR_FLAG_FREEZE_EXCEPTION;
             this->actionFunc = EnEgol_StartDeathCutscene;
         }
     }

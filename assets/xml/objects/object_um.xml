@@ -1,10 +1,10 @@
 ﻿<Root>
     <File Name="object_um" Segment="6">
-        <DList Name="object_um_DL_000040" Offset="0x40" />
+        <DList Name="object_um_DL_000040" Offset="0x40" /> <!-- Original name is "kak_hahen01_model" -->
         <Texture Name="object_um_Tex_0000C8" OutName="tex_0000C8" Format="rgba16" Width="32" Height="32" Offset="0xC8" />
-        <DList Name="object_um_DL_000910" Offset="0x910" />
+        <DList Name="object_um_DL_000910" Offset="0x910" /> <!-- Original name is "kak_hahen02_model" -->
         <Texture Name="object_um_Tex_000998" OutName="tex_000998" Format="rgba16" Width="32" Height="32" Offset="0x998" />
-        <DList Name="object_um_DL_0011E0" Offset="0x11E0" />
+        <DList Name="object_um_DL_0011E0" Offset="0x11E0" /> <!-- Original name is "kak_hahen03_model" -->
         <Texture Name="object_um_Tex_001268" OutName="tex_001268" Format="rgba16" Width="32" Height="32" Offset="0x1268" />
         <DList Name="object_um_DL_001EE0" Offset="0x1EE0" />
         <Texture Name="object_um_Tex_002148" OutName="tex_002148" Format="rgba16" Width="32" Height="32" Offset="0x2148" />
@@ -32,8 +32,8 @@
 
         <TextureAnimation Name="object_um_Matanimheader_007D10" Offset="0x7D10" /> <!-- Empty TexAnim -->
 
-        <Collision Name="object_um_Colheader_007E20" Offset="0x7E20" />
-        <Collision Name="object_um_Colheader_007F50" Offset="0x7F50" />
+        <Collision Name="object_um_Colheader_007E20" Offset="0x7E20" /> <!-- Original name is "um_atari_bgdatainfo" -->
+        <Collision Name="object_um_Colheader_007F50" Offset="0x7F50" /> <!-- Original name is "um_atari2_bgdatainfo" -->
 
         <DList Name="object_um_DL_00DF20" Offset="0xDF20" />
         <DList Name="object_um_DL_00E2F0" Offset="0xE2F0" />
@@ -79,9 +79,9 @@
 
         <Skeleton Name="gUmSkel" Type="Flex" LimbType="Standard" LimbNone="UM_LIMB_NONE" LimbMax="UM_LIMB_MAX" EnumName="ObjectUmLimb" Offset="0x11DF8" />
 
-        <Animation Name="gUmGallopAnim" Offset="0x1213C" />
-        <Animation Name="gUmLookBackAnim" Offset="0x126C4" />
-        <Animation Name="gUmTrotAnim" Offset="0x12CC0" />
+        <Animation Name="gUmGallopAnim" Offset="0x1213C" /> <!-- Original name is "um_fastrun" -->
+        <Animation Name="gUmLookBackAnim" Offset="0x126C4" /> <!-- Original name is "um_furimuku" -->
+        <Animation Name="gUmTrotAnim" Offset="0x12CC0" /> <!-- Original name is "um_slowrun" -->
 
         <Texture Name="object_um_TLUT_012CD0" OutName="tlut_012CD0" Format="rgba16" Width="16" Height="16" Offset="0x12CD0" />
         <Texture Name="object_um_TLUT_012ED0" OutName="tlut_012ED0" Format="rgba16" Width="16" Height="16" Offset="0x12ED0" />
@@ -121,6 +121,6 @@
         <Texture Name="object_um_Tex_019210" OutName="tex_019210" Format="ci8" Width="16" Height="16" Offset="0x19210" />
         <Texture Name="object_um_Tex_019310" OutName="tex_019310" Format="ci8" Width="16" Height="32" Offset="0x19310" />
         <Texture Name="object_um_Tex_019510" OutName="tex_019510" Format="ci8" Width="64" Height="16" Offset="0x19510" />
-        <Animation Name="gUmIdleAnim" Offset="0x19E10" />
+        <Animation Name="gUmIdleAnim" Offset="0x19E10" /> <!-- Original name is "um_wait" -->
     </File>
 </Root>

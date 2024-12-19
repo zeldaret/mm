@@ -835,7 +835,7 @@ void EnTalkGibud_Talk(EnTalkGibud* this, PlayState* play) {
                     }
                     player->stateFlags1 |= PLAYER_STATE1_20;
                     player->stateFlags1 |= PLAYER_STATE1_20000000;
-                    this->actor.flags |= ACTOR_FLAG_100000;
+                    this->actor.flags |= ACTOR_FLAG_FREEZE_EXCEPTION;
                     EnTalkGibud_SetupDisappear(this);
                 } else {
                     EnTalkGibud_SetupPassiveIdle(this);

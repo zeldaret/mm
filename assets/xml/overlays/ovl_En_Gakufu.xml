@@ -3,6 +3,6 @@
         <Array Name="gGakufuButtonIndexVtx" Count="4" Offset="0x8D0">
             <Vtx/>
         </Array>
-        <DList Name="gGakufuButtonIndexDL" Offset="0x910"/>
+        <DList Name="gGakufuButtonIndexDL" Offset="0x910"/> <!-- Original name might be "en_gakufu_draw_common" -->
     </File>
 </Root>

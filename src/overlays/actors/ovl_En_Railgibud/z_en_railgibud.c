@@ -1111,7 +1111,7 @@ void EnRailgibud_InitCutsceneGibdo(EnRailgibud* this, PlayState* play) {
 
     EnRailgibud_InitCueType(this);
     this->cueId = 99;
-    this->actor.flags |= ACTOR_FLAG_100000;
+    this->actor.flags |= ACTOR_FLAG_FREEZE_EXCEPTION;
     this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 28.0f);

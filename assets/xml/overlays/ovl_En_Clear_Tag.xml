@@ -13,7 +13,7 @@
         <DList Name="gClearTagFireEffectMaterialDL" Offset="0x37F8"/>
         <Texture Name="gClearTagFireEffectFlickerTex" OutName="clear_tag_fire_effect_flicker" Format="i4" Width="32" Height="64" Offset="0x31C8"/>
         <Texture Name="gClearTagFireEffectBackgroundTex" OutName="clear_tag_fire_effect_background" Format="i4" Width="32" Height="32" Offset="0x35C8"/>
-        <DList Name="gClearTagFireEffectDL" Offset="0x38A0"/>
+        <DList Name="gClearTagFireEffectDL" Offset="0x38A0"/> <!-- Original name might be "a_fireball_model" -->
         <Array Name="gClearTagFireEffectVtx" Count="3" Offset="0x37C8">
             <Vtx/>
         </Array>

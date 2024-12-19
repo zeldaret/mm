@@ -1,7 +1,7 @@
 ﻿<Root>
     <File Name="object_vm" Segment="6">
         <!-- Beamos Animations -->
-        <Animation Name="gBeamosAnim" Offset="0x68" />
+        <Animation Name="gBeamosAnim" Offset="0x68" /> <!-- Original name is "vm_akesime" -->
         
         <!-- Beamos Limb DisplayLists -->
         <DList Name="gBeamosBodyDL" Offset="0x1E00" />

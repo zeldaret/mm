@@ -375,7 +375,7 @@ void EnDeath_UpdateSpinAttackTris(EnDeath* this) {
     Collider_SetTrisVertices(&this->weaponSpinningCollider, 1, &p1, &p3, &p2);
 }
 
-f32 EnDeath_UpdateCoreVelocityAndRotation(EnDeath* this) {
+void EnDeath_UpdateCoreVelocityAndRotation(EnDeath* this) {
     f32 tmp;
 
     this->coreVelocity = this->actor.world.pos.y - this->actor.home.pos.y;

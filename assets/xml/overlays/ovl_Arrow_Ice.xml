@@ -7,6 +7,6 @@
             <Vtx/>
         </Array>
         <DList Name="gIceArrowMaterialDL" Offset="0x1C30"/>
-        <DList Name="gIceArrowModelDL" Offset="0x1CE0"/>
+        <DList Name="gIceArrowModelDL" Offset="0x1CE0"/> <!-- Original name might be "m_arrow_modelT_ice" -->
     </File>
 </Root>

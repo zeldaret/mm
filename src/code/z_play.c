@@ -1277,7 +1277,7 @@ void Play_DrawMain(PlayState* this) {
                 goto PostWorldDraw;
             }
 
-            if (!this->unk_18844) {
+            if (!this->soaringCsOrSoTCsPlaying) {
                 if (1) {
                     if (((u32)this->skyboxId != SKYBOX_NONE) && !this->envCtx.skyboxDisabled) {
                         if ((this->skyboxId == SKYBOX_NORMAL_SKY) || (this->skyboxId == SKYBOX_3)) {
@@ -2270,7 +2270,7 @@ void Play_Init(GameState* thisx) {
     this->worldCoverAlpha = 0;
     this->bgCoverAlpha = 0;
     this->haltAllActors = false;
-    this->unk_18844 = false;
+    this->soaringCsOrSoTCsPlaying = false;
 
     if (gSaveContext.gameMode != GAMEMODE_TITLE_SCREEN) {
         if (gSaveContext.nextTransitionType == TRANS_NEXT_TYPE_DEFAULT) {

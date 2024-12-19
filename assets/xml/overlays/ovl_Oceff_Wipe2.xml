@@ -6,6 +6,6 @@
             <Vtx/>
         </Array>
         <DList Name="sEponaSongFrustumMaterialDL" Offset="0x1580"/>
-        <DList Name="sEponaSongFrustumModelDL" Offset="0x1628"/>
+        <DList Name="sEponaSongFrustumModelDL" Offset="0x1628"/> <!-- Original name might be "efc_ocarina_41_modelT" or "ocarina_epona_model" -->
     </File>
 </Root>

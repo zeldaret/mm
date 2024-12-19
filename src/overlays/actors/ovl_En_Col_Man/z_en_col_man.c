@@ -9,7 +9,7 @@
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_100000)
+#define FLAGS (ACTOR_FLAG_FREEZE_EXCEPTION)
 
 void EnColMan_Init(Actor* thisx, PlayState* play);
 void EnColMan_Destroy(Actor* thisx, PlayState* play);

@@ -2,7 +2,7 @@
     <!-- Child Zelda: from the cutscene where Deku Link recalls how to play Song of Time after getting his Ocarina back -->
     <File Name="object_zl4" Segment="6">
         <!-- Everything up to and including the skeleton is retained from the beginning of OoT's object_zl4 -->
-        <Animation Name="gDmZl4IdleAnim" Offset="0x654" />
+        <Animation Name="gDmZl4IdleAnim" Offset="0x654" /> <!-- Original name is "anim_matsu" -->
         <Texture Name="gDmZl4DressTLUT" OutName="dress_tlut" Format="rgba16" Width="16" Height="16" Offset="0x670" />
         <Texture Name="gDmZl4EyeTLUT" OutName="eye_tlut" Format="rgba16" Width="16" Height="16" Offset="0x870" />
         <Texture Name="gDmZl4MouthTLUT" OutName="mouth_tlut" Format="rgba16" Width="16" Height="16" Offset="0xA70" />
@@ -74,7 +74,7 @@
 
         <!-- Ocarina, drawn to right hand in OverrideLimbDraw -->
         <Texture Name="gDmZl4OcarinaTex" OutName="ocarina" Format="rgba16" Width="32" Height="16" Offset="0xD8B8" />
-        <DList Name="gDmZl4OcarinaDL" Offset="0xDE08" />
+        <DList Name="gDmZl4OcarinaDL" Offset="0xDE08" /> <!-- Original name is "zl4_okarina_model" -->
 
         <Limb Name="gDmZl4RootLimb" Type="Standard" EnumName="ZL4_LIMB_ROOT" Offset="0xDF28" />
         <Limb Name="gDmZl4WaistLimb" Type="Standard" EnumName="ZL4_LIMB_WAIST" Offset="0xDF34" />
@@ -95,64 +95,65 @@
         <Limb Name="gDmZl4HeadLimb" Type="Standard" EnumName="ZL4_LIMB_HEAD" Offset="0xDFE8" />
         <Skeleton Name="gZl4Skel" Type="Flex" LimbType="Standard" LimbNone="ZL4_LIMB_NONE" LimbMax="ZL4_LIMB_MAX" EnumName="Zl4Limb" Offset="0xE038" />
 
+        <!-- Used in MM -->
+        <Animation Name="gDmZl4TurningAroundAnim" Offset="0xF250" /> <!-- Original name is probably "cze_fue_furimuki" -->
         
         <!-- Unused Flute Animations -->
-        <Animation Name="gDmZl4HoldingFluteInFrontAnim" Offset="0xFDC8" />
-        <Animation Name="gDmZl4RaiseFluteToPlayAnim" Offset="0x10334" />
-        <Animation Name="gDmZl4LowerFluteAfterPlayAnim" Offset="0x105C8" />
-        <Animation Name="gDmZl4PlayingFluteAnim" Offset="0x10D50" />
+        <Animation Name="gDmZl4HoldingFluteInFrontAnim" Offset="0xFDC8" /> <!-- Original name is probably "cze_fue_furimuki_wait" -->
+        <Animation Name="gDmZl4RaiseFluteToPlayAnim" Offset="0x10334" /> <!-- Original name is probably "cze_fue_kamae" -->
+        <Animation Name="gDmZl4LowerFluteAfterPlayAnim" Offset="0x105C8" /> <!-- Original name is probably "cze_fue_niyari" -->
+        <Animation Name="gDmZl4PlayingFluteAnim" Offset="0x10D50" /> <!-- Original name is probably "cze_fue_play" -->
 
         <!-- Used in MM -->
-        <Animation Name="gDmZl4TurningAroundAnim" Offset="0xF250" />
-        <Animation Name="gDmZl4FacingAwayIdleAnim" Offset="0x11294" />
-        <Animation Name="gDmZl4GivingItemStartAnim" Offset="0x11BB8" />
-        <Animation Name="gDmZl4GivingItemLoopAnim" Offset="0x122E0" />
-        <Animation Name="gDmZl4RaisingOcarinaToPlayAnim" Offset="0x12A84" />
-        <Animation Name="gDmZl4PlayingOcarinaAnim" Offset="0x1303C" />
+        <Animation Name="gDmZl4FacingAwayIdleAnim" Offset="0x11294" /> <!-- Original name is probably "cze_fue_wait" -->
+        <Animation Name="gDmZl4GivingItemStartAnim" Offset="0x11BB8" /> <!-- Original name is "cze_okarina_dasu" -->
+        <Animation Name="gDmZl4GivingItemLoopAnim" Offset="0x122E0" /> <!-- Original name is "cze_okarina_dasu_loop" -->
+        <Animation Name="gDmZl4RaisingOcarinaToPlayAnim" Offset="0x12A84" /> <!-- Original name is "cze_okarina_fuku" -->
+        <Animation Name="gDmZl4PlayingOcarinaAnim" Offset="0x1303C" /> <!-- Original name is "cze_okarina_fuku_loop" -->
 
         <!-- Unused Backflipping Animation -->
-        <Animation Name="gDmZl4BackflipAnim" Offset="0x13934" />
-        <Animation Name="gDmZl4BackflipPrepareAnim" Offset="0x13F2C" />
-        <Animation Name="gDmZl4BackflipPrepareHoldingReadyAnim" Offset="0x14558" />
+        <Animation Name="gDmZl4BackflipAnim" Offset="0x13934" /> <!-- Original name is probably "cze_op_bakutyu" -->
+        <Animation Name="gDmZl4BackflipPrepareAnim" Offset="0x13F2C" /> <!-- Original name is probably "cze_op_suihei" -->
+        <Animation Name="gDmZl4BackflipPrepareHoldingReadyAnim" Offset="0x14558" /> <!-- Original name is probably "cze_op_suihei_wait" -->
 
         <!-- Used in MM --> 
-        <Animation Name="gDmZl4TurningAround2Anim" Offset="0x15494" />
-        <Animation Name="gDmZl4HandsOverEmblemLoopAnim" Offset="0x15A4C" />
-        <Animation Name="gDmZl4FacingAwayHandsOverEmblemLoopAnim" Offset="0x15DA0" />
+        <Animation Name="gDmZl4TurningAround2Anim" Offset="0x15494" /> <!-- Original name is "cze_usiro_furimuki" -->
+        <Animation Name="gDmZl4HandsOverEmblemLoopAnim" Offset="0x15A4C" /> <!-- Original name is "cze_usiro_furimuki_roop" -->
+        <Animation Name="gDmZl4FacingAwayHandsOverEmblemLoopAnim" Offset="0x15DA0" /> <!-- Original name is "cze_usiro_roop" -->
 
         <!-- Unused in MM, copy of OoT Animations in object_zl4:(0xE050 -> End) --> 
-        <Animation Name="gDmZl4Anim_016328" Offset="0x16328" />
-        <Animation Name="gDmZl4Anim_016924" Offset="0x16924" />
-        <Animation Name="gDmZl4Anim_016E04" Offset="0x16E04" />
-        <Animation Name="gDmZl4Anim_0175F4" Offset="0x175F4" />
-        <Animation Name="gDmZl4Anim_018B58" Offset="0x18B58" />
-        <Animation Name="gDmZl4Anim_018FA8" Offset="0x18FA8" />
-        <Animation Name="gDmZl4Anim_0193F8" Offset="0x193F8" />
-        <Animation Name="gDmZl4Anim_019894" Offset="0x19894" />
-        <Animation Name="gDmZl4Anim_01A344" Offset="0x1A344" />
-        <Animation Name="gDmZl4Anim_01ABB8" Offset="0x1ABB8" />
-        <Animation Name="gDmZl4Anim_01AFE0" Offset="0x1AFE0" />
-        <Animation Name="gDmZl4Anim_01B388" Offset="0x1B388" />
-        <Animation Name="gDmZl4Anim_01B7B0" Offset="0x1B7B0" />
-        <Animation Name="gDmZl4Anim_01BC00" Offset="0x1BC00" />
-        <Animation Name="gDmZl4Anim_01DC74" Offset="0x1DC74" />
-        <Animation Name="gDmZl4Anim_01E714" Offset="0x1E714" />
-        <Animation Name="gDmZl4Anim_01EA68" Offset="0x1EA68" />
-        <Animation Name="gDmZl4Anim_01EFCC" Offset="0x1EFCC" />
-        <Animation Name="gDmZl4Anim_01F578" Offset="0x1F578" />
-        <Animation Name="gDmZl4Anim_01FDBC" Offset="0x1FDBC" />
-        <Animation Name="gDmZl4Anim_0205F8" Offset="0x205F8" />
-        <Animation Name="gDmZl4Anim_020E6C" Offset="0x20E6C" />
-        <Animation Name="gDmZl4Anim_021360" Offset="0x21360" />
-        <Animation Name="gDmZl4Anim_02167C" Offset="0x2167C" />
-        <Animation Name="gDmZl4Anim_02205C" Offset="0x2205C" />
-        <Animation Name="gDmZl4Anim_022840" Offset="0x22840" />
-        <Animation Name="gDmZl4Anim_022BE8" Offset="0x22BE8" />
-        <Animation Name="gDmZl4Anim_0235D4" Offset="0x235D4" />
-        <Animation Name="gDmZl4Anim_023A50" Offset="0x23A50" />
-        <Animation Name="gDmZl4Anim_0241F4" Offset="0x241F4" />
-        <Animation Name="gDmZl4Anim_024510" Offset="0x24510" />
-        <Animation Name="gDmZl4Anim_024B68" Offset="0x24B68" />
+        <Animation Name="gDmZl4Anim_016328" Offset="0x16328" /> <!-- Original name is "demo_aisatu" -->
+        <Animation Name="gDmZl4Anim_016924" Offset="0x16924" /> <!-- Original name is "demo_aisatu_wait" -->
+        <Animation Name="gDmZl4Anim_016E04" Offset="0x16E04" /> <!-- Original name is "demo_arigato" -->
+        <Animation Name="gDmZl4Anim_0175F4" Offset="0x175F4" /> <!-- Original name is "demo_arigato_wait" -->
+        <Animation Name="gDmZl4Anim_018B58" Offset="0x18B58" /> <!-- Seems like a modified form of "gChildZelda1Anim_10B38" from object_zl1. Original name is probably "demo_furimuki" -->
+        <Animation Name="gDmZl4Anim_018FA8" Offset="0x18FA8" /> <!-- Seems like a modified form of "gChildZelda1Anim_11348" from object_zl1. Original name is probably "demo_furimuki_wait" -->
+        <Animation Name="gDmZl4Anim_0193F8" Offset="0x193F8" /> <!-- Original name is "demo_gomen" -->
+        <Animation Name="gDmZl4Anim_019894" Offset="0x19894" /> <!-- Original name is "demo_himitu" -->
+        <Animation Name="gDmZl4Anim_01A344" Offset="0x1A344" /> <!-- Original name is "demo_kaku" -->
+        <Animation Name="gDmZl4Anim_01ABB8" Offset="0x1ABB8" /> <!-- Original name is "demo_kaku_wait" -->
+        <Animation Name="gDmZl4Anim_01AFE0" Offset="0x1AFE0" /> <!-- Seems like a modified form of "gChildZelda1Anim_116E4" from object_zl1. Original name is probably "demo_kasige" -->
+        <Animation Name="gDmZl4Anim_01B388" Offset="0x1B388" /> <!-- Seems like a modified form of "gChildZelda1Anim_11B88" from object_zl1. Original name is probably "demo_kasige_wait" -->
+        <Animation Name="gDmZl4Anim_01B7B0" Offset="0x1B7B0" /> <!-- Original name is "demo_kirai" -->
+        <Animation Name="gDmZl4Anim_01BC00" Offset="0x1BC00" /> <!-- Original name is "demo_kirai_wait" -->
+        <Animation Name="gDmZl4Anim_01DC74" Offset="0x1DC74" /> <!-- Original name is "demo_modoru" -->
+        <Animation Name="gDmZl4Anim_01E714" Offset="0x1E714" /> <!-- Original name is "demo_modoru_to_omegai2" -->
+        <Animation Name="gDmZl4Anim_01EA68" Offset="0x1EA68" /> <!-- Original name is "demo_modoru_wait" -->
+        <Animation Name="gDmZl4Anim_01EFCC" Offset="0x1EFCC" /> <!-- Original name is "demo_namae" -->
+        <Animation Name="gDmZl4Anim_01F578" Offset="0x1F578" /> <!-- Original name is "demo_namae_wait" -->
+        <Animation Name="gDmZl4Anim_01FDBC" Offset="0x1FDBC" /> <!-- Original name is "demo_naname_wait" -->
+        <Animation Name="gDmZl4Anim_0205F8" Offset="0x205F8" /> <!-- Original name is "demo_noridasi" -->
+        <Animation Name="gDmZl4Anim_020E6C" Offset="0x20E6C" /> <!-- Original name is "demo_noridasi_wait" -->
+        <Animation Name="gDmZl4Anim_021360" Offset="0x21360" /> <!-- Seems like a modified form of "gChildZelda1Anim_12118" from object_zl1. Original name is probably "demo_nozoki_wait" -->
+        <Animation Name="gDmZl4Anim_02167C" Offset="0x2167C" /> <!-- Original name is "demo_onegai" -->
+        <Animation Name="gDmZl4Anim_02205C" Offset="0x2205C" /> <!-- Original name is "demo_onegai2" -->
+        <Animation Name="gDmZl4Anim_022840" Offset="0x22840" /> <!-- Original name is "demo_onegai2_wait" -->
+        <Animation Name="gDmZl4Anim_022BE8" Offset="0x22BE8" /> <!-- Original name is "demo_onegai_wait" -->
+        <Animation Name="gDmZl4Anim_0235D4" Offset="0x235D4" /> <!-- Duplicate of "gChildZelda1Anim_12B04" from object_zl1. Original name is "demo_slide" -->
+        <Animation Name="gDmZl4Anim_023A50" Offset="0x23A50" /> <!-- Duplicate of "gChildZelda1Anim_12F80" from object_zl1. Original name is "demo_slide_wait" -->
+        <Animation Name="gDmZl4Anim_0241F4" Offset="0x241F4" /> <!-- Seems like a modified form of "gChildZelda1Anim_138E0" from object_zl1. Original name is probably "demo_tetataki_1" -->
+        <Animation Name="gDmZl4Anim_024510" Offset="0x24510" /> <!-- Seems like a modified form of "gChildZelda1Anim_143A8" from object_zl1. Original name is probably "demo_tetataki_wait" -->
+        <Animation Name="gDmZl4Anim_024B68" Offset="0x24B68" /> <!-- Original name is probably "demo_usiro_ude_wait" -->
 
         <!-- Unused Flute -->
         <DList Name="gDmZl4FluteDL" Offset="0x24D80" />

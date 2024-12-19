@@ -6,8 +6,9 @@
 
 #include "z_en_ma_yts.h"
 
-#define FLAGS \
-    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_100000 | ACTOR_FLAG_UPDATE_DURING_OCARINA)
+#define FLAGS                                                                           \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_FREEZE_EXCEPTION | \
+     ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
 void EnMaYts_Init(Actor* thisx, PlayState* play);
 void EnMaYts_Destroy(Actor* thisx, PlayState* play);

@@ -1,16 +1,16 @@
 ﻿<Root>
     <File Name="object_zog" Segment="6">
-        <Animation Name="object_zog_Anim_001000" Offset="0x1000" />
-        <Animation Name="object_zog_Anim_001970" Offset="0x1970" />
-        <Animation Name="object_zog_Anim_002344" Offset="0x2344" />
-        <Animation Name="object_zog_Anim_002894" Offset="0x2894" />
-        <Animation Name="object_zog_Anim_0030E0" Offset="0x30E0" />
-        <Animation Name="object_zog_Anim_0037F8" Offset="0x37F8" />
-        <Animation Name="object_zog_Anim_0041D0" Offset="0x41D0" />
-        <Animation Name="object_zog_Anim_004BDC" Offset="0x4BDC" />
-        <Animation Name="object_zog_Anim_0055B4" Offset="0x55B4" />
+        <Animation Name="object_zog_Anim_001000" Offset="0x1000" /> <!-- Original name is "mikau_aruku" -->
+        <Animation Name="object_zog_Anim_001970" Offset="0x1970" /> <!-- Original name is "mikau_aruku_loop" -->
+        <Animation Name="object_zog_Anim_002344" Offset="0x2344" /> <!-- Original name is "mikau_dream_loop" -->
+        <Animation Name="object_zog_Anim_002894" Offset="0x2894" /> <!-- Original name is "mikau_oya" -->
+        <Animation Name="object_zog_Anim_0030E0" Offset="0x30E0" /> <!-- Original name is "mikau_oya_loop" -->
+        <Animation Name="object_zog_Anim_0037F8" Offset="0x37F8" /> <!-- Original name is "mikau_ruru" -->
+        <Animation Name="object_zog_Anim_0041D0" Offset="0x41D0" /> <!-- Original name is "mikau_ruru_loop" -->
+        <Animation Name="object_zog_Anim_004BDC" Offset="0x4BDC" /> <!-- Original name is "mikau_tyakuchi" -->
+        <Animation Name="object_zog_Anim_0055B4" Offset="0x55B4" /> <!-- Original name is "mikau_tyakuchi_loop" -->
         <DList Name="gMikauGraveDirtDL" Offset="0x69F0" />
-        <DList Name="gMikauGraveDL" Offset="0x6AA0" />
+        <DList Name="gMikauGraveDL" Offset="0x6AA0" /> <!-- Original name is "z2_30_haka_model" -->
         <Texture Name="gMikauGraveDirtTex" OutName="mikau_grave_dirt" Format="rgba16" Width="16" Height="32" Offset="0x6FD0" />
         <Texture Name="gMikauGraveJawTex" OutName="mikau_grave_jaw" Format="rgba16" Width="16" Height="16" Offset="0x73D0" />
         <Texture Name="gMikauGraveEyeTex" OutName="mikau_grave_eye" Format="rgba16" Width="16" Height="16" Offset="0x75D0" />
@@ -19,29 +19,29 @@
         <Texture Name="gMikauGraveBoneTex" OutName="mikau_grave_bone" Format="rgba16" Width="16" Height="32" Offset="0x7DD0" />
         <Texture Name="gMikauGraveWoodenStickTex" OutName="mikau_grave_wooden_stick" Format="rgba16" Width="32" Height="8" Offset="0x81D0" />
         <Texture Name="gMikauGraveCordTex" OutName="mikau_grave_cord" Format="rgba16" Width="16" Height="8" Offset="0x83D0" />
-        <Collision Name="gMikauGraveCol" Offset="0x8670" />
-        <Animation Name="object_zog_Anim_008EB8" Offset="0x8EB8" />
-        <Animation Name="object_zog_Anim_00931C" Offset="0x931C" />
-        <Animation Name="object_zog_Anim_0099A4" Offset="0x99A4" />
-        <Animation Name="object_zog_Anim_009EC4" Offset="0x9EC4" />
-        <Animation Name="object_zog_Anim_00B01C" Offset="0xB01C" />
-        <Animation Name="object_zog_Anim_00BF38" Offset="0xBF38" />
-        <Animation Name="object_zog_Anim_00CA94" Offset="0xCA94" />
-        <Animation Name="object_zog_Anim_00ECBC" Offset="0xECBC" />
-        <Animation Name="object_zog_Anim_00F110" Offset="0xF110" />
-        <Animation Name="object_zog_Anim_00FC0C" Offset="0xFC0C" />
-        <Animation Name="object_zog_Anim_0106B0" Offset="0x106B0" />
-        <Animation Name="object_zog_Anim_014B10" Offset="0x14B10" />
-        <Animation Name="object_zog_Anim_01579C" Offset="0x1579C" />
-        <Animation Name="object_zog_Anim_015B80" Offset="0x15B80" />
-        <Animation Name="object_zog_Anim_0166F4" Offset="0x166F4" />
-        <Animation Name="object_zog_Anim_017170" Offset="0x17170" />
-        <Animation Name="object_zog_Anim_018600" Offset="0x18600" />
-        <Animation Name="object_zog_Anim_01A06C" Offset="0x1A06C" />
-        <Animation Name="object_zog_Anim_01A990" Offset="0x1A990" />
-        <Animation Name="object_zog_Anim_01AD58" Offset="0x1AD58" />
-        <Animation Name="object_zog_Anim_01B72C" Offset="0x1B72C" />
-        <Animation Name="object_zog_Anim_01BC88" Offset="0x1BC88" />
+        <Collision Name="gMikauGraveCol" Offset="0x8670" /> <!-- Original name is "z2_30_haka_bgdatainfo" -->
+        <Animation Name="object_zog_Anim_008EB8" Offset="0x8EB8" /> <!-- Original name is "zG_guiter1L" -->
+        <Animation Name="object_zog_Anim_00931C" Offset="0x931C" /> <!-- Original name is "zG_guiter2L" -->
+        <Animation Name="object_zog_Anim_0099A4" Offset="0x99A4" /> <!-- Original name is "zG_guter1L2guiter2L" -->
+        <Animation Name="object_zog_Anim_009EC4" Offset="0x9EC4" /> <!-- Original name is "zG_guter2L2guiter1L" -->
+        <Animation Name="object_zog_Anim_00B01C" Offset="0xB01C" /> <!-- Original name is "zG_jya_n" -->
+        <Animation Name="object_zog_Anim_00BF38" Offset="0xBF38" /> <!-- Original name is "zG_jya_n2neruL" -->
+        <Animation Name="object_zog_Anim_00CA94" Offset="0xCA94" /> <!-- Original name is "zG_neruL" -->
+        <Animation Name="object_zog_Anim_00ECBC" Offset="0xECBC" /> <!-- Original name is "zG_neruL2guiter1L" -->
+        <Animation Name="object_zog_Anim_00F110" Offset="0xF110" /> <!-- Original name is "zG_neruL2talkinlandL" -->
+        <Animation Name="object_zog_Anim_00FC0C" Offset="0xFC0C" /> <!-- Original name is "zG_oboreL" -->
+        <Animation Name="object_zog_Anim_0106B0" Offset="0x106B0" /> <!-- Original name is "zG_oboreL2talkinwater" -->
+        <Animation Name="object_zog_Anim_014B10" Offset="0x14B10" /> <!-- Original name is "zG_standup" -->
+        <Animation Name="object_zog_Anim_01579C" Offset="0x1579C" /> <!-- Original name is "zG_talkinlandL" -->
+        <Animation Name="object_zog_Anim_015B80" Offset="0x15B80" /> <!-- Original name is "zG_talkinlandL2neruL" -->
+        <Animation Name="object_zog_Anim_0166F4" Offset="0x166F4" /> <!-- Original name is "zG_talkinwaterL" -->
+        <Animation Name="object_zog_Anim_017170" Offset="0x17170" /> <!-- Original name is "zG_talkinwaterL2obore" -->
+        <Animation Name="object_zog_Anim_018600" Offset="0x18600" /> <!-- Original name is "zG_walkL" -->
+        <Animation Name="object_zog_Anim_01A06C" Offset="0x1A06C" /> <!-- Original name is "zG_walkL2neruL" -->
+        <Animation Name="object_zog_Anim_01A990" Offset="0x1A990" /> <!-- Original name is "zG_yuurei_talk" -->
+        <Animation Name="object_zog_Anim_01AD58" Offset="0x1AD58" /> <!-- Original name is "zG_yuurei_talk2wait" -->
+        <Animation Name="object_zog_Anim_01B72C" Offset="0x1B72C" /> <!-- Original name is "zG_yuurei_wait" -->
+        <Animation Name="object_zog_Anim_01BC88" Offset="0x1BC88" /> <!-- Original name is "zG_yuurei_wait2talk" -->
         <DList Name="object_zog_DL_01F830" Offset="0x1F830" />
         <DList Name="object_zog_DL_01F9A8" Offset="0x1F9A8" />
         <DList Name="object_zog_DL_01FB40" Offset="0x1FB40" />

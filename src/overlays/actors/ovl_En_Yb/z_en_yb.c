@@ -64,8 +64,6 @@ static ColliderCylinderInit sCylinderInit = {
     { 20, 40, 0, { 0, 0, 0 } },
 };
 
-// crashes if I try to mod it in to look at it
-//  assumption: draw uses two different skeleton functions, might be incompatible
 static AnimationHeader* gYbUnusedAnimations[] = { &object_yb_Anim_000200 };
 
 static PlayerAnimationHeader* gPlayerAnimations[] = {
