@@ -2,6 +2,7 @@
 #include "buffers.h"
 #include "assets/audio/sequence_sizes.h"
 #include "assets/audio/soundfont_sizes.h"
+
 #define SFX_SEQ_SIZE Sequence_0_SIZE
 #define AMBIENCE_SEQ_SIZE Sequence_1_SIZE
 #define SFX_SOUNDFONTS_SIZE (Soundfont_0_SIZE + Soundfont_1_SIZE + Soundfont_2_SIZE)
