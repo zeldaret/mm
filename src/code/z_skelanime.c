@@ -19,7 +19,7 @@ void AnimTask_Copy(struct PlayState* play, AnimTaskData* data);
 void AnimTask_Interp(struct PlayState* play, AnimTaskData* data);
 void AnimTask_CopyUsingMap(struct PlayState* play, AnimTaskData* data);
 void AnimTask_CopyUsingMapInverted(struct PlayState* play, AnimTaskData* data);
-void AnimTask_ActorMove(struct PlayState* play, AnimTaskData* data);
+void AnimTask_ActorMovement(struct PlayState* play, AnimTaskData* data);
 
 s32 sCurAnimTaskGroup;
 s32 sDisabledTransformTaskGroups;
@@ -1121,13 +1121,13 @@ void AnimTaskQueue_AddCopyUsingMapInverted(PlayState* play, s32 vecCount, Vec3s*
 /**
  * Creates a task which will move an actor according to the translation of its root limb for the current frame.
  */
-void AnimTaskQueue_AddActorMove(PlayState* play, Actor* actor, SkelAnime* skelAnime, f32 moveDiffScale) {
+void AnimTaskQueue_AddActorMovement(PlayState* play, Actor* actor, SkelAnime* skelAnime, f32 moveDiffScale) {
     AnimTask* task = AnimTaskQueue_NewTask(&play->animTaskQueue, ANIMTASK_ACTOR_MOVE);
 
     if (task != NULL) {
-        task->data.actorMove.actor = actor;
-        task->data.actorMove.skelAnime = skelAnime;
-        task->data.actorMove.diffScale = moveDiffScale;
+        task->data.actorMovement.actor = actor;
+        task->data.actorMovement.skelAnime = skelAnime;
+        task->data.actorMovement.diffScale = moveDiffScale;
     }
 }
 
@@ -1210,9 +1210,10 @@ void AnimTask_CopyUsingMapInverted(PlayState* play, AnimTaskData* data) {
 
 /**
  * Move an actor according to the translation of its root limb for the current animation frame.
+ * The actor's current shape yaw will factor into the resulting movement.
  */
-void AnimTask_ActorMove(PlayState* play, AnimTaskData* data) {
-    AnimTaskActorMove* task = &data->actorMove;
+void AnimTask_ActorMovement(PlayState* play, AnimTaskData* data) {
+    AnimTaskActorMovement* task = &data->actorMovement;
     Actor* actor = task->actor;
     Vec3f diff;
 
@@ -1231,8 +1232,8 @@ typedef void (*AnimTaskFunc)(struct PlayState* play, AnimTaskData* data);
  */
 void AnimTaskQueue_Update(PlayState* play, AnimTaskQueue* animTaskQueue) {
     static AnimTaskFunc sAnimTaskFuncs[ANIMTASK_MAX] = {
-        AnimTask_LoadPlayerFrame,      AnimTask_Copy,      AnimTask_Interp, AnimTask_CopyUsingMap,
-        AnimTask_CopyUsingMapInverted, AnimTask_ActorMove,
+        AnimTask_LoadPlayerFrame,      AnimTask_Copy,          AnimTask_Interp, AnimTask_CopyUsingMap,
+        AnimTask_CopyUsingMapInverted, AnimTask_ActorMovement,
     };
     AnimTask* task = animTaskQueue->tasks;
 
@@ -1978,7 +1979,7 @@ void SkelAnime_UpdateTranslation(SkelAnime* skelAnime, Vec3f* diff, s16 angle) {
     f32 sin;
     f32 cos;
 
-    if (skelAnime->moveFlags & ANIM_FLAG_NOMOVE) {
+    if (skelAnime->movementFlags & ANIM_FLAG_NOMOVE) {
         diff->z = 0.0f;
         diff->x = 0.0f;
     } else {
@@ -1996,8 +1997,8 @@ void SkelAnime_UpdateTranslation(SkelAnime* skelAnime, Vec3f* diff, s16 angle) {
     skelAnime->prevTransl.z = skelAnime->jointTable[LIMB_ROOT_POS].z;
     skelAnime->jointTable[LIMB_ROOT_POS].z = skelAnime->baseTransl.z;
 
-    if (skelAnime->moveFlags & ANIM_FLAG_UPDATE_Y) {
-        if (skelAnime->moveFlags & ANIM_FLAG_NOMOVE) {
+    if (skelAnime->movementFlags & ANIM_FLAG_UPDATE_Y) {
+        if (skelAnime->movementFlags & ANIM_FLAG_NOMOVE) {
             diff->y = 0.0f;
         } else {
             diff->y = skelAnime->jointTable[LIMB_ROOT_POS].y - skelAnime->prevTransl.y;
@@ -2008,7 +2009,7 @@ void SkelAnime_UpdateTranslation(SkelAnime* skelAnime, Vec3f* diff, s16 angle) {
         diff->y = 0.0f;
         skelAnime->prevTransl.y = skelAnime->jointTable[LIMB_ROOT_POS].y;
     }
-    skelAnime->moveFlags &= ~ANIM_FLAG_NOMOVE;
+    skelAnime->movementFlags &= ~ANIM_FLAG_NOMOVE;
 }
 
 /**

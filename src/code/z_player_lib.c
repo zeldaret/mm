@@ -2235,11 +2235,12 @@ s32 Player_OverrideLimbDrawGameplayCommon(PlayState* play, s32 limbIndex, Gfx** 
         sPlayerCurBodyPartPos = &player->bodyPartsPos[0] - 1;
 
         if (player->transformation != PLAYER_FORM_FIERCE_DEITY) {
-            if (!(player->skelAnime.moveFlags & ANIM_FLAG_4) || (player->skelAnime.moveFlags & ANIM_FLAG_1)) {
+            if (!(player->skelAnime.movementFlags & ANIM_FLAG_4) || (player->skelAnime.movementFlags & ANIM_FLAG_1)) {
                 pos->x *= player->ageProperties->unk_08;
                 pos->z *= player->ageProperties->unk_08;
             }
-            if (!(player->skelAnime.moveFlags & ANIM_FLAG_4) || (player->skelAnime.moveFlags & ANIM_FLAG_UPDATE_Y)) {
+            if (!(player->skelAnime.movementFlags & ANIM_FLAG_4) ||
+                (player->skelAnime.movementFlags & ANIM_FLAG_UPDATE_Y)) {
                 pos->y *= player->ageProperties->unk_08;
             }
         }

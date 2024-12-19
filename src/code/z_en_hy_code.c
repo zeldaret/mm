@@ -189,8 +189,8 @@ void func_800F0BB4(EnHy* enHy, PlayState* play, EnDoor* door, s16 arg3, s16 arg4
     EnHy_ChangeObjectAndAnim(enHy, play, (animIndex == 0) ? arg3 : arg4);
     enHy->skelAnime.baseTransl = enHy->skelAnime.jointTable[LIMB_ROOT_POS];
     enHy->skelAnime.prevTransl = enHy->skelAnime.jointTable[LIMB_ROOT_POS];
-    enHy->skelAnime.moveFlags |= (ANIM_FLAG_UPDATE_Y | ANIM_FLAG_1);
-    AnimTaskQueue_AddActorMove(play, &enHy->actor, &enHy->skelAnime, 1.0f);
+    enHy->skelAnime.movementFlags |= (ANIM_FLAG_UPDATE_Y | ANIM_FLAG_1);
+    AnimTaskQueue_AddActorMovement(play, &enHy->actor, &enHy->skelAnime, 1.0f);
     door->knobDoor.requestOpen = true;
     door->knobDoor.animIndex = animIndex;
 }

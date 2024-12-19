@@ -22,7 +22,15 @@ struct PlayerAnimationFrame;
 #define ANIM_FLAG_1         (1 << 0)
 #define ANIM_FLAG_UPDATE_Y  (1 << 1)
 #define ANIM_FLAG_4         (1 << 2)
-#define ANIM_FLAG_8         (1 << 3)
+
+// When this flag is set, ActorMovement tasks will be queued.
+//
+// Note that individual actors are responsible for implementing the functionality of this flag.
+// In practice, Player is the only actor who implements this flag.
+// It is possible to bypass the need for this flag by manually calling `AnimTaskQueue_AddActorMovement`
+// when it is needed.
+#define ANIM_FLAG_ENABLE_MOVEMENT (1 << 3)
+
 #define ANIM_FLAG_NOMOVE    (1 << 4)
 #define ANIM_FLAG_80        (1 << 7)
 #define ANIM_FLAG_100       (1 << 8)
@@ -140,7 +148,7 @@ typedef struct {
     /* 0x0 */ struct Actor* actor;
     /* 0x4 */ struct SkelAnime* skelAnime;
     /* 0x8 */ f32 diffScale;
-} AnimTaskActorMove; // size = 0xC
+} AnimTaskActorMovement; // size = 0xC
 
 typedef union {
     AnimTaskLoadPlayerFrame loadPlayerFrame;
@@ -148,7 +156,7 @@ typedef union {
     AnimTaskInterp interp;
     AnimTaskCopyUsingMap copyUsingMap;
     AnimTaskCopyUsingMapInverted copyUsingMapInverted;
-    AnimTaskActorMove actorMove;
+    AnimTaskActorMovement actorMovement;
 } AnimTaskData; // size = 0x3C
 
 typedef struct {
@@ -192,7 +200,7 @@ typedef struct SkelAnime {
                     s32 (*player)(struct PlayState*, struct SkelAnime*); // Loop, Play once, and Morph
                 } update;
     /* 0x34 */ s8 initFlags;      // Flags used when initializing Player's skeleton
-    /* 0x35 */ u8 moveFlags;      // Flags used for animations that move the actor in worldspace.
+    /* 0x35 */ u8 movementFlags;  // Flags used for animations that move the actor in worldspace.
     /* 0x36 */ s16 prevYaw;       // Previous rotation in worldspace.
     /* 0x38 */ Vec3s prevTransl;  // Previous modelspace translation.
     /* 0x3E */ Vec3s baseTransl;  // Base modelspace translation.
@@ -262,7 +270,7 @@ void AnimTaskQueue_AddCopy(struct PlayState* play, s32 vecCount, Vec3s* dest, Ve
 void AnimTaskQueue_AddInterp(struct PlayState* play, s32 vecCount, Vec3s* base, Vec3s* mod, f32 weight);
 void AnimTaskQueue_AddCopyUsingMap(struct PlayState* play, s32 vecCount, Vec3s* dest, Vec3s* src, u8* limbCopyMap);
 void AnimTaskQueue_AddCopyUsingMapInverted(struct PlayState* play, s32 vecCount, Vec3s* dest, Vec3s* src, u8* limbCopyMap);
-void AnimTaskQueue_AddActorMove(struct PlayState* play, struct Actor* actor, SkelAnime* skelAnime, f32 moveDiffScale);
+void AnimTaskQueue_AddActorMovement(struct PlayState* play, struct Actor* actor, SkelAnime* skelAnime, f32 moveDiffScale);
 void AnimTaskQueue_Update(struct PlayState* play, AnimTaskQueue* animTaskQueue);
 
 void SkelAnime_InitPlayer(struct PlayState* play, SkelAnime* skelAnime, FlexSkeletonHeader* skeletonHeaderSeg, PlayerAnimationHeader* animation, s32 flags, void* jointTableBuffer, void* morphTableBuffer, s32 limbBufCount);
