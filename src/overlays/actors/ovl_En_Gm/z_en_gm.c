@@ -1233,7 +1233,7 @@ s32 func_8094FCC4(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             EnGm_ChangeAnim(this, play, ENGM_ANIM_0);
         } else {
             EnGm_ChangeAnim(this, play, ENGM_ANIM_9);
-            this->skelAnime.moveFlags = ANIM_FLAG_NOMOVE;
+            this->skelAnime.movementFlags = ANIM_FLAG_NOMOVE;
         }
         this->unk_3A4 |= 0x100;
         this->unk_3A4 |= 0x200;
@@ -1309,7 +1309,7 @@ s32 func_8094FF04(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
         } else {
             Math_Vec3f_Copy(&this->actor.world.pos, &sp30);
             EnGm_ChangeAnim(this, play, ENGM_ANIM_9);
-            this->skelAnime.moveFlags = ANIM_FLAG_NOMOVE;
+            this->skelAnime.movementFlags = ANIM_FLAG_NOMOVE;
         }
         this->unk_400 = 0;
         this->unk_3A4 |= 0x100;
@@ -1468,7 +1468,7 @@ s32 func_809503F8(EnGm* this, PlayState* play) {
             SubS_SetOfferMode(&this->unk_3A4, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
             EnGm_ChangeAnim(this, play, ENGM_ANIM_0);
         } else {
-            AnimTaskQueue_AddActorMove(play, &this->actor, &this->skelAnime, 1.0f);
+            AnimTaskQueue_AddActorMovement(play, &this->actor, &this->skelAnime, 1.0f);
         }
     }
     return false;
@@ -1505,7 +1505,7 @@ s32 func_80950490(EnGm* this, PlayState* play) {
                 EnGm_ChangeAnim(this, play, ENGM_ANIM_0);
                 func_8094E278(play);
             } else {
-                AnimTaskQueue_AddActorMove(play, &this->actor, &this->skelAnime, 1.0f);
+                AnimTaskQueue_AddActorMovement(play, &this->actor, &this->skelAnime, 1.0f);
             }
             break;
 
