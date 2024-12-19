@@ -25,7 +25,7 @@ void Room_Draw(PlayState* play, Room* room, u32 flags);
 
 void Room_FinishRoomChange(PlayState* play, RoomContext* roomCtx);
 
-void func_80183070(void);
+NORETURN void func_80183070(void);
 
 AudioTask* AudioThread_Update(void);
 void AudioThread_QueueCmdF32(u32 opArgs, f32 data);
