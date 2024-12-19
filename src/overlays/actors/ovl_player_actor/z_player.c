@@ -18352,7 +18352,7 @@ void Player_Action_84(Player* this, PlayState* play) {
             func_8082DC38(this);
 
             if (anim == NULL) {
-                this->skelAnime.movementFlags &= ~8;
+                this->skelAnime.movementFlags &= ~ANIM_FLAG_ENABLE_MOVEMENT;
                 func_8085B384(this, play);
             } else {
                 u8 savedMovementFlags = this->skelAnime.movementFlags;
