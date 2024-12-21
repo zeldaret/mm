@@ -299,7 +299,7 @@ wordReplace = {
     "SkelAnime_AnimationType2Loaded": "AnimTask_Interp",
     "SkelAnime_AnimationType3Loaded": "AnimTask_CopyUsingMap",
     "SkelAnime_AnimationType4Loaded": "AnimTask_CopyUsingMapInverted",
-    "SkelAnime_AnimationType5Loaded": "AnimTask_ActorMove",
+    "SkelAnime_AnimationType5Loaded": "AnimTask_ActorMovement",
     "func_80135EE8": "AnimTaskQueue_Update",
     "SkelAnime_InitLink": "SkelAnime_InitPlayer",
     "LinkAnimation_SetUpdateFunction": "PlayerAnimation_SetUpdateFunction",
