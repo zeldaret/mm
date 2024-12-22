@@ -169,7 +169,7 @@ static TexturePtr sMouthTextures[] = {
     gCremiaMouthHangingOpenTex,
 };
 
-static TexturePtr sEyesTextures[] = {
+static TexturePtr sEyeTextures[] = {
     gCremiaEyeOpenTex, gCremiaEyeHalfTex, gCremiaEyeClosedTex, gCremiaEyeHappyTex, gCremiaEyeAngryTex, gCremiaEyeSadTex,
 };
 
@@ -1523,7 +1523,7 @@ void EnMaYto_Draw(Actor* thisx, PlayState* play) {
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sMouthTextures[this->mouthTexIndex]));
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyesTextures[this->eyeTexIndex]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeTexIndex]));
 
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnMaYto_OverrideLimbDraw, EnMaYto_PostLimbDraw, &this->actor);

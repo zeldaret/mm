@@ -358,9 +358,9 @@ asm/non_matchings/code/z_actor/Attention_ActorOnScreen.s,Attention_ActorOnScreen
 asm/non_matchings/code/z_actor/Attention_FindActorInCategory.s,Attention_FindActorInCategory,0x800BB604,0xBA
 asm/non_matchings/code/z_actor/Attention_FindActor.s,Attention_FindActor,0x800BB8EC,0x67
 asm/non_matchings/code/z_actor/Enemy_StartFinishingBlow.s,Enemy_StartFinishingBlow,0x800BBA88,0xE
-asm/non_matchings/code/z_actor/func_800BBAC0.s,func_800BBAC0,0x800BBAC0,0x2D
-asm/non_matchings/code/z_actor/func_800BBB74.s,func_800BBB74,0x800BBB74,0x2B
-asm/non_matchings/code/z_actor/func_800BBC20.s,func_800BBC20,0x800BBC20,0x33
+asm/non_matchings/code/z_actor/FaceChange_UpdateBlinking.s,FaceChange_UpdateBlinking,0x800BBAC0,0x2D
+asm/non_matchings/code/z_actor/FaceChange_UpdateBlinkingAlt.s,FaceChange_UpdateBlinkingAlt,0x800BBB74,0x2B
+asm/non_matchings/code/z_actor/FaceChange_UpdateRandomSet.s,FaceChange_UpdateRandomSet,0x800BBC20,0x33
 asm/non_matchings/code/z_actor/Actor_SpawnBodyParts.s,Actor_SpawnBodyParts,0x800BBCEC,0x30
 asm/non_matchings/code/z_actor/Actor_SpawnFloorDustRing.s,Actor_SpawnFloorDustRing,0x800BBDAC,0x81
 asm/non_matchings/code/z_actor/func_800BBFB0.s,func_800BBFB0,0x800BBFB0,0x69

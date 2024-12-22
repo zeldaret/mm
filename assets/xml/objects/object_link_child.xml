@@ -3,16 +3,16 @@
         <Texture Name="gLinkHumanEyesOpenTex" OutName="eyes_open" Format="ci8" Width="64" Height="32" Offset="0x0" TlutOffset="0x5000" />
         <Texture Name="gLinkHumanEyesHalfTex" OutName="eyes_half" Format="ci8" Width="64" Height="32" Offset="0x800" TlutOffset="0x5000" />
         <Texture Name="gLinkHumanEyesClosedTex" OutName="eyes_closed" Format="ci8" Width="64" Height="32" Offset="0x1000" TlutOffset="0x5000" />
-        <Texture Name="gLinkHumanEyesRollRightTex" OutName="eyes_roll_right" Format="ci8" Width="64" Height="32" Offset="0x1800" TlutOffset="0x5000" />
-        <Texture Name="gLinkHumanEyesRollLeftTex" OutName="eyes_roll_left" Format="ci8" Width="64" Height="32" Offset="0x2000" TlutOffset="0x5000" />
-        <Texture Name="gLinkHumanEyesRollUpTex" OutName="eyes_roll_up" Format="ci8" Width="64" Height="32" Offset="0x2800" TlutOffset="0x5000" />
-        <Texture Name="gLinkHumanEyesRollDownTex" OutName="eyes_roll_down" Format="ci8" Width="64" Height="32" Offset="0x3000" TlutOffset="0x5000" />
-        <Texture Name="object_link_child_Tex_003800" OutName="tex_003800" Format="ci8" Width="64" Height="32" Offset="0x3800" TlutOffset="0x5000" />
+        <Texture Name="gLinkHumanEyesRightTex" OutName="eyes_right" Format="ci8" Width="64" Height="32" Offset="0x1800" TlutOffset="0x5000" />
+        <Texture Name="gLinkHumanEyesLeftTex" OutName="eyes_left" Format="ci8" Width="64" Height="32" Offset="0x2000" TlutOffset="0x5000" />
+        <Texture Name="gLinkHumanEyesUpTex" OutName="eyes_up" Format="ci8" Width="64" Height="32" Offset="0x2800" TlutOffset="0x5000" />
+        <Texture Name="gLinkHumanEyesDownTex" OutName="eyes_down" Format="ci8" Width="64" Height="32" Offset="0x3000" TlutOffset="0x5000" />
+        <Texture Name="gLinkHumanEyesWincingTex" OutName="eyes_wincing" Format="ci8" Width="64" Height="32" Offset="0x3800" TlutOffset="0x5000" />
 
         <Texture Name="gLinkHumanMouthClosedTex" OutName="mouth_closed" Format="ci8" Width="32" Height="32" Offset="0x4000" TlutOffset="0x5200" />
-        <Texture Name="gLinkHumanMouthTeethTex" OutName="mouth_teeth" Format="ci8" Width="32" Height="32" Offset="0x4400" TlutOffset="0x5200" />
-        <Texture Name="gLinkHumanMouthAngryTex" OutName="mouth_angry" Format="ci8" Width="32" Height="32" Offset="0x4800" TlutOffset="0x5200" />
-        <Texture Name="gLinkHumanMouthHappyTex" OutName="mouth_happy" Format="ci8" Width="32" Height="32" Offset="0x4C00" TlutOffset="0x5200" />
+        <Texture Name="gLinkHumanMouthHalfTex" OutName="mouth_half" Format="ci8" Width="32" Height="32" Offset="0x4400" TlutOffset="0x5200" />
+        <Texture Name="gLinkHumanMouthOpenTex" OutName="mouth_open" Format="ci8" Width="32" Height="32" Offset="0x4800" TlutOffset="0x5200" />
+        <Texture Name="gLinkHumanMouthSmileTex" OutName="mouth_smile" Format="ci8" Width="32" Height="32" Offset="0x4C00" TlutOffset="0x5200" />
 
         <Texture Name="gLinkHumanSkinTLUT" OutName="skin_tlut" Format="rgba16" Width="16" Height="16" Offset="0x5000" />
         <Texture Name="gLinkHumanMouthTLUT" OutName="mouth_tlut" Format="rgba16" Width="16" Height="16" Offset="0x5200" />

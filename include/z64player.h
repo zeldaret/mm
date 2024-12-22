@@ -9,6 +9,7 @@
 #include "z64interface.h"
 #include "z64item.h"
 #include "z64light.h"
+#include "face_change.h"
 
 struct Player;
 struct PlayState;
@@ -477,19 +478,19 @@ typedef enum PlayerEyeIndex {
     /* 0 */ PLAYER_EYES_OPEN,
     /* 1 */ PLAYER_EYES_HALF,
     /* 2 */ PLAYER_EYES_CLOSED,
-    /* 3 */ PLAYER_EYES_ROLL_RIGHT,
-    /* 4 */ PLAYER_EYES_ROLL_LEFT,
-    /* 5 */ PLAYER_EYES_ROLL_UP,
-    /* 6 */ PLAYER_EYES_ROLL_DOWN,
-    /* 7 */ PLAYER_EYES_7,
+    /* 3 */ PLAYER_EYES_RIGHT,
+    /* 4 */ PLAYER_EYES_LEFT,
+    /* 5 */ PLAYER_EYES_UP,
+    /* 6 */ PLAYER_EYES_DOWN,
+    /* 7 */ PLAYER_EYES_WINCING, // For Goron, this is a surprised eye
     /* 8 */ PLAYER_EYES_MAX
 } PlayerEyeIndex;
 
 typedef enum PlayerMouthIndex {
     /* 0 */ PLAYER_MOUTH_CLOSED,
-    /* 1 */ PLAYER_MOUTH_TEETH,
-    /* 2 */ PLAYER_MOUTH_ANGRY,
-    /* 3 */ PLAYER_MOUTH_HAPPY,
+    /* 1 */ PLAYER_MOUTH_HALF,
+    /* 2 */ PLAYER_MOUTH_OPEN,
+    /* 3 */ PLAYER_MOUTH_SMILE,
     /* 4 */ PLAYER_MOUTH_MAX
 } PlayerMouthIndex;
 
@@ -1165,7 +1166,7 @@ typedef struct Player {
     /* 0x2C8 */ SkelAnime unk_2C8;
     /* 0x30C */ Vec3s jointTable[5];
     /* 0x32A */ Vec3s morphTable[5];
-    /* 0x348 */ BlinkInfo blinkInfo;
+    /* 0x348 */ FaceChange faceChange;
     /* 0x34C */ Actor* heldActor;
     /* 0x350 */ PosRot leftHandWorld;
     /* 0x364 */ Actor* rightHandActor;

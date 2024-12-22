@@ -11,6 +11,7 @@
 #include "z64collision_check.h"
 #include "z64item.h"
 #include "unk.h"
+#include "face_change.h"
 
 #define MASS_IMMOVABLE 0xFF // Cannot be pushed by OC collisions
 #define MASS_HEAVY 0xFE     // Can only be pushed by OC collisions with IMMOVABLE and HEAVY objects.
@@ -759,11 +760,6 @@ typedef struct NpcInteractInfo {
     /* 0x24 */ UNK_TYPE1 unk_24[0x4];
 } NpcInteractInfo; // size = 0x28
 
-typedef struct BlinkInfo {
-    /* 0x0 */ s16 eyeTexIndex;
-    /* 0x2 */ s16 blinkTimer;
-} BlinkInfo; // size = 0x4
-
 extern AttentionRangeParams gAttentionRanges[ATTENTION_RANGE_MAX];
 extern s16 D_801AED48[8];
 extern Gfx D_801AEF88[];
@@ -911,9 +907,6 @@ Actor* Actor_SpawnAsChild(ActorContext* actorCtx, Actor* parent, struct PlayStat
                           f32 posY, f32 posZ, s16 rotX, s16 rotY, s16 rotZ, s32 params);
 void Actor_SpawnTransitionActors(struct PlayState* play, ActorContext* actorCtx);
 void Enemy_StartFinishingBlow(struct PlayState* play, Actor* actor);
-s16 func_800BBAC0(BlinkInfo* info, s16 arg1, s16 arg2, s16 arg3);
-s16 func_800BBB74(BlinkInfo* info, s16 arg1, s16 arg2, s16 arg3);
-s16 func_800BBC20(BlinkInfo* info, s16 arg1, s16 arg2, s16 arg3);
 void Actor_SpawnBodyParts(Actor* actor, struct PlayState* play, s32 partParams, Gfx** dList);
 void Actor_SpawnFloorDustRing(struct PlayState* play, Actor* actor, Vec3f* posXZ, f32 radius, s32 countMinusOne,
                               f32 randAccelWeight, s16 scale, s16 scaleStep, u8 useLighting);

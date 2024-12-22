@@ -1824,23 +1824,122 @@ Gfx gCullFrontDList[] = {
     gsSPEndDisplayList(),
 };
 
-TexturePtr sPlayerEyesTextures[PLAYER_EYES_MAX] = {
-    gLinkHumanEyesOpenTex,        // PLAYER_EYES_OPEN
-    gLinkHumanEyesHalfTex,        // PLAYER_EYES_HALF
-    gLinkHumanEyesClosedTex,      // PLAYER_EYES_CLOSED
-    gLinkHumanEyesRollRightTex,   // PLAYER_EYES_ROLL_RIGHT
-    gLinkHumanEyesRollLeftTex,    // PLAYER_EYES_ROLL_LEFT
-    gLinkHumanEyesRollUpTex,      // PLAYER_EYES_ROLL_UP
-    gLinkHumanEyesRollDownTex,    // PLAYER_EYES_ROLL_DOWN
-    object_link_child_Tex_003800, // PLAYER_EYES_7
+#ifndef AVOID_UB
+static TexturePtr sEyeTextures[PLAYER_EYES_MAX] = {
+    gLinkHumanEyesOpenTex,    // PLAYER_EYES_OPEN
+    gLinkHumanEyesHalfTex,    // PLAYER_EYES_HALF
+    gLinkHumanEyesClosedTex,  // PLAYER_EYES_CLOSED
+    gLinkHumanEyesRightTex,   // PLAYER_EYES_RIGHT
+    gLinkHumanEyesLeftTex,    // PLAYER_EYES_LEFT
+    gLinkHumanEyesUpTex,      // PLAYER_EYES_UP
+    gLinkHumanEyesDownTex,    // PLAYER_EYES_DOWN
+    gLinkHumanEyesWincingTex, // PLAYER_EYES_WINCING
 };
 
-TexturePtr sPlayerMouthTextures[PLAYER_MOUTH_MAX] = {
+static TexturePtr sMouthTextures[PLAYER_MOUTH_MAX] = {
     gLinkHumanMouthClosedTex, // PLAYER_MOUTH_CLOSED
-    gLinkHumanMouthTeethTex,  // PLAYER_MOUTH_TEETH
-    gLinkHumanMouthAngryTex,  // PLAYER_MOUTH_ANGRY
-    gLinkHumanMouthHappyTex,  // PLAYER_MOUTH_HAPPY
+    gLinkHumanMouthHalfTex,   // PLAYER_MOUTH_HALF
+    gLinkHumanMouthOpenTex,   // PLAYER_MOUTH_OPEN
+    gLinkHumanMouthSmileTex,  // PLAYER_MOUTH_SMILE
 };
+#else
+static TexturePtr sEyeTextures[PLAYER_FORM_MAX][PLAYER_EYES_MAX] = {
+    // PLAYER_FORM_FIERCE_DEITY
+    {
+        NULL, // PLAYER_EYES_OPEN
+        NULL, // PLAYER_EYES_HALF
+        NULL, // PLAYER_EYES_CLOSED
+        NULL, // PLAYER_EYES_RIGHT
+        NULL, // PLAYER_EYES_LEFT
+        NULL, // PLAYER_EYES_UP
+        NULL, // PLAYER_EYES_DOWN
+        NULL, // PLAYER_EYES_WINCING
+    },
+    // PLAYER_FORM_GORON
+    // Note: use PLAYER_EYES_WINCING to access `gLinkGoronEyesSurprisedTex`. See `Player_DrawImpl`.
+    {
+        gLinkGoronEyesOpenTex,      // PLAYER_EYES_OPEN
+        gLinkGoronEyesHalfTex,      // PLAYER_EYES_HALF
+        gLinkGoronEyesClosedTex,    // PLAYER_EYES_CLOSED
+        gLinkGoronEyesSurprisedTex, // PLAYER_EYES_RIGHT
+        NULL,                       // PLAYER_EYES_LEFT
+        NULL,                       // PLAYER_EYES_UP
+        NULL,                       // PLAYER_EYES_DOWN
+        NULL,                       // PLAYER_EYES_WINCING
+    },
+    // PLAYER_FORM_ZORA
+    {
+        gLinkZoraEyesOpenTex,    // PLAYER_EYES_OPEN
+        gLinkZoraEyesHalfTex,    // PLAYER_EYES_HALF
+        gLinkZoraEyesClosedTex,  // PLAYER_EYES_CLOSED
+        gLinkZoraEyesRightTex,   // PLAYER_EYES_RIGHT
+        gLinkZoraEyesLeftTex,    // PLAYER_EYES_LEFT
+        gLinkZoraEyesUpTex,      // PLAYER_EYES_UP
+        gLinkZoraEyesDownTex,    // PLAYER_EYES_DOWN
+        gLinkZoraEyesWincingTex, // PLAYER_EYES_WINCING
+    },
+    // PLAYER_FORM_DEKU
+    {
+        NULL, // PLAYER_EYES_OPEN
+        NULL, // PLAYER_EYES_HALF
+        NULL, // PLAYER_EYES_CLOSED
+        NULL, // PLAYER_EYES_RIGHT
+        NULL, // PLAYER_EYES_LEFT
+        NULL, // PLAYER_EYES_UP
+        NULL, // PLAYER_EYES_DOWN
+        NULL, // PLAYER_EYES_WINCING
+    },
+    // PLAYER_FORM_HUMAN
+    {
+        gLinkHumanEyesOpenTex,    // PLAYER_EYES_OPEN
+        gLinkHumanEyesHalfTex,    // PLAYER_EYES_HALF
+        gLinkHumanEyesClosedTex,  // PLAYER_EYES_CLOSED
+        gLinkHumanEyesRightTex,   // PLAYER_EYES_RIGHT
+        gLinkHumanEyesLeftTex,    // PLAYER_EYES_LEFT
+        gLinkHumanEyesUpTex,      // PLAYER_EYES_UP
+        gLinkHumanEyesDownTex,    // PLAYER_EYES_DOWN
+        gLinkHumanEyesWincingTex, // PLAYER_EYES_WINCING
+    },
+};
+
+static TexturePtr sMouthTextures[PLAYER_FORM_MAX][PLAYER_MOUTH_MAX] = {
+    // PLAYER_FORM_FIERCE_DEITY
+    {
+        NULL, // PLAYER_MOUTH_CLOSED
+        NULL, // PLAYER_MOUTH_HALF
+        NULL, // PLAYER_MOUTH_OPEN
+        NULL, // PLAYER_MOUTH_SMILE
+    },
+    // PLAYER_FORM_GORON
+    {
+        NULL, // PLAYER_MOUTH_CLOSED
+        NULL, // PLAYER_MOUTH_HALF
+        NULL, // PLAYER_MOUTH_OPEN
+        NULL, // PLAYER_MOUTH_SMILE
+    },
+    // PLAYER_FORM_ZORA
+    {
+        gLinkZoraMouthClosedTex, // PLAYER_MOUTH_CLOSED
+        gLinkZoraMouthHalfTex,   // PLAYER_MOUTH_HALF
+        gLinkZoraMouthOpenTex,   // PLAYER_MOUTH_OPEN
+        gLinkZoraMouthSmileTex,  // PLAYER_MOUTH_SMILE
+    },
+    // PLAYER_FORM_DEKU
+    {
+        NULL, // PLAYER_MOUTH_CLOSED
+        NULL, // PLAYER_MOUTH_HALF
+        NULL, // PLAYER_MOUTH_OPEN
+        NULL, // PLAYER_MOUTH_SMILE
+    },
+    // PLAYER_FORM_HUMAN
+    {
+        gLinkHumanMouthClosedTex, // PLAYER_MOUTH_CLOSED
+        gLinkHumanMouthHalfTex,   // PLAYER_MOUTH_HALF
+        gLinkHumanMouthOpenTex,   // PLAYER_MOUTH_OPEN
+        gLinkHumanMouthSmileTex,  // PLAYER_MOUTH_SMILE
+    },
+};
+#endif
 
 typedef struct PlayerFaceIndices {
     /* 0x0 */ u8 eyeIndex;
@@ -1848,22 +1947,22 @@ typedef struct PlayerFaceIndices {
 } PlayerFaceIndices; // size = 0x2
 
 PlayerFaceIndices sPlayerFaces[] = {
-    { PLAYER_EYES_OPEN, PLAYER_MOUTH_CLOSED },       // PLAYER_FACE_0
-    { PLAYER_EYES_HALF, PLAYER_MOUTH_CLOSED },       // PLAYER_FACE_1
-    { PLAYER_EYES_CLOSED, PLAYER_MOUTH_CLOSED },     // PLAYER_FACE_2
-    { PLAYER_EYES_OPEN, PLAYER_MOUTH_CLOSED },       // PLAYER_FACE_3
-    { PLAYER_EYES_HALF, PLAYER_MOUTH_CLOSED },       // PLAYER_FACE_4
-    { PLAYER_EYES_CLOSED, PLAYER_MOUTH_CLOSED },     // PLAYER_FACE_5
-    { PLAYER_EYES_ROLL_LEFT, PLAYER_MOUTH_CLOSED },  // PLAYER_FACE_6
-    { PLAYER_EYES_ROLL_UP, PLAYER_MOUTH_TEETH },     // PLAYER_FACE_7
-    { PLAYER_EYES_7, PLAYER_MOUTH_ANGRY },           // PLAYER_FACE_8
-    { PLAYER_EYES_OPEN, PLAYER_MOUTH_ANGRY },        // PLAYER_FACE_9
-    { PLAYER_EYES_ROLL_RIGHT, PLAYER_MOUTH_CLOSED }, // PLAYER_FACE_10
-    { PLAYER_EYES_ROLL_LEFT, PLAYER_MOUTH_CLOSED },  // PLAYER_FACE_11
-    { PLAYER_EYES_CLOSED, PLAYER_MOUTH_ANGRY },      // PLAYER_FACE_12
-    { PLAYER_EYES_HALF, PLAYER_MOUTH_TEETH },        // PLAYER_FACE_13
-    { PLAYER_EYES_OPEN, PLAYER_MOUTH_ANGRY },        // PLAYER_FACE_14
-    { PLAYER_EYES_OPEN, PLAYER_MOUTH_HAPPY },        // PLAYER_FACE_15
+    { PLAYER_EYES_OPEN, PLAYER_MOUTH_CLOSED },   // PLAYER_FACE_0
+    { PLAYER_EYES_HALF, PLAYER_MOUTH_CLOSED },   // PLAYER_FACE_1
+    { PLAYER_EYES_CLOSED, PLAYER_MOUTH_CLOSED }, // PLAYER_FACE_2
+    { PLAYER_EYES_OPEN, PLAYER_MOUTH_CLOSED },   // PLAYER_FACE_3
+    { PLAYER_EYES_HALF, PLAYER_MOUTH_CLOSED },   // PLAYER_FACE_4
+    { PLAYER_EYES_CLOSED, PLAYER_MOUTH_CLOSED }, // PLAYER_FACE_5
+    { PLAYER_EYES_LEFT, PLAYER_MOUTH_CLOSED },   // PLAYER_FACE_6
+    { PLAYER_EYES_UP, PLAYER_MOUTH_HALF },       // PLAYER_FACE_7
+    { PLAYER_EYES_WINCING, PLAYER_MOUTH_OPEN },  // PLAYER_FACE_8
+    { PLAYER_EYES_OPEN, PLAYER_MOUTH_OPEN },     // PLAYER_FACE_9
+    { PLAYER_EYES_RIGHT, PLAYER_MOUTH_CLOSED },  // PLAYER_FACE_10
+    { PLAYER_EYES_LEFT, PLAYER_MOUTH_CLOSED },   // PLAYER_FACE_11
+    { PLAYER_EYES_CLOSED, PLAYER_MOUTH_OPEN },   // PLAYER_FACE_12
+    { PLAYER_EYES_HALF, PLAYER_MOUTH_HALF },     // PLAYER_FACE_13
+    { PLAYER_EYES_OPEN, PLAYER_MOUTH_OPEN },     // PLAYER_FACE_14
+    { PLAYER_EYES_OPEN, PLAYER_MOUTH_SMILE },    // PLAYER_FACE_15
 };
 
 // Note the correct pointer to pass as the jointTable is the jointTable pointer from the SkelAnime struct, not the
@@ -1884,20 +1983,34 @@ void Player_DrawImpl(PlayState* play, void** skeleton, Vec3s* jointTable, s32 dL
     }
 
     if (playerForm == PLAYER_FORM_GORON) {
-        if ((eyeIndex >= PLAYER_EYES_ROLL_RIGHT) && (eyeIndex <= PLAYER_EYES_ROLL_DOWN)) {
+        // Goron does
+        if ((eyeIndex >= PLAYER_EYES_RIGHT) && (eyeIndex <= PLAYER_EYES_DOWN)) {
             eyeIndex = PLAYER_EYES_OPEN;
-        } else if (eyeIndex == PLAYER_EYES_7) {
-            eyeIndex = PLAYER_EYES_ROLL_RIGHT;
+        } else if (eyeIndex == PLAYER_EYES_WINCING) {
+            // Goron form puts a surpised expression where the eyes-right normally goes
+            eyeIndex = PLAYER_EYES_RIGHT;
         }
     }
 
-    gSPSegment(&gfx[0], 0x08, Lib_SegmentedToVirtual(sPlayerEyesTextures[eyeIndex]));
+    // Only Human, Zora, and Goron will read the eye textures in the head limb display list.
+    // Fierce Deity and Deku will write garbage data to this segment, but it will be unread from.
+#ifndef AVOID_UB
+    gSPSegment(&gfx[0], 0x08, Lib_SegmentedToVirtual(sEyeTextures[eyeIndex]));
+#else
+    gSPSegment(&gfx[0], 0x08, Lib_SegmentedToVirtual(sEyeTextures[playerForm][eyeIndex]));
+#endif
 
     if (mouthIndex < 0) {
         mouthIndex = sPlayerFaces[face].mouthIndex;
     }
 
-    gSPSegment(&gfx[1], 0x09, Lib_SegmentedToVirtual(sPlayerMouthTextures[mouthIndex]));
+    // Only Human and Zora will read the eye textures in the head limb display list.
+    // Goron, Fierce Deity, and Deku will write garbage data to this segment, but it will be unread from.
+#ifndef AVOID_UB
+    gSPSegment(&gfx[1], 0x09, Lib_SegmentedToVirtual(sMouthTextures[mouthIndex]));
+#else
+    gSPSegment(&gfx[1], 0x09, Lib_SegmentedToVirtual(sMouthTextures[playerForm][mouthIndex]));
+#endif
 
     POLY_OPA_DISP = &gfx[2];
 

@@ -12520,12 +12520,12 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
         }
 
         if ((this->transformation >= PLAYER_FORM_GORON) && (this->transformation <= PLAYER_FORM_DEKU)) {
-            func_800BBB74(&this->blinkInfo, 20, 80, 3);
+            FaceChange_UpdateBlinkingAlt(&this->faceChange, 20, 80, 3);
         } else {
-            func_800BBAC0(&this->blinkInfo, 20, 80, 6);
+            FaceChange_UpdateBlinking(&this->faceChange, 20, 80, 6);
         }
 
-        this->actor.shape.face = ((play->gameplayFrames & 0x20) ? 0 : 3) + this->blinkInfo.eyeTexIndex;
+        this->actor.shape.face = ((play->gameplayFrames & 0x20) ? 0 : 3) + this->faceChange.face;
 
         if (this->currentMask == PLAYER_MASK_BUNNY) {
             Player_UpdateBunnyEars(this);
