@@ -1980,6 +1980,7 @@ void Player_DrawImpl(PlayState* play, void** skeleton, Vec3s* jointTable, s32 dL
 
     gfx = POLY_OPA_DISP;
 
+    // If the eyes index provided by the animation is negative, use the value provided by the `face` argument instead
     if (eyeIndex < 0) {
         eyeIndex = sPlayerFaces[face].eyeIndex;
     }
@@ -2002,6 +2003,7 @@ void Player_DrawImpl(PlayState* play, void** skeleton, Vec3s* jointTable, s32 dL
     gSPSegment(&gfx[0], 0x08, Lib_SegmentedToVirtual(sEyeTextures[playerForm][eyeIndex]));
 #endif
 
+    // If the mouth index provided by the animation is negative, use the value provided by the `face` argument instead
     if (mouthIndex < 0) {
         mouthIndex = sPlayerFaces[face].mouthIndex;
     }

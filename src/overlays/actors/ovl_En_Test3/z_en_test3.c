@@ -1289,13 +1289,18 @@ void EnTest3_Draw(Actor* thisx, PlayState* play2) {
 
     gfx = POLY_OPA_DISP;
 
+    // If the eyes index provided by the animation is negative, use the value provided by the `face` argument instead
     if (eyeIndex < 0) {
         eyeIndex = sKafeiFaces[this->player.actor.shape.face].eyeIndex;
     }
+
     gSPSegment(&gfx[0], 0x08, Lib_SegmentedToVirtual(sEyeTextures[eyeIndex]));
+
+    // If the mouth index provided by the animation is negative, use the value provided by the `face` argument instead
     if (mouthIndex < 0) {
         mouthIndex = sKafeiFaces[this->player.actor.shape.face].mouthIndex;
     }
+
     gSPSegment(&gfx[1], 0x09, Lib_SegmentedToVirtual(sMouthTextures[mouthIndex]));
 
     POLY_OPA_DISP = &gfx[2];
@@ -1303,11 +1308,14 @@ void EnTest3_Draw(Actor* thisx, PlayState* play2) {
     SkelAnime_DrawFlexLod(play, this->player.skelAnime.skeleton, this->player.skelAnime.jointTable,
                           this->player.skelAnime.dListCount, EnTest3_OverrideLimbDraw, EnTest3_PostLimbDraw,
                           &this->player.actor, 0);
+
     if (this->player.invincibilityTimer > 0) {
         POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
     }
+
     if ((this->player.getItemDrawIdPlusOne - 1) != GID_NONE) {
         Player_DrawGetItem(play, &this->player);
     }
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

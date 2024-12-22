@@ -479,12 +479,6 @@ typedef struct PlayerFaceIndices {
     /* 0x1 */ u8 mouthIndex;
 } PlayerFaceIndices; // size = 0x2
 
-typedef enum PlayerFacePart {
-    /* 0 */ PLAYER_FACEPART_EYES,
-    /* 1 */ PLAYER_FACEPART_MOUTH,
-    /* 2 */ PLAYER_FACEPART_MAX
-} PlayerFacePart;
-
 typedef enum PlayerEyes {
     /* 0 */ PLAYER_EYES_OPEN,
     /* 1 */ PLAYER_EYES_HALF,
