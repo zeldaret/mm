@@ -1824,6 +1824,15 @@ Gfx gCullFrontDList[] = {
     gsSPEndDisplayList(),
 };
 
+/**
+ * Link's eyes and mouth textures are placed at the exact same place in all player form's respective object files.
+ * This allows the array to only contain the symbols for one file and have it apply to both. This is a problem for
+ * shiftability, and changes will need to be made in the code to account for this in a modding scenario. The symbols
+ * from adult Link's object are used here.
+ *
+ * Note that some player forms do not use the eyes and mouth textures loaded into segments 0x08 and 0x09 respectively.
+ * Therefore, the segment will point at gargage data, but this does not cause issues as the data is not read from.
+ */
 #ifndef AVOID_UB
 static TexturePtr sEyeTextures[PLAYER_EYES_MAX] = {
     gLinkHumanEyesOpenTex,    // PLAYER_EYES_OPEN

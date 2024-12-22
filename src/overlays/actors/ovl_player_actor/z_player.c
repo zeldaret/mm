@@ -17317,7 +17317,7 @@ void func_80852290(PlayState* play, Player* this) {
         this->unk_B8A = 8;
     } else {
         f32 sp3C;
-        s16 var_a1_3;
+        s16 upperLimbRotX;
         s16 sp38;
 
         if ((play->msgCtx.ocarinaMode == OCARINA_MODE_ACTIVE) &&
@@ -17348,17 +17348,17 @@ void func_80852290(PlayState* play, Player* this) {
             sp38 = 0x2EE0;
         }
 
-        var_a1_3 = (sp3C * -100.0f);
-        var_a1_3 = CLAMP_MAX(var_a1_3, 0xFA0);
-        Math_SmoothStepToS(&this->upperLimbRot.x, var_a1_3, 4, 0x7D0, 0);
+        upperLimbRotX = (sp3C * -100.0f);
+        upperLimbRotX = CLAMP_MAX(upperLimbRotX, 0xFA0);
+        Math_SmoothStepToS(&this->upperLimbRot.x, upperLimbRotX, 4, 0x7D0, 0);
         Math_SmoothStepToS(&this->upperLimbRot.y, sp38, 4, 0x7D0, 0);
         this->headLimbRot.x = -this->upperLimbRot.x;
         this->unk_AA6_rotFlags |= UNKAA6_ROT_HEAD_X | UNKAA6_ROT_UPPER_X | UNKAA6_ROT_UPPER_Y;
 
-        var_a1_3 = ABS_ALT(this->upperLimbRot.x);
-        if (var_a1_3 < 0x7D0) {
+        upperLimbRotX = ABS_ALT(this->upperLimbRot.x);
+        if (upperLimbRotX < 0x7D0) {
             this->actor.shape.face = PLAYER_FACE_NEUTRAL;
-        } else if (var_a1_3 < 0xFA0) {
+        } else if (upperLimbRotX < 0xFA0) {
             this->actor.shape.face = PLAYER_FACE_OPENING;
         } else {
             this->actor.shape.face = PLAYER_FACE_HURT;
