@@ -1941,28 +1941,30 @@ static TexturePtr sMouthTextures[PLAYER_FORM_MAX][PLAYER_MOUTH_MAX] = {
 };
 #endif
 
-typedef struct PlayerFaceIndices {
-    /* 0x0 */ u8 eyeIndex;
-    /* 0x1 */ u8 mouthIndex;
-} PlayerFaceIndices; // size = 0x2
+PlayerFaceIndices sPlayerFaces[PLAYER_FACE_MAX] = {
+    // The first 6 faces defined must be default blinking faces. See relevant code in `Player_UpdateCommon`.
+    { PLAYER_EYES_OPEN, PLAYER_MOUTH_CLOSED },   // PLAYER_FACE_NEUTRAL
+    { PLAYER_EYES_HALF, PLAYER_MOUTH_CLOSED },   // PLAYER_FACE_NEUTRAL_BLINKING_HALF
+    { PLAYER_EYES_CLOSED, PLAYER_MOUTH_CLOSED }, // PLAYER_FACE_NEUTRAL_BLINKING_CLOSED
 
-PlayerFaceIndices sPlayerFaces[] = {
-    { PLAYER_EYES_OPEN, PLAYER_MOUTH_CLOSED },   // PLAYER_FACE_0
-    { PLAYER_EYES_HALF, PLAYER_MOUTH_CLOSED },   // PLAYER_FACE_1
-    { PLAYER_EYES_CLOSED, PLAYER_MOUTH_CLOSED }, // PLAYER_FACE_2
-    { PLAYER_EYES_OPEN, PLAYER_MOUTH_CLOSED },   // PLAYER_FACE_3
-    { PLAYER_EYES_HALF, PLAYER_MOUTH_CLOSED },   // PLAYER_FACE_4
-    { PLAYER_EYES_CLOSED, PLAYER_MOUTH_CLOSED }, // PLAYER_FACE_5
-    { PLAYER_EYES_LEFT, PLAYER_MOUTH_CLOSED },   // PLAYER_FACE_6
-    { PLAYER_EYES_UP, PLAYER_MOUTH_HALF },       // PLAYER_FACE_7
-    { PLAYER_EYES_WINCING, PLAYER_MOUTH_OPEN },  // PLAYER_FACE_8
-    { PLAYER_EYES_OPEN, PLAYER_MOUTH_OPEN },     // PLAYER_FACE_9
-    { PLAYER_EYES_RIGHT, PLAYER_MOUTH_CLOSED },  // PLAYER_FACE_10
-    { PLAYER_EYES_LEFT, PLAYER_MOUTH_CLOSED },   // PLAYER_FACE_11
-    { PLAYER_EYES_CLOSED, PLAYER_MOUTH_OPEN },   // PLAYER_FACE_12
-    { PLAYER_EYES_HALF, PLAYER_MOUTH_HALF },     // PLAYER_FACE_13
-    { PLAYER_EYES_OPEN, PLAYER_MOUTH_OPEN },     // PLAYER_FACE_14
-    { PLAYER_EYES_OPEN, PLAYER_MOUTH_SMILE },    // PLAYER_FACE_15
+    // This duplicate set of blinking faces is defined because Player will choose between the first and second set
+    // based on gameplayFrames. See relevant code in `Player_UpdateCommon`.
+    // This, in theory, allows for psuedo-random variance in the faces used. But in practice, duplicate faces are used.
+    { PLAYER_EYES_OPEN, PLAYER_MOUTH_CLOSED },   // PLAYER_FACE_NEUTRAL_2
+    { PLAYER_EYES_HALF, PLAYER_MOUTH_CLOSED },   // PLAYER_FACE_NEUTRAL_BLINKING_HALF_2
+    { PLAYER_EYES_CLOSED, PLAYER_MOUTH_CLOSED }, // PLAYER_FACE_NEUTRAL_BLINKING_CLOSED_2
+
+    // Additional faces. Most faces are encoded within animations.
+    { PLAYER_EYES_LEFT, PLAYER_MOUTH_CLOSED },  // PLAYER_FACE_LOOK_LEFT
+    { PLAYER_EYES_UP, PLAYER_MOUTH_HALF },      // PLAYER_FACE_SURPRISED
+    { PLAYER_EYES_WINCING, PLAYER_MOUTH_OPEN }, // PLAYER_FACE_HURT
+    { PLAYER_EYES_OPEN, PLAYER_MOUTH_OPEN },    // PLAYER_FACE_GASP
+    { PLAYER_EYES_RIGHT, PLAYER_MOUTH_CLOSED }, // PLAYER_FACE_LOOK_RIGHT
+    { PLAYER_EYES_LEFT, PLAYER_MOUTH_CLOSED },  // PLAYER_FACE_LOOK_LEFT_2
+    { PLAYER_EYES_CLOSED, PLAYER_MOUTH_OPEN },  // PLAYER_FACE_EYES_CLOSED_MOUTH_OPEN
+    { PLAYER_EYES_HALF, PLAYER_MOUTH_HALF },    // PLAYER_FACE_OPENING
+    { PLAYER_EYES_OPEN, PLAYER_MOUTH_OPEN },    // PLAYER_FACE_EYES_AND_MOUTH_OPEN
+    { PLAYER_EYES_OPEN, PLAYER_MOUTH_SMILE },   // PLAYER_FACE_SMILE
 };
 
 // Note the correct pointer to pass as the jointTable is the jointTable pointer from the SkelAnime struct, not the
@@ -1983,7 +1985,7 @@ void Player_DrawImpl(PlayState* play, void** skeleton, Vec3s* jointTable, s32 dL
     }
 
     if (playerForm == PLAYER_FORM_GORON) {
-        // Goron does
+        // Goron does not have the eye textures to look in different directions
         if ((eyeIndex >= PLAYER_EYES_RIGHT) && (eyeIndex <= PLAYER_EYES_DOWN)) {
             eyeIndex = PLAYER_EYES_OPEN;
         } else if (eyeIndex == PLAYER_EYES_WINCING) {

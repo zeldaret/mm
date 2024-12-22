@@ -474,7 +474,18 @@ typedef enum PlayerModelGroup {
     /* 15 */ PLAYER_MODELGROUP_MAX
 } PlayerModelGroup;
 
-typedef enum PlayerEyeIndex {
+typedef struct PlayerFaceIndices {
+    /* 0x0 */ u8 eyeIndex;
+    /* 0x1 */ u8 mouthIndex;
+} PlayerFaceIndices; // size = 0x2
+
+typedef enum PlayerFacePart {
+    /* 0 */ PLAYER_FACEPART_EYES,
+    /* 1 */ PLAYER_FACEPART_MOUTH,
+    /* 2 */ PLAYER_FACEPART_MAX
+} PlayerFacePart;
+
+typedef enum PlayerEyes {
     /* 0 */ PLAYER_EYES_OPEN,
     /* 1 */ PLAYER_EYES_HALF,
     /* 2 */ PLAYER_EYES_CLOSED,
@@ -484,34 +495,35 @@ typedef enum PlayerEyeIndex {
     /* 6 */ PLAYER_EYES_DOWN,
     /* 7 */ PLAYER_EYES_WINCING, // For Goron, this is a surprised eye
     /* 8 */ PLAYER_EYES_MAX
-} PlayerEyeIndex;
+} PlayerEyes;
 
-typedef enum PlayerMouthIndex {
+typedef enum PlayerMouth {
     /* 0 */ PLAYER_MOUTH_CLOSED,
     /* 1 */ PLAYER_MOUTH_HALF,
     /* 2 */ PLAYER_MOUTH_OPEN,
     /* 3 */ PLAYER_MOUTH_SMILE,
     /* 4 */ PLAYER_MOUTH_MAX
-} PlayerMouthIndex;
+} PlayerMouth;
 
-typedef enum PlayerFacialExpression {
-    /*  0 */ PLAYER_FACE_0,
-    /*  1 */ PLAYER_FACE_1,
-    /*  2 */ PLAYER_FACE_2,
-    /*  3 */ PLAYER_FACE_3,
-    /*  4 */ PLAYER_FACE_4,
-    /*  5 */ PLAYER_FACE_5,
-    /*  6 */ PLAYER_FACE_6,
-    /*  7 */ PLAYER_FACE_7,
-    /*  8 */ PLAYER_FACE_8,
-    /*  9 */ PLAYER_FACE_9,
-    /* 10 */ PLAYER_FACE_10,
-    /* 11 */ PLAYER_FACE_11,
-    /* 12 */ PLAYER_FACE_12,
-    /* 13 */ PLAYER_FACE_13,
-    /* 14 */ PLAYER_FACE_14,
-    /* 15 */ PLAYER_FACE_15
-} PlayerFacialExpression;
+typedef enum PlayerFace {
+    /*  0 */ PLAYER_FACE_NEUTRAL,
+    /*  1 */ PLAYER_FACE_NEUTRAL_BLINKING_HALF,
+    /*  2 */ PLAYER_FACE_NEUTRAL_BLINKING_CLOSED,
+    /*  3 */ PLAYER_FACE_NEUTRAL_2,
+    /*  4 */ PLAYER_FACE_NEUTRAL_BLINKING_HALF_2,
+    /*  5 */ PLAYER_FACE_NEUTRAL_BLINKING_CLOSED_2,
+    /*  6 */ PLAYER_FACE_LOOK_LEFT,
+    /*  7 */ PLAYER_FACE_SURPRISED,
+    /*  8 */ PLAYER_FACE_HURT,
+    /*  9 */ PLAYER_FACE_GASP,
+    /* 10 */ PLAYER_FACE_LOOK_RIGHT,
+    /* 11 */ PLAYER_FACE_LOOK_LEFT_2,
+    /* 12 */ PLAYER_FACE_EYES_CLOSED_MOUTH_OPEN,
+    /* 13 */ PLAYER_FACE_OPENING,
+    /* 14 */ PLAYER_FACE_EYES_AND_MOUTH_OPEN,
+    /* 15 */ PLAYER_FACE_SMILE,
+    /* 16 */ PLAYER_FACE_MAX
+} PlayerFace;
 
 typedef enum PlayerLimb {
     /* 0x00 */ PLAYER_LIMB_NONE,

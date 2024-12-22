@@ -17357,11 +17357,11 @@ void func_80852290(PlayState* play, Player* this) {
 
         var_a1_3 = ABS_ALT(this->upperLimbRot.x);
         if (var_a1_3 < 0x7D0) {
-            this->actor.shape.face = 0;
+            this->actor.shape.face = PLAYER_FACE_NEUTRAL;
         } else if (var_a1_3 < 0xFA0) {
-            this->actor.shape.face = 13;
+            this->actor.shape.face = PLAYER_FACE_OPENING;
         } else {
-            this->actor.shape.face = 8;
+            this->actor.shape.face = PLAYER_FACE_HURT;
         }
     }
 
@@ -20505,7 +20505,7 @@ void Player_CsAction_11(PlayState* play, Player* this, CsCmdActorCue* cue) {
 }
 
 void Player_CsAction_12(PlayState* play, Player* this, CsCmdActorCue* cue) {
-    this->actor.shape.face = 0xF;
+    this->actor.shape.face = PLAYER_FACE_SMILE;
     func_80840F90(play, this, cue, 0.0f, 0, 0);
 }
 
