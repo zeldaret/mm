@@ -1,6 +1,6 @@
 #include "global.h"
 
-// Unused; inferred to have been used in audio_synthesis based on Animal Forest's audio library
+// Unused; inferred to have been used in audio's synthesis.c based on Animal Forest's audio library
 s16 D_801D1E80[][128] ALIGNED(16) = {
     {
         1,      772,    1544,   2315,   3086,   3856,   4627,   5398,   5912,   6683,   7197,   7968,   8482,
