@@ -2005,7 +2005,7 @@ void Player_DrawImpl(PlayState* play, void** skeleton, Vec3s* jointTable, s32 dL
     }
 
     // Only Human, Zora, and Goron will read the eye textures in the head limb display list.
-    // Fierce Deity and Deku will write garbage data to this segment, but it will be unread from.
+    // Fierce Deity and Deku will point this segment to garbage data, but it will be unread from.
 #ifndef AVOID_UB
     gSPSegment(&gfx[0], 0x08, Lib_SegmentedToVirtual(sEyeTextures[eyeIndex]));
 #else
@@ -2018,7 +2018,7 @@ void Player_DrawImpl(PlayState* play, void** skeleton, Vec3s* jointTable, s32 dL
     }
 
     // Only Human and Zora will read the eye textures in the head limb display list.
-    // Goron, Fierce Deity, and Deku will write garbage data to this segment, but it will be unread from.
+    // Goron, Fierce Deity, and Deku will point this segment to garbage data, but it will be unread from.
 #ifndef AVOID_UB
     gSPSegment(&gfx[1], 0x09, Lib_SegmentedToVirtual(sMouthTextures[mouthIndex]));
 #else
