@@ -4,6 +4,7 @@
  * Description: Pause Menu
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_kaleido_scope.h"
 
 #include "sys_cmpdma.h"

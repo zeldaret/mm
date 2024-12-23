@@ -1,5 +1,6 @@
 #include "z64game.h"
 
+#include "prevent_bss_reordering.h"
 #include "global.h"
 #include "audiomgr.h"
 #include "libu64/debug.h"

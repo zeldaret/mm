@@ -11,7 +11,6 @@
 #include "z64collision_check.h"
 #include "z64item.h"
 #include "unk.h"
-#include "face_change.h"
 
 #define MASS_IMMOVABLE 0xFF // Cannot be pushed by OC collisions
 #define MASS_HEAVY 0xFE     // Can only be pushed by OC collisions with IMMOVABLE and HEAVY objects.

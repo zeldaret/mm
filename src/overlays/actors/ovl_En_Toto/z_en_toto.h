@@ -2,6 +2,7 @@
 #define Z_EN_TOTO_H
 
 #include "global.h"
+#include "face_change.h"
 #include "assets/objects/object_zm/object_zm.h"
 
 struct EnToto;
