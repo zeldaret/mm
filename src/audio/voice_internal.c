@@ -143,7 +143,7 @@ void func_801A53E8(u16 distance, u16 answerNum, u16 warning, u16 voiceLevel, u16
 }
 
 // Unused
-s32 func_801A541C(s32 analog, s32 digital) {
+void func_801A541C(s32 analog, s32 digital) {
     s32 errorCode;
     OSMesgQueue* serialEventQueue;
 
