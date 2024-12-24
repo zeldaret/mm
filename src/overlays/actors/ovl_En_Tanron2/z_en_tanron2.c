@@ -4,7 +4,6 @@
  * Description: Wart's Bubbles
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_en_tanron2.h"
 #include "overlays/actors/ovl_Boss_04/z_boss_04.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"

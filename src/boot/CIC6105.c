@@ -1,8 +1,9 @@
-#include "prevent_bss_reordering.h"
 #include "CIC6105.h"
 
 #include "build.h"
 #include "fault.h"
+
+#pragma increment_block_number "n64-us:200"
 
 s32 gCICAddr1Val;
 s32 gCICAddr2Val;
