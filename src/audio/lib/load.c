@@ -443,7 +443,6 @@ s32 AudioLoad_SyncLoadSample(Sample* sample, s32 fontId) {
         }
     }
     //! @bug Missing return, but the return value is never used so it's fine.
-
 }
 
 s32 AudioLoad_SyncLoadInstrument(s32 fontId, s32 instId, s32 drumId) {
