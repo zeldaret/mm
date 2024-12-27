@@ -147,7 +147,7 @@ void Graph_TaskSet00(GraphicsContext* gfxCtx, GameState* gameState) {
     OSScTask* scTask = &gfxCtx->task;
     OSTimer timer;
     OSMesg msg;
-    CfbInfo* cfb;
+    s32 pad;
 
 retry:
     osSetTimer(&timer, OS_USEC_TO_CYCLES(3 * 1000 * 1000), 0, &gfxCtx->queue, (OSMesg)666);
@@ -201,27 +201,28 @@ retry:
     scTask->msgQ = &gfxCtx->queue;
     scTask->msg = NULL;
 
-    { s32 pad; }
+    {
+        CfbInfo* cfb = &sGraphCfbInfos[sCfbIndex];
 
-    cfb = &sGraphCfbInfos[sCfbIndex];
-    sCfbIndex = (sCfbIndex + 1) % ARRAY_COUNT(sGraphCfbInfos);
+        sCfbIndex = (sCfbIndex + 1) % ARRAY_COUNT(sGraphCfbInfos);
 
-    cfb->framebuffer = gfxCtx->curFrameBuffer;
-    cfb->swapBuffer = gfxCtx->curFrameBuffer;
+        cfb->framebuffer = gfxCtx->curFrameBuffer;
+        cfb->swapBuffer = gfxCtx->curFrameBuffer;
 
-    if (gfxCtx->updateViMode) {
-        gfxCtx->updateViMode = false;
-        cfb->viMode = gfxCtx->viMode;
-        cfb->viFeatures = gfxCtx->viConfigFeatures;
-        cfb->xScale = gfxCtx->xScale;
-        cfb->yScale = gfxCtx->yScale;
-    } else {
-        cfb->viMode = NULL;
+        if (gfxCtx->updateViMode) {
+            gfxCtx->updateViMode = false;
+            cfb->viMode = gfxCtx->viMode;
+            cfb->viFeatures = gfxCtx->viConfigFeatures;
+            cfb->xScale = gfxCtx->xScale;
+            cfb->yScale = gfxCtx->yScale;
+        } else {
+            cfb->viMode = NULL;
+        }
+        cfb->unk_10 = 0;
+        cfb->updateRate = gameState->framerateDivisor;
+
+        scTask->framebuffer = cfb;
     }
-    cfb->unk_10 = 0;
-    cfb->updateRate = gameState->framerateDivisor;
-
-    scTask->framebuffer = cfb;
 
     while (gfxCtx->queue.validCount != 0) {
         osRecvMesg(&gfxCtx->queue, NULL, OS_MESG_NOBLOCK);
