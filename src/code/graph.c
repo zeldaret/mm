@@ -180,10 +180,10 @@ retry:
     task->ucode_data = SysUcode_GetUCodeData();
     task->ucode_size = SP_UCODE_SIZE;
     task->ucode_data_size = SP_UCODE_DATA_SIZE;
-    task->dram_stack = (u64*)gGfxSPTaskStack;
+    task->dram_stack = gGfxSPTaskStack;
     task->dram_stack_size = sizeof(gGfxSPTaskStack);
     task->output_buff = gGfxSPTaskOutputBufferPtr;
-    task->output_buff_size = (void*)gGfxSPTaskOutputBufferEnd;
+    task->output_buff_size = gGfxSPTaskOutputBufferEnd;
     task->data_ptr = (u64*)gGfxMasterDL;
     task->data_size = 0;
     task->yield_data_ptr = (u64*)gGfxSPTaskYieldBuffer;
