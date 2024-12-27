@@ -342,11 +342,11 @@ void Graph_ThreadEntry(void* arg) {
     GameStateOverlay* nextOvl = &gGameStateOverlayTable[0];
     GameStateOverlay* ovl;
     GameState* gameState;
-    u32 size;
+    size_t size;
     s32 pad[2];
 
     gZBufferLoRes = malloc(sizeof(*gZBufferLoRes) + sizeof(*gWorkBufferLoRes) + 64 - 1);
-    gZBufferLoRes = (void*)ALIGN64((u32)gZBufferLoRes);
+    gZBufferLoRes = (void*)ALIGN64((uintptr_t)gZBufferLoRes);
 
     gWorkBufferLoRes = (void*)((u8*)gZBufferLoRes + sizeof(*gZBufferLoRes));
 
