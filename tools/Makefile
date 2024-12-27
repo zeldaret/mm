@@ -45,8 +45,8 @@ $(foreach p,$(PROGRAMS),$(eval $(call COMPILE,$(p))))
 
 $(IDO_RECOMP_5_3_DIR):
 	mkdir -p $@
-	curl -L https://github.com/decompals/ido-static-recomp/releases/download/$(IDO_RECOMP_VERSION)/ido-5.3-recomp-$(DETECTED_OS).tar.gz | tar xz -C $@
+	curl -sL https://github.com/decompals/ido-static-recomp/releases/download/$(IDO_RECOMP_VERSION)/ido-5.3-recomp-$(DETECTED_OS).tar.gz | tar xz -C $@
 
 $(IDO_RECOMP_7_1_DIR):
 	mkdir -p $@
-	curl -L https://github.com/decompals/ido-static-recomp/releases/download/$(IDO_RECOMP_VERSION)/ido-7.1-recomp-$(DETECTED_OS).tar.gz | tar xz -C $@
+	curl -sL https://github.com/decompals/ido-static-recomp/releases/download/$(IDO_RECOMP_VERSION)/ido-7.1-recomp-$(DETECTED_OS).tar.gz | tar xz -C $@
