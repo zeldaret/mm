@@ -186,7 +186,7 @@ retry:
     task->output_buff_size = gGfxSPTaskOutputBufferEnd;
     task->data_ptr = (u64*)gGfxMasterDL;
     task->data_size = 0;
-    task->yield_data_ptr = (u64*)gGfxSPTaskYieldBuffer;
+    task->yield_data_ptr = gGfxSPTaskYieldBuffer;
     task->yield_data_size = sizeof(gGfxSPTaskYieldBuffer);
 
     scTask->next = NULL;
