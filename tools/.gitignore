@@ -4,3 +4,5 @@ mkdmadata
 mkldscript
 reloc_prereq
 vtxdis
+
+ido_recomp/
