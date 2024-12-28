@@ -88,10 +88,16 @@ void SysCfb_SetHiResMode(void) {
 }
 
 void SysCfb_Init(void) {
-    sCfbLoRes1 = gLoBuffer.framebuffer;
-    sCfbLoRes0 = gHiBuffer.framebuffer;
-    sCfbHiRes1 = gFramebufferHiRes1;
-    sCfbHiRes0 = gFramebufferHiRes0;
+    do {
+        sCfbLoRes1 = gLoBuffer.framebuffer;
+        sCfbLoRes0 = gHiBuffer.framebuffer;
+    } while ((u64)0);
+
+    do {
+        sCfbHiRes1 = gLoBuffer.framebufferHiRes;
+        sCfbHiRes0 = gHiBuffer.framebufferHiRes;
+    } while ((u64)0);
+
     SysCfb_SetLoResMode();
 }
 

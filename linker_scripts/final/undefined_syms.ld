@@ -1,8 +1,3 @@
-// sys_cfb buffers
-
-gFramebufferHiRes1 = gLoBuffer;
-gFramebufferHiRes0 = gHiBuffer;
-
 // Segmented Addresses
 
 // segment 0x01

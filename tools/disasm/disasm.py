@@ -458,7 +458,7 @@ def format_f32(f_wd):
         return ".float 3.4028235e+38"
 
     f = as_float(struct.pack(">I", f_wd))
-    if math.isnan(f):
+    if math.isnan(f) or math.isinf(f):
         return f".word 0x{f_wd:08X}"
     return f".float {reduce_float(repr(f))}"
 
