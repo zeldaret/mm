@@ -492,6 +492,7 @@ setup:
 	$(MAKE) -C tools
 	$(PYTHON) tools/decompress_baserom.py -v $(VERSION)
 	$(PYTHON) tools/extract_baserom.py $(BASEROM_DIR)/baserom-decompressed.z64 $(EXTRACTED_DIR)/baserom -v $(VERSION)
+	$(PYTHON) tools/extract_incbins.py $(EXTRACTED_DIR)/baserom $(EXTRACTED_DIR)/incbin -v $(VERSION)
 	$(PYTHON) tools/extract_yars.py $(EXTRACTED_DIR)/baserom -v $(VERSION)
 
 assets:
