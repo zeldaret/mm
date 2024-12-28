@@ -15,9 +15,6 @@ typedef union {
     };
 } BufferLow;
 
-// Equivalent to gLoBuffer.framebufferHiRes, but a different symbol is required to match
-extern u16 gFramebufferHiRes1[HIRES_BUFFER_WIDTH][HIRES_BUFFER_HEIGHT];
-
 extern BufferLow gLoBuffer;
 
 
@@ -35,9 +32,6 @@ typedef union {
         u16 framebuffer[SCREEN_HEIGHT][SCREEN_WIDTH] ALIGNED(64);
     };
 } BufferHigh;
-
-// Equivalent to gHiBuffer.framebufferHiRes, but a different symbol is required to match
-extern u16 gFramebufferHiRes0[HIRES_BUFFER_HEIGHT][HIRES_BUFFER_WIDTH];
 
 extern BufferHigh gHiBuffer;
 
