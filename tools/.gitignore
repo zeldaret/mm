@@ -3,4 +3,5 @@
 mkdmadata
 mkldscript
 reloc_prereq
+preprocess_pragmas
 vtxdis

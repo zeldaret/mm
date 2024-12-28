@@ -4,7 +4,6 @@
  * Description: Kafei
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_en_test3.h"
 
 #include "zelda_arena.h"
@@ -13,6 +12,8 @@
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 #include "assets/objects/object_mask_ki_tan/object_mask_ki_tan.h"
+
+#pragma increment_block_number "n64-us:128"
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED | ACTOR_FLAG_CAN_PRESS_SWITCHES)
 
