@@ -627,7 +627,7 @@ void EnZod_DrawDrums(EnZod* this, PlayState* play) {
 }
 
 void EnZod_Draw(Actor* thisx, PlayState* play) {
-    static TexturePtr sTijoEyesTextures[] = { &gTijoEyesOpenTex, &gTijoEyesHalfOpenTex, &gTijoEyesClosedTex };
+    static TexturePtr sTijoEyeTextures[] = { &gTijoEyesOpenTex, &gTijoEyesHalfOpenTex, &gTijoEyesClosedTex };
     EnZod* this = (EnZod*)thisx;
     Gfx* gfx;
 
@@ -641,7 +641,7 @@ void EnZod_Draw(Actor* thisx, PlayState* play) {
 
     gfx = POLY_OPA_DISP;
 
-    gSPSegment(&gfx[0], 0x08, Lib_SegmentedToVirtual(sTijoEyesTextures[this->eyeIndex]));
+    gSPSegment(&gfx[0], 0x08, Lib_SegmentedToVirtual(sTijoEyeTextures[this->eyeIndex]));
     gSPSegment(&gfx[1], 0x09, Lib_SegmentedToVirtual(&gTijoMouthClosedTex));
 
     POLY_OPA_DISP = &gfx[2];
