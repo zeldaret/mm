@@ -565,9 +565,6 @@ void EnTest6_InvertedSoTCutscene(EnTest6* this, PlayState* play) {
             }
 
             for (i = 0; i < SOTCS_INV_NUM_CLOCKS; i++) {
-                //! FAKE:
-                if (player != NULL) {}
-
                 clockYaw += 0x10000 / SOTCS_INV_NUM_CLOCKS;
                 this->invSoTClockPos[i].x = player->actor.world.pos.x + (Math_SinS(clockYaw) * this->clockDist);
                 this->invSoTClockPos[i].y = player->actor.world.pos.y;
@@ -669,6 +666,9 @@ void EnTest6_InvertedSoTCutscene(EnTest6* this, PlayState* play) {
 
     // Update white screen
     if (this->screenFillAlpha != 0) {
+        //! FAKE:
+        if (1) {}
+
         EnTest6_EnableWhiteFillScreen(play, this->screenFillAlpha * 0.05f);
         subCam->fov += (mainCam->fov - subCam->fov) * 0.05f;
         this->screenFillAlpha++;
