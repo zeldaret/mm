@@ -936,10 +936,8 @@ void ObjSwitch_Update(Actor* thisx, PlayState* play) {
     }
     this->actionFunc(this, play);
     if (this->floorSwitchPlayerSnapState != 0) {
-        s32 pad;
+        s32 requiredScopeTemp;
 
-    //! FAKE:
-    dummy:
         ObjSwitch_FloorSwitchSnapPlayerToSwitchEdge(this, play);
         if (this->floorSwitchPlayerSnapState == 2) {
             this->floorSwitchPlayerSnapState = 0;
