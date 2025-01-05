@@ -280,7 +280,7 @@ void Player_CsAction_20(PlayState* play, Player* this, CsCmdActorCue* cue);
 void Player_CsAction_21(PlayState* play, Player* this, CsCmdActorCue* cue);
 void Player_CsAction_22(PlayState* play, Player* this, CsCmdActorCue* cue);
 void Player_CsAction_23(PlayState* play, Player* this, CsCmdActorCue* cue);
-void Player_CsAction_TranslateReverse(PlayState* play, Player* this, CsCmdActorCue* cue);
+void Player_CsAction_TranslateReverse(PlayState* play, Player* this, CsCmdActorCue* cue2);
 void Player_CsAction_25(PlayState* play, Player* this, CsCmdActorCue* cue);
 void Player_CsAction_26(PlayState* play, Player* this, CsCmdActorCue* cue);
 void Player_CsAction_27(PlayState* play, Player* this, CsCmdActorCue* cue);
@@ -20643,28 +20643,15 @@ void Player_CsAction_23(PlayState* play, Player* this, CsCmdActorCue* cue) {
     }
 }
 
-void Player_CsAction_TranslateReverse(PlayState* play, Player* this, CsCmdActorCue* cue) {
-    s32 pad;
-    f32 xEnd;
-    f32 yEnd;
-    f32 zEnd;
-    f32 xDiff;
-    f32 yDiff;
-    f32 zDiff;
-    f32 progress;
-
-    xEnd = cue->endPos.x;
-    yEnd = cue->endPos.y;
-    zEnd = cue->endPos.z;
-
-    xDiff = cue->startPos.x - xEnd;
-    yDiff = cue->startPos.y - yEnd;
-    zDiff = cue->startPos.z - zEnd;
-
-    //! FAKE:
-    if (1) {}
-
-    progress = ((f32)(cue->endFrame - play->csCtx.curFrame)) / ((f32)(cue->endFrame - cue->startFrame));
+void Player_CsAction_TranslateReverse(PlayState* play, Player* this, CsCmdActorCue* cue2) {
+    CsCmdActorCue* cue = cue2;
+    f32 xEnd = cue->endPos.x;
+    f32 yEnd = cue->endPos.y;
+    f32 zEnd = cue->endPos.z;
+    f32 xDiff = cue->startPos.x - xEnd;
+    f32 yDiff = cue->startPos.y - yEnd;
+    f32 zDiff = cue->startPos.z - zEnd;
+    f32 progress = (f32)(cue->endFrame - play->csCtx.curFrame) / (f32)(cue->endFrame - cue->startFrame);
 
     this->actor.world.pos.x = (xDiff * progress) + xEnd;
     this->actor.world.pos.y = (yDiff * progress) + yEnd;
