@@ -404,12 +404,12 @@ EnKusa2UnkBssSubStruct* func_80A5C074(EnKusa2UnkBssStruct* arg0) {
 EnKusa2UnkBssSubStruct2* func_80A5C0B8(EnKusa2UnkBssStruct* arg0) {
     s32 i;
     EnKusa2UnkBssSubStruct2* phi_v1 = &arg0->unk_0480[0];
+    EnKusa2UnkBssSubStruct2* iter;
 
     for (i = 1; i < ARRAY_COUNT(D_80A5F1C0.unk_0480); i++) {
-        if (phi_v1->unk_2C > arg0->unk_0480[i].unk_2C) {
-            phi_v1 = &arg0->unk_0480[i];
-            //! FAKE:
-            if (1) {}
+        iter = &arg0->unk_0480[i];
+        if (iter->unk_2C < phi_v1->unk_2C) {
+            phi_v1 = iter;
 
             if (phi_v1->unk_2C <= 0) {
                 break;
