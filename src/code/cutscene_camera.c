@@ -298,7 +298,7 @@ s32 CutsceneCamera_UpdateSplines(u8* script, CutsceneCamera* csCamera) {
                 csCamera->atCmd = (CsCmdCamPoint*)&script[csCamera->cmdIndex];
                 csCamera->cmdIndex += (s16)(csCamera->eyeInterp.numEntries * sizeof(CsCmdCamPoint));
 
-                // Misc Point
+                // Eye Point
                 csCamera->eyeCmd = (CsCmdCamPoint*)&script[csCamera->cmdIndex];
                 csCamera->cmdIndex += (s16)(csCamera->eyeInterp.numEntries * sizeof(CsCmdCamPoint));
 
