@@ -305,9 +305,7 @@ void EnTest6_DrawAmmoDropRupee(EnTest6* this, PlayState* play, SoTCsAmmoDrops* a
     if (gfxHead != NULL) {
         Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
-        //! FAKE: & 0xFFFF
-        gDPSetTileSize(gfx++, 1, hilite->h.x1 & 0xFFFF, hilite->h.y1 & 0xFFFF, (hilite->h.x1 + 60) & 0xFFFF,
-                       (hilite->h.y1 + 60) & 0xFFFF);
+        gDPSetHilite1Tile(gfx++, 1, hilite, 0x10, 0x10);
         gSPEndDisplayList(gfx++);
 
         gSPSegment(POLY_OPA_DISP++, 0x07, gfxHead);
