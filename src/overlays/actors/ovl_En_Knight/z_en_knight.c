@@ -3465,27 +3465,11 @@ void EnKnight_FlyingHeadAttack(EnKnight* this, PlayState* play) {
             if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) ||
                 CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_B)) {
 
-                if (1) {} //! FAKE:
-                if (this->timers[0] != 0) {
-                    this->timers[0]--;
-                    if (1) {}
-                }
-
-                if (this->timers[0] != 0) {
-                    this->timers[0]--;
-                }
-
-                if (this->timers[0] != 0) {
-                    this->timers[0]--;
-                }
-
-                if (this->timers[0] != 0) {
-                    this->timers[0]--;
-                }
-
-                if (this->timers[0] != 0) {
-                    this->timers[0]--;
-                }
+                DECR(this->timers[0]);
+                DECR(this->timers[0]);
+                DECR(this->timers[0]);
+                DECR(this->timers[0]);
+                DECR(this->timers[0]);
             }
 
             Math_ApproachF(&this->actor.world.pos.x, player->actor.world.pos.x + targetHeight.x, 1.0f,
