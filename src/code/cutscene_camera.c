@@ -42,7 +42,7 @@ s32 CutsceneCamera_Init(Camera* camera, CutsceneCamera* csCamera) {
 
     csCamera->nextSplineTimer = csCamera->updateSplineTimer = 0;
     csCamera->cmdIndex = 0;
-    csCamera->splineIndex = 0xFFFF;
+    csCamera->splineIndex = -1;
     csCamera->splineNeedsInit = true;
     csCamera->state = CS_CAM_STATE_UPDATE_ALL;
 
