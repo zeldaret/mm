@@ -263,10 +263,8 @@ void EnPoSisters_MatchPlayerY(EnPoSisters* this, PlayState* play) {
     // equalize to player height
     Math_ApproachF(&this->actor.world.pos.y, player->actor.world.pos.y + 5.0f, 0.5f, 3.0f);
 
-    if (this->floatingBobbingTimer == 0) {
+    if ((u32)this->floatingBobbingTimer == 0) {
         this->floatingBobbingTimer = 32;
-        //! FAKE:
-        if (this->floatingBobbingTimer) {}
     }
 
     DECR(this->floatingBobbingTimer);
