@@ -188,8 +188,10 @@ void EnKakasi_Init(Actor* thisx, PlayState* play) {
     i = 0;
     csId = this->picto.actor.csId;
     while (csId != CS_ID_NONE) {
-        //! FAKE:
-        csId = CutsceneManager_GetAdditionalCsId(this->csIdList[i] = csId);
+        // clang-format off
+        this->csIdList[i] = csId; \
+        csId = CutsceneManager_GetAdditionalCsId(csId);
+        // clang-format on
         i++;
     }
 
