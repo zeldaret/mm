@@ -307,12 +307,10 @@ s32 CutsceneCamera_UpdateSplines(u8* script, CutsceneCamera* csCamera) {
                 csCamera->cmdIndex += (s16)(csCamera->eyeInterp.numEntries * sizeof(CsCmdCamMisc));
 
                 // Other Params
-                csCamera->eyeInterp.curPoint = 0;
-                csCamera->atInterp.curPoint = 0;
+                csCamera->eyeInterp.curPoint = csCamera->atInterp.curPoint = 0;
 
                 csCamera->splineNeedsInit = false;
-                //! FAKE: csCamera->splineIndex++;
-                csCamera->splineIndex = (csCamera->splineIndex & 0xFFFF) + 1;
+                csCamera->splineIndex++;
                 csCamera->state = CS_CAM_STATE_UPDATE_ALL;
                 csCamera->nextSplineTimer = csCamera->updateSplineTimer = 0;
                 csCamera->eyeInterp.type = csCamera->atInterp.type = CS_CAM_INTERP_OFF;
