@@ -4342,7 +4342,7 @@ void EnKnight_UpdateEffects(EnKnight* this, PlayState* play) {
 
             eff->accel.y = BREG(56) * 0.01f + 1.0f;
 
-            if (eff->active == (u32) true) { //! FAKE:
+            if (eff->active == true) {
                 Math_ApproachF(&eff->scale, (KREG(59) * 0.01f + 1.0f) * eff->scaleTarget, 0.1f,
                                eff->scaleTarget * 0.1f);
 
