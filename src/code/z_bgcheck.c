@@ -2873,7 +2873,7 @@ void DynaPoly_AddBgActorToLookup(PlayState* play, DynaCollisionContext* dyna, s3
     pos.y += actor->shape.yOffset * actor->scale.y;
 
     //! FAKE:
-    if (pbgdata && pbgdata) {}
+    if (1) {}
 
     ScaleRotPos_SetValue(&dyna->bgActors[bgId].curTransform, &actor->scale, &actor->shape.rot, &pos);
 
