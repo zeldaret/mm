@@ -1900,11 +1900,11 @@ s32 Math3D_CylVsLineSeg(Cylinder16* cyl, Vec3f* linePointA, Vec3f* linePointB, V
     fracA = 0.0f;
     fracB = 0.0f;
 
-//! FAKE:
-dummy:;
-
     zero = 0.0f;
     intFlags = 0;
+
+    //! FAKE:
+    if (1) {}
 
     if (Math3D_PointInCyl(cyl, linePointA) && Math3D_PointInCyl(cyl, linePointB)) {
         // both points are in the cylinder
