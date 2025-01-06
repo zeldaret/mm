@@ -2105,7 +2105,6 @@ void Play_Init(GameState* thisx) {
 
     if ((gSaveContext.nextCutsceneIndex == 0xFFEF) || (gSaveContext.nextCutsceneIndex == 0xFFF0)) {
         scene = ((void)0, gSaveContext.save.entrance) >> 9;
-        spawn = (((void)0, gSaveContext.save.entrance) >> 4) & 0x1F;
 
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_SNOWHEAD_TEMPLE)) {
             if (scene == ENTR_SCENE_MOUNTAIN_VILLAGE_WINTER) {
@@ -2145,9 +2144,8 @@ void Play_Init(GameState* thisx) {
                 gSaveContext.nextCutsceneIndex = 0xFFF4;
             }
         }
-        //! FAKE:
-        gSaveContext.save.entrance =
-            Entrance_Create(((void)0, scene), spawn, ((void)0, gSaveContext.save.entrance) & 0xF);
+        gSaveContext.save.entrance = Entrance_Create(scene, (((void)0, gSaveContext.save.entrance) >> 4) & 0x1F,
+                                                     ((void)0, gSaveContext.save.entrance) & 0xF);
     }
 
     GameState_Realloc(&this->state, 0);
