@@ -3968,7 +3968,6 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
             static Vec3f sPlayerFocusHeadLimbModelPos = { 1100.0f, -700.0f, 0.0f };
             static Vec3f D_801C0E88 = { 1600.0f, -1700.0f, -70.0f }; // unused
             Actor* spA8 = NULL;
-            s32 pad;
 
             if (player->transformation != PLAYER_FORM_DEKU) {
                 Matrix_MultVec3f(&sPlayerFocusHeadLimbModelPos, &player->actor.focus.pos);
@@ -3998,6 +3997,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
     } else if ((limbIndex == PLAYER_LIMB_HAT) && (player->stateFlags3 & PLAYER_STATE3_100000)) {
         Vec3f sp5C;
         Vec3f sp50;
+        s32 pad;
 
         Matrix_MultVecX(3000.0f, &sp5C);
         Matrix_MultVecX(2300.0f, &sp50);
