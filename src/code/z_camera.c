@@ -3070,7 +3070,7 @@ s32 Camera_Jump2(Camera* camera) {
     VecGeo sp9C;
     s16 temp_t2;
     s16 yawDiff;
-    s32 pad;
+    f32 tmp;
     f32 sp90;
     f32 sp8C;
     s32 sp88;
@@ -3155,11 +3155,9 @@ s32 Camera_Jump2(Camera* camera) {
     Camera_CalcAtDefault(camera, &spA4, roData->unk_00, 0);
     spB4 = OLib_Vec3fDiffToVecGeo(at, eye);
 
-    //! FAKE: Unused
-    yNormal = roData->unk_04;
-
+    tmp = roData->unk_04;
     phi_f2 = roData->unk_08 + (roData->unk_08 * roData->unk_0C);
-    temp_f16 = roData->unk_04 - (roData->unk_04 * roData->unk_0C);
+    temp_f16 = tmp - (roData->unk_04 * roData->unk_0C);
 
     if (spB4.r > phi_f2) {
         spB4.r = phi_f2;
