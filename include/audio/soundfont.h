@@ -28,11 +28,9 @@ typedef struct AdpcmBookHeader {
  * The procedure used to design the codeBook is based on an adaptive clustering algorithm.
  * The size of the codeBook is (8 * order * numPredictors) and is 8-byte aligned
  */
-typedef s16 AdpcmBookData[];
-
 typedef struct AdpcmBook {
     /* 0x0 */ AdpcmBookHeader header;
-    /* 0x8 */ AdpcmBookData codeBook;
+    /* 0x8 */ s16 codeBook[1];
 } AdpcmBook; // size >= 0x8
 
 typedef enum SampleCodec {
