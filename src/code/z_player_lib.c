@@ -1687,9 +1687,8 @@ PlayerExplosive Player_GetExplosiveHeld(Player* player) {
 PlayerSword Player_SwordFromIA(Player* player, PlayerItemAction itemAction) {
     PlayerSword sword = PLAYER_SWORD_KOKIRI;
 
-    //! FAKE:
     if ((itemAction == PLAYER_IA_LAST_USED) ||
-        ((sword = GET_SWORD_FROM_IA(itemAction), (sword > PLAYER_SWORD_NONE)) && (sword < PLAYER_SWORD_MAX))) {
+        (sword = GET_SWORD_FROM_IA(itemAction), ((sword > PLAYER_SWORD_NONE) && (sword < PLAYER_SWORD_MAX)))) {
         return sword;
     }
 
