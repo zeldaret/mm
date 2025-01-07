@@ -2538,9 +2538,9 @@ s32 Camera_Normal0(Camera* camera) {
     s16 phi_a1;
     s16 phi_a0;
     BgCamFuncData* bgCamFuncData;
-    f32 new_var;
     Normal0ReadOnlyData* roData = &camera->paramData.norm0.roData;
     Normal0ReadWriteData* rwData = &camera->paramData.norm0.rwData;
+    s32 pad2;
 
     if (!RELOAD_PARAMS(camera)) {
     } else {
@@ -2559,46 +2559,50 @@ s32 Camera_Normal0(Camera* camera) {
 
     sCameraInterfaceFlags = roData->interfaceFlags;
 
-    if (RELOAD_PARAMS(camera)) {
-        bgCamFuncData = (BgCamFuncData*)Camera_GetBgCamOrActorCsCamFuncData(camera, camera->bgCamIndex);
-        rwData->unk_00 = Camera_Vec3sToVec3f(&bgCamFuncData->pos);
-        rwData->unk_20 = bgCamFuncData->rot.x;
-        rwData->unk_22 = bgCamFuncData->rot.y;
-        rwData->unk_24 = focalActorPosRot->pos.y;
-        if (bgCamFuncData->fov == -1) {
-            rwData->unk_1C = roData->unk_14;
-        } else {
-            if (bgCamFuncData->fov > 360) {
-                phi_f0 = CAM_RODATA_UNSCALE(bgCamFuncData->fov);
-            } else {
-                phi_f0 = bgCamFuncData->fov;
-            }
-            rwData->unk_1C = phi_f0;
-        }
-
-        if (bgCamFuncData->unk_0E == -1) {
-            rwData->unk_2C = 0;
-        } else {
-            rwData->unk_2C = bgCamFuncData->unk_0E;
-        }
-
-        rwData->unk_18 = 0.0f;
-        rwData->unk_28 = 120.0f;
-
-        if (roData->interfaceFlags & NORMAL0_FLAG_2) {
-            sp88.pitch = rwData->unk_20;
-            sp88.yaw = rwData->unk_22;
-            sp88.r = 100.0f;
-            rwData->unk_0C = OLib_VecGeoToVec3f(&sp88);
-        }
-        camera->animState = 1;
-        camera->yawUpdateRateInv = 50.0f;
-    } else {
-        if (func_800CB950(camera)) {
+    switch (camera->animState) {
+        case 0:
+        case 10:
+        case 20:
+            bgCamFuncData = (BgCamFuncData*)Camera_GetBgCamOrActorCsCamFuncData(camera, camera->bgCamIndex);
+            rwData->unk_00 = Camera_Vec3sToVec3f(&bgCamFuncData->pos);
+            rwData->unk_20 = bgCamFuncData->rot.x;
+            rwData->unk_22 = bgCamFuncData->rot.y;
             rwData->unk_24 = focalActorPosRot->pos.y;
-        }
-        //! FAKE:
-        if (1) {}
+            if (bgCamFuncData->fov == -1) {
+                rwData->unk_1C = roData->unk_14;
+            } else {
+                if (bgCamFuncData->fov > 360) {
+                    phi_f0 = CAM_RODATA_UNSCALE(bgCamFuncData->fov);
+                } else {
+                    phi_f0 = bgCamFuncData->fov;
+                }
+                rwData->unk_1C = phi_f0;
+            }
+
+            if (bgCamFuncData->unk_0E == -1) {
+                rwData->unk_2C = 0;
+            } else {
+                rwData->unk_2C = bgCamFuncData->unk_0E;
+            }
+
+            rwData->unk_18 = 0.0f;
+            rwData->unk_28 = 120.0f;
+
+            if (roData->interfaceFlags & NORMAL0_FLAG_2) {
+                sp88.pitch = rwData->unk_20;
+                sp88.yaw = rwData->unk_22;
+                sp88.r = 100.0f;
+                rwData->unk_0C = OLib_VecGeoToVec3f(&sp88);
+            }
+            camera->animState = 1;
+            camera->yawUpdateRateInv = 50.0f;
+            break;
+
+        default:
+            if (func_800CB950(camera)) {
+                rwData->unk_24 = focalActorPosRot->pos.y;
+            }
+            break;
     }
 
     sp80 = OLib_Vec3fDiffToVecGeo(at, eye);
@@ -2634,32 +2638,13 @@ s32 Camera_Normal0(Camera* camera) {
     sp88 = OLib_Vec3fDiffToVecGeo(&rwData->unk_00, at);
     sp90 = OLib_Vec3fDiffToVecGeo(at, eyeNext);
 
-    if (rwData->unk_2C & 2) {
-        phi_a1 = rwData->unk_22;
-    } else {
-        phi_a1 = roData->unk_1C;
-    }
-
-    temp_v1_2 = sp90.yaw - sp88.yaw;
-    if (((phi_a1 <= 0x4000) && (phi_a1 < ABS(temp_v1_2))) || ((phi_a1 > 0x4000) && (ABS(temp_v1_2) < phi_a1))) {
-        //! FAKE: Needed to swap v0/v1
-        if (1) {}
-        if (1) {}
-        if (1) {}
-        if (1) {}
-
-        //! FAKE: Needed because the *1.0f isn't being multiplied
-        new_var = 1.0f;
-
-        if (temp_v1_2 < 0) {
-            phi_a0 = -phi_a1;
-        } else {
-            phi_a0 = phi_a1;
-        }
-
+    phi_a1 = (rwData->unk_2C & 2) ? rwData->unk_22 : roData->unk_1C;
+    phi_a0 = sp90.yaw - sp88.yaw;
+    if (((phi_a1 <= 0x4000) && (phi_a1 < ABS(phi_a0))) || ((phi_a1 > 0x4000) && (ABS(phi_a0) < phi_a1))) {
+        phi_a0 = (phi_a0 < 0) ? -phi_a1 : phi_a1;
         phi_a0 += sp88.yaw;
         sp98.yaw = Camera_ScaledStepToCeilS(phi_a0, sp80.yaw,
-                                            (1.0f / camera->yawUpdateRateInv) * new_var * camera->speedRatio, 5);
+                                            (1 / camera->yawUpdateRateInv) * 1 * camera->speedRatio, 5);
         if (rwData->unk_2C & 1) {
             sp98.pitch = Camera_CalcDefaultPitch(camera, sp78.pitch, rwData->unk_20, 0);
         } else {
