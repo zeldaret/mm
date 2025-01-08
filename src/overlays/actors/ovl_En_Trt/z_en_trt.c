@@ -1054,6 +1054,8 @@ void EnTrt_ItemGiven(EnTrt* this, PlayState* play) {
 
             default:
                 this->textId = 0x849;
+                // note break is missing
+                // break;
         }
         Message_ContinueTextbox(play, this->textId);
     } else {

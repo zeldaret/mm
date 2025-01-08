@@ -2076,9 +2076,9 @@ void Play_Init(GameState* thisx) {
     s32 zAllocSize;
     Player* player;
     s32 i;
-    s32 spawn;
-    u8 sceneLayer;
     s32 scene;
+    u8 sceneLayer;
+    s32 pad2;
 
     if ((gSaveContext.respawnFlag == -4) || (gSaveContext.respawnFlag == -0x63)) {
         if (CHECK_EVENTINF(EVENTINF_TRIGGER_DAYTELOP)) {
