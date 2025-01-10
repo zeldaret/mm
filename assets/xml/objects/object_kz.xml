@@ -14,15 +14,16 @@
         <Animation Name="gKaizokuUnsheatheAnim" Offset="0x5644" /> <!-- Original name is "kz_kime" -->
         <Animation Name="gKaizokuWalkAnim" Offset="0x58B8" /> <!-- Original name is "kz_run" -->
 
-        <Texture Name="object_kz_TLUT_0058D0" OutName="tlut_0058D0" Format="rgba16" Width="16" Height="16" Offset="0x58D0" />
-        <Texture Name="gKaizokuSkinGradientTex" OutName="tex_005AD0" Format="ci8" Width="8" Height="8" Offset="0x5AD0" />
-        <Texture Name="gKaizokuShirtTopRedGradientTex" OutName="tex_005B10" Format="ci8" Width="8" Height="8" Offset="0x5B10" />
-        <Texture Name="gKaizokuArmor1Tex" OutName="tex_005B50" Format="ci8" Width="16" Height="16" Offset="0x5B50" />
-        <Texture Name="gKaizokuShirtTopPatternAndVeilTex" OutName="tex_005C50" Format="i8" Width="16" Height="16" Offset="0x5C50" />
-        <Texture Name="gKaizokuBellyButtonTex" OutName="tex_005D50" Format="ci8" Width="16" Height="16" Offset="0x5D50" />
-        <Texture Name="gKaizokuPantsTex" OutName="tex_005E50" Format="i8" Width="16" Height="16" Offset="0x5E50" />
-        <!-- This is the texture at the back of her boots, texture is duplicated later  -->
-        <Texture Name="gKaizokuZipper1Tex" OutName="tex_005F50" Format="i8" Width="8" Height="16" Offset="0x5F50" />
+        <Texture Name="object_kz_TLUT_0058D0" OutName="tlut1_0058D0" Format="rgba16" Width="16" Height="16" Offset="0x58D0" />
+        <!-- This is the same skin texture as below, but this one is her arms and back -->
+        <Texture Name="gKaizokuSkinGradientTex" OutName="skin1" Format="ci8" Width="8" Height="8" Offset="0x5AD0" TlutOffset="0x58D0" />
+        <Texture Name="gKaizokuShirtTopRedGradientTex" OutName="shirt_burgundy1" Format="ci8" Width="8" Height="8" Offset="0x5B10" />
+        <Texture Name="gKaizokuArmor1Tex" OutName="armor" Format="ci8" Width="16" Height="16" Offset="0x5B50" />
+        <Texture Name="gKaizokuShirtTopPatternAndVeilTex" OutName="shirt_pattern1" Format="i8" Width="16" Height="16" Offset="0x5C50" />
+        <Texture Name="gKaizokuBellyButtonTex" OutName="navel" Format="ci8" Width="16" Height="16" Offset="0x5D50" />
+        <Texture Name="gKaizokuPantsTex" OutName="pants" Format="i8" Width="16" Height="16" Offset="0x5E50" />
+        <!-- This is the texture at the back of her boots and pants belt center.  -->
+        <Texture Name="gKaizokuZipper1Tex" OutName="zipper1" Format="i8" Width="8" Height="16" Offset="0x5F50" />
 
         <DList Name="gKaizokuTorsoDl" Offset="0x7CB0" />
         <DList Name="gKaizokuRightUpperArmDl" Offset="0x8130" />
@@ -35,18 +36,22 @@
         <DList Name="gKaizokuLeftThighDl" Offset="0x8D80" />
         <DList Name="gKaizokuLeftShinDl" Offset="0x8E80" />
 
-        <Texture Name="object_kz_TLUT_009100" OutName="tlut_009100" Format="rgba16" Width="8" Height="8" Offset="0x9100" /> -->
-        <Texture Name="gKaizokuSkinGradient2Tex" OutName="tex_009300" Format="ci8" Width="8" Height="8" Offset="0x9300" />
-        <Texture Name="gKaizokuEarTex" OutName="tex_009338" Format="ci8" Width="8" Height="16" Offset="0x9338" />
+        <!-- THIS TLUT IS THE WRONG SIZE all textures that use it export incorrectly -->
+        <Texture Name="object_kz_TLUT_009100" OutName="tlut2_009100" Format="rgba16" Width="16" Height="8" Offset="0x9100" /> 
+        <!-- This is the same skin texture as above, but this one is for her head and feet -->
+        <Texture Name="gKaizokuSkinGradient2Tex" OutName="skin2" Format="ci8" Width="8" Height="8" Offset="0x92F8"  TlutOffset="0x9100"/>
+        <Texture Name="gKaizokuEarTex" OutName="ear" Format="ci8" Width="8" Height="16" Offset="0x9338" />
         <Texture Name="gKaizokuEyeOpenTex" OutName="kaizoku_eye_open" Format="ci8" Width="32" Height="32" Offset="0x93B8" TlutOffset="0x9100" />
-        <Texture Name="gKaizokuShirtTopPatternAndVeil2Tex" OutName="tex_0097B8" Format="i8" Width="16" Height="16" Offset="0x97B8" />
-        <Texture Name="gKaizokuShoesTex" OutName="tex_0098B8" Format="ci8" Width="8" Height="16" Offset="0x98B8" />
-        <Texture Name="gKaizokuShoeBottomTex" OutName="tex_009938" Format="ci8" Width="8" Height="8" Offset="0x9938" />
+        <Texture Name="gKaizokuShirtTopPatternAndVeil2Tex" OutName="shirt_pattern2" Format="i8" Width="16" Height="16" Offset="0x97B8" />
+        <Texture Name="gKaizokuShoesTex" OutName="shoe_sides" Format="ci8" Width="8" Height="16" Offset="0x98B8" TlutOffset="0x9100"/>
+        <Texture Name="gKaizokuShoeBottomTex" OutName="shoe_bottom" Format="ci8" Width="8" Height="8" Offset="0x9938" TlutOffset="0x9100" />
         <Texture Name="gKaizokuEyeHalfTex" OutName="kaizoku_eye_half" Format="ci8" Width="32" Height="32" Offset="0x9978" TlutOffset="0x9100" />
-        <Texture Name="gKaizokuZipper2Tex" OutName="tex_009D78" Format="i8" Width="8" Height="16" Offset="0x9D78" />
-        <Texture Name="gKaizokuHairTex" OutName="tex_009DF8" Format="ci8" Width="16" Height="16" Offset="0x9DF8" />
-        <Texture Name="gKaizokuFingersTex" OutName="tex_009EF8" Format="ci8" Width="16" Height="16" Offset="0x9EF8" />
-        <Texture Name="gKaizokuArmor2Tex" OutName="tex_009FF8" Format="ci8" Width="16" Height="16" Offset="0x9FF8" />
+        <!-- This is the same zipper texture above, but used in different places. hair emblem, back of hands  -->
+        <Texture Name="gKaizokuZipper2Tex" OutName="zipper2" Format="i8" Width="8" Height="16" Offset="0x9D78"/>
+        <Texture Name="gKaizokuHairTex" OutName="hair" Format="ci8" Width="16" Height="16" Offset="0x9DF8" TlutOffset="0x9100" />
+        <Texture Name="gKaizokuFingersTex" OutName="fingers" Format="ci8" Width="16" Height="16" Offset="0x9EF8" TlutOffset="0x9100" />
+        <!-- This is the same as the gKaizokuArmor above, but used in different spots: used for sword guard and her forhead emblem  -->
+        <Texture Name="gKaizokuYellowSwordGuardAndEmblemTex" OutName="emblem" Format="ci8" Width="16" Height="16" Offset="0x9FF8" />
         <Texture Name="gKaizokuEyeClosedTex" OutName="kaizoku_eye_closed" Format="ci8" Width="32" Height="32" Offset="0xA0F8" TlutOffset="0x9100" />
 
         <DList Name="gKaizokuLeftFootDl" Offset="0xC318" />

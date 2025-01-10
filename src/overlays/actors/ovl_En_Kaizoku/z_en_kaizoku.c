@@ -84,7 +84,7 @@ static u16 sKaizokuTextIds[] = {
   0x11AD, // (stone mask) did you think that mask would work?
 };
 
-Vec3f D_80B8A8E4[] = {
+static Vec3f sCutsceneCameraPositions[] = {
     { -70.0f, 9.0f, 30.0f },   { -70.0f, 9.0f, 30.0f },   { -70.0f, 9.0f, 30.0f },   { 41.0f, 55.0f, 11.0f },
     { 41.0f, 55.0f, 11.0f },   { 70.0f, 45.0f, 35.0f },   { 80.0f, 45.0f, 25.0f },   { 0.0f, 0.0f, 0.0f },
     { -70.0f, 9.0f, 30.0f },   { -70.0f, 9.0f, 30.0f },   { -70.0f, 9.0f, 30.0f },   { 41.0f, 55.0f, 11.0f },
@@ -93,7 +93,7 @@ Vec3f D_80B8A8E4[] = {
     { -41.0f, 55.0f, -11.0f }, { -70.0f, 45.0f, -25.0f }, { -80.0f, 45.0f, -25.0f }, { 0.0f, 0.0f, 0.0f },
 };
 
-Vec3f D_80B8AA04[] = {
+Vec3f sCutsceneCameraTargetPositions[] = {
     { 120.0f, 60.0f, -20.0f },   { 120.0f, 60.0f, -20.0f },   { 120.0f, 60.0f, -20.0f },   { -470.0f, 30.0f, -140.0f },
     { -470.0f, 30.0f, -140.0f }, { -410.0f, 80.0f, -130.0f }, { -410.0f, 80.0f, -130.0f }, { 0.0f, 0.0f, 0.0f },
     { 120.0f, 60.0f, -20.0f },   { 120.0f, 60.0f, -20.0f },   { 120.0f, 60.0f, -20.0f },   { -470.0f, 30.0f, -140.0f },
@@ -635,16 +635,16 @@ void EnKaizoku_WaitForApproach(EnKaizoku* this, PlayState* play) {
     }
 
     if (this->cutsceneState < 7) {
-        s32 temp_v0_3 = this->colorType * 8;
+        s32 typeCameraOffset = this->colorType * 8;
 
-        temp_v0_3 += this->cutsceneState;
-        this->unk_5C8.x = D_80B8A8E4[temp_v0_3].x + this->picto.actor.home.pos.x;
-        this->unk_5C8.y = D_80B8A8E4[temp_v0_3].y + player->actor.world.pos.y;
-        this->unk_5C8.z = D_80B8A8E4[temp_v0_3].z + this->picto.actor.home.pos.z;
+        typeCameraOffset += this->cutsceneState;
+        this->unk_5C8.x = sCutsceneCameraPositions[typeCameraOffset].x + this->picto.actor.home.pos.x;
+        this->unk_5C8.y = sCutsceneCameraPositions[typeCameraOffset].y + player->actor.world.pos.y;
+        this->unk_5C8.z = sCutsceneCameraPositions[typeCameraOffset].z + this->picto.actor.home.pos.z;
 
-        this->unk_5D4.x = D_80B8AA04[temp_v0_3].x + this->picto.actor.home.pos.x;
-        this->unk_5D4.y = D_80B8AA04[temp_v0_3].y + player->actor.world.pos.y;
-        this->unk_5D4.z = D_80B8AA04[temp_v0_3].z + this->picto.actor.home.pos.z;
+        this->unk_5D4.x = sCutsceneCameraTargetPositions[typeCameraOffset].x + this->picto.actor.home.pos.x;
+        this->unk_5D4.y = sCutsceneCameraTargetPositions[typeCameraOffset].y + player->actor.world.pos.y;
+        this->unk_5D4.z = sCutsceneCameraTargetPositions[typeCameraOffset].z + this->picto.actor.home.pos.z;
     }
 
     if (this->cutsceneState >= 5) {
