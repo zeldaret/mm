@@ -101,7 +101,6 @@ Vec3f D_80B8AA04[] = {
     { 470.0f, 30.0f, 140.0f },   { 410.0f, 80.0f, 130.0f },   { 410.0f, 80.0f, 130.0f },   { 0.0f, 0.0f, 0.0f },
 };
 
-// assumption: lipstick color, as this is only for her face dl
 Color_RGBA8 sKaizokuLipstickColors[] = {
     { 255, 255, 90, 255 }, // yellow
     { 55, 25, 80, 255 },   // dark purple
@@ -215,25 +214,25 @@ static ColliderQuadInit sQuadInit = {
 };
 
 static AnimationHeader* sAnimations[EN_KAIZOKU_ANIM_MAX] = {
-    &object_kz_Anim_00F8E4, // EN_KAIZOKU_ANIM_0
-    &object_kz_Anim_00EF9C, // EN_KAIZOKU_ANIM_1
-    &object_kz_Anim_00E1C8, // EN_KAIZOKU_ANIM_2
-    &object_kz_Anim_00DBE4, // EN_KAIZOKU_ANIM_3
-    &object_kz_Anim_0058B8, // EN_KAIZOKU_ANIM_4
-    &object_kz_Anim_004860, // EN_KAIZOKU_ANIM_5
-    &object_kz_Anim_002730, // EN_KAIZOKU_ANIM_6
-    &object_kz_Anim_001578, // EN_KAIZOKU_ANIM_7
-    &object_kz_Anim_001390, // EN_KAIZOKU_ANIM_8
-    &object_kz_Anim_0003CC, // EN_KAIZOKU_ANIM_9
-    &object_kz_Anim_000F5C, // EN_KAIZOKU_ANIM_10
-    &object_kz_Anim_00E8BC, // EN_KAIZOKU_ANIM_11
-    &object_kz_Anim_00ED1C, // EN_KAIZOKU_ANIM_12
-    &object_kz_Anim_005644, // EN_KAIZOKU_ANIM_13
-    &object_kz_Anim_00F288, // EN_KAIZOKU_ANIM_14
-    &object_kz_Anim_0043E4, // EN_KAIZOKU_ANIM_15
-    &object_kz_Anim_003A3C, // EN_KAIZOKU_ANIM_16
-    &object_kz_Anim_002BA0, // EN_KAIZOKU_ANIM_17
-    &object_kz_Anim_001E9C, // EN_KAIZOKU_ANIM_18
+    &gKaizokuFightingIdleAnim, // EN_KAIZOKU_ANIM_0
+    &gKaizokuOOTConversationAnim, // EN_KAIZOKU_ANIM_1
+    &gKaizokuOOTJumpAnim, // EN_KAIZOKU_ANIM_2
+    &gKaizokuSidestepAnim, // EN_KAIZOKU_ANIM_3
+    &gKaizokuWalkAnim, // EN_KAIZOKU_ANIM_4
+    &gKaizokuDamageAnim, // EN_KAIZOKU_ANIM_5
+    &gKaizokuDefeatOldAnim, // EN_KAIZOKU_ANIM_6
+    &gKaizokuBlockAnim, // EN_KAIZOKU_ANIM_7
+    &gKaizokuFlipAnim, // EN_KAIZOKU_ANIM_8
+    &gKaizokuSlashAnim, // EN_KAIZOKU_ANIM_9
+    &gKaizokuSpinAttackAnim, // EN_KAIZOKU_ANIM_10
+    &gKaizokuLandAnim, // EN_KAIZOKU_ANIM_11
+    &gKaizokuChallengeTalkAnim, // EN_KAIZOKU_ANIM_12
+    &gKaizokuUnsheatheAnim, // EN_KAIZOKU_ANIM_13
+    &gKaizokuLowerWeaponsAnim, // EN_KAIZOKU_ANIM_14
+    &gKaizokuDemonstrativeSwordSwingAnim, // EN_KAIZOKU_ANIM_15
+    &gKaizokuDefeatAnim, // EN_KAIZOKU_ANIM_16
+    &gKaizokuDefeatIdleAnim, // EN_KAIZOKU_ANIM_17
+    &gKaizokuThrowFlashAnim, // EN_KAIZOKU_ANIM_18
 };
 
 static u8 sAnimationModes[EN_KAIZOKU_ANIM_MAX] = {
@@ -282,7 +281,7 @@ void EnKaizoku_Init(Actor* thisx, PlayState* play) {
     this->colorType = KAIZOKU_GET_TYPE(this);
     KAIZOKU_GET_TYPE(this) = 0;
     this->picto.actor.colChkInfo.damageTable = &sDamageTable;
-    SkelAnime_InitFlex(play, &this->skelAnime, &gKaizokuSkel, &object_kz_Anim_0058B8, this->jointTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &gKaizokuSkel, &gKaizokuWalkAnim, this->jointTable,
                        this->morphTable, KAIZOKU_LIMB_MAX);
     Collider_InitAndSetCylinder(play, &this->bodyCollider, &this->picto.actor, &sCylinderInit);
     Collider_InitAndSetQuad(play, &this->swordCollider, &this->picto.actor, &sQuadInit);
