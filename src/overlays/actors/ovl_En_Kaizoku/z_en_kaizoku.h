@@ -74,8 +74,8 @@ typedef struct EnKaizoku {
     /* 0x2BE */ s16 unk_2BE;
     /* 0x2C0 */ f32 drawDmgEffScale;
     /* 0x2C4 */ f32 drawDmgEffFrozenSteamScale;
-    /* 0x2C8 */ s16 unk_2C8;
-    /* 0x2CA */ s16 textId;
+    /* 0x2C8 */ s16 textidOffset; // which of the 4 default states of text this cutscene pertains to
+    /* 0x2CA */ s16 textType;
     /* 0x2CC */ s16 eyeIndex;
     /* 0x2CE */ s16 blinkTimer;
     /* 0x2D0 */ s16 unk_2D0;
@@ -83,7 +83,7 @@ typedef struct EnKaizoku {
     /* 0x2D4 */ s16 exitIndex;
     /* 0x2D6 */ s16 csId;
     /* 0x2D8 */ u8 bool2D8; // bool
-    /* 0x2D9 */ u8 unk_2D9;
+    /* 0x2D9 */ u8 unk_2D9; // flag if sfx has played
     /* 0x2DC */ f32 animEndFrame;
     /* 0x2E0 */ f32 unk_2E0;
     /* 0x2E4 */ EnKaizokuAnimation animIndex;
@@ -104,7 +104,7 @@ typedef struct EnKaizoku {
     /* 0x580 */ Vec3f rightFootPos;
     /* 0x58C */ Vec3f leftFootPos;
     /* 0x598 */ s32 unk_598; // timer?? why is it double len?
-    /* 0x59C */ s16 escapeCsState; 
+    /* 0x59C */ s16 cutsceneState; 
     /* 0x59E */ s16 subCamId;
     /* 0x5A0 */ s16 unk_5A0;
     /* 0x5A2 */ s16 unk_5A2;
