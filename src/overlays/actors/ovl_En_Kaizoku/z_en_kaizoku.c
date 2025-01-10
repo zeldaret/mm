@@ -2060,11 +2060,11 @@ s32 EnKaizoku_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
         *dList = NULL;
     }
 
-    if (limbIndex == KAIZOKU_LIMB_03) { // head root node
+    if (limbIndex == KAIZOKU_LIMB_NECK) {
         rot->z += this->headRot.x;
         rot->x += this->headRot.y;
         rot->y += this->headRot.z;
-    } else if (limbIndex == KAIZOKU_LIMB_06) { // face?? her face has a color??
+    } else if (limbIndex == KAIZOKU_LIMB_HEAD) {
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetEnvColor(POLY_OPA_DISP++, sKaizokuLipstickColors[this->colorType].r, sKaizokuLipstickColors[this->colorType].g,
                        sKaizokuLipstickColors[this->colorType].b, 255);
@@ -2112,13 +2112,21 @@ void EnKaizoku_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
         Matrix_MultVec3f(&sFootOffset, &this->rightFootPos);
     }
 
-    if ((limbIndex == KAIZOKU_LIMB_02) || (limbIndex == KAIZOKU_LIMB_06) || (limbIndex == KAIZOKU_LIMB_07) ||
+   /*
+   if ((limbIndex == KAIZOKU_LIMB_02) || (limbIndex == KAIZOKU_LIMB_06) || (limbIndex == KAIZOKU_LIMB_07) ||
         (limbIndex == KAIZOKU_LIMB_08) || (limbIndex == KAIZOKU_LIMB_0A) || (limbIndex == KAIZOKU_LIMB_0C) ||
         (limbIndex == KAIZOKU_LIMB_0D) || (limbIndex == KAIZOKU_LIMB_0F) || (limbIndex == KAIZOKU_LIMB_11) ||
         (limbIndex == KAIZOKU_LIMB_12) || (limbIndex == KAIZOKU_LIMB_L_FOOT) || (limbIndex == KAIZOKU_LIMB_14) ||
         (limbIndex == KAIZOKU_LIMB_15) || (limbIndex == KAIZOKU_LIMB_R_FOOT) || (limbIndex == KAIZOKU_LIMB_17)) {
-        Matrix_MultZero(&this->bodyPartsPos[this->bodyPartIndex]);
+   // */
 
+    if ((limbIndex == KAIZOKU_LIMB_TORSO) || (limbIndex == KAIZOKU_LIMB_HEAD) || (limbIndex == KAIZOKU_LIMB_R_UPPER_ARM) ||
+        (limbIndex == KAIZOKU_LIMB_R_FOREARM) || (limbIndex == KAIZOKU_LIMB_R_HAND) || (limbIndex == KAIZOKU_LIMB_L_UPPER_ARM) ||
+        (limbIndex == KAIZOKU_LIMB_L_FOREARM) || (limbIndex == KAIZOKU_LIMB_L_HAND) || (limbIndex == KAIZOKU_LIMB_L_THIGH) ||
+        (limbIndex == KAIZOKU_LIMB_L_SHIN) || (limbIndex == KAIZOKU_LIMB_L_FOOT) || (limbIndex == KAIZOKU_LIMB_R_THIGH) ||
+        (limbIndex == KAIZOKU_LIMB_R_SHIN) || (limbIndex == KAIZOKU_LIMB_R_FOOT) || (limbIndex == KAIZOKU_LIMB_WAIST)) {
+
+        Matrix_MultZero(&this->bodyPartsPos[this->bodyPartIndex]);
         this->bodyPartIndex++;
         if (this->bodyPartIndex >= KAIZOKU_BODYPART_MAX) {
             this->bodyPartIndex = 0;
@@ -2132,7 +2140,7 @@ void EnKaizoku_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
     if (limbIndex == KAIZOKU_LIMB_R_SWORD) {
         Matrix_Scale(this->unk_2F8.x, this->unk_2F8.y, this->unk_2F8.z, MTXMODE_APPLY);
     }
-    if (limbIndex == KAIZOKU_LIMB_10) {
+    if (limbIndex == KAIZOKU_LIMB_L_SWORD) {
         Matrix_Scale(this->unk_304.x, this->unk_304.y, this->unk_304.z, MTXMODE_APPLY);
     }
 }

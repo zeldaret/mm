@@ -24,24 +24,24 @@
         <!-- This is the texture at the back of her boots, texture is duplicated later  -->
         <Texture Name="gKaizokuZipper1Tex" OutName="tex_005F50" Format="i8" Width="8" Height="16" Offset="0x5F50" />
 
-        <DList Name="object_kz_DL_007CB0" Offset="0x7CB0" />
-        <DList Name="object_kz_DL_008130" Offset="0x8130" />
-        <DList Name="object_kz_DL_008268" Offset="0x8268" />
-        <DList Name="object_kz_DL_008490" Offset="0x8490" />
-        <DList Name="object_kz_DL_0085C8" Offset="0x85C8" />
-        <DList Name="object_kz_DL_0087F0" Offset="0x87F0" />
-        <DList Name="object_kz_DL_008A10" Offset="0x8A10" />
-        <DList Name="object_kz_DL_008B10" Offset="0x8B10" />
-        <DList Name="object_kz_DL_008D80" Offset="0x8D80" />
-        <DList Name="object_kz_DL_008E80" Offset="0x8E80" />
+        <DList Name="gKaizokuTorsoDl" Offset="0x7CB0" />
+        <DList Name="gKaizokuRightUpperArmDl" Offset="0x8130" />
+        <DList Name="gKaizokuRightForarmDl" Offset="0x8268" />
+        <DList Name="gKaizokuLeftUpperArmDl" Offset="0x8490" />
+        <DList Name="gKaizokuLeftForarmDl" Offset="0x85C8" />
+        <DList Name="gKaizokuWaistDl" Offset="0x87F0" />
+        <DList Name="gKaizokuRightThighDl" Offset="0x8A10" />
+        <DList Name="gKaizokuRightShinDl" Offset="0x8B10" />
+        <DList Name="gKaizokuLeftThighDl" Offset="0x8D80" />
+        <DList Name="gKaizokuLeftShinDl" Offset="0x8E80" />
 
-        <!-- <Texture Name="object_kz_TLUT_009100" OutName="tlut_009100" Format="rgba16" Width="16" Height="16" Offset="0x9100" /> -->
-        <!-- <Blob Name="object_kz_Blob_009300" Size="0x38" Offset="0x9300" /> -->
+        <Texture Name="object_kz_TLUT_009100" OutName="tlut_009100" Format="rgba16" Width="8" Height="8" Offset="0x9100" /> -->
+        <Texture Name="gKaizokuSkinGradient2Tex" OutName="tex_009300" Format="ci8" Width="8" Height="8" Offset="0x9300" />
         <Texture Name="gKaizokuEarTex" OutName="tex_009338" Format="ci8" Width="8" Height="16" Offset="0x9338" />
         <Texture Name="gKaizokuEyeOpenTex" OutName="kaizoku_eye_open" Format="ci8" Width="32" Height="32" Offset="0x93B8" TlutOffset="0x9100" />
         <Texture Name="gKaizokuShirtTopPatternAndVeil2Tex" OutName="tex_0097B8" Format="i8" Width="16" Height="16" Offset="0x97B8" />
         <Texture Name="gKaizokuShoesTex" OutName="tex_0098B8" Format="ci8" Width="8" Height="16" Offset="0x98B8" />
-        <Texture Name="gKaizokuUnkGreenTex" OutName="tex_009938" Format="ci8" Width="8" Height="8" Offset="0x9938" />
+        <Texture Name="gKaizokuShoeBottomTex" OutName="tex_009938" Format="ci8" Width="8" Height="8" Offset="0x9938" />
         <Texture Name="gKaizokuEyeHalfTex" OutName="kaizoku_eye_half" Format="ci8" Width="32" Height="32" Offset="0x9978" TlutOffset="0x9100" />
         <Texture Name="gKaizokuZipper2Tex" OutName="tex_009D78" Format="i8" Width="8" Height="16" Offset="0x9D78" />
         <Texture Name="gKaizokuHairTex" OutName="tex_009DF8" Format="ci8" Width="16" Height="16" Offset="0x9DF8" />
@@ -49,39 +49,41 @@
         <Texture Name="gKaizokuArmor2Tex" OutName="tex_009FF8" Format="ci8" Width="16" Height="16" Offset="0x9FF8" />
         <Texture Name="gKaizokuEyeClosedTex" OutName="kaizoku_eye_closed" Format="ci8" Width="32" Height="32" Offset="0xA0F8" TlutOffset="0x9100" />
 
-        <DList Name="object_kz_DL_00C318" Offset="0xC318" />
-        <DList Name="object_kz_DL_00C4D8" Offset="0xC4D8" />
-        <DList Name="object_kz_DL_00C698" Offset="0xC698" />
-        <DList Name="object_kz_DL_00C830" Offset="0xC830" />
-        <DList Name="object_kz_DL_00CA08" Offset="0xCA08" />
-        <DList Name="object_kz_DL_00CBA0" Offset="0xCBA0" />
-        <DList Name="object_kz_DL_00CD78" Offset="0xCD78" />
-        <DList Name="object_kz_DL_00CE30" Offset="0xCE30" />
-        <DList Name="object_kz_DL_00CF20" Offset="0xCF20" />
+        <DList Name="gKaizokuLeftFootDl" Offset="0xC318" />
+        <DList Name="gKaizokuRightFootDl" Offset="0xC4D8" />
+        <DList Name="gKaizokuLeftHandDl" Offset="0xC698" />
+        <DList Name="gKaizokuLeftSwordDl" Offset="0xC830" />
+        <DList Name="gKaizokuRightHandDl" Offset="0xCA08" />
+        <DList Name="gKaizokuRightSwordDl" Offset="0xCBA0" />
+        <DList Name="gKaizokuVeilDl" Offset="0xCD78" />
+        <DList Name="gKaizokuPonytailDl" Offset="0xCE30" />
+        <DList Name="gKaizokuHeadDl" Offset="0xCF20" />
 
-        <Limb Name="object_kz_Standardlimb_00D6B8" Type="Standard" EnumName="KAIZOKU_LIMB_01" Offset="0xD6B8" />
-        <Limb Name="object_kz_Standardlimb_00D6C4" Type="Standard" EnumName="KAIZOKU_LIMB_02" Offset="0xD6C4" />
-        <Limb Name="object_kz_Standardlimb_00D6D0" Type="Standard" EnumName="KAIZOKU_LIMB_03" Offset="0xD6D0" />
-        <Limb Name="object_kz_Standardlimb_00D6DC" Type="Standard" EnumName="KAIZOKU_LIMB_04" Offset="0xD6DC" />
-        <Limb Name="object_kz_Standardlimb_00D6E8" Type="Standard" EnumName="KAIZOKU_LIMB_VEIL" Offset="0xD6E8" />
-        <Limb Name="object_kz_Standardlimb_00D6F4" Type="Standard" EnumName="KAIZOKU_LIMB_06" Offset="0xD6F4" />
-        <Limb Name="object_kz_Standardlimb_00D700" Type="Standard" EnumName="KAIZOKU_LIMB_07" Offset="0xD700" />
-        <Limb Name="object_kz_Standardlimb_00D70C" Type="Standard" EnumName="KAIZOKU_LIMB_08" Offset="0xD70C" />
-        <Limb Name="object_kz_Standardlimb_00D718" Type="Standard" EnumName="KAIZOKU_LIMB_09" Offset="0xD718" />
-        <Limb Name="object_kz_Standardlimb_00D724" Type="Standard" EnumName="KAIZOKU_LIMB_0A" Offset="0xD724" />
-        <Limb Name="object_kz_Standardlimb_00D730" Type="Standard" EnumName="KAIZOKU_LIMB_R_SWORD" Offset="0xD730" />
-        <Limb Name="object_kz_Standardlimb_00D73C" Type="Standard" EnumName="KAIZOKU_LIMB_0C" Offset="0xD73C" />
-        <Limb Name="object_kz_Standardlimb_00D748" Type="Standard" EnumName="KAIZOKU_LIMB_0D" Offset="0xD748" />
-        <Limb Name="object_kz_Standardlimb_00D754" Type="Standard" EnumName="KAIZOKU_LIMB_0E" Offset="0xD754" />
-        <Limb Name="object_kz_Standardlimb_00D760" Type="Standard" EnumName="KAIZOKU_LIMB_0F" Offset="0xD760" />
-        <Limb Name="object_kz_Standardlimb_00D76C" Type="Standard" EnumName="KAIZOKU_LIMB_10" Offset="0xD76C" />
-        <Limb Name="object_kz_Standardlimb_00D778" Type="Standard" EnumName="KAIZOKU_LIMB_11" Offset="0xD778" />
-        <Limb Name="object_kz_Standardlimb_00D784" Type="Standard" EnumName="KAIZOKU_LIMB_12" Offset="0xD784" />
-        <Limb Name="object_kz_Standardlimb_00D790" Type="Standard" EnumName="KAIZOKU_LIMB_L_FOOT" Offset="0xD790" />
-        <Limb Name="object_kz_Standardlimb_00D79C" Type="Standard" EnumName="KAIZOKU_LIMB_14" Offset="0xD79C" />
-        <Limb Name="object_kz_Standardlimb_00D7A8" Type="Standard" EnumName="KAIZOKU_LIMB_15" Offset="0xD7A8" />
-        <Limb Name="object_kz_Standardlimb_00D7B4" Type="Standard" EnumName="KAIZOKU_LIMB_R_FOOT" Offset="0xD7B4" />
-        <Limb Name="object_kz_Standardlimb_00D7C0" Type="Standard" EnumName="KAIZOKU_LIMB_17" Offset="0xD7C0" />
+        <Limb Name="gKaizokuRootLimb" Type="Standard" EnumName="KAIZOKU_LIMB_ROOT" Offset="0xD6B8" />
+        <Limb Name="gKaizokuTorsoLimb" Type="Standard" EnumName="KAIZOKU_LIMB_TORSO" Offset="0xD6C4" />
+        <Limb Name="gKaizokuNeckLimb" Type="Standard" EnumName="KAIZOKU_LIMB_NECK" Offset="0xD6D0" />
+        <Limb Name="gKaizokuPonytailLimb" Type="Standard" EnumName="KAIZOKU_LIMB_PONYTAIL" Offset="0xD6DC" />
+        <Limb Name="gKaizokuVeilLimb" Type="Standard" EnumName="KAIZOKU_LIMB_VEIL" Offset="0xD6E8" />
+        <Limb Name="gKaizokuHeadLimb" Type="Standard" EnumName="KAIZOKU_LIMB_HEAD" Offset="0xD6F4" />
+        <Limb Name="gKaizokuRightUpperArmLimb" Type="Standard" EnumName="KAIZOKU_LIMB_R_UPPER_ARM" Offset="0xD700" />
+        <Limb Name="gKaizokuRightForearmLimb" Type="Standard" EnumName="KAIZOKU_LIMB_R_FOREARM" Offset="0xD70C" />
+        <Limb Name="gKaizokuRightWristLimb" Type="Standard" EnumName="KAIZOKU_LIMB_R_WRIST" Offset="0xD718" />
+        <Limb Name="gKaizokuRightHandLimb" Type="Standard" EnumName="KAIZOKU_LIMB_R_HAND" Offset="0xD724" />
+        <Limb Name="gKaizokuRightSwordLimb" Type="Standard" EnumName="KAIZOKU_LIMB_R_SWORD" Offset="0xD730" />
+        <Limb Name="gKaizokuLeftUpperArmLimb" Type="Standard" EnumName="KAIZOKU_LIMB_L_UPPER_ARM" Offset="0xD73C" />
+        <Limb Name="gKaizokuLeftForearmLimb" Type="Standard" EnumName="KAIZOKU_LIMB_L_FOREARM" Offset="0xD748" />
+        <Limb Name="gKaizokuLeftWristLimb" Type="Standard" EnumName="KAIZOKU_LIMB_L_WRIST" Offset="0xD754" />
+        <Limb Name="gKaizokuLeftHandLimb" Type="Standard" EnumName="KAIZOKU_LIMB_L_HAND" Offset="0xD760" />
+        <Limb Name="gKaizokuLeftSwordLimb" Type="Standard" EnumName="KAIZOKU_LIMB_L_SWORD" Offset="0xD76C" />
+        <Limb Name="gKaizokuLeftThighLimb" Type="Standard" EnumName="KAIZOKU_LIMB_L_THIGH" Offset="0xD778" />
+        <Limb Name="gKaizokuLeftShinLimb" Type="Standard" EnumName="KAIZOKU_LIMB_L_SHIN" Offset="0xD784" />
+        <Limb Name="gKaizokuLeftFootLimb" Type="Standard" EnumName="KAIZOKU_LIMB_L_FOOT" Offset="0xD790" />
+        <Limb Name="gKaizokuRightThighLimb" Type="Standard" EnumName="KAIZOKU_LIMB_R_THIGH" Offset="0xD79C" />
+        <Limb Name="gKaizokuRightShinLimb" Type="Standard" EnumName="KAIZOKU_LIMB_R_SHIN" Offset="0xD7A8" />
+        <Limb Name="gKaizokuRightFootLimb" Type="Standard" EnumName="KAIZOKU_LIMB_R_FOOT" Offset="0xD7B4" />
+        <Limb Name="gKaizokuWaistLimb" Type="Standard" EnumName="KAIZOKU_LIMB_WAIST" Offset="0xD7C0" />
+
+
         <Skeleton Name="gKaizokuSkel" Type="Flex" LimbType="Standard" LimbNone="KAIZOKU_LIMB_NONE" LimbMax="KAIZOKU_LIMB_MAX" EnumName="KaizokuLimb" Offset="0xD828" />
 
         <Animation Name="gKaizokuSidestepAnim" Offset="0xDBE4" /> <!-- Original name is "kz_side_walk" -->
