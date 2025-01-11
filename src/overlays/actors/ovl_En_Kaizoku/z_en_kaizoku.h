@@ -12,6 +12,7 @@ typedef void (*EnKaizokuActionFunc)(struct EnKaizoku*, PlayState*);
 #define KAIZOKU_GET_EXIT_INDEX(thisx) ((thisx)->params & 0x3F)
 #define KAIZOKU_GET_SWITCH_FLAG(thisx) (((thisx)->params >> 6) & 0x7F)
 
+// used for text and for outfit color
 #define KAIZOKU_GET_TYPE(this) ((this)->picto.actor.world.rot.z)
 
 #define KAIZOKU_SWITCH_FLAG_NONE 0x7F
@@ -19,12 +20,12 @@ typedef void (*EnKaizokuActionFunc)(struct EnKaizoku*, PlayState*);
 // todo name these
 typedef enum EnKaizokuAnimation {
     /*  0 */ KAIZOKU_ANIM_FIGHTING_IDLE,
-    /*  1 */ EN_KAIZOKU_ANIM_1,
-    /*  2 */ EN_KAIZOKU_ANIM_2,
+    /*  1 */ KAIZOKU_ANIM_OOT_CONVERSATION, // giving player membership card?
+    /*  2 */ KAIZOKU_ANIM_OOT_JUMP, // replaced with _LAND
     /*  3 */ KAIZOKU_ANIM_SIDESTEP,
     /*  4 */ KAIZOKU_ANIM_WALK,
     /*  5 */ KAIZOKU_ANIM_DAMAGE,
-    /*  6 */ EN_KAIZOKU_ANIM_6,
+    /*  6 */ KAIZOKU_ANIM_OOT_DEFEAT, // replaced with _DEFEAT
     /*  7 */ KAIZOKU_ANIM_BLOCK,
     /*  8 */ KAIZOKU_ANIM_FLIP,
     /*  9 */ KAIZOKU_ANIM_SLASH_ATTCK,
@@ -37,9 +38,10 @@ typedef enum EnKaizokuAnimation {
     /* 16 */ KAIZOKU_ANIM_DEFEAT,
     /* 17 */ KAIZOKU_ANIM_DEFEAT_IDLE,
     /* 18 */ KAIZOKU_ANIM_THROW_FLASH,
-    /* 19 */ EN_KAIZOKU_ANIM_MAX
+    /* 19 */ KAIZOKU_ANIM_MAX
 } EnKaizokuAnimation;
 
+// this predates actor object xml enums right?
 typedef enum EnKaizokuBodyPart {
     /*  0 */ KAIZOKU_BODYPART_0,
     /*  1 */ KAIZOKU_BODYPART_1,
@@ -60,10 +62,10 @@ typedef enum EnKaizokuBodyPart {
 } EnKaizokuBodyPart;
 
 typedef enum KaizokuTextOffset{
-    /*  0 */ KAIZOKU_COVERSATION_INTRO_1,
-    /*  1 */ KAIZOKU_COVERSATION_INTRO_2,
-    /*  2 */ KAIZOKU_COVERSATION_WIN,
-    /*  3 */ KAIZOKU_COVERSATION_LOSS
+    /*  0 */ KAIZOKU_COVERSATION_INTRO_1, // shout before landing
+    /*  1 */ KAIZOKU_COVERSATION_INTRO_2, // after landing
+    /*  2 */ KAIZOKU_COVERSATION_WIN,  // after losing to player
+    /*  3 */ KAIZOKU_COVERSATION_LOSS  // after defeating player 
 } KaizokuTextOffset;
 
 
@@ -74,13 +76,13 @@ typedef struct EnKaizoku {
     /* 0x21C */ Vec3s morphTable[KAIZOKU_LIMB_MAX];
     /* 0x2AC */ EnKaizokuActionFunc actionFunc;
     /* 0x2B0 */ s16 action;
-    /* 0x2B2 */ s16 timer2B2; // unk timer
+    /* 0x2B2 */ s16 combatTimer;
     /* 0x2B4 */ s16 lookTimer;
-    /* 0x2B6 */ s16 unk_2B6; // timer 
+    /* 0x2B6 */ s16 iceTimer;
     /* 0x2B8 */ s16 colorFilterTimer; // name taken from oot, damaged flashing red
     /* 0x2BA */ s16 drawDmgEffType;
     /* 0x2BC */ s16 switchFlag;
-    /* 0x2BE */ s16 unk_2BE;
+    /* 0x2BE */ s16 unused2BE;
     /* 0x2C0 */ f32 drawDmgEffScale;
     /* 0x2C4 */ f32 drawDmgEffFrozenSteamScale;
     /* 0x2C8 */ s16 textidOffset; // which of the 4 text states during interaction 
@@ -91,10 +93,10 @@ typedef struct EnKaizoku {
     /* 0x2D2 */ s16 swordState;
     /* 0x2D4 */ s16 exitIndex;
     /* 0x2D6 */ s16 csId;
-    /* 0x2D8 */ u8 bool2D8; // bool
+    /* 0x2D8 */ u8 dontUpdateSkel;
     /* 0x2D9 */ u8 defeatBreathingStarted;
     /* 0x2DC */ f32 animEndFrame;
-    /* 0x2E0 */ f32 unk_2E0; // walking vector magnitude?
+    /* 0x2E0 */ f32 approachRate;
     /* 0x2E4 */ EnKaizokuAnimation animIndex;
     /* 0x2E8 */ s32 bodyPartIndex;
     /* 0x2EC */ s32 colorType;
