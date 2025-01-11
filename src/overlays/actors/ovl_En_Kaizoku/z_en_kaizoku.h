@@ -63,7 +63,7 @@ typedef enum KaizokuTextOffset{
     /*  0 */ KAIZOKU_COVERSATION_INTRO_1,
     /*  1 */ KAIZOKU_COVERSATION_INTRO_2,
     /*  2 */ KAIZOKU_COVERSATION_WIN,
-    /*  3 */ KAIZOKU_COVERSATION_LOSS,
+    /*  3 */ KAIZOKU_COVERSATION_LOSS
 } KaizokuTextOffset;
 
 
@@ -87,7 +87,7 @@ typedef struct EnKaizoku {
     /* 0x2CA */ s16 textType;
     /* 0x2CC */ s16 eyeIndex;
     /* 0x2CE */ s16 blinkTimer;
-    /* 0x2D0 */ s16 unk_2D0;
+    /* 0x2D0 */ s16 spinAttackState;
     /* 0x2D2 */ s16 swordState;
     /* 0x2D4 */ s16 exitIndex;
     /* 0x2D6 */ s16 csId;
@@ -98,12 +98,12 @@ typedef struct EnKaizoku {
     /* 0x2E4 */ EnKaizokuAnimation animIndex;
     /* 0x2E8 */ s32 bodyPartIndex;
     /* 0x2EC */ s32 colorType;
-    /* 0x2F0 */ f32 unk_2F0;
-    /* 0x2F4 */ s16 unk_2F4;
-    /* 0x2F8 */ Vec3f unk_2F8;
-    /* 0x304 */ Vec3f unk_304;
+    /* 0x2F0 */ f32 unk_2F0; // modfified in Update, but not read/used?
+    /* 0x2F4 */ s16 unk_2F4; // read but never set?
+    /* 0x2F8 */ Vec3f swordScaleRight;
+    /* 0x304 */ Vec3f swordScaleLeft;
     /* 0x310 */ Vec3f bodyPartsPos[KAIZOKU_BODYPART_MAX];
-    /* 0x3C4 */ Vec3f unk_3C4;
+    /* 0x3C4 */ Vec3f unk_3C4; // momentum?
     /* 0x3D0 */ s32 blureIndex;
     /* 0x3D4 */ ColliderCylinder bodyCollider;
     /* 0x420 */ ColliderQuad swordCollider;
@@ -116,14 +116,14 @@ typedef struct EnKaizoku {
     /* 0x59C */ s16 cutsceneState; 
     /* 0x59E */ s16 subCamId;
     /* 0x5A0 */ s16 flashTimer;
-    /* 0x5A2 */ s16 unused5A2; // never referenced in code?
+    /* 0x5A2 */ s16 unused5A2;
     /* 0x5A4 */ Vec3f subCamEye;
     /* 0x5B0 */ Vec3f subCamAt;
     /* 0x5BC */ Vec3f subCamUp;
-    /* 0x5C8 */ Vec3f unk_5C8;
-    /* 0x5D4 */ Vec3f unk_5D4;
-    /* 0x5E0 */ f32 unk_5E0; // manual cutscene camera control?
-    /* 0x5E4 */ f32 unk_5E4;
+    /* 0x5C8 */ Vec3f subCamEyeTarget;
+    /* 0x5D4 */ Vec3f subCamAtTarget;
+    /* 0x5E0 */ f32 subCamVelocity;
+    /* 0x5E4 */ f32 unused5E4;
     /* 0x5E8 */ f32 flashScreenAlpha;
     /* 0x5EC */ f32 flashScreenAlphaTarget;
 } EnKaizoku; // size = 0x5F0

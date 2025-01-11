@@ -221,7 +221,7 @@ static AnimationHeader* sAnimations[EN_KAIZOKU_ANIM_MAX] = {
     &gKaizokuSidestepAnim, // KAIZOKU_ANIM_SIDESTEP
     &gKaizokuWalkAnim, // KAIZOKU_ANIM_WALK
     &gKaizokuDamageAnim, // KAIZOKU_ANIM_DAMAGE
-    &gKaizokuDefeatOldAnim, // EN_KAIZOKU_ANIM_6
+    &gKaizokuOOTDefeatAnim, // EN_KAIZOKU_ANIM_6
     &gKaizokuBlockAnim, // KAIZOKU_ANIM_BLOCK
     &gKaizokuFlipAnim, // KAIZOKU_ANIM_FLIP
     &gKaizokuSlashAnim, // KAIZOKU_ANIM_SLASH_ATTCK
@@ -469,8 +469,8 @@ s32 EnKaizoku_ValidatePictograph(PlayState* play, Actor* actor) {
 }
 
 void EnKaizoku_SetupWaitForApproach(EnKaizoku* this) {
-    Math_Vec3f_Copy(&this->unk_2F8, &gZeroVec3f);
-    Math_Vec3f_Copy(&this->unk_304, &gZeroVec3f);
+    Math_Vec3f_Copy(&this->swordScaleRight, &gZeroVec3f);
+    Math_Vec3f_Copy(&this->swordScaleLeft, &gZeroVec3f);
     this->bool2D8 = true;
     this->action = KAIZOKU_ACTION_0;
     this->actionFunc = EnKaizoku_WaitForApproach;
@@ -514,8 +514,8 @@ void EnKaizoku_WaitForApproach(EnKaizoku* this, PlayState* play) {
             this->picto.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             player->actor.shape.rot.y = player->actor.world.rot.y =
                 Math_Vec3f_Yaw(&player->actor.world.pos, &this->picto.actor.world.pos);
-            Math_Vec3f_Copy(&this->subCamEye, &this->unk_5C8);
-            Math_Vec3f_Copy(&this->subCamAt, &this->unk_5D4);
+            Math_Vec3f_Copy(&this->subCamEye, &this->subCamEyeTarget);
+            Math_Vec3f_Copy(&this->subCamAt, &this->subCamAtTarget);
             this->subCamUp.x = -0.11f;
             this->picto.actor.draw = EnKaizoku_Draw;
             this->cutsceneTimer = 0;
@@ -596,7 +596,7 @@ void EnKaizoku_WaitForApproach(EnKaizoku* this, PlayState* play) {
             break;
 
         case 5:
-            Math_ApproachF(&this->unk_5E0, 2.0f, 0.2f, 1.0f);
+            Math_ApproachF(&this->subCamVelocity, 2.0f, 0.2f, 1.0f);
             if (Animation_OnFrame(&this->skelAnime, 20.0f)) {
                 Actor_PlaySfx(&this->picto.actor, NA_SE_EN_BOSU_SWORD);
             }
@@ -607,16 +607,16 @@ void EnKaizoku_WaitForApproach(EnKaizoku* this, PlayState* play) {
             break;
 
         case 6:
-            Math_ApproachF(&this->unk_5E0, 5.0f, 0.3f, 1.0f);
+            Math_ApproachF(&this->subCamVelocity, 5.0f, 0.3f, 1.0f);
             if (curFrame >= this->animEndFrame) {
                 this->cutsceneTimer = 7;
-                this->unk_2F8.x = 1.0f;
+                this->swordScaleRight.x = 1.0f;
                 this->cutsceneState++;
-                this->unk_2F8.y = 1.0f;
-                this->unk_2F8.z = 1.0f;
-                this->unk_304.x = 1.0f;
-                this->unk_304.y = 1.0f;
-                this->unk_304.z = 1.0f;
+                this->swordScaleRight.y = 1.0f;
+                this->swordScaleRight.z = 1.0f;
+                this->swordScaleLeft.x = 1.0f;
+                this->swordScaleLeft.y = 1.0f;
+                this->swordScaleLeft.z = 1.0f;
             }
             break;
 
@@ -635,40 +635,40 @@ void EnKaizoku_WaitForApproach(EnKaizoku* this, PlayState* play) {
     }
 
     if (this->cutsceneState < 7) {
-        s32 typeCameraOffset = this->colorType * 8;
+        s32 cameraIndex = this->colorType * 8;
 
-        typeCameraOffset += this->cutsceneState;
-        this->unk_5C8.x = sCutsceneCameraPositions[typeCameraOffset].x + this->picto.actor.home.pos.x;
-        this->unk_5C8.y = sCutsceneCameraPositions[typeCameraOffset].y + player->actor.world.pos.y;
-        this->unk_5C8.z = sCutsceneCameraPositions[typeCameraOffset].z + this->picto.actor.home.pos.z;
+        cameraIndex += this->cutsceneState;
+        this->subCamEyeTarget.x = sCutsceneCameraPositions[cameraIndex].x + this->picto.actor.home.pos.x;
+        this->subCamEyeTarget.y = sCutsceneCameraPositions[cameraIndex].y + player->actor.world.pos.y;
+        this->subCamEyeTarget.z = sCutsceneCameraPositions[cameraIndex].z + this->picto.actor.home.pos.z;
 
-        this->unk_5D4.x = sCutsceneCameraTargetPositions[typeCameraOffset].x + this->picto.actor.home.pos.x;
-        this->unk_5D4.y = sCutsceneCameraTargetPositions[typeCameraOffset].y + player->actor.world.pos.y;
-        this->unk_5D4.z = sCutsceneCameraTargetPositions[typeCameraOffset].z + this->picto.actor.home.pos.z;
+        this->subCamAtTarget.x = sCutsceneCameraTargetPositions[cameraIndex].x + this->picto.actor.home.pos.x;
+        this->subCamAtTarget.y = sCutsceneCameraTargetPositions[cameraIndex].y + player->actor.world.pos.y;
+        this->subCamAtTarget.z = sCutsceneCameraTargetPositions[cameraIndex].z + this->picto.actor.home.pos.z;
     }
 
     if (this->cutsceneState >= 5) {
         if (curFrame >= 6.0f) {
-            Math_ApproachF(&this->unk_2F8.x, 1.0f, 0.3f, 0.3f);
-            this->unk_2F8.z = this->unk_2F8.y = this->unk_2F8.x;
+            Math_ApproachF(&this->swordScaleRight.x, 1.0f, 0.3f, 0.3f);
+            this->swordScaleRight.z = this->swordScaleRight.y = this->swordScaleRight.x;
         }
 
         if (curFrame >= 22.0f) {
-            Math_ApproachF(&this->unk_304.x, 1.0f, 0.3f, 0.3f);
-            this->unk_304.z = this->unk_304.y = this->unk_304.x;
+            Math_ApproachF(&this->swordScaleLeft.x, 1.0f, 0.3f, 0.3f);
+            this->swordScaleLeft.z = this->swordScaleLeft.y = this->swordScaleLeft.x;
         }
     }
 
     if (this->cutsceneState >= 5) {
-        Math_ApproachF(&this->subCamEye.x, this->unk_5C8.x, 0.5f, this->unk_5E0);
-        Math_ApproachF(&this->subCamEye.y, this->unk_5C8.y, 0.5f, this->unk_5E0);
-        Math_ApproachF(&this->subCamEye.z, this->unk_5C8.z, 0.5f, this->unk_5E0);
-        Math_ApproachF(&this->subCamAt.x, this->unk_5D4.x, 0.5f, this->unk_5E0);
-        Math_ApproachF(&this->subCamAt.y, this->unk_5D4.y, 0.5f, this->unk_5E0);
-        Math_ApproachF(&this->subCamAt.z, this->unk_5D4.z, 0.5f, this->unk_5E0);
+        Math_ApproachF(&this->subCamEye.x, this->subCamEyeTarget.x, 0.5f, this->subCamVelocity);
+        Math_ApproachF(&this->subCamEye.y, this->subCamEyeTarget.y, 0.5f, this->subCamVelocity);
+        Math_ApproachF(&this->subCamEye.z, this->subCamEyeTarget.z, 0.5f, this->subCamVelocity);
+        Math_ApproachF(&this->subCamAt.x, this->subCamAtTarget.x, 0.5f, this->subCamVelocity);
+        Math_ApproachF(&this->subCamAt.y, this->subCamAtTarget.y, 0.5f, this->subCamVelocity);
+        Math_ApproachF(&this->subCamAt.z, this->subCamAtTarget.z, 0.5f, this->subCamVelocity);
     } else {
-        Math_Vec3f_Copy(&this->subCamEye, &this->unk_5C8);
-        Math_Vec3f_Copy(&this->subCamAt, &this->unk_5D4);
+        Math_Vec3f_Copy(&this->subCamEye, &this->subCamEyeTarget);
+        Math_Vec3f_Copy(&this->subCamAt, &this->subCamAtTarget);
     }
 
     if (this->subCamId != SUB_CAM_ID_DONE) {
@@ -700,6 +700,7 @@ void EnKaizoku_SetupLoss(EnKaizoku* this, PlayState* play) {
     this->picto.actor.speed = 0.0f;
 }
 
+// Player has lost the fight
 void EnKaizoku_Loss(EnKaizoku* this, PlayState* play) {
     f32 curFrame = this->skelAnime.curFrame;
 
@@ -762,6 +763,7 @@ void EnKaizoku_Loss(EnKaizoku* this, PlayState* play) {
     }
 }
 
+// Player has won the fight
 void EnKaizoku_SetupWin(EnKaizoku* this) {
     this->bool2D8 = 0;
     this->action = KAIZOKU_ACTION_0;
@@ -779,12 +781,12 @@ void EnKaizoku_Win(EnKaizoku* this, PlayState* play) {
         player->actor.world.pos.z = this->picto.actor.home.pos.z + 30.0f;
         this->picto.actor.world.pos.x = this->picto.actor.home.pos.x;
         this->picto.actor.world.pos.z = this->picto.actor.home.pos.z;
-        this->unk_5C8.x = player->actor.world.pos.x + 39.0f;
-        this->unk_5C8.y = player->actor.world.pos.y + 4.0f;
-        this->unk_5C8.z = player->actor.world.pos.z - 41.0f;
-        this->unk_5D4.x = player->actor.world.pos.x - 150.0f;
-        this->unk_5D4.y = player->actor.world.pos.y + 60.0f;
-        this->unk_5D4.z = player->actor.world.pos.z + 50.0f;
+        this->subCamEyeTarget.x = player->actor.world.pos.x + 39.0f;
+        this->subCamEyeTarget.y = player->actor.world.pos.y + 4.0f;
+        this->subCamEyeTarget.z = player->actor.world.pos.z - 41.0f;
+        this->subCamAtTarget.x = player->actor.world.pos.x - 150.0f;
+        this->subCamAtTarget.y = player->actor.world.pos.y + 60.0f;
+        this->subCamAtTarget.z = player->actor.world.pos.z + 50.0f;
     }
 
     player->actor.shape.rot.y = player->actor.world.rot.y =
@@ -821,19 +823,19 @@ void EnKaizoku_Win(EnKaizoku* this, PlayState* play) {
             break;
 
         case 2:
-            this->unk_5C8.x = player->actor.world.pos.x + 77.0f;
-            this->unk_5C8.y = player->actor.world.pos.y + 84.0f;
-            this->unk_5C8.z = player->actor.world.pos.z - 71.0f;
+            this->subCamEyeTarget.x = player->actor.world.pos.x + 77.0f;
+            this->subCamEyeTarget.y = player->actor.world.pos.y + 84.0f;
+            this->subCamEyeTarget.z = player->actor.world.pos.z - 71.0f;
 
-            this->unk_5D4.x = player->actor.world.pos.x - 110.0f;
-            this->unk_5D4.y = player->actor.world.pos.y;
-            this->unk_5D4.z = player->actor.world.pos.z + 30.0f;
+            this->subCamAtTarget.x = player->actor.world.pos.x - 110.0f;
+            this->subCamAtTarget.y = player->actor.world.pos.y;
+            this->subCamAtTarget.z = player->actor.world.pos.z + 30.0f;
             this->flashTimer++;
             if (curFrame >= 1.0f) {
-                Math_ApproachZeroF(&this->unk_2F8.x, 0.3f, 0.3f);
-                Math_ApproachZeroF(&this->unk_304.x, 0.3f, 0.3f);
-                this->unk_2F8.z = this->unk_2F8.y = this->unk_2F8.x;
-                this->unk_304.z = this->unk_304.y = this->unk_304.x;
+                Math_ApproachZeroF(&this->swordScaleRight.x, 0.3f, 0.3f);
+                Math_ApproachZeroF(&this->swordScaleLeft.x, 0.3f, 0.3f);
+                this->swordScaleRight.z = this->swordScaleRight.y = this->swordScaleRight.x;
+                this->swordScaleLeft.z = this->swordScaleLeft.y = this->swordScaleLeft.x;
             }
             if (this->flashTimer == 0x12) {
                 Actor* dekuNut;
@@ -863,8 +865,8 @@ void EnKaizoku_Win(EnKaizoku* this, PlayState* play) {
             if ((curFrame >= this->animEndFrame) && (this->flashTimer >= 0x28)) {
                 this->picto.actor.draw = NULL;
                 this->cutsceneTimer = 10;
-                Math_Vec3f_Copy(&this->unk_2F8, &gZeroVec3f);
-                Math_Vec3f_Copy(&this->unk_304, &gZeroVec3f);
+                Math_Vec3f_Copy(&this->swordScaleRight, &gZeroVec3f);
+                Math_Vec3f_Copy(&this->swordScaleLeft, &gZeroVec3f);
                 this->cutsceneState++;
             }
             break;
@@ -895,13 +897,13 @@ void EnKaizoku_Win(EnKaizoku* this, PlayState* play) {
         default:
             break;
     }
-    Math_ApproachF(&this->subCamEye.x, this->unk_5C8.x, 0.5f, this->unk_5E0);
-    Math_ApproachF(&this->subCamEye.y, this->unk_5C8.y, 0.5f, this->unk_5E0);
-    Math_ApproachF(&this->subCamEye.z, this->unk_5C8.z, 0.5f, this->unk_5E0);
-    Math_ApproachF(&this->subCamAt.x, this->unk_5D4.x, 0.5f, this->unk_5E0);
-    Math_ApproachF(&this->subCamAt.y, this->unk_5D4.y, 0.5f, this->unk_5E0);
-    Math_ApproachF(&this->subCamAt.z, this->unk_5D4.z, 0.5f, this->unk_5E0);
-    Math_ApproachF(&this->unk_5E0, 10.0f, 0.5f, 100.0f);
+    Math_ApproachF(&this->subCamEye.x, this->subCamEyeTarget.x, 0.5f, this->subCamVelocity);
+    Math_ApproachF(&this->subCamEye.y, this->subCamEyeTarget.y, 0.5f, this->subCamVelocity);
+    Math_ApproachF(&this->subCamEye.z, this->subCamEyeTarget.z, 0.5f, this->subCamVelocity);
+    Math_ApproachF(&this->subCamAt.x, this->subCamAtTarget.x, 0.5f, this->subCamVelocity);
+    Math_ApproachF(&this->subCamAt.y, this->subCamAtTarget.y, 0.5f, this->subCamVelocity);
+    Math_ApproachF(&this->subCamAt.z, this->subCamAtTarget.z, 0.5f, this->subCamVelocity);
+    Math_ApproachF(&this->subCamVelocity, 10.0f, 0.5f, 100.0f);
 
     if (this->subCamId != SUB_CAM_ID_DONE) {
         this->subCamUp.x = 0.0f;
@@ -1192,7 +1194,7 @@ void func_80B87E9C(EnKaizoku* this, PlayState* play) {
 
 void func_80B87F70(EnKaizoku* this) {
     EnKaizoku_ChangeAnim(this, KAIZOKU_ANIM_SLASH_ATTCK);
-    this->unk_2D0 = 0;
+    this->spinAttackState = 0;
     this->swordCollider.base.atFlags &= ~AT_BOUNCED;
     this->picto.actor.speed = 0.0f;
     AudioSfx_StopByPosAndId(&this->picto.actor.projectedPos, NA_SE_EN_PIRATE_BREATH);
@@ -1402,7 +1404,7 @@ void func_80B887AC(EnKaizoku* this, PlayState* play) {
 void func_80B88910(EnKaizoku* this) {
     EnKaizoku_ChangeAnim(this, KAIZOKU_ANIM_SPIN_ATTACK);
     this->swordCollider.base.atFlags &= ~(AT_BOUNCED | AT_HIT);
-    this->unk_2D0 = 0;
+    this->spinAttackState = 0;
     this->action = KAIZOKU_ACTION_11;
     this->actionFunc = func_80B88964;
     this->picto.actor.speed = 0.0f;
@@ -1415,10 +1417,10 @@ void func_80B88964(EnKaizoku* this, PlayState* play) {
     s16 a0;
     s32 pad;
 
-    if (this->unk_2D0 < 2) {
+    if (this->spinAttackState < 2) {
         if (this->swordCollider.base.atFlags & AT_BOUNCED) {
             this->swordCollider.base.atFlags &= ~(AT_BOUNCED | AT_HIT);
-            this->unk_2D0 = 1;
+            this->spinAttackState = 1;
             this->skelAnime.playSpeed = 1.0f;
         }
     }
@@ -1438,7 +1440,7 @@ void func_80B88964(EnKaizoku* this, PlayState* play) {
     }
 
     this->bool2D8 = 0;
-    if ((curFrame >= this->animEndFrame) && (this->unk_2D0 < 2)) {
+    if ((curFrame >= this->animEndFrame) && (this->spinAttackState < 2)) {
         if (!Actor_IsFacingPlayer(&this->picto.actor, 0x1554)) {
             func_80B872A4(this);
             this->timer2B2 = Rand_ZeroOne() * 5.0f + 5.0f;
@@ -1446,7 +1448,7 @@ void func_80B88964(EnKaizoku* this, PlayState* play) {
             return;
         }
 
-        if (this->unk_2D0 != 0) {
+        if (this->spinAttackState != 0) {
             func_80B87E28(this);
             return;
         }
@@ -1685,6 +1687,8 @@ void func_80B894C0(EnKaizoku* this, PlayState* play) {
     }
 }
 
+
+// trigger win
 void func_80B8960C(EnKaizoku* this, PlayState* play) {
     Vec3f sp24;
 
@@ -1752,13 +1756,13 @@ void func_80B8971C(EnKaizoku* this, PlayState* play) {
         this->picto.actor.world.pos.x = this->picto.actor.home.pos.x;
         this->picto.actor.world.pos.z = this->picto.actor.home.pos.z;
 
-        this->subCamEye.x = this->unk_5C8.x = player->actor.world.pos.x + 39.0f;
-        this->subCamEye.y = this->unk_5C8.y = player->actor.world.pos.y + 4.0f;
-        this->subCamEye.z = this->unk_5C8.z = player->actor.world.pos.z - 41.0f;
+        this->subCamEye.x = this->subCamEyeTarget.x = player->actor.world.pos.x + 39.0f;
+        this->subCamEye.y = this->subCamEyeTarget.y = player->actor.world.pos.y + 4.0f;
+        this->subCamEye.z = this->subCamEyeTarget.z = player->actor.world.pos.z - 41.0f;
 
-        this->subCamAt.x = this->unk_5D4.x = player->actor.world.pos.x - 150.0f;
-        this->subCamAt.y = this->unk_5D4.y = player->actor.world.pos.y + 60.0f;
-        this->subCamAt.z = this->unk_5D4.z = player->actor.world.pos.z + 50.0f;
+        this->subCamAt.x = this->subCamAtTarget.x = player->actor.world.pos.x - 150.0f;
+        this->subCamAt.y = this->subCamAtTarget.y = player->actor.world.pos.y + 60.0f;
+        this->subCamAt.z = this->subCamAtTarget.z = player->actor.world.pos.z + 50.0f;
 
         player->actor.shape.rot.y = player->actor.world.rot.y =
             Math_Vec3f_Yaw(&player->actor.world.pos, &this->picto.actor.world.pos);
@@ -1784,9 +1788,7 @@ void func_80B8971C(EnKaizoku* this, PlayState* play) {
 
 // handle damage to player and from player
 void func_80B89A08(EnKaizoku* this, PlayState* play) {
-    s32 sp64 = 0;
-    Vec3f sp58;
-    s32 i;
+    s32 wasHit = false;
 
     if (gSaveContext.save.saveInfo.playerData.health <= 0x10) {
         this->swordCollider.info.toucher.damage = 0;
@@ -1796,7 +1798,7 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
 
     if (!(this->swordCollider.base.atFlags & AT_BOUNCED) && (this->swordCollider.base.atFlags & AT_HIT)) {
         if ((gSaveContext.save.saveInfo.playerData.health <= 0x10) && (this->action != KAIZOKU_ACTION_16)) {
-            this->unk_2D0 = 2;
+            this->spinAttackState = 2;
             this->subCamId = SUB_CAM_ID_DONE;
             this->picto.actor.flags |= ACTOR_FLAG_100000;
 
@@ -1814,7 +1816,7 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
             Health_ChangeBy(play, -0xC);
             if ((gSaveContext.save.saveInfo.playerData.health <= 0x10) && (this->action != KAIZOKU_ACTION_16)) {
                 Health_ChangeBy(play, 0x10);
-                this->unk_2D0 = 2;
+                this->spinAttackState = 2;
                 this->subCamId = SUB_CAM_ID_DONE;
                 this->picto.actor.flags |= ACTOR_FLAG_100000;
 
@@ -1842,7 +1844,7 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
         func_80B87F70(this);
     }
 
-    if ((this->bodyCollider.base.acFlags & AC_HIT) && (this->action > KAIZOKU_ACTION_0) && (this->unk_2D0 < 2) &&
+    if ((this->bodyCollider.base.acFlags & AC_HIT) && (this->action > KAIZOKU_ACTION_0) && (this->spinAttackState < 2) &&
         (this->action != KAIZOKU_ACTION_6) && (this->action != KAIZOKU_ACTION_12) &&
         (this->action != KAIZOKU_ACTION_14) && (this->action != KAIZOKU_ACTION_15)) {
         Actor_SetDropFlag(&this->picto.actor, &this->bodyCollider.info);
@@ -1873,17 +1875,17 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
             case KAIZOKU_DMGEFF_F:
                 if ((this->action != KAIZOKU_ACTION_5) && (this->action != KAIZOKU_ACTION_7) &&
                     (this->action < KAIZOKU_ACTION_14)) {
-                    sp64 = 1;
+                    wasHit = true;
                 }
                 break;
 
             case KAIZOKU_DMGEFF_E:
-                sp64 = 1;
+                wasHit = true;
                 break;
 
             case KAIZOKU_DMGEFF_D:
                 if (this->action == KAIZOKU_ACTION_13) {
-                    sp64 = 1;
+                    wasHit = true;
                 } else if (this->action != KAIZOKU_ACTION_6) {
                     func_80B87C7C(this);
                 }
@@ -1894,7 +1896,7 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
                     (this->action < KAIZOKU_ACTION_14)) {
                     this->colorFilterTimer = 40;
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
-                    sp64 = 1;
+                    wasHit = true;
                 }
                 break;
 
@@ -1928,7 +1930,7 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
                     Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->picto.actor.focus.pos.x,
                                 this->picto.actor.focus.pos.y, this->picto.actor.focus.pos.z, 0, 0, 0,
                                 CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
-                    sp64 = 1;
+                    wasHit = true;
                 }
                 break;
 
@@ -1936,7 +1938,10 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
                 break;
         }
 
-        if (sp64) {
+        if (wasHit) {
+            Vec3f bloodPos;
+            s32 i;
+
             Actor_SetColorFilter(&this->picto.actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
             Actor_ApplyDamage(&this->picto.actor);
             if (this->picto.actor.colChkInfo.health <= 0) {
@@ -1947,10 +1952,10 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
             this->bodyCollider.info.elemType = ELEMTYPE_UNK1;
             this->bodyCollider.base.colType = COLTYPE_HIT3;
             this->swordCollider.info.elemType = ELEMTYPE_UNK4;
-            Math_Vec3f_Copy(&sp58, &this->picto.actor.focus.pos);
+            Math_Vec3f_Copy(&bloodPos, &this->picto.actor.focus.pos);
             for (i = 0; i < 3; i++) {
-                sp58.y += Rand_ZeroFloat(20.0f);
-                CollisionCheck_BlueBlood(play, NULL, &sp58);
+                bloodPos.y += Rand_ZeroFloat(20.0f);
+                CollisionCheck_BlueBlood(play, NULL, &bloodPos);
             }
 
             func_80B893CC(this, play);
@@ -2050,7 +2055,7 @@ void EnKaizoku_Update(Actor* thisx, PlayState* play2) {
                                 UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10);
     Collider_UpdateCylinder(&this->picto.actor, &this->bodyCollider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->bodyCollider.base);
-    if ((this->unk_2D0 < 2) && (this->action != KAIZOKU_ACTION_0)) {
+    if ((this->spinAttackState < 2) && (this->action != KAIZOKU_ACTION_0)) {
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->bodyCollider.base);
     }
     if (this->swordState > 0) {
@@ -2120,14 +2125,6 @@ void EnKaizoku_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
         Matrix_MultVec3f(&sFootOffset, &this->rightFootPos);
     }
 
-   /*
-   if ((limbIndex == KAIZOKU_LIMB_02) || (limbIndex == KAIZOKU_LIMB_06) || (limbIndex == KAIZOKU_LIMB_07) ||
-        (limbIndex == KAIZOKU_LIMB_08) || (limbIndex == KAIZOKU_LIMB_0A) || (limbIndex == KAIZOKU_LIMB_0C) ||
-        (limbIndex == KAIZOKU_LIMB_0D) || (limbIndex == KAIZOKU_LIMB_0F) || (limbIndex == KAIZOKU_LIMB_11) ||
-        (limbIndex == KAIZOKU_LIMB_12) || (limbIndex == KAIZOKU_LIMB_L_FOOT) || (limbIndex == KAIZOKU_LIMB_14) ||
-        (limbIndex == KAIZOKU_LIMB_15) || (limbIndex == KAIZOKU_LIMB_R_FOOT) || (limbIndex == KAIZOKU_LIMB_17)) {
-   // */
-
     if ((limbIndex == KAIZOKU_LIMB_TORSO) || (limbIndex == KAIZOKU_LIMB_HEAD) || (limbIndex == KAIZOKU_LIMB_R_UPPER_ARM) ||
         (limbIndex == KAIZOKU_LIMB_R_FOREARM) || (limbIndex == KAIZOKU_LIMB_R_HAND) || (limbIndex == KAIZOKU_LIMB_L_UPPER_ARM) ||
         (limbIndex == KAIZOKU_LIMB_L_FOREARM) || (limbIndex == KAIZOKU_LIMB_L_HAND) || (limbIndex == KAIZOKU_LIMB_L_THIGH) ||
@@ -2146,10 +2143,10 @@ void EnKaizoku_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
     EnKaizoku* this = THIS;
 
     if (limbIndex == KAIZOKU_LIMB_R_SWORD) {
-        Matrix_Scale(this->unk_2F8.x, this->unk_2F8.y, this->unk_2F8.z, MTXMODE_APPLY);
+        Matrix_Scale(this->swordScaleRight.x, this->swordScaleRight.y, this->swordScaleRight.z, MTXMODE_APPLY);
     }
     if (limbIndex == KAIZOKU_LIMB_L_SWORD) {
-        Matrix_Scale(this->unk_304.x, this->unk_304.y, this->unk_304.z, MTXMODE_APPLY);
+        Matrix_Scale(this->swordScaleLeft.x, this->swordScaleLeft.y, this->swordScaleLeft.z, MTXMODE_APPLY);
     }
 }
 

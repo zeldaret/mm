@@ -5,19 +5,20 @@
         <Animation Name="gKaizokuFlipAnim" Offset="0x1390" /> <!-- Original name is "kz_back_ten" -->
         <Animation Name="gKaizokuBlockAnim" Offset="0x1578" /> <!-- Original name is "kz_defense" -->
         <Animation Name="gKaizokuThrowFlashAnim" Offset="0x1E9C" /> <!-- Original name is "kz_doron" -->
-        <Animation Name="gKaizokuDefeatOldAnim" Offset="0x2730" /> <!-- Original name is "kz_down" -->
+        <Animation Name="gKaizokuOOTDefeatAnim" Offset="0x2730" /> <!-- Original name is "kz_down" -->
         <Animation Name="gKaizokuDefeatIdleAnim" Offset="0x2BA0" /> <!-- Original name is "kz_downwait" -->
         <Animation Name="gKaizokuDefeatAnim" Offset="0x3A3C" /> <!-- Original name is "kz_downwake" -->
-        <!-- I'm not sure this is used by the fighter, it looks like a move the leader uses -->
+        <!-- This is used in a threatening stance if the player loses the fight, while she talks to you -->
         <Animation Name="gKaizokuDemonstrativeSwordSwingAnim" Offset="0x43E4" /> <!-- Original name is "kz_getout" -->
         <Animation Name="gKaizokuDamageAnim" Offset="0x4860" /> <!-- Original name is "kz_hit" -->
         <Animation Name="gKaizokuUnsheatheAnim" Offset="0x5644" /> <!-- Original name is "kz_kime" -->
         <Animation Name="gKaizokuWalkAnim" Offset="0x58B8" /> <!-- Original name is "kz_run" -->
 
-        <Texture Name="object_kz_TLUT_0058D0" OutName="tlut1_0058D0" Format="rgba16" Width="16" Height="16" Offset="0x58D0" />
+        <Texture Name="gKaizokuTLUT1" OutName="tlut1_0058D0" Format="rgba16" Width="16" Height="16" Offset="0x58D0" />
         <!-- This is the same skin texture as below, but this one is her arms and back -->
-        <Texture Name="gKaizokuSkinGradientTex" OutName="skin1" Format="ci8" Width="8" Height="8" Offset="0x5AD0" TlutOffset="0x58D0" />
-        <Texture Name="gKaizokuShirtTopRedGradientTex" OutName="shirt_burgundy1" Format="ci8" Width="8" Height="8" Offset="0x5B10" />
+        <Texture Name="gKaizokuSkinGradient1Tex" OutName="skin1" Format="ci8" Width="8" Height="8" Offset="0x5AD0" TlutOffset="0x58D0" />
+        <Texture Name="gKaizokuShirtTopRedGradientTex" OutName="shirt_burgundy" Format="ci8" Width="8" Height="8" Offset="0x5B10" />
+        <!-- Gold armor plates on her shin, forearms, belt. Similar texture as Emblem, but slightly darker. -->
         <Texture Name="gKaizokuArmor1Tex" OutName="armor" Format="ci8" Width="16" Height="16" Offset="0x5B50" />
         <Texture Name="gKaizokuShirtTopPatternAndVeilTex" OutName="shirt_pattern1" Format="i8" Width="16" Height="16" Offset="0x5C50" />
         <Texture Name="gKaizokuBellyButtonTex" OutName="navel" Format="ci8" Width="16" Height="16" Offset="0x5D50" />
@@ -36,8 +37,7 @@
         <DList Name="gKaizokuLeftThighDl" Offset="0x8D80" />
         <DList Name="gKaizokuLeftShinDl" Offset="0x8E80" />
 
-        <!-- THIS TLUT IS THE WRONG SIZE all textures that use it export incorrectly -->
-        <Texture Name="object_kz_TLUT_009100" OutName="tlut2_009100" Format="rgba16" Width="16" Height="8" Offset="0x9100" /> 
+        <Texture Name="gKaizokuTLUT2" OutName="tlut2_009100" Format="rgba16" Width="4" Height="63" Offset="0x9100" /> 
         <!-- This is the same skin texture as above, but this one is for her head and feet -->
         <Texture Name="gKaizokuSkinGradient2Tex" OutName="skin2" Format="ci8" Width="8" Height="8" Offset="0x92F8"  TlutOffset="0x9100"/>
         <Texture Name="gKaizokuEarTex" OutName="ear" Format="ci8" Width="8" Height="16" Offset="0x9338" />
@@ -50,7 +50,7 @@
         <Texture Name="gKaizokuZipper2Tex" OutName="zipper2" Format="i8" Width="8" Height="16" Offset="0x9D78"/>
         <Texture Name="gKaizokuHairTex" OutName="hair" Format="ci8" Width="16" Height="16" Offset="0x9DF8" TlutOffset="0x9100" />
         <Texture Name="gKaizokuFingersTex" OutName="fingers" Format="ci8" Width="16" Height="16" Offset="0x9EF8" TlutOffset="0x9100" />
-        <!-- This is the same as the gKaizokuArmor above, but used in different spots: used for sword guard and her forhead emblem  -->
+        <!-- Similar to Armor above, but slightly brighter and  used in different spots: used for sword guard and her forhead emblem  -->
         <Texture Name="gKaizokuYellowSwordGuardAndEmblemTex" OutName="emblem" Format="ci8" Width="16" Height="16" Offset="0x9FF8" />
         <Texture Name="gKaizokuEyeClosedTex" OutName="kaizoku_eye_closed" Format="ci8" Width="32" Height="32" Offset="0xA0F8" TlutOffset="0x9100" />
 
