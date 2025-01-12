@@ -11,9 +11,7 @@
 #include "overlays/actors/ovl_En_Water_Effect/z_en_water_effect.h"
 #include "assets/objects/object_ikana_obj/object_ikana_obj.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
-
-#define THIS ((BgIkanaRotaryroom*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 void BgIkanaRotaryroom_Init(Actor* thisx, PlayState* play);
 void BgIkanaRotaryroom_Destroy(Actor* thisx, PlayState* play);
@@ -703,7 +701,7 @@ s32 func_80B816A4(BgIkanaRotaryroom* this) {
 
 void BgIkanaRotaryroom_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    BgIkanaRotaryroom* this = THIS;
+    BgIkanaRotaryroom* this = (BgIkanaRotaryroom*)thisx;
     s32 sp34 = BGIKANAROTARYROOM_GET_1(&this->dyna.actor);
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
@@ -741,7 +739,7 @@ void BgIkanaRotaryroom_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgIkanaRotaryroom_Destroy(Actor* thisx, PlayState* play) {
-    BgIkanaRotaryroom* this = THIS;
+    BgIkanaRotaryroom* this = (BgIkanaRotaryroom*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
     Collider_DestroyJntSph(play, &this->collider);
@@ -752,7 +750,7 @@ void func_80B818B4(BgIkanaRotaryroom* this) {
 }
 
 void func_80B818C8(Actor* thisx, PlayState* play) {
-    BgIkanaRotaryroom* this = THIS;
+    BgIkanaRotaryroom* this = (BgIkanaRotaryroom*)thisx;
     s32 switchFlag;
 
     if (this->collider.base.acFlags & AC_HIT) {
@@ -774,7 +772,7 @@ void func_80B81978(BgIkanaRotaryroom* this) {
 }
 
 void func_80B8198C(Actor* thisx, PlayState* play) {
-    BgIkanaRotaryroom* this = THIS;
+    BgIkanaRotaryroom* this = (BgIkanaRotaryroom*)thisx;
 
     if (this->unk_204.unk_00 == NULL) {
         func_80B819DC(this);
@@ -789,7 +787,7 @@ void func_80B819DC(BgIkanaRotaryroom* this) {
 }
 
 void func_80B819F0(Actor* thisx, PlayState* play) {
-    BgIkanaRotaryroom* this = THIS;
+    BgIkanaRotaryroom* this = (BgIkanaRotaryroom*)thisx;
 
     if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
         CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
@@ -808,7 +806,7 @@ void func_80B81A64(BgIkanaRotaryroom* this) {
 }
 
 void func_80B81A80(Actor* thisx, PlayState* play) {
-    BgIkanaRotaryroom* this = THIS;
+    BgIkanaRotaryroom* this = (BgIkanaRotaryroom*)thisx;
     s32 pad;
     s32 i;
     BgIkanaRotaryroomStruct1* ptr;
@@ -846,7 +844,7 @@ void func_80B81B84(BgIkanaRotaryroom* this) {
 }
 
 void func_80B81BA0(Actor* thisx, PlayState* play) {
-    BgIkanaRotaryroom* this = THIS;
+    BgIkanaRotaryroom* this = (BgIkanaRotaryroom*)thisx;
     s32 sp30 = 0;
     s32 i;
 
@@ -918,7 +916,7 @@ void func_80B81DAC(BgIkanaRotaryroom* this) {
 
 void func_80B81DC8(Actor* thisx, PlayState* play) {
     s32 pad;
-    BgIkanaRotaryroom* this = THIS;
+    BgIkanaRotaryroom* this = (BgIkanaRotaryroom*)thisx;
 
     if (this->unk_584 > 10) {
         Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_EARTHQUAKE - SFX_FLAG);
@@ -938,7 +936,7 @@ void func_80B81DC8(Actor* thisx, PlayState* play) {
 }
 
 void BgIkanaRotaryroom_Update(Actor* thisx, PlayState* play) {
-    BgIkanaRotaryroom* this = THIS;
+    BgIkanaRotaryroom* this = (BgIkanaRotaryroom*)thisx;
     BgIkanaRotaryroomStruct1* ptr;
     BgIkanaRotaryroomStruct1* ptr2;
     BgIkanaRotaryroomStruct2* ptr3;
@@ -991,7 +989,7 @@ void BgIkanaRotaryroom_Update(Actor* thisx, PlayState* play) {
 }
 
 void BgIkanaRotaryroom_Draw(Actor* thisx, PlayState* play) {
-    BgIkanaRotaryroom* this = THIS;
+    BgIkanaRotaryroom* this = (BgIkanaRotaryroom*)thisx;
     s32 param = BGIKANAROTARYROOM_GET_1(&this->dyna.actor);
 
     if (!param) {

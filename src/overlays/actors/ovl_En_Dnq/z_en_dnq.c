@@ -11,8 +11,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
-#define THIS ((EnDnq*)thisx)
-
 void EnDnq_Init(Actor* thisx, PlayState* play);
 void EnDnq_Destroy(Actor* thisx, PlayState* play);
 void EnDnq_Update(Actor* thisx, PlayState* play);
@@ -324,7 +322,7 @@ s32 func_80A52B68(EnDnq* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     u16 textId = play->msgCtx.currentTextId;
 
-    if ((player->stateFlags1 & PLAYER_STATE1_40) && (player->talkActor == &this->picto.actor)) {
+    if ((player->stateFlags1 & PLAYER_STATE1_TALKING) && (player->talkActor == &this->picto.actor)) {
         switch (textId) {
             case 0x89B:
                 EnDnq_ChangeAnim(this, DEKU_KING_ANIM_FOOT_STAMP_LOOP);
@@ -488,7 +486,7 @@ void EnDnq_HandleCutscene(EnDnq* this, PlayState* play) {
 }
 
 void EnDnq_Init(Actor* thisx, PlayState* play) {
-    EnDnq* this = THIS;
+    EnDnq* this = (EnDnq*)thisx;
 
     ActorShape_Init(&this->picto.actor.shape, 0.0f, NULL, 14.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gDekuKingSkel, NULL, this->jointTable, this->morphTable,
@@ -512,13 +510,13 @@ void EnDnq_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnDnq_Destroy(Actor* thisx, PlayState* play) {
-    EnDnq* this = THIS;
+    EnDnq* this = (EnDnq*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
 
 void EnDnq_Update(Actor* thisx, PlayState* play) {
-    EnDnq* this = THIS;
+    EnDnq* this = (EnDnq*)thisx;
 
     if (!func_80A52D44(this, play) && func_80A52648(this, play)) {
         EnDnq_HandleCutscene(this, play);
@@ -539,7 +537,7 @@ void EnDnq_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnDnq_Draw(Actor* thisx, PlayState* play) {
-    EnDnq* this = THIS;
+    EnDnq* this = (EnDnq*)thisx;
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,

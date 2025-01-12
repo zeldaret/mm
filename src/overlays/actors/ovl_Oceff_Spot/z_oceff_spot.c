@@ -6,9 +6,7 @@
 
 #include "z_oceff_spot.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_UPDATE_DURING_OCARINA)
-
-#define THIS ((OceffSpot*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
 void OceffSpot_Init(Actor* thisx, PlayState* play2);
 void OceffSpot_Destroy(Actor* thisx, PlayState* play2);
@@ -37,7 +35,7 @@ ActorProfile Oceff_Spot_Profile = {
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 0, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneForward, 1500, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeDistance, 1500, ICHAIN_STOP),
 };
 
 void OceffSpot_SetupAction(OceffSpot* this, OceffSpotActionFunc actionFunc) {
@@ -46,7 +44,7 @@ void OceffSpot_SetupAction(OceffSpot* this, OceffSpotActionFunc actionFunc) {
 
 void OceffSpot_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    OceffSpot* this = THIS;
+    OceffSpot* this = (OceffSpot*)thisx;
     Player* player = GET_PLAYER(play);
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
@@ -68,7 +66,7 @@ void OceffSpot_Init(Actor* thisx, PlayState* play2) {
 
 void OceffSpot_Destroy(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    OceffSpot* this = THIS;
+    OceffSpot* this = (OceffSpot*)thisx;
 
     LightContext_RemoveLight(play, &play->lightCtx, this->lightNode1);
     LightContext_RemoveLight(play, &play->lightCtx, this->lightNode2);
@@ -113,7 +111,7 @@ void OceffSpot_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     Player* player = GET_PLAYER(play);
     f32 temp;
-    OceffSpot* this = THIS;
+    OceffSpot* this = (OceffSpot*)thisx;
 
     temp = (1.0f - cosf(this->unk16C * M_PIf)) * 0.5f;
     this->actionFunc(this, play);
@@ -156,7 +154,7 @@ void OceffSpot_Update(Actor* thisx, PlayState* play) {
 }
 
 void OceffSpot_Draw(Actor* thisx, PlayState* play) {
-    OceffSpot* this = THIS;
+    OceffSpot* this = (OceffSpot*)thisx;
     u32 scroll = play->state.frames & 0xFFFF;
 
     OPEN_DISPS(play->state.gfxCtx);

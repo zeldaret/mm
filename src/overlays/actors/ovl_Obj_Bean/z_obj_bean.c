@@ -8,9 +8,7 @@
 #include "assets/objects/object_mamenoki/object_mamenoki.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_400000)
-
-#define THIS ((ObjBean*)thisx)
+#define FLAGS (ACTOR_FLAG_IGNORE_LEGACY_POINT_LIGHTS)
 
 void ObjBean_Init(Actor* thisx, PlayState* play);
 void ObjBean_Destroy(Actor* thisx, PlayState* play);
@@ -352,14 +350,14 @@ void func_809375F4(ObjBean* this, PlayState* play) {
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneForward, 2500, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 200, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 200, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeDistance, 2500, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 200, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 200, ICHAIN_STOP),
 };
 
 void ObjBean_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    ObjBean* this = THIS;
+    ObjBean* this = (ObjBean*)thisx;
     s32 sp2C = OBJBEAN_GET_C000(&this->dyna.actor);
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
@@ -375,7 +373,7 @@ void ObjBean_Init(Actor* thisx, PlayState* play) {
             Collider_SetCylinder(play, &this->collider, &this->dyna.actor, &sCylinderInit2);
             Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
         }
-        this->dyna.actor.flags |= ACTOR_FLAG_10;
+        this->dyna.actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
         func_80937C10(this);
         if (!func_80936D58(this, play)) {
             Actor_Kill(&this->dyna.actor);
@@ -423,7 +421,7 @@ void ObjBean_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjBean_Destroy(Actor* thisx, PlayState* play) {
-    ObjBean* this = THIS;
+    ObjBean* this = (ObjBean*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
     Collider_DestroyCylinder(play, &this->collider);
@@ -730,7 +728,7 @@ void func_8093868C(ObjBean* this, PlayState* play) {
 }
 
 void func_80938704(ObjBean* this) {
-    this->dyna.actor.flags |= ACTOR_FLAG_10;
+    this->dyna.actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     this->dyna.actor.draw = NULL;
     this->actionFunc = func_80938728;
 }
@@ -761,7 +759,7 @@ void func_80938780(ObjBean* this, PlayState* play) {
 }
 
 void func_80938804(ObjBean* this) {
-    this->dyna.actor.flags &= ~ACTOR_FLAG_10;
+    this->dyna.actor.flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     this->dyna.actor.draw = func_80938E00;
     this->actionFunc = func_80938834;
 }
@@ -776,7 +774,7 @@ void func_80938834(ObjBean* this, PlayState* play) {
 void func_80938874(ObjBean* this) {
     this->actionFunc = func_809388A8;
     this->dyna.actor.draw = func_80938E00;
-    this->dyna.actor.flags |= ACTOR_FLAG_10;
+    this->dyna.actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     this->dyna.actor.speed = 0.0f;
 }
 
@@ -793,7 +791,7 @@ void func_809388A8(ObjBean* this, PlayState* play) {
 }
 
 void func_8093892C(ObjBean* this) {
-    this->dyna.actor.flags |= ACTOR_FLAG_10;
+    this->dyna.actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     this->dyna.actor.draw = func_80938E00;
     this->actionFunc = func_80938958;
 }
@@ -806,7 +804,7 @@ void func_80938958(ObjBean* this, PlayState* play) {
 }
 
 void func_80938998(ObjBean* this) {
-    this->dyna.actor.flags |= ACTOR_FLAG_10;
+    this->dyna.actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     this->dyna.actor.draw = NULL;
     this->actionFunc = func_809389BC;
 }
@@ -822,7 +820,7 @@ void func_809389BC(ObjBean* this, PlayState* play) {
 
 void func_80938A14(ObjBean* this) {
     this->dyna.actor.draw = NULL;
-    this->dyna.actor.flags |= ACTOR_FLAG_10;
+    this->dyna.actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     this->unk_1B2 = 100;
     func_80937130(this);
     this->actionFunc = func_80938A5C;
@@ -837,7 +835,7 @@ void func_80938A5C(ObjBean* this, PlayState* play) {
 }
 
 void func_80938AA4(ObjBean* this) {
-    this->dyna.actor.flags |= ACTOR_FLAG_10;
+    this->dyna.actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     this->dyna.actor.draw = func_80938E00;
     this->unk_1B2 = 30;
     this->actionFunc = func_80938AD8;
@@ -882,7 +880,7 @@ void func_80938AD8(ObjBean* this, PlayState* play) {
 }
 
 void func_80938C1C(Actor* thisx, PlayState* play) {
-    ObjBean* this = THIS;
+    ObjBean* this = (ObjBean*)thisx;
 
     if (this->unk_1B2 > 0) {
         this->unk_1B2--;
@@ -900,7 +898,7 @@ void func_80938C1C(Actor* thisx, PlayState* play) {
 
 void ObjBean_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    ObjBean* this = THIS;
+    ObjBean* this = (ObjBean*)thisx;
 
     if (this->unk_1B2 > 0) {
         this->unk_1B2--;
@@ -937,7 +935,7 @@ void ObjBean_Update(Actor* thisx, PlayState* play) {
 }
 
 void func_80938E00(Actor* thisx, PlayState* play) {
-    ObjBean* this = THIS;
+    ObjBean* this = (ObjBean*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -966,7 +964,7 @@ void func_80938E00(Actor* thisx, PlayState* play) {
 }
 
 void func_80938F50(Actor* thisx, PlayState* play) {
-    ObjBean* this = THIS;
+    ObjBean* this = (ObjBean*)thisx;
 
     Gfx_DrawDListXlu(play, object_mamenoki_DL_002208);
 }

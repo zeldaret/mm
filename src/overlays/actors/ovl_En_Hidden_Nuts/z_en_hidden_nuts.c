@@ -10,8 +10,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
-#define THIS ((EnHiddenNuts*)thisx)
-
 void EnHiddenNuts_Init(Actor* thisx, PlayState* play);
 void EnHiddenNuts_Destroy(Actor* thisx, PlayState* play);
 void EnHiddenNuts_Update(Actor* thisx, PlayState* play);
@@ -101,7 +99,7 @@ static u8 sAnimationModes[ENHIDDENNUTS_ANIM_MAX] = {
 };
 
 void EnHiddenNuts_Init(Actor* thisx, PlayState* play) {
-    EnHiddenNuts* this = THIS;
+    EnHiddenNuts* this = (EnHiddenNuts*)thisx;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
     SkelAnime_Init(play, &this->skelAnime, &object_hintnuts_Skel_0023B8.sh, &object_hintnuts_Anim_0024CC,
@@ -137,7 +135,7 @@ void EnHiddenNuts_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnHiddenNuts_Destroy(Actor* thisx, PlayState* play) {
-    EnHiddenNuts* this = THIS;
+    EnHiddenNuts* this = (EnHiddenNuts*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -260,7 +258,7 @@ void func_80BDB59C(EnHiddenNuts* this, PlayState* play) {
 }
 
 void func_80BDB788(EnHiddenNuts* this) {
-    this->actor.flags |= ACTOR_FLAG_10;
+    this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
     Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_UP);
     Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_DEAD);
@@ -436,7 +434,7 @@ void func_80BDBED4(EnHiddenNuts* this, PlayState* play) {
 
 void EnHiddenNuts_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnHiddenNuts* this = THIS;
+    EnHiddenNuts* this = (EnHiddenNuts*)thisx;
 
     if (this->unk_218 != 0) {
         this->unk_218--;
@@ -461,7 +459,7 @@ void EnHiddenNuts_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnHiddenNuts_Draw(Actor* thisx, PlayState* play) {
-    EnHiddenNuts* this = THIS;
+    EnHiddenNuts* this = (EnHiddenNuts*)thisx;
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, NULL, &this->actor);

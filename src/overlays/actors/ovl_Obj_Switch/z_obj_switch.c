@@ -9,9 +9,7 @@
 #include "overlays/actors/ovl_Obj_Ice_Poly/z_obj_ice_poly.h"
 #include "assets/objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
 
-#define FLAGS (ACTOR_FLAG_10)
-
-#define THIS ((ObjSwitch*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 #define COS_OF_5_PI_DIV_8 -0.38268343f
 
@@ -192,9 +190,9 @@ static ColliderJntSphInit sJntSphInit = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 200, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 200, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeDistance, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 200, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 200, ICHAIN_STOP),
 };
 
 static Color_RGB8 sSakonHideoutColor[2] = { { 250, 90, 60 }, { 255, 255, 255 } };
@@ -333,7 +331,7 @@ void ObjSwitch_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     s32 type;
     u32 isSwitchFlagSet;
-    ObjSwitch* this = THIS;
+    ObjSwitch* this = (ObjSwitch*)thisx;
     s32 pad2;
 
     isSwitchFlagSet = Flags_GetSwitch(play, OBJ_SWITCH_GET_SWITCH_FLAG(&this->dyna.actor));
@@ -463,7 +461,7 @@ void ObjSwitch_Init(Actor* thisx, PlayState* play) {
 
 void ObjSwitch_Destroy(Actor* thisx, PlayState* play) {
     s32 pad;
-    ObjSwitch* this = THIS;
+    ObjSwitch* this = (ObjSwitch*)thisx;
     s32 type = OBJ_SWITCH_GET_TYPE(&this->dyna.actor);
 
     if (type == OBJSWITCH_TYPE_FLOOR || type == OBJSWITCH_TYPE_FLOOR_RUSTY || type == OBJSWITCH_TYPE_FLOOR_LARGE) {
@@ -928,7 +926,7 @@ void ObjSwitch_LargeFloorSwitchRiseUp(ObjSwitch* this, PlayState* play) {
 }
 
 void ObjSwitch_Update(Actor* thisx, PlayState* play) {
-    ObjSwitch* this = THIS;
+    ObjSwitch* this = (ObjSwitch*)thisx;
 
     if (this->floorSwitchReleaseTimer > 0) {
         this->floorSwitchReleaseTimer--;
@@ -1066,7 +1064,7 @@ void ObjSwitch_Draw(Actor* thisx, PlayState* play) {
         ObjSwitch_DrawFloorSwitch,   ObjSwitch_DrawRustyFloorSwitch, ObjSwitch_DrawEyeSwitch,
         ObjSwitch_DrawCrystalSwitch, ObjSwitch_DrawCrystalSwitch,    ObjSwitch_DrawFloorSwitch,
     };
-    ObjSwitch* this = THIS;
+    ObjSwitch* this = (ObjSwitch*)thisx;
 
     drawFunc[OBJ_SWITCH_GET_TYPE(&this->dyna.actor)](this, play);
 }

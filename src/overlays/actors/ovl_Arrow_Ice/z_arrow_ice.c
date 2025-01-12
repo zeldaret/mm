@@ -7,9 +7,7 @@
 #include "z_arrow_ice.h"
 #include "overlays/actors/ovl_En_Arrow/z_en_arrow.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_UPDATE_DURING_OCARINA)
-
-#define THIS ((ArrowIce*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
 void ArrowIce_Init(Actor* thisx, PlayState* play);
 void ArrowIce_Destroy(Actor* thisx, PlayState* play);
@@ -36,7 +34,7 @@ ActorProfile Arrow_Ice_Profile = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeDistance, 2000, ICHAIN_STOP),
 };
 
 void ArrowIce_SetupAction(ArrowIce* this, ArrowIceActionFunc actionFunc) {
@@ -44,7 +42,7 @@ void ArrowIce_SetupAction(ArrowIce* this, ArrowIceActionFunc actionFunc) {
 }
 
 void ArrowIce_Init(Actor* thisx, PlayState* play) {
-    ArrowIce* this = THIS;
+    ArrowIce* this = (ArrowIce*)thisx;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     this->radius = 0;
@@ -174,7 +172,7 @@ void ArrowIce_Fly(ArrowIce* this, PlayState* play) {
 }
 
 void ArrowIce_Update(Actor* thisx, PlayState* play) {
-    ArrowIce* this = THIS;
+    ArrowIce* this = (ArrowIce*)thisx;
 
     if ((play->msgCtx.msgMode == MSGMODE_E) || (play->msgCtx.msgMode == MSGMODE_SONG_PLAYED)) {
         Actor_Kill(&this->actor);
@@ -186,7 +184,7 @@ void ArrowIce_Update(Actor* thisx, PlayState* play) {
 
 void ArrowIce_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
-    ArrowIce* this = THIS;
+    ArrowIce* this = (ArrowIce*)thisx;
     Actor* transform;
     u32 stateFrames = play->state.frames;
     EnArrow* arrow = (EnArrow*)this->actor.parent;

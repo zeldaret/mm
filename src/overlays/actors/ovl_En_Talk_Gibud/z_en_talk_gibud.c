@@ -7,9 +7,9 @@
 #include "z_en_talk_gibud.h"
 #include "z64rumble.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_400)
-
-#define THIS ((EnTalkGibud*)thisx)
+#define FLAGS                                                                                 \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
+     ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER)
 
 void EnTalkGibud_Init(Actor* thisx, PlayState* play);
 void EnTalkGibud_Destroy(Actor* thisx, PlayState* play);
@@ -225,7 +225,7 @@ static Vec3f sAccel = { 0.0f, 0.600000023842f, 0.0f };
 
 void EnTalkGibud_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnTalkGibud* this = THIS;
+    EnTalkGibud* this = (EnTalkGibud*)thisx;
     s32 i;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
@@ -277,7 +277,7 @@ void EnTalkGibud_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnTalkGibud_Destroy(Actor* thisx, PlayState* play) {
-    EnTalkGibud* this = THIS;
+    EnTalkGibud* this = (EnTalkGibud*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -569,7 +569,7 @@ void EnTalkGibud_Damage(EnTalkGibud* this, PlayState* play) {
         if ((this->drawDmgEffTimer > 0) && (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FIRE) &&
             (this->type == EN_TALK_GIBUD_TYPE_GIBDO)) {
             this->actor.hintId = TATL_HINT_ID_REDEAD;
-            this->actor.flags &= ~(ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_ATTENTION_ENABLED);
+            this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
             this->actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE);
             SkelAnime_InitFlex(play, &this->skelAnime, &gRedeadSkel, NULL, this->jointTable, this->morphTable,
                                GIBDO_LIMB_MAX);
@@ -835,7 +835,7 @@ void EnTalkGibud_Talk(EnTalkGibud* this, PlayState* play) {
                     }
                     player->stateFlags1 |= PLAYER_STATE1_20;
                     player->stateFlags1 |= PLAYER_STATE1_20000000;
-                    this->actor.flags |= ACTOR_FLAG_100000;
+                    this->actor.flags |= ACTOR_FLAG_FREEZE_EXCEPTION;
                     EnTalkGibud_SetupDisappear(this);
                 } else {
                     EnTalkGibud_SetupPassiveIdle(this);
@@ -935,13 +935,13 @@ void EnTalkGibud_CheckForGibdoMask(EnTalkGibud* this, PlayState* play) {
         if (this->actionFunc != EnTalkGibud_PassiveIdle) {
             if (Player_GetMask(play) == PLAYER_MASK_GIBDO) {
                 this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE);
-                this->actor.flags |= (ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_ATTENTION_ENABLED);
+                this->actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
                 this->actor.hintId = TATL_HINT_ID_NONE;
                 this->actor.textId = 0;
                 EnTalkGibud_SetupPassiveIdle(this);
             }
         } else if (Player_GetMask(play) != PLAYER_MASK_GIBDO) {
-            this->actor.flags &= ~(ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_ATTENTION_ENABLED);
+            this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
             this->actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE);
             if (this->type == EN_TALK_GIBUD_TYPE_REDEAD) {
                 this->actor.hintId = TATL_HINT_ID_REDEAD;
@@ -1147,7 +1147,7 @@ void EnTalkGibud_UpdateEffect(EnTalkGibud* this, PlayState* play) {
 }
 
 void EnTalkGibud_Update(Actor* thisx, PlayState* play) {
-    EnTalkGibud* this = THIS;
+    EnTalkGibud* this = (EnTalkGibud*)thisx;
 
     EnTalkGibud_CheckForGibdoMask(this, play);
     EnTalkGibud_UpdateDamage(this, play);
@@ -1166,7 +1166,7 @@ void EnTalkGibud_Update(Actor* thisx, PlayState* play) {
 
 s32 EnTalkGibud_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
                                  Gfx** gfx) {
-    EnTalkGibud* this = THIS;
+    EnTalkGibud* this = (EnTalkGibud*)thisx;
 
     if (limbIndex == GIBDO_LIMB_UPPER_BODY_ROOT) {
         rot->y += this->torsoRot.y;
@@ -1178,7 +1178,7 @@ s32 EnTalkGibud_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Ve
 }
 
 void EnTalkGibud_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
-    EnTalkGibud* this = THIS;
+    EnTalkGibud* this = (EnTalkGibud*)thisx;
 
     if ((this->drawDmgEffTimer != 0) &&
         ((limbIndex == GIBDO_LIMB_LEFT_THIGH) || (limbIndex == GIBDO_LIMB_LEFT_SHIN) ||
@@ -1194,7 +1194,7 @@ void EnTalkGibud_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s
 }
 
 void EnTalkGibud_Draw(Actor* thisx, PlayState* play) {
-    EnTalkGibud* this = THIS;
+    EnTalkGibud* this = (EnTalkGibud*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

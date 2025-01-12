@@ -7,9 +7,7 @@
 #include "z_bg_dblue_elevator.h"
 #include "assets/objects/object_dblue_object/object_dblue_object.h"
 
-#define FLAGS (ACTOR_FLAG_10)
-
-#define THIS ((BgDblueElevator*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void BgDblueElevator_SpawnRipplesAndSplashes(BgDblueElevator* this, PlayState* play);
 void BgDblueElevator_CheckWaterBoxInfo(BgDblueElevator* this, PlayState* play2);
@@ -53,9 +51,9 @@ static s8 sLargeRipplesLives[] = { 0, 2, 4 };
 static s8 sSmallRipplesLives[] = { 0, 1, 2, 3, 4, 5 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 250, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 250, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDistance, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 250, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 250, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
@@ -160,7 +158,7 @@ s32 BgDblueElevator_GetWaterFlowFromPipes(BgDblueElevator* this, PlayState* play
 }
 
 void BgDblueElevator_Init(Actor* thisx, PlayState* play2) {
-    BgDblueElevator* this = THIS;
+    BgDblueElevator* this = (BgDblueElevator*)thisx;
     PlayState* play = play2;
     s32 index = BG_DBLUE_ELEVATOR_GET_INDEX(&this->dyna.actor);
     BgDblueElevatorStruct1* ptr = &D_80B92960[index];
@@ -188,7 +186,7 @@ void BgDblueElevator_Init(Actor* thisx, PlayState* play2) {
 }
 
 void BgDblueElevator_Destroy(Actor* thisx, PlayState* play) {
-    BgDblueElevator* this = THIS;
+    BgDblueElevator* this = (BgDblueElevator*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
@@ -294,7 +292,7 @@ void BgDblueElevator_Move(BgDblueElevator* this, PlayState* play) {
 
     if (!ptr->isHorizontal) {
         this->dyna.actor.world.pos.y = this->posOffset + this->dyna.actor.home.pos.y;
-        if (CHECK_FLAG_ALL(this->dyna.actor.flags, ACTOR_FLAG_40) && (this->isWithinWaterBoxXZ)) {
+        if (CHECK_FLAG_ALL(this->dyna.actor.flags, ACTOR_FLAG_INSIDE_CULLING_VOLUME) && (this->isWithinWaterBoxXZ)) {
             if (this->direction > 0) {
                 nearWaterSurfaceCheck = ((this->dyna.actor.world.pos.y + -10.0f) - this->waterSurfacePosY) *
                                         ((this->dyna.actor.prevPos.y + -10.0f) - this->waterSurfacePosY);
@@ -326,13 +324,13 @@ void BgDblueElevator_Move(BgDblueElevator* this, PlayState* play) {
 }
 
 void BgDblueElevator_Update(Actor* thisx, PlayState* play) {
-    BgDblueElevator* this = THIS;
+    BgDblueElevator* this = (BgDblueElevator*)thisx;
 
     this->actionFunc(this, play);
 }
 
 void BgDblueElevator_Draw(Actor* thisx, PlayState* play) {
-    BgDblueElevator* this = THIS;
+    BgDblueElevator* this = (BgDblueElevator*)thisx;
 
     Gfx_DrawDListOpa(play, gGreatBayTempleObjectElevatorDL);
 }

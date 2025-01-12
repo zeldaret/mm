@@ -8,9 +8,7 @@
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/actors/ovl_En_Prz/z_en_prz.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10)
-
-#define THIS ((EnPr*)thisx)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void EnPr_Init(Actor* thisx, PlayState* play2);
 void EnPr_Destroy(Actor* thisx, PlayState* play);
@@ -133,7 +131,7 @@ static u8 sAnimationModes[ENPR_ANIM_MAX] = {
 
 void EnPr_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnPr* this = THIS;
+    EnPr* this = (EnPr*)thisx;
     EnPrz* prz;
     s32 i;
     s32 temp_s4;
@@ -192,7 +190,7 @@ void EnPr_Init(Actor* thisx, PlayState* play2) {
 }
 
 void EnPr_Destroy(Actor* thisx, PlayState* play) {
-    EnPr* this = THIS;
+    EnPr* this = (EnPr*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -502,7 +500,7 @@ void func_80A33098(EnPr* this, PlayState* play) {
 
 void EnPr_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnPr* this = THIS;
+    EnPr* this = (EnPr*)thisx;
     s32 i;
 
     SkelAnime_Update(&this->skelAnime);
@@ -585,7 +583,7 @@ void EnPr_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnPr_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnPr* this = THIS;
+    EnPr* this = (EnPr*)thisx;
 
     if (limbIndex == OBJECT_PR_1_LIMB_02) {
         rot->y += this->unk_214;
@@ -595,7 +593,7 @@ s32 EnPr_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
 
 void EnPr_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     Vec3f sp24 = { 0.0f, 0.0f, 0.0f };
-    EnPr* this = THIS;
+    EnPr* this = (EnPr*)thisx;
 
     if (limbIndex == OBJECT_PR_1_LIMB_02) {
         Matrix_Translate(0.0f, 0.0f, 0.0f, MTXMODE_APPLY);
@@ -616,7 +614,7 @@ void EnPr_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 }
 
 void EnPr_Draw(Actor* thisx, PlayState* play) {
-    EnPr* this = THIS;
+    EnPr* this = (EnPr*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

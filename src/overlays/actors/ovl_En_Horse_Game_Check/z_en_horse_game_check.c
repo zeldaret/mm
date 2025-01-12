@@ -9,9 +9,7 @@
 #include "assets/objects/object_horse_game_check/object_horse_game_check.h"
 #include "libu64/debug.h"
 
-#define FLAGS (ACTOR_FLAG_10)
-
-#define THIS ((EnHorseGameCheck*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void EnHorseGameCheck_Init(Actor* thisx, PlayState* play);
 void EnHorseGameCheck_Destroy(Actor* thisx, PlayState* play);
@@ -57,7 +55,7 @@ s32 func_808F8AA0(EnHorseGameCheck* this, PlayState* play) {
     MtxF sp38;
 
     this->dyna.actor.scale.x = this->dyna.actor.scale.y = this->dyna.actor.scale.z = this->unk_160 * 0.001f;
-    this->dyna.actor.flags |= ACTOR_FLAG_400000;
+    this->dyna.actor.flags |= ACTOR_FLAG_IGNORE_LEGACY_POINT_LIGHTS;
 
     DynaPolyActor_Init(&this->dyna, 0);
 
@@ -395,8 +393,8 @@ s32 func_808F9868(EnHorseGameCheck* this, PlayState* play) {
 }
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneScale, 2400, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeScale, 2400, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 300, ICHAIN_STOP),
 };
 
 s32 func_808F987C(EnHorseGameCheck* this, PlayState* play) {
@@ -463,7 +461,7 @@ EnHorseGameCheckUnkFunc D_808F9C5C[] = {
 };
 
 void EnHorseGameCheck_Init(Actor* thisx, PlayState* play) {
-    EnHorseGameCheck* this = THIS;
+    EnHorseGameCheck* this = (EnHorseGameCheck*)thisx;
 
     this->unk_15C = ENHORSEGAMECHECK_GET_FF(&this->dyna.actor);
     this->unk_160 = ENHORSEGAMECHECK_GET_FF00(&this->dyna.actor);
@@ -478,7 +476,7 @@ void EnHorseGameCheck_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnHorseGameCheck_Destroy(Actor* thisx, PlayState* play) {
-    EnHorseGameCheck* this = THIS;
+    EnHorseGameCheck* this = (EnHorseGameCheck*)thisx;
 
     if (D_808F9C0C[this->unk_15C] != NULL) {
         D_808F9C0C[this->unk_15C](this, play);
@@ -486,7 +484,7 @@ void EnHorseGameCheck_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnHorseGameCheck_Update(Actor* thisx, PlayState* play) {
-    EnHorseGameCheck* this = THIS;
+    EnHorseGameCheck* this = (EnHorseGameCheck*)thisx;
 
     if (D_808F9C34[this->unk_15C] != NULL) {
         D_808F9C34[this->unk_15C](this, play);
@@ -494,7 +492,7 @@ void EnHorseGameCheck_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnHorseGameCheck_Draw(Actor* thisx, PlayState* play) {
-    EnHorseGameCheck* this = THIS;
+    EnHorseGameCheck* this = (EnHorseGameCheck*)thisx;
 
     if (D_808F9C5C[this->unk_15C] != NULL) {
         D_808F9C5C[this->unk_15C](this, play);

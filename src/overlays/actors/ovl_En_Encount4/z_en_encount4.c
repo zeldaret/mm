@@ -6,9 +6,7 @@
 
 #include "z_en_encount4.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_LOCK_ON_DISABLED)
-
-#define THIS ((EnEncount4*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_LOCK_ON_DISABLED)
 
 void EnEncount4_Init(Actor* thisx, PlayState* play);
 void EnEncount4_Destroy(Actor* thisx, PlayState* play);
@@ -41,7 +39,7 @@ f32 D_809C46DC[] = {
 
 void EnEncount4_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnEncount4* this = THIS;
+    EnEncount4* this = (EnEncount4*)thisx;
 
     this->unk_148 = ENCOUNT4_GET_F000(thisx);
     this->switchFlag = ENCOUNT4_GET_SWITCH_FLAG(thisx);
@@ -206,7 +204,7 @@ void func_809C464C(EnEncount4* this, PlayState* play) {
 }
 
 void EnEncount4_Update(Actor* thisx, PlayState* play) {
-    EnEncount4* this = THIS;
+    EnEncount4* this = (EnEncount4*)thisx;
 
     DECR(this->timer);
     this->actionFunc(this, play);

@@ -7,9 +7,7 @@
 #include "z_en_door_etc.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_10)
-
-#define THIS ((EnDoorEtc*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void EnDoorEtc_Init(Actor* thisx, PlayState* play2);
 void EnDoorEtc_Destroy(Actor* thisx, PlayState* play);
@@ -80,7 +78,7 @@ EnDoorEtcInfo sObjectInfo[] = {
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_U8(attentionRangeType, ATTENTION_RANGE_0, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDistance, 4000, ICHAIN_CONTINUE),
     ICHAIN_U16(shape.rot.x, 0, ICHAIN_CONTINUE),
     ICHAIN_U16(shape.rot.z, 0, ICHAIN_STOP),
 };
@@ -90,7 +88,7 @@ void EnDoorEtc_Init(Actor* thisx, PlayState* play2) {
     s32 objectSlot;
     EnDoorEtcInfo* objectInfo = sObjectInfo;
     s32 i;
-    EnDoorEtc* this = THIS;
+    EnDoorEtc* this = (EnDoorEtc*)thisx;
 
     Actor_ProcessInitChain(&this->knobDoor.dyna.actor, sInitChain);
     Actor_SetScale(&this->knobDoor.dyna.actor, 0.01f);
@@ -122,7 +120,7 @@ void EnDoorEtc_Init(Actor* thisx, PlayState* play2) {
 }
 
 void EnDoorEtc_Destroy(Actor* thisx, PlayState* play) {
-    EnDoorEtc* this = THIS;
+    EnDoorEtc* this = (EnDoorEtc*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -140,7 +138,7 @@ s32 EnDoorEtc_IsDistanceGreater(Vec3f* a, Vec3f* b, f32 c) {
 
 void EnDoorEtc_WaitForObject(EnDoorEtc* this, PlayState* play) {
     if (Object_IsLoaded(&play->objectCtx, this->knobDoor.objectSlot)) {
-        this->knobDoor.dyna.actor.flags &= ~ACTOR_FLAG_10;
+        this->knobDoor.dyna.actor.flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED;
         this->knobDoor.dyna.actor.objectSlot = this->knobDoor.objectSlot;
         this->actionFunc = func_80AC2354;
         this->knobDoor.dyna.actor.draw = EnDoorEtc_Draw;
@@ -226,7 +224,7 @@ void func_80AC2354(EnDoorEtc* this, PlayState* play) {
 
 void EnDoorEtc_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnDoorEtc* this = THIS;
+    EnDoorEtc* this = (EnDoorEtc*)thisx;
 
     this->actionFunc(this, play);
     if (this->unk_1F4 & 1) {
@@ -236,7 +234,7 @@ void EnDoorEtc_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnDoorEtc_Draw(Actor* thisx, PlayState* play) {
-    EnDoorEtc* this = THIS;
+    EnDoorEtc* this = (EnDoorEtc*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

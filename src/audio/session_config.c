@@ -1,5 +1,4 @@
 #include "global.h"
-#include "buffers.h"
 
 static s32 sBssPad[36];
 AudioContext gAudioCtx;
@@ -8,33 +7,6 @@ AudioCustomSeqFunction gAudioCustomSeqFunction;
 AudioCustomReverbFunction gAudioCustomReverbFunction;
 AudioCustomSynthFunction gAudioCustomSynthFunction;
 static s32 sBssPad2[3];
-
-const s16 gAudioTatumInit[] = {
-    0x1C00,          // unused
-    TATUMS_PER_BEAT, // gTatumsPerBeat
-};
-
-// TODO: Extract from table?
-#define NUM_SOUNDFONTS 41
-#define SFX_SEQ_SIZE 0xC6A0
-#define AMBIENCE_SEQ_SIZE 0xFC0
-#define SOUNDFONT_0_SIZE 0x81C0
-#define SOUNDFONT_1_SIZE 0x36D0
-#define SOUNDFONT_2_SIZE 0xCE0
-
-// Sizes of everything on the init pool
-#define AI_BUFFERS_SIZE (AIBUF_SIZE * ARRAY_COUNT(gAudioCtx.aiBuffers))
-#define SOUNDFONT_LIST_SIZE (NUM_SOUNDFONTS * sizeof(SoundFont))
-
-// 0x19BD0
-#define PERMANENT_POOL_SIZE \
-    (SFX_SEQ_SIZE + AMBIENCE_SEQ_SIZE + SOUNDFONT_0_SIZE + SOUNDFONT_1_SIZE + SOUNDFONT_2_SIZE + 0x430)
-
-const AudioHeapInitSizes gAudioHeapInitSizes = {
-    ALIGN16(sizeof(gAudioHeap) - 0x100),                                         // audio heap size
-    ALIGN16(PERMANENT_POOL_SIZE + AI_BUFFERS_SIZE + SOUNDFONT_LIST_SIZE + 0x40), // init pool size
-    ALIGN16(PERMANENT_POOL_SIZE),                                                // permanent pool size
-};
 
 #define REVERB_INDEX_0_SETTINGS \
     { 1, 0x30, 0x3000, 0, 0, 0x7FFF, 0x0000, 0x0000, REVERB_INDEX_NONE, 0x3000, 0, 0 }

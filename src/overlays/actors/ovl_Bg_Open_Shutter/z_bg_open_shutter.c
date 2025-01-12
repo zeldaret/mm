@@ -9,9 +9,7 @@
 #include "z64quake.h"
 #include "z64rumble.h"
 
-#define FLAGS (ACTOR_FLAG_10)
-
-#define THIS ((BgOpenShutter*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void BgOpenShutter_Init(Actor* thisx, PlayState* play);
 void BgOpenShutter_Destroy(Actor* thisx, PlayState* play);
@@ -40,9 +38,9 @@ ActorProfile Bg_Open_Shutter_Profile = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 350, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 350, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDistance, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 350, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 350, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
@@ -89,7 +87,7 @@ s8 func_80ACABA8(BgOpenShutter* this, PlayState* play) {
 }
 
 void BgOpenShutter_Init(Actor* thisx, PlayState* play) {
-    BgOpenShutter* this = THIS;
+    BgOpenShutter* this = (BgOpenShutter*)thisx;
 
     Actor_ProcessInitChain(&this->slidingDoor.dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->slidingDoor.dyna, DYNA_TRANSFORM_POS);
@@ -98,7 +96,7 @@ void BgOpenShutter_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgOpenShutter_Destroy(Actor* thisx, PlayState* play) {
-    BgOpenShutter* this = THIS;
+    BgOpenShutter* this = (BgOpenShutter*)thisx;
     s32 transition = DOOR_GET_TRANSITION_ID(thisx);
 
     play->transitionActors.list[transition].id = -play->transitionActors.list[transition].id;
@@ -167,7 +165,7 @@ void func_80ACAEF0(BgOpenShutter* this, PlayState* play) {
 }
 
 void BgOpenShutter_Update(Actor* thisx, PlayState* play2) {
-    BgOpenShutter* this = THIS;
+    BgOpenShutter* this = (BgOpenShutter*)thisx;
     PlayState* play = play2;
     s32 cueChannel;
 

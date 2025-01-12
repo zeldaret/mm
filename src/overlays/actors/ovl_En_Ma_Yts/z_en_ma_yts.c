@@ -6,10 +6,9 @@
 
 #include "z_en_ma_yts.h"
 
-#define FLAGS \
-    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_100000 | ACTOR_FLAG_UPDATE_DURING_OCARINA)
-
-#define THIS ((EnMaYts*)thisx)
+#define FLAGS                                                                           \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_FREEZE_EXCEPTION | \
+     ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
 void EnMaYts_Init(Actor* thisx, PlayState* play);
 void EnMaYts_Destroy(Actor* thisx, PlayState* play);
@@ -249,7 +248,7 @@ s32 EnMaYts_CheckValidSpawn(EnMaYts* this, PlayState* play) {
 }
 
 void EnMaYts_Init(Actor* thisx, PlayState* play) {
-    EnMaYts* this = THIS;
+    EnMaYts* this = (EnMaYts*)thisx;
     s32 pad;
 
     this->type = EN_MA_YTS_GET_TYPE(thisx);
@@ -309,7 +308,7 @@ void EnMaYts_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnMaYts_Destroy(Actor* thisx, PlayState* play) {
-    EnMaYts* this = THIS;
+    EnMaYts* this = (EnMaYts*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -408,7 +407,7 @@ void EnMaYts_DialogueHandler(EnMaYts* this, PlayState* play) {
 }
 
 void EnMaYts_SetupEndCreditsHandler(EnMaYts* this) {
-    this->actor.flags |= ACTOR_FLAG_10;
+    this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     EnMaYts_SetFaceExpression(this, 0, 0);
     this->actionFunc = EnMaYts_EndCreditsHandler;
 }
@@ -527,7 +526,7 @@ void EnMaYts_SetFaceExpression(EnMaYts* this, s16 overrideEyeTexIndex, s16 mouth
 }
 
 void EnMaYts_Update(Actor* thisx, PlayState* play) {
-    EnMaYts* this = THIS;
+    EnMaYts* this = (EnMaYts*)thisx;
     ColliderCylinder* collider;
 
     this->actionFunc(this, play);
@@ -540,7 +539,7 @@ void EnMaYts_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnMaYts_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnMaYts* this = THIS;
+    EnMaYts* this = (EnMaYts*)thisx;
     Vec3s limbRot;
 
     if (limbIndex == ROMANI_LIMB_HEAD) {
@@ -559,7 +558,7 @@ s32 EnMaYts_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
 }
 
 void EnMaYts_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnMaYts* this = THIS;
+    EnMaYts* this = (EnMaYts*)thisx;
 
     if (limbIndex == ROMANI_LIMB_HEAD) {
         Matrix_MultZero(&this->actor.focus.pos);
@@ -575,7 +574,7 @@ void EnMaYts_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
 }
 
 void EnMaYts_Draw(Actor* thisx, PlayState* play) {
-    EnMaYts* this = THIS;
+    EnMaYts* this = (EnMaYts*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

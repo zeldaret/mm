@@ -17,9 +17,9 @@
 #include "assets/objects/object_water_effect/object_water_effect.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20)
-
-#define THIS ((EnWaterEffect*)thisx)
+#define FLAGS                                                                                 \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
+     ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 void EnWaterEffect_Init(Actor* thisx, PlayState* play);
 void EnWaterEffect_Destroy(Actor* thisx, PlayState* play);
@@ -88,7 +88,7 @@ void func_80A58908(EnWaterEffect* this, Vec3f* arg1, Vec3f* arg2, u8 arg3) {
 
 void EnWaterEffect_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnWaterEffect* this = THIS;
+    EnWaterEffect* this = (EnWaterEffect*)thisx;
 
     this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->unk_DC4 = Rand_ZeroFloat(100.0f);
@@ -143,7 +143,7 @@ void EnWaterEffect_Destroy(Actor* thisx, PlayState* play) {
 
 void EnWaterEffect_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnWaterEffect* this = THIS;
+    EnWaterEffect* this = (EnWaterEffect*)thisx;
     Player* player = GET_PLAYER(play);
     EnWaterEffectStruct* ptr = &this->unk_144[0];
     s16 i;
@@ -280,7 +280,7 @@ void EnWaterEffect_Update(Actor* thisx, PlayState* play2) {
 void EnWaterEffect_Draw(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     GraphicsContext* gfxCtx = play->state.gfxCtx;
-    EnWaterEffect* this = THIS;
+    EnWaterEffect* this = (EnWaterEffect*)thisx;
     s32 pad;
     EnWaterEffectStruct* backupPtr = &this->unk_144[0];
     EnWaterEffectStruct* ptr = backupPtr;
@@ -391,7 +391,7 @@ void func_80A599E8(EnWaterEffect* this, Vec3f* arg1, u8 arg2) {
 
 void func_80A59C04(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnWaterEffect* this = THIS;
+    EnWaterEffect* this = (EnWaterEffect*)thisx;
     s16 i;
     s16 j;
     f32 temp_f0_2;
@@ -516,7 +516,7 @@ void func_80A59C04(Actor* thisx, PlayState* play2) {
 
 void func_80A5A184(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnWaterEffect* this = THIS;
+    EnWaterEffect* this = (EnWaterEffect*)thisx;
     GraphicsContext* gfxCtx = play->state.gfxCtx;
     EnWaterEffectStruct* ptr = &this->unk_144[0];
     u8 flag = false;
@@ -575,7 +575,7 @@ void func_80A5A184(Actor* thisx, PlayState* play2) {
 }
 
 void func_80A5A534(Actor* thisx, PlayState* play) {
-    EnWaterEffect* this = THIS;
+    EnWaterEffect* this = (EnWaterEffect*)thisx;
     s32 i;
 
     if (this->unk_E38 < 1.0f) {
@@ -612,7 +612,7 @@ void func_80A5A534(Actor* thisx, PlayState* play) {
 
 void func_80A5A6B8(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnWaterEffect* this = THIS;
+    EnWaterEffect* this = (EnWaterEffect*)thisx;
     EnWaterEffectStruct* ptr = &this->unk_144[0];
     u8 phi_s4 = false;
     s16 i;

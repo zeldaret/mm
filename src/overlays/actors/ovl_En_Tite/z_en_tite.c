@@ -7,9 +7,7 @@
 #include "z_en_tite.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_200)
-
-#define THIS ((EnTite*)thisx)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR)
 
 void EnTite_Init(Actor* thisx, PlayState* play);
 void EnTite_Destroy(Actor* thisx, PlayState* play);
@@ -133,7 +131,7 @@ static InitChainEntry sInitChain[] = {
 
 void EnTite_Init(Actor* thisx, PlayState* play) {
     static s32 sTexturesDesegmented = false;
-    EnTite* this = THIS;
+    EnTite* this = (EnTite*)thisx;
     s32 i;
     s32 j;
 
@@ -183,7 +181,7 @@ void EnTite_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnTite_Destroy(Actor* thisx, PlayState* play) {
-    EnTite* this = THIS;
+    EnTite* this = (EnTite*)thisx;
 
     Collider_DestroySphere(play, &this->collider);
 }
@@ -272,7 +270,7 @@ void func_80893DD4(EnTite* this) {
     this->drawDmgEffFrozenSteamScale = 0.75f;
     this->drawDmgEffAlpha = 1.0f;
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 80);
-    this->actor.flags &= ~ACTOR_FLAG_200;
+    this->actor.flags &= ~ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR;
 }
 
 void func_80893E54(EnTite* this, PlayState* play) {
@@ -281,7 +279,7 @@ void func_80893E54(EnTite* this, PlayState* play) {
         this->collider.base.colMaterial = COL_MATERIAL_HIT6;
         this->drawDmgEffAlpha = 0.0f;
         Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, ENTITE_BODYPART_MAX, 2, 0.2f, 0.2f);
-        this->actor.flags |= ACTOR_FLAG_200;
+        this->actor.flags |= ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR;
     }
 }
 
@@ -639,7 +637,7 @@ void func_80895020(EnTite* this, PlayState* play) {
     this->actor.colorFilterTimer = 0;
     SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EN_TEKU_DEAD);
     this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
-    this->actor.flags |= ACTOR_FLAG_10;
+    this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     this->unk_2BA = 1;
     Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, this->unk_2BE);
     this->unk_2BC = 25;
@@ -1055,7 +1053,7 @@ void func_808963B4(EnTite* this, PlayState* play) {
 }
 
 void EnTite_Update(Actor* thisx, PlayState* play) {
-    EnTite* this = THIS;
+    EnTite* this = (EnTite*)thisx;
 
     func_80895FF8(this, play);
 
@@ -1103,7 +1101,7 @@ void EnTite_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnTite_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnTite* this = THIS;
+    EnTite* this = (EnTite*)thisx;
 
     if (this->unk_2BA == -1) {
         this->unk_3A8 = *dList;
@@ -1169,7 +1167,7 @@ static s8 sLimbToBodyParts2[OBJECT_TITE_LIMB_MAX] = {
 };
 
 void EnTite_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnTite* this = THIS;
+    EnTite* this = (EnTite*)thisx;
     MtxF* matrix;
     s8 bodyPart1Index;
 
@@ -1206,7 +1204,7 @@ void EnTite_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot
 }
 
 void EnTite_Draw(Actor* thisx, PlayState* play) {
-    EnTite* this = THIS;
+    EnTite* this = (EnTite*)thisx;
     Gfx* gfx;
 
     OPEN_DISPS(play->state.gfxCtx);

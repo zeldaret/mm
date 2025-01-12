@@ -9,9 +9,7 @@
 #include "overlays/actors/ovl_En_Part/z_en_part.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
-
-#define THIS ((EnHintSkb*)thisx)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void EnHintSkb_Init(Actor* thisx, PlayState* play);
 void EnHintSkb_Destroy(Actor* thisx, PlayState* play);
@@ -167,7 +165,7 @@ static InitChainEntry sInitChain[] = {
 
 void EnHintSkb_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnHintSkb* this = THIS;
+    EnHintSkb* this = (EnHintSkb*)thisx;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
     SkelAnime_Init(play, &this->skelAnime, &gStalchildSkel, &gStalchildSitLaughAnim, this->jointTable, this->morphTable,
@@ -186,7 +184,7 @@ void EnHintSkb_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnHintSkb_Destroy(Actor* thisx, PlayState* play) {
-    EnHintSkb* this = THIS;
+    EnHintSkb* this = (EnHintSkb*)thisx;
 
     Collider_DestroyJntSph(play, &this->collider);
 }
@@ -853,7 +851,7 @@ void func_80C215E4(PlayState* play, EnHintSkb* this, Vec3f* arg2) {
 }
 
 void EnHintSkb_Update(Actor* thisx, PlayState* play) {
-    EnHintSkb* this = THIS;
+    EnHintSkb* this = (EnHintSkb*)thisx;
 
     this->actionFunc(this, play);
 
@@ -872,7 +870,7 @@ void EnHintSkb_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnHintSkb_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnHintSkb* this = THIS;
+    EnHintSkb* this = (EnHintSkb*)thisx;
     f32 temp_f10;
 
     if (limbIndex == STALCHILD_LIMB_HEAD) {
@@ -899,7 +897,7 @@ s32 EnHintSkb_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
 
 void EnHintSkb_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f D_80C21E70 = { 800.0f, 1200.0f, 0.0f };
-    EnHintSkb* this = THIS;
+    EnHintSkb* this = (EnHintSkb*)thisx;
 
     if (!(this->unk_3E8 & 8)) {
         Collider_UpdateSpheres(limbIndex, &this->collider);
@@ -932,7 +930,7 @@ void EnHintSkb_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
 }
 
 void EnHintSkb_Draw(Actor* thisx, PlayState* play) {
-    EnHintSkb* this = THIS;
+    EnHintSkb* this = (EnHintSkb*)thisx;
 
     this->bodyPartsCount = 0;
     Gfx_SetupDL25_Opa(play->state.gfxCtx);

@@ -7,9 +7,7 @@
 #include "z_en_hanabi.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
-
-#define THIS ((EnHanabi*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 void EnHanabi_Init(Actor* thisx, PlayState* play2);
 void EnHanabi_Destroy(Actor* thisx, PlayState* play2);
@@ -191,7 +189,7 @@ void func_80B22FA8(EnHanabiStruct* arg0, PlayState* play2) {
 
 void EnHanabi_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnHanabi* this = THIS;
+    EnHanabi* this = (EnHanabi*)thisx;
     s32 i;
 
     //! FAKE:
@@ -216,7 +214,7 @@ void EnHanabi_Init(Actor* thisx, PlayState* play2) {
 
 void EnHanabi_Destroy(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnHanabi* this = THIS;
+    EnHanabi* this = (EnHanabi*)thisx;
     s32 i;
 
     for (i = 0; i < ARRAY_COUNT(this->unk_4634); i++) {
@@ -339,7 +337,7 @@ void func_80B23934(EnHanabi* this, PlayState* play) {
 }
 
 void EnHanabi_Update(Actor* thisx, PlayState* play) {
-    EnHanabi* this = THIS;
+    EnHanabi* this = (EnHanabi*)thisx;
 
     this->actionFunc(this, play);
 
@@ -347,7 +345,7 @@ void EnHanabi_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnHanabi_Draw(Actor* thisx, PlayState* play) {
-    EnHanabi* this = THIS;
+    EnHanabi* this = (EnHanabi*)thisx;
 
     Matrix_Push();
     func_80B22FA8(this->unk_148, play);

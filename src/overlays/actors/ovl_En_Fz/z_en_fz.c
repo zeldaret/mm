@@ -10,9 +10,7 @@
 #include "assets/objects/object_fz/object_fz.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10)
-
-#define THIS ((EnFz*)thisx)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void EnFz_Init(Actor* thisx, PlayState* play);
 void EnFz_Destroy(Actor* thisx, PlayState* play);
@@ -159,12 +157,12 @@ static DamageTable sDamageTable = {
 static InitChainEntry sInitChain[] = {
     ICHAIN_S8(hintId, TATL_HINT_ID_FREEZARD, ICHAIN_CONTINUE),
     ICHAIN_U8(attentionRangeType, ATTENTION_RANGE_2, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneForward, 1400, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDistance, 1400, ICHAIN_CONTINUE),
     ICHAIN_F32(lockOnArrowOffset, 30, ICHAIN_STOP),
 };
 
 void EnFz_Init(Actor* thisx, PlayState* play) {
-    EnFz* this = THIS;
+    EnFz* this = (EnFz*)thisx;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     this->actor.colChkInfo.damageTable = &sDamageTable;
@@ -190,7 +188,7 @@ void EnFz_Init(Actor* thisx, PlayState* play) {
     this->unk_BD7 = 1;
     this->unk_BD8 = 0;
     this->actor.speed = 0.0f;
-    this->actor.uncullZoneScale = 400.0f;
+    this->actor.cullingVolumeScale = 400.0f;
     this->unk_BAC = this->actor.world.pos.y;
     this->unk_BB4 = this->actor.world.pos.y;
     this->unk_BA8 = this->actor.world.pos.x;
@@ -235,7 +233,7 @@ void EnFz_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnFz_Destroy(Actor* thisx, PlayState* play) {
-    EnFz* this = THIS;
+    EnFz* this = (EnFz*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider1);
     Collider_DestroyCylinder(play, &this->collider2);
@@ -790,7 +788,7 @@ void func_80933B48(EnFz* this, PlayState* play) {
 void EnFz_Update(Actor* thisx, PlayState* play) {
     static EnFzUnkFunc D_809347AC[] = { func_80932AE8, func_80932AF4, func_80932BD4, func_80932BD4 };
     s32 pad;
-    EnFz* this = THIS;
+    EnFz* this = (EnFz*)thisx;
 
     this->unk_BC6++;
     if (this->unk_BC8 != 0) {
@@ -836,7 +834,7 @@ void EnFz_Update(Actor* thisx, PlayState* play) {
 void EnFz_Draw(Actor* thisx, PlayState* play) {
     static Gfx* D_809347BC[] = { object_fz_DL_001130, object_fz_DL_0021A0, object_fz_DL_002CA0 };
     s32 pad;
-    EnFz* this = THIS;
+    EnFz* this = (EnFz*)thisx;
     s32 sp9C = 3 - this->actor.colChkInfo.health;
 
     OPEN_DISPS(play->state.gfxCtx);

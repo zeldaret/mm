@@ -8,9 +8,7 @@
 #include "assets/objects/object_hanareyama_obj/object_hanareyama_obj.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_REACT_TO_LENS)
-
-#define THIS ((EnDnb*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED | ACTOR_FLAG_REACT_TO_LENS)
 
 void EnDnb_Init(Actor* thisx, PlayState* play);
 void EnDnb_Destroy(Actor* thisx, PlayState* play);
@@ -100,7 +98,7 @@ s32 func_80A500F8(EnDnb* this) {
 }
 
 void EnDnb_Init(Actor* thisx, PlayState* play) {
-    EnDnb* this = THIS;
+    EnDnb* this = (EnDnb*)thisx;
     s32 i;
     s16* alloc;
 
@@ -116,13 +114,13 @@ void EnDnb_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnDnb_Destroy(Actor* thisx, PlayState* play) {
-    EnDnb* this = THIS;
+    EnDnb* this = (EnDnb*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
 void EnDnb_Update(Actor* thisx, PlayState* play) {
-    EnDnb* this = THIS;
+    EnDnb* this = (EnDnb*)thisx;
     s32 i;
 
     if (this->unk_0D30 == 0) {
@@ -199,7 +197,7 @@ void func_80A5063C(EnDnb* this, PlayState* play) {
 }
 
 void EnDnb_Draw(Actor* thisx, PlayState* play) {
-    EnDnb* this = THIS;
+    EnDnb* this = (EnDnb*)thisx;
 
     if (play->actorCtx.lensMaskSize != 0) {
         func_80A50510(this, play);

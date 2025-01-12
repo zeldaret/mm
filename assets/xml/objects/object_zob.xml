@@ -1,13 +1,13 @@
 ﻿<Root>
     <File Name="object_zob" Segment="6">
-        <Animation Name="object_zob_Anim_001FD4" Offset="0x1FD4" />
-        <Animation Name="object_zob_Anim_0027D0" Offset="0x27D0" />
-        <Animation Name="object_zob_Anim_002B38" Offset="0x2B38" />
-        <Animation Name="object_zob_Anim_0037A0" Offset="0x37A0" />
-        <Animation Name="object_zob_Anim_0043C4" Offset="0x43C4" />
-        <Animation Name="object_zob_Anim_005224" Offset="0x5224" />
-        <Animation Name="object_zob_Anim_005E90" Offset="0x5E90" />
-        <Animation Name="object_zob_Anim_006998" Offset="0x6998" />
+        <Animation Name="object_zob_Anim_001FD4" Offset="0x1FD4" /> <!-- Original name is "jb_ensou_loop" -->
+        <Animation Name="object_zob_Anim_0027D0" Offset="0x27D0" /> <!-- Original name is "zB_play01" -->
+        <Animation Name="object_zob_Anim_002B38" Offset="0x2B38" /> <!-- Original name is "zB_play02" -->
+        <Animation Name="object_zob_Anim_0037A0" Offset="0x37A0" /> <!-- Original name is "zB_talk01" -->
+        <Animation Name="object_zob_Anim_0043C4" Offset="0x43C4" /> <!-- Original name is "zB_talk02" -->
+        <Animation Name="object_zob_Anim_005224" Offset="0x5224" /> <!-- Original name is "zB_talk03" -->
+        <Animation Name="object_zob_Anim_005E90" Offset="0x5E90" /> <!-- Original name is "zB_talk04" -->
+        <Animation Name="object_zob_Anim_006998" Offset="0x6998" /> <!-- Original name is "zB_wait01" -->
         <DList Name="object_zob_DL_00A700" Offset="0xA700" />
         <DList Name="object_zob_DL_00A880" Offset="0xA880" />
         <DList Name="object_zob_DL_00AA58" Offset="0xAA58" />
@@ -68,6 +68,6 @@
         <Limb Name="object_zob_Standardlimb_01079C" Type="Standard" EnumName="OBJECT_ZOB_LIMB_16" Offset="0x1079C" />
         <Limb Name="object_zob_Standardlimb_0107A8" Type="Standard" EnumName="OBJECT_ZOB_LIMB_17" Offset="0x107A8" />
         <Skeleton Name="object_zob_Skel_010810" Type="Flex" LimbType="Standard" LimbNone="OBJECT_ZOB_LIMB_NONE" LimbMax="OBJECT_ZOB_LIMB_MAX" EnumName="ObjectZobLimb" Offset="0x10810" />
-        <Animation Name="object_zob_Anim_011144" Offset="0x11144" />
+        <Animation Name="object_zob_Anim_011144" Offset="0x11144" /> <!-- Original name is "zB_wait02" -->
     </File>
 </Root>

@@ -6,9 +6,7 @@
 
 #include "z_item_etcetera.h"
 
-#define FLAGS (ACTOR_FLAG_10)
-
-#define THIS ((ItemEtcetera*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void ItemEtcetera_Init(Actor* thisx, PlayState* play);
 void ItemEtcetera_Destroy(Actor* thisx, PlayState* play);
@@ -53,7 +51,7 @@ void ItemEtcetera_SetupAction(ItemEtcetera* this, ItemEtceteraActionFunc actionF
 
 void ItemEtcetera_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    ItemEtcetera* this = THIS;
+    ItemEtcetera* this = (ItemEtcetera*)thisx;
     s32 type = ITEMETCETERA_GET_FF(&this->actor);
     s32 objectSlot = Object_GetSlot(&play->objectCtx, sObjectIds[type]);
 
@@ -119,13 +117,13 @@ void func_809200F8(ItemEtcetera* this, PlayState* play) {
 }
 
 void ItemEtcetera_Update(Actor* thisx, PlayState* play) {
-    ItemEtcetera* this = THIS;
+    ItemEtcetera* this = (ItemEtcetera*)thisx;
 
     this->actionFunc(this, play);
 }
 
 void ItemEtcetera_DrawThroughLens(Actor* thisx, PlayState* play) {
-    ItemEtcetera* this = THIS;
+    ItemEtcetera* this = (ItemEtcetera*)thisx;
 
     if (play->actorCtx.lensMaskSize == LENS_MASK_ACTIVE_SIZE) {
         func_800B8050(&this->actor, play, 0);
@@ -135,7 +133,7 @@ void ItemEtcetera_DrawThroughLens(Actor* thisx, PlayState* play) {
 }
 
 void ItemEtcetera_Draw(Actor* thisx, PlayState* play) {
-    ItemEtcetera* this = THIS;
+    ItemEtcetera* this = (ItemEtcetera*)thisx;
 
     func_800B8050(&this->actor, play, 0);
     func_800B8118(&this->actor, play, 0);

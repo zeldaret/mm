@@ -9,9 +9,7 @@
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_100000)
-
-#define THIS ((EnColMan*)thisx)
+#define FLAGS (ACTOR_FLAG_FREEZE_EXCEPTION)
 
 void EnColMan_Init(Actor* thisx, PlayState* play);
 void EnColMan_Destroy(Actor* thisx, PlayState* play);
@@ -61,7 +59,7 @@ ActorProfile En_Col_Man_Profile = {
 };
 
 void EnColMan_Init(Actor* thisx, PlayState* play) {
-    EnColMan* this = THIS;
+    EnColMan* this = (EnColMan*)thisx;
 
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->actor.attentionRangeType = ATTENTION_RANGE_1;
@@ -88,7 +86,7 @@ void EnColMan_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnColMan_Destroy(Actor* thisx, PlayState* play) {
-    EnColMan* this = THIS;
+    EnColMan* this = (EnColMan*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -146,8 +144,8 @@ void EnColMan_SetHeartPieceCollectedAndKill(EnColMan* this, PlayState* play) {
 
 void func_80AFDF60(EnColMan* this) {
     this->actor.draw = func_80AFE584;
-    this->actor.flags |= ACTOR_FLAG_10;
-    this->actor.flags |= ACTOR_FLAG_20;
+    this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
+    this->actor.flags |= ACTOR_FLAG_DRAW_CULLING_DISABLED;
     this->type = EN_COL_MAN_FALLING_ROCK;
     this->actionFunc = func_80AFDFB4;
     this->actor.shape.shadowScale = 5.0f;
@@ -220,7 +218,7 @@ void func_80AFE25C(EnColMan* this, PlayState* play) {
 
 void EnColMan_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnColMan* this = THIS;
+    EnColMan* this = (EnColMan*)thisx;
 
     Actor_SetScale(&this->actor, this->scale);
     this->actionFunc(this, play);
@@ -233,7 +231,7 @@ void EnColMan_Update(Actor* thisx, PlayState* play) {
 }
 
 void func_80AFE414(Actor* thisx, PlayState* play) {
-    EnColMan* this = THIS;
+    EnColMan* this = (EnColMan*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -246,7 +244,7 @@ void func_80AFE414(Actor* thisx, PlayState* play) {
 }
 
 void func_80AFE4AC(Actor* thisx, PlayState* play) {
-    EnColMan* this = THIS;
+    EnColMan* this = (EnColMan*)thisx;
 
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     Gfx_SetupDL25_Opa(play->state.gfxCtx);

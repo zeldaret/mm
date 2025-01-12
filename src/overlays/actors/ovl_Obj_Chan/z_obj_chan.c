@@ -14,9 +14,7 @@
 #include "assets/objects/object_obj_chan/object_obj_chan.h"
 #include "assets/objects/object_tsubo/object_tsubo.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
-
-#define THIS ((ObjChan*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 #define OBJCHAN_ROTATION_SPEED 364 // == (65536 * 2/360) i.e. 2 degrees per second
 
@@ -79,7 +77,7 @@ static s32 sObjChanLoaded;
 
 void ObjChan_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    ObjChan* this = THIS;
+    ObjChan* this = (ObjChan*)thisx;
 
     if (OBJCHAN_SUBTYPE(&this->actor) == OBJCHAN_SUBTYPE_CHANDELIER) {
         if (sObjChanLoaded) {
@@ -111,7 +109,7 @@ void ObjChan_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjChan_Destroy(Actor* thisx, PlayState* play) {
-    ObjChan* this = THIS;
+    ObjChan* this = (ObjChan*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -365,7 +363,7 @@ void ObjChan_CreateSmashEffects(ObjChan* this, PlayState* play) {
 }
 
 void ObjChan_Update(Actor* thisx, PlayState* play) {
-    ObjChan* this = THIS;
+    ObjChan* this = (ObjChan*)thisx;
 
     this->actionFunc(this, play);
     CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
@@ -373,7 +371,7 @@ void ObjChan_Update(Actor* thisx, PlayState* play) {
 
 void ObjChan_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
-    ObjChan* this = THIS;
+    ObjChan* this = (ObjChan*)thisx;
     Gfx* gfxOpa;
     Gfx* gfxXlu;
 
@@ -401,7 +399,7 @@ void ObjChan_Draw(Actor* thisx, PlayState* play) {
 }
 
 void ObjChan_DrawPot(Actor* thisx, PlayState* play) {
-    ObjChan* this = THIS;
+    ObjChan* this = (ObjChan*)thisx;
     s32 pad;
     Gfx* gfx;
 

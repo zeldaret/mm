@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
-#define THIS ((EnDnk*)thisx)
-
 void EnDnk_Init(Actor* thisx, PlayState* play);
 void EnDnk_Destroy(Actor* thisx, PlayState* play);
 void EnDnk_Update(Actor* thisx, PlayState* play);
@@ -240,7 +238,7 @@ void func_80A51648(EnDnk* this, PlayState* play) {
         CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
         if (ENDNK_GET_3C(&this->actor) == 4) {
             this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
-            this->actor.flags |= (ACTOR_FLAG_10 | ACTOR_FLAG_20);
+            this->actor.flags |= (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED);
             this->actionFunc = EnDnk_HandleCutscene;
             Actor_SetScale(&this->actor, 0.1f);
         } else {
@@ -261,7 +259,7 @@ void EnDnk_DoNothing(EnDnk* this, PlayState* play) {
 }
 
 void EnDnk_Init(Actor* thisx, PlayState* play) {
-    EnDnk* this = THIS;
+    EnDnk* this = (EnDnk*)thisx;
 
     this->objectSlot = OBJECT_SLOT_NONE;
 
@@ -290,13 +288,13 @@ void EnDnk_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnDnk_Destroy(Actor* thisx, PlayState* play) {
-    EnDnk* this = THIS;
+    EnDnk* this = (EnDnk*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
 
 void EnDnk_Update(Actor* thisx, PlayState* play) {
-    EnDnk* this = THIS;
+    EnDnk* this = (EnDnk*)thisx;
     s32 pad;
 
     this->actionFunc(this, play);
@@ -310,7 +308,7 @@ void EnDnk_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnDnk_OverrideLimbDraw2(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnDnk* this = THIS;
+    EnDnk* this = (EnDnk*)thisx;
 
     this->unk_260[limbIndex] = *dList;
     *dList = NULL;
@@ -318,7 +316,7 @@ s32 EnDnk_OverrideLimbDraw2(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
 }
 
 void EnDnk_PostLimbDraw2(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnDnk* this = THIS;
+    EnDnk* this = (EnDnk*)thisx;
     MtxF sp5C;
     Vec3f sp50 = gZeroVec3f;
     Vec3f sp44;
@@ -386,7 +384,7 @@ void func_80A51CB8(EnDnk* this, PlayState* play) {
 }
 
 s32 EnDnk_OverrideLimbDraw1(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnDnk* this = THIS;
+    EnDnk* this = (EnDnk*)thisx;
 
     this->unk_260[limbIndex] = *dList;
     *dList = NULL;
@@ -394,7 +392,7 @@ s32 EnDnk_OverrideLimbDraw1(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
 }
 
 void EnDnk_PostLimbDraw1(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnDnk* this = THIS;
+    EnDnk* this = (EnDnk*)thisx;
     MtxF sp5C;
     Vec3f sp50 = gZeroVec3f;
     Vec3f sp44;
@@ -450,7 +448,7 @@ void func_80A51FC0(EnDnk* this, PlayState* play) {
 }
 
 void func_80A52018(Actor* thisx, PlayState* play) {
-    EnDnk* this = THIS;
+    EnDnk* this = (EnDnk*)thisx;
 
     switch (ENDNK_GET_3(thisx)) {
         case ENDNK_GET_3_0:

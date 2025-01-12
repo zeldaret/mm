@@ -6,9 +6,7 @@
 
 #include "z_dm_tag.h"
 
-#define FLAGS (ACTOR_FLAG_10)
-
-#define THIS ((DmTag*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void DmTag_Init(Actor* thisx, PlayState* play);
 void DmTag_Destroy(Actor* thisx, PlayState* play);
@@ -119,7 +117,7 @@ s16 func_80C2247C(DmTag* this, s32 numCutscenes) {
 }
 
 s32 func_80C224D8(Actor* thisx, PlayState* play) {
-    DmTag* this = THIS;
+    DmTag* this = (DmTag*)thisx;
     Actor* sp30;
     Actor* sp2C;
     s16 csId = this->actor.csId;
@@ -197,7 +195,7 @@ s32 func_80C224D8(Actor* thisx, PlayState* play) {
 }
 
 s32 func_80C227E8(Actor* thisx, PlayState* play) {
-    DmTag* this = THIS;
+    DmTag* this = (DmTag*)thisx;
 
     if (this->unk_1A4 == 0) {
         Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_WAIT);
@@ -294,7 +292,7 @@ void DmTag_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void DmTag_Update(Actor* thisx, PlayState* play) {
-    DmTag* this = THIS;
+    DmTag* this = (DmTag*)thisx;
 
     func_80C2291C(this, play);
     this->actionFunc(this, play);

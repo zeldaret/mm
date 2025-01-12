@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE)
 
-#define THIS ((EnMkk*)thisx)
-
 void EnMkk_Init(Actor* thisx, PlayState* play);
 void EnMkk_Destroy(Actor* thisx, PlayState* play);
 void EnMkk_Update(Actor* thisx, PlayState* play);
@@ -138,7 +136,7 @@ static Color_RGBA8 D_80A4F7C4[] = {
 };
 
 void EnMkk_Init(Actor* thisx, PlayState* play) {
-    EnMkk* this = THIS;
+    EnMkk* this = (EnMkk*)thisx;
     s32 paramsFF00;
     s32 params2;
 
@@ -187,7 +185,7 @@ void EnMkk_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnMkk_Destroy(Actor* thisx, PlayState* play) {
-    EnMkk* this = THIS;
+    EnMkk* this = (EnMkk*)thisx;
 
     Collider_DestroySphere(play, &this->collider);
 }
@@ -312,7 +310,7 @@ void func_80A4E67C(EnMkk* this) {
     this->unk_14B |= 1;
     this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->collider.base.acFlags &= ~AC_ON;
-    this->actor.flags |= ACTOR_FLAG_10;
+    this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     Actor_PlaySfx(&this->actor, NA_SE_EN_PO_DEAD);
     this->alpha = 254;
     func_800BE568(&this->actor, &this->collider);
@@ -404,7 +402,7 @@ void func_80A4EBBC(EnMkk* this, PlayState* play) {
 void EnMkk_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     Player* player;
-    EnMkk* this = THIS;
+    EnMkk* this = (EnMkk*)thisx;
 
     if (this->primColorSelect > 0) {
         this->primColorSelect--;
@@ -454,12 +452,12 @@ void func_80A4EE48(EnMkk* this, PlayState* play) {
     if (this->unk_14E > 0) {
         this->unk_14E--;
         if (this->unk_14E == 0) {
-            this->actor.flags &= ~ACTOR_FLAG_10;
+            this->actor.flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED;
         }
     } else if ((this->actor.xzDistToPlayer < this->unk_178) && (Player_GetMask(play) != PLAYER_MASK_STONE)) {
         this->actor.update = EnMkk_Update;
         this->actor.draw = EnMkk_Draw;
-        this->actor.flags &= ~ACTOR_FLAG_10;
+        this->actor.flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED;
         func_80A4E0CC(this);
     }
 }
@@ -505,7 +503,7 @@ void func_80A4EF74(EnMkk* this, PlayState* play) {
 }
 
 void func_80A4F16C(Actor* thisx, PlayState* play) {
-    EnMkk* this = THIS;
+    EnMkk* this = (EnMkk*)thisx;
 
     this->actionFunc(this, play);
 }
@@ -514,7 +512,7 @@ void EnMkk_Draw(Actor* thisx, PlayState* play) {
     EnMkkModelInfo* modelInfo = &sBoeModelInfo[thisx->params];
     Gfx* gfx;
     Color_RGBA8* primColors;
-    EnMkk* this = THIS;
+    EnMkk* this = (EnMkk*)thisx;
 
     if (this->actor.projectedPos.z > 0.0f) {
         MtxF* matrix;
@@ -572,7 +570,7 @@ void func_80A4F4C8(Actor* thisx, PlayState* play) {
     Gfx* gfx;
     MtxF* matrix;
     EnMkkModelInfo* modelInfo = &sBoeModelInfo[thisx->params];
-    EnMkk* this = THIS;
+    EnMkk* this = (EnMkk*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

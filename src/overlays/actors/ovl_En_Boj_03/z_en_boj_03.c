@@ -6,9 +6,7 @@
 
 #include "z_en_boj_03.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
-
-#define THIS ((EnBoj03*)thisx)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void EnBoj03_Init(Actor* thisx, PlayState* play);
 void EnBoj03_Destroy(Actor* thisx, PlayState* play);

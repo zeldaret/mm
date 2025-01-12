@@ -7,9 +7,9 @@
 #include "z_en_fg.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_200 | ACTOR_FLAG_CAN_ATTACH_TO_ARROW)
-
-#define THIS ((EnFg*)thisx)
+#define FLAGS                                                                               \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR | \
+     ACTOR_FLAG_CAN_ATTACH_TO_ARROW)
 
 void EnFg_Init(Actor* thisx, PlayState* play);
 void EnFg_Destroy(Actor* thisx, PlayState* play);
@@ -340,7 +340,7 @@ void EnFg_Knockback(EnFg* this, PlayState* play) {
 }
 
 void EnFg_Init(Actor* thisx, PlayState* play) {
-    EnFg* this = THIS;
+    EnFg* this = (EnFg*)thisx;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 10.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gFrogSkel, NULL, this->jointTable, this->morphTable, FROG_LIMB_MAX);
@@ -355,15 +355,15 @@ void EnFg_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnFg_Destroy(Actor* thisx, PlayState* play) {
-    EnFg* this = THIS;
+    EnFg* this = (EnFg*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
 
 void EnFg_Update(Actor* thisx, PlayState* play) {
-    EnFg* this = THIS;
+    EnFg* this = (EnFg*)thisx;
 
-    if ((CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_2000) == 0) &&
+    if ((CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_HOOKSHOT_ATTACHED) == 0) &&
         (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_ATTACHED_TO_ARROW) == 0)) {
         this->actionFunc(this, play);
         Actor_UpdateBgCheckInfo(play, &this->actor, sREG(0), sREG(1), 0.0f,
@@ -376,7 +376,7 @@ void EnFg_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnFg_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnFg* this = THIS;
+    EnFg* this = (EnFg*)thisx;
 
     if ((limbIndex == FROG_LIMB_RIGHT_EYE) || (limbIndex == FROG_LIMB_LEFT_EYE)) {
         *dList = NULL;
@@ -391,7 +391,7 @@ s32 EnFg_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
 }
 
 void EnFg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnFg* this = THIS;
+    EnFg* this = (EnFg*)thisx;
     s16 pad;
     Vec3f zeroVec = { 0.0f, 0.0f, 0.0f };
 
@@ -413,7 +413,7 @@ void EnFg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 }
 
 void EnFg_Draw(Actor* thisx, PlayState* play) {
-    EnFg* this = THIS;
+    EnFg* this = (EnFg*)thisx;
     s32 pad;
     Color_RGBA8 envColor[] = {
         { 200, 170, 0, 255 },   // BETAFROG_YELLOW

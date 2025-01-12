@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE)
 
-#define THIS ((EnSw*)thisx)
-
 void EnSw_Init(Actor* thisx, PlayState* play);
 void EnSw_Destroy(Actor* thisx, PlayState* play);
 void EnSw_Update(Actor* thisx, PlayState* play);
@@ -1141,7 +1139,7 @@ void func_808DB2E0(EnSw* this, PlayState* play) {
 }
 
 void EnSw_Init(Actor* thisx, PlayState* play) {
-    EnSw* this = THIS;
+    EnSw* this = (EnSw*)thisx;
     s32 pad;
 
     if (!func_808D9968(this, play)) {
@@ -1176,7 +1174,7 @@ void EnSw_Init(Actor* thisx, PlayState* play) {
 
             case 1:
                 this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
-                this->actor.flags |= ACTOR_FLAG_10;
+                this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
 
                 this->unk_460 = ABS_ALT(thisx->world.rot.z);
 
@@ -1193,7 +1191,7 @@ void EnSw_Init(Actor* thisx, PlayState* play) {
             case 2:
             case 3:
                 this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
-                this->actor.flags |= ACTOR_FLAG_10;
+                this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
 
                 this->unk_460 = ABS_ALT(thisx->world.rot.z);
 
@@ -1217,13 +1215,13 @@ void EnSw_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnSw_Destroy(Actor* thisx, PlayState* play) {
-    EnSw* this = THIS;
+    EnSw* this = (EnSw*)thisx;
 
     Collider_DestroySphere(play, &this->collider);
 }
 
 void EnSw_Update(Actor* thisx, PlayState* play) {
-    EnSw* this = THIS;
+    EnSw* this = (EnSw*)thisx;
 
     if (func_808DA08C(this, play)) {
         this->actionFunc = func_808DA89C;
@@ -1240,7 +1238,7 @@ void EnSw_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnSw_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnSw* this = THIS;
+    EnSw* this = (EnSw*)thisx;
 
     if (ENSW_GET_3(&this->actor)) {
         switch (limbIndex) {
@@ -1292,7 +1290,7 @@ s32 EnSw_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
 }
 
 void EnSw_Draw(Actor* thisx, PlayState* play) {
-    EnSw* this = THIS;
+    EnSw* this = (EnSw*)thisx;
     s32 bodyPartIndex;
     s32 count;
 

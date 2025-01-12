@@ -9,8 +9,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((BgAstrBombwall*)thisx)
-
 void BgAstrBombwall_Init(Actor* thisx, PlayState* play);
 void BgAstrBombwall_Destroy(Actor* thisx, PlayState* play);
 void BgAstrBombwall_Update(Actor* thisx, PlayState* play);
@@ -99,7 +97,7 @@ void BgAstrBombwall_InitCollider(ColliderTrisInit* init, Vec3f* pos, Vec3s* rot,
 
 void BgAstrBombwall_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    BgAstrBombwall* this = THIS;
+    BgAstrBombwall* this = (BgAstrBombwall*)thisx;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
@@ -109,7 +107,7 @@ void BgAstrBombwall_Init(Actor* thisx, PlayState* play) {
         Actor_Kill(&this->dyna.actor);
         return;
     }
-    this->dyna.actor.flags |= ACTOR_FLAG_10000000;
+    this->dyna.actor.flags |= ACTOR_FLAG_UCODE_POINT_LIGHT_ENABLED;
     if (!Collider_SetTris(play, &this->collider, &this->dyna.actor, &sTrisInit, this->colliderElements)) {
         Actor_Kill(&this->dyna.actor);
         return;
@@ -120,7 +118,7 @@ void BgAstrBombwall_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgAstrBombwall_Destroy(Actor* thisx, PlayState* play) {
-    BgAstrBombwall* this = THIS;
+    BgAstrBombwall* this = (BgAstrBombwall*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
@@ -194,7 +192,7 @@ void func_80C0A4BC(BgAstrBombwall* this, PlayState* play) {
 }
 
 void BgAstrBombwall_Update(Actor* thisx, PlayState* play) {
-    BgAstrBombwall* this = THIS;
+    BgAstrBombwall* this = (BgAstrBombwall*)thisx;
 
     this->actionFunc(this, play);
 }

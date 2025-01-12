@@ -6,9 +6,7 @@
 
 #include "z_en_scopecrow.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
-
-#define THIS ((EnScopecrow*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 void EnScopecrow_Init(Actor* thisx, PlayState* play);
 void EnScopecrow_Destroy(Actor* thisx, PlayState* play);
@@ -267,7 +265,7 @@ void func_80BCD640(EnScopecrow* this, PlayState* play) {
 }
 
 void EnScopecrow_Init(Actor* thisx, PlayState* play) {
-    EnScopecrow* this = THIS;
+    EnScopecrow* this = (EnScopecrow*)thisx;
     Vec3s* temp;
     CollisionPoly* sp4C;
     Vec3s* points;
@@ -340,13 +338,13 @@ void EnScopecrow_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnScopecrow_Destroy(Actor* thisx, PlayState* play) {
-    EnScopecrow* this = THIS;
+    EnScopecrow* this = (EnScopecrow*)thisx;
 
     Collider_DestroyJntSph(play, &this->collider);
 }
 
 void EnScopecrow_Update(Actor* thisx, PlayState* play) {
-    EnScopecrow* this = THIS;
+    EnScopecrow* this = (EnScopecrow*)thisx;
 
     this->actionFunc(this, play);
 
@@ -355,7 +353,7 @@ void EnScopecrow_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnScopecrow_Draw(Actor* thisx, PlayState* play) {
-    EnScopecrow* this = THIS;
+    EnScopecrow* this = (EnScopecrow*)thisx;
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,

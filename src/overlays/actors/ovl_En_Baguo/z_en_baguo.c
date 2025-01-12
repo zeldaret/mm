@@ -10,8 +10,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE)
 
-#define THIS ((EnBaguo*)thisx)
-
 void EnBaguo_Init(Actor* thisx, PlayState* play);
 void EnBaguo_Destroy(Actor* thisx, PlayState* play);
 void EnBaguo_Update(Actor* thisx, PlayState* play);
@@ -123,7 +121,7 @@ static DamageTable sDamageTable = {
 };
 
 void EnBaguo_Init(Actor* thisx, PlayState* play) {
-    EnBaguo* this = THIS;
+    EnBaguo* this = (EnBaguo*)thisx;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 0.0f);
     SkelAnime_Init(play, &this->skelAnime, &gNejironSkel, NULL, this->jointTable, this->morphTable, NEJIRON_LIMB_MAX);
@@ -152,7 +150,7 @@ void EnBaguo_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnBaguo_Destroy(Actor* thisx, PlayState* play) {
-    EnBaguo* this = THIS;
+    EnBaguo* this = (EnBaguo*)thisx;
 
     Collider_DestroyJntSph(play, &this->collider);
 }
@@ -366,7 +364,7 @@ void EnBaguo_CheckForDetonation(EnBaguo* this, PlayState* play) {
 }
 
 void EnBaguo_Update(Actor* thisx, PlayState* play) {
-    EnBaguo* this = THIS;
+    EnBaguo* this = (EnBaguo*)thisx;
 
     Actor_SetFocus(&this->actor, 30.0f);
     EnBaguo_UpdateEffects(this, play);
@@ -406,14 +404,14 @@ void EnBaguo_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnBaguo_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnBaguo* this = THIS;
+    EnBaguo* this = (EnBaguo*)thisx;
 
     Collider_UpdateSpheres(limbIndex, &this->collider);
 }
 
 void EnBaguo_DrawBody(Actor* thisx, PlayState* play) {
     static TexturePtr sEyeTextures[] = { &gNejironEyeOpenTex, &gNejironEyeHalfTex, &gNejironEyeClosedTex };
-    EnBaguo* this = THIS;
+    EnBaguo* this = (EnBaguo*)thisx;
     Gfx* gfx;
     s32 eyeIndex;
     void* virtualAddress;

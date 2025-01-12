@@ -11,8 +11,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((EnButte*)thisx)
-
 void EnButte_Init(Actor* thisx, PlayState* play);
 void EnButte_Destroy(Actor* thisx, PlayState* play2);
 void EnButte_Update(Actor* thisx, PlayState* play);
@@ -95,9 +93,9 @@ Vec3f D_8091D3A4 = { 0.0f, 0.0f, -3.0f };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneForward, 700, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 20, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 60, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeDistance, 700, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 20, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 60, ICHAIN_STOP),
 };
 
 f32 D_8091D3C0[] = { 50.0f, 80.0f, 100.0f };
@@ -163,7 +161,7 @@ void func_8091C178(EnButte* this, PlayState* play) {
 
 void EnButte_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnButte* this = THIS;
+    EnButte* this = (EnButte*)thisx;
 
     if (BUTTERFLY_GET(&this->actor) == BUTTERFLY_MINUS1) {
         this->actor.params = BUTTERFLY_0;
@@ -175,7 +173,7 @@ void EnButte_Init(Actor* thisx, PlayState* play) {
     Actor_ProcessInitChain(&this->actor, sInitChain);
 
     if ((BUTTERFLY_GET_1(&this->actor) & 0xFF) == BUTTERFLY_1) {
-        this->actor.uncullZoneScale = 200.0f;
+        this->actor.cullingVolumeScale = 200.0f;
     }
 
     SkelAnime_Init(play, &this->skelAnime, &gameplay_field_keep_Skel_002FA0, &gameplay_field_keep_Anim_001D20,
@@ -199,7 +197,7 @@ void EnButte_Init(Actor* thisx, PlayState* play) {
 
 void EnButte_Destroy(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnButte* this = THIS;
+    EnButte* this = (EnButte*)thisx;
 
     Collider_DestroyJntSph(play, &this->collider);
 }
@@ -368,7 +366,7 @@ void func_8091CBB4(EnButte* this, PlayState* play) {
 
 void func_8091CF64(EnButte* this) {
     this->unk_24C = 9;
-    this->actor.flags |= ACTOR_FLAG_10;
+    this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     this->skelAnime.playSpeed = 1.0f;
     func_8091C124();
     this->actionFunc = func_8091CFB4;
@@ -402,7 +400,7 @@ void func_8091D090(EnButte* this, PlayState* play) {
 }
 
 void EnButte_Update(Actor* thisx, PlayState* play) {
-    EnButte* this = THIS;
+    EnButte* this = (EnButte*)thisx;
 
     if ((this->actor.child != NULL) && (this->actor.child->update == NULL) && (&this->actor != this->actor.child)) {
         this->actor.child = NULL;
@@ -444,7 +442,7 @@ void EnButte_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnButte_Draw(Actor* thisx, PlayState* play) {
-    EnButte* this = THIS;
+    EnButte* this = (EnButte*)thisx;
 
     if (this->unk_250 != 0) {
         Gfx_SetupDL25_Opa(play->state.gfxCtx);

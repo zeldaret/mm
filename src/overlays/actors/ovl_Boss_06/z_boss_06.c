@@ -12,9 +12,9 @@
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 #include "assets/objects/object_knight/object_knight.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20)
-
-#define THIS ((Boss06*)thisx)
+#define FLAGS                                                                                 \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
+     ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 void Boss06_Init(Actor* thisx, PlayState* play);
 void Boss06_Destroy(Actor* thisx, PlayState* play);
@@ -147,7 +147,7 @@ f32 Boss06_RandZeroOne(void) {
 }
 
 void Boss06_Init(Actor* thisx, PlayState* play) {
-    Boss06* this = THIS;
+    Boss06* this = (Boss06*)thisx;
     u8* curtainTexture;
     s32 i;
 
@@ -425,7 +425,7 @@ void Boss06_CurtainDestroyed(Boss06* this, PlayState* play) {
 }
 
 void Boss06_Update(Actor* thisx, PlayState* play) {
-    Boss06* this = THIS;
+    Boss06* this = (Boss06*)thisx;
 
     this->actionFunc(this, play);
 
@@ -520,7 +520,7 @@ void Boss06_Update(Actor* thisx, PlayState* play) {
 
 void Boss06_Draw(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    Boss06* this = THIS;
+    Boss06* this = (Boss06*)thisx;
     s32 i;
     f32 lightOrbOffsetZ = 0.0f;
     s16 lightRayBaseX;

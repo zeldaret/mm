@@ -6,9 +6,7 @@
 
 #include "z_en_okarina_tag.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_UPDATE_DURING_OCARINA | ACTOR_FLAG_LOCK_ON_DISABLED)
-
-#define THIS ((EnOkarinaTag*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_UPDATE_DURING_OCARINA | ACTOR_FLAG_LOCK_ON_DISABLED)
 
 void EnOkarinaTag_Init(Actor* thisx, PlayState* play);
 void EnOkarinaTag_Destroy(Actor* thisx, PlayState* play);
@@ -33,7 +31,7 @@ void EnOkarinaTag_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnOkarinaTag_Init(Actor* thisx, PlayState* play) {
-    EnOkarinaTag* this = THIS;
+    EnOkarinaTag* this = (EnOkarinaTag*)thisx;
     f32 zRot = 0.0f;
     s32 i = 0;
 
@@ -88,7 +86,7 @@ void func_8093E518(EnOkarinaTag* this, PlayState* play) {
     if (this->unk14A == -1) {
         var_v1 = 0;
     }
-    if (func_800B8718(&this->actor, &play->state)) {
+    if (Actor_OcarinaInteractionAccepted(&this->actor, &play->state)) {
         Message_DisplayOcarinaStaff(play, OCARINA_ACTION_CHECK_HEALING + var_v1);
         this->actionFunc = func_8093E68C;
     } else {
@@ -106,7 +104,7 @@ void func_8093E518(EnOkarinaTag* this, PlayState* play) {
         if (yRange == 0.0f) {
             yRange = 50000.0f;
         }
-        func_800B874C(&this->actor, play, xzRange, yRange);
+        Actor_OfferOcarinaInteraction(&this->actor, play, xzRange, yRange);
     }
 }
 
@@ -152,7 +150,7 @@ void func_8093E68C(EnOkarinaTag* this, PlayState* play) {
 }
 
 void EnOkarinaTag_Update(Actor* thisx, PlayState* play) {
-    EnOkarinaTag* this = THIS;
+    EnOkarinaTag* this = (EnOkarinaTag*)thisx;
 
     this->actionFunc(this, play);
 }

@@ -12,9 +12,9 @@
 #include "assets/objects/object_bigslime/object_bigslime.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_200)
-
-#define THIS ((EnBigslime*)thisx)
+#define FLAGS                                                                                 \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
+     ACTOR_FLAG_DRAW_CULLING_DISABLED | ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR)
 
 void EnBigslime_Init(Actor* thisx, PlayState* play2);
 void EnBigslime_Destroy(Actor* thisx, PlayState* play);
@@ -319,7 +319,7 @@ void EnBigslime_Init(Actor* thisx, PlayState* play2) {
         WEEKEVENTREG_33_02,
     };
     PlayState* play = play2;
-    EnBigslime* this = THIS;
+    EnBigslime* this = (EnBigslime*)thisx;
     s32 i;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
@@ -381,7 +381,7 @@ void EnBigslime_Init(Actor* thisx, PlayState* play2) {
 }
 
 void EnBigslime_Destroy(Actor* thisx, PlayState* play) {
-    EnBigslime* this = THIS;
+    EnBigslime* this = (EnBigslime*)thisx;
     s32 i;
 
     for (i = 0; i < BIGSLIME_NUM_RING_FACES; i++) {
@@ -765,8 +765,8 @@ void EnBigslime_BreakIntoMinislime(EnBigslime* this, PlayState* play) {
     EnBigslime_SetPlayerParams(this, play);
     EnBigslime_EndCutscene(this, play);
     this->actor.colChkInfo.mass = 50;
-    this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_400);
-    this->actor.flags |= ACTOR_FLAG_200;
+    this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER);
+    this->actor.flags |= ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR;
     this->actor.hintId = TATL_HINT_ID_GEKKO_GIANT_SLIME;
     this->gekkoRot.x = 0;
     this->gekkoRot.y = 0;
@@ -914,7 +914,7 @@ void EnBigslime_GekkoFreeze(EnBigslime* this) {
     this->gekkoDrawDmgEffScale = 0.75f;
     this->gekkoDrawDmgEffFrozenSteamScale = 1.125f;
     this->gekkoDrawDmgEffAlpha = 1.0f;
-    this->actor.flags &= ~ACTOR_FLAG_200;
+    this->actor.flags &= ~ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR;
 }
 
 void EnBigslime_GekkoThaw(EnBigslime* this, PlayState* play) {
@@ -924,7 +924,7 @@ void EnBigslime_GekkoThaw(EnBigslime* this, PlayState* play) {
         this->gekkoCollider.elem.elemMaterial = ELEM_MATERIAL_UNK1;
         this->gekkoDrawDmgEffAlpha = 0.0f;
         Actor_SpawnIceEffects(play, &this->actor, this->gekkoBodyPartsPos, GEKKO_BODYPART_MAX, 2, 0.3f, 0.2f);
-        this->actor.flags |= ACTOR_FLAG_200;
+        this->actor.flags |= ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR;
     }
 }
 
@@ -1031,7 +1031,7 @@ void EnBigslime_SetupMoveOnCeiling(EnBigslime* this) {
     this->wavySurfaceTimer = 0;
     this->bigslimeCollider[0].base.acFlags |= AC_ON;
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->actor.flags &= ~ACTOR_FLAG_200;
+    this->actor.flags &= ~ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR;
     this->actionFunc = EnBigslime_MoveOnCeiling;
 }
 
@@ -2179,8 +2179,8 @@ void EnBigslime_SetupDamageGekko(EnBigslime* this, s32 isNotFrozen) {
     }
 
     EnBigslime_GekkoSfxOutsideBigslime(this, NA_SE_EN_FROG_DAMAGE);
-    if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_2000)) {
-        this->actor.flags &= ~ACTOR_FLAG_2000;
+    if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_HOOKSHOT_ATTACHED)) {
+        this->actor.flags &= ~ACTOR_FLAG_HOOKSHOT_ATTACHED;
     }
 
     this->actionFunc = EnBigslime_DamageGekko;
@@ -2774,7 +2774,7 @@ void EnBigslime_UpdateEffects(EnBigslime* this) {
 }
 
 void EnBigslime_UpdateBigslime(Actor* thisx, PlayState* play) {
-    EnBigslime* this = THIS;
+    EnBigslime* this = (EnBigslime*)thisx;
     s32 i;
     Vec3f vtxMax;
     Vec3f vtxMin;
@@ -2820,7 +2820,7 @@ void EnBigslime_UpdateBigslime(Actor* thisx, PlayState* play) {
 
 void EnBigslime_UpdateGekko(Actor* thisx, PlayState* play) {
     static s32 isGekkoOnGround = false;
-    EnBigslime* this = THIS;
+    EnBigslime* this = (EnBigslime*)thisx;
     Player* player;
     s32 pad;
 
@@ -2983,7 +2983,7 @@ void EnBigslime_DrawBigslime(Actor* thisx, PlayState* play) {
         { 84, 0.45f },  { 90, 0.5f },   { 96, 0.6f },  { 102, 0.2f },  { 108, 0.4f },  { 114, 0.15f }, { 120, 0.35f },
         { 126, 0.65f }, { 132, 0.25f }, { 138, 0.3f }, { 144, 0.15f }, { 150, 0.45f }, { 156, 0.3f },  { 161, 0.25f },
     };
-    EnBigslime* this = THIS;
+    EnBigslime* this = (EnBigslime*)thisx;
     EnBigslimeBubbles* bubblesInfoPtr;
     Vtx* dynamicVtx;
     MtxF* billboardMtxF;
@@ -3067,7 +3067,7 @@ static s8 sLimbToBodyParts[GEKKO_LIMB_MAX] = {
 static Vec3f sRightFootOffsetRef = { 1500.0f, 2200.0f, 0.0f };
 
 void EnBigslime_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnBigslime* this = THIS;
+    EnBigslime* this = (EnBigslime*)thisx;
     Vec3f rightFootOffset;
 
     if (limbIndex == GEKKO_LIMB_HEAD) {
@@ -3089,7 +3089,7 @@ void EnBigslime_DrawGekko(Actor* thisx, PlayState* play) {
     static Color_RGBA8 sGekkoDamageColor = { 255, 0, 0, 0 };
     static Color_RGBA8 sGekkoStunColor = { 0, 0, 255, 0 };
     Vec3f gekkoPos;
-    EnBigslime* this = THIS;
+    EnBigslime* this = (EnBigslime*)thisx;
     s32 pad;
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);

@@ -8,9 +8,7 @@
 #include "assets/objects/object_numa_obj/object_numa_obj.h"
 #include "assets/objects/object_dekucity_obj/object_dekucity_obj.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
-
-#define THIS ((ObjPurify*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 void ObjPurify_Init(Actor* thisx, PlayState* play);
 void ObjPurify_Destroy(Actor* thisx, PlayState* play);
@@ -122,7 +120,7 @@ s32 ObjPurify_IsPurified(ObjPurify* this) {
 
 void ObjPurify_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    ObjPurify* this = THIS;
+    ObjPurify* this = (ObjPurify*)thisx;
     ObjPurifyInfo* info = &sObjPurifyInfo[OBJPURIFY_GET_INFO_INDEX(&this->dyna.actor)];
     s32 sp20 = OBJPURIFY_GET_UNK_FLAG(thisx);
 
@@ -143,7 +141,7 @@ void ObjPurify_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjPurify_Destroy(Actor* thisx, PlayState* play) {
-    ObjPurify* this = THIS;
+    ObjPurify* this = (ObjPurify*)thisx;
     if (OBJPURIFY_GET_UNK_FLAG(&this->dyna.actor) == 1) {
         DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
     }
@@ -226,7 +224,7 @@ void func_80A850E8(ObjPurify* this, PlayState* play) {
 }
 
 void func_80A8515C(ObjPurify* this) {
-    this->dyna.actor.flags &= ~ACTOR_FLAG_10;
+    this->dyna.actor.flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     this->dyna.actor.draw = func_80A851C8;
     this->gfxIndex = 1;
     this->actionFunc = ObjPurify_DoNothing;
@@ -236,14 +234,14 @@ void ObjPurify_DoNothing(ObjPurify* this, PlayState* play) {
 }
 
 void ObjPurify_Update(Actor* thisx, PlayState* play) {
-    ObjPurify* this = THIS;
+    ObjPurify* this = (ObjPurify*)thisx;
 
     this->actionFunc(this, play);
 }
 
 void func_80A851C8(Actor* thisx, PlayState* play) {
     s32 pad;
-    ObjPurify* this = THIS;
+    ObjPurify* this = (ObjPurify*)thisx;
     ObjPurifyInfo* info = &sObjPurifyInfo[OBJPURIFY_GET_INFO_INDEX(&this->dyna.actor)];
     Gfx* opaDList = info->opaDLists[this->gfxIndex];
     Gfx* xluDList = info->xluDLists[this->gfxIndex];
@@ -270,7 +268,7 @@ void func_80A851C8(Actor* thisx, PlayState* play) {
 
 void func_80A85304(Actor* thisx, PlayState* play) {
     s32 pad;
-    ObjPurify* this = THIS;
+    ObjPurify* this = (ObjPurify*)thisx;
     ObjPurifyInfo* info = &sObjPurifyInfo[OBJPURIFY_GET_INFO_INDEX(&this->dyna.actor)];
     s32 sp6C[2];
     s32 i;

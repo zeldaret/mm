@@ -10,8 +10,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((ObjLightblock*)thisx)
-
 void ObjLightblock_Init(Actor* thisx, PlayState* play);
 void ObjLightblock_Destroy(Actor* thisx, PlayState* play);
 void ObjLightblock_Update(Actor* thisx, PlayState* play);
@@ -69,9 +67,9 @@ static LightblockTypeVars sLightblockTypeVars[] = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 500, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 500, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeDistance, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 500, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 500, ICHAIN_STOP),
 };
 
 void ObjLightblock_SpawnEffect(ObjLightblock* this, PlayState* play) {
@@ -83,7 +81,7 @@ void ObjLightblock_SpawnEffect(ObjLightblock* this, PlayState* play) {
 
 void ObjLightblock_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    ObjLightblock* this = THIS;
+    ObjLightblock* this = (ObjLightblock*)thisx;
     LightblockTypeVars* typeVars = &sLightblockTypeVars[LIGHTBLOCK_TYPE(&this->dyna.actor)];
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
@@ -106,7 +104,7 @@ void ObjLightblock_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjLightblock_Destroy(Actor* thisx, PlayState* play) {
-    ObjLightblock* this = THIS;
+    ObjLightblock* this = (ObjLightblock*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
     Collider_DestroyCylinder(play, &this->collider);
@@ -182,13 +180,13 @@ void ObjLightblock_FadeAway(ObjLightblock* this, PlayState* play) {
 }
 
 void ObjLightblock_Update(Actor* thisx, PlayState* play) {
-    ObjLightblock* this = THIS;
+    ObjLightblock* this = (ObjLightblock*)thisx;
 
     this->actionFunc(this, play);
 }
 
 void ObjLightblock_Draw(Actor* thisx, PlayState* play) {
-    ObjLightblock* this = THIS;
+    ObjLightblock* this = (ObjLightblock*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

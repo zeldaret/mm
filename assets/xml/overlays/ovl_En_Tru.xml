@@ -12,7 +12,7 @@
         <Array Name="D_80A8A0C8" Count="4" Offset="0x4AA8">
             <Vtx/>
         </Array>
-        <DList Name="D_80A8A108" Offset="0x4AE8"/>
+        <DList Name="D_80A8A108" Offset="0x4AE8"/> <!-- Original name might be "tru_flash_model" -->
 
         <Texture Name="D_80A8A188" OutName="en_tru_4B68" Format="i8" Width="64" Height="64" Offset="0x4B68"/>
         <Array Name="D_80A8B188" Count="4" Offset="0x5B68">

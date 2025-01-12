@@ -6,9 +6,7 @@
 
 #include "z_en_si.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_200)
-
-#define THIS ((EnSi*)thisx)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR)
 
 void EnSi_Init(Actor* thisx, PlayState* play);
 void EnSi_Destroy(Actor* thisx, PlayState* play);
@@ -114,7 +112,7 @@ void EnSi_GiveToken(EnSi* this, PlayState* play) {
 }
 
 void EnSi_Wait(EnSi* this, PlayState* play) {
-    if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_2000)) {
+    if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_HOOKSHOT_ATTACHED)) {
         this->actionFunc = EnSi_DraggedByHookshot;
     } else if (this->collider.base.ocFlags2 & OC2_HIT_PLAYER) {
         EnSi_GiveToken(this, play);
@@ -125,14 +123,14 @@ void EnSi_Wait(EnSi* this, PlayState* play) {
 }
 
 void EnSi_DraggedByHookshot(EnSi* this, PlayState* play) {
-    if (!CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_2000)) {
+    if (!CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_HOOKSHOT_ATTACHED)) {
         EnSi_GiveToken(this, play);
         Actor_Kill(&this->actor);
     }
 }
 
 void EnSi_Init(Actor* thisx, PlayState* play) {
-    EnSi* this = THIS;
+    EnSi* this = (EnSi*)thisx;
 
     Collider_InitSphere(play, &this->collider);
     Collider_SetSphere(play, &this->collider, &this->actor, &sSphereInit);
@@ -142,13 +140,13 @@ void EnSi_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnSi_Destroy(Actor* thisx, PlayState* play) {
-    EnSi* this = THIS;
+    EnSi* this = (EnSi*)thisx;
 
     Collider_DestroySphere(play, &this->collider);
 }
 
 void EnSi_Update(Actor* thisx, PlayState* play) {
-    EnSi* this = THIS;
+    EnSi* this = (EnSi*)thisx;
 
     this->actionFunc(this, play);
     EnSi_UpdateCollision(this, play);
@@ -156,7 +154,7 @@ void EnSi_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnSi_Draw(Actor* thisx, PlayState* play) {
-    EnSi* this = THIS;
+    EnSi* this = (EnSi*)thisx;
 
     func_800B8118(&this->actor, play, 0);
     func_800B8050(&this->actor, play, 0);

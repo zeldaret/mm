@@ -7,9 +7,7 @@
 #include "z_bg_ladder.h"
 #include "assets/objects/object_ladder/object_ladder.h"
 
-#define FLAGS (ACTOR_FLAG_10)
-
-#define THIS ((BgLadder*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void BgLadder_Init(Actor* thisx, PlayState* play);
 void BgLadder_Destroy(Actor* thisx, PlayState* play);
@@ -44,7 +42,7 @@ static Gfx* sLadderDLists[] = {
 };
 
 void BgLadder_Init(Actor* thisx, PlayState* play) {
-    BgLadder* this = THIS;
+    BgLadder* this = (BgLadder*)thisx;
     BgLadderSize size;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
@@ -70,7 +68,7 @@ void BgLadder_Init(Actor* thisx, PlayState* play) {
     if (Flags_GetSwitch(play, this->switchFlag)) {
         // If the flag is set, then the ladder draws immediately
         this->alpha = 255;
-        this->dyna.actor.flags &= ~ACTOR_FLAG_10; // always update = off
+        this->dyna.actor.flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED; // always update = off
         this->action = BgLadder_DoNothing;
     } else {
         // Otherwise, the ladder doesn't draw; wait for the flag to be set
@@ -82,7 +80,7 @@ void BgLadder_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgLadder_Destroy(Actor* thisx, PlayState* play) {
-    BgLadder* this = THIS;
+    BgLadder* this = (BgLadder*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
@@ -114,7 +112,7 @@ void BgLadder_FadeIn(BgLadder* this, PlayState* play) {
         this->alpha = 255;
         CutsceneManager_Stop(this->dyna.actor.csId);
         DynaPoly_EnableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
-        this->dyna.actor.flags &= ~ACTOR_FLAG_10; // always update = off
+        this->dyna.actor.flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED; // always update = off
         this->action = BgLadder_DoNothing;
     }
 }
@@ -123,13 +121,13 @@ void BgLadder_DoNothing(BgLadder* this, PlayState* play) {
 }
 
 void BgLadder_Update(Actor* thisx, PlayState* play) {
-    BgLadder* this = THIS;
+    BgLadder* this = (BgLadder*)thisx;
 
     this->action(this, play);
 }
 
 void BgLadder_Draw(Actor* thisx, PlayState* play) {
-    BgLadder* this = THIS;
+    BgLadder* this = (BgLadder*)thisx;
     s32 pad;
     Gfx* gfx;
 

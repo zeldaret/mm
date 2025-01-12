@@ -8,9 +8,7 @@
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_10)
-
-#define THIS ((EnNutsball*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void EnNutsball_Init(Actor* thisx, PlayState* play);
 void EnNutsball_Destroy(Actor* thisx, PlayState* play);
@@ -52,7 +50,7 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 void EnNutsball_Init(Actor* thisx, PlayState* play) {
-    EnNutsball* this = THIS;
+    EnNutsball* this = (EnNutsball*)thisx;
 
     ActorShape_Init(&this->actor.shape, 400.0f, ActorShadow_DrawCircle, 13.0f);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
@@ -75,7 +73,7 @@ void EnNutsball_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnNutsball_Destroy(Actor* thisx, PlayState* play) {
-    EnNutsball* this = THIS;
+    EnNutsball* this = (EnNutsball*)thisx;
     Collider_DestroyCylinder(play, &this->collider);
 }
 
@@ -88,7 +86,7 @@ void EnNutsball_InitColliderParams(EnNutsball* this) {
 
 void EnNutsball_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnNutsball* this = THIS;
+    EnNutsball* this = (EnNutsball*)thisx;
     Player* player = GET_PLAYER(play);
     Vec3f worldPos;
     Vec3s worldRot;
@@ -98,7 +96,7 @@ void EnNutsball_Update(Actor* thisx, PlayState* play2) {
     CollisionPoly* poly;
 
     if (!(player->stateFlags1 &
-          (PLAYER_STATE1_40 | PLAYER_STATE1_DEAD | PLAYER_STATE1_10000000 | PLAYER_STATE1_20000000))) {
+          (PLAYER_STATE1_TALKING | PLAYER_STATE1_DEAD | PLAYER_STATE1_10000000 | PLAYER_STATE1_20000000))) {
         this->timer--;
         if (this->timer < 0) {
             this->actor.velocity.y += this->actor.gravity;
@@ -170,7 +168,7 @@ void EnNutsball_Update(Actor* thisx, PlayState* play2) {
 }
 
 void EnNutsball_Draw(Actor* thisx, PlayState* play) {
-    EnNutsball* this = THIS;
+    EnNutsball* this = (EnNutsball*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

@@ -131,9 +131,9 @@ typedef struct Actor {
     /* 0x0BC */ ActorShape shape; // Variables related to the physical shape of the actor
     /* 0x0EC */ Vec3f projectedPos; // Position of the actor in projected space
     /* 0x0F8 */ f32 projectedW; // w component of the projected actor position
-    /* 0x0FC */ f32 uncullZoneForward; // Amount to increase the uncull zone forward by (in projected space)
-    /* 0x100 */ f32 uncullZoneScale; // Amount to increase the uncull zone scale by (in projected space)
-    /* 0x104 */ f32 uncullZoneDownward; // Amount to increase uncull zone downward by (in projected space)
+    /* 0x0FC */ f32 cullingVolumeDistance; // Forward distance of the culling volume (in projected space). See `Actor_CullingCheck` and `Actor_CullingVolumeTest` for more information.
+    /* 0x100 */ f32 cullingVolumeScale; // Scale of the culling volume (in projected space). See `Actor_CullingCheck` and `Actor_CullingVolumeTest` for more information.
+    /* 0x104 */ f32 cullingVolumeDownward; // Downward height of the culling volume (in projected space). See `Actor_CullingCheck` and `Actor_CullingVolumeTest` for more information.
     /* 0x108 */ Vec3f prevPos; // World position from the previous update cycle
     /* 0x114 */ u8 isLockedOn; // Set to true if the actor is currently being targeted by the player
     /* 0x115 */ u8 targetPriority; // Lower values have higher priority. Resets to 0 when player stops targeting
@@ -432,7 +432,7 @@ typedef struct ActorContext {
     /* 0x0A0 */ Actor* lensActors[LENS_ACTOR_MAX]; // Draws up to LENS_ACTOR_MAX number of invisible actors
     /* 0x120 */ Attention attention;
     /* 0x1B8 */ ActorContextSceneFlags sceneFlags;
-    /* 0x1E4 */ TitleCardContext titleCtxt;
+    /* 0x1E4 */ TitleCardContext titleCtx;
     /* 0x1F4 */ PlayerImpact playerImpact;
     /* 0x208 */ UNK_TYPE1 unk_208[0x4];
     /* 0x20C */ ActorSharedMemoryEntry actorSharedMemory[8];
@@ -465,26 +465,40 @@ typedef enum DoorLockType {
 
 // Actor is discoverable by the Attention System. This enables Tatl to hover over the actor when it is in range.
 // The actor can also be locked onto (as long as `ACTOR_FLAG_LOCK_ON_DISABLED` is not set).
-#define ACTOR_FLAG_ATTENTION_ENABLED    (1 << 0)
+#define ACTOR_FLAG_ATTENTION_ENABLED (1 << 0)
 
 // Unused
-#define ACTOR_FLAG_2             (1 << 1)
+#define ACTOR_FLAG_2 (1 << 1)
 
 // Actor is hostile toward the Player. Player has specific "battle" behavior when locked onto hostile actors.
 // Enemy background music will also be played when the player is close enough to a hostile actor.
 // Note: This must be paired with `ACTOR_FLAG_ATTENTION_ENABLED` to have any effect.
-#define ACTOR_FLAG_HOSTILE    (1 << 2)
+#define ACTOR_FLAG_HOSTILE (1 << 2)
 
 // Actor is considered "friendly"; Opposite flag of `ACTOR_FLAG_HOSTILE`.
 // Note that this flag doesn't have any effect on either the actor, or Player's behavior.
 // What actually matters is the presence or lack of `ACTOR_FLAG_HOSTILE`.
-#define ACTOR_FLAG_FRIENDLY      (1 << 3)
-// 
-#define ACTOR_FLAG_10            (1 << 4)
-// 
-#define ACTOR_FLAG_20            (1 << 5)
-// 
-#define ACTOR_FLAG_40            (1 << 6)
+#define ACTOR_FLAG_FRIENDLY (1 << 3)
+
+// Culling of the actor's update process is disabled.
+// In other words, the actor will keep updating even if the actor is outside its own culling volume.
+// See `Actor_CullingCheck` for more information about culling.
+// See `Actor_CullingVolumeTest` for more information on the test used to determine if an actor should be culled.
+#define ACTOR_FLAG_UPDATE_CULLING_DISABLED (1 << 4)
+
+// Culling of the actor's draw process is disabled.
+// In other words, the actor will keep drawing even if the actor is outside its own culling volume.
+// See `Actor_CullingCheck` for more information about culling.
+// See `Actor_CullingVolumeTest` for more information on the test used to determine if an actor should be culled.
+// (The original name for this flag is `NO_CULL_DRAW`, known from the Majora's Mask Debug ROM)
+#define ACTOR_FLAG_DRAW_CULLING_DISABLED (1 << 5)
+
+// Set if the actor is currently within the bounds of its culling volume.
+// In most cases, this flag can be used to determine whether or not an actor is currently culled.
+// However this flag still updates even if `ACTOR_FLAG_UPDATE_CULLING_DISABLED` or `ACTOR_FLAG_DRAW_CULLING_DISABLED`
+// are set. Meaning, the flag can still have a value of "false" even if it is not actually culled.
+// (The original name for this flag is `NO_CULL_FLAG`, known from the Majora's Mask Debug ROM)
+#define ACTOR_FLAG_INSIDE_CULLING_VOLUME (1 << 6)
 
 // hidden or revealed by Lens of Truth (depending on room lensMode)
 #define ACTOR_FLAG_REACT_TO_LENS (1 << 7)
@@ -493,17 +507,26 @@ typedef enum DoorLockType {
 // Player will retain this flag until the player is finished talking
 // Actor will retain this flag until `Actor_TalkOfferAccepted` is called or manually turned off by the actor
 #define ACTOR_FLAG_TALK (1 << 8)
-// 
-#define ACTOR_FLAG_200           (1 << 9)
-// 
-#define ACTOR_FLAG_400           (1 << 10)
-// 
-#define ACTOR_FLAG_800           (1 << 11)
+
+// When the hookshot attaches to this actor, the actor will be pulled back as the hookshot retracts.
+#define ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR (1 << 9)
+
+// When the hookshot attaches to this actor, Player will be pulled by the hookshot and fly to the actor.
+#define ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER (1 << 10)
+
+// This is likely `ACTOR_FLAG_GRASS_DESTROYED` from OoT, however this flag is unused in this game.
+#define ACTOR_FLAG_800 (1 << 11)
 
 // Actor will not shake when a quake occurs
-#define ACTOR_FLAG_IGNORE_QUAKE  (1 << 12)
-// 
-#define ACTOR_FLAG_2000          (1 << 13)
+#define ACTOR_FLAG_IGNORE_QUAKE (1 << 12)
+
+// The hookshot is currently attached to this actor.
+// The behavior that occurs after attachment is determined by `ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR` and `ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER`.
+// If neither of those flags are set attachment cannot occur, and the hookshot will simply act as a damage source.
+//
+// This flag is also reused to indicate that an actor is attached to the Zora boomerang.
+// This only has an effect for Gold Skulltula Tokens (EN_SI) which has overlapping behavior for hookshot and boomerang.
+#define ACTOR_FLAG_HOOKSHOT_ATTACHED (1 << 13)
 
 // When hit by an arrow, the actor will be able to attach to the arrow and fly with it in the air
 #define ACTOR_FLAG_CAN_ATTACH_TO_ARROW (1 << 14)
@@ -529,24 +552,33 @@ typedef enum DoorLockType {
 // Also allows for the next lock-on actor to be the focus actor again.
 // When chosen as the next lock-on actor, this flag is unset.
 #define ACTOR_FLAG_FOCUS_ACTOR_REFINDABLE (1 << 19)
-// 
-#define ACTOR_FLAG_100000        (1 << 20)
-// 
-#define ACTOR_FLAG_200000        (1 << 21)
-// 
-#define ACTOR_FLAG_400000        (1 << 22)
+
+// Actor can update even if Player is currently in one of the `sCategoryFreezeMasks` states.
+// Typically an actor will halt while the player is in one of the `sCategoryFreezeMasks` states (depending on category).
+// This flag allows a given actor to be an exception.
+#define ACTOR_FLAG_FREEZE_EXCEPTION (1 << 20)
+
+// Actor can update even if the Song of Soaring Cutscene or the Song of Time Cutscene is playing.
+// Typically an actor will halt while the Song of Soaring Cutscene or the Song of Time Cutscene is playing.
+// This flag allows a given actor to be an exception.
+#define ACTOR_FLAG_UPDATE_DURING_SOARING_AND_SOT_CS (1 << 21)
+
+// Specifies whether the actor can (not) use fake point lights, in the event that ucode point lights are not compatible with its display lists.
+// In F3DZEX2 versions that predate MM, microcode point lights didn't exist so `PointLight_t` could not be used.
+// Instead, fake point lights by using a directional light that constantly changes to face a reference position.
+#define ACTOR_FLAG_IGNORE_LEGACY_POINT_LIGHTS (1 << 22)
 
 // When Player is carrying this actor, it can only be thrown, not dropped/placed.
 // Typically an actor can only be thrown when moving, but this allows an actor to be thrown when standing still.
-#define ACTOR_FLAG_THROW_ONLY    (1 << 23)
+#define ACTOR_FLAG_THROW_ONLY (1 << 23)
 
 // When colliding with Player's body AC collider, a "thump" sound will play indicating his body has been hit
-#define ACTOR_FLAG_SFX_FOR_PLAYER_BODY_HIT       (1 << 24)
+#define ACTOR_FLAG_SFX_FOR_PLAYER_BODY_HIT (1 << 24)
 
 // Actor can update even if Player is currently using the ocarina.
 // Typically an actor will halt while the ocarina is active (depending on category).
 // This flag allows a given actor to be an exception.
-#define ACTOR_FLAG_UPDATE_DURING_OCARINA       (1 << 25)
+#define ACTOR_FLAG_UPDATE_DURING_OCARINA (1 << 25)
 
 // Actor can press and hold down switches.
 // See usages of `DynaPolyActor_SetSwitchPressed` and `DynaPolyActor_IsSwitchPressed` for more context on how switches work.
@@ -554,17 +586,27 @@ typedef enum DoorLockType {
 
 // Player is not able to lock onto the actor.
 // Tatl will still be able to hover over the actor, assuming `ACTOR_FLAG_ATTENTION_ENABLED` is set.
-#define ACTOR_FLAG_LOCK_ON_DISABLED  (1 << 27)
-// 
-#define ACTOR_FLAG_10000000      (1 << 28)
-// 
-#define ACTOR_FLAG_20000000      (1 << 29)
+#define ACTOR_FLAG_LOCK_ON_DISABLED (1 << 27)
+
+// Specifies whether subsequent geometry is compatible with ucode point lights.
+// The current room must also enable point lights for point lights to take effect.
+#define ACTOR_FLAG_UCODE_POINT_LIGHT_ENABLED (1 << 28)
+
+// Signals that player has accepted an offer to use the ocarina to interact with an actor
+// An exception is made for EN_ZOT, see `Player_ActionHandler_13`.
+// Player will retain this flag until the player is finished playing the ocarina
+// Actor will retain this flag until `Actor_OcarinaInteractionAccepted` is called or manually turned off by the actor
+#define ACTOR_FLAG_OCARINA_INTERACTION (1 << 29)
 
 // Camera will slowly drift to the actor while approaching it.
 // Uses the attention system but `ACTOR_FLAG_ATTENTION_ENABLED` is not required.
 #define ACTOR_FLAG_CAMERA_DRIFT_ENABLED (1 << 30)
-// 
-#define ACTOR_FLAG_80000000      (1 << 31)
+
+// The actor's location will be marked on the minimap.
+// If the actor is a player actor, a compass icon will be drawn.
+// If the actor is EN_BOX, the flag has no effect.
+// Otherwise a square icon is drawn, with the color determined by it's actor category.
+#define ACTOR_FLAG_MINIMAP_ICON_ENABLED (1 << 31)
 
 #define DROPFLAG_NONE   (0)
 #define DROPFLAG_1      (1 << 0)
@@ -823,10 +865,10 @@ s32 Actor_OfferTalkNearColChkInfoCylinder(Actor* actor, struct PlayState* play);
 s32 Actor_TextboxIsClosing(Actor* actor, struct PlayState* play);
 s32 Actor_ChangeFocus(Actor* actor1, struct PlayState* play, Actor* actor2);
 
-s32 func_800B8718(Actor* actor, struct GameState* gameState);
-s32 func_800B874C(Actor* actor, struct PlayState* play, f32 xzRange, f32 yRange);
-s32 func_800B8804(Actor* actor, struct PlayState* play, f32 xzRange);
-s32 func_800B886C(Actor* actor, struct PlayState* play);
+s32 Actor_OcarinaInteractionAccepted(Actor* actor, struct GameState* gameState);
+s32 Actor_OfferOcarinaInteraction(Actor* actor, struct PlayState* play, f32 xzRange, f32 yRange);
+s32 Actor_OfferOcarinaInteractionNearby(Actor* actor, struct PlayState* play, f32 xzRange);
+s32 Actor_NoOcarinaInteraction(Actor* actor, struct PlayState* play);
 void Actor_GetScreenPos(struct PlayState* play, Actor* actor, s16* posX, s16* posY);
 bool Actor_OnScreen(struct PlayState* play, Actor* actor);
 s32 Actor_HasParent(Actor* actor, struct PlayState* play);

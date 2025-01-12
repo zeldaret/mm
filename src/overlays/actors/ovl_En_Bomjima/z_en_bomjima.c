@@ -8,9 +8,7 @@
 
 #include "overlays/effects/ovl_Effect_Ss_Hitmark/z_eff_ss_hitmark.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
-
-#define THIS ((EnBomjima*)thisx)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void EnBomjima_Init(Actor* thisx, PlayState* play);
 void EnBomjima_Destroy(Actor* thisx, PlayState* play);
@@ -175,7 +173,7 @@ s16 D_80C00AF8[] = {
 };
 
 void EnBomjima_Init(Actor* thisx, PlayState* play) {
-    EnBomjima* this = THIS;
+    EnBomjima* this = (EnBomjima*)thisx;
     s32 csId;
     s32 i;
 
@@ -214,7 +212,7 @@ void EnBomjima_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnBomjima_Destroy(Actor* thisx, PlayState* play) {
-    EnBomjima* this = THIS;
+    EnBomjima* this = (EnBomjima*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -1070,7 +1068,7 @@ void func_80C00284(EnBomjima* this, PlayState* play) {
 
 void EnBomjima_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnBomjima* this = THIS;
+    EnBomjima* this = (EnBomjima*)thisx;
 
     if (this->unk_2BE != 0) {
         this->unk_2BE--;
@@ -1113,13 +1111,13 @@ void EnBomjima_Update(Actor* thisx, PlayState* play) {
     Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f,
                             UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
                                 UPDBGCHECKINFO_FLAG_10);
-    this->actor.uncullZoneForward = 500.0f;
+    this->actor.cullingVolumeDistance = 500.0f;
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 }
 
 s32 EnBomjima_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnBomjima* this = THIS;
+    EnBomjima* this = (EnBomjima*)thisx;
 
     if (limbIndex == OBJECT_CS_LIMB_08) {
         rot->z += this->unk_294;
@@ -1160,7 +1158,7 @@ void EnBomjima_Draw(Actor* thisx, PlayState* play) {
     static TexturePtr D_80C00B48[] = {
         object_cs_Tex_00E620, object_cs_Tex_00EA20, object_cs_Tex_00EE20, object_cs_Tex_00DD20, object_cs_Tex_00F220,
     };
-    EnBomjima* this = THIS;
+    EnBomjima* this = (EnBomjima*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

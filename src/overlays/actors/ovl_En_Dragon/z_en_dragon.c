@@ -7,9 +7,9 @@
 #include "z_en_dragon.h"
 #include "overlays/actors/ovl_En_Ot/z_en_ot.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20)
-
-#define THIS ((EnDragon*)thisx)
+#define FLAGS                                                                                 \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
+     ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 void EnDragon_Init(Actor* thisx, PlayState* play);
 void EnDragon_Destroy(Actor* thisx, PlayState* play);
@@ -201,7 +201,7 @@ static ColliderJntSphInit sJntSphInit = {
 };
 
 void EnDragon_Init(Actor* thisx, PlayState* play) {
-    EnDragon* this = THIS;
+    EnDragon* this = (EnDragon*)thisx;
 
     SkelAnime_InitFlex(play, &this->skelAnime, &gDeepPythonSkel, &gDeepPythonSmallSideSwayAnim, this->jointTable,
                        this->morphTable, DEEP_PYTHON_LIMB_MAX);
@@ -244,7 +244,7 @@ void EnDragon_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnDragon_Destroy(Actor* thisx, PlayState* play) {
-    EnDragon* this = THIS;
+    EnDragon* this = (EnDragon*)thisx;
 
     Collider_DestroyJntSph(play, &this->collider);
 }
@@ -629,7 +629,7 @@ void EnDragon_Attack(EnDragon* this, PlayState* play) {
             player->av2.actionVar2 = 100;
         }
 
-        this->actor.flags &= ~ACTOR_FLAG_100000;
+        this->actor.flags &= ~ACTOR_FLAG_FREEZE_EXCEPTION;
 
         if ((this->state != DEEP_PYTHON_ATTACK_STATE_START) && (curFrame >= this->animEndFrame)) {
             this->timer = 3;
@@ -752,7 +752,7 @@ void EnDragon_UpdateDamage(EnDragon* this, PlayState* play) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_UTSUBO_DEAD);
                 this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
                 this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
-                this->actor.flags |= ACTOR_FLAG_100000;
+                this->actor.flags |= ACTOR_FLAG_FREEZE_EXCEPTION;
                 this->action = DEEP_PYTHON_ACTION_SETUP_DEAD;
                 this->actionFunc = EnDragon_SetupDead;
             }
@@ -765,14 +765,14 @@ void EnDragon_UpdateDamage(EnDragon* this, PlayState* play) {
           (playerImpactType == PLAYER_IMPACT_ZORA_BARRIER))) {
         this->actor.speed = 0.0f;
         this->action = DEEP_PYTHON_ACTION_GRAB;
-        this->actor.flags |= ACTOR_FLAG_100000;
+        this->actor.flags |= ACTOR_FLAG_FREEZE_EXCEPTION;
         this->actionFunc = EnDragon_SetupGrab;
     }
 }
 
 void EnDragon_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnDragon* this = THIS;
+    EnDragon* this = (EnDragon*)thisx;
 
     if (this->retreatTimer != 0) {
         this->retreatTimer--;
@@ -810,7 +810,7 @@ void EnDragon_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnDragon_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnDragon* this = THIS;
+    EnDragon* this = (EnDragon*)thisx;
 
     if (limbIndex == DEEP_PYTHON_LIMB_JAW) {
         rot->x += this->jawXRotation;
@@ -822,7 +822,7 @@ s32 EnDragon_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f
 }
 
 void EnDragon_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnDragon* this = THIS;
+    EnDragon* this = (EnDragon*)thisx;
     Vec3f playerGrabOffsetFromJawPos = { 350.0f, -120.0f, -60.0f };
 
     if (limbIndex == DEEP_PYTHON_LIMB_JAW) {
@@ -841,7 +841,7 @@ void EnDragon_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* r
 }
 
 void EnDragon_Draw(Actor* thisx, PlayState* play) {
-    EnDragon* this = THIS;
+    EnDragon* this = (EnDragon*)thisx;
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);

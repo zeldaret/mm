@@ -10,9 +10,7 @@
 #include "assets/objects/gameplay_field_keep/gameplay_field_keep.h"
 #include "overlays/actors/ovl_En_Insect/z_en_insect.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_THROW_ONLY)
-
-#define THIS ((EnKusa*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_THROW_ONLY)
 
 void EnKusa_Init(Actor* thisx, PlayState* play);
 void EnKusa_Destroy(Actor* thisx, PlayState* play);
@@ -107,9 +105,9 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 400, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -3200, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(terminalVelocity, -17000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneForward, 1200, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 200, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeDistance, 1200, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 100, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 200, ICHAIN_STOP),
 };
 
 /**
@@ -352,7 +350,7 @@ s32 EnKusa_IsUnderwater(EnKusa* this, PlayState* play) {
 }
 
 void EnKusa_InitCollider(Actor* thisx, PlayState* play) {
-    EnKusa* this = THIS;
+    EnKusa* this = (EnKusa*)thisx;
 
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
@@ -360,14 +358,14 @@ void EnKusa_InitCollider(Actor* thisx, PlayState* play) {
 }
 
 void EnKusa_Init(Actor* thisx, PlayState* play) {
-    EnKusa* this = THIS;
+    EnKusa* this = (EnKusa*)thisx;
     s32 pad;
     s32 kusaType = KUSA_GET_TYPE(&this->actor);
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
 
     if (play->csCtx.state != CS_STATE_IDLE) {
-        this->actor.uncullZoneForward += 1000.0f;
+        this->actor.cullingVolumeDistance += 1000.0f;
     }
     EnKusa_InitCollider(&this->actor, play);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, NULL, &sColChkInfoInit);
@@ -416,7 +414,7 @@ void EnKusa_Init(Actor* thisx, PlayState* play) {
 
 void EnKusa_Destroy(Actor* thisx, PlayState* play) {
     PlayState* play2 = play;
-    EnKusa* this = THIS;
+    EnKusa* this = (EnKusa*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -442,13 +440,13 @@ void EnKusa_WaitObject(EnKusa* this, PlayState* play) {
             this->actor.draw = EnKusa_DrawGrass;
         }
         this->actor.objectSlot = this->objectSlot;
-        this->actor.flags &= ~ACTOR_FLAG_10;
+        this->actor.flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     }
 }
 
 void EnKusa_SetupInteract(EnKusa* this) {
     this->actionFunc = EnKusa_WaitForInteract;
-    this->actor.flags &= ~ACTOR_FLAG_10;
+    this->actor.flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED;
 }
 
 void EnKusa_WaitForInteract(EnKusa* this, PlayState* play) {
@@ -501,7 +499,7 @@ void EnKusa_WaitForInteract(EnKusa* this, PlayState* play) {
 void EnKusa_SetupLiftedUp(EnKusa* this) {
     this->actionFunc = EnKusa_LiftedUp;
     this->actor.room = -1;
-    this->actor.flags |= ACTOR_FLAG_10;
+    this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
 }
 
 void EnKusa_LiftedUp(EnKusa* this, PlayState* play) {
@@ -686,7 +684,7 @@ void EnKusa_Regrow(EnKusa* this, PlayState* play) {
 
 void EnKusa_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnKusa* this = THIS;
+    EnKusa* this = (EnKusa*)thisx;
 
     this->actionFunc(this, play);
 
@@ -695,8 +693,7 @@ void EnKusa_Update(Actor* thisx, PlayState* play2) {
     } else {
         this->actor.shape.yOffset = 0.0f;
     }
-    if ((kusaGameplayFrames != play->gameplayFrames) &&
-        (play->roomCtx.curRoom.behaviorType1 == ROOM_BEHAVIOR_TYPE1_0)) {
+    if ((kusaGameplayFrames != play->gameplayFrames) && (play->roomCtx.curRoom.type == ROOM_TYPE_NORMAL)) {
         EnKusa_Sway();
         kusaGameplayFrames = play->gameplayFrames;
     }
@@ -704,13 +701,12 @@ void EnKusa_Update(Actor* thisx, PlayState* play2) {
 
 void EnKusa_DrawBush(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnKusa* this = THIS;
+    EnKusa* this = (EnKusa*)thisx;
 
     if ((this->actor.projectedPos.z <= 1200.0f) || ((this->isInWater & 1) && (this->actor.projectedPos.z < 1300.0f))) {
 
-        if ((play->roomCtx.curRoom.behaviorType1 == ROOM_BEHAVIOR_TYPE1_0) &&
-            (this->actionFunc == EnKusa_WaitForInteract) && (this->actor.projectedPos.z > -150.0f) &&
-            (this->actor.projectedPos.z < 400.0f)) {
+        if ((play->roomCtx.curRoom.type == ROOM_TYPE_NORMAL) && (this->actionFunc == EnKusa_WaitForInteract) &&
+            (this->actor.projectedPos.z > -150.0f) && (this->actor.projectedPos.z < 400.0f)) {
             EnKusa_ApplySway(&D_80936AD8[this->kusaMtxIdx]);
         }
 
@@ -733,13 +729,12 @@ void EnKusa_DrawBush(Actor* thisx, PlayState* play2) {
 }
 
 void EnKusa_DrawGrass(Actor* thisx, PlayState* play) {
-    EnKusa* this = THIS;
+    EnKusa* this = (EnKusa*)thisx;
 
     if (this->isCut) {
         Gfx_DrawDListOpa(play, gKusaStumpDL);
     } else {
-        if ((play->roomCtx.curRoom.behaviorType1 == ROOM_BEHAVIOR_TYPE1_0) &&
-            (this->actionFunc == EnKusa_WaitForInteract)) {
+        if ((play->roomCtx.curRoom.type == ROOM_TYPE_NORMAL) && (this->actionFunc == EnKusa_WaitForInteract)) {
             if ((this->actor.projectedPos.z > -150.0f) && (this->actor.projectedPos.z < 400.0f)) {
                 EnKusa_ApplySway(&D_80936AD8[this->kusaMtxIdx]);
             }

@@ -15,9 +15,7 @@
 #include "assets/objects/object_kaizoku_obj/object_kaizoku_obj.h"
 #include "assets/objects/object_spot11_obj/object_spot11_obj.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
-
-#define THIS ((BgBreakwall*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 void BgBreakwall_Init(Actor* thisx, PlayState* play);
 void BgBreakwall_Update(Actor* thisx, PlayState* play);
@@ -95,9 +93,9 @@ BgBreakwallStruct D_808B8140[] = {
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F(scale, 1, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 400, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 800, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeDistance, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 400, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 800, ICHAIN_STOP),
 };
 
 Color_RGBA8 D_808B82F0[] = {
@@ -214,7 +212,7 @@ bool func_808B751C(BgBreakwall* this, PlayState* play) {
 
 void BgBreakwall_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    BgBreakwall* this = THIS;
+    BgBreakwall* this = (BgBreakwall*)thisx;
     BgBreakwallStruct* sp24 = &D_808B8140[BGBREAKWALL_GET_F(&this->dyna.actor)];
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
@@ -230,7 +228,7 @@ void BgBreakwall_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgBreakwall_Destroy(Actor* thisx, PlayState* play) {
-    BgBreakwall* this = THIS;
+    BgBreakwall* this = (BgBreakwall*)thisx;
     BgBreakwallStruct* temp_s1 = &D_808B8140[BGBREAKWALL_GET_F(&this->dyna.actor)];
 
     if (temp_s1->unk_10 != NULL) {
@@ -248,7 +246,7 @@ void func_808B76CC(BgBreakwall* this, PlayState* play) {
         if (((BGBREAKWALL_GET_F(&this->dyna.actor)) != BGBREAKWALL_F_7) &&
             ((BGBREAKWALL_GET_F(&this->dyna.actor)) != BGBREAKWALL_F_9) &&
             ((BGBREAKWALL_GET_F(&this->dyna.actor)) != BGBREAKWALL_F_11)) {
-            this->dyna.actor.flags &= ~ACTOR_FLAG_10;
+            this->dyna.actor.flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED;
         }
 
         Actor_SetObjectDependency(play, &this->dyna.actor);
@@ -333,7 +331,7 @@ void func_808B7A10(BgBreakwall* this, PlayState* play) {
 }
 
 void BgBreakwall_Update(Actor* thisx, PlayState* play) {
-    BgBreakwall* this = THIS;
+    BgBreakwall* this = (BgBreakwall*)thisx;
 
     this->actionFunc(this, play);
 }
@@ -382,7 +380,7 @@ void func_808B7B54(Actor* thisx, PlayState* play) {
 }
 
 void func_808B7D34(Actor* thisx, PlayState* play) {
-    BgBreakwall* this = THIS;
+    BgBreakwall* this = (BgBreakwall*)thisx;
     s32 sp48;
     s32 tempA;
     s32 tempB;
@@ -414,7 +412,7 @@ void func_808B7D34(Actor* thisx, PlayState* play) {
 
 void BgBreakwall_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
-    BgBreakwall* this = THIS;
+    BgBreakwall* this = (BgBreakwall*)thisx;
     BgBreakwallStruct* temp_s2 = &D_808B8140[BGBREAKWALL_GET_F(&this->dyna.actor)];
 
     OPEN_DISPS(play->state.gfxCtx);

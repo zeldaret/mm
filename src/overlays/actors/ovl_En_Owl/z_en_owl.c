@@ -6,9 +6,7 @@
 
 #include "z_en_owl.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
-
-#define THIS ((EnOwl*)thisx)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void EnOwl_Init(Actor* thisx, PlayState* play);
 void EnOwl_Destroy(Actor* thisx, PlayState* play);
@@ -81,9 +79,9 @@ static ColliderCylinderInit sCylinderInit = {
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 25, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneForward, 1400, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 2000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 2400, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeDistance, 1400, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 2000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 2400, ICHAIN_STOP),
 };
 
 void func_8095A510(EnOwl* this, PlayState* play) {
@@ -99,7 +97,7 @@ void func_8095A510(EnOwl* this, PlayState* play) {
 
 void EnOwl_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnOwl* this = THIS;
+    EnOwl* this = (EnOwl*)thisx;
     s32 i;
     s16 csId = this->actor.csId;
     s32 owlType;
@@ -209,7 +207,7 @@ void EnOwl_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnOwl_Destroy(Actor* thisx, PlayState* play) {
-    EnOwl* this = THIS;
+    EnOwl* this = (EnOwl*)thisx;
 
     if (ENOWL_GET_TYPE(&this->actor) != ENOWL_GET_TYPE_30) {
         Collider_DestroyCylinder(play, &this->collider);
@@ -449,7 +447,7 @@ void func_8095B254(EnOwl* this, PlayState* play) {
     if (this->actionFlags & 1) {
         EnOwl_ChangeMode(this, func_8095B1E4, func_8095C328, &this->skelAnimeFlying, &gOwlFlyAnim, 0.0f);
         this->unk_3EA = 6;
-        this->actor.flags |= ACTOR_FLAG_20;
+        this->actor.flags |= ACTOR_FLAG_DRAW_CULLING_DISABLED;
     }
 
     func_8095B158(this);
@@ -762,7 +760,7 @@ void func_8095BF58(EnOwl* this, PlayState* play) {
 }
 
 void func_8095BF78(EnOwl* this, PlayState* play) {
-    this->actor.flags |= ACTOR_FLAG_20;
+    this->actor.flags |= ACTOR_FLAG_DRAW_CULLING_DISABLED;
     if (this->actor.xzDistToPlayer > 6000.0f) {
         Actor_Kill(&this->actor);
     }
@@ -905,7 +903,7 @@ void func_8095C568(EnOwl* this) {
 
 void EnOwl_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnOwl* this = THIS;
+    EnOwl* this = (EnOwl*)thisx;
     s16 sp36;
 
     if (this->actor.draw != NULL) {
@@ -1100,7 +1098,7 @@ void EnOwl_Update(Actor* thisx, PlayState* play) {
 }
 
 void func_8095CCF4(Actor* thisx, PlayState* play) {
-    EnOwl* this = THIS;
+    EnOwl* this = (EnOwl*)thisx;
     Player* player = GET_PLAYER(play);
 
     if (player->stateFlags3 & PLAYER_STATE3_10000000) {
@@ -1130,7 +1128,7 @@ void func_8095CCF4(Actor* thisx, PlayState* play) {
 }
 
 s32 EnOwl_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnOwl* this = THIS;
+    EnOwl* this = (EnOwl*)thisx;
 
     switch (limbIndex) {
         case OWL_FLYING_LIMB_HEAD: // OWL_PERCHING_LIMB_HEAD
@@ -1163,7 +1161,7 @@ s32 EnOwl_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 }
 
 void EnOwl_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnOwl* this = THIS;
+    EnOwl* this = (EnOwl*)thisx;
     Vec3f sp18;
 
     sp18.z = 0.0f;
@@ -1187,7 +1185,7 @@ void EnOwl_Draw(Actor* thisx, PlayState* play) {
         gOwlEyeClosedTex,
     };
     s32 pad;
-    EnOwl* this = THIS;
+    EnOwl* this = (EnOwl*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -1202,7 +1200,7 @@ void EnOwl_Draw(Actor* thisx, PlayState* play) {
 }
 
 void func_8095D074(Actor* thisx, PlayState* play) {
-    EnOwl* this = THIS;
+    EnOwl* this = (EnOwl*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

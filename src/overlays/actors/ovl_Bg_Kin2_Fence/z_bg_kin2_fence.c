@@ -7,9 +7,7 @@
 #include "z_bg_kin2_fence.h"
 #include "assets/objects/object_kin2_obj/object_kin2_obj.h"
 
-#define FLAGS (ACTOR_FLAG_10)
-
-#define THIS ((BgKin2Fence*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void BgKin2Fence_Init(Actor* thisx, PlayState* play);
 void BgKin2Fence_Destroy(Actor* thisx, PlayState* play);
@@ -134,14 +132,14 @@ void BgKin2Fence_SpawnEyeSparkles(BgKin2Fence* this, PlayState* play, s32 mask) 
 }
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDistance, 2000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 100, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 100, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
 void BgKin2Fence_Init(Actor* thisx, PlayState* play) {
-    BgKin2Fence* this = THIS;
+    BgKin2Fence* this = (BgKin2Fence*)thisx;
     s32 i = 0;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
@@ -165,7 +163,7 @@ void BgKin2Fence_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgKin2Fence_Destroy(Actor* thisx, PlayState* play) {
-    BgKin2Fence* this = THIS;
+    BgKin2Fence* this = (BgKin2Fence*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
     Collider_DestroyJntSph(play, &this->collider);
@@ -253,7 +251,7 @@ void BgKin2Fence_DoNothing(BgKin2Fence* this, PlayState* play) {
 }
 
 void BgKin2Fence_Update(Actor* thisx, PlayState* play) {
-    BgKin2Fence* this = THIS;
+    BgKin2Fence* this = (BgKin2Fence*)thisx;
 
     this->actionFunc(this, play);
 }

@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
-#define THIS ((EnZog*)thisx)
-
 void EnZog_Init(Actor* thisx, PlayState* play);
 void EnZog_Destroy(Actor* thisx, PlayState* play);
 void EnZog_Update(Actor* thisx, PlayState* play);
@@ -140,7 +138,7 @@ static AnimationHeader* sAnimations[ENZOG_ANIM_MAX] = {
 
 void func_80B93310(Actor* thisx, Lights* mapper, PlayState* play) {
     Vec3f sp34;
-    EnZog* this = THIS;
+    EnZog* this = (EnZog*)thisx;
     f32 sp2C;
 
     if (this->unk_322 > 0) {
@@ -190,7 +188,7 @@ void func_80B93468(EnZog* this, PlayState* play) {
 
 void EnZog_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnZog* this = THIS;
+    EnZog* this = (EnZog*)thisx;
     s32 i;
     s16 csId;
 
@@ -224,7 +222,7 @@ void EnZog_Init(Actor* thisx, PlayState* play) {
 
     this->actor.terminalVelocity = -4.0f;
     this->actor.gravity = -1.0f;
-    this->actor.uncullZoneScale = 3000.0f;
+    this->actor.cullingVolumeScale = 3000.0f;
     this->actor.shape.yOffset = 1000.0f;
     this->unk_308 = 0;
     this->unk_30A = 0;
@@ -301,7 +299,7 @@ void EnZog_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnZog_Destroy(Actor* thisx, PlayState* play) {
-    EnZog* this = THIS;
+    EnZog* this = (EnZog*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -984,7 +982,7 @@ void func_80B95240(EnZog* this, PlayState* play) {
 
 void EnZog_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnZog* this = THIS;
+    EnZog* this = (EnZog*)thisx;
 
     Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 10.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
@@ -1031,7 +1029,7 @@ void EnZog_Update(Actor* thisx, PlayState* play) {
 
 void EnZog_PostLimbDrawOpa(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f D_80B959B8 = { 0.0f, 0.0f, 0.0f };
-    EnZog* this = THIS;
+    EnZog* this = (EnZog*)thisx;
 
     D_80B959B8.y = 1000.0f;
     if (limbIndex == OBJECT_ZOG_LIMB_09) {
@@ -1054,7 +1052,7 @@ void EnZog_PostLimbDrawOpa(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* r
 
 void EnZog_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     static Vec3f D_80B959C4 = { 0.0f, 0.0f, 0.0f };
-    EnZog* this = THIS;
+    EnZog* this = (EnZog*)thisx;
 
     D_80B959C4.y = 1000.0f;
     if (limbIndex == OBJECT_ZOG_LIMB_09) {
@@ -1072,7 +1070,7 @@ void EnZog_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
 }
 
 void EnZog_Draw(Actor* thisx, PlayState* play) {
-    EnZog* this = THIS;
+    EnZog* this = (EnZog*)thisx;
     Gfx* gfx;
 
     OPEN_DISPS(play->state.gfxCtx);

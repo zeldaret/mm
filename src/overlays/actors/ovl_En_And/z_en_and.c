@@ -6,9 +6,9 @@
 
 #include "z_en_and.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
-
-#define THIS ((EnAnd*)thisx)
+#define FLAGS                                                                                  \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
+     ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 #define EYE_TEXTURES_COUNT 4
 
@@ -116,7 +116,7 @@ void EnAnd_HandleCutscene(EnAnd* this, PlayState* play) {
 }
 
 void EnAnd_Init(Actor* thisx, PlayState* play) {
-    EnAnd* this = THIS;
+    EnAnd* this = (EnAnd*)thisx;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 14.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gAndSkel, NULL, this->jointTable, this->morphTable,
@@ -133,7 +133,7 @@ void EnAnd_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnAnd_Update(Actor* thisx, PlayState* play) {
-    EnAnd* this = THIS;
+    EnAnd* this = (EnAnd*)thisx;
 
     this->actionFunc(this, play);
     SkelAnime_Update(&this->skelAnime);
@@ -141,7 +141,7 @@ void EnAnd_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnAnd_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
-    EnAnd* this = THIS;
+    EnAnd* this = (EnAnd*)thisx;
     s32 stepRot;
     s32 overrideRot;
 
@@ -190,7 +190,7 @@ void EnAnd_Draw(Actor* thisx, PlayState* play) {
         gAndEyeClosedTex,
         gAndEyeOpeningTex,
     };
-    EnAnd* this = THIS;
+    EnAnd* this = (EnAnd*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

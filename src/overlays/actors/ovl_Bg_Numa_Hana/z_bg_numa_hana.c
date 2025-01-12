@@ -8,9 +8,7 @@
 #include "assets/objects/object_numa_obj/object_numa_obj.h"
 #include "assets/objects/object_syokudai/object_syokudai.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_400)
-
-#define THIS ((BgNumaHana*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER)
 
 void BgNumaHana_Init(Actor* thisx, PlayState* play);
 void BgNumaHana_Destroy(Actor* thisx, PlayState* play);
@@ -70,9 +68,9 @@ static s16 sInitialAnglePerPetal[] = { 0x0000, 0x2AAA, 0x5555, 0x8000, 0xAAAA, 0
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 800, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 600, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeDistance, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 800, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 600, ICHAIN_STOP),
 };
 
 /**
@@ -140,7 +138,7 @@ void BgNumaHana_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     DynaPolyActor* child;
     s32 type;
-    BgNumaHana* this = THIS;
+    BgNumaHana* this = (BgNumaHana*)thisx;
 
     type = BG_NUMA_HANA_GET_TYPE(&this->dyna.actor);
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
@@ -190,7 +188,7 @@ void BgNumaHana_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgNumaHana_Destroy(Actor* thisx, PlayState* play) {
-    BgNumaHana* this = THIS;
+    BgNumaHana* this = (BgNumaHana*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
     if (BG_NUMA_HANA_GET_TYPE(&this->dyna.actor) == BG_NUMA_HANA_TYPE_NORMAL) {
@@ -351,7 +349,7 @@ void BgNumaHana_OpenedIdle(BgNumaHana* this, PlayState* play) {
 
 void BgNumaHana_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    BgNumaHana* this = THIS;
+    BgNumaHana* this = (BgNumaHana*)thisx;
     s32 type = BG_NUMA_HANA_GET_TYPE(&this->dyna.actor);
     Vec3f firePos;
 
@@ -375,7 +373,7 @@ void BgNumaHana_Update(Actor* thisx, PlayState* play) {
 
 void BgNumaHana_Draw(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    BgNumaHana* this = THIS;
+    BgNumaHana* this = (BgNumaHana*)thisx;
     WoodenFlowerPetalPosRot* innerPetalPosRot;
     WoodenFlowerPetalPosRot* outerPetalPosRot;
     s32 objectSlot;

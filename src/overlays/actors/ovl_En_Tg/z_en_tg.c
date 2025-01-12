@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
-#define THIS ((EnTg*)thisx)
-
 void EnTg_Init(Actor* thisx, PlayState* play);
 void EnTg_Destroy(Actor* thisx, PlayState* play);
 void EnTg_Update(Actor* thisx, PlayState* play);
@@ -126,7 +124,7 @@ void EnTg_UpdateSkelAnime(EnTg* this, PlayState* play) {
 }
 
 void EnTg_Init(Actor* thisx, PlayState* play) {
-    EnTg* this = THIS;
+    EnTg* this = (EnTg*)thisx;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gHoneyAndDarlingSkel, NULL, this->jointTable, this->morphTable,
@@ -141,7 +139,7 @@ void EnTg_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnTg_Destroy(Actor* thisx, PlayState* play) {
-    EnTg* this = THIS;
+    EnTg* this = (EnTg*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -164,7 +162,7 @@ void EnTg_Idle(EnTg* this, PlayState* play) {
 }
 
 void EnTg_Update(Actor* thisx, PlayState* play) {
-    EnTg* this = THIS;
+    EnTg* this = (EnTg*)thisx;
 
     this->actionFunc(this, play);
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
@@ -178,7 +176,7 @@ s32 EnTg_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
 }
 
 void EnTg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnTg* this = THIS;
+    EnTg* this = (EnTg*)thisx;
     Vec3f zeroVec = { 0.0f, 0.0f, 0.0f };
 
     if (limbIndex == HONEY_AND_DARLING_LIMB_MAN_HEAD) {
@@ -188,7 +186,7 @@ void EnTg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 
 void EnTg_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnTg* this = THIS;
+    EnTg* this = (EnTg*)thisx;
 
     Matrix_Push();
     EnTg_DrawHearts(play, this->effects, ARRAY_COUNT(this->effects));

@@ -10,9 +10,7 @@
 #include "overlays/actors/ovl_En_Mushi2/z_en_mushi2.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
-
-#define THIS ((EnFish2*)thisx)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void EnFish2_Init(Actor* thisx, PlayState* play);
 void EnFish2_Destroy(Actor* thisx, PlayState* play);
@@ -170,7 +168,7 @@ s32 func_80B28478(EnFish2* this) {
 }
 
 void EnFish2_Init(Actor* thisx, PlayState* play) {
-    EnFish2* this = THIS;
+    EnFish2* this = (EnFish2*)thisx;
     s32 i;
     s32 csId;
 
@@ -238,7 +236,7 @@ void EnFish2_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnFish2_Destroy(Actor* thisx, PlayState* play) {
-    EnFish2* this = THIS;
+    EnFish2* this = (EnFish2*)thisx;
 
     if (this->actor.params != 1) {
         Collider_DestroyJntSph(play, &this->collider);
@@ -955,7 +953,7 @@ void EnFish2_Update(Actor* thisx, PlayState* play2) {
         0.0f, 40.0f, -40.0f, 0.0f, 0.0f, 0.0f,
     };
     PlayState* play = play2;
-    EnFish2* this = THIS;
+    EnFish2* this = (EnFish2*)thisx;
 
     if ((this->actionFunc != func_80B295A4) && (this->actor.params != 1)) {
         SkelAnime_Update(&this->skelAnime);
@@ -1058,7 +1056,7 @@ void EnFish2_Update(Actor* thisx, PlayState* play2) {
 }
 
 s32 EnFish2_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnFish2* this = THIS;
+    EnFish2* this = (EnFish2*)thisx;
 
     if ((limbIndex == OBJECT_FB_LIMB_14) || (limbIndex == OBJECT_FB_LIMB_15)) {
         *dList = NULL;
@@ -1068,7 +1066,7 @@ s32 EnFish2_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
 }
 
 void EnFish2_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnFish2* this = THIS;
+    EnFish2* this = (EnFish2*)thisx;
     s32 pad;
 
     if ((limbIndex == OBJECT_FB_LIMB_14) || (limbIndex == OBJECT_FB_LIMB_15)) {
@@ -1097,7 +1095,7 @@ void EnFish2_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
 }
 
 void EnFish2_Draw(Actor* thisx, PlayState* play) {
-    EnFish2* this = THIS;
+    EnFish2* this = (EnFish2*)thisx;
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);

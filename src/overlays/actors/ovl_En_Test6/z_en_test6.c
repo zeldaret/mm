@@ -12,9 +12,9 @@
 
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_200000 | ACTOR_FLAG_UPDATE_DURING_OCARINA)
-
-#define THIS ((EnTest6*)thisx)
+#define FLAGS                                                                \
+    (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED | \
+     ACTOR_FLAG_UPDATE_DURING_SOARING_AND_SOT_CS | ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
 void EnTest6_Init(Actor* thisx, PlayState* play2);
 void EnTest6_Destroy(Actor* thisx, PlayState* play2);
@@ -347,7 +347,7 @@ void EnTest6_SetupAction(EnTest6* this, EnTest6ActionFunc actionFunc) {
 
 void EnTest6_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnTest6* this = THIS;
+    EnTest6* this = (EnTest6*)thisx;
     s32 i;
 
     if (((SOTCS_GET_OCARINA_MODE(&this->actor) == OCARINA_MODE_APPLY_INV_SOT_FAST) ||
@@ -375,7 +375,7 @@ void EnTest6_Init(Actor* thisx, PlayState* play2) {
 
 void EnTest6_Destroy(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnTest6* this = THIS;
+    EnTest6* this = (EnTest6*)thisx;
     s32 i;
 
     play->envCtx.adjLightSettings.ambientColor[0] = 0;
@@ -452,7 +452,7 @@ void EnTest6_StopInvertedSoTCutscene(EnTest6* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     player->actor.freezeTimer = 0;
-    play->unk_18844 = false;
+    play->soaringCsOrSoTCsPlaying = false;
     CutsceneManager_Stop(play->playerCsIds[PLAYER_CS_ID_SONG_WARP]);
     Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_END);
     EnTest6_DisableMotionBlur();
@@ -534,7 +534,7 @@ void EnTest6_InvertedSoTCutscene(EnTest6* this, PlayState* play) {
                 Distortion_Request(DISTORTION_TYPE_SONG_OF_TIME);
                 Distortion_SetDuration(80);
 
-                play->unk_18844 = true;
+                play->soaringCsOrSoTCsPlaying = true;
                 this->cueId = SOTCS_CUEID_INV_CLOCKS;
             }
             break;
@@ -596,7 +596,7 @@ void EnTest6_InvertedSoTCutscene(EnTest6* this, PlayState* play) {
                 this->speed = 0.1f;
                 EnTest6_DisableMotionBlur();
                 Distortion_RemoveRequest(DISTORTION_TYPE_SONG_OF_TIME);
-                play->unk_18844 = false;
+                play->soaringCsOrSoTCsPlaying = false;
                 if (this->invSoTParticles != NULL) {
                     ZeldaArena_Free(this->invSoTParticles);
                 }
@@ -706,7 +706,7 @@ void EnTest6_StopDoubleSoTCutscene(EnTest6* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     player->actor.freezeTimer = 0;
-    play->unk_18844 = false;
+    play->soaringCsOrSoTCsPlaying = false;
     CutsceneManager_Stop(play->playerCsIds[PLAYER_CS_ID_SONG_WARP]);
     Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_END);
     EnTest6_DisableMotionBlur();
@@ -757,7 +757,7 @@ void EnTest6_DoubleSoTCutscene(EnTest6* this, PlayState* play) {
         Environment_LerpDiffuseColor(play, &sDoubleSoTCsDiffuseColor, 1.0f);
         Environment_LerpFogColor(play, &sDoubleSoTCsFogColor, 1.0f);
         Environment_LerpFog(play, sDoubleSoTCsFogNear, sDoubleSoTCsZFar, 1.0f);
-        play->unk_18844 = true;
+        play->soaringCsOrSoTCsPlaying = true;
     }
 
     if (this->timer == 15) {
@@ -765,7 +765,7 @@ void EnTest6_DoubleSoTCutscene(EnTest6* this, PlayState* play) {
         Environment_LerpDiffuseColor(play, &sDoubleSoTCsDiffuseColor, 0.0f);
         Environment_LerpFogColor(play, &sDoubleSoTCsFogColor, 0.0f);
         Environment_LerpFog(play, sDoubleSoTCsFogNear, sDoubleSoTCsZFar, 0.0f);
-        play->unk_18844 = false;
+        play->soaringCsOrSoTCsPlaying = false;
     }
 
     if (this->screenFillAlpha >= 20) {
@@ -773,7 +773,7 @@ void EnTest6_DoubleSoTCutscene(EnTest6* this, PlayState* play) {
         Environment_LerpDiffuseColor(play, &sDoubleSoTCsDiffuseColor, this->doubleSoTEnvLerp);
         Environment_LerpFogColor(play, &sDoubleSoTCsFogColor, this->doubleSoTEnvLerp);
         Environment_LerpFog(play, sDoubleSoTCsFogNear, sDoubleSoTCsZFar, this->doubleSoTEnvLerp);
-        play->unk_18844 = false;
+        play->soaringCsOrSoTCsPlaying = false;
     }
 
     Actor_PlaySfx_Flagged2(&player->actor, NA_SE_PL_FLYING_AIR - SFX_FLAG);
@@ -921,7 +921,7 @@ void EnTest6_DoubleSoTCutscene(EnTest6* this, PlayState* play) {
 }
 
 void EnTest6_Update(Actor* thisx, PlayState* play) {
-    EnTest6* this = THIS;
+    EnTest6* this = (EnTest6*)thisx;
 
     this->actionFunc(this, play);
 }
@@ -1082,7 +1082,7 @@ void EnTest6_SharedSoTCutscene(EnTest6* this, PlayState* play) {
 
             case SOTCS_CUEID_DOUBLE_END:
                 Play_SetRespawnData(play, RESPAWN_MODE_RETURN, ((void)0, gSaveContext.save.entrance), player->unk_3CE,
-                                    PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B), &player->unk_3C0, player->unk_3CC);
+                                    PLAYER_PARAMS(0xFF, PLAYER_START_MODE_B), &player->unk_3C0, player->unk_3CC);
                 this->drawType = SOTCS_DRAW_TYPE_NONE;
                 play->transitionTrigger = TRANS_TRIGGER_START;
                 play->nextEntrance = gSaveContext.respawn[RESPAWN_MODE_RETURN].entrance;
@@ -1164,7 +1164,7 @@ void EnTest6_SharedSoTCutscene(EnTest6* this, PlayState* play) {
             case SOTCS_CUEID_DOUBLE_END:
                 if (CURRENT_TIME > CLOCK_TIME(12, 0)) {
                     Play_SetRespawnData(play, RESPAWN_MODE_RETURN, ((void)0, gSaveContext.save.entrance),
-                                        player->unk_3CE, PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B), &player->unk_3C0,
+                                        player->unk_3CE, PLAYER_PARAMS(0xFF, PLAYER_START_MODE_B), &player->unk_3C0,
                                         player->unk_3CC);
                     this->drawType = SOTCS_DRAW_TYPE_NONE;
                     play->transitionTrigger = TRANS_TRIGGER_START;
@@ -1423,7 +1423,7 @@ void EnTest6_DrawInvertedSoTCutscene(EnTest6* this, PlayState* play2) {
 }
 
 void EnTest6_Draw(Actor* thisx, PlayState* play) {
-    EnTest6* this = THIS;
+    EnTest6* this = (EnTest6*)thisx;
 
     if (this->cueId != SOTCS_CUEID_NONE) {
         switch (this->drawType) {

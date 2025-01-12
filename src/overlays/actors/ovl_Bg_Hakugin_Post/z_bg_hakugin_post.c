@@ -9,9 +9,7 @@
 #include "z64rumble.h"
 #include "assets/objects/object_hakugin_obj/object_hakugin_obj.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
-
-#define THIS ((BgHakuginPost*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 void BgHakuginPost_Init(Actor* thisx, PlayState* play);
 void BgHakuginPost_Destroy(Actor* thisx, PlayState* play);
@@ -688,7 +686,7 @@ void func_80A9C854(BgHakuginPost* this, PlayState* play) {
 
 void BgHakuginPost_Init(Actor* thisx, PlayState* play) {
     static s32 D_80A9D8FC = 1;
-    BgHakuginPost* this = THIS;
+    BgHakuginPost* this = (BgHakuginPost*)thisx;
 
     if (D_80A9D8FC != 0) {
         D_80A9D8FC = 0;
@@ -713,7 +711,7 @@ void BgHakuginPost_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgHakuginPost_Destroy(Actor* thisx, PlayState* play) {
-    BgHakuginPost* this = THIS;
+    BgHakuginPost* this = (BgHakuginPost*)thisx;
 
     if (BGHAKUGINPOST_GET_7(&this->dyna.actor) == 7) {
         DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
@@ -951,7 +949,7 @@ void func_80A9D434(BgHakuginPost* this, PlayState* play) {
 }
 
 void BgHakuginPost_Update(Actor* thisx, PlayState* play) {
-    BgHakuginPost* this = THIS;
+    BgHakuginPost* this = (BgHakuginPost*)thisx;
     f32 temp;
 
     func_80A9B46C(this, play);
@@ -1003,7 +1001,7 @@ void func_80A9D61C(Actor* thisx, PlayState* play) {
         object_hakugin_obj_DL_00D098,
         object_hakugin_obj_DL_00D098,
     };
-    BgHakuginPost* this = THIS;
+    BgHakuginPost* this = (BgHakuginPost*)thisx;
     BgHakuginPostUnkStruct1* unkStruct1;
     BgHakuginPostUnkStruct2* unkStruct2;
     Vec3f sp68;

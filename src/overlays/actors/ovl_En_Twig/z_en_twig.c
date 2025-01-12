@@ -6,9 +6,7 @@
 #include "z_en_twig.h"
 #include "assets/objects/object_twig/object_twig.h"
 
-#define FLAGS (ACTOR_FLAG_10)
-
-#define THIS ((EnTwig*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void EnTwig_Init(Actor* thisx, PlayState* play2);
 void EnTwig_Destroy(Actor* thisx, PlayState* play2);
@@ -49,15 +47,15 @@ static CollisionHeader* sColHeaders[] = {
 static s16 sRingsHaveSpawned = false;
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneScale, 40, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 40, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneForward, 1000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 40, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 40, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDistance, 1000, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
 };
 
 void EnTwig_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnTwig* this = THIS;
+    EnTwig* this = (EnTwig*)thisx;
     s32 i;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
@@ -90,14 +88,16 @@ void EnTwig_Init(Actor* thisx, PlayState* play2) {
                 return;
             }
             Actor_SetScale(&this->dyna.actor, 4.2f);
-            this->dyna.actor.uncullZoneScale = this->dyna.actor.uncullZoneDownward = this->dyna.actor.scale.x * 60.0f;
+            this->dyna.actor.cullingVolumeScale = this->dyna.actor.cullingVolumeDownward =
+                this->dyna.actor.scale.x * 60.0f;
             DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
             func_80AC0A7C(this, play);
             break;
 
         case 2:
             Actor_SetScale(&this->dyna.actor, 1.0f);
-            this->dyna.actor.uncullZoneScale = this->dyna.actor.uncullZoneDownward = this->dyna.actor.scale.x * 880.0f;
+            this->dyna.actor.cullingVolumeScale = this->dyna.actor.cullingVolumeDownward =
+                this->dyna.actor.scale.x * 880.0f;
             func_80AC0A54(this, play);
             break;
 
@@ -108,7 +108,7 @@ void EnTwig_Init(Actor* thisx, PlayState* play2) {
 
 void EnTwig_Destroy(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnTwig* this = THIS;
+    EnTwig* this = (EnTwig*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
@@ -229,13 +229,13 @@ void func_80AC0D2C(EnTwig* this, PlayState* play) {
 
 void EnTwig_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnTwig* this = THIS;
+    EnTwig* this = (EnTwig*)thisx;
 
     this->actionFunc(this, play);
 }
 
 void EnTwig_Draw(Actor* thisx, PlayState* play) {
-    EnTwig* this = THIS;
+    EnTwig* this = (EnTwig*)thisx;
 
     switch (this->unk_160) {
         case 1:

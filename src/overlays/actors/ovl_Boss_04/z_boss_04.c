@@ -9,9 +9,9 @@
 #include "attributes.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20)
-
-#define THIS ((Boss04*)thisx)
+#define FLAGS                                                                                 \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
+     ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 void Boss04_Init(Actor* thisx, PlayState* play2);
 void Boss04_Destroy(Actor* thisx, PlayState* play);
@@ -146,7 +146,7 @@ void Boss04_Init(Actor* thisx, PlayState* play2) {
         { 0.0f, 0.0f, 1000.0f },
     };
     PlayState* play = play2;
-    Boss04* this = THIS;
+    Boss04* this = (Boss04*)thisx;
     s32 i;
     CollisionPoly* spC0;
     Vec3f spB4;
@@ -672,7 +672,7 @@ void func_809ED50C(Boss04* this) {
 
 void Boss04_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    Boss04* this = THIS;
+    Boss04* this = (Boss04*)thisx;
     s16 temp_v0_8;
     s32 pad;
 
@@ -772,7 +772,7 @@ void Boss04_Update(Actor* thisx, PlayState* play2) {
 }
 
 s32 Boss04_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    Boss04* this = THIS;
+    Boss04* this = (Boss04*)thisx;
 
     if (limbIndex == KREG(32)) {
         if (!(this->unk_1F4 & 3)) {
@@ -802,7 +802,7 @@ s32 Boss04_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
 void Boss04_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f D_809EE228 = { 0.0f, -200.0f, 0.0f };
     static Vec3f D_809EE234 = { 0.0f, 720.0f, 0.0f };
-    Boss04* this = THIS;
+    Boss04* this = (Boss04*)thisx;
     Vec3f sp18;
 
     if (limbIndex == WART_LIMB_ROOT) {
@@ -815,7 +815,7 @@ void Boss04_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot
 }
 
 void Boss04_Draw(Actor* thisx, PlayState* play) {
-    Boss04* this = THIS;
+    Boss04* this = (Boss04*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

@@ -12,8 +12,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
-#define THIS ((EnSth*)thisx)
-
 void EnSth_Init(Actor* thisx, PlayState* play);
 void EnSth_Destroy(Actor* thisx, PlayState* play);
 void EnSth_UpdateWaitForObject(Actor* thisx, PlayState* play);
@@ -115,7 +113,7 @@ static Color_RGB8 sShirtColors[] = {
 
 void EnSth_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnSth* this = THIS;
+    EnSth* this = (EnSth*)thisx;
     s32 objectSlot;
 
     // this actor can draw two separate bodies that use different objects
@@ -140,7 +138,7 @@ void EnSth_Init(Actor* thisx, PlayState* play) {
     switch (STH_GET_TYPE(&this->actor)) {
         case STH_TYPE_UNUSED_1:
             if (play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON) {
-                this->actor.flags |= (ACTOR_FLAG_10 | ACTOR_FLAG_20);
+                this->actor.flags |= (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED);
                 this->actionFunc = EnSth_DefaultIdle;
             } else {
                 Actor_Kill(&this->actor);
@@ -170,7 +168,7 @@ void EnSth_Init(Actor* thisx, PlayState* play) {
             this->actionFunc = EnSth_MoonLookingIdle;
             this->sthFlags |= STH_FLAG_DISABLE_HEAD_TRACK;
             this->actor.attentionRangeType = ATTENTION_RANGE_3;
-            this->actor.uncullZoneForward = 800.0f;
+            this->actor.cullingVolumeDistance = 800.0f;
             break;
 
         case STH_TYPE_OCEANSIDE_SPIDER_HOUSE_GREET:
@@ -205,7 +203,7 @@ void EnSth_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnSth_Destroy(Actor* thisx, PlayState* play) {
-    EnSth* this = THIS;
+    EnSth* this = (EnSth*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -610,7 +608,7 @@ void EnSth_SwampSpiderHouseIdle(EnSth* this, PlayState* play) {
  * Here we wait invisible until the player has finished.
  */
 void EnSth_UpdateOceansideSpiderHouseWaitForTokens(Actor* thisx, PlayState* play) {
-    EnSth* this = THIS;
+    EnSth* this = (EnSth*)thisx;
 
     if (Inventory_GetSkullTokenCount(play->sceneId) >= SPIDER_HOUSE_TOKENS_REQUIRED) {
         this->actor.update = EnSth_Update;
@@ -625,7 +623,7 @@ void EnSth_UpdateOceansideSpiderHouseWaitForTokens(Actor* thisx, PlayState* play
  */
 void EnSth_UpdateWaitForObject(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnSth* this = THIS;
+    EnSth* this = (EnSth*)thisx;
 
     if (Object_IsLoaded(&play->objectCtx, this->mainObjectSlot)) {
         this->actor.objectSlot = this->mainObjectSlot;
@@ -680,7 +678,7 @@ void EnSth_UpdateWaitForObject(Actor* thisx, PlayState* play) {
 
 void EnSth_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnSth* this = THIS;
+    EnSth* this = (EnSth*)thisx;
 
     Actor_MoveWithGravity(&this->actor);
     Collider_UpdateCylinder(&this->actor, &this->collider);
@@ -704,7 +702,7 @@ void EnSth_Update(Actor* thisx, PlayState* play) {
 
 s32 EnSth_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     s32 pad;
-    EnSth* this = THIS;
+    EnSth* this = (EnSth*)thisx;
 
     if (limbIndex == STH_LIMB_HEAD) {
         rot->x += this->headRot.y;
@@ -724,7 +722,7 @@ s32 EnSth_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 }
 
 void EnSth_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnSth* this = THIS;
+    EnSth* this = (EnSth*)thisx;
 
     if (limbIndex == STH_LIMB_HEAD) {
         s32 pad;
@@ -761,7 +759,7 @@ void EnSth_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
 
 void EnSth_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnSth* this = THIS;
+    EnSth* this = (EnSth*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

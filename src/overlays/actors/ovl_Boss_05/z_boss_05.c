@@ -32,8 +32,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE)
 
-#define THIS ((Boss05*)thisx)
-
 // This actor has an array of timers in its instance, but for the most part, it only uses the first entry
 #define TIMER_CURRENT_ACTION 0
 #define TIMER_FALLING_HEAD_FALL 2
@@ -344,7 +342,7 @@ ActorProfile Boss_05_Profile = {
 
 void Boss05_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    Boss05* this = THIS;
+    Boss05* this = (Boss05*)thisx;
     CollisionHeader* colHeader = NULL;
 
     this->dyna.actor.attentionRangeType = ATTENTION_RANGE_3;
@@ -430,7 +428,7 @@ void Boss05_Init(Actor* thisx, PlayState* play) {
 
         ActorShape_Init(&this->dyna.actor.shape, 0.0f, ActorShadow_DrawCircle, 30.0f);
         this->dyna.actor.colChkInfo.damageTable = &sWalkingHeadDamageTable;
-        this->dyna.actor.flags |= ACTOR_FLAG_10 | ACTOR_FLAG_20;
+        this->dyna.actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED;
     } else if (BIO_BABA_GET_TYPE(&this->dyna.actor) >= BIO_BABA_TYPE_FRAGMENT_BASE) {
         SkelAnime_InitFlex(play, &this->headSkelAnime, &gBioDekuBabaHeadSkel, &gBioDekuBabaHeadChompAnim,
                            this->headJointTable, this->headMorphTable, BIO_DEKU_BABA_HEAD_LIMB_MAX);
@@ -450,7 +448,7 @@ void Boss05_Init(Actor* thisx, PlayState* play) {
 }
 
 void Boss05_Destroy(Actor* thisx, PlayState* play) {
-    Boss05* this = THIS;
+    Boss05* this = (Boss05*)thisx;
 
     if ((BIO_BABA_GET_TYPE(&this->dyna.actor) == BIO_BABA_TYPE_LILY_PAD) ||
         (BIO_BABA_GET_TYPE(&this->dyna.actor) == BIO_BABA_TYPE_LILY_PAD_WITH_HEAD) ||
@@ -1308,7 +1306,7 @@ void Boss05_Fragment_Move(Boss05* this, PlayState* play) {
 
 void Boss05_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    Boss05* this = THIS;
+    Boss05* this = (Boss05*)thisx;
     s16 i;
 
     this->frameCounter++;
@@ -1425,7 +1423,7 @@ static s8 sLimbIndexToLimbRotIndex[] = {
 
 s32 Boss05_LilyPadWithHead_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
                                             Actor* thisx) {
-    Boss05* this = THIS;
+    Boss05* this = (Boss05*)thisx;
     s8 limbRotIndex;
 
     if (limbIndex == KREG(32)) {
@@ -1459,7 +1457,7 @@ s32 Boss05_LilyPadWithHead_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx*
 
 void Boss05_LilyPad_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f sHeadOffset = { 0.0f, -1400.0f, 600.0f };
-    Boss05* this = THIS;
+    Boss05* this = (Boss05*)thisx;
     MtxF mf;
     Vec3f upperStemPos;
     Vec3f lowerStemPos;
@@ -1500,7 +1498,7 @@ Vec3f sBioDekuBabaHeadColliderPos;
 void Boss05_Head_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f sHeadColliderOffset = { 1600.0f, -300.0f, 0.0f };
     static Vec3f sHeadOffset = { 700.0f, 0.0f, 0.0f };
-    Boss05* this = THIS;
+    Boss05* this = (Boss05*)thisx;
 
     if (limbIndex == BIO_DEKU_BABA_HEAD_LIMB_BODY) {
         Matrix_MultVec3f(&sHeadColliderOffset, &sBioDekuBabaHeadColliderPos);
@@ -1520,7 +1518,7 @@ void Boss05_Head_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s
 }
 
 void Boss05_Head_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
-    Boss05* this = THIS;
+    Boss05* this = (Boss05*)thisx;
 
     if ((limbIndex == BIO_DEKU_BABA_HEAD_LIMB_LOWER_JAW) || (limbIndex == BIO_DEKU_BABA_HEAD_LIMB_UPPER_JAW)) {
         Matrix_Scale(this->lowerJawScaleXZ, 1.0f, this->lowerJawScaleXZ, MTXMODE_APPLY);
@@ -1555,7 +1553,7 @@ s32 Boss05_FallingHeadLilyPad_OverrideLimbDraw(PlayState* play, s32 limbIndex, G
 }
 
 void Boss05_FallingHeadLilyPad_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
-    Boss05* this = THIS;
+    Boss05* this = (Boss05*)thisx;
 
     if ((limbIndex >= BIO_DEKU_BABA_LILY_PAD_LIMB_MIDDLE_STEM) &&
         (limbIndex <= BIO_DEKU_BABA_LILY_PAD_LIMB_RIGHT_LOWER_ARM)) {
@@ -1583,7 +1581,7 @@ static BioDekuBabaHeadLimb sFragmentIndexToLimbIndex[BIO_BABA_TYPE_MAX - BIO_BAB
 
 s32 Boss05_Fragment_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
                                      Actor* thisx) {
-    Boss05* this = THIS;
+    Boss05* this = (Boss05*)thisx;
 
     if (limbIndex != sFragmentIndexToLimbIndex[BIO_BABA_GET_FRAGMENT_INDEX(&this->dyna.actor)]) {
         *dList = NULL;
@@ -1597,7 +1595,7 @@ s32 Boss05_Fragment_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList
 }
 
 void Boss05_Fragment_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    Boss05* this = THIS;
+    Boss05* this = (Boss05*)thisx;
 
     if (limbIndex != sFragmentIndexToLimbIndex[BIO_BABA_GET_FRAGMENT_INDEX(&this->dyna.actor)]) {
         Matrix_MultZero(&this->fragmentPos);
@@ -1606,7 +1604,7 @@ void Boss05_Fragment_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, V
 
 void Boss05_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
-    Boss05* this = THIS;
+    Boss05* this = (Boss05*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

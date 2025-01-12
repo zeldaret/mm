@@ -8,9 +8,7 @@
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_200)
-
-#define THIS ((EnRat*)thisx)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR)
 
 void EnRat_Init(Actor* thisx, PlayState* play);
 void EnRat_Destroy(Actor* thisx, PlayState* play);
@@ -143,7 +141,7 @@ static s32 sTexturesDesegmented = false;
 
 void EnRat_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnRat* this = THIS;
+    EnRat* this = (EnRat*)thisx;
     s32 attackRange;
     s32 i;
 
@@ -194,7 +192,7 @@ void EnRat_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnRat_Destroy(Actor* thisx, PlayState* play) {
-    EnRat* this = THIS;
+    EnRat* this = (EnRat*)thisx;
 
     if (EN_RAT_GET_TYPE(&this->actor) == EN_RAT_TYPE_DUNGEON) {
         Effect_Destroy(play, this->blure1Index);
@@ -575,7 +573,7 @@ void EnRat_Revive(EnRat* this, PlayState* play) {
         }
 
         if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
-            this->actor.flags &= ~ACTOR_FLAG_10;
+            this->actor.flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED;
             this->timer = 150;
             EnRat_SetupIdle(this);
         }
@@ -615,7 +613,7 @@ void EnRat_Idle(EnRat* this, PlayState* play) {
 }
 
 void EnRat_SetupSpottedPlayer(EnRat* this) {
-    this->actor.flags |= ACTOR_FLAG_10;
+    this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     Animation_MorphToLoop(&this->skelAnime, &gRealBombchuSpotAnim, -5.0f);
     this->animLoopCounter = 3;
     this->actor.speed = 0.0f;
@@ -781,7 +779,7 @@ void EnRat_PostDetonation(EnRat* this, PlayState* play) {
 
 void EnRat_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnRat* this = THIS;
+    EnRat* this = (EnRat*)thisx;
 
     this->shouldRotateOntoSurfaces = false;
     if (this->damageReaction.stunTimer == 0) {
@@ -835,7 +833,7 @@ void EnRat_Update(Actor* thisx, PlayState* play) {
             if (this->damageReaction.hookedState == EN_RAT_HOOK_STARTED) {
                 // The player just hit the Real Bombchu with the Hookshot.
                 this->damageReaction.hookedState = EN_RAT_HOOKED;
-            } else if (!CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_2000)) {
+            } else if (!CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_HOOKSHOT_ATTACHED)) {
                 // The player has hooked the Real Bombchu for more than one frame, but
                 // the actor flag indicating that the Hookshot is attached is *not* set.
                 EnRat_Explode(this, play);
@@ -893,7 +891,7 @@ void EnRat_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnRat_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnRat* this = THIS;
+    EnRat* this = (EnRat*)thisx;
 
     if (limbIndex == REAL_BOMBCHU_LIMB_BODY) {
         pos->y -= this->revivePosY;
@@ -908,7 +906,7 @@ s32 EnRat_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 
 void EnRat_PostLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     PlayState* play = play2;
-    EnRat* this = THIS;
+    EnRat* this = (EnRat*)thisx;
     MtxF* currentMatrixState;
     Vec3f* ptr;
     f32 redModifier;
@@ -969,7 +967,7 @@ void EnRat_PostLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3s* rot
 }
 
 void EnRat_Draw(Actor* thisx, PlayState* play) {
-    EnRat* this = THIS;
+    EnRat* this = (EnRat*)thisx;
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     Gfx_SetupDL60_XluNoCD(play->state.gfxCtx);

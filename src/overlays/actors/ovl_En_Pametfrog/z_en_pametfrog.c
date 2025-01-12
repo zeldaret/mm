@@ -11,9 +11,9 @@
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20)
-
-#define THIS ((EnPametfrog*)thisx)
+#define FLAGS                                                                                 \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
+     ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 void EnPametfrog_Init(Actor* thisx, PlayState* play);
 void EnPametfrog_Destroy(Actor* thisx, PlayState* play);
@@ -180,7 +180,7 @@ static s32 sIsFrogReturnedFlags[] = {
 };
 
 void EnPametfrog_Init(Actor* thisx, PlayState* play) {
-    EnPametfrog* this = THIS;
+    EnPametfrog* this = (EnPametfrog*)thisx;
     s32 i;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
@@ -213,7 +213,7 @@ void EnPametfrog_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnPametfrog_Destroy(Actor* thisx, PlayState* play) {
-    EnPametfrog* this = THIS;
+    EnPametfrog* this = (EnPametfrog*)thisx;
 
     Collider_DestroyJntSph(play, &this->collider);
 }
@@ -1329,7 +1329,7 @@ void EnPametfrog_ApplyDamageEffect(EnPametfrog* this, PlayState* play) {
 }
 
 void EnPametfrog_Update(Actor* thisx, PlayState* play) {
-    EnPametfrog* this = THIS;
+    EnPametfrog* this = (EnPametfrog*)thisx;
     f32 unk2C4;
     f32 wallCheckRadius;
 
@@ -1409,7 +1409,7 @@ static s8 sLimbToBodyParts[GEKKO_LIMB_MAX] = {
 };
 
 void EnPametfrog_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnPametfrog* this = THIS;
+    EnPametfrog* this = (EnPametfrog*)thisx;
     Vec3f vec;
     Vec3s* center;
     s8 bodyPartIndex;
@@ -1435,7 +1435,7 @@ void EnPametfrog_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s
 }
 
 void EnPametfrog_Draw(Actor* thisx, PlayState* play) {
-    EnPametfrog* this = THIS;
+    EnPametfrog* this = (EnPametfrog*)thisx;
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     Matrix_RotateYS(this->spinYaw, MTXMODE_APPLY);

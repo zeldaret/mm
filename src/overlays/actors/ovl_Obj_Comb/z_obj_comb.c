@@ -9,8 +9,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((ObjComb*)thisx)
-
 void ObjComb_Init(Actor* thisx, PlayState* play);
 void ObjComb_Destroy(Actor* thisx, PlayState* play2);
 void ObjComb_Update(Actor* thisx, PlayState* play);
@@ -63,9 +61,9 @@ static ColliderJntSphInit sJntSphInit = {
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneForward, 1200, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeDistance, 1200, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 100, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 100, ICHAIN_STOP),
 };
 
 bool func_8098CE40(ObjComb* this, PlayState* play) {
@@ -328,7 +326,7 @@ void func_8098DA74(ObjComb* this, PlayState* play) {
 
 void ObjComb_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    ObjComb* this = THIS;
+    ObjComb* this = (ObjComb*)thisx;
     s32 sp2C = OBJCOMB_GET_8000(&this->actor) | OBJCOMB_GET_80(&this->actor);
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
@@ -343,7 +341,7 @@ void ObjComb_Init(Actor* thisx, PlayState* play) {
 
     if ((sp2C == 0) && Item_CanDropBigFairy(play, OBJCOMB_GET_3F(&this->actor), OBJCOMB_GET_7F00(&this->actor))) {
         this->unk_1B7 = 1;
-        this->actor.flags |= ACTOR_FLAG_10;
+        this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     }
 
     if ((sp2C != 2) || !func_8098CE40(this, play)) {
@@ -354,7 +352,7 @@ void ObjComb_Init(Actor* thisx, PlayState* play) {
 
 void ObjComb_Destroy(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    ObjComb* this = THIS;
+    ObjComb* this = (ObjComb*)thisx;
 
     Collider_DestroyJntSph(play, &this->collider);
 }
@@ -398,7 +396,7 @@ void func_8098DC60(ObjComb* this, PlayState* play) {
             if ((this->unk_1B2 <= 0) && (dmgFlags & 0x13820)) {
                 if (this->unk_1B5 == 0) {
                     this->unk_1B5 = 1;
-                    this->actor.flags |= ACTOR_FLAG_10;
+                    this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
                 }
                 this->unk_1B2 = 20;
             }
@@ -427,7 +425,7 @@ void func_8098DC60(ObjComb* this, PlayState* play) {
 }
 
 void func_8098DE58(ObjComb* this) {
-    this->actor.flags |= ACTOR_FLAG_10;
+    this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     this->unk_1B4 = 100;
     this->actor.terminalVelocity = -20.0f;
     this->actor.gravity = -1.5f;
@@ -501,7 +499,7 @@ void func_8098E0B8(ObjComb* this, PlayState* play) {
 }
 
 void ObjComb_Update(Actor* thisx, PlayState* play) {
-    ObjComb* this = THIS;
+    ObjComb* this = (ObjComb*)thisx;
 
     this->unk_1B3 = (this->collider.base.acFlags & AC_HIT) != 0;
     if (this->unk_1B3) {
@@ -546,13 +544,13 @@ void ObjComb_Update(Actor* thisx, PlayState* play) {
 
         if (this->unk_1B7 != 0) {
             play->actorCtx.flags |= ACTORCTX_FLAG_3;
-            this->actor.flags |= ACTOR_FLAG_10;
+            this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
         }
     }
 }
 
 void ObjComb_Draw(Actor* thisx, PlayState* play) {
-    ObjComb* this = THIS;
+    ObjComb* this = (ObjComb*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

@@ -6,9 +6,7 @@
 
 #include "z_en_ja.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
-
-#define THIS ((EnJa*)thisx)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void EnJa_Init(Actor* thisx, PlayState* play);
 void EnJa_Destroy(Actor* thisx, PlayState* play);
@@ -419,7 +417,7 @@ void func_80BC22F4(EnJa* this, PlayState* play) {
 }
 
 void EnJa_Init(Actor* thisx, PlayState* play) {
-    EnJa* this = THIS;
+    EnJa* this = (EnJa*)thisx;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 18.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &object_boj_Skel_00C240, NULL, this->jointTable, this->morphTable,
@@ -430,7 +428,7 @@ void EnJa_Init(Actor* thisx, PlayState* play) {
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.attentionRangeType = ATTENTION_RANGE_0;
-    this->actor.uncullZoneForward = 800.0f;
+    this->actor.cullingVolumeDistance = 800.0f;
     this->actor.gravity = 0.0f;
     SubS_SetOfferMode(&this->unk_340, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
     this->unk_340 |= 0x10;
@@ -440,13 +438,13 @@ void EnJa_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnJa_Destroy(Actor* thisx, PlayState* play) {
-    EnJa* this = THIS;
+    EnJa* this = (EnJa*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
 
 void EnJa_Update(Actor* thisx, PlayState* play) {
-    EnJa* this = THIS;
+    EnJa* this = (EnJa*)thisx;
     f32 height;
     f32 radius;
 
@@ -476,7 +474,7 @@ void EnJa_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnJa_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnJa* this = THIS;
+    EnJa* this = (EnJa*)thisx;
 
     if (limbIndex == OBJECT_BOJ_LIMB_0F) {
         func_80BC1E40(this, play);
@@ -491,7 +489,7 @@ void EnJa_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
     static Vec3f D_80BC3798 = { 400.0f, 0.0f, 400.0f };
     static Vec3s D_80BC37A4 = { 0x7770, -0x4BC, -0x251C };
     s32 pad;
-    EnJa* this = THIS;
+    EnJa* this = (EnJa*)thisx;
     s32 pad2;
 
     if (limbIndex == OBJECT_BOJ_LIMB_0F) {
@@ -596,7 +594,7 @@ void EnJa_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 }
 
 void EnJa_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
-    EnJa* this = THIS;
+    EnJa* this = (EnJa*)thisx;
     s32 stepRot;
     s32 overrideRot;
 
@@ -663,7 +661,7 @@ void EnJa_Draw(Actor* thisx, PlayState* play) {
         object_boj_Tex_0063B0,
     };
     s32 pad;
-    EnJa* this = THIS;
+    EnJa* this = (EnJa*)thisx;
     s32 phi_t2;
 
     if (ENJA_GET_3(&this->actor) == 0) {

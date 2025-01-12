@@ -7,9 +7,7 @@
 #include "z_obj_shutter.h"
 #include "assets/objects/object_f53_obj/object_f53_obj.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
-
-#define THIS ((ObjShutter*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 void ObjShutter_Init(Actor* thisx, PlayState* play);
 void ObjShutter_Destroy(Actor* thisx, PlayState* play);
@@ -37,7 +35,7 @@ void ObjShutter_Destroy(Actor* thisx, PlayState* play) {
 #include "src/overlays/actors/ovl_Obj_Shutter/scheduleScripts.schl.inc"
 
 void ObjShutter_Update(Actor* thisx, PlayState* play2) {
-    ObjShutter* this = THIS;
+    ObjShutter* this = (ObjShutter*)thisx;
     PlayState* play = play2;
     ScheduleOutput scheduleOutput;
 
@@ -72,7 +70,7 @@ void ObjShutter_Update(Actor* thisx, PlayState* play2) {
 }
 
 void ObjShutter_Draw(Actor* thisx, PlayState* play) {
-    ObjShutter* this = THIS;
+    ObjShutter* this = (ObjShutter*)thisx;
 
     Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y + this->verticalOffset, this->actor.world.pos.z,
                      MTXMODE_NEW);

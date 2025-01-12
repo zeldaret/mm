@@ -7,9 +7,7 @@
 #include "z_bg_open_spot.h"
 #include "assets/objects/object_open_obj/object_open_obj.h"
 
-#define FLAGS (ACTOR_FLAG_10)
-
-#define THIS ((BgOpenSpot*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void BgOpenSpot_Init(Actor* thisx, PlayState* play);
 void BgOpenSpot_Destroy(Actor* thisx, PlayState* play);
@@ -29,14 +27,14 @@ ActorProfile Bg_Open_Spot_Profile = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 560, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 800, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDistance, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 560, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 800, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
 void BgOpenSpot_Init(Actor* thisx, PlayState* play) {
-    BgOpenSpot* this = THIS;
+    BgOpenSpot* this = (BgOpenSpot*)thisx;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     this->texScrolls = Lib_SegmentedToVirtual(gSpotlightTexAnim);
@@ -46,7 +44,7 @@ void BgOpenSpot_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void BgOpenSpot_Update(Actor* thisx, PlayState* play) {
-    BgOpenSpot* this = THIS;
+    BgOpenSpot* this = (BgOpenSpot*)thisx;
     u32 cueId;
 
     if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_125)) {

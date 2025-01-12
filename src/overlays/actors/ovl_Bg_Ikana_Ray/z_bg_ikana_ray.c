@@ -9,8 +9,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((BgIkanaRay*)thisx)
-
 void BgIkanaRay_Init(Actor* thisx, PlayState* play);
 void BgIkanaRay_Destroy(Actor* thisx, PlayState* play);
 void BgIkanaRay_Update(Actor* thisx, PlayState* play);
@@ -54,14 +52,14 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 1000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 1000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDistance, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 1000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 1000, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
 void BgIkanaRay_Init(Actor* thisx, PlayState* play) {
-    BgIkanaRay* this = THIS;
+    BgIkanaRay* this = (BgIkanaRay*)thisx;
     ColliderCylinder* collision = &this->collision;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
@@ -79,7 +77,7 @@ void BgIkanaRay_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgIkanaRay_Destroy(Actor* thisx, PlayState* play) {
-    BgIkanaRay* this = THIS;
+    BgIkanaRay* this = (BgIkanaRay*)thisx;
 
     ColliderCylinder* collision = &this->collision;
     Collider_DestroyCylinder(play, collision);
@@ -87,7 +85,7 @@ void BgIkanaRay_Destroy(Actor* thisx, PlayState* play) {
 
 void BgIkanaRay_SetDeactivated(BgIkanaRay* this) {
     this->actor.draw = NULL;
-    this->actor.flags |= ACTOR_FLAG_10;
+    this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     this->actionFunc = BgIkanaRay_UpdateCheckForActivation;
 }
 
@@ -99,7 +97,7 @@ void BgIkanaRay_UpdateCheckForActivation(BgIkanaRay* this, PlayState* play) {
 
 void BgIkanaRay_SetActivated(BgIkanaRay* this) {
     this->actor.draw = BgIkanaRay_Draw;
-    this->actor.flags &= ~ACTOR_FLAG_10;
+    this->actor.flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     this->actionFunc = BgIkanaRay_UpdateActivated;
 }
 
@@ -108,13 +106,13 @@ void BgIkanaRay_UpdateActivated(BgIkanaRay* this, PlayState* play) {
 }
 
 void BgIkanaRay_Update(Actor* thisx, PlayState* play) {
-    BgIkanaRay* this = THIS;
+    BgIkanaRay* this = (BgIkanaRay*)thisx;
 
     this->actionFunc(this, play);
 }
 
 void BgIkanaRay_Draw(Actor* thisx, PlayState* play) {
-    BgIkanaRay* this = THIS;
+    BgIkanaRay* this = (BgIkanaRay*)thisx;
 
     AnimatedMat_Draw(play, this->animatedTextures);
     Gfx_DrawDListXlu(play, object_ikana_obj_DL_001100);

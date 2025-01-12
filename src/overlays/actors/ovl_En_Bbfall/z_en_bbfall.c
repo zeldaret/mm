@@ -8,9 +8,9 @@
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_200)
-
-#define THIS ((EnBbfall*)thisx)
+#define FLAGS                                                                                 \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
+     ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR)
 
 void EnBbfall_Init(Actor* thisx, PlayState* play);
 void EnBbfall_Destroy(Actor* thisx, PlayState* play);
@@ -149,7 +149,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void EnBbfall_Init(Actor* thisx, PlayState* play) {
-    EnBbfall* this = THIS;
+    EnBbfall* this = (EnBbfall*)thisx;
     s32 i;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
@@ -167,7 +167,7 @@ void EnBbfall_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnBbfall_Destroy(Actor* thisx, PlayState* play) {
-    EnBbfall* this = THIS;
+    EnBbfall* this = (EnBbfall*)thisx;
 
     Collider_DestroyJntSph(play, &this->collider);
 }
@@ -178,7 +178,7 @@ void EnBbfall_Freeze(EnBbfall* this) {
     this->drawDmgEffFrozenSteamScale = 0.6f;
     this->timer = 80;
     this->drawDmgEffAlpha = 1.0f;
-    this->actor.flags &= ~ACTOR_FLAG_200;
+    this->actor.flags &= ~ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR;
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 80);
 }
 
@@ -187,7 +187,7 @@ void EnBbfall_Thaw(EnBbfall* this, PlayState* play) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->drawDmgEffAlpha = 0.0f;
         Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, BUBBLE_BODYPART_MAX, 2, 0.2f, 0.15f);
-        this->actor.flags |= ACTOR_FLAG_200;
+        this->actor.flags |= ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR;
     }
 }
 
@@ -575,7 +575,7 @@ void EnBbfall_UpdateDamage(EnBbfall* this, PlayState* play) {
 }
 
 void EnBbfall_Update(Actor* thisx, PlayState* play) {
-    EnBbfall* this = THIS;
+    EnBbfall* this = (EnBbfall*)thisx;
     Sphere16* sphere;
     Vec3f diff;
     s32 i;
@@ -642,7 +642,7 @@ void EnBbfall_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnBbfall_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnBbfall* this = THIS;
+    EnBbfall* this = (EnBbfall*)thisx;
 
     if (this->bodyPartDrawStatus == BBFALL_BODY_PART_DRAW_STATUS_BROKEN) {
         this->limbDList = *dList;
@@ -682,7 +682,7 @@ static Vec3f sEffectsBodyPartOffset = { 1000.0f, -700.0f, 0.0f };
 
 void EnBbfall_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     s32 pad;
-    EnBbfall* this = THIS;
+    EnBbfall* this = (EnBbfall*)thisx;
     MtxF* currentMatrixState;
 
     if (this->bodyPartDrawStatus == BBFALL_BODY_PART_DRAW_STATUS_ALIVE) {
@@ -723,7 +723,7 @@ void EnBbfall_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* r
 
 void EnBbfall_Draw(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnBbfall* this = THIS;
+    EnBbfall* this = (EnBbfall*)thisx;
     MtxF* currentMatrixState;
     Gfx* gfx;
     s32 opacity;

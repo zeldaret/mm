@@ -6,9 +6,9 @@
 
 #include "z_en_viewer.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_200000)
-
-#define THIS ((EnViewer*)thisx)
+#define FLAGS                                                                \
+    (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED | \
+     ACTOR_FLAG_UPDATE_DURING_SOARING_AND_SOT_CS)
 
 void EnViewer_Init(Actor* thisx, PlayState* play);
 void EnViewer_Destroy(Actor* thisx, PlayState* play);
@@ -42,7 +42,7 @@ void EnViewer_SetupAction(EnViewer* this, EnViewerActionFunc actionFunc) {
 }
 
 void EnViewer_Init(Actor* thisx, PlayState* play) {
-    EnViewer* this = THIS;
+    EnViewer* this = (EnViewer*)thisx;
 
     this->unk_154 = D_8089F3E0;
     D_8089F3E0++;
@@ -153,7 +153,7 @@ void func_8089F2C4(EnViewer* this, PlayState* play) {
 
 void EnViewer_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnViewer* this = THIS;
+    EnViewer* this = (EnViewer*)thisx;
 
     if (D_8089F4D0 != play->state.frames) {
         D_8089F4D0 = play->state.frames;

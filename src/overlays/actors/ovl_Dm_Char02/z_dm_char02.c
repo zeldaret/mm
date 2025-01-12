@@ -7,9 +7,7 @@
 #include "z_dm_char02.h"
 #include "assets/objects/object_stk2/object_stk2.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
-
-#define THIS ((DmChar02*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 void DmChar02_Init(Actor* thisx, PlayState* play);
 void DmChar02_Destroy(Actor* thisx, PlayState* play);
@@ -82,7 +80,7 @@ void DmChar02_PlaySfxForCutscenes(DmChar02* this, PlayState* play) {
 }
 
 void DmChar02_Init(Actor* thisx, PlayState* play) {
-    DmChar02* this = THIS;
+    DmChar02* this = (DmChar02*)thisx;
 
     if (gSaveContext.save.saveInfo.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
         this->animIndex = DMCHAR02_ANIM_HIT_GROUND;
@@ -143,7 +141,7 @@ void DmChar02_HandleCutscene(DmChar02* this, PlayState* play) {
 }
 
 void DmChar02_Update(Actor* thisx, PlayState* play) {
-    DmChar02* this = THIS;
+    DmChar02* this = (DmChar02*)thisx;
 
     SkelAnime_Update(&this->skelAnime);
 
@@ -173,7 +171,7 @@ void DmChar02_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 
 void DmChar02_Draw(Actor* thisx, PlayState* play) {
     s32 pad[2];
-    DmChar02* this = THIS;
+    DmChar02* this = (DmChar02*)thisx;
     s32 shouldDraw = false;
 
     if ((play->csCtx.state == CS_STATE_IDLE) && (this->actor.world.pos.y < 100.0f)) {

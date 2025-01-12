@@ -60,7 +60,7 @@ void Main(void* arg) {
     Check_RegionIsSupported();
     Check_ExpansionPak();
 
-    sysHeap = (uintptr_t)SEGMENT_START(system_heap);
+    sysHeap = (uintptr_t)SEGMENT_END(buffers);
     fb = FRAMEBUFFERS_START_ADDR;
     gSystemHeapSize = fb - sysHeap;
     SystemHeap_Init((void*)sysHeap, gSystemHeapSize);

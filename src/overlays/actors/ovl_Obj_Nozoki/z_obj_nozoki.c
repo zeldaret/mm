@@ -7,9 +7,7 @@
 #include "z_obj_nozoki.h"
 #include "assets/objects/object_secom_obj/object_secom_obj.h"
 
-#define FLAGS (ACTOR_FLAG_10)
-
-#define THIS ((ObjNozoki*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void ObjNozoki_Init(Actor* thisx, PlayState* play);
 void ObjNozoki_Destroy(Actor* thisx, PlayState* play);
@@ -64,7 +62,7 @@ void ObjNozoki_SetupAction(ObjNozoki* this, ObjNozokiActionFunc actionFunc) {
 }
 
 void ObjNozoki_Init(Actor* thisx, PlayState* play) {
-    ObjNozoki* this = THIS;
+    ObjNozoki* this = (ObjNozoki*)thisx;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     this->dyna.actor.shape.rot.x = 0;
@@ -85,7 +83,7 @@ void ObjNozoki_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjNozoki_Destroy(Actor* thisx, PlayState* play) {
-    ObjNozoki* this = THIS;
+    ObjNozoki* this = (ObjNozoki*)thisx;
 
     if (this->unk_15C == 0) {
         DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
@@ -115,7 +113,7 @@ void func_80BA2514(ObjNozoki* this, PlayState* play) {
             Lib_Vec3f_TranslateAndRotateY(&this->dyna.actor.world.pos, this->dyna.actor.shape.rot.y, &D_80BA34C0,
                                           &this->dyna.actor.home.pos);
             Actor_SetScale(&this->dyna.actor, 0.6f);
-            this->dyna.actor.flags |= ACTOR_FLAG_20;
+            this->dyna.actor.flags |= ACTOR_FLAG_DRAW_CULLING_DISABLED;
             ObjNozoki_SetupAction(this, func_80BA2BA4);
         } else if (this->unk_15C == 2) {
             Lib_Vec3f_TranslateAndRotateY(&this->dyna.actor.home.pos, this->dyna.actor.shape.rot.y, &D_80BA34CC,
@@ -448,7 +446,7 @@ void func_80BA3344(ObjNozoki* this, PlayState* play) {
 }
 
 void ObjNozoki_Update(Actor* thisx, PlayState* play) {
-    ObjNozoki* this = THIS;
+    ObjNozoki* this = (ObjNozoki*)thisx;
 
     this->actionFunc(this, play);
 }
@@ -462,7 +460,7 @@ Gfx* D_80BA34FC[] = {
 };
 
 void ObjNozoki_Draw(Actor* thisx, PlayState* play) {
-    ObjNozoki* this = THIS;
+    ObjNozoki* this = (ObjNozoki*)thisx;
 
     if (this->unk_15C == 1) {
         GetItem_Draw(play, GID_MASK_SUN);

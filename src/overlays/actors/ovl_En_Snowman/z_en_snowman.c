@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE)
 
-#define THIS ((EnSnowman*)thisx)
-
 void EnSnowman_Init(Actor* thisx, PlayState* play);
 void EnSnowman_Destroy(Actor* thisx, PlayState* play);
 void EnSnowman_Update(Actor* thisx, PlayState* play);
@@ -186,7 +184,7 @@ static InitChainEntry sInitChain[] = {
 
 void EnSnowman_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnSnowman* this = THIS;
+    EnSnowman* this = (EnSnowman*)thisx;
     s32 attackRange;
 
     Actor_ProcessInitChain(thisx, sInitChain);
@@ -204,7 +202,7 @@ void EnSnowman_Init(Actor* thisx, PlayState* play) {
         CollisionCheck_SetInfo(&thisx->colChkInfo, &sDamageTable, &sColChkInfoInit);
         Collider_InitAndSetCylinder(play, &this->collider, thisx, &sEenoCylinderInit);
         if (EN_SNOWMAN_GET_TYPE(thisx) == EN_SNOWMAN_TYPE_LARGE) {
-            thisx->flags |= ACTOR_FLAG_400;
+            thisx->flags |= ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER;
             Actor_SpawnAsChild(&play->actorCtx, thisx, play, ACTOR_EN_SNOWMAN, thisx->world.pos.x, thisx->world.pos.y,
                                thisx->world.pos.z, 0, 0, 0, EN_SNOWMAN_TYPE_SPLIT);
             thisx->parent = Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_SNOWMAN, thisx->world.pos.x,
@@ -276,7 +274,7 @@ void EnSnowman_Init(Actor* thisx, PlayState* play) {
             thisx->gravity = -1.5f;
         }
 
-        thisx->flags |= ACTOR_FLAG_10;
+        thisx->flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
         thisx->update = EnSnowman_UpdateSnowball;
         thisx->draw = EnSnowman_DrawSnowball;
         this->work.timer = 5;
@@ -284,7 +282,7 @@ void EnSnowman_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnSnowman_Destroy(Actor* thisx, PlayState* play) {
-    EnSnowman* this = THIS;
+    EnSnowman* this = (EnSnowman*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -607,7 +605,7 @@ void EnSnowman_SetupMelt(EnSnowman* this) {
     this->collider.base.acFlags &= ~AC_ON;
     this->work.timer = 50;
     this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
-    this->actor.flags |= ACTOR_FLAG_10;
+    this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     this->actor.scale.y = this->actor.scale.x;
     this->actor.speed = 0.0f;
     this->actionFunc = EnSnowman_Melt;
@@ -790,7 +788,7 @@ void EnSnowman_SetupSplitDoNothing(EnSnowman* this) {
         this->combineState = EN_SNOWMAN_COMBINE_STATE_NO_ABSORPTION;
     }
 
-    this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_10);
+    this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_UPDATE_CULLING_DISABLED);
     if ((this->actor.parent != NULL) && (((EnSnowman*)this->actor.parent)->actionFunc == EnSnowman_SplitDoNothing)) {
         if ((this->actor.child != NULL) && (((EnSnowman*)this->actor.child)->actionFunc == EnSnowman_SplitDoNothing)) {
             EnSnowman_SetupKill((EnSnowman*)this->actor.parent);
@@ -837,7 +835,7 @@ void EnSnowman_CreateSplitEeno(EnSnowman* this, Vec3f* basePos, s32 yRot) {
     this->actor.world.pos.z = (Math_CosS(yRot) * 40.0f) + basePos->z;
     this->combineTimer = 600;
     this->actor.params = EN_SNOWMAN_TYPE_SPLIT;
-    this->actor.flags &= ~ACTOR_FLAG_400;
+    this->actor.flags &= ~ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER;
     this->collider.base.ocFlags1 |= OC1_ON;
     this->collider.base.acFlags &= ~AC_ON;
     EnSnowman_SetupMoveSnowPile(this);
@@ -863,7 +861,7 @@ void EnSnowman_SetupCombine(EnSnowman* this, PlayState* play, Vec3f* combinePos)
     if (this->actor.colChkInfo.health == 0) {
         this->combineState = EN_SNOWMAN_COMBINE_STATE_NO_ABSORPTION;
     } else {
-        this->actor.flags |= ACTOR_FLAG_10;
+        this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
         Math_Vec3f_Copy(&this->combinePos, combinePos);
         this->combineState = EN_SNOWMAN_COMBINE_STATE_ACTIVE;
 
@@ -955,7 +953,7 @@ void EnSnowman_Combine(EnSnowman* this, PlayState* play) {
         } else if (this->fwork.targetScaleDuringCombine > 0.018f) {
             Actor_SetScale(&this->actor, 0.02f);
             this->actor.params = EN_SNOWMAN_TYPE_LARGE;
-            this->actor.flags |= ACTOR_FLAG_400;
+            this->actor.flags |= ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER;
             this->collider.base.ocFlags1 |= OC1_ON;
             this->combineState = EN_SNOWMAN_COMBINE_STATE_BEING_ABSORBED_OR_DONE;
             this->eenoScale = 2.0f;
@@ -1021,7 +1019,7 @@ void EnSnowman_UpdateDamage(EnSnowman* this, PlayState* play) {
 
 void EnSnowman_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnSnowman* this = THIS;
+    EnSnowman* this = (EnSnowman*)thisx;
     f32 wallCheckRadius;
 
     if (this->actionFunc != EnSnowman_SplitDoNothing) {
@@ -1077,7 +1075,7 @@ void EnSnowman_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnSnowman_UpdateSnowball(Actor* thisx, PlayState* play) {
-    EnSnowman* this = THIS;
+    EnSnowman* this = (EnSnowman*)thisx;
     s16 scale;
     s32 i;
 
@@ -1159,7 +1157,7 @@ static Vec3f sBodyBottomBodyPartOffsets[] = {
 
 void EnSnowman_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     s32 pad;
-    EnSnowman* this = THIS;
+    EnSnowman* this = (EnSnowman*)thisx;
     Gfx* gfx;
     s32 i;
 
@@ -1197,7 +1195,7 @@ void EnSnowman_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
 }
 
 void EnSnowman_Draw(Actor* thisx, PlayState* play) {
-    EnSnowman* this = THIS;
+    EnSnowman* this = (EnSnowman*)thisx;
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
@@ -1207,7 +1205,7 @@ void EnSnowman_Draw(Actor* thisx, PlayState* play) {
 }
 
 void EnSnowman_DrawSnowPile(Actor* thisx, PlayState* play) {
-    EnSnowman* this = THIS;
+    EnSnowman* this = (EnSnowman*)thisx;
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->snowPileSkelAnime.skeleton, this->snowPileSkelAnime.jointTable,

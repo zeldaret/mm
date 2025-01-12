@@ -8,9 +8,7 @@
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 #include "libc64/malloc.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
-
-#define THIS ((EffDust*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 void EffDust_Init(Actor* thisx, PlayState* play);
 void EffDust_Destroy(Actor* thisx, PlayState* play);
@@ -50,7 +48,7 @@ void func_80918B40(EffDust* this) {
 }
 
 void EffDust_Init(Actor* thisx, PlayState* play) {
-    EffDust* this = THIS;
+    EffDust* this = (EffDust*)thisx;
     u32 type = this->actor.params;
 
     func_80918B40(this);
@@ -176,7 +174,7 @@ void func_80919230(EffDust* this, PlayState* play) {
     s32 i;
     s32 j;
 
-    if ((parent == NULL) || (parent->update == NULL) || !(player->stateFlags1 & PLAYER_STATE1_1000)) {
+    if ((parent == NULL) || (parent->update == NULL) || !(player->stateFlags1 & PLAYER_STATE1_CHARGING_SPIN_ATTACK)) {
         if (this->life != 0) {
             this->life--;
         } else {
@@ -252,7 +250,7 @@ void func_80919230(EffDust* this, PlayState* play) {
 }
 
 void EffDust_Update(Actor* thisx, PlayState* play) {
-    EffDust* this = THIS;
+    EffDust* this = (EffDust*)thisx;
 
     this->actionFunc(this, play);
 }
@@ -262,7 +260,7 @@ Gfx D_80919DB0[] = {
 };
 
 void func_80919768(Actor* thisx, PlayState* play2) {
-    EffDust* this = THIS;
+    EffDust* this = (EffDust*)thisx;
     PlayState* play = play2;
     GraphicsContext* gfxCtx = play2->state.gfxCtx;
     f32* distanceTraveled;
@@ -317,7 +315,7 @@ void func_80919768(Actor* thisx, PlayState* play2) {
 }
 
 void func_809199FC(Actor* thisx, PlayState* play2) {
-    EffDust* this = THIS;
+    EffDust* this = (EffDust*)thisx;
     PlayState* play = play2;
     GraphicsContext* gfxCtx = play2->state.gfxCtx;
     f32* distanceTraveled;
@@ -374,7 +372,7 @@ void func_809199FC(Actor* thisx, PlayState* play2) {
 }
 
 void EffDust_Draw(Actor* thisx, PlayState* play) {
-    EffDust* this = THIS;
+    EffDust* this = (EffDust*)thisx;
 
     this->drawFunc(thisx, play);
 }

@@ -9,10 +9,9 @@
 #include "overlays/actors/ovl_Arrow_Light/z_arrow_light.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS \
-    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_IGNORE_QUAKE)
-
-#define THIS ((EnDeath*)thisx)
+#define FLAGS                                                                                 \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
+     ACTOR_FLAG_DRAW_CULLING_DISABLED | ACTOR_FLAG_IGNORE_QUAKE)
 
 void EnDeath_Init(Actor* thisx, PlayState* play2);
 void EnDeath_Destroy(Actor* thisx, PlayState* play);
@@ -226,7 +225,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void EnDeath_Init(Actor* thisx, PlayState* play2) {
-    EnDeath* this = THIS;
+    EnDeath* this = (EnDeath*)thisx;
     PlayState* play = play2;
     f32 yOffset = 15.0f;
     s16 yRot = 0;
@@ -291,7 +290,7 @@ void EnDeath_Init(Actor* thisx, PlayState* play2) {
 }
 
 void EnDeath_Destroy(Actor* thisx, PlayState* play) {
-    EnDeath* this = THIS;
+    EnDeath* this = (EnDeath*)thisx;
 
     Collider_DestroySphere(play, &this->coreCollider);
     Collider_DestroyCylinder(play, &this->bodyCollider);
@@ -376,7 +375,7 @@ void EnDeath_UpdateSpinAttackTris(EnDeath* this) {
     Collider_SetTrisVertices(&this->weaponSpinningCollider, 1, &p1, &p3, &p2);
 }
 
-f32 EnDeath_UpdateCoreVelocityAndRotation(EnDeath* this) {
+void EnDeath_UpdateCoreVelocityAndRotation(EnDeath* this) {
     f32 tmp;
 
     this->coreVelocity = this->actor.world.pos.y - this->actor.home.pos.y;
@@ -1245,7 +1244,7 @@ void EnDeath_UpdateDamage(EnDeath* this, PlayState* play) {
 }
 
 void EnDeath_Update(Actor* thisx, PlayState* play) {
-    EnDeath* this = THIS;
+    EnDeath* this = (EnDeath*)thisx;
     ArrowLight* lightArrow;
     s32 pad;
 
@@ -1434,7 +1433,7 @@ void EnDeath_DrawBats(EnDeath* this, PlayState* play) {
 
     for (i = 0; i < ARRAY_COUNT(this->miniDeaths); i++) {
         if (this->actionFunc == EnDeath_BeginWithoutCutscene ||
-            CHECK_FLAG_ALL(this->miniDeaths[i]->actor.flags, ACTOR_FLAG_40)) {
+            CHECK_FLAG_ALL(this->miniDeaths[i]->actor.flags, ACTOR_FLAG_INSIDE_CULLING_VOLUME)) {
             miniDeath = this->miniDeaths[i];
 
             Matrix_RotateZYX(miniDeath->actor.shape.rot.x, miniDeath->actor.shape.rot.y, 0, MTXMODE_NEW);
@@ -1555,7 +1554,7 @@ void EnDeath_DrawFlames(EnDeath* this, PlayState* play2) {
     }
 
     for (i = 0; i < ARRAY_COUNT(this->miniDeaths); i++) {
-        if (CHECK_FLAG_ALL(this->miniDeaths[i]->actor.flags, ACTOR_FLAG_40)) {
+        if (CHECK_FLAG_ALL(this->miniDeaths[i]->actor.flags, ACTOR_FLAG_INSIDE_CULLING_VOLUME)) {
             for (effect = this->miniDeaths[i]->effects, j = 0; j < MINIDEATH_NUM_EFFECTS; j++, effect++) {
                 cmf->mf[3][0] = effect->pos.x;
                 cmf->mf[3][1] = effect->pos.y - 12.0f;
@@ -1598,7 +1597,7 @@ void EnDeath_DrawCore(EnDeath* this, PlayState* play) {
 }
 
 s32 EnDeath_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnDeath* this = THIS;
+    EnDeath* this = (EnDeath*)thisx;
 
     if (this->noDrawLimbs[limbIndex] == true) {
         *dList = NULL;
@@ -1632,7 +1631,7 @@ void EnDeath_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
     static s8 sLimbToBodyParts[GOMESS_LIMB_MAX] = {
         -1, -1, -1, 12, -1, 0, -1, -1, -1, -1, -1, -1, -1, 7, 1, 2, 3, 4, 5, 6, -1, -1,
     };
-    EnDeath* this = THIS;
+    EnDeath* this = (EnDeath*)thisx;
     s8 index;
 
     if (limbIndex == GOMESS_LIMB_SCYTHE_BLADE) {
@@ -1716,7 +1715,7 @@ void EnDeath_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
 }
 
 void EnDeath_Draw(Actor* thisx, PlayState* play) {
-    EnDeath* this = THIS;
+    EnDeath* this = (EnDeath*)thisx;
     s32 pad;
 
     OPEN_DISPS(play->state.gfxCtx);

@@ -8,9 +8,7 @@
 #include "z64horse.h"
 #include "overlays/actors/ovl_En_Horse_Game_Check/z_en_horse_game_check.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
-
-#define THIS ((EnIn*)thisx)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void EnIn_Init(Actor* thisx, PlayState* play);
 void EnIn_Destroy(Actor* thisx, PlayState* play);
@@ -1483,12 +1481,12 @@ void func_808F5C98(EnIn* this, PlayState* play) {
 }
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneScale, 1200, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeScale, 1200, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 300, ICHAIN_STOP),
 };
 
 void EnIn_Init(Actor* thisx, PlayState* play) {
-    EnIn* this = THIS;
+    EnIn* this = (EnIn*)thisx;
     s32 pad[2];
     s16 type;
 
@@ -1586,13 +1584,13 @@ void EnIn_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnIn_Destroy(Actor* thisx, PlayState* play) {
-    EnIn* this = THIS;
+    EnIn* this = (EnIn*)thisx;
 
     Collider_DestroyCylinder(play, &this->colliderCylinder);
 }
 
 void EnIn_Update(Actor* thisx, PlayState* play) {
-    EnIn* this = THIS;
+    EnIn* this = (EnIn*)thisx;
 
     func_808F3310(this, play);
     func_808F3334(this, play);
@@ -1632,7 +1630,7 @@ void func_808F6334(EnIn* this, PlayState* play) {
 }
 
 s32 EnIn_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnIn* this = THIS;
+    EnIn* this = (EnIn*)thisx;
     s32 pad;
     Gfx* sp50[OBJECT_IN_LIMB_MAX] = {
         NULL,                // OBJECT_IN_LIMB_NONE
@@ -1716,7 +1714,7 @@ s32 EnIn_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
 }
 
 void EnIn_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnIn* this = THIS;
+    EnIn* this = (EnIn*)thisx;
     Vec3f sp50 = { 1600.0f, 0.0f, 0.0f };
     Vec3f sp44 = { 0.0f, 0.0f, 0.0f };
 
@@ -1759,7 +1757,7 @@ void EnIn_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 }
 
 void EnIn_Draw(Actor* thisx, PlayState* play) {
-    EnIn* this = THIS;
+    EnIn* this = (EnIn*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

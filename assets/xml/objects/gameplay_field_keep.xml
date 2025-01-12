@@ -2,9 +2,9 @@
     <File Name="gameplay_field_keep" Segment="5">
         <Texture Name="gameplay_field_keep_Tex_000000" OutName="tex_000000" Format="rgba16" Width="16" Height="32" Offset="0x0" />
         <Texture Name="gameplay_field_keep_Tex_000400" OutName="tex_000400" Format="rgba16" Width="32" Height="32" Offset="0x400" />
-        <DList Name="gameplay_field_keep_DL_000C40" Offset="0xC40" />
+        <DList Name="gameplay_field_keep_DL_000C40" Offset="0xC40" /> <!-- Original name is "ana01_modelT" -->
         <Texture Name="gameplay_field_keep_Tex_000CD0" OutName="tex_000CD0" Format="ia16" Width="32" Height="64" Offset="0xCD0" />
-        <Animation Name="gameplay_field_keep_Anim_001D20" Offset="0x1D20" />
+        <Animation Name="gameplay_field_keep_Anim_001D20" Offset="0x1D20" /> <!-- Original name is "butterfly_fly" -->
         <DList Name="gameplay_field_keep_DL_001D30" Offset="0x1D30" />
         <DList Name="gameplay_field_keep_DL_001DD0" Offset="0x1DD0" />
         <DList Name="gameplay_field_keep_DL_001DE0" Offset="0x1DE0" />
@@ -23,10 +23,10 @@
         <Texture Name="gameplay_field_keep_TLUT_002FB0" OutName="tlut_002FB0" Format="rgba16" Width="4" Height="4" Offset="0x2FB0" />
         <Texture Name="gameplay_field_keep_Tex_002FD0" OutName="tex_002FD0" Format="ci4" Width="32" Height="64" Offset="0x2FD0" />
         <Texture Name="gameplay_field_keep_Tex_0033D0" OutName="tex_0033D0" Format="ci4" Width="32" Height="64" Offset="0x33D0" />
-        <DList Name="gameplay_field_keep_DL_003870" Offset="0x3870" />
-        <DList Name="gameplay_field_keep_DL_003938" Offset="0x3938" />
-        <Collision Name="gameplay_field_keep_Colheader_003A60" Offset="0x3A60" />
-        <DList Name="gFieldWoodDoorFrameDL" Offset="0x3FD0" />
+        <DList Name="gameplay_field_keep_DL_003870" Offset="0x3870" /> <!-- Original name is "c_bombwallbefore_model" -->
+        <DList Name="gameplay_field_keep_DL_003938" Offset="0x3938" /> <!-- Original name is "c_bombwallafter_model" -->
+        <Collision Name="gameplay_field_keep_Colheader_003A60" Offset="0x3A60" /> <!-- Original name is "c_bombwallbefore_bgdatainfo" -->
+        <DList Name="gFieldWoodDoorFrameDL" Offset="0x3FD0" /> <!-- Original name is "obj_door_huti_model" -->
         <DList Name="gFieldWoodDoorLeftDL" Offset="0x4050" />
         <DList Name="gFieldWoodDoorRightDL" Offset="0x4228" />
         <Texture Name="gameplay_field_keep_Tex_004400" OutName="tex_004400" Format="rgba16" Width="16" Height="16" Offset="0x4400" />
@@ -34,10 +34,10 @@
         <Texture Name="gFieldWoodDoorTex" OutName="wood_door" Format="i4" Width="64" Height="128" Offset="0x4800" />
         <Texture Name="gameplay_field_keep_TLUT_005800" OutName="tlut_005800" Format="rgba16" Width="4" Height="4" Offset="0x5800" />
         <Texture Name="gameplay_field_keep_Tex_005828" OutName="tex_005828" Format="ci4" Width="64" Height="64" Offset="0x5828" />
-        <DList Name="gameplay_field_keep_DL_0061E8" Offset="0x61E8" />
-        <DList Name="gameplay_field_keep_DL_006420" Offset="0x6420" />
-        <DList Name="gameplay_field_keep_DL_0066B0" Offset="0x66B0" />
-        <DList Name="gameplay_field_keep_DL_006760" Offset="0x6760" />
+        <DList Name="gameplay_field_keep_DL_0061E8" Offset="0x61E8" /> <!-- Original name is "obj_ginbure_model" -->
+        <DList Name="gameplay_field_keep_DL_006420" Offset="0x6420" /> <!-- Original name is "obj_ginbure_h_model" -->
+        <DList Name="gameplay_field_keep_DL_0066B0" Offset="0x66B0" /> <!-- Original name is "obj_isi01_model" -->
+        <DList Name="gameplay_field_keep_DL_006760" Offset="0x6760" /> <!-- Original name is "obj_isi01_xlu_model" -->
         <Texture Name="gameplay_field_keep_Tex_006810" OutName="tex_006810" Format="rgba16" Width="32" Height="32" Offset="0x6810" />
         <Texture Name="gameplay_field_keep_Tex_007010" OutName="tex_007010" Format="rgba16" Width="32" Height="32" Offset="0x7010" />
 

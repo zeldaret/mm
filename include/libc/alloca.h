@@ -1,7 +1,7 @@
 #ifndef LIBC_ALLOCA_H
 #define LIBC_ALLOCA_H
 
-void* alloca(u32);
-#define alloca  __builtin_alloca
+void* alloca(size_t);
+#define alloca(size) __builtin_alloca(size)
 
 #endif

@@ -2,7 +2,7 @@
     <!-- Object for Child Zelda 1 -->
     <File Name="object_zl1" Segment="6">
         <!-- Animation -->
-        <Animation Name="gChildZelda1Anim_00438" Offset="0x438" />
+        <Animation Name="gChildZelda1Anim_00438" Offset="0x438" /> <!-- Original name is "anim_matsu" -->
 
         <!-- Palette -->
         <Texture Name="gChildZelda1TLUT_0450" OutName="child_zelda_1_tlut_0450" Format="rgba16" Width="16" Height="16" Offset="0x450" />
@@ -101,16 +101,16 @@
         <Skeleton Name="gChildZelda1Skel" Type="Flex" LimbType="Standard" LimbNone="CHILD_ZELDA_1_LIMB_NONE" LimbMax="CHILD_ZELDA_1_LIMB_MAX" EnumName="ChildZelda1Limb" Offset="0xF5D8" />
         
         <!-- Animations -->
-        <Animation Name="gChildZelda1Anim_10B38" Offset="0x10B38" />
-        <Animation Name="gChildZelda1Anim_11348" Offset="0x11348" />
-        <Animation Name="gChildZelda1Anim_116E4" Offset="0x116E4" />
-        <Animation Name="gChildZelda1Anim_12B88" Offset="0x11B88" />
-        <Animation Name="gChildZelda1Anim_12118" Offset="0x12118" />
-        <Animation Name="gChildZelda1Anim_12B04" Offset="0x12B04" />
-        <Animation Name="gChildZelda1Anim_12F80" Offset="0x12F80" />
-        <Animation Name="gChildZelda1Anim_132D8" Offset="0x132D8" />
-        <Animation Name="gChildZelda1Anim_138E0" Offset="0x138E0" />
-        <Animation Name="gChildZelda1Anim_13F10" Offset="0x13F10" />
-        <Animation Name="gChildZelda1Anim_143A8" Offset="0x143A8" />
+        <Animation Name="gChildZelda1Anim_10B38" Offset="0x10B38" /> <!-- Original name is "demo_furimuki" -->
+        <Animation Name="gChildZelda1Anim_11348" Offset="0x11348" /> <!-- Original name is "demo_furimuki_wait" -->
+        <Animation Name="gChildZelda1Anim_116E4" Offset="0x116E4" /> <!-- Original name is "demo_kasige" -->
+        <Animation Name="gChildZelda1Anim_11B88" Offset="0x11B88" /> <!-- Original name is "demo_kasige_wait" -->
+        <Animation Name="gChildZelda1Anim_12118" Offset="0x12118" /> <!-- Original name is "demo_nozoki_wait" -->
+        <Animation Name="gChildZelda1Anim_12B04" Offset="0x12B04" /> <!-- Original name is "demo_slide" -->
+        <Animation Name="gChildZelda1Anim_12F80" Offset="0x12F80" /> <!-- Original name is "demo_slide_wait" -->
+        <Animation Name="gChildZelda1Anim_132D8" Offset="0x132D8" /> <!-- Original name is "demo_tesage" -->
+        <Animation Name="gChildZelda1Anim_138E0" Offset="0x138E0" /> <!-- Original name is "demo_tetataki_1" -->
+        <Animation Name="gChildZelda1Anim_13F10" Offset="0x13F10" /> <!-- Original name is "demo_tetataki_2" -->
+        <Animation Name="gChildZelda1Anim_143A8" Offset="0x143A8" /> <!-- Original name is "demo_tetataki_wait" -->
     </File>
 </Root>

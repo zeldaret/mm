@@ -6,9 +6,7 @@
 
 #include "z_oceff_wipe6.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_UPDATE_DURING_OCARINA)
-
-#define THIS ((OceffWipe6*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
 void OceffWipe6_Init(Actor* thisx, PlayState* play);
 void OceffWipe6_Destroy(Actor* thisx, PlayState* play);
@@ -30,7 +28,7 @@ ActorProfile Oceff_Wipe6_Profile = {
 #include "assets/overlays/ovl_Oceff_Wipe6/ovl_Oceff_Wipe6.c"
 
 void OceffWipe6_Init(Actor* thisx, PlayState* play) {
-    OceffWipe6* this = THIS;
+    OceffWipe6* this = (OceffWipe6*)thisx;
 
     Actor_SetScale(&this->actor, 1.0f);
     this->counter = 0;
@@ -43,7 +41,7 @@ void OceffWipe6_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void OceffWipe6_Update(Actor* thisx, PlayState* play) {
-    OceffWipe6* this = THIS;
+    OceffWipe6* this = (OceffWipe6*)thisx;
 
     this->actor.world.pos = GET_ACTIVE_CAM(play)->eye;
     if (this->counter < 100) {
@@ -54,7 +52,7 @@ void OceffWipe6_Update(Actor* thisx, PlayState* play) {
 }
 
 void OceffWipe6_Draw(Actor* thisx, PlayState* play) {
-    OceffWipe6* this = THIS;
+    OceffWipe6* this = (OceffWipe6*)thisx;
     f32 z;
     u8 alpha;
     s32 i;

@@ -4,15 +4,14 @@
  * Description: Wart's Bubbles
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_en_tanron2.h"
 #include "overlays/actors/ovl_Boss_04/z_boss_04.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 #include "assets/objects/object_boss04/object_boss04.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20)
-
-#define THIS ((EnTanron2*)thisx)
+#define FLAGS                                                                                 \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
+     ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 void EnTanron2_Init(Actor* thisx, PlayState* play);
 void EnTanron2_Destroy(Actor* thisx, PlayState* play);
@@ -119,7 +118,7 @@ static ColliderCylinderInit sCylinderInit2 = {
 };
 
 void EnTanron2_Init(Actor* thisx, PlayState* play) {
-    EnTanron2* this = THIS;
+    EnTanron2* this = (EnTanron2*)thisx;
 
     D_80BB8450 = (Boss04*)this->actor.parent;
     this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
@@ -130,7 +129,7 @@ void EnTanron2_Init(Actor* thisx, PlayState* play) {
         return;
     }
 
-    this->actor.flags |= ACTOR_FLAG_200;
+    this->actor.flags |= ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR;
     Actor_SetScale(&this->actor, 1.0f);
 
     this->actor.draw = NULL;
@@ -478,7 +477,7 @@ void func_80BB7578(EnTanron2* this, PlayState* play) {
 
 void EnTanron2_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnTanron2* this = THIS;
+    EnTanron2* this = (EnTanron2*)thisx;
     s32 pad2[2];
     Input* input;
 
@@ -559,8 +558,8 @@ void EnTanron2_Update(Actor* thisx, PlayState* play) {
         }
     }
 
-    if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_2000) && (this->actor.xzDistToPlayer < 80.0f)) {
-        this->actor.flags &= ~ACTOR_FLAG_2000;
+    if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_HOOKSHOT_ATTACHED) && (this->actor.xzDistToPlayer < 80.0f)) {
+        this->actor.flags &= ~ACTOR_FLAG_HOOKSHOT_ATTACHED;
         this->unk_15A = 25;
         this->unk_159 = 1;
     }
@@ -576,7 +575,7 @@ void EnTanron2_Update(Actor* thisx, PlayState* play) {
 }
 
 void func_80BB7B90(Actor* thisx, PlayState* play) {
-    EnTanron2* this = THIS;
+    EnTanron2* this = (EnTanron2*)thisx;
 
     D_80BB8454 = (Math_SinS(play->gameplayFrames * 0x3000) * 0.1f) + 1.0f;
     if (D_80BB8450->unk_1F6 == 11) {

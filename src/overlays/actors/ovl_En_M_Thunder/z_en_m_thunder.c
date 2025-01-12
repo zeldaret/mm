@@ -9,9 +9,7 @@
 #include "overlays/actors/ovl_Eff_Dust/z_eff_dust.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_10)
-
-#define THIS ((EnMThunder*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void EnMThunder_Init(Actor* thisx, PlayState* play);
 void EnMThunder_Destroy(Actor* thisx, PlayState* play);
@@ -100,7 +98,7 @@ void EnMThunder_UnkType_Setup(EnMThunder* this, PlayState* play) {
 
 void EnMThunder_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnMThunder* this = THIS;
+    EnMThunder* this = (EnMThunder*)thisx;
     Player* player = GET_PLAYER(play);
 
     Collider_InitCylinder(play, &this->collider);
@@ -192,7 +190,7 @@ void EnMThunder_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnMThunder_Destroy(Actor* thisx, PlayState* play) {
-    EnMThunder* this = THIS;
+    EnMThunder* this = (EnMThunder*)thisx;
 
     if (this->isCharging) {
         Magic_Reset(play);
@@ -221,7 +219,7 @@ void EnMThunder_Spin_AttackNoMagic(EnMThunder* this, PlayState* play) {
         return;
     }
 
-    if (!(player->stateFlags1 & PLAYER_STATE1_1000)) {
+    if (!(player->stateFlags1 & PLAYER_STATE1_CHARGING_SPIN_ATTACK)) {
         Actor_Kill(&this->actor);
     }
 }
@@ -313,7 +311,7 @@ void EnMThunder_Charge(EnMThunder* this, PlayState* play) {
         return;
     }
 
-    if (!(player->stateFlags1 & PLAYER_STATE1_1000)) {
+    if (!(player->stateFlags1 & PLAYER_STATE1_CHARGING_SPIN_ATTACK)) {
         if (this->actor.child != NULL) {
             this->actor.child->parent = NULL;
         }
@@ -461,7 +459,7 @@ void EnMThunder_UnkType_Attack(EnMThunder* this, PlayState* play) {
 }
 
 void EnMThunder_Update(Actor* thisx, PlayState* play) {
-    EnMThunder* this = THIS;
+    EnMThunder* this = (EnMThunder*)thisx;
 
     this->actionFunc(this, play);
     EnMThunder_AdjustLights(play, this->adjustLightsArg1);
@@ -471,7 +469,7 @@ void EnMThunder_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnMThunder_UnkType_Update(Actor* thisx, PlayState* play) {
-    EnMThunder* this = THIS;
+    EnMThunder* this = (EnMThunder*)thisx;
 
     this->actionFunc(this, play);
     Lights_PointNoGlowSetInfo(&this->lightInfo, this->actor.world.pos.x, this->actor.world.pos.y,
@@ -481,7 +479,7 @@ void EnMThunder_UnkType_Update(Actor* thisx, PlayState* play) {
 
 void EnMThunder_Draw(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnMThunder* this = THIS;
+    EnMThunder* this = (EnMThunder*)thisx;
     Player* player = GET_PLAYER(play);
     f32 scale;
     s32 y2Scroll;

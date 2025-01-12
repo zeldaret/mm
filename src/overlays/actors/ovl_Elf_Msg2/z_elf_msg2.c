@@ -6,9 +6,7 @@
 
 #include "z_elf_msg2.h"
 
-#define FLAGS (ACTOR_FLAG_10)
-
-#define THIS ((ElfMsg2*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void ElfMsg2_Init(Actor* thisx, PlayState* play);
 void ElfMsg2_Destroy(Actor* thisx, PlayState* play);
@@ -32,7 +30,7 @@ ActorProfile Elf_Msg2_Profile = {
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 200, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneForward, 1000, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeDistance, 1000, ICHAIN_STOP),
 };
 
 void ElfMsg2_SetupAction(ElfMsg2* this, ElfMsg2ActionFunc actionFunc) {
@@ -72,7 +70,7 @@ s32 func_8096EC4C(ElfMsg2* this, PlayState* play) {
 }
 
 void ElfMsg2_Init(Actor* thisx, PlayState* play) {
-    ElfMsg2* this = THIS;
+    ElfMsg2* this = (ElfMsg2*)thisx;
 
     if (!func_8096EC4C(this, play)) {
         if ((this->actor.home.rot.x > 0) && (this->actor.home.rot.x < 8)) {
@@ -143,7 +141,7 @@ void func_8096EFD0(ElfMsg2* this, PlayState* play) {
 }
 
 void ElfMsg2_Update(Actor* thisx, PlayState* play) {
-    ElfMsg2* this = THIS;
+    ElfMsg2* this = (ElfMsg2*)thisx;
 
     if (!func_8096EC4C(this, play)) {
         this->actionFunc(this, play);

@@ -8,9 +8,9 @@
 #include "attributes.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20)
-
-#define THIS ((EnClearTag*)thisx)
+#define FLAGS                                                                                 \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
+     ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 typedef enum {
     /* 0x00 */ CLEAR_TAG_EFFECT_AVAILABLE,
@@ -416,7 +416,7 @@ void EnClearTag_Destroy(Actor* thisx, PlayState* play) {
  */
 void EnClearTag_Init(Actor* thisx, PlayState* play) {
     s32 pad[3];
-    EnClearTag* this = THIS;
+    EnClearTag* this = (EnClearTag*)thisx;
     f32 lightRayMaxScale;
     u8 i;
     Vec3f pos;
@@ -607,7 +607,7 @@ void EnClearTag_UpdateCamera(EnClearTag* this, PlayState* play) {
  * Decides whether to update or to mark for death
  */
 void EnClearTag_Update(Actor* thisx, PlayState* play) {
-    EnClearTag* this = THIS;
+    EnClearTag* this = (EnClearTag*)thisx;
 
     if (this->activeTimer != 0) {
         this->activeTimer--;
@@ -805,7 +805,7 @@ void EnClearTag_DrawEffects(Actor* thisx, PlayState* play) {
     f32 ySurface;
     MtxF mtxF;
     GraphicsContext* gfxCtx = play->state.gfxCtx;
-    EnClearTag* this = THIS;
+    EnClearTag* this = (EnClearTag*)thisx;
     EnClearTagEffect* effect = this->effect;
     EnClearTagEffect* firstEffect = this->effect;
 

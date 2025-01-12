@@ -8,8 +8,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((ObjFlowerpot*)thisx)
-
 void ObjFlowerpot_Init(Actor* thisx, PlayState* play);
 void ObjFlowerpot_Destroy(Actor* thisx, PlayState* play2);
 void ObjFlowerpot_Update(Actor* thisx, PlayState* play2);
@@ -91,9 +89,9 @@ u8 D_80A1D404 = true;
 Vec3f D_80A1D408 = { 0.0f, 20.0f, 0.0f };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_CONTINUE), ICHAIN_F32_DIV1000(terminalVelocity, -20000, ICHAIN_CONTINUE),
-    ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_CONTINUE),   ICHAIN_F32(uncullZoneForward, 1600, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),   ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_STOP),
+    ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_CONTINUE),  ICHAIN_F32_DIV1000(terminalVelocity, -20000, ICHAIN_CONTINUE),
+    ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_CONTINUE),    ICHAIN_F32(cullingVolumeDistance, 1600, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 100, ICHAIN_CONTINUE), ICHAIN_F32(cullingVolumeDownward, 100, ICHAIN_STOP),
 };
 
 void func_80A1B3D0(void) {
@@ -394,7 +392,7 @@ void func_80A1C62C(ObjFlowerpot* this, PlayState* play) {
 
 void ObjFlowerpot_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    ObjFlowerpot* this = THIS;
+    ObjFlowerpot* this = (ObjFlowerpot*)thisx;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
 
@@ -430,7 +428,7 @@ void ObjFlowerpot_Init(Actor* thisx, PlayState* play) {
 
 void ObjFlowerpot_Destroy(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    ObjFlowerpot* this = THIS;
+    ObjFlowerpot* this = (ObjFlowerpot*)thisx;
 
     Collider_DestroyJntSph(play, &this->collider);
 }
@@ -447,7 +445,7 @@ void func_80A1C838(ObjFlowerpot* this, PlayState* play) {
         func_80A1CBF8(this);
         this->actor.room = -1;
         this->actor.colChkInfo.mass = 180;
-        this->actor.flags |= ACTOR_FLAG_10;
+        this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
         if (func_800A817C(ENOBJFLOWERPOT_GET_3F(&this->actor))) {
             func_80A1B914(this, play);
         }
@@ -493,7 +491,7 @@ void func_80A1C838(ObjFlowerpot* this, PlayState* play) {
             if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
                 if (this->actor.colChkInfo.mass == MASS_IMMOVABLE) {
                     if (DynaPoly_GetActor(&play->colCtx, this->actor.floorBgId) == NULL) {
-                        this->actor.flags &= ~ACTOR_FLAG_10;
+                        this->actor.flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED;
                         this->unk_1EA &= ~0x1;
                     }
                 } else if (Math3D_Vec3fDistSq(&this->actor.world.pos, &this->actor.prevPos) < 0.01f) {
@@ -648,13 +646,13 @@ void func_80A1CEF4(ObjFlowerpot* this, PlayState* play) {
 
 void ObjFlowerpot_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    ObjFlowerpot* this = THIS;
+    ObjFlowerpot* this = (ObjFlowerpot*)thisx;
 
     this->actionFunc(this, play);
 
     func_80A1C554(this);
 
-    if ((D_80A1D830 != play->gameplayFrames) && (play->roomCtx.curRoom.behaviorType1 == ROOM_BEHAVIOR_TYPE1_0)) {
+    if ((D_80A1D830 != play->gameplayFrames) && (play->roomCtx.curRoom.type == ROOM_TYPE_NORMAL)) {
         func_80A1B3D0();
         D_80A1D830 = play->gameplayFrames;
     }
@@ -662,7 +660,7 @@ void ObjFlowerpot_Update(Actor* thisx, PlayState* play2) {
 
 void ObjFlowerpot_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
-    ObjFlowerpot* this = THIS;
+    ObjFlowerpot* this = (ObjFlowerpot*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -679,7 +677,7 @@ void ObjFlowerpot_Draw(Actor* thisx, PlayState* play) {
     }
 
     if (!(this->unk_1EA & 2)) {
-        if ((play->roomCtx.curRoom.behaviorType1 == ROOM_BEHAVIOR_TYPE1_0) && (this->actionFunc == func_80A1C838)) {
+        if ((play->roomCtx.curRoom.type == ROOM_TYPE_NORMAL) && (this->actionFunc == func_80A1C838)) {
             if ((this->actor.projectedPos.z > -150.0f) && (this->actor.projectedPos.z < 400.0f)) {
                 func_80A1B840(&D_80A1D838[this->unk_1EB]);
 

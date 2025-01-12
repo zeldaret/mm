@@ -9,8 +9,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((ObjKepnKoya*)thisx)
-
 void ObjKepnKoya_Init(Actor* thisx, PlayState* play);
 void ObjKepnKoya_Destroy(Actor* thisx, PlayState* play);
 void ObjKepnKoya_Update(Actor* thisx, PlayState* play);
@@ -29,12 +27,12 @@ ActorProfile Obj_Kepn_Koya_Profile = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneScale, 1200, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 900, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeScale, 1200, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 900, ICHAIN_STOP),
 };
 
 void ObjKepnKoya_Init(Actor* thisx, PlayState* play) {
-    ObjKepnKoya* this = THIS;
+    ObjKepnKoya* this = (ObjKepnKoya*)thisx;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     Actor_SetScale(&this->dyna.actor, 0.1f);
@@ -46,7 +44,7 @@ void ObjKepnKoya_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjKepnKoya_Destroy(Actor* thisx, PlayState* play) {
-    ObjKepnKoya* this = THIS;
+    ObjKepnKoya* this = (ObjKepnKoya*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }

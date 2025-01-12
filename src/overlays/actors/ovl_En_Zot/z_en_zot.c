@@ -8,9 +8,7 @@
 #include "z64snap.h"
 #include "attributes.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
-
-#define THIS ((EnZot*)thisx)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void EnZot_Init(Actor* thisx, PlayState* play2);
 void EnZot_Destroy(Actor* thisx, PlayState* play);
@@ -109,7 +107,7 @@ void func_80B965D0(EnZot* this, PlayState* play) {
 
 void EnZot_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnZot* this = THIS;
+    EnZot* this = (EnZot*)thisx;
     s32 i;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
@@ -256,7 +254,7 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
 }
 
 void EnZot_Destroy(Actor* thisx, PlayState* play) {
-    EnZot* this = THIS;
+    EnZot* this = (EnZot*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
     if (ENZOT_GET_1F(&this->actor) == 8) {
@@ -580,7 +578,7 @@ void func_80B97708(EnZot* this, PlayState* play) {
         return;
     }
 
-    if (!(player->stateFlags1 & PLAYER_STATE1_2000000)) {
+    if (!(player->stateFlags1 & PLAYER_STATE1_ZORA_BOOMERANG_THROWN)) {
         phi_v1 = func_80B96CE4(this);
     } else {
         phi_v1 = 0;
@@ -1170,7 +1168,7 @@ void func_80B98BF4(EnZot* this, PlayState* play) {
 }
 
 void func_80B98CA8(EnZot* this, PlayState* play) {
-    if (func_800B8718(&this->actor, &play->state)) {
+    if (Actor_OcarinaInteractionAccepted(&this->actor, &play->state)) {
         play->msgCtx.ocarinaMode = OCARINA_MODE_END;
         AudioOcarina_StartDefault(0xFFFF);
         this->actionFunc = func_80B98BF4;
@@ -1185,7 +1183,7 @@ void func_80B98CA8(EnZot* this, PlayState* play) {
         }
 
         if ((GET_PLAYER_FORM == PLAYER_FORM_ZORA) || (this->actor.xzDistToPlayer < 100.0f)) {
-            func_800B874C(&this->actor, play, 120.0f, 100.0f);
+            Actor_OfferOcarinaInteraction(&this->actor, play, 120.0f, 100.0f);
         }
     }
 
@@ -1340,7 +1338,7 @@ void func_80B99384(EnZot* this, PlayState* play) {
 
 void EnZot_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnZot* this = THIS;
+    EnZot* this = (EnZot*)thisx;
 
     Actor_MoveWithGravity(&this->actor);
     Collider_UpdateCylinder(&this->actor, &this->collider);
@@ -1384,7 +1382,7 @@ Gfx* func_80B99580(GraphicsContext* gfxCtx) {
 }
 
 s32 EnZot_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnZot* this = THIS;
+    EnZot* this = (EnZot*)thisx;
     s32 pad;
 
     if (limbIndex == ZORA_LIMB_HEAD) {
@@ -1410,7 +1408,7 @@ s32 EnZot_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 
 void EnZot_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f D_80B99934 = { 400.0f, 0.0f, 0.0f };
-    EnZot* this = THIS;
+    EnZot* this = (EnZot*)thisx;
 
     if (limbIndex == ZORA_LIMB_HEAD) {
         Matrix_MultVec3f(&D_80B99934, &this->actor.focus.pos);
@@ -1423,7 +1421,7 @@ void EnZot_Draw(Actor* thisx, PlayState* play) {
         gZoraEyeHalfTex,
         gZoraEyeClosedTex,
     };
-    EnZot* this = THIS;
+    EnZot* this = (EnZot*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

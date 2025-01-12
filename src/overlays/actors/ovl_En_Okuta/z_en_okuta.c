@@ -15,8 +15,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE)
 
-#define THIS ((EnOkuta*)thisx)
-
 void EnOkuta_Init(Actor* thisx, PlayState* play2);
 void EnOkuta_Destroy(Actor* thisx, PlayState* play);
 void EnOkuta_Update(Actor* thisx, PlayState* play2);
@@ -145,7 +143,7 @@ static InitChainEntry sInitChain[] = {
 
 void EnOkuta_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnOkuta* this = THIS;
+    EnOkuta* this = (EnOkuta*)thisx;
     WaterBox* waterBox;
     f32 waterSurface;
     s32 bgId;
@@ -186,7 +184,7 @@ void EnOkuta_Init(Actor* thisx, PlayState* play2) {
     } else {
         ActorShape_Init(&thisx->shape, 1100.0f, ActorShadow_DrawCircle, 18.0f);
         thisx->flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
-        thisx->flags |= ACTOR_FLAG_10;
+        thisx->flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
         Collider_InitAndSetCylinder(play, &this->collider, thisx, &sProjectileCylinderInit);
         Actor_ChangeCategory(play, &play->actorCtx, thisx, ACTORCAT_PROP);
         this->timer = 22;
@@ -200,7 +198,7 @@ void EnOkuta_Init(Actor* thisx, PlayState* play2) {
 }
 
 void EnOkuta_Destroy(Actor* thisx, PlayState* play) {
-    EnOkuta* this = THIS;
+    EnOkuta* this = (EnOkuta*)thisx;
     Collider_DestroyCylinder(play, &this->collider);
 }
 
@@ -657,7 +655,7 @@ void EnOkuta_SetupFrozen(EnOkuta* this, PlayState* play) {
 
     if (this->actor.child != NULL) {
         this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
-        this->actor.flags |= ACTOR_FLAG_10;
+        this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
         this->actor.child->csId = this->actor.csId;
         this->actionFunc = EnOkuta_FrozenInIceBlock;
     } else {
@@ -684,7 +682,7 @@ void EnOkuta_FrozenInIceBlock(EnOkuta* this, PlayState* play) {
         this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
 
         if (Math_StepToF(&this->actor.world.pos.y, this->actor.home.pos.y, 10.0f)) {
-            this->actor.flags &= ~ACTOR_FLAG_10;
+            this->actor.flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED;
             EnOkuta_SetupFloat(this);
         }
     }
@@ -883,7 +881,7 @@ void EnOkuta_UpdateDamage(EnOkuta* this, PlayState* play) {
 
 void EnOkuta_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnOkuta* this = THIS;
+    EnOkuta* this = (EnOkuta*)thisx;
     s32 pad[2];
 
     if (EN_OKUTA_GET_TYPE(&this->actor) == EN_OKUTA_TYPE_RED_OCTOROK) {
@@ -940,13 +938,13 @@ void EnOkuta_Update(Actor* thisx, PlayState* play2) {
 }
 
 void EnOkuta_Projectile_Update(Actor* thisx, PlayState* play) {
-    EnOkuta* this = THIS;
+    EnOkuta* this = (EnOkuta*)thisx;
     Player* player = GET_PLAYER(play);
     s32 pad;
     Vec3f prevPos;
     s32 canRestorePrevPos = false;
 
-    if (!(player->stateFlags1 & (PLAYER_STATE1_2 | PLAYER_STATE1_40 | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 |
+    if (!(player->stateFlags1 & (PLAYER_STATE1_2 | PLAYER_STATE1_TALKING | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 |
                                  PLAYER_STATE1_10000000 | PLAYER_STATE1_20000000))) {
         this->actionFunc(this, play);
         Actor_MoveWithoutGravity(&this->actor);
@@ -1021,7 +1019,7 @@ s32 EnOkuta_GetSnoutScale(EnOkuta* this, f32 curFrame, Vec3f* scale) {
 }
 
 s32 EnOkuta_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnOkuta* this = THIS;
+    EnOkuta* this = (EnOkuta*)thisx;
     s32 shouldScaleLimb = false;
     Vec3f scale;
     f32 curFrame = this->skelAnime.curFrame;
@@ -1076,7 +1074,7 @@ static Vec3f sEffectsBodyPartOffsets[3] = {
 };
 
 void EnOkuta_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnOkuta* this = THIS;
+    EnOkuta* this = (EnOkuta*)thisx;
     s32 bodyPartIndex = sLimbToBodyParts[limbIndex];
     s32 i;
 
@@ -1097,7 +1095,7 @@ void EnOkuta_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
 }
 
 void EnOkuta_Draw(Actor* thisx, PlayState* play) {
-    EnOkuta* this = THIS;
+    EnOkuta* this = (EnOkuta*)thisx;
     s32 pad;
     Gfx* gfx;
 

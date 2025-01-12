@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
-#define THIS ((EnSth2*)thisx)
-
 void EnSth2_Init(Actor* thisx, PlayState* play);
 void EnSth2_Destroy(Actor* thisx, PlayState* play);
 void EnSth2_Update(Actor* thisx, PlayState* play);
@@ -33,7 +31,7 @@ ActorProfile En_Sth2_Profile = {
 #include "assets/overlays/ovl_En_Sth2/ovl_En_Sth2.c"
 
 void EnSth2_Init(Actor* thisx, PlayState* play) {
-    EnSth2* this = THIS;
+    EnSth2* this = (EnSth2*)thisx;
 
     this->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_STH);
     Actor_SetScale(&this->actor, 0.01f);
@@ -41,7 +39,7 @@ void EnSth2_Init(Actor* thisx, PlayState* play) {
     this->unused = 0;
 
     if (play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON) {
-        this->actor.flags |= (ACTOR_FLAG_10 | ACTOR_FLAG_20);
+        this->actor.flags |= (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED);
     } else {
         Actor_Kill(&this->actor);
         return;
@@ -58,7 +56,7 @@ void EnSth2_UpdateSkelAnime(EnSth2* this, PlayState* play) {
 
 void EnSth2_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnSth2* this = THIS;
+    EnSth2* this = (EnSth2*)thisx;
 
     if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
         this->actor.objectSlot = this->objectSlot;
@@ -72,7 +70,7 @@ void EnSth2_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnSth2_UpdateActionFunc(Actor* thisx, PlayState* play) {
-    EnSth2* this = THIS;
+    EnSth2* this = (EnSth2*)thisx;
 
     this->actionFunc(this, play);
 }
@@ -110,7 +108,7 @@ void EnSth2_Draw(Actor* thisx, PlayState* play2) {
         { 190, 110, 0 }, { 0, 180, 110 }, { 0, 255, 80 }, { 255, 160, 60 }, { 190, 230, 250 }, { 240, 230, 120 },
     };
     PlayState* play = play2;
-    EnSth2* this = THIS;
+    EnSth2* this = (EnSth2*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

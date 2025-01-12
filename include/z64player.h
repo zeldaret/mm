@@ -13,6 +13,31 @@
 struct Player;
 struct PlayState;
 
+#define PLAYER_GET_BG_CAM_INDEX(thisx) ((thisx)->params & 0xFF)
+#define PLAYER_GET_START_MODE(thisx) (((thisx)->params & 0xF00) >> 8)
+
+typedef enum PlayerStartMode {
+    /*  0x0 */ PLAYER_START_MODE_NOTHING, // Update is empty and draw function is NULL, nothing occurs. Useful in cutscenes, for example.
+    /*  0x1 */ PLAYER_START_MODE_TIME_TRAVEL, // OoT Leftover. Arriving from time travel. Automatically adjusts by age.
+    /*  0x2 */ PLAYER_START_MODE_BLUE_WARP, // Arriving from a blue warp.
+    /*  0x3 */ PLAYER_START_MODE_DOOR, // Unused. Use a door immediately if one is nearby. If no door is in usable range, a softlock occurs.
+    /*  0x4 */ PLAYER_START_MODE_GROTTO, // Arriving from a grotto, launched upward from the ground.
+    /*  0x5 */ PLAYER_START_MODE_WARP_SONG, // OoT Leftover. Arriving from a warp song.
+    /*  0x6 */ PLAYER_START_MODE_OWL, // Arriving from an Owl Save or Song of Soaring (both overworld and dungeon warps).
+    /*  0x7 */ PLAYER_START_MODE_KNOCKED_OVER, // Knocked over on the ground and flashing red.
+    /*  0x8 */ PLAYER_START_MODE_8,
+    /*  0x9 */ PLAYER_START_MODE_9,
+    /*  0xA */ PLAYER_START_MODE_A,
+    /*  0xB */ PLAYER_START_MODE_B,
+    /*  0xC */ PLAYER_START_MODE_TELESCOPE,
+    /*  0xD */ PLAYER_START_MODE_D,
+    /*  0xE */ PLAYER_START_MODE_E,
+    /*  0xF */ PLAYER_START_MODE_F,
+    /* 0x10 */ PLAYER_START_MODE_MAX // Note: By default, this param has 4 bits allocated. The max value is 16.
+} PlayerStartMode;
+
+#define PLAYER_PARAMS(startBgCamIndex, startMode) ((startBgCamIndex & 0xFF) | ((startMode & 0xF) << 8))
+
 typedef enum PlayerShield {
     /* 0 */ PLAYER_SHIELD_NONE,
     /* 1 */ PLAYER_SHIELD_HEROS_SHIELD,
@@ -81,7 +106,7 @@ typedef enum PlayerItemAction {
     /* 0x05 */ PLAYER_IA_SWORD_GILDED,
     /* 0x06 */ PLAYER_IA_SWORD_TWO_HANDED,
     /* 0x07 */ PLAYER_IA_DEKU_STICK,
-    /* 0x08 */ PLAYER_IA_ZORA_FINS,
+    /* 0x08 */ PLAYER_IA_ZORA_BOOMERANG,
     /* 0x09 */ PLAYER_IA_BOW,
     /* 0x0A */ PLAYER_IA_BOW_FIRE,
     /* 0x0B */ PLAYER_IA_BOW_ICE,
@@ -185,7 +210,7 @@ typedef enum PlayerMeleeWeapon {
     /* 3 */ PLAYER_MELEEWEAPON_SWORD_GILDED = GET_MELEE_WEAPON_FROM_IA(PLAYER_IA_SWORD_GILDED),
     /* 4 */ PLAYER_MELEEWEAPON_SWORD_TWO_HANDED = GET_MELEE_WEAPON_FROM_IA(PLAYER_IA_SWORD_TWO_HANDED),
     /* 5 */ PLAYER_MELEEWEAPON_DEKU_STICK = GET_MELEE_WEAPON_FROM_IA(PLAYER_IA_DEKU_STICK),
-    /* 6 */ PLAYER_MELEEWEAPON_ZORA_FINS = GET_MELEE_WEAPON_FROM_IA(PLAYER_IA_ZORA_FINS),
+    /* 6 */ PLAYER_MELEEWEAPON_ZORA_BOOMERANG = GET_MELEE_WEAPON_FROM_IA(PLAYER_IA_ZORA_BOOMERANG),
     /* 7 */ PLAYER_MELEEWEAPON_MAX
 } PlayerMeleeWeapon;
 
@@ -444,7 +469,7 @@ typedef enum PlayerModelGroup {
     /* 11 */ PLAYER_MODELGROUP_INSTRUMENT,
     /* 12 */ PLAYER_MODELGROUP_BOTTLE,
     /* 13 */ PLAYER_MODELGROUP_13,
-    /* 14 */ PLAYER_MODELGROUP_ZORA_FINS,
+    /* 14 */ PLAYER_MODELGROUP_ZORA_BOOMERANG,
     /* 15 */ PLAYER_MODELGROUP_MAX
 } PlayerModelGroup;
 
@@ -560,6 +585,14 @@ typedef enum PlayerLedgeClimbType {
 
 #define LEDGE_DIST_MAX 399.96002f
 
+typedef enum PlayerStickDirection {
+    /* -1 */ PLAYER_STICK_DIR_NONE = -1,
+    /*  0 */ PLAYER_STICK_DIR_FORWARD,
+    /*  1 */ PLAYER_STICK_DIR_LEFT,
+    /*  2 */ PLAYER_STICK_DIR_BACKWARD,
+    /*  3 */ PLAYER_STICK_DIR_RIGHT
+} PlayerStickDirection;
+
 // TODO: less dumb name
 #define SFX_VOICE_BANK_SIZE 0x20
 
@@ -590,8 +623,8 @@ typedef struct PlayerAgeProperties {
     /* 0x98 */ f32 unk_98;
     /* 0x9C */ f32 unk_9C;
     /* 0xA0 */ PlayerAnimationHeader* openChestAnim;
-    /* 0xA4 */ PlayerAnimationHeader* unk_A4; // OoT leftovers to interact with the Master Sword
-    /* 0xA8 */ PlayerAnimationHeader* unk_A8; // OoT leftovers to interact with the Master Sword
+    /* 0xA4 */ PlayerAnimationHeader* timeTravelStartAnim; // OoT leftovers to interact with the Master Sword
+    /* 0xA8 */ PlayerAnimationHeader* timeTravelEndAnim; // OoT leftovers to interact with the Master Sword
     /* 0xAC */ PlayerAnimationHeader* unk_AC;
     /* 0xB0 */ PlayerAnimationHeader* unk_B0;
     /* 0xB4 */ PlayerAnimationHeader* unk_B4[4];
@@ -880,8 +913,8 @@ typedef enum PlayerCueId {
 #define PLAYER_STATE1_10         (1 << 4)
 // 
 #define PLAYER_STATE1_20         (1 << 5)
-// 
-#define PLAYER_STATE1_40         (1 << 6)
+// Currently talking to an actor. This includes item exchanges.
+#define PLAYER_STATE1_TALKING (1 << 6)
 // Player has died. Note that this gets set when the death cutscene has started, after landing from the air.
 // This also gets set when either deku/zora forms touches lava floor, or goron form enters water and the scene resets.
 #define PLAYER_STATE1_DEAD         (1 << 7)
@@ -893,8 +926,8 @@ typedef enum PlayerCueId {
 #define PLAYER_STATE1_400        (1 << 10)
 // Currently carrying an actor
 #define PLAYER_STATE1_CARRYING_ACTOR (1 << 11)
-// charging spin attack
-#define PLAYER_STATE1_1000       (1 << 12)
+// Currently charging a spin attack (by holding down the B button)
+#define PLAYER_STATE1_CHARGING_SPIN_ATTACK (1 << 12)
 // 
 #define PLAYER_STATE1_2000       (1 << 13)
 // 
@@ -917,10 +950,10 @@ typedef enum PlayerCueId {
 #define PLAYER_STATE1_400000     (1 << 22)
 // 
 #define PLAYER_STATE1_800000     (1 << 23)
-// 
-#define PLAYER_STATE1_1000000    (1 << 24)
-// 
-#define PLAYER_STATE1_2000000    (1 << 25)
+// Currently using the zora boomerang. This includes all phases (aiming, throwing, and catching).
+#define PLAYER_STATE1_USING_ZORA_BOOMERANG (1 << 24)
+// Zora boomerang has been thrown and is flying in the air
+#define PLAYER_STATE1_ZORA_BOOMERANG_THROWN (1 << 25)
 // 
 #define PLAYER_STATE1_4000000    (1 << 26)
 // Swimming?
@@ -937,8 +970,8 @@ typedef enum PlayerCueId {
 
 // 
 #define PLAYER_STATE2_1          (1 << 0)
-// 
-#define PLAYER_STATE2_2          (1 << 1)
+// Can accept a talk offer. "Speak" or "Check" is shown on the A button.
+#define PLAYER_STATE2_CAN_ACCEPT_TALK_OFFER          (1 << 1)
 // 
 #define PLAYER_STATE2_4          (1 << 2)
 // 
@@ -1015,8 +1048,8 @@ typedef enum PlayerCueId {
 #define PLAYER_STATE3_20         (1 << 5)
 // 
 #define PLAYER_STATE3_40         (1 << 6)
-// 
-#define PLAYER_STATE3_80         (1 << 7)
+// Flying in the air with the hookshot as it pulls Player toward its destination
+#define PLAYER_STATE3_FLYING_WITH_HOOKSHOT (1 << 7)
 // Deku flower dive
 #define PLAYER_STATE3_100        (1 << 8)
 // 
@@ -1047,8 +1080,8 @@ typedef enum PlayerCueId {
 #define PLAYER_STATE3_200000     (1 << 21)
 // 
 #define PLAYER_STATE3_400000     (1 << 22)
-// 
-#define PLAYER_STATE3_800000     (1 << 23)
+// A Zora boomerang has been caught this frame
+#define PLAYER_STATE3_ZORA_BOOMERANG_CAUGHT (1 << 23)
 // 
 #define PLAYER_STATE3_1000000    (1 << 24)
 // 
@@ -1061,36 +1094,10 @@ typedef enum PlayerCueId {
 #define PLAYER_STATE3_10000000   (1 << 28)
 // breman mask march?
 #define PLAYER_STATE3_20000000   (1 << 29)
-// 
+// Item change process has begun
 #define PLAYER_STATE3_START_CHANGING_HELD_ITEM   (1 << 30)
 // Currently locked onto a hostile actor. Triggers a "battle" variant of many actions.
 #define PLAYER_STATE3_HOSTILE_LOCK_ON   (1 << 31)
-
-
-#define PLAYER_GET_BG_CAM_INDEX(thisx) ((thisx)->params & 0xFF)
-#define PLAYER_GET_INITMODE(thisx) (((thisx)->params & 0xF00) >> 8)
-
-typedef enum PlayerInitMode {
-    /*  0x0 */ PLAYER_INITMODE_0,
-    /*  0x1 */ PLAYER_INITMODE_1, // Spawning after pulling/putting-back Master sword // OoT leftover
-    /*  0x2 */ PLAYER_INITMODE_2,
-    /*  0x3 */ PLAYER_INITMODE_3,
-    /*  0x4 */ PLAYER_INITMODE_4,
-    /*  0x5 */ PLAYER_INITMODE_5,
-    /*  0x6 */ PLAYER_INITMODE_6,
-    /*  0x7 */ PLAYER_INITMODE_7,
-    /*  0x8 */ PLAYER_INITMODE_8,
-    /*  0x9 */ PLAYER_INITMODE_9,
-    /*  0xA */ PLAYER_INITMODE_A,
-    /*  0xB */ PLAYER_INITMODE_B,
-    /*  0xC */ PLAYER_INITMODE_TELESCOPE,
-    /*  0xD */ PLAYER_INITMODE_D,
-    /*  0xE */ PLAYER_INITMODE_E,
-    /*  0xF */ PLAYER_INITMODE_F,
-    /* 0x10 */ PLAYER_INITMODE_MAX // Must not exceed 0x10 as `PLAYER_GET_INITMODE` is limited to a nibble in player params
-} PlayerInitMode;
-
-#define PLAYER_PARAMS(startBgCamIndex, initMode) ((startBgCamIndex & 0xFF) | ((initMode & 0xF) << 8))
 
 typedef enum PlayerUnkAA5 {
     /* 0 */ PLAYER_UNKAA5_0,
@@ -1141,7 +1148,7 @@ typedef struct Player {
     /* 0x164 */ Gfx** waistDLists;
     /* 0x168 */ UNK_TYPE1 unk_168[0x4C];
     /* 0x1B4 */ s16 unk_1B4;
-    /* 0x1B6 */ char unk_1B6[2];
+    /* 0x1B6 */ UNK_TYPE1 unk_1B6[0x2];
     /* 0x1B8 */ u8 giObjectLoading;
     /* 0x1BC */ DmaRequest giObjectDmaRequest;
     /* 0x1DC */ OSMesgQueue giObjectLoadQueue;
@@ -1187,7 +1194,6 @@ typedef struct Player {
                     s16 doorBgCamIndex; // `BgCamIndex` used during a sliding door and spiral staircase cutscenes
                 } cv; // "Cutscene Variable": context dependent variable that has different meanings depending on what function is called
     /* 0x3BC */ s16 subCamId;
-    /* 0x3BE */ char unk_3BE[2];
     /* 0x3C0 */ Vec3f unk_3C0;
     /* 0x3CC */ s16 unk_3CC;
     /* 0x3CE */ s8 unk_3CE;
@@ -1201,7 +1207,7 @@ typedef struct Player {
     /* 0x664 */ ColliderQuad shieldQuad;
     /* 0x6E4 */ ColliderCylinder shieldCylinder;
     /* 0x730 */ Actor* focusActor; // Actor that Player and the camera are looking at; Used for lock-on, talking, and more
-    /* 0x734 */ char unk_734[4];
+    /* 0x734 */ UNK_TYPE1 unk_734[0x4];
     /* 0x738 */ s32 zTargetActiveTimer; // Non-zero values indicate Z-Targeting should update; Values under 5 indicate lock-on is releasing
     /* 0x73C */ s32 meleeWeaponEffectIndex[3];
     /* 0x748 */ PlayerActionFunc actionFunc;
@@ -1215,16 +1221,16 @@ typedef struct Player {
     /* 0xA70 */ u32 stateFlags2;
     /* 0xA74 */ u32 stateFlags3;
     /* 0xA78 */ Actor* autoLockOnActor; // Actor that is locked onto automatically without player input; see `Player_SetAutoLockOnActor`
-    /* 0xA7C */ Actor* boomerangActor;
+    /* 0xA7C */ Actor* zoraBoomerangActor; // Defaults to the left zora boomerang, but will switch to right if only the left boomerang is caught.
     /* 0xA80 */ Actor* tatlActor;
     /* 0xA84 */ s16 tatlTextId;
     /* 0xA86 */ s8 csId;
     /* 0xA87 */ s8 exchangeItemAction; // PlayerItemAction enum
     /* 0xA88 */ Actor* talkActor;
     /* 0xA8C */ f32 talkActorDistance;
-    /* 0xA90 */ Actor* unk_A90;
-    /* 0xA94 */ f32 unk_A94;
-    /* 0xA98 */ Actor* unk_A98;
+    /* 0xA90 */ Actor* ocarinaInteractionActor;
+    /* 0xA94 */ f32 ocarinaInteractionDistance;
+    /* 0xA98 */ UNK_TYPE1 unk_A98[0x4];
     /* 0xA9C */ f32 secretRumbleCharge; // builds per frame until discharges with a rumble request
     /* 0xAA0 */ f32 closestSecretDistSq; // Used to augment `secretRumbleCharge`. Cleared every frame
     /* 0xAA4 */ s8 idleType;
@@ -1250,15 +1256,20 @@ typedef struct Player {
     /* 0xADB */ s8 meleeWeaponState;
     /* 0xADC */ s8 unk_ADC;
     /* 0xADD */ s8 unk_ADD; // Some sort of combo counter
-    /* 0xADE */ u8 unk_ADE;
-    /* 0xADF */ s8 unk_ADF[4]; // Circular buffer used for testing for triggering a quickspin
-    /* 0xAE3 */ s8 unk_AE3[4]; // Circular buffer used for ?
+    /* 0xADE */ u8 controlStickDataIndex; // cycles between 0 - 3. Used to index `controlStickSpinAngles` and `controlStickDirections`
+    /* 0xADF */ s8 controlStickSpinAngles[4]; // Stores a modified version of the control stick angle for the last 4 frames. Used for checking spins.
+    /* 0xAE3 */ s8 controlStickDirections[4]; // Stores the control stick direction (relative to shape yaw) for the last 4 frames. See `PlayerStickDirection`.
     /* 0xAE7 */ union {
         s8 actionVar1;
+        s8 startedAnim; // Player_Action_TimeTravelEnd: Started playing the animation that was previously frozen
+        s8 facingUpSlope; // Player_Action_SlideOnSlope: Facing uphill when sliding on a slope
     } av1; // "Action Variable 1": context dependent variable that has different meanings depending on what action is currently running
     /* 0xAE8 */ union {
         s16 actionVar2;
         s16 fallDamageStunTimer; // Player_Action_Idle: Prevents any movement and shakes model up and down quickly to indicate fall damage stun
+        s16 animDelayTimer; // Player_Action_TimeTravelEnd: Delays playing animation until finished counting down
+        s16 csDelayTimer; // Player_Action_WaitForCutscene: Number of frames to wait before responding to a cutscene
+        s16 playedLandingSfx; // Player_Action_BlueWarpArrive: Played sfx when landing on the ground
     } av2; // "Action Variable 2": context dependent variable that has different meanings depending on what action is currently running
     /* 0xAEC */ f32 unk_AEC;
     /* 0xAF0 */ union {
@@ -1287,7 +1298,7 @@ typedef struct Player {
     /* 0xB58 */ f32 distToInteractWall; // xyz distance to the interact wall
     /* 0xB5C */ u8 ledgeClimbType; // see PlayerLedgeClimbType enum
     /* 0xB5D */ u8 ledgeClimbDelayTimer;
-    /* 0xB5E */ u8 unk_B5E;
+    /* 0xB5E */ u8 textboxBtnCooldownTimer; // Prevents usage of A/B/C-up when counting down
     /* 0xB5F */ u8 unk_B5F;
     /* 0xB60 */ u16 blastMaskTimer;
     /* 0xB62 */ s16 unk_B62;
@@ -1374,7 +1385,7 @@ s32 Player_InitOverrideInput(struct PlayState* play, PlayerOverrideInputEntry* i
 s32 Player_UpdateOverrideInput(struct PlayState* play, PlayerOverrideInputEntry* inputEntry, f32 distXZRange);
 void func_80122868(struct PlayState* play, Player* player);
 void func_801229A0(struct PlayState* play, Player* player);
-void func_801229EC(Actor* thisx, struct PlayState* play);
+void Player_DoNothing(Actor* thisx, struct PlayState* play);
 void func_801229FC(Player* player);
 void func_80122BA4(struct PlayState* play, struct_80122D44_arg1* arg1, s32 arg2, s32 alpha);
 void func_80122C20(struct PlayState* play, struct_80122D44_arg1* arg1);

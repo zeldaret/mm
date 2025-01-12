@@ -8,9 +8,7 @@
 #include "overlays/actors/ovl_Obj_Aqua/z_obj_aqua.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_10)
-
-#define THIS ((ObjIcePoly*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void ObjIcePoly_Init(Actor* thisx, PlayState* play);
 void ObjIcePoly_Destroy(Actor* thisx, PlayState* play);
@@ -78,12 +76,12 @@ static Color_RGBA8 D_80932378 = { 250, 250, 250, 255 };
 static Color_RGBA8 D_8093237C = { 180, 180, 180, 255 };
 
 void ObjIcePoly_Init(Actor* thisx, PlayState* play) {
-    ObjIcePoly* this = THIS;
+    ObjIcePoly* this = (ObjIcePoly*)thisx;
     s32 i;
 
     this->switchFlag = OBJICEPOLY_GET_SWITCH_FLAG(thisx);
     thisx->params = OBJICEPOLY_GET_SCALE(thisx);
-    thisx->uncullZoneForward = 5600.0f;
+    thisx->cullingVolumeDistance = 5600.0f;
 
     Actor_SetScale(thisx, thisx->params * 0.01f);
 
@@ -125,7 +123,7 @@ void ObjIcePoly_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjIcePoly_Destroy(Actor* thisx, PlayState* play) {
-    ObjIcePoly* this = THIS;
+    ObjIcePoly* this = (ObjIcePoly*)thisx;
     s32 i;
 
     for (i = 0; i < ARRAY_COUNT(this->colliders1); i++) {
@@ -336,14 +334,14 @@ void func_80931EEC(ObjIcePoly* this, PlayState* play) {
 }
 
 void ObjIcePoly_Update(Actor* thisx, PlayState* play) {
-    ObjIcePoly* this = THIS;
+    ObjIcePoly* this = (ObjIcePoly*)thisx;
 
     this->actionFunc(this, play);
 }
 
 void ObjIcePoly_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
-    ObjIcePoly* this = THIS;
+    ObjIcePoly* this = (ObjIcePoly*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

@@ -9,9 +9,7 @@
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
-
-#define THIS ((EnBom*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 void EnBom_Init(Actor* thisx, PlayState* play);
 void EnBom_Destroy(Actor* thisx, PlayState* play);
@@ -129,7 +127,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void EnBom_Init(Actor* thisx, PlayState* play) {
-    EnBom* this = THIS;
+    EnBom* this = (EnBom*)thisx;
     s32 params;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
@@ -172,7 +170,7 @@ void EnBom_Init(Actor* thisx, PlayState* play) {
     this->collider2.elements[0].dim.worldSphere.center.y = this->actor.world.pos.y;
     this->collider2.elements[0].dim.worldSphere.center.z = this->actor.world.pos.z;
 
-    this->actor.flags |= ACTOR_FLAG_100000;
+    this->actor.flags |= ACTOR_FLAG_FREEZE_EXCEPTION;
 
     if (Actor_HasParent(&this->actor, play)) {
         this->actionFunc = EnBom_WaitForRelease;
@@ -185,7 +183,7 @@ void EnBom_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnBom_Destroy(Actor* thisx, PlayState* play) {
-    EnBom* this = THIS;
+    EnBom* this = (EnBom*)thisx;
 
     Collider_DestroyJntSph(play, &this->collider2);
     Collider_DestroyCylinder(play, &this->collider1);
@@ -303,11 +301,11 @@ void EnBom_Move(EnBom* this, PlayState* play) {
 }
 
 void EnBom_WaitForRelease(EnBom* this, PlayState* play) {
-    // if parent is NULL bomb has been released
+    // if parent pointer is NULL, the bomb has been released
     if (Actor_HasNoParent(&this->actor, play)) {
         this->actionFunc = EnBom_Move;
         this->actor.room = play->roomCtx.curRoom.num;
-        this->actor.flags &= ~ACTOR_FLAG_100000;
+        this->actor.flags &= ~ACTOR_FLAG_FREEZE_EXCEPTION;
         this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
         Math_Vec3s_ToVec3f(&this->actor.prevPos, &this->actor.home.rot);
         if (this->isPowderKeg) {
@@ -343,7 +341,7 @@ void EnBom_Explode(EnBom* this, PlayState* play) {
     Color_RGBA8 sp80;
 
     if (this->collider2.elements[0].dim.modelSphere.radius == 0) {
-        this->actor.flags |= ACTOR_FLAG_20;
+        this->actor.flags |= ACTOR_FLAG_DRAW_CULLING_DISABLED;
         Rumble_Request(this->actor.xzDistToPlayer, 255, 20, 150);
     }
 
@@ -434,7 +432,7 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
     Vec3f effPos;
     Vec3f dustAccel = { 0.0f, 0.6f, 0.0f };
     Color_RGBA8 dustColor = { 255, 255, 255, 255 };
-    EnBom* this = THIS;
+    EnBom* this = (EnBom*)thisx;
     s32 pad;
     Player* player = GET_PLAYER(play);
 
@@ -557,7 +555,7 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
                 Camera_AddQuake(&play->mainCamera, 2, 11, 8);
                 thisx->params = BOMB_TYPE_EXPLOSION;
                 this->timer = 10;
-                thisx->flags |= (ACTOR_FLAG_20 | ACTOR_FLAG_100000);
+                thisx->flags |= (ACTOR_FLAG_DRAW_CULLING_DISABLED | ACTOR_FLAG_FREEZE_EXCEPTION);
                 this->actionFunc = EnBom_Explode;
                 if (this->isPowderKeg) {
                     gSaveContext.powderKegTimer = 0;
@@ -615,7 +613,7 @@ static Vec3f D_80872F04 = { 0.0f, 0.0f, 0.0f };
 
 void EnBom_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnBom* this = THIS;
+    EnBom* this = (EnBom*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

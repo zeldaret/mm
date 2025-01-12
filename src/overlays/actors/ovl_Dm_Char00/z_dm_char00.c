@@ -8,9 +8,7 @@
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 #include "assets/objects/object_delf/object_delf.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
-
-#define THIS ((DmChar00*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 void DmChar00_Init(Actor* thisx, PlayState* play);
 void DmChar00_Destroy(Actor* thisx, PlayState* play);
@@ -664,7 +662,7 @@ void func_80AA5EBC(DmChar00* this, PlayState* play) {
 
 void DmChar00_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    DmChar00* this = THIS;
+    DmChar00* this = (DmChar00*)thisx;
 
     if ((play->sceneId == SCENE_LOST_WOODS) && !Cutscene_IsPlaying(play)) {
         Actor_Kill(thisx);
@@ -1023,7 +1021,7 @@ void func_80AA695C(DmChar00* this, PlayState* play) {
 }
 
 void DmChar00_Update(Actor* thisx, PlayState* play) {
-    DmChar00* this = THIS;
+    DmChar00* this = (DmChar00*)thisx;
 
     SkelAnime_Update(&this->skelAnime);
 
@@ -1036,7 +1034,7 @@ void DmChar00_Update(Actor* thisx, PlayState* play) {
 
 s32 DmChar00_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
                               Gfx** gfx) {
-    DmChar00* this = THIS;
+    DmChar00* this = (DmChar00*)thisx;
     f32 sp28;
     Vec3f sp1C;
 
@@ -1051,7 +1049,7 @@ s32 DmChar00_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f
 
 void DmChar00_Draw(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    DmChar00* this = THIS;
+    DmChar00* this = (DmChar00*)thisx;
     s32 phi_a0;
     s32 pad;
     Gfx* gfx = GRAPH_ALLOC(play->state.gfxCtx, 4 * sizeof(Gfx));

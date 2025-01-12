@@ -3,9 +3,9 @@
 
 // Static/compile-time assertions
 
-#if (__STDC_VERSION__ >= 202311L)
+#if !defined(__sgi) && (__STDC_VERSION__ >= 202311L)
 // static_assert is a keyword in C23, do not define it
-#elif (__STDC_VERSION__ >= 201112L)
+#elif !defined(__sgi) && (__STDC_VERSION__ >= 201112L)
 # define static_assert(cond, msg) _Static_assert(cond, msg)
 #else
 # ifndef GLUE

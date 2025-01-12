@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
-#define THIS ((DmChar08*)thisx)
-
 void DmChar08_Init(Actor* thisx, PlayState* play2);
 void DmChar08_Destroy(Actor* thisx, PlayState* play);
 void DmChar08_Update(Actor* thisx, PlayState* play);
@@ -73,9 +71,9 @@ static AnimationInfo sAnimationInfo[TURTLE_ANIM_MAX] = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 4000, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeDistance, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 4000, ICHAIN_STOP),
 };
 
 void DmChar08_UpdateEyes(DmChar08* this) {
@@ -144,7 +142,7 @@ void DmChar08_ChangeAnim(SkelAnime* skelAnime, AnimationInfo* animInfo, u16 anim
 
 void DmChar08_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    DmChar08* this = THIS;
+    DmChar08* this = (DmChar08*)thisx;
 
     thisx->attentionRangeType = ATTENTION_RANGE_5;
     this->eyeMode = TURTLE_EYEMODE_CLOSED;
@@ -243,7 +241,7 @@ void DmChar08_Init(Actor* thisx, PlayState* play2) {
 }
 
 void DmChar08_Destroy(Actor* thisx, PlayState* play) {
-    DmChar08* this = THIS;
+    DmChar08* this = (DmChar08*)thisx;
 
     if (this->dynapolyInitialized) {
         DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
@@ -1015,7 +1013,7 @@ void DmChar08_UpdateCollision(DmChar08* this, PlayState* play) {
 }
 
 void DmChar08_Update(Actor* thisx, PlayState* play) {
-    DmChar08* this = THIS;
+    DmChar08* this = (DmChar08*)thisx;
 
     this->dyna.actor.focus.pos.x = this->focusPos.x;
     this->dyna.actor.focus.pos.y = this->focusPos.y + this->dyna.actor.lockOnArrowOffset;
@@ -1061,7 +1059,7 @@ s32 DmChar08_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f
 }
 
 void DmChar08_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    DmChar08* this = THIS;
+    DmChar08* this = (DmChar08*)thisx;
     Vec3f src;
 
     if (limbIndex == TURTLE_LIMB_SHELL) {
@@ -1087,7 +1085,7 @@ void DmChar08_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* r
 }
 
 void DmChar08_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
-    DmChar08* this = THIS;
+    DmChar08* this = (DmChar08*)thisx;
     f32 one;
 
     switch (limbIndex) {
@@ -1144,7 +1142,7 @@ TexturePtr sBigTurtleEyeTextures[] = {
 
 void DmChar08_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
-    DmChar08* this = THIS;
+    DmChar08* this = (DmChar08*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

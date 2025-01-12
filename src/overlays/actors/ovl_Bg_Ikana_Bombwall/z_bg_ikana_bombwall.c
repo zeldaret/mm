@@ -7,9 +7,7 @@
 #include "z_bg_ikana_bombwall.h"
 #include "assets/objects/object_ikana_obj/object_ikana_obj.h"
 
-#define FLAGS (ACTOR_FLAG_10000000)
-
-#define THIS ((BgIkanaBombwall*)thisx)
+#define FLAGS (ACTOR_FLAG_UCODE_POINT_LIGHT_ENABLED)
 
 void BgIkanaBombwall_Init(Actor* thisx, PlayState* play);
 void BgIkanaBombwall_Destroy(Actor* thisx, PlayState* play);
@@ -85,9 +83,9 @@ s16 D_80BD52C8[] = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 500, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 500, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDistance, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 500, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 500, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_STOP),
 };
 
@@ -233,7 +231,7 @@ void func_80BD4A14(BgIkanaBombwall* this, PlayState* play) {
 
 void BgIkanaBombwall_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    BgIkanaBombwall* this = THIS;
+    BgIkanaBombwall* this = (BgIkanaBombwall*)thisx;
     s32 sp2C = BGIKANABOMBWALL_GET_100(&this->dyna.actor);
     CollisionHeader* colHeader;
     ColliderCylinderInit* cylinderInit;
@@ -267,7 +265,7 @@ void BgIkanaBombwall_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgIkanaBombwall_Destroy(Actor* thisx, PlayState* play) {
-    BgIkanaBombwall* this = THIS;
+    BgIkanaBombwall* this = (BgIkanaBombwall*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
     Collider_DestroyCylinder(play, &this->collider);
@@ -318,7 +316,7 @@ void func_80BD4F9C(BgIkanaBombwall* this, PlayState* play) {
 }
 
 void func_80BD4FF8(BgIkanaBombwall* this) {
-    this->dyna.actor.flags |= ACTOR_FLAG_10;
+    this->dyna.actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     CutsceneManager_Queue(this->dyna.actor.csId);
     this->actionFunc = func_80BD503C;
 }
@@ -365,7 +363,7 @@ void func_80BD5134(BgIkanaBombwall* this, PlayState* play) {
 }
 
 void BgIkanaBombwall_Update(Actor* thisx, PlayState* play) {
-    BgIkanaBombwall* this = THIS;
+    BgIkanaBombwall* this = (BgIkanaBombwall*)thisx;
 
     this->actionFunc(this, play);
 }

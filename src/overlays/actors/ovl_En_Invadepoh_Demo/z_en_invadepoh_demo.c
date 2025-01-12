@@ -19,9 +19,7 @@
 
 #include "sys_cfb.h"
 
-#define FLAGS (ACTOR_FLAG_10)
-
-#define THIS ((EnInvadepohDemo*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void EnInvadepohDemo_Init(Actor* thisx, PlayState* play);
 void EnInvadepohDemo_Destroy(Actor* thisx, PlayState* play);
@@ -115,37 +113,39 @@ static s32 sCueTypes[EN_INVADEPOH_DEMO_TYPE_MAX] = {
 };
 
 static InitChainEntry sAlienInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 20000, ICHAIN_CONTINUE), ICHAIN_F32(uncullZoneScale, 500, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 600, ICHAIN_CONTINUE),  ICHAIN_F32(lockOnArrowOffset, 6000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDistance, 20000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 500, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 600, ICHAIN_CONTINUE),
+    ICHAIN_F32(lockOnArrowOffset, 6000, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
 };
 
 static InitChainEntry sRomaniInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 20000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDistance, 20000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 100, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 100, ICHAIN_CONTINUE),
     ICHAIN_F32(lockOnArrowOffset, 1500, ICHAIN_CONTINUE),
     ICHAIN_U8(attentionRangeType, ATTENTION_RANGE_6, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
 };
 
 static InitChainEntry sCowInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 20000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 200, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDistance, 20000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 200, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 300, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
 };
 
 static InitChainEntry sUfoInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 20000, ICHAIN_CONTINUE), ICHAIN_F32(uncullZoneScale, 1000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 1000, ICHAIN_CONTINUE), ICHAIN_VEC3S(shape.rot, 0, ICHAIN_CONTINUE),
-    ICHAIN_F32(terminalVelocity, -100, ICHAIN_CONTINUE),   ICHAIN_VEC3F_DIV1000(scale, 800, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeDistance, 20000, ICHAIN_CONTINUE), ICHAIN_F32(cullingVolumeScale, 1000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 1000, ICHAIN_CONTINUE),  ICHAIN_VEC3S(shape.rot, 0, ICHAIN_CONTINUE),
+    ICHAIN_F32(terminalVelocity, -100, ICHAIN_CONTINUE),       ICHAIN_VEC3F_DIV1000(scale, 800, ICHAIN_STOP),
 };
 
 static InitChainEntry sCowTailInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 20000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDistance, 20000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 100, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 100, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
 };
 
@@ -212,7 +212,7 @@ void EnInvadepohDemo_DoNothing(EnInvadepohDemo* this, PlayState* play) {
 
 void EnInvadepohDemo_Alien_Init(EnInvadepohDemo* this, PlayState* play) {
     Actor_ProcessInitChain(&this->actor, sAlienInitChain);
-    this->actor.flags = ACTOR_FLAG_10 | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_80000000;
+    this->actor.flags = ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_MINIMAP_ICON_ENABLED;
     this->objectSlot = Object_GetSlot(&play->objectCtx, OBJECT_UCH);
     if (this->objectSlot <= OBJECT_SLOT_NONE) {
         Actor_Kill(&this->actor);
@@ -769,7 +769,7 @@ void EnInvadepohDemo_CowTail_Draw(EnInvadepohDemo* this, PlayState* play) {
 
 void EnInvadepohDemo_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnInvadepohDemo* this = THIS;
+    EnInvadepohDemo* this = (EnInvadepohDemo*)thisx;
 
     this->cueIdOffset = EN_INVADEPOH_DEMO_GET_CUEID_OFFSET(&this->actor);
     this->type = EN_INVADEPOH_DEMO_GET_TYPE(&this->actor);
@@ -799,21 +799,21 @@ void EnInvadepohDemo_Init(Actor* thisx, PlayState* play) {
 
 void EnInvadepohDemo_Destroy(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnInvadepohDemo* this = THIS;
+    EnInvadepohDemo* this = (EnInvadepohDemo*)thisx;
 
     sDestroyFuncs[this->type](this, play);
 }
 
 void EnInvadepohDemo_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnInvadepohDemo* this = THIS;
+    EnInvadepohDemo* this = (EnInvadepohDemo*)thisx;
 
     this->actionFunc(this, play);
 }
 
 void EnInvadepohDemo_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnInvadepohDemo* this = THIS;
+    EnInvadepohDemo* this = (EnInvadepohDemo*)thisx;
 
     if ((this->cueId != EN_INVADEPOH_DEMO_CUEID_NONE) && (this->drawFlags & DRAW_FLAG_SHOULD_DRAW)) {
         sDrawFuncs[this->type](this, play);

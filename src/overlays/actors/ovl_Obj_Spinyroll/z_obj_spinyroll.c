@@ -8,9 +8,7 @@
 #include "overlays/effects/ovl_Effect_Ss_Hitmark/z_eff_ss_hitmark.h"
 #include "assets/objects/object_spinyroll/object_spinyroll.h"
 
-#define FLAGS (ACTOR_FLAG_10)
-
-#define THIS ((ObjSpinyroll*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void ObjSpinyroll_Init(Actor* thisx, PlayState* play);
 void ObjSpinyroll_Destroy(Actor* thisx, PlayState* play);
@@ -138,8 +136,8 @@ f32 D_80A1F1F4[] = { 30.0f, -30.0f };
 f32 D_80A1F1FC[] = { 9.0f, -9.0f };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 500, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeDistance, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 500, ICHAIN_STOP),
 };
 
 s16 D_80A1F20C[] = { 0xFA0, -0xFA0 };
@@ -163,7 +161,7 @@ void func_80A1DAAC(Vec3f* arg0, Vec3f* arg1, s16 arg2) {
 }
 
 void func_80A1DB2C(Actor* thisx) {
-    ObjSpinyroll* this = THIS;
+    ObjSpinyroll* this = (ObjSpinyroll*)thisx;
     s32 i;
     s32 j;
     s32 params = OBJSPINYROLL_GET_C000(&this->dyna.actor);
@@ -315,7 +313,7 @@ s32 func_80A1E074(ObjSpinyroll* this, PlayState* play, Vec3f* arg2, s32 arg3) {
 
             if (BgCheck_EntityLineTest3(&play->colCtx, &spC8, &spBC, &spB0, &temp_s1->unk_04, true, false, false, true,
                                         &temp_s1->bgId, &this->dyna.actor, 0.0f)) {
-                if (arg3 && (this->dyna.actor.flags & ACTOR_FLAG_40)) {
+                if (arg3 && (this->dyna.actor.flags & ACTOR_FLAG_INSIDE_CULLING_VOLUME)) {
                     func_80A1DA50(play, this, &spC8, &spB0);
                 }
 
@@ -402,7 +400,7 @@ s32 func_80A1E3D8(ObjSpinyroll* this, PlayState* play, f32* arg2, s32 arg3) {
             if (spC0(&play->colCtx, &spA0.y, &temp_s0->unk_04, &temp_s0->bgId, &spAC, this)) {
                 temp_f20 = fabsf(spA0.y - spAC.y);
                 if (temp_f20 <= 24.0f) {
-                    if (arg3 && (this->dyna.actor.flags & ACTOR_FLAG_40)) {
+                    if (arg3 && (this->dyna.actor.flags & ACTOR_FLAG_INSIDE_CULLING_VOLUME)) {
                         spA0.x = spAC.x;
                         spA0.z = spAC.z;
                         func_80A1DA50(play, this, &spAC, &spA0);
@@ -449,7 +447,7 @@ s32 func_80A1E6D4(ObjSpinyroll* this, PlayState* play) {
 
 void ObjSpinyroll_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    ObjSpinyroll* this = THIS;
+    ObjSpinyroll* this = (ObjSpinyroll*)thisx;
     f32 sp44;
     Path* path;
     s32 pad2;
@@ -469,7 +467,7 @@ void ObjSpinyroll_Init(Actor* thisx, PlayState* play) {
     this->dyna.actor.scale.y = 0.1f;
     this->dyna.actor.scale.z = 0.1f;
 
-    this->dyna.actor.uncullZoneScale = 250.0f * sp44;
+    this->dyna.actor.cullingVolumeScale = 250.0f * sp44;
     DynaPolyActor_Init(&this->dyna, 0);
     DynaPolyActor_LoadMesh(play, &this->dyna, &object_spinyroll_Colheader_000E68);
 
@@ -511,7 +509,7 @@ void ObjSpinyroll_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjSpinyroll_Destroy(Actor* thisx, PlayState* play) {
-    ObjSpinyroll* this = THIS;
+    ObjSpinyroll* this = (ObjSpinyroll*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
     Collider_DestroyTris(play, &this->collider);
@@ -629,7 +627,7 @@ void func_80A1ECD4(ObjSpinyroll* this, PlayState* play) {
 
 void ObjSpinyroll_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    ObjSpinyroll* this = THIS;
+    ObjSpinyroll* this = (ObjSpinyroll*)thisx;
 
     if (this->collider.base.atFlags & AT_HIT) {
         this->collider.base.atFlags &= ~AT_HIT;
@@ -647,7 +645,7 @@ void ObjSpinyroll_Update(Actor* thisx, PlayState* play2) {
 }
 
 void ObjSpinyroll_Draw(Actor* thisx, PlayState* play) {
-    ObjSpinyroll* this = THIS;
+    ObjSpinyroll* this = (ObjSpinyroll*)thisx;
     f32 temp_f26;
     f32 temp_f28;
     s32 temp_s1 = OBJSPINYROLL_GET_C000(&this->dyna.actor);

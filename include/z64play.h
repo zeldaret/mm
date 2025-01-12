@@ -85,7 +85,7 @@ typedef struct PlayState {
     /* 0x187FC */ MtxF billboardMtxF;
     /* 0x1883C */ Mtx* billboardMtx;
     /* 0x18840 */ u32 gameplayFrames;
-    /* 0x18844 */ u8 unk_18844; // bool
+    /* 0x18844 */ u8 soaringCsOrSoTCsPlaying; // Either the Song of Soaring Cutscene or the Song of Time Cutscene is playing.
     /* 0x18845 */ u8 haltAllActors;
     /* 0x18846 */ s16 numSetupActors;
     /* 0x18848 */ RoomList roomList;

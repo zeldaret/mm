@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED)
 
-#define THIS ((EnBubble*)thisx)
-
 void EnBubble_Init(Actor* thisx, PlayState* play);
 void EnBubble_Destroy(Actor* thisx, PlayState* play);
 void EnBubble_Update(Actor* thisx, PlayState* play);
@@ -327,7 +325,7 @@ void func_808A005C(EnBubble* this) {
 
 void EnBubble_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnBubble* this = THIS;
+    EnBubble* this = (EnBubble*)thisx;
 
     ActorShape_Init(&this->actor.shape, 16.0f, ActorShadow_DrawCircle, 0.2f);
     Collider_InitJntSph(play, &this->colliderSphere);

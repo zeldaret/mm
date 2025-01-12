@@ -9,9 +9,7 @@
 #include "overlays/actors/ovl_En_Bombf/z_en_bombf.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_400 | ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE)
-
-#define THIS ((EnAm*)thisx)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER)
 
 void EnAm_Init(Actor* thisx, PlayState* play);
 void EnAm_Destroy(Actor* thisx, PlayState* play);
@@ -133,7 +131,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void EnAm_Init(Actor* thisx, PlayState* play) {
-    EnAm* this = THIS;
+    EnAm* this = (EnAm*)thisx;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 300.0f / 7.0f);
@@ -150,7 +148,7 @@ void EnAm_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnAm_Destroy(Actor* thisx, PlayState* play) {
-    EnAm* this = THIS;
+    EnAm* this = (EnAm*)thisx;
 
     Collider_DestroyCylinder(play, &this->enemyCollider);
     Collider_DestroyCylinder(play, &this->interactCollider);
@@ -382,7 +380,7 @@ void func_808B0820(EnAm* this) {
     Animation_PlayLoopSetSpeed(&this->skelAnime, &gArmosHopAnim, 4.0f);
     this->explodeTimer = 64;
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    this->actor.flags |= ACTOR_FLAG_10;
+    this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     this->actor.speed = 0.0f;
     this->speed = 6.0f;
     this->actionFunc = func_808B0894;
@@ -469,7 +467,7 @@ s32 EnAm_UpdateDamage(EnAm* this, PlayState* play) {
 }
 
 void EnAm_Update(Actor* thisx, PlayState* play) {
-    EnAm* this = THIS;
+    EnAm* this = (EnAm*)thisx;
     s32 pad;
 
     if (EnAm_UpdateDamage(this, play) == false) {
@@ -532,7 +530,7 @@ void EnAm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
     s32 phi_s3;
     Vec3f* phi_s1;
     Vec3f* phi_s2;
-    EnAm* this = THIS;
+    EnAm* this = (EnAm*)thisx;
 
     phi_s2 = 0;
     phi_s1 = 0;
@@ -559,7 +557,7 @@ void EnAm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 
 void EnAm_Draw(Actor* thisx, PlayState* play) {
     Gfx* gfx;
-    EnAm* this = THIS;
+    EnAm* this = (EnAm*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

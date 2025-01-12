@@ -8,9 +8,7 @@
 #include "assets/objects/object_raillift/object_raillift.h"
 #include "overlays/actors/ovl_Obj_Etcetera/z_obj_etcetera.h"
 
-#define FLAGS (ACTOR_FLAG_10)
-
-#define THIS ((ObjRaillift*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void ObjRaillift_Init(Actor* thisx, PlayState* play);
 void ObjRaillift_Destroy(Actor* thisx, PlayState* play);
@@ -41,9 +39,9 @@ ActorProfile Obj_Raillift_Profile = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 200, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 400, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDistance, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 200, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 400, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
@@ -54,7 +52,7 @@ void ObjRaillift_UpdatePosition(ObjRaillift* this, s32 index) {
 }
 
 void ObjRaillift_Init(Actor* thisx, PlayState* play) {
-    ObjRaillift* this = THIS;
+    ObjRaillift* this = (ObjRaillift*)thisx;
     s32 pad;
     Path* path;
     s32 type = OBJRAILLIFT_GET_TYPE(thisx);
@@ -101,7 +99,7 @@ void ObjRaillift_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjRaillift_Destroy(Actor* thisx, PlayState* play) {
-    ObjRaillift* this = THIS;
+    ObjRaillift* this = (ObjRaillift*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
@@ -214,7 +212,7 @@ void ObjRaillift_StartCutscene(ObjRaillift* this, PlayState* play) {
 }
 
 void ObjRaillift_Update(Actor* thisx, PlayState* play) {
-    ObjRaillift* this = THIS;
+    ObjRaillift* this = (ObjRaillift*)thisx;
 
     this->actionFunc(this, play);
     Actor_SetFocus(thisx, 10.0f);

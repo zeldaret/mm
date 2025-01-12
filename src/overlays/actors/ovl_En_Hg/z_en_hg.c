@@ -6,11 +6,9 @@
 
 #include "z_en_hg.h"
 
-#define FLAGS                                                                                 \
-    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_100000 | \
-     ACTOR_FLAG_UPDATE_DURING_OCARINA)
-
-#define THIS ((EnHg*)thisx)
+#define FLAGS                                                                                  \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
+     ACTOR_FLAG_FREEZE_EXCEPTION | ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
 void EnHg_Init(Actor* thisx, PlayState* play);
 void EnHg_Destroy(Actor* thisx, PlayState* play);
@@ -133,7 +131,7 @@ static AnimationInfo sAnimationInfo[HG_ANIM_MAX] = {
 static u32 sHasSoundPlayed = false;
 
 void EnHg_Init(Actor* thisx, PlayState* play) {
-    EnHg* this = THIS;
+    EnHg* this = (EnHg*)thisx;
     s16 csId = this->actor.csId;
     s32 i;
 
@@ -160,7 +158,7 @@ void EnHg_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnHg_Destroy(Actor* thisx, PlayState* play) {
-    EnHg* this = THIS;
+    EnHg* this = (EnHg*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -429,7 +427,7 @@ void EnHg_WaitForPlayerAction(EnHg* this, PlayState* play) {
 }
 
 void EnHg_Update(Actor* thisx, PlayState* play) {
-    EnHg* this = THIS;
+    EnHg* this = (EnHg*)thisx;
 
     this->actionFunc(this, play);
     SkelAnime_Update(&this->skelAnime);
@@ -444,7 +442,7 @@ s32 EnHg_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
 }
 
 void EnHg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnHg* this = THIS;
+    EnHg* this = (EnHg*)thisx;
     if (limbIndex == PAMELAS_FATHER_GIBDO_LIMB_EYEBROWS) {
         Matrix_Get(&this->mf);
     } else if (limbIndex == PAMELAS_FATHER_GIBDO_LIMB_HEAD) {
@@ -453,7 +451,7 @@ void EnHg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 }
 
 void EnHg_Draw(Actor* thisx, PlayState* play) {
-    EnHg* this = THIS;
+    EnHg* this = (EnHg*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

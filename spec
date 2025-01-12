@@ -12,9 +12,9 @@ endseg
 beginseg
     name "makerom"
     address 0x8007F000
-    include "$(BUILD_DIR)/asm/makerom/rom_header.o"
-    include "$(BUILD_DIR)/asm/makerom/ipl3.o"
-    include "$(BUILD_DIR)/asm/makerom/entry.o"
+    include "$(BUILD_DIR)/src/makerom/rom_header.o"
+    include "$(BUILD_DIR)/src/makerom/ipl3.o"
+    include "$(BUILD_DIR)/src/makerom/entry.o"
 endseg
 
 beginseg
@@ -745,7 +745,6 @@ beginseg
     include "$(BUILD_DIR)/src/code/sys_flashrom.o"
     include "$(BUILD_DIR)/asm/code/kanread.text.o" // handwritten
     include "$(BUILD_DIR)/src/code/osFlash.o"
-    include "$(BUILD_DIR)/data/code/code_801D1E80.data.o"
     pad_text
     pad_text
     pad_text
@@ -771,6 +770,7 @@ beginseg
     include "$(BUILD_DIR)/src/audio/sfx.o"
     include "$(BUILD_DIR)/src/audio/sequence.o"
     include "$(BUILD_DIR)/src/audio/session_config.o"
+    include "$(BUILD_DIR)/src/audio/session_init.o"
     include "$(BUILD_DIR)/src/code/jpegutils.o"
     include "$(BUILD_DIR)/src/code/jpegdecoder.o"
     include "$(BUILD_DIR)/src/code/z_game_over.o"
@@ -790,17 +790,8 @@ endseg
 beginseg
     name "buffers"
     flags NOLOAD
-    include "$(BUILD_DIR)/src/buffers/gfxyield.o"
-    include "$(BUILD_DIR)/src/buffers/gfxstack.o"
-    include "$(BUILD_DIR)/src/buffers/gfxpools.o"
+    include "$(BUILD_DIR)/src/buffers/gfxbuffers.o"
     include "$(BUILD_DIR)/src/buffers/audio_heap.o"
-endseg
-
-beginseg
-    name "system_heap"
-    flags NOLOAD
-    // This segment is just a dummy that is used to know where the other buffers (non framebuffers) end
-    include "$(BUILD_DIR)/src/buffers/system_heap.o"
 endseg
 
 beginseg
@@ -2512,9 +2503,7 @@ beginseg
     name "ovl_Boss_07"
     compress
     include "$(BUILD_DIR)/src/overlays/actors/ovl_Boss_07/z_boss_07.o"
-    include "$(BUILD_DIR)/data/ovl_Boss_07/ovl_Boss_07.data.o"
-    include "$(BUILD_DIR)/data/ovl_Boss_07/ovl_Boss_07.bss.o"
-    include "$(BUILD_DIR)/data/ovl_Boss_07/ovl_Boss_07.reloc.o"
+    include "$(BUILD_DIR)/src/overlays/actors/ovl_Boss_07/ovl_Boss_07_reloc.o"
 endseg
 
 beginseg

@@ -7,9 +7,7 @@
 #include "z_dm_char07.h"
 #include "assets/objects/object_milkbar/object_milkbar.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
-
-#define THIS ((DmChar07*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 void DmChar07_Init(Actor* thisx, PlayState* play);
 void DmChar07_Destroy(Actor* thisx, PlayState* play);
@@ -35,7 +33,7 @@ void DmChar07_SetupAction(DmChar07* this, DmChar07ActionFunc actionFunc) {
 }
 
 void DmChar07_Init(Actor* thisx, PlayState* play) {
-    DmChar07* this = THIS;
+    DmChar07* this = (DmChar07*)thisx;
 
     this->isStage = 0;
     Actor_SetScale(&this->dyna.actor, 1.0f);
@@ -53,7 +51,7 @@ void DmChar07_Init(Actor* thisx, PlayState* play) {
 }
 
 void DmChar07_Destroy(Actor* thisx, PlayState* play) {
-    DmChar07* this = THIS;
+    DmChar07* this = (DmChar07*)thisx;
 
     if (this->isStage) {
         DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
@@ -64,13 +62,13 @@ void DmChar07_DoNothing(DmChar07* this, PlayState* play) {
 }
 
 void DmChar07_Update(Actor* thisx, PlayState* play) {
-    DmChar07* this = THIS;
+    DmChar07* this = (DmChar07*)thisx;
 
     this->actionFunc(this, play);
 }
 
 void DmChar07_Draw(Actor* thisx, PlayState* play) {
-    DmChar07* this = THIS;
+    DmChar07* this = (DmChar07*)thisx;
     s32 pad;
 
     OPEN_DISPS(play->state.gfxCtx);

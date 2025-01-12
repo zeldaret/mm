@@ -6,9 +6,7 @@
 #include "z_bg_kin2_bombwall.h"
 #include "assets/objects/object_kin2_obj/object_kin2_obj.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_10000000)
-
-#define THIS ((BgKin2Bombwall*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_UCODE_POINT_LIGHT_ENABLED)
 
 void BgKin2Bombwall_Init(Actor* thisx, PlayState* play);
 void BgKin2Bombwall_Destroy(Actor* thisx, PlayState* play);
@@ -131,14 +129,14 @@ void BgKin2Bombwall_SpawnEffects(BgKin2Bombwall* this, PlayState* play) {
 }
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 200, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDistance, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 200, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 300, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_STOP),
 };
 
 void BgKin2Bombwall_Init(Actor* thisx, PlayState* play) {
-    BgKin2Bombwall* this = THIS;
+    BgKin2Bombwall* this = (BgKin2Bombwall*)thisx;
     ColliderCylinder* bombwallCollider;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
@@ -158,7 +156,7 @@ void BgKin2Bombwall_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgKin2Bombwall_Destroy(Actor* thisx, PlayState* play) {
-    BgKin2Bombwall* this = THIS;
+    BgKin2Bombwall* this = (BgKin2Bombwall*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
     Collider_DestroyCylinder(play, &this->collider);
@@ -211,13 +209,13 @@ void BgKin2Bombwall_EndCutscene(BgKin2Bombwall* this, PlayState* play) {
 }
 
 void BgKin2Bombwall_Update(Actor* thisx, PlayState* play) {
-    BgKin2Bombwall* this = THIS;
+    BgKin2Bombwall* this = (BgKin2Bombwall*)thisx;
 
     this->actionFunc(this, play);
 }
 
 void BgKin2Bombwall_Draw(Actor* thisx, PlayState* play) {
-    BgKin2Bombwall* this = THIS;
+    BgKin2Bombwall* this = (BgKin2Bombwall*)thisx;
 
     Gfx_DrawDListOpa(play, gOceanSpiderHouseBombableWallDL);
     Gfx_DrawDListXlu(play, gOceanSpiderHouseBombableWallCrackDL);

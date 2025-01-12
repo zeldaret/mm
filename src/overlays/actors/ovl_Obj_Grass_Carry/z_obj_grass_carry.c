@@ -9,9 +9,7 @@
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 #include "overlays/actors/ovl_Obj_Grass/z_obj_grass.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_THROW_ONLY)
-
-#define THIS ((ObjGrassCarry*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED | ACTOR_FLAG_THROW_ONLY)
 
 void ObjGrassCarry_Init(Actor* thisx, PlayState* play);
 void ObjGrassCarry_Destroy(Actor* thisx, PlayState* play);
@@ -150,7 +148,7 @@ void ObjGrassCarry_SpawnFragments(Vec3f* basePos, PlayState* play) {
 }
 
 void ObjGrassCarry_Init(Actor* thisx, PlayState* play) {
-    ObjGrassCarry* this = THIS;
+    ObjGrassCarry* this = (ObjGrassCarry*)thisx;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     Collider_InitCylinder(play, &this->collider);
@@ -160,7 +158,7 @@ void ObjGrassCarry_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjGrassCarry_Destroy(Actor* thisx, PlayState* play) {
-    ObjGrassCarry* this = THIS;
+    ObjGrassCarry* this = (ObjGrassCarry*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 
@@ -345,7 +343,7 @@ void ObjGrassCarry_Fall(ObjGrassCarry* this, PlayState* play) {
 }
 
 void ObjGrassCarry_Update(Actor* thisx, PlayState* play) {
-    ObjGrassCarry* this = THIS;
+    ObjGrassCarry* this = (ObjGrassCarry*)thisx;
 
     if (this->grassManager == NULL) {
         if ((this->actionFunc != ObjGrassCarry_LiftedUp) && (this->actionFunc != ObjGrassCarry_Fall)) {

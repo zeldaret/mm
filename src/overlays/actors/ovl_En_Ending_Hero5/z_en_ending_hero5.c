@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
-#define THIS ((EnEndingHero5*)thisx)
-
 void EnEndingHero5_Init(Actor* thisx, PlayState* play);
 void EnEndingHero5_Destroy(Actor* thisx, PlayState* play);
 void EnEndingHero5_Update(Actor* thisx, PlayState* play);
@@ -31,7 +29,7 @@ ActorProfile En_Ending_Hero5_Profile = {
 };
 
 void EnEndingHero5_Init(Actor* thisx, PlayState* play) {
-    EnEndingHero5* this = THIS;
+    EnEndingHero5* this = (EnEndingHero5*)thisx;
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     Actor_SetScale(&this->actor, 0.01f);
@@ -57,7 +55,7 @@ void EnEndingHero5_Idle(EnEndingHero5* this, PlayState* play) {
 }
 
 void EnEndingHero5_Update(Actor* thisx, PlayState* play) {
-    EnEndingHero5* this = THIS;
+    EnEndingHero5* this = (EnEndingHero5*)thisx;
 
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
@@ -70,7 +68,7 @@ Gfx* D_80C23BF0[] = { object_daiku_DL_0070C0, object_daiku_DL_006FB0, object_dai
                       object_daiku_DL_00A390 };
 
 void EnEndingHero5_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnEndingHero5* this = THIS;
+    EnEndingHero5* this = (EnEndingHero5*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -82,7 +80,7 @@ void EnEndingHero5_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
 }
 
 void EnEndingHero5_Draw(Actor* thisx, PlayState* play) {
-    EnEndingHero5* this = THIS;
+    EnEndingHero5* this = (EnEndingHero5*)thisx;
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);

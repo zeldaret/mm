@@ -7,9 +7,7 @@
 #include "z_obj_lightswitch.h"
 #include "assets/objects/object_lightswitch/object_lightswitch.h"
 
-#define FLAGS (ACTOR_FLAG_10)
-
-#define THIS ((ObjLightswitch*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void ObjLightswitch_Init(Actor* thisx, PlayState* play);
 void ObjLightswitch_Destroy(Actor* thisx, PlayState* play);
@@ -78,9 +76,9 @@ static Color_RGBA8 sLightswitchEffectEnvColor = { 255, 0, 0, 0 };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 200, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 200, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeDistance, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 200, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 200, ICHAIN_STOP),
 };
 
 void ObjLightswitch_InitCollider(ObjLightswitch* this, PlayState* play) {
@@ -145,7 +143,7 @@ void ObjLightswitch_SpawnEffects(ObjLightswitch* this, PlayState* play) {
 }
 
 void ObjLightswitch_Init(Actor* thisx, PlayState* play) {
-    ObjLightswitch* this = THIS;
+    ObjLightswitch* this = (ObjLightswitch*)thisx;
     s32 pad;
     u32 isSwitchActivated;
     s32 isTriggered;
@@ -178,7 +176,7 @@ void ObjLightswitch_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjLightswitch_Destroy(Actor* thisx, PlayState* play) {
-    ObjLightswitch* this = THIS;
+    ObjLightswitch* this = (ObjLightswitch*)thisx;
     Collider_DestroyJntSph(play, &this->collider);
 }
 
@@ -323,7 +321,7 @@ void ObjLightSwitch_Fade(ObjLightswitch* this, PlayState* play) {
 }
 
 void ObjLightswitch_Update(Actor* thisx, PlayState* play) {
-    ObjLightswitch* this = THIS;
+    ObjLightswitch* this = (ObjLightswitch*)thisx;
     s32 pad;
 
     if (this->collider.base.acFlags & AC_HIT) {
@@ -436,7 +434,7 @@ void ObjLightSwitch_DrawXlu(ObjLightswitch* this, PlayState* play) {
 }
 
 void ObjLightswitch_Draw(Actor* thisx, PlayState* play) {
-    ObjLightswitch* this = THIS;
+    ObjLightswitch* this = (ObjLightswitch*)thisx;
     s32 alpha = (u8)(this->colorAlpha >> 6);
 
     if ((LIGHTSWITCH_GET_TYPE(&this->actor) == LIGHTSWITCH_TYPE_FAKE) && (alpha > 0) && (alpha < 255)) {

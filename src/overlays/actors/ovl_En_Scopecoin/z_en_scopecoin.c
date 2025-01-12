@@ -7,9 +7,7 @@
 #include "z_en_scopecoin.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
-
-#define THIS ((EnScopecoin*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 void EnScopecoin_Init(Actor* thisx, PlayState* play);
 void EnScopecoin_Destroy(Actor* thisx, PlayState* play);
@@ -40,7 +38,7 @@ void EnScopecoin_CheckCollectible(EnScopecoin* this, PlayState* play) {
 }
 
 void EnScopecoin_Init(Actor* thisx, PlayState* play) {
-    EnScopecoin* this = THIS;
+    EnScopecoin* this = (EnScopecoin*)thisx;
 
     Actor_SetScale(&this->actor, 0.01f);
     ActorShape_Init(&this->actor.shape, 0, ActorShadow_DrawCircle, 10.0f);
@@ -77,7 +75,7 @@ void EnScopecoin_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnScopecoin_Update(Actor* thisx, PlayState* play) {
-    EnScopecoin* this = THIS;
+    EnScopecoin* this = (EnScopecoin*)thisx;
 
     this->actionFunc(this, play);
 }
@@ -87,7 +85,7 @@ static TexturePtr sRupeeTextures[] = {
 };
 
 void EnScopecoin_Draw(Actor* thisx, PlayState* play) {
-    EnScopecoin* this = THIS;
+    EnScopecoin* this = (EnScopecoin*)thisx;
     GraphicsContext* gfxCtx = play->state.gfxCtx;
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);

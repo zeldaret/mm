@@ -7,9 +7,7 @@
 #include "z_obj_aqua.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_10)
-
-#define THIS ((ObjAqua*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void ObjAqua_Init(Actor* thisx, PlayState* play);
 void ObjAqua_Destroy(Actor* thisx, PlayState* play);
@@ -57,10 +55,13 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_VEC3S(shape.rot, 0, ICHAIN_CONTINUE),          ICHAIN_VEC3S(world.rot, 0, ICHAIN_CONTINUE),
-    ICHAIN_F32_DIV1000(gravity, -900, ICHAIN_CONTINUE),   ICHAIN_F32_DIV1000(terminalVelocity, -4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE), ICHAIN_F32(uncullZoneScale, 300, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_STOP),
+    ICHAIN_VEC3S(shape.rot, 0, ICHAIN_CONTINUE),
+    ICHAIN_VEC3S(world.rot, 0, ICHAIN_CONTINUE),
+    ICHAIN_F32_DIV1000(gravity, -900, ICHAIN_CONTINUE),
+    ICHAIN_F32_DIV1000(terminalVelocity, -4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDistance, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 300, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 300, ICHAIN_STOP),
 };
 
 Vec3f D_80ACC308 = { 1.0f / 1000.0f, 7.0f / 10000.0f, 1.0f / 1000.0f };
@@ -141,7 +142,7 @@ s32 ObjAqua_IsUnderwater(ObjAqua* this, PlayState* play) {
 }
 
 void ObjAqua_Init(Actor* thisx, PlayState* play) {
-    ObjAqua* this = THIS;
+    ObjAqua* this = (ObjAqua*)thisx;
     s32 i;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
@@ -168,7 +169,7 @@ void ObjAqua_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjAqua_Destroy(Actor* thisx, PlayState* play) {
-    ObjAqua* this = THIS;
+    ObjAqua* this = (ObjAqua*)thisx;
     Collider_DestroyCylinder(play, &this->collider);
 }
 
@@ -240,7 +241,7 @@ void func_80ACBDFC(ObjAqua* this, PlayState* play) {
 }
 
 void ObjAqua_Update(Actor* thisx, PlayState* play) {
-    ObjAqua* this = THIS;
+    ObjAqua* this = (ObjAqua*)thisx;
     s32 pad;
 
     if (this->counter > 0) {
@@ -267,7 +268,7 @@ void ObjAqua_Update(Actor* thisx, PlayState* play) {
 }
 
 void ObjAqua_Draw(Actor* thisx, PlayState* play) {
-    ObjAqua* this = THIS;
+    ObjAqua* this = (ObjAqua*)thisx;
     s32 framesTemp;
     s32 pad;
     s16 yaw = Camera_GetCamDirYaw(GET_ACTIVE_CAM(play)) + 0x8000;

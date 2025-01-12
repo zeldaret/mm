@@ -10,9 +10,7 @@
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/effects/ovl_Effect_Ss_Hitmark/z_eff_ss_hitmark.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_400)
-
-#define THIS ((EnDodongo*)thisx)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER)
 
 void EnDodongo_Init(Actor* thisx, PlayState* play);
 void EnDodongo_Destroy(Actor* thisx, PlayState* play);
@@ -295,7 +293,7 @@ void EnDodongo_Init(Actor* thisx, PlayState* play) {
         { 0, 0, 0, 0 },
         { 0, 0, 0, 0 },
     };
-    EnDodongo* this = THIS;
+    EnDodongo* this = (EnDodongo*)thisx;
     s32 i;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
@@ -346,7 +344,7 @@ void EnDodongo_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnDodongo_Destroy(Actor* thisx, PlayState* play) {
-    EnDodongo* this = THIS;
+    EnDodongo* this = (EnDodongo*)thisx;
 
     Effect_Destroy(play, this->unk_338);
     Collider_DestroyJntSph(play, &this->collider2);
@@ -432,7 +430,7 @@ void func_80876CAC(EnDodongo* this) {
     this->drawDmgEffFrozenSteamScale = 1.125f;
     this->drawDmgEffAlpha = 1.0f;
     this->timer = 80;
-    this->actor.flags &= ~ACTOR_FLAG_400;
+    this->actor.flags &= ~ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER;
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 80);
 }
 
@@ -445,7 +443,7 @@ void func_80876D28(EnDodongo* this, PlayState* play) {
         this->drawDmgEffAlpha = 0.0f;
         Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, DODONGO_BODYPART_MAX, 2, this->unk_334 * 0.3f,
                               this->unk_334 * 0.2f);
-        this->actor.flags |= ACTOR_FLAG_400;
+        this->actor.flags |= ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER;
     }
 }
 
@@ -709,7 +707,7 @@ void func_80877D90(EnDodongo* this, PlayState* play) {
 
 void func_80877DE0(EnDodongo* this) {
     Animation_Change(&this->skelAnime, &object_dodongo_Anim_0028F0, -1.0f, 35.0f, 0.0f, ANIMMODE_ONCE, -4.0f);
-    this->actor.flags |= ACTOR_FLAG_10;
+    this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     this->timer = 25;
     this->actionFunc = func_80877E60;
     this->actor.speed = 0.0f;
@@ -749,7 +747,7 @@ void func_80877E60(EnDodongo* this, PlayState* play) {
             Actor_Kill(this->actor.child);
             this->actor.child = NULL;
         }
-        this->actor.flags &= ~ACTOR_FLAG_10;
+        this->actor.flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     } else if (this->skelAnime.playSpeed > -0.5f) {
         this->timer--;
         if (this->timer == 10) {
@@ -1036,7 +1034,7 @@ void EnDodongo_UpdateDamage(EnDodongo* this, PlayState* play) {
 
 void EnDodongo_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnDodongo* this = THIS;
+    EnDodongo* this = (EnDodongo*)thisx;
 
     EnDodongo_UpdateDamage(this, play);
     this->actionFunc(this, play);
@@ -1075,7 +1073,7 @@ void EnDodongo_Update(Actor* thisx, PlayState* play2) {
 }
 
 s32 EnDodongo_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnDodongo* this = THIS;
+    EnDodongo* this = (EnDodongo*)thisx;
 
     if (limbIndex == OBJECT_DODONGO_LIMB_01) {
         pos->z += 1000.0f;
@@ -1124,7 +1122,7 @@ static s8 sLimbToBodyParts[OBJECT_DODONGO_LIMB_MAX] = {
 };
 
 void EnDodongo_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnDodongo* this = THIS;
+    EnDodongo* this = (EnDodongo*)thisx;
 
     Collider_UpdateSpheres(limbIndex, &this->collider1);
     Collider_UpdateSpheres(limbIndex, &this->collider2);
@@ -1150,7 +1148,7 @@ void EnDodongo_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
 }
 
 void EnDodongo_Draw(Actor* thisx, PlayState* play) {
-    EnDodongo* this = THIS;
+    EnDodongo* this = (EnDodongo*)thisx;
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnDodongo_OverrideLimbDraw,

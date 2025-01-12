@@ -9,9 +9,7 @@
 #include "z64rumble.h"
 #include "assets/objects/object_bombiwa/object_bombiwa.h"
 
-#define FLAGS (ACTOR_FLAG_10)
-
-#define THIS ((ObjHugebombiwa*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void ObjHugebombiwa_Init(Actor* thisx, PlayState* play);
 void ObjHugebombiwa_Destroy(Actor* thisx, PlayState* play2);
@@ -328,14 +326,14 @@ s32 func_80A54A0C(ObjHugebombiwa* this) {
 }
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 3700, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 900, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 900, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeDistance, 3700, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 900, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 900, ICHAIN_STOP),
 };
 
 void ObjHugebombiwa_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    ObjHugebombiwa* this = THIS;
+    ObjHugebombiwa* this = (ObjHugebombiwa*)thisx;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     Collider_InitCylinder(play, &this->collider);
@@ -363,7 +361,7 @@ void ObjHugebombiwa_Init(Actor* thisx, PlayState* play) {
 
 void ObjHugebombiwa_Destroy(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    ObjHugebombiwa* this = THIS;
+    ObjHugebombiwa* this = (ObjHugebombiwa*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -625,13 +623,13 @@ void func_80A55564(ObjHugebombiwa* this, PlayState* play) {
 }
 
 void ObjHugebombiwa_Update(Actor* thisx, PlayState* play) {
-    ObjHugebombiwa* this = THIS;
+    ObjHugebombiwa* this = (ObjHugebombiwa*)thisx;
 
     this->actionFunc(this, play);
 }
 
 void ObjHugebombiwa_Draw(Actor* thisx, PlayState* play) {
-    ObjHugebombiwa* this = THIS;
+    ObjHugebombiwa* this = (ObjHugebombiwa*)thisx;
     s32 pad[8];
     f32 sp38;
 
@@ -686,7 +684,7 @@ void ObjHugebombiwa_Draw(Actor* thisx, PlayState* play) {
 }
 
 void func_80A55B34(Actor* thisx, PlayState* play) {
-    ObjHugebombiwa* this = THIS;
+    ObjHugebombiwa* this = (ObjHugebombiwa*)thisx;
     s32 i;
     Gfx* gfx;
     EnHugebombiwaStruct* ptr;

@@ -9,11 +9,10 @@
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/actors/ovl_En_Wiz_Brock/z_en_wiz_brock.h"
 
-#define FLAGS                                                                                                      \
-    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_IGNORE_QUAKE | \
-     ACTOR_FLAG_100000 | ACTOR_FLAG_LOCK_ON_DISABLED | ACTOR_FLAG_80000000)
-
-#define THIS ((EnWiz*)thisx)
+#define FLAGS                                                                                   \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_UPDATE_CULLING_DISABLED |   \
+     ACTOR_FLAG_DRAW_CULLING_DISABLED | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_FREEZE_EXCEPTION | \
+     ACTOR_FLAG_LOCK_ON_DISABLED | ACTOR_FLAG_MINIMAP_ICON_ENABLED)
 
 void EnWiz_Init(Actor* thisx, PlayState* play);
 void EnWiz_Destroy(Actor* thisx, PlayState* play);
@@ -311,7 +310,7 @@ static DamageTable sIceWizrobeDamageTable = {
 
 void EnWiz_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnWiz* this = THIS;
+    EnWiz* this = (EnWiz*)thisx;
 
     SkelAnime_InitFlex(play, &this->skelAnime, &gWizrobeSkel, &gWizrobeIdleAnim, this->jointTable, this->morphTable,
                        WIZROBE_LIMB_MAX);
@@ -337,7 +336,7 @@ void EnWiz_Init(Actor* thisx, PlayState* play) {
     if ((this->type == EN_WIZ_TYPE_FIRE) || (this->type == EN_WIZ_TYPE_FIRE_NO_BGM)) {
         this->actor.colChkInfo.damageTable = &sFireWizrobeDamageTable;
         this->actor.colChkInfo.health = 8;
-        this->actor.flags &= ~ACTOR_FLAG_100000;
+        this->actor.flags &= ~ACTOR_FLAG_FREEZE_EXCEPTION;
     } else {
         this->actor.colChkInfo.damageTable = &sIceWizrobeDamageTable;
         this->actor.colChkInfo.health = 6;
@@ -363,7 +362,7 @@ void EnWiz_Init(Actor* thisx, PlayState* play) {
 
 void EnWiz_Destroy(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnWiz* this = THIS;
+    EnWiz* this = (EnWiz*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
     Collider_DestroyJntSph(play, &this->ghostColliders);
@@ -677,7 +676,7 @@ void EnWiz_StartIntroCutscene(EnWiz* this, PlayState* play) {
     if (CutsceneManager_IsNext(this->actor.csId)) {
         CutsceneManager_StartWithPlayerCsAndSetFlag(this->actor.csId, &this->actor);
         this->subCamId = CutsceneManager_GetCurrentSubCamId(this->actor.csId);
-        this->actor.flags |= ACTOR_FLAG_100000;
+        this->actor.flags |= ACTOR_FLAG_FREEZE_EXCEPTION;
         EnWiz_SetupAppear(this, play);
     } else {
         CutsceneManager_Queue(this->actor.csId);
@@ -841,7 +840,7 @@ void EnWiz_SetupSecondPhaseCutscene(EnWiz* this, PlayState* play) {
     } else {
         CutsceneManager_StartWithPlayerCsAndSetFlag(secondPhaseCsId, &this->actor);
         this->subCamId = CutsceneManager_GetCurrentSubCamId(secondPhaseCsId);
-        this->actor.flags |= ACTOR_FLAG_100000;
+        this->actor.flags |= ACTOR_FLAG_FREEZE_EXCEPTION;
         EnWiz_ChangeAnim(this, EN_WIZ_ANIM_DANCE, false);
         this->action = EN_WIZ_ACTION_RUN_BETWEEN_PLATFORMS;
         this->nextPlatformIndex = 1;
@@ -892,7 +891,7 @@ void EnWiz_SecondPhaseCutscene(EnWiz* this, PlayState* play) {
                     this->fightState = EN_WIZ_FIGHT_STATE_SECOND_PHASE_GHOSTS_COPY_WIZROBE;
                     this->timer = 0;
                     CutsceneManager_Stop(CutsceneManager_GetAdditionalCsId(this->actor.csId));
-                    this->actor.flags &= ~ACTOR_FLAG_100000;
+                    this->actor.flags &= ~ACTOR_FLAG_FREEZE_EXCEPTION;
                     EnWiz_SetupDisappear(this);
                     return;
                 }
@@ -1044,7 +1043,7 @@ void EnWiz_Disappear(EnWiz* this, PlayState* play) {
         if ((this->introCutsceneState == EN_WIZ_INTRO_CS_DISAPPEAR) && (this->introCutsceneTimer == 0)) {
             this->introCutsceneState = EN_WIZ_INTRO_CS_END;
             CutsceneManager_Stop(this->actor.csId);
-            this->actor.flags &= ~ACTOR_FLAG_100000;
+            this->actor.flags &= ~ACTOR_FLAG_FREEZE_EXCEPTION;
         }
 
         if (this->introCutsceneState != EN_WIZ_INTRO_CS_DISAPPEAR) {
@@ -1317,7 +1316,7 @@ void EnWiz_UpdateDamage(EnWiz* this, PlayState* play) {
 
 void EnWiz_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnWiz* this = THIS;
+    EnWiz* this = (EnWiz*)thisx;
     s32 i;
     s32 j;
 
@@ -1370,7 +1369,7 @@ void EnWiz_Update(Actor* thisx, PlayState* play) {
 
 void EnWiz_PostLimbDrawOpa(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     Vec3f staffFlamePos = { 0.0f, 0.0f, 0.0f };
-    EnWiz* this = THIS;
+    EnWiz* this = (EnWiz*)thisx;
 
     if (limbIndex == WIZROBE_LIMB_STAFF) {
         staffFlamePos.x = 7300.0f;
@@ -1403,7 +1402,7 @@ void EnWiz_PostLimbDrawOpa(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* r
 void EnWiz_PostLimbDrawXlu(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     Vec3f staffFlamePos = { 0.0f, 0.0f, 0.0f };
     s32 pad;
-    EnWiz* this = THIS;
+    EnWiz* this = (EnWiz*)thisx;
 
     if (this->action != EN_WIZ_ACTION_BURST_INTO_FLAMES) {
         if (limbIndex == WIZROBE_LIMB_STAFF) {
@@ -1451,7 +1450,7 @@ void EnWiz_PostLimbDrawXlu(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* r
 
 void EnWiz_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnWiz* this = THIS;
+    EnWiz* this = (EnWiz*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

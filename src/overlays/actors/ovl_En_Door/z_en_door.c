@@ -22,12 +22,10 @@
 #include "assets/objects/object_kaizoku_obj/object_kaizoku_obj.h"
 #include "assets/objects/gameplay_field_keep/gameplay_field_keep.h"
 
-#define FLAGS (ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 #define DOOR_AJAR_SLAM_RANGE 120.0f
 #define DOOR_AJAR_OPEN_RANGE (2 * DOOR_AJAR_SLAM_RANGE)
-
-#define THIS ((EnDoor*)thisx)
 
 void EnDoor_Init(Actor* thisx, PlayState* play2);
 void EnDoor_Destroy(Actor* thisx, PlayState* play);
@@ -249,7 +247,7 @@ static_assert(ARRAY_COUNT(sObjectInfo) == DOOR_OBJINFO_MAX,
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_U8(attentionRangeType, ATTENTION_RANGE_0, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDistance, 4000, ICHAIN_CONTINUE),
     ICHAIN_U16(shape.rot.x, 0, ICHAIN_CONTINUE),
     ICHAIN_U16(shape.rot.z, 0, ICHAIN_STOP),
 };
@@ -329,7 +327,7 @@ void EnDoor_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     s32 objectSlot;
     EnDoorInfo* objectInfo = &sObjectInfo[0];
-    EnDoor* this = THIS;
+    EnDoor* this = (EnDoor*)thisx;
     s32 i;
 
     Actor_ProcessInitChain(&this->knobDoor.dyna.actor, sInitChain);
@@ -632,14 +630,14 @@ void EnDoor_Open(EnDoor* this, PlayState* play) {
 }
 
 void EnDoor_Update(Actor* thisx, PlayState* play) {
-    EnDoor* this = THIS;
+    EnDoor* this = (EnDoor*)thisx;
 
     this->actionFunc(this, play);
 }
 
 s32 EnDoor_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     TransitionActorEntry* transitionEntry;
-    EnDoor* this = THIS;
+    EnDoor* this = (EnDoor*)thisx;
 
     if (limbIndex == DOOR_LIMB_4) {
         Gfx** sideDLists = sDoorDLists[this->knobDoor.dlIndex];
@@ -671,7 +669,7 @@ s32 EnDoor_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
 }
 
 void EnDoor_Draw(Actor* thisx, PlayState* play) {
-    EnDoor* this = THIS;
+    EnDoor* this = (EnDoor*)thisx;
 
     // Ensure the object that will be used is loaded
     if (this->knobDoor.dyna.actor.objectSlot == this->knobDoor.objectSlot) {

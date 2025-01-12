@@ -12,9 +12,9 @@
 #include "assets/objects/object_gs/object_gs.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_UPDATE_DURING_OCARINA)
-
-#define THIS ((EnGs*)thisx)
+#define FLAGS                                                                                  \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
+     ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
 void EnGs_Init(Actor* thisx, PlayState* play);
 void EnGs_Destroy(Actor* thisx, PlayState* play);
@@ -138,7 +138,7 @@ static InitChainEntry sInitChain[] = {
 
 void EnGs_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnGs* this = THIS;
+    EnGs* this = (EnGs*)thisx;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     this->unk_208 = -1;
@@ -171,7 +171,7 @@ void EnGs_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnGs_Destroy(Actor* thisx, PlayState* play) {
-    EnGs* this = THIS;
+    EnGs* this = (EnGs*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
     Play_DisableMotionBlur();
@@ -193,7 +193,7 @@ void func_80997D38(EnGs* this, PlayState* play) {
     }
 
     if (this->actor.params != ENGS_2) {
-        func_800B874C(&this->actor, play, 100.0f, 100.0f);
+        Actor_OfferOcarinaInteraction(&this->actor, play, 100.0f, 100.0f);
     }
 }
 
@@ -855,7 +855,7 @@ s32 func_809995A4(EnGs* this, PlayState* play) {
         if (this->unk_1D4++ >= 40) {
             this->unk_19A |= 0x10;
 
-            this->actor.uncullZoneForward = 12000.0f;
+            this->actor.cullingVolumeDistance = 12000.0f;
             this->actor.gravity = 0.3f;
             this->unk_1DC = 0.0f;
 
@@ -945,7 +945,7 @@ void func_80999B34(EnGs* this) {
 
 void func_80999BC8(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnGs* this = THIS;
+    EnGs* this = (EnGs*)thisx;
     s32 pad;
 
     if (this->actor.isLockedOn && (AudioVoice_GetWord() == VOICE_WORD_ID_HOURS)) {
@@ -1029,14 +1029,14 @@ void func_80999BC8(Actor* thisx, PlayState* play2) {
 
 void EnGs_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnGs* this = THIS;
+    EnGs* this = (EnGs*)thisx;
 
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         play->msgCtx.msgMode = MSGMODE_NONE;
         play->msgCtx.msgLength = 0;
         this->collider.base.acFlags &= ~AC_HIT;
         func_80997DEC(this, play);
-    } else if (func_800B8718(&this->actor, &play->state)) {
+    } else if (Actor_OcarinaInteractionAccepted(&this->actor, &play->state)) {
         this->unk_19A |= 0x200;
         this->collider.base.acFlags &= ~AC_HIT;
         if (this->actor.csId != CS_ID_NONE) {
@@ -1048,7 +1048,8 @@ void EnGs_Update(Actor* thisx, PlayState* play) {
         s16 screenPosX;
         s16 screenPosY;
 
-        if ((this->actor.flags & ACTOR_FLAG_40) || (this->unk_19A & 0x100) || (this->unk_19A & 0x200)) {
+        if ((this->actor.flags & ACTOR_FLAG_INSIDE_CULLING_VOLUME) || (this->unk_19A & 0x100) ||
+            (this->unk_19A & 0x200)) {
             func_80999BC8(&this->actor, play);
             Actor_GetScreenPos(play, &this->actor, &screenPosX, &screenPosY);
             if ((this->actor.xyzDistToPlayerSq > SQ(400.0f)) || (screenPosX < 0) || (screenPosX > SCREEN_WIDTH) ||
@@ -1084,7 +1085,7 @@ void EnGs_Update(Actor* thisx, PlayState* play) {
 
 void EnGs_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnGs* this = THIS;
+    EnGs* this = (EnGs*)thisx;
     u32 frames;
 
     if (this->unk_19A & 8) {

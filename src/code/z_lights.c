@@ -191,8 +191,8 @@ void Lights_BindDirectional(Lights* lights, LightParams* params, void* unused) {
     }
 }
 
-typedef void (*LightsBindFunc)(Lights* lights, LightParams* params, Vec3f* vec);
-typedef void (*LightsPosBindFunc)(Lights* lights, LightParams* params, struct PlayState* play);
+typedef void (*LightsBindFuncLegacy)(Lights* lights, LightParams* params, Vec3f* vec);
+typedef void (*LightsBindFunc)(Lights* lights, LightParams* params, struct PlayState* play);
 
 /**
  * For every light in a provided list, try to find a free slot in the provided Lights group and bind
@@ -201,28 +201,32 @@ typedef void (*LightsPosBindFunc)(Lights* lights, LightParams* params, struct Pl
  *
  * Note: Lights in a given list can only be binded to however many free slots are
  * available in the Lights group. This is at most 7 slots for a new group, but could be less.
+ *
+ * Note: In F3DZEX2 versions that predate MM, microcode point lights didn't exist so `PointLight_t` could not be used.
+ * Instead, fake point lights by using a directional light that constantly changes to face a reference position.
+ * `sBindFuncs` maps to the new microcode point lights, and `sBindFuncsLegacy` maps to the old fake point lights.
  */
 void Lights_BindAll(Lights* lights, LightNode* listHead, Vec3f* refPos, PlayState* play) {
-    static LightsPosBindFunc sPosBindFuncs[] = {
+    static LightsBindFunc sBindFuncs[] = {
         Lights_BindPoint,
-        (LightsPosBindFunc)Lights_BindDirectional,
+        (LightsBindFunc)Lights_BindDirectional,
         Lights_BindPoint,
     };
-    static LightsBindFunc sDirBindFuncs[] = {
+    static LightsBindFuncLegacy sBindFuncsLegacy[] = {
         Lights_BindPointWithReference,
-        (LightsBindFunc)Lights_BindDirectional,
+        (LightsBindFuncLegacy)Lights_BindDirectional,
         Lights_BindPointWithReference,
     };
 
     if (listHead != NULL) {
         if ((refPos == NULL) && (lights->enablePosLights == 1)) {
             do {
-                sPosBindFuncs[listHead->info->type](lights, &listHead->info->params, play);
+                sBindFuncs[listHead->info->type](lights, &listHead->info->params, play);
                 listHead = listHead->next;
             } while (listHead != NULL);
         } else {
             do {
-                sDirBindFuncs[listHead->info->type](lights, &listHead->info->params, refPos);
+                sBindFuncsLegacy[listHead->info->type](lights, &listHead->info->params, refPos);
                 listHead = listHead->next;
             } while (listHead != NULL);
         }
@@ -400,7 +404,7 @@ void Lights_GlowCheck(PlayState* play) {
             worldPos.z = params->z;
             Actor_GetProjectedPos(play, &worldPos, &projectedPos, &invW);
 
-            params->drawGlow = 0;
+            params->drawGlow = false;
 
             if ((projectedPos.z > 1) && (fabsf(projectedPos.x * invW) < 1) && (fabsf(projectedPos.y * invW) < 1)) {
                 s32 screenPosX = PROJECTED_TO_SCREEN_X(projectedPos, invW);
@@ -409,7 +413,7 @@ void Lights_GlowCheck(PlayState* play) {
                 s32 zBuf = SysCfb_GetZBufferInt(screenPosX, screenPosY);
 
                 if (wZ < zBuf) {
-                    params->drawGlow = 1;
+                    params->drawGlow = true;
                 }
             }
         }

@@ -10,9 +10,9 @@
 #include "overlays/effects/ovl_Effect_Ss_Hitmark/z_eff_ss_hitmark.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
-
-#define THIS ((ObjUm*)thisx)
+#define FLAGS                                                                                  \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
+     ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 /**
  * weekEventReg flags checked by this actor:
@@ -634,13 +634,13 @@ void ObjUm_RotatePlayerView(ObjUm* this, PlayState* play, s16 angle) {
 }
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneScale, 1200, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeScale, 1200, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 300, ICHAIN_STOP),
 };
 
 void ObjUm_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    ObjUm* this = THIS;
+    ObjUm* this = (ObjUm*)thisx;
     s32 sp54 = true;
     s32 i;
 
@@ -785,7 +785,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjUm_Destroy(Actor* thisx, PlayState* play) {
-    ObjUm* this = THIS;
+    ObjUm* this = (ObjUm*)thisx;
     s32 i;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
@@ -1709,7 +1709,7 @@ void ObjUm_ChangeAnim(ObjUm* this, PlayState* play, ObjUmAnimation animIndex) {
 }
 
 void ObjUm_Update(Actor* thisx, PlayState* play) {
-    ObjUm* this = THIS;
+    ObjUm* this = (ObjUm*)thisx;
 
     this->actionFunc(this, play);
     this->unk_350++;
@@ -1792,7 +1792,7 @@ void ObjUm_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 ObjUm_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    ObjUm* this = THIS;
+    ObjUm* this = (ObjUm*)thisx;
     Player* player = GET_PLAYER(play);
     s32 pad;
     s16 temp_v0_3;
@@ -1876,10 +1876,10 @@ void ObjUm_SpawnFragments(PlayState* play, Vec3f* potPos) {
     }
 }
 
-void ObjUm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    ObjUm* this = THIS;
-    GraphicsContext* gfxCtx = play->state.gfxCtx;
-    Mtx* mtx;
+void ObjUm_PostLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    PlayState* play = play2;
+    ObjUm* this = (ObjUm*)thisx;
+    GraphicsContext* gfxCtx = play2->state.gfxCtx;
     Gfx* spFC[] = {
         NULL, gUmBrokenMinigamePotDL, gUmMinigamePotDL, gUmMinigamePotDL, gUmMinigamePotDL, object_um_DL_0067C0
     };
@@ -1905,15 +1905,11 @@ void ObjUm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
     }
 
     if (limbIndex == UM_LIMB_WAGON_CART_BED) {
-        Vec3f* potPos;
+        Mtx* mtx;
         Vec3f sp88;
         Vec3s sp80;
         s32 i;
         f32 sp70[] = { 2000.0f, 0.0f, -2000.0f };
-        s32 pad;
-
-        //! FAKE:
-        if (i) {}
 
         sp80.x = 0;
         sp80.z = 0;
@@ -1934,9 +1930,8 @@ void ObjUm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
             Matrix_Push();
             Matrix_TranslateRotateZYX(&sp88, &sp80);
             mtx = Matrix_Finalize(gfxCtx);
-            potPos = &this->potPos[i];
             Matrix_MultVec3f(&spC0, &calcPotPos);
-            SkinMatrix_Vec3fMtxFMultXYZW(&play->viewProjectionMtxF, &calcPotPos, potPos, &spB0);
+            SkinMatrix_Vec3fMtxFMultXYZW(&play->viewProjectionMtxF, &calcPotPos, &this->potPos[i], &spB0);
 
             if (this->wasPotHit[i]) {
                 this->wasPotHit[i] = false;
@@ -1952,9 +1947,6 @@ void ObjUm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
                 //! @bug skips CLOSE_DISPS
                 return;
             }
-
-            //! FAKE:
-            if (play) {}
 
             gSPMatrix(POLY_OPA_DISP++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
@@ -2015,7 +2007,7 @@ void func_80B7BEA4(Vec3f* cartBedPos, s16 arg1, Vec3f* arg2, u8 alpha, PlayState
 
 void ObjUm_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
-    ObjUm* this = THIS;
+    ObjUm* this = (ObjUm*)thisx;
     Vec3f sp34;
 
     this->flags |= OBJ_UM_FLAG_0001;

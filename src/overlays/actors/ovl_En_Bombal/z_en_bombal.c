@@ -9,9 +9,7 @@
 #include "assets/objects/object_fusen/object_fusen.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_10)
-
-#define THIS ((EnBombal*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void EnBombal_Init(Actor* thisx, PlayState* play);
 void EnBombal_Destroy(Actor* thisx, PlayState* play);
@@ -59,7 +57,7 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 void EnBombal_Init(Actor* thisx, PlayState* play) {
-    EnBombal* this = THIS;
+    EnBombal* this = (EnBombal*)thisx;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
     this->actor.colChkInfo.mass = 0;
@@ -72,7 +70,7 @@ void EnBombal_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnBombal_Destroy(Actor* thisx, PlayState* play) {
-    EnBombal* this = THIS;
+    EnBombal* this = (EnBombal*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -95,8 +93,8 @@ void func_80C05B3C(EnBombal* this, PlayState* play) {
             this->collider.base.acFlags &= ~AC_HIT;
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_75_40) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_73_10) &&
                 !CHECK_WEEKEVENTREG(WEEKEVENTREG_85_02)) {
-                player->stateFlags1 |= ACTOR_FLAG_20;
-                this->actor.flags |= ACTOR_FLAG_100000;
+                player->stateFlags1 |= ACTOR_FLAG_DRAW_CULLING_DISABLED;
+                this->actor.flags |= ACTOR_FLAG_FREEZE_EXCEPTION;
             }
             this->actionFunc = func_80C05C44;
         }
@@ -161,7 +159,7 @@ void func_80C05DE8(EnBombal* this, PlayState* play) {
 
 void EnBombal_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnBombal* this = THIS;
+    EnBombal* this = (EnBombal*)thisx;
 
     if (this->timer != 0) {
         this->timer--;
@@ -184,7 +182,7 @@ void EnBombal_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnBombal_Draw(Actor* thisx, PlayState* play) {
-    EnBombal* this = THIS;
+    EnBombal* this = (EnBombal*)thisx;
 
     if (this->isPopped != true) {
         Gfx_DrawDListOpa(play, gMajoraBalloonDL);

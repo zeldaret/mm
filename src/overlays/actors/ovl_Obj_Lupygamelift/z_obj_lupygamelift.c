@@ -7,9 +7,7 @@
 #include "z_obj_lupygamelift.h"
 #include "assets/objects/object_raillift/object_raillift.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
-
-#define THIS ((ObjLupygamelift*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 void ObjLupygamelift_Init(Actor* thisx, PlayState* play);
 void ObjLupygamelift_Destroy(Actor* thisx, PlayState* play);
@@ -34,15 +32,15 @@ ActorProfile Obj_Lupygamelift_Profile = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 200, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 400, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDistance, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 200, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 400, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
 void ObjLupygamelift_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    ObjLupygamelift* this = THIS;
+    ObjLupygamelift* this = (ObjLupygamelift*)thisx;
     Path* path;
     s32 params;
 
@@ -86,7 +84,7 @@ void ObjLupygamelift_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjLupygamelift_Destroy(Actor* thisx, PlayState* play) {
-    ObjLupygamelift* this = THIS;
+    ObjLupygamelift* this = (ObjLupygamelift*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
@@ -164,7 +162,7 @@ void func_80AF0530(ObjLupygamelift* this, PlayState* play) {
 }
 
 void ObjLupygamelift_Update(Actor* thisx, PlayState* play) {
-    ObjLupygamelift* this = THIS;
+    ObjLupygamelift* this = (ObjLupygamelift*)thisx;
 
     this->actionFunc(this, play);
 }

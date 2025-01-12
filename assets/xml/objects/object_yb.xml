@@ -1,11 +1,13 @@
 ﻿<Root>
     <File Name="object_yb" Segment="6">
-        <!-- animation wont play in z64utils, attempts to play in game are crash -->
-        <!-- actor uses link animation so this might be reading incorrectly -->
-        <Animation Name="object_yb_Anim_000200" Offset="0x200" />
-        <!-- since these blobs are right after the animation, and that animation doesnt work... assume this is part of why -->
-        <!-- <Blob Name="object_yb_Blob_002080" Size="0x30" Offset="0x2080" /> -->
-        <!-- <Blob Name="object_yb_Blob_002D50" Size="0x30" Offset="0x2D50" /> -->
+        <Animation Name="object_yb_Anim_000200" Offset="0x200" /> <!-- Original name is "yb_kihon" -->
+        <!-- These 2 vtx were likely grouped with the rest of Kamaro's vertices, but they are separated out here for the used and unused sections -->
+        <Array Name="object_yb_Vtx_002080" Count="3" Offset="0x2080">
+            <Vtx/>
+        </Array>
+        <Array Name="object_yb_Vtx_002D50" Count="3" Offset="0x2D50">
+            <Vtx/>
+        </Array>
         <DList Name="gYbPantsAndBellyButtonDL" Offset="0x3400" />
         <DList Name="gYbRightThighDL" Offset="0x3610" />
         <DList Name="gYbRightShinDL" Offset="0x37B0" />

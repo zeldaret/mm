@@ -7,9 +7,9 @@
 #include "z_en_minislime.h"
 #include "overlays/actors/ovl_En_Bigslime/z_en_bigslime.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_200)
-
-#define THIS ((EnMinislime*)thisx)
+#define FLAGS                                                                                 \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
+     ACTOR_FLAG_DRAW_CULLING_DISABLED | ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR)
 
 void EnMinislime_Init(Actor* thisx, PlayState* play);
 void EnMinislime_Destroy(Actor* thisx, PlayState* play);
@@ -119,7 +119,7 @@ static DamageTable sDamageTable = {
 };
 
 void EnMinislime_Init(Actor* thisx, PlayState* play) {
-    EnMinislime* this = THIS;
+    EnMinislime* this = (EnMinislime*)thisx;
 
     this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
@@ -130,7 +130,7 @@ void EnMinislime_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnMinislime_Destroy(Actor* thisx, PlayState* play) {
-    EnMinislime* this = THIS;
+    EnMinislime* this = (EnMinislime*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -500,8 +500,8 @@ void EnMinislime_SetupMoveToBigslime(EnMinislime* this) {
     }
     this->frozenAlpha = 0;
 
-    if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_2000)) {
-        this->actor.flags &= ~ACTOR_FLAG_2000;
+    if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_HOOKSHOT_ATTACHED)) {
+        this->actor.flags &= ~ACTOR_FLAG_HOOKSHOT_ATTACHED;
     }
     this->actionFunc = EnMinislime_MoveToBigslime;
 }
@@ -556,8 +556,8 @@ void EnMinislime_SetupDefeatIdle(EnMinislime* this) {
     }
 
     this->frozenAlpha = 0;
-    if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_2000)) {
-        this->actor.flags &= ~ACTOR_FLAG_2000;
+    if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_HOOKSHOT_ATTACHED)) {
+        this->actor.flags &= ~ACTOR_FLAG_HOOKSHOT_ATTACHED;
     }
 
     this->actor.shape.rot.x = 0;
@@ -625,8 +625,8 @@ void EnMinislime_SetupMoveToGekko(EnMinislime* this) {
     this->actor.velocity.y = 0.0f;
     this->collider.base.acFlags &= ~AC_ON;
     this->collider.base.ocFlags1 &= ~OC1_ON;
-    if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_2000)) {
-        this->actor.flags &= ~ACTOR_FLAG_2000;
+    if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_HOOKSHOT_ATTACHED)) {
+        this->actor.flags &= ~ACTOR_FLAG_HOOKSHOT_ATTACHED;
     }
 
     this->actionFunc = EnMinislime_MoveToGekko;
@@ -703,7 +703,7 @@ void EnMinislime_ApplyDamage(EnMinislime* this) {
 }
 
 void EnMinislime_Update(Actor* thisx, PlayState* play) {
-    EnMinislime* this = THIS;
+    EnMinislime* this = (EnMinislime*)thisx;
     Player* player;
     s32 pad;
     Vec3f vec1;
@@ -715,7 +715,7 @@ void EnMinislime_Update(Actor* thisx, PlayState* play) {
     } else if ((this->actor.params == MINISLIME_FORM_BIGSLIME) && (this->actionFunc != EnMinislime_MoveToBigslime)) {
         EnMinislime_SetupMoveToBigslime(this);
     } else {
-        if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_2000)) {
+        if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_HOOKSHOT_ATTACHED)) {
             this->collider.base.acFlags &= ~AC_HIT;
             return;
         }

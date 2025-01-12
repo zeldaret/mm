@@ -12,9 +12,7 @@
 #include "assets/objects/object_ikninside_obj/object_ikninside_obj.h"
 #include "assets/objects/object_danpei_object/object_danpei_object.h"
 
-#define FLAGS (ACTOR_FLAG_10)
-
-#define THIS ((DoorSpiral*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void DoorSpiral_Init(Actor* thisx, PlayState* play);
 void DoorSpiral_Destroy(Actor* thisx, PlayState* play);
@@ -85,9 +83,9 @@ SpiralSceneInfo sSpiralSceneInfoTable[] = {
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F(scale, 1, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 400, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 400, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeDistance, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 400, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 400, ICHAIN_STOP),
 };
 
 void DoorSpiral_SetupAction(DoorSpiral* this, DoorSpiralActionFunc actionFunc) {
@@ -103,7 +101,7 @@ s32 func_809A2B70(DoorSpiral* this, PlayState* play) {
         if (this->unk148 == 2) {
             this->unk148 = 3;
         }
-        this->actor.flags |= ACTOR_FLAG_10000000;
+        this->actor.flags |= ACTOR_FLAG_UCODE_POINT_LIGHT_ENABLED;
     }
     DoorSpiral_SetupAction(this, func_809A2FF8);
     return 0;
@@ -129,7 +127,7 @@ u8 func_809A2BF8(PlayState* play) {
 }
 
 void DoorSpiral_Init(Actor* thisx, PlayState* play) {
-    DoorSpiral* this = THIS;
+    DoorSpiral* this = (DoorSpiral*)thisx;
     s32 transitionId = DOOR_GET_TRANSITION_ID(thisx);
     s8 objectSlot;
 
@@ -230,10 +228,11 @@ void func_809A3098(DoorSpiral* this, PlayState* play) {
 }
 
 void DoorSpiral_Update(Actor* thisx, PlayState* play) {
-    DoorSpiral* this = THIS;
+    DoorSpiral* this = (DoorSpiral*)thisx;
     Player* player = GET_PLAYER(play);
 
-    if (!(player->stateFlags1 & (PLAYER_STATE1_40 | PLAYER_STATE1_DEAD | PLAYER_STATE1_400 | PLAYER_STATE1_10000000)) ||
+    if (!(player->stateFlags1 &
+          (PLAYER_STATE1_TALKING | PLAYER_STATE1_DEAD | PLAYER_STATE1_400 | PLAYER_STATE1_10000000)) ||
         (this->actionFunc == func_809A2DB0)) {
         this->actionFunc(this, play);
     }
@@ -241,7 +240,7 @@ void DoorSpiral_Update(Actor* thisx, PlayState* play) {
 
 void DoorSpiral_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
-    DoorSpiral* this = THIS;
+    DoorSpiral* this = (DoorSpiral*)thisx;
 
     if (this->actor.objectSlot == this->objectSlot) {
         SpiralInfo* spiralInfo = &sSpiralInfoTable[this->unk148];

@@ -7,9 +7,7 @@
 #include "z_obj_usiyane.h"
 #include "assets/objects/object_obj_usiyane/object_obj_usiyane.h"
 
-#define FLAGS (ACTOR_FLAG_20)
-
-#define THIS ((ObjUsiyane*)thisx)
+#define FLAGS (ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 void ObjUsiyane_Init(Actor* thisx, PlayState* play);
 void ObjUsiyane_Destroy(Actor* thisx, PlayState* play);
@@ -36,9 +34,9 @@ PosRot D_80C08660[] = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneScale, 1200, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneForward, 3000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 900, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeScale, 1200, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDistance, 3000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 900, ICHAIN_STOP),
 };
 
 s32 ObjUsiyane_GetAlienSpawnTime(s32 alienIndex) {
@@ -185,7 +183,7 @@ void func_80C082E0(ObjUsiyane* this, PlayState* play) {
 }
 
 void ObjUsiyane_Init(Actor* thisx, PlayState* play) {
-    ObjUsiyane* this = THIS;
+    ObjUsiyane* this = (ObjUsiyane*)thisx;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     Actor_SetScale(&this->dyna.actor, 0.1f);
@@ -212,19 +210,19 @@ void ObjUsiyane_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjUsiyane_Destroy(Actor* thisx, PlayState* play) {
-    ObjUsiyane* this = THIS;
+    ObjUsiyane* this = (ObjUsiyane*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
 void ObjUsiyane_Update(Actor* thisx, PlayState* play) {
-    ObjUsiyane* this = THIS;
+    ObjUsiyane* this = (ObjUsiyane*)thisx;
 
     this->actionFunc(this, play);
 }
 
 void ObjUsiyane_Draw(Actor* thisx, PlayState* play) {
-    ObjUsiyane* this = THIS;
+    ObjUsiyane* this = (ObjUsiyane*)thisx;
     MtxF mf;
 
     if (!(this->unk_744 & 1)) {

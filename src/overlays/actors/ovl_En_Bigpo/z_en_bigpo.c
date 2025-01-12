@@ -9,10 +9,9 @@
 #include "assets/objects/object_bigpo/object_bigpo.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS \
-    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_200 | ACTOR_FLAG_IGNORE_QUAKE)
-
-#define THIS ((EnBigpo*)thisx)
+#define FLAGS                                                                                 \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
+     ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR | ACTOR_FLAG_IGNORE_QUAKE)
 
 void EnBigpo_Init(Actor* thisx, PlayState* play2);
 void EnBigpo_Destroy(Actor* thisx, PlayState* play2);
@@ -183,7 +182,7 @@ static Vec3f D_80B65084[] = {
 
 void EnBigpo_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnBigpo* this = THIS;
+    EnBigpo* this = (EnBigpo*)thisx;
     EnBigpoFireEffect* firesPtr;
     s32 i;
 
@@ -227,8 +226,8 @@ void EnBigpo_Init(Actor* thisx, PlayState* play2) {
         Actor_Kill(&this->actor);
     }
 
-    if (thisx->params == BIG_POE_TYPE_REGULAR) { // the well poe, starts immediately
-        thisx->flags &= ~ACTOR_FLAG_10;          // always update OFF
+    if (thisx->params == BIG_POE_TYPE_REGULAR) {             // the well poe, starts immediately
+        thisx->flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED; // always update OFF
         this->storePrevBgm = true;
         EnBigpo_InitWellBigpo(this);
     } else if (thisx->params == BIG_POE_TYPE_SUMMONED) { // dampe type
@@ -238,7 +237,7 @@ void EnBigpo_Init(Actor* thisx, PlayState* play2) {
 
 void EnBigpo_Destroy(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnBigpo* this = THIS;
+    EnBigpo* this = (EnBigpo*)thisx;
     s32 fireCount;
 
     if ((thisx->params != BIG_POE_TYPE_POSSIBLE_FIRE) && (thisx->params != BIG_POE_TYPE_CHOSEN_FIRE) &&
@@ -1155,11 +1154,11 @@ s32 EnBigpo_ApplyDamage(EnBigpo* this, PlayState* play) {
 }
 
 void EnBigpo_Update(Actor* thisx, PlayState* play) {
-    EnBigpo* this = THIS;
+    EnBigpo* this = (EnBigpo*)thisx;
     s32 pad;
     ColliderCylinder* thisCollider;
 
-    if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_2000)) {
+    if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_HOOKSHOT_ATTACHED)) {
         this->hoverHeightCycleTimer = 0;
         this->savedHeight = this->actor.world.pos.y;
     }
@@ -1223,7 +1222,7 @@ void EnBigpo_Update(Actor* thisx, PlayState* play) {
  * alt update func: the revealed fires under dampe's house
  */
 void EnBigpo_UpdateFire(Actor* thisx, PlayState* play) {
-    EnBigpo* this = THIS;
+    EnBigpo* this = (EnBigpo*)thisx;
 
     this->actor.shape.rot.y = BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(play)));
     this->actionFunc(this, play);
@@ -1231,7 +1230,7 @@ void EnBigpo_UpdateFire(Actor* thisx, PlayState* play) {
 
 s32 EnBigpo_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
                              Gfx** gfx) {
-    EnBigpo* this = THIS;
+    EnBigpo* this = (EnBigpo*)thisx;
     // not fully invisible
     if ((this->mainColor.a == 0) || (limbIndex == BIG_POE_LIMB_LANTERN) ||
         ((this->actionFunc == EnBigpo_BurnAwayDeath) && (this->idleTimer >= 2))) {
@@ -1241,7 +1240,7 @@ s32 EnBigpo_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
 }
 
 void EnBigpo_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
-    EnBigpo* this = THIS;
+    EnBigpo* this = (EnBigpo*)thisx;
     s8 bodyPartIndex;
     Vec3f* v1ptr; // todo: figure out better names
     Vec3f* v2ptr;
@@ -1293,7 +1292,7 @@ void EnBigpo_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
 }
 
 void EnBigpo_DrawMainBigpo(Actor* thisx, PlayState* play) {
-    EnBigpo* this = THIS;
+    EnBigpo* this = (EnBigpo*)thisx;
     Gfx* gfx;
 
     OPEN_DISPS(play->state.gfxCtx);
@@ -1335,7 +1334,7 @@ void EnBigpo_DrawMainBigpo(Actor* thisx, PlayState* play) {
 }
 
 void EnBigpo_DrawScoopSoul(Actor* thisx, PlayState* play) {
-    EnBigpo* this = THIS;
+    EnBigpo* this = (EnBigpo*)thisx;
     s32 pad;
 
     OPEN_DISPS(play->state.gfxCtx);
@@ -1364,7 +1363,7 @@ void EnBigpo_DrawScoopSoul(Actor* thisx, PlayState* play) {
 }
 
 void EnBigpo_DrawLantern(Actor* thisx, PlayState* play) {
-    EnBigpo* this = THIS;
+    EnBigpo* this = (EnBigpo*)thisx;
     f32 magnitude;
     f32 magnitude2;
     Gfx* gfx;
@@ -1419,7 +1418,7 @@ void EnBigpo_DrawLantern(Actor* thisx, PlayState* play) {
 }
 
 void EnBigpo_DrawCircleFlames(Actor* thisx, PlayState* play) {
-    EnBigpo* this = THIS;
+    EnBigpo* this = (EnBigpo*)thisx;
     s32 pad[3];
     s16 fireRadius;
     MtxF* mtfxPtr;
@@ -1463,7 +1462,7 @@ void EnBigpo_DrawCircleFlames(Actor* thisx, PlayState* play) {
 }
 
 void EnBigpo_RevealedFire(Actor* thisx, PlayState* play) {
-    EnBigpo* this = THIS;
+    EnBigpo* this = (EnBigpo*)thisx;
     EnBigpo* parent = (EnBigpo*)thisx->parent;
     s32 pad;
 

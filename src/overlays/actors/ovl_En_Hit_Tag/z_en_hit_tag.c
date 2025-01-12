@@ -6,9 +6,7 @@
 
 #include "z_en_hit_tag.h"
 
-#define FLAGS (ACTOR_FLAG_10)
-
-#define THIS ((EnHitTag*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void EnHitTag_Init(Actor* thisx, PlayState* play);
 void EnHitTag_Destroy(Actor* thisx, PlayState* play);
@@ -50,7 +48,7 @@ static ColliderCylinderInit sCylinderInit = {
 
 void EnHitTag_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnHitTag* this = THIS;
+    EnHitTag* this = (EnHitTag*)thisx;
 
     Actor_SetScale(&this->actor, 1.0f);
     this->actionFunc = EnHitTag_WaitForHit;
@@ -62,7 +60,7 @@ void EnHitTag_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnHitTag_Destroy(Actor* thisx, PlayState* play) {
-    EnHitTag* this = THIS;
+    EnHitTag* this = (EnHitTag*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -87,6 +85,6 @@ void EnHitTag_WaitForHit(EnHitTag* this, PlayState* play) {
 }
 
 void EnHitTag_Update(Actor* thisx, PlayState* play) {
-    EnHitTag* this = THIS;
+    EnHitTag* this = (EnHitTag*)thisx;
     this->actionFunc(this, play);
 }

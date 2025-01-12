@@ -9,8 +9,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((EnSnowwd*)thisx)
-
 void EnSnowwd_Init(Actor* thisx, PlayState* play);
 void EnSnowwd_Destroy(Actor* thisx, PlayState* play);
 void EnSnowwd_Update(Actor* thisx, PlayState* play);
@@ -51,21 +49,21 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 void EnSnowwd_Init(Actor* thisx, PlayState* play) {
-    EnSnowwd* this = THIS;
+    EnSnowwd* this = (EnSnowwd*)thisx;
 
     SNOWWD_DROPPED_COLLECTIBLE(thisx) = false;
     this->actor.home.rot.y = 0;
     this->timer = 0;
-    this->actor.uncullZoneForward = 4000.0f;
-    this->actor.uncullZoneScale = 2000.0f;
-    this->actor.uncullZoneDownward = 2400.0f;
+    this->actor.cullingVolumeDistance = 4000.0f;
+    this->actor.cullingVolumeScale = 2000.0f;
+    this->actor.cullingVolumeDownward = 2400.0f;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     Actor_SetScale(&this->actor, 1.0f);
     this->actionFunc = EnSnowwd_Idle;
 }
 
 void EnSnowwd_Destroy(Actor* thisx, PlayState* play) {
-    EnSnowwd* this = THIS;
+    EnSnowwd* this = (EnSnowwd*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -117,7 +115,7 @@ void EnSnowwd_Idle(EnSnowwd* this, PlayState* play) {
 }
 
 void EnSnowwd_Update(Actor* thisx, PlayState* play) {
-    EnSnowwd* this = THIS;
+    EnSnowwd* this = (EnSnowwd*)thisx;
 
     this->actionFunc(this, play);
 }

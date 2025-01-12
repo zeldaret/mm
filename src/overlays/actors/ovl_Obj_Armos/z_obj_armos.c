@@ -7,9 +7,7 @@
 #include "z_obj_armos.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_CAN_PRESS_SWITCHES)
-
-#define THIS ((ObjArmos*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_CAN_PRESS_SWITCHES)
 
 void ObjArmos_Init(Actor* thisx, PlayState* play);
 void ObjArmos_Destroy(Actor* thisx, PlayState* play);
@@ -39,8 +37,10 @@ s16 D_809A5BB0[] = { 1, -1, 0, 0 };
 s16 D_809A5BB8[] = { 0, 0, 1, -1 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE), ICHAIN_F32(uncullZoneScale, 120, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 250, ICHAIN_CONTINUE), ICHAIN_F32_DIV1000(gravity, -4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDistance, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 120, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 250, ICHAIN_CONTINUE),
+    ICHAIN_F32_DIV1000(gravity, -4000, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
 };
 
@@ -178,7 +178,7 @@ void func_809A518C(ObjArmos* this, s32 arg1) {
 
 void ObjArmos_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    ObjArmos* this = THIS;
+    ObjArmos* this = (ObjArmos*)thisx;
     s32 sp44 = OBJARMOS_GET_ROTZ_7(&this->dyna.actor);
     s32 sp40 = OBJARMOS_GET_ROTX_F(&this->dyna.actor);
     f32 endFrame = Animation_GetLastFrame(&gArmosPushedBackAnim);
@@ -220,7 +220,7 @@ void ObjArmos_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjArmos_Destroy(Actor* thisx, PlayState* play) {
-    ObjArmos* this = THIS;
+    ObjArmos* this = (ObjArmos*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
@@ -316,7 +316,7 @@ void func_809A57F4(ObjArmos* this, PlayState* play) {
 
 void ObjArmos_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    ObjArmos* this = THIS;
+    ObjArmos* this = (ObjArmos*)thisx;
     s32 bgId;
 
     this->actionFunc(this, play);
@@ -385,7 +385,7 @@ void func_809A5A3C(ObjArmos* this, PlayState* play) {
 }
 
 void ObjArmos_Draw(Actor* thisx, PlayState* play) {
-    ObjArmos* this = THIS;
+    ObjArmos* this = (ObjArmos*)thisx;
 
     func_809A5960(this, play);
     func_809A5A3C(this, play);

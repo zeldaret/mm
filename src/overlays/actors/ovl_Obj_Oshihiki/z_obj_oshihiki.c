@@ -8,9 +8,7 @@
 #include "overlays/actors/ovl_Obj_Switch/z_obj_switch.h"
 #include "assets/objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
 
-#define FLAGS (ACTOR_FLAG_10)
-
-#define THIS ((ObjOshihiki*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void ObjOshihiki_Init(Actor* thisx, PlayState* play);
 void ObjOshihiki_Destroy(Actor* thisx, PlayState* play);
@@ -46,9 +44,9 @@ static Color_RGB8 sColors[] = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 500, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 500, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeDistance, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 500, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 500, ICHAIN_STOP),
 };
 
 // The vertices and center of the bottom face
@@ -194,7 +192,7 @@ void ObjOshihiki_SetColor(ObjOshihiki* this, PlayState* play) {
 }
 
 void ObjOshihiki_Init(Actor* thisx, PlayState* play) {
-    ObjOshihiki* this = THIS;
+    ObjOshihiki* this = (ObjOshihiki*)thisx;
 
     DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
 
@@ -237,7 +235,7 @@ void ObjOshihiki_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjOshihiki_Destroy(Actor* thisx, PlayState* play) {
-    ObjOshihiki* this = THIS;
+    ObjOshihiki* this = (ObjOshihiki*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
@@ -567,7 +565,7 @@ void ObjOshihiki_Fall(ObjOshihiki* this, PlayState* play) {
 }
 
 void ObjOshihiki_Update(Actor* thisx, PlayState* play) {
-    ObjOshihiki* this = THIS;
+    ObjOshihiki* this = (ObjOshihiki*)thisx;
 
     this->stateFlags &=
         ~(PUSHBLOCK_SETUP_FALL | PUSHBLOCK_FALL | PUSHBLOCK_SETUP_PUSH | PUSHBLOCK_PUSH | PUSHBLOCK_SETUP_ON_ACTOR |
@@ -588,7 +586,7 @@ void ObjOshihiki_Update(Actor* thisx, PlayState* play) {
 
 void ObjOshihiki_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
-    ObjOshihiki* this = THIS;
+    ObjOshihiki* this = (ObjOshihiki*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

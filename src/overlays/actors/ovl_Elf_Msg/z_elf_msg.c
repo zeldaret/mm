@@ -7,9 +7,7 @@
 #include "z_elf_msg.h"
 #include "overlays/actors/ovl_En_Elf/z_en_elf.h"
 
-#define FLAGS (ACTOR_FLAG_10)
-
-#define THIS ((ElfMsg*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void ElfMsg_Init(Actor* thisx, PlayState* play);
 void ElfMsg_Destroy(Actor* thisx, PlayState* play);
@@ -32,7 +30,7 @@ ActorProfile Elf_Msg_Profile = {
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneForward, 1000, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeDistance, 1000, ICHAIN_STOP),
 };
 
 void ElfMsg_SetupAction(ElfMsg* this, ElfMsgActionFunc actionFunc) {
@@ -70,7 +68,7 @@ s32 func_8092DF9C(ElfMsg* this, PlayState* play) {
 }
 
 void ElfMsg_Init(Actor* thisx, PlayState* play) {
-    ElfMsg* this = THIS;
+    ElfMsg* this = (ElfMsg*)thisx;
 
     if (!func_8092DF9C(this, play)) {
         Actor_ProcessInitChain(&this->actor, sInitChain);
@@ -132,7 +130,7 @@ void func_8092E284(ElfMsg* this, PlayState* play) {
 }
 
 void ElfMsg_Update(Actor* thisx, PlayState* play) {
-    ElfMsg* this = THIS;
+    ElfMsg* this = (ElfMsg*)thisx;
 
     if (func_8092DF9C(this, play) == 0) {
         if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {

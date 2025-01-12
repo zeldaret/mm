@@ -11,8 +11,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE)
 
-#define THIS ((EnKarebaba*)thisx)
-
 void EnKarebaba_Init(Actor* thisx, PlayState* play);
 void EnKarebaba_Destroy(Actor* thisx, PlayState* play);
 void EnKarebaba_Update(Actor* thisx, PlayState* play2);
@@ -142,7 +140,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void EnKarebaba_Init(Actor* thisx, PlayState* play) {
-    EnKarebaba* this = THIS;
+    EnKarebaba* this = (EnKarebaba*)thisx;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 22.0f);
@@ -170,7 +168,7 @@ void EnKarebaba_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnKarebaba_Destroy(Actor* thisx, PlayState* play) {
-    EnKarebaba* this = THIS;
+    EnKarebaba* this = (EnKarebaba*)thisx;
 
     Collider_DestroyCylinder(play, &this->hurtCollider);
     Collider_DestroyCylinder(play, &this->attackCollider);
@@ -387,7 +385,7 @@ void EnKarebaba_SetupDying(EnKarebaba* this) {
     }
 
     Actor_PlaySfx(&this->actor, NA_SE_EN_DEKU_JR_DEAD);
-    this->actor.flags |= (ACTOR_FLAG_10 | ACTOR_FLAG_20);
+    this->actor.flags |= (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED);
     this->actionFunc = EnKarebaba_Dying;
 }
 
@@ -451,7 +449,7 @@ void EnKarebaba_Dying(EnKarebaba* this, PlayState* play) {
 
 void EnKarebaba_SetupShrinkDie(EnKarebaba* this) {
     Actor_PlaySfx(&this->actor, NA_SE_EN_DEKU_JR_DEAD);
-    this->actor.flags |= (ACTOR_FLAG_10 | ACTOR_FLAG_20);
+    this->actor.flags |= (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED);
     this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
         this->timer = 3;
@@ -487,7 +485,7 @@ void EnKarebaba_SetupDeadItemDrop(EnKarebaba* this, PlayState* play) {
     this->actor.shape.shadowScale = 3.0f;
     Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_MISC);
     this->timer = 200;
-    this->actor.flags &= ~ACTOR_FLAG_20;
+    this->actor.flags &= ~ACTOR_FLAG_DRAW_CULLING_DISABLED;
     this->drawDmgEffAlpha = 0.0f;
     this->actionFunc = EnKarebaba_DeadItemDrop;
 }
@@ -550,7 +548,7 @@ void EnKarebaba_Regrow(EnKarebaba* this, PlayState* play) {
     this->actor.world.pos.y = this->actor.home.pos.y + (14.0f * scale);
 
     if (this->timer == 20) {
-        this->actor.flags &= ~ACTOR_FLAG_10;
+        this->actor.flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED;
         this->actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE);
         if (this->actor.params == ENKAREBABA_1) {
             Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_ENEMY);
@@ -581,7 +579,7 @@ void EnKarebaba_Dead(EnKarebaba* this, PlayState* play) {
 
 void EnKarebaba_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnKarebaba* this = THIS;
+    EnKarebaba* this = (EnKarebaba*)thisx;
     f32 max;
 
     this->actionFunc(this, play);
@@ -647,7 +645,7 @@ void EnKarebaba_DrawShadow(EnKarebaba* this, PlayState* play) {
 void EnKarebaba_Draw(Actor* thisx, PlayState* play) {
     static Color_RGBA8 sFogColor = { 0, 0, 0, 0 };
     static Gfx* sStemDLists[] = { gDekuBabaStemTopDL, gDekuBabaStemMiddleDL, gDekuBabaStemBaseDL };
-    EnKarebaba* this = THIS;
+    EnKarebaba* this = (EnKarebaba*)thisx;
     s32 i;
     s32 stemSections;
     s16 bodyPartsCount;

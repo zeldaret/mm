@@ -6,9 +6,7 @@
 
 #include "z_obj_sound.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
-
-#define THIS ((ObjSound*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 void ObjSound_Init(Actor* thisx, PlayState* play);
 void ObjSound_Destroy(Actor* thisx, PlayState* play);
@@ -28,7 +26,7 @@ ActorProfile Obj_Sound_Profile = {
 };
 
 void ObjSound_Init(Actor* thisx, PlayState* play) {
-    ObjSound* this = THIS;
+    ObjSound* this = (ObjSound*)thisx;
 
     this->unk_144 = false;
     this->soundType = OBJ_SOUND_GET_TYPE(&this->actor);
@@ -40,7 +38,7 @@ void ObjSound_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjSound_Destroy(Actor* thisx, PlayState* play) {
-    ObjSound* this = THIS;
+    ObjSound* this = (ObjSound*)thisx;
 
     if (this->soundType == OBJ_SOUND_TYPE_BGM) {
         Audio_PlayObjSoundBgm(NULL, NA_BGM_GENERAL_SFX);
@@ -48,7 +46,7 @@ void ObjSound_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void ObjSound_Update(Actor* thisx, PlayState* play) {
-    ObjSound* this = THIS;
+    ObjSound* this = (ObjSound*)thisx;
 
     if (this->soundType == OBJ_SOUND_TYPE_SFX) {
         if (this->sfxType != 0) {
@@ -68,7 +66,7 @@ void ObjSound_Update(Actor* thisx, PlayState* play) {
 }
 
 void ObjSound_Draw(Actor* thisx, PlayState* play) {
-    ObjSound* this = THIS;
+    ObjSound* this = (ObjSound*)thisx;
 
     if (CHECK_EVENTINF(EVENTINF_41) || CHECK_EVENTINF(EVENTINF_35)) {
         Audio_PlayObjSoundFanfare(&this->actor.projectedPos, this->actor.params);

@@ -8,9 +8,7 @@
 #include "attributes.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
-
-#define THIS ((EnIg*)thisx)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void EnIg_Init(Actor* thisx, PlayState* play);
 void EnIg_Destroy(Actor* thisx, PlayState* play);
@@ -388,7 +386,7 @@ s16 func_80BF1744(EnIg* this, s32 numCutscenes) {
 }
 
 s32 func_80BF17BC(Actor* thisx, PlayState* play) {
-    EnIg* this = THIS;
+    EnIg* this = (EnIg*)thisx;
     s16 csId;
     s32 ret;
 
@@ -515,7 +513,7 @@ s32 func_80BF1B40(EnIg* this, PlayState* play) {
     u16 temp = play->msgCtx.currentTextId;
     s32 pad;
 
-    if (player->stateFlags1 & (PLAYER_STATE1_40 | PLAYER_STATE1_400 | PLAYER_STATE1_CARRYING_ACTOR)) {
+    if (player->stateFlags1 & (PLAYER_STATE1_TALKING | PLAYER_STATE1_400 | PLAYER_STATE1_CARRYING_ACTOR)) {
         this->unk_3D0 |= 0x400;
         if (this->unk_3D2 != temp) {
             if ((this->animIndex == ENIG_ANIM_2) || (this->animIndex == ENIG_ANIM_3)) {
@@ -973,7 +971,7 @@ void func_80BF2BD4(EnIg* this, PlayState* play) {
 }
 
 void EnIg_Init(Actor* thisx, PlayState* play) {
-    EnIg* this = THIS;
+    EnIg* this = (EnIg*)thisx;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 28.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &object_dai_Skel_0130D0, NULL, this->jointTable, this->morphTable,
@@ -991,14 +989,14 @@ void EnIg_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnIg_Destroy(Actor* thisx, PlayState* play) {
-    EnIg* this = THIS;
+    EnIg* this = (EnIg*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider1);
     Collider_DestroySphere(play, &this->collider2);
 }
 
 void EnIg_Update(Actor* thisx, PlayState* play) {
-    EnIg* this = THIS;
+    EnIg* this = (EnIg*)thisx;
 
     func_80BF19A0(this, play);
 
@@ -1019,7 +1017,7 @@ void EnIg_Update(Actor* thisx, PlayState* play) {
 
 s32 EnIg_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
                           Gfx** gfx) {
-    EnIg* this = THIS;
+    EnIg* this = (EnIg*)thisx;
 
     if (limbIndex == OBJECT_DAI_LIMB_0A) {
         *dList = NULL;
@@ -1031,7 +1029,7 @@ void EnIg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
     static Vec3f D_80BF351C = { 1800.0f, -2000.0f, 0.0f };
     static Vec3f D_80BF3528 = { 0.0f, 0.0f, 0.0f };
     s32 pad;
-    EnIg* this = THIS;
+    EnIg* this = (EnIg*)thisx;
     Vec3f sp2C;
 
     if (limbIndex == OBJECT_DAI_LIMB_0B) {
@@ -1058,7 +1056,7 @@ void EnIg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 }
 
 void EnIg_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx, Gfx** gfx) {
-    EnIg* this = THIS;
+    EnIg* this = (EnIg*)thisx;
     s32 stepRot;
     s32 overrideRot;
 
@@ -1093,7 +1091,7 @@ void EnIg_Draw(Actor* thisx, PlayState* play) {
         object_dai_Tex_011FB0, object_dai_Tex_0127B0,
     };
     s32 pad;
-    EnIg* this = THIS;
+    EnIg* this = (EnIg*)thisx;
 
     if (this->scheduleResult != 0) {
         Gfx_SetupDL25_Opa(play->state.gfxCtx);

@@ -7,9 +7,7 @@
 #include "z_en_syateki_crow.h"
 #include "overlays/actors/ovl_En_Syateki_Man/z_en_syateki_man.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_LOCK_ON_DISABLED)
-
-#define THIS ((EnSyatekiCrow*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED | ACTOR_FLAG_LOCK_ON_DISABLED)
 
 void EnSyatekiCrow_Init(Actor* thisx, PlayState* play2);
 void EnSyatekiCrow_Destroy(Actor* thisx, PlayState* play);
@@ -65,7 +63,7 @@ static ColliderJntSphInit sJntSphInit = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneScale, 3000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 3000, ICHAIN_CONTINUE),
     ICHAIN_S8(hintId, TATL_HINT_ID_GUAY, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -500, ICHAIN_CONTINUE),
     ICHAIN_F32(lockOnArrowOffset, 2000, ICHAIN_STOP),
@@ -73,7 +71,7 @@ static InitChainEntry sInitChain[] = {
 
 void EnSyatekiCrow_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnSyatekiCrow* this = THIS;
+    EnSyatekiCrow* this = (EnSyatekiCrow*)thisx;
     Path* path;
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
     s32 i;
@@ -109,7 +107,7 @@ void EnSyatekiCrow_Init(Actor* thisx, PlayState* play2) {
 }
 
 void EnSyatekiCrow_Destroy(Actor* thisx, PlayState* play) {
-    EnSyatekiCrow* this = THIS;
+    EnSyatekiCrow* this = (EnSyatekiCrow*)thisx;
 
     Collider_DestroyJntSph(play, &this->collider);
 }
@@ -275,7 +273,7 @@ void EnSyatekiCrow_UpdateDamage(EnSyatekiCrow* this, PlayState* play) {
 }
 
 void EnSyatekiCrow_Update(Actor* thisx, PlayState* play) {
-    EnSyatekiCrow* this = THIS;
+    EnSyatekiCrow* this = (EnSyatekiCrow*)thisx;
 
     this->actionFunc(this, play);
 
@@ -289,7 +287,7 @@ void EnSyatekiCrow_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnSyatekiCrow_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnSyatekiCrow* this = THIS;
+    EnSyatekiCrow* this = (EnSyatekiCrow*)thisx;
 
     if (limbIndex == OBJECT_CROW_LIMB_UPPER_TAIL) {
         rot->y += TRUNCF_BINANG(0xC00 * Math_SinF(this->skelAnime.curFrame * (M_PIf / 4)));
@@ -303,7 +301,7 @@ s32 EnSyatekiCrow_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, 
 static Vec3f sBodyOffset = { 2500.0f, 0.0f, 0.0f };
 
 void EnSyatekiCrow_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnSyatekiCrow* this = THIS;
+    EnSyatekiCrow* this = (EnSyatekiCrow*)thisx;
     Vec3f* bodyPartPos;
 
     if (limbIndex == OBJECT_CROW_LIMB_BODY) {
@@ -318,7 +316,7 @@ void EnSyatekiCrow_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
 }
 
 void EnSyatekiCrow_Draw(Actor* thisx, PlayState* play) {
-    EnSyatekiCrow* this = THIS;
+    EnSyatekiCrow* this = (EnSyatekiCrow*)thisx;
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,

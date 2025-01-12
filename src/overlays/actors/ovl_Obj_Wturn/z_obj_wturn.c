@@ -6,9 +6,7 @@
 
 #include "z_obj_wturn.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_100000 | ACTOR_FLAG_UPDATE_DURING_OCARINA)
-
-#define THIS ((ObjWturn*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_FREEZE_EXCEPTION | ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
 void ObjWturn_Init(Actor* thisx, PlayState* play);
 void ObjWturn_Update(Actor* thisx, PlayState* play);
@@ -35,7 +33,7 @@ ActorProfile Obj_Wturn_Profile = {
 };
 
 void ObjWturn_Init(Actor* thisx, PlayState* play) {
-    ObjWturn* this = THIS;
+    ObjWturn* this = (ObjWturn*)thisx;
 
     func_808A7954(this);
 }
@@ -132,7 +130,7 @@ void func_808A7C78(ObjWturn* this, PlayState* play) {
 }
 
 void ObjWturn_Update(Actor* thisx, PlayState* play) {
-    ObjWturn* this = THIS;
+    ObjWturn* this = (ObjWturn*)thisx;
 
     this->actionFunc(this, play);
 }

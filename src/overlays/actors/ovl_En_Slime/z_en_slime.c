@@ -7,9 +7,9 @@
 #include "z_en_slime.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_200)
-
-#define THIS ((EnSlime*)thisx)
+#define FLAGS                                                                                 \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
+     ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR)
 
 #define ICE_BLOCK_TIMER_MAX 254
 #define ICE_BLOCK_UNUSED (ICE_BLOCK_TIMER_MAX + 1)
@@ -156,7 +156,7 @@ static Vec3f sBubbleAccel = { 0.0f, -0.8f, 0.0f };
 AnimatedMaterial* sSlimeTexAnim;
 
 void EnSlime_Init(Actor* thisx, PlayState* play) {
-    EnSlime* this = THIS;
+    EnSlime* this = (EnSlime*)thisx;
     s32 reviveTimeSeconds;
     s32 i;
 
@@ -215,7 +215,7 @@ void EnSlime_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnSlime_Destroy(Actor* thisx, PlayState* play) {
-    EnSlime* this = THIS;
+    EnSlime* this = (EnSlime*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -231,7 +231,7 @@ void EnSlime_Freeze(EnSlime* this) {
     this->drawDmgEffFrozenSteamScale = 0.6f;
     this->drawDmgEffAlpha = 1.0f;
     this->timer = 80;
-    this->actor.flags &= ~ACTOR_FLAG_400;
+    this->actor.flags &= ~ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER;
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_XLU, 80);
 }
 
@@ -245,7 +245,7 @@ void EnSlime_Thaw(EnSlime* this, PlayState* play) {
         this->collider.base.colMaterial = COL_MATERIAL_NONE;
         this->drawDmgEffAlpha = 0.0f;
         Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, EN_SLIME_BODYPART_MAX, 2, 0.2f, 0.2f);
-        this->actor.flags |= ACTOR_FLAG_200;
+        this->actor.flags |= ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR;
     }
 }
 
@@ -281,7 +281,7 @@ void EnSlime_SetupInitializeIdle(EnSlime* this) {
  */
 void EnSlime_InitializeIdle(EnSlime* this, PlayState* play) {
     if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
-        this->actor.flags &= ~ACTOR_FLAG_10;
+        this->actor.flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED;
         EnSlime_SetupIdle(this);
     }
 }
@@ -839,7 +839,7 @@ void EnSlime_SpawnIceBlock(EnSlime* this, PlayState* play) {
 }
 
 void EnSlime_SetupIceBlock(EnSlime* this) {
-    this->actor.flags |= ACTOR_FLAG_10;
+    this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     this->actionFunc = EnSlime_IceBlock;
 }
 
@@ -916,7 +916,7 @@ void EnSlime_IceBlockThaw(EnSlime* this, PlayState* play) {
     if (this->iceBlockTimer == ICE_BLOCK_UNUSED) {
         this->collider.base.acFlags |= AC_ON;
         this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
-        this->actor.flags &= ~ACTOR_FLAG_10;
+        this->actor.flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED;
         EnSlime_SetupIdle(this);
     }
 }
@@ -927,7 +927,7 @@ void EnSlime_IceBlockThaw(EnSlime* this, PlayState* play) {
  */
 void EnSlime_SetupWaitForRevive(EnSlime* this) {
     this->actor.draw = NULL;
-    this->actor.flags |= ACTOR_FLAG_10;
+    this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     this->drawDmgEffAlpha = 0.0f;
     this->actor.gravity = 0.0f;
     this->actor.velocity.y = 0.0f;
@@ -976,7 +976,7 @@ void EnSlime_Revive(EnSlime* this, PlayState* play) {
 
     this->timer++;
     if (this->timer == 28) {
-        this->actor.flags &= ~ACTOR_FLAG_10;
+        this->actor.flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED;
         this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
         this->collider.base.acFlags |= AC_ON;
         this->actor.shape.rot.y = this->actor.home.rot.y;
@@ -1082,7 +1082,7 @@ void EnSlime_UpdateDamage(EnSlime* this, PlayState* play) {
 }
 
 void EnSlime_Update(Actor* thisx, PlayState* play) {
-    EnSlime* this = THIS;
+    EnSlime* this = (EnSlime*)thisx;
     s32 pad;
     Player* player = GET_PLAYER(play);
 
@@ -1162,7 +1162,7 @@ static Vec3f sBodyPartPosOffsets[EN_SLIME_BODYPART_MAX] = {
 
 void EnSlime_Draw(Actor* thisx, PlayState* play) {
     s32 i;
-    EnSlime* this = THIS;
+    EnSlime* this = (EnSlime*)thisx;
     Vec3f wobbleScale;
     Color_RGBA8* primColor;
     Color_RGBA8* envColor;

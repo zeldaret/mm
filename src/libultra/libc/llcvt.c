@@ -1,4 +1,4 @@
-#include "ultra64.h"
+// IDO Compiler Intrinsics for 64-bit conversion
 
 long long __d_to_ll(double d) {
     return d;

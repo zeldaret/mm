@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE)
 
-#define THIS ((EnWdhand*)thisx)
-
 void EnWdhand_Init(Actor* thisx, PlayState* play);
 void EnWdhand_Destroy(Actor* thisx, PlayState* play);
 void EnWdhand_Update(Actor* thisx, PlayState* play);
@@ -175,7 +173,7 @@ static DamageTable sDamageTable = {
 };
 
 void EnWdhand_Init(Actor* thisx, PlayState* play) {
-    EnWdhand* this = THIS;
+    EnWdhand* this = (EnWdhand*)thisx;
     s32 i;
     Vec3f initVel;
 
@@ -230,7 +228,7 @@ void EnWdhand_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnWdhand_Destroy(Actor* thisx, PlayState* play) {
-    EnWdhand* this = THIS;
+    EnWdhand* this = (EnWdhand*)thisx;
 
     Collider_DestroyJntSph(play, &this->collider);
 }
@@ -597,7 +595,7 @@ void EnWdhand_SetupDie(EnWdhand* this) {
     s32 i;
 
     this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
-    this->actor.flags |= ACTOR_FLAG_10;
+    this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
 
     // Finds the particular collider that was hit
     for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++) {
@@ -756,7 +754,7 @@ void EnWdhand_UpdateDamage(EnWdhand* this, PlayState* play) {
 }
 
 void EnWdhand_Update(Actor* thisx, PlayState* play) {
-    EnWdhand* this = THIS;
+    EnWdhand* this = (EnWdhand*)thisx;
 
     EnWdhand_UpdateDamage(this, play);
 
@@ -783,7 +781,7 @@ void EnWdhand_UpdateColliderLocationsForLimb(EnWdhand* this, s32 limbIndex, Vec3
 }
 
 void EnWdhand_Draw(Actor* thisx, PlayState* play) {
-    EnWdhand* this = THIS;
+    EnWdhand* this = (EnWdhand*)thisx;
     Vec3f limbPos;
     Gfx* gfx;
     s32 limbIndex;

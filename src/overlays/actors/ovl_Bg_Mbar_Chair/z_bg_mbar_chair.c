@@ -9,8 +9,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((BgMbarChair*)thisx)
-
 void BgMbarChair_Init(Actor* thisx, PlayState* play);
 void BgMbarChair_Destroy(Actor* thisx, PlayState* play);
 void BgMbarChair_Update(Actor* thisx, PlayState* play);
@@ -29,14 +27,14 @@ ActorProfile Bg_Mbar_Chair_Profile = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 60, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 80, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDistance, 2000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 60, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 80, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
 void BgMbarChair_Init(Actor* thisx, PlayState* play) {
-    BgMbarChair* this = THIS;
+    BgMbarChair* this = (BgMbarChair*)thisx;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 0);
@@ -44,7 +42,7 @@ void BgMbarChair_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgMbarChair_Destroy(Actor* thisx, PlayState* play) {
-    BgMbarChair* this = THIS;
+    BgMbarChair* this = (BgMbarChair*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }

@@ -11,8 +11,6 @@
 #define FLAGS \
     (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_CAN_ATTACH_TO_ARROW)
 
-#define THIS ((EnBat*)thisx)
-
 #define BAD_BAT_FLAP_FRAME 5
 
 void EnBat_Init(Actor* thisx, PlayState* play);
@@ -110,7 +108,7 @@ static CollisionCheckInfoInit sColChkInfoInit = { 1, 15, 30, 10 };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_S8(hintId, TATL_HINT_ID_BAD_BAT, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneForward, 3000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDistance, 3000, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -500, ICHAIN_CONTINUE),
     ICHAIN_F32(lockOnArrowOffset, 2000, ICHAIN_STOP),
 };
@@ -126,7 +124,7 @@ s32 sNumberAttacking; //!< Limit number attacking player to at most `BAD_BAT_MAX
 s32 sAlreadySpawned;  //!< used for those spawned with room -1 in Graveyard to avoid respawn on room change
 
 void EnBat_Init(Actor* thisx, PlayState* play) {
-    EnBat* this = THIS;
+    EnBat* this = (EnBat*)thisx;
 
     Actor_ProcessInitChain(thisx, sInitChain);
     Collider_InitAndSetSphere(play, &this->collider, thisx, &sSphereInit);
@@ -173,7 +171,7 @@ void EnBat_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnBat_Destroy(Actor* thisx, PlayState* play) {
-    EnBat* this = THIS;
+    EnBat* this = (EnBat*)thisx;
 
     Collider_DestroySphere(play, &this->collider);
 }
@@ -348,7 +346,7 @@ void EnBat_SetupDie(EnBat* this, PlayState* play) {
     }
 
     this->collider.base.acFlags &= ~AC_ON;
-    this->actor.flags |= ACTOR_FLAG_10;
+    this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     this->actionFunc = EnBat_Die;
 }
 
@@ -452,7 +450,7 @@ void EnBat_UpdateDamage(EnBat* this, PlayState* play) {
 
 void EnBat_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnBat* this = THIS;
+    EnBat* this = (EnBat*)thisx;
 
     if (this->actor.room == -1) {
         sAlreadySpawned = true;
@@ -521,7 +519,7 @@ void EnBat_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnBat_Draw(Actor* thisx, PlayState* play) {
-    EnBat* this = THIS;
+    EnBat* this = (EnBat*)thisx;
     Gfx* gfx;
 
     // Draw body and wings

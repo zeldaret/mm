@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
-#define THIS ((DoorAna*)thisx)
-
 void DoorAna_Init(Actor* thisx, PlayState* play);
 void DoorAna_Destroy(Actor* thisx, PlayState* play);
 void DoorAna_Update(Actor* thisx, PlayState* play);
@@ -63,7 +61,7 @@ void DoorAna_SetupAction(DoorAna* this, DoorAnaActionFunc actionFunction) {
 }
 
 void DoorAna_Init(Actor* thisx, PlayState* play) {
-    DoorAna* this = THIS;
+    DoorAna* this = (DoorAna*)thisx;
     s32 grottoType = DOORANA_GET_TYPE(&this->actor);
 
     this->actor.shape.rot.y = this->actor.shape.rot.z = 0;
@@ -72,7 +70,7 @@ void DoorAna_Init(Actor* thisx, PlayState* play) {
         if (grottoType == DOORANA_TYPE_HIDDEN_BOMB) {
             Collider_InitAndSetCylinder(play, &this->bombCollider, &this->actor, &sCylinderInit);
         } else {
-            this->actor.flags |= ACTOR_FLAG_10; // always update
+            this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED; // always update
         }
 
         Actor_SetScale(&this->actor, 0);
@@ -86,7 +84,7 @@ void DoorAna_Init(Actor* thisx, PlayState* play) {
 }
 
 void DoorAna_Destroy(Actor* thisx, PlayState* play) {
-    DoorAna* this = THIS;
+    DoorAna* this = (DoorAna*)thisx;
     s32 grottoType = DOORANA_GET_TYPE(&this->actor);
 
     if (grottoType == DOORANA_TYPE_HIDDEN_BOMB) {
@@ -102,7 +100,7 @@ void DoorAna_WaitClosed(DoorAna* this, PlayState* play) {
         //! @bug Implementation from OoT is not updated for MM, grotto does not open on Song of Storms
         if (this->actor.xyzDistToPlayerSq < SQ(200.0f) && CutsceneFlags_Get(play, 5)) {
             grottoIsOpen = true;
-            this->actor.flags &= ~ACTOR_FLAG_10; // always update OFF
+            this->actor.flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED; // always update OFF
         }
 
     } else {
@@ -141,7 +139,7 @@ void DoorAna_WaitOpen(DoorAna* this, PlayState* play) {
             } else {
                 s32 destinationIdx = DOORANA_GET_ENTRANCE(&this->actor);
 
-                Play_SetupRespawnPoint(play, RESPAWN_MODE_UNK_3, PLAYER_PARAMS(0xFF, PLAYER_INITMODE_4));
+                Play_SetupRespawnPoint(play, RESPAWN_MODE_UNK_3, PLAYER_PARAMS(0xFF, PLAYER_START_MODE_GROTTO));
 
                 gSaveContext.respawn[RESPAWN_MODE_UNK_3].pos.y = this->actor.world.pos.y;
                 gSaveContext.respawn[RESPAWN_MODE_UNK_3].yaw = this->actor.home.rot.y;
@@ -192,7 +190,7 @@ void DoorAna_GrabLink(DoorAna* this, PlayState* play) {
 }
 
 void DoorAna_Update(Actor* thisx, PlayState* play) {
-    DoorAna* this = THIS;
+    DoorAna* this = (DoorAna*)thisx;
 
     this->actionFunc(this, play);
     this->actor.shape.rot.y = BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(play)));

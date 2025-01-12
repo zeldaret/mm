@@ -15,9 +15,7 @@
 #include "overlays/actors/ovl_En_Ot/z_en_ot.h"
 #include "assets/objects/object_sinkai_kabe/object_sinkai_kabe.h"
 
-#define FLAGS (ACTOR_FLAG_10)
-
-#define THIS ((BgSinkaiKabe*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void BgSinkaiKabe_Init(Actor* thisx, PlayState* play);
 void BgSinkaiKabe_Destroy(Actor* thisx, PlayState* play);
@@ -40,7 +38,7 @@ ActorProfile Bg_Sinkai_Kabe_Profile = {
 static s32 sCurrentPythonIndex = 0;
 
 void BgSinkaiKabe_Init(Actor* thisx, PlayState* play) {
-    BgSinkaiKabe* this = THIS;
+    BgSinkaiKabe* this = (BgSinkaiKabe*)thisx;
     s32 pad;
     CollisionHeader* colHeader = NULL;
     Vec3f pos;
@@ -111,7 +109,7 @@ void BgSinkaiKabe_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgSinkaiKabe_Destroy(Actor* thisx, PlayState* play) {
-    BgSinkaiKabe* this = THIS;
+    BgSinkaiKabe* this = (BgSinkaiKabe*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
@@ -146,7 +144,7 @@ void BgSinkaiKabe_WaitForPlayer(BgSinkaiKabe* this, PlayState* play) {
 }
 
 void BgSinkaiKabe_Update(Actor* thisx, PlayState* play) {
-    BgSinkaiKabe* this = THIS;
+    BgSinkaiKabe* this = (BgSinkaiKabe*)thisx;
 
     this->actionFunc(this, play);
 }

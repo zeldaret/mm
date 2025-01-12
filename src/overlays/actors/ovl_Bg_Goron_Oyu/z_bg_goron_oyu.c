@@ -7,9 +7,7 @@
 #include "z_bg_goron_oyu.h"
 #include "assets/objects/object_oyu/object_oyu.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
-
-#define THIS ((BgGoronOyu*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 void BgGoronOyu_Init(Actor* thisx, PlayState* play);
 void BgGoronOyu_Destroy(Actor* thisx, PlayState* play);
@@ -148,7 +146,7 @@ void BgGoronOyu_SpawnEffects(BgGoronOyu* this, PlayState* play) {
 
 void BgGoronOyu_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    BgGoronOyu* this = THIS;
+    BgGoronOyu* this = (BgGoronOyu*)thisx;
     CollisionHeader* colHeader = NULL;
 
     Actor_SetScale(&this->dyna.actor, 0.1f);
@@ -169,13 +167,13 @@ void BgGoronOyu_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgGoronOyu_Destroy(Actor* thisx, PlayState* play) {
-    BgGoronOyu* this = THIS;
+    BgGoronOyu* this = (BgGoronOyu*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
 void BgGoronOyu_Update(Actor* thisx, PlayState* play) {
-    BgGoronOyu* this = THIS;
+    BgGoronOyu* this = (BgGoronOyu*)thisx;
 
     this->actionFunc(this, play);
     BgGoronOyu_SpawnEffects(this, play);

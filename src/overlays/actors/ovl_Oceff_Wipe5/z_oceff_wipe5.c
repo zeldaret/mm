@@ -6,9 +6,7 @@
 
 #include "z_oceff_wipe5.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_UPDATE_DURING_OCARINA)
-
-#define THIS ((OceffWipe5*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
 void OceffWipe5_Init(Actor* thisx, PlayState* play);
 void OceffWipe5_Destroy(Actor* thisx, PlayState* play);
@@ -30,7 +28,7 @@ ActorProfile Oceff_Wipe5_Profile = {
 static s32 sBssPad;
 
 void OceffWipe5_Init(Actor* thisx, PlayState* play) {
-    OceffWipe5* this = THIS;
+    OceffWipe5* this = (OceffWipe5*)thisx;
 
     Actor_SetScale(&this->actor, 1.0f);
     this->counter = 0;
@@ -38,14 +36,14 @@ void OceffWipe5_Init(Actor* thisx, PlayState* play) {
 }
 
 void OceffWipe5_Destroy(Actor* thisx, PlayState* play) {
-    OceffWipe5* this = THIS;
+    OceffWipe5* this = (OceffWipe5*)thisx;
 
     Magic_Reset(play);
     play->msgCtx.ocarinaSongEffectActive = false;
 }
 
 void OceffWipe5_Update(Actor* thisx, PlayState* play) {
-    OceffWipe5* this = THIS;
+    OceffWipe5* this = (OceffWipe5*)thisx;
 
     this->actor.world.pos = GET_ACTIVE_CAM(play)->eye;
     if (this->counter < 100) {
@@ -66,7 +64,7 @@ static u8 sEnvColors[] = {
 };
 
 void OceffWipe5_Draw(Actor* thisx, PlayState* play) {
-    OceffWipe5* this = THIS;
+    OceffWipe5* this = (OceffWipe5*)thisx;
     f32 z;
     s32 pad;
     s32 i;

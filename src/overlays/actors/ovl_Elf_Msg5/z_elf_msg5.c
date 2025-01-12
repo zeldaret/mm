@@ -6,9 +6,7 @@
 
 #include "z_elf_msg5.h"
 
-#define FLAGS (ACTOR_FLAG_10)
-
-#define THIS ((ElfMsg5*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void ElfMsg5_Init(Actor* thisx, PlayState* play);
 void ElfMsg5_Destroy(Actor* thisx, PlayState* play);
@@ -31,7 +29,7 @@ ActorProfile Elf_Msg5_Profile = {
 
 static InitChainEntry sInitChainsInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 200, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneForward, 1000, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeDistance, 1000, ICHAIN_STOP),
 };
 
 s32 func_80AFD990(ElfMsg5* this, PlayState* play) {
@@ -66,7 +64,7 @@ s32 func_80AFD990(ElfMsg5* this, PlayState* play) {
 }
 
 void ElfMsg5_Init(Actor* thisx, PlayState* play) {
-    ElfMsg5* this = THIS;
+    ElfMsg5* this = (ElfMsg5*)thisx;
 
     if (!func_80AFD990(this, play)) {
         Actor_ProcessInitChain(&this->actor, sInitChainsInitChain);
@@ -84,7 +82,7 @@ void func_80AFDB38(ElfMsg5* this, PlayState* play) {
 }
 
 void ElfMsg5_Update(Actor* thisx, PlayState* play) {
-    ElfMsg5* this = THIS;
+    ElfMsg5* this = (ElfMsg5*)thisx;
 
     if ((this->actor.home.rot.y >= 0) || (this->actor.home.rot.y < -0x80) ||
         Flags_GetSwitch(play, -this->actor.home.rot.y - 1)) {

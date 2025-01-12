@@ -7,9 +7,7 @@
 #include "z_en_bal.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
-
-#define THIS ((EnBal*)thisx)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void EnBal_Init(Actor* thisx, PlayState* play);
 void EnBal_Destroy(Actor* thisx, PlayState* play);
@@ -193,13 +191,13 @@ static AnimationInfo sAnimationInfo[TINGLE_ANIM_MAX] = {
 };
 
 void EnBal_Init(Actor* thisx, PlayState* play) {
-    EnBal* this = THIS;
+    EnBal* this = (EnBal*)thisx;
     s32 pad;
     f32 endFrame = Animation_GetLastFrame(&gTingleFloatIdleAnim);
 
     this->locationMapId = TINGLE_GET_MAP_ID(&this->picto.actor);
     this->picto.actor.attentionRangeType = 1;
-    this->picto.actor.uncullZoneForward = 3000.0f;
+    this->picto.actor.cullingVolumeDistance = 3000.0f;
     Actor_SetScale(&this->picto.actor, 0.02f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gTingleSkel, &gTingleFloatIdleAnim, this->jointTable, this->morphTable,
                        TINGLE_LIMB_MAX);
@@ -232,7 +230,7 @@ void EnBal_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnBal_Destroy(Actor* thisx, PlayState* play) {
-    EnBal* this = THIS;
+    EnBal* this = (EnBal*)thisx;
 
     Collider_InitJntSph(play, &this->collider);
 }
@@ -251,7 +249,7 @@ void EnBal_SetMainColliderToHead(EnBal* this) {
 
 s32 EnBal_ValidatePictograph(PlayState* play, Actor* thisx) {
     s32 pictoValid;
-    EnBal* this = THIS;
+    EnBal* this = (EnBal*)thisx;
 
     pictoValid = Snap_ValidatePictograph(play, &this->picto.actor, PICTO_VALID_TINGLE, &this->picto.actor.focus.pos,
                                          &this->picto.actor.shape.rot, 10.0f, 400.0f, 0x4000);
@@ -1102,7 +1100,7 @@ void EnBal_TryBalloonPopped(EnBal* this, PlayState* play) {
 }
 
 void EnBal_Update(Actor* thisx, PlayState* play) {
-    EnBal* this = THIS;
+    EnBal* this = (EnBal*)thisx;
 
     this->actionFunc(this, play);
     EnBal_TryBalloonPopped(this, play);
@@ -1122,7 +1120,7 @@ void EnBal_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnBal_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnBal* this = THIS;
+    EnBal* this = (EnBal*)thisx;
     Vec3s balloonRot;
 
     if (limbIndex == TINGLE_LIMB_BALLOON) {
@@ -1152,7 +1150,7 @@ s32 EnBal_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 }
 
 void EnBal_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnBal* this = THIS;
+    EnBal* this = (EnBal*)thisx;
 
     Collider_UpdateSpheres(limbIndex, &this->collider);
     if (limbIndex == TINGLE_LIMB_HEAD) {
@@ -1161,7 +1159,7 @@ void EnBal_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
 }
 
 void EnBal_Draw(Actor* thisx, PlayState* play) {
-    EnBal* this = THIS;
+    EnBal* this = (EnBal*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

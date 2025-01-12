@@ -6,9 +6,7 @@
 
 #include "z_en_guruguru.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
-
-#define THIS ((EnGuruguru*)thisx)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void EnGuruguru_Init(Actor* thisx, PlayState* play);
 void EnGuruguru_Destroy(Actor* thisx, PlayState* play);
@@ -86,7 +84,7 @@ static TexturePtr sEyeTextures[] = { gGuruGuruEyeClosedTex, gGuruGuruEyeAngryTex
 static TexturePtr sMouthTextures[] = { gGuruGuruMouthOpenTex, gGuruGuruMouthAngryTex };
 
 void EnGuruguru_Init(Actor* thisx, PlayState* play) {
-    EnGuruguru* this = THIS;
+    EnGuruguru* this = (EnGuruguru*)thisx;
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 19.0f);
@@ -115,7 +113,7 @@ void EnGuruguru_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnGuruguru_Destroy(Actor* thisx, PlayState* play) {
-    EnGuruguru* this = THIS;
+    EnGuruguru* this = (EnGuruguru*)thisx;
 
     if (this->actor.params != 2) {
         Collider_DestroyCylinder(play, &this->collider);
@@ -331,7 +329,7 @@ void func_80BC7520(EnGuruguru* this, PlayState* play) {
 }
 
 void EnGuruguru_Update(Actor* thisx, PlayState* play) {
-    EnGuruguru* this = THIS;
+    EnGuruguru* this = (EnGuruguru*)thisx;
     s32 yaw;
     Player* player = GET_PLAYER(play);
     s16 yawTemp;
@@ -388,7 +386,7 @@ void EnGuruguru_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnGuruguru_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnGuruguru* this = THIS;
+    EnGuruguru* this = (EnGuruguru*)thisx;
 
     if (limbIndex == GURU_GURU_LIMB_HEAD) {
         rot->x += this->headXRot;
@@ -399,7 +397,7 @@ s32 EnGuruguru_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
 }
 
 void EnGuruguru_Draw(Actor* thisx, PlayState* play) {
-    EnGuruguru* this = THIS;
+    EnGuruguru* this = (EnGuruguru*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

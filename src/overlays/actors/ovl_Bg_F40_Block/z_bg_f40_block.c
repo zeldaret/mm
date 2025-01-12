@@ -7,9 +7,7 @@
 #include "z_bg_f40_block.h"
 #include "assets/objects/object_f40_obj/object_f40_obj.h"
 
-#define FLAGS (ACTOR_FLAG_10)
-
-#define THIS ((BgF40Block*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void BgF40Block_Init(Actor* thisx, PlayState* play);
 void BgF40Block_Destroy(Actor* thisx, PlayState* play);
@@ -44,9 +42,9 @@ static Vec3f D_80BC4620[] = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 400, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 400, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDistance, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 400, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 400, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
@@ -225,7 +223,7 @@ void func_80BC4038(BgF40Block* this) {
 }
 
 void BgF40Block_Init(Actor* thisx, PlayState* play) {
-    BgF40Block* this = THIS;
+    BgF40Block* this = (BgF40Block*)thisx;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
@@ -254,7 +252,7 @@ void BgF40Block_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgF40Block_Destroy(Actor* thisx, PlayState* play) {
-    BgF40Block* this = THIS;
+    BgF40Block* this = (BgF40Block*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
@@ -365,7 +363,7 @@ void func_80BC457C(BgF40Block* this, PlayState* play) {
 }
 
 void BgF40Block_Update(Actor* thisx, PlayState* play) {
-    BgF40Block* this = THIS;
+    BgF40Block* this = (BgF40Block*)thisx;
 
     this->actionFunc(this, play);
 

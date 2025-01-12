@@ -8,9 +8,7 @@
 #include "assets/objects/gameplay_field_keep/gameplay_field_keep.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_THROW_ONLY)
-
-#define THIS ((EnKusa2*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_THROW_ONLY)
 
 void EnKusa2_Init(Actor* thisx, PlayState* play);
 void EnKusa2_Destroy(Actor* thisx, PlayState* play);
@@ -284,7 +282,7 @@ void func_80A5BB40(EnKusa2* this, PlayState* play, s32 arg2) {
     f32 temp_f24;
     s16 temp_s0;
 
-    if (this->actor.flags & ACTOR_FLAG_40) {
+    if (this->actor.flags & ACTOR_FLAG_INSIDE_CULLING_VOLUME) {
         for (i = 0; i <= arg2; i++) {
             temp_s0 = Rand_S16Offset(-16000, 32000) + this->actor.world.rot.y;
             temp_f20 = Math_SinS(temp_s0);
@@ -851,20 +849,20 @@ void func_80A5D178(EnKusa2* this) {
 }
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_CONTINUE), ICHAIN_F32_DIV1000(terminalVelocity, -17000, ICHAIN_CONTINUE),
-    ICHAIN_VEC3F_DIV1000(scale, 400, ICHAIN_CONTINUE),   ICHAIN_F32(uncullZoneForward, 1200, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),   ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_STOP),
+    ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_CONTINUE),  ICHAIN_F32_DIV1000(terminalVelocity, -17000, ICHAIN_CONTINUE),
+    ICHAIN_VEC3F_DIV1000(scale, 400, ICHAIN_CONTINUE),    ICHAIN_F32(cullingVolumeDistance, 1200, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 100, ICHAIN_CONTINUE), ICHAIN_F32(cullingVolumeDownward, 100, ICHAIN_STOP),
 };
 
 void EnKusa2_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnKusa2* this = THIS;
+    EnKusa2* this = (EnKusa2*)thisx;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     if (!ENKUSA2_GET_1(&this->actor)) {
         this->actor.update = func_80A5E604;
         this->actor.draw = NULL;
-        this->actor.flags |= ACTOR_FLAG_20;
+        this->actor.flags |= ACTOR_FLAG_DRAW_CULLING_DISABLED;
         Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_BG);
         this->unk_1BE = 0;
         if (D_80A5EAEC) {
@@ -899,7 +897,7 @@ void EnKusa2_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnKusa2_Destroy(Actor* thisx, PlayState* play) {
-    EnKusa2* this = THIS;
+    EnKusa2* this = (EnKusa2*)thisx;
 
     if (ENKUSA2_GET_1(&this->actor) == 1) {
         Collider_DestroyCylinder(play, &this->collider);
@@ -1285,7 +1283,7 @@ void func_80A5E4BC(EnKusa2* this, PlayState* play) {
 
 void func_80A5E604(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnKusa2* this = THIS;
+    EnKusa2* this = (EnKusa2*)thisx;
 
     this->actionFunc(this, play);
 
@@ -1294,7 +1292,7 @@ void func_80A5E604(Actor* thisx, PlayState* play) {
     } else {
         this->actor.draw = func_80A5E6F0;
 
-        if (play->roomCtx.curRoom.behaviorType1 == ROOM_BEHAVIOR_TYPE1_0) {
+        if (play->roomCtx.curRoom.type == ROOM_TYPE_NORMAL) {
             func_80A5B508();
         }
         func_80A5CAF4(&D_80A5F1C0);
@@ -1303,7 +1301,7 @@ void func_80A5E604(Actor* thisx, PlayState* play) {
 }
 
 void EnKusa2_Update(Actor* thisx, PlayState* play) {
-    EnKusa2* this = THIS;
+    EnKusa2* this = (EnKusa2*)thisx;
 
     if ((this->unk_1C0 != NULL) && (this->unk_1C0->actor.update == NULL)) {
         this->unk_1C0 = NULL;
@@ -1319,7 +1317,7 @@ void func_80A5E6F0(Actor* thisx, PlayState* play) {
         gKakeraLeafTipDL,
         gKakeraLeafMiddleDL,
     };
-    EnKusa2* this = THIS;
+    EnKusa2* this = (EnKusa2*)thisx;
     s32 i;
 
     OPEN_DISPS(play->state.gfxCtx);
@@ -1354,10 +1352,10 @@ void func_80A5E80C(PlayState* play, s32 arg1) {
 }
 
 void EnKusa2_Draw(Actor* thisx, PlayState* play) {
-    EnKusa2* this = THIS;
+    EnKusa2* this = (EnKusa2*)thisx;
 
     if (this->actor.projectedPos.z <= 1200.0f) {
-        if ((play->roomCtx.curRoom.behaviorType1 == ROOM_BEHAVIOR_TYPE1_0) && (this->actor.projectedPos.z > -150.0f) &&
+        if ((play->roomCtx.curRoom.type == ROOM_TYPE_NORMAL) && (this->actor.projectedPos.z > -150.0f) &&
             (this->actor.projectedPos.z < 400.0f)) {
             func_80A5B954(&D_80A60908[this->unk_1CE], 0.0015f);
         }
@@ -1379,7 +1377,7 @@ void func_80A5E9B4(Actor* thisx, PlayState* play) {
 }
 
 void func_80A5EA48(Actor* thisx, PlayState* play) {
-    EnKusa2* this = THIS;
+    EnKusa2* this = (EnKusa2*)thisx;
 
     if (this->unk_1CF == 0xFF) {
         Gfx_DrawDListOpa(play, gKusaBushType1DL);

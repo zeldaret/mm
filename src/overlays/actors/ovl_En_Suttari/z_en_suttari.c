@@ -10,9 +10,7 @@
 #include "overlays/actors/ovl_En_Elf/z_en_elf.h"
 #include "overlays/effects/ovl_Effect_Ss_Solder_Srch_Ball/z_eff_ss_solder_srch_ball.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
-
-#define THIS ((EnSuttari*)thisx)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void EnSuttari_Init(Actor* thisx, PlayState* play);
 void EnSuttari_Destroy(Actor* thisx, PlayState* play);
@@ -1229,7 +1227,7 @@ void func_80BAD380(EnSuttari* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
     Player* player = GET_PLAYER(play);
 
-    if ((player->stateFlags1 & PLAYER_STATE1_40) && (play->msgCtx.currentTextId != 0x2A31)) {
+    if ((player->stateFlags1 & PLAYER_STATE1_TALKING) && (play->msgCtx.currentTextId != 0x2A31)) {
         this->flags1 |= 0x8000;
         this->actor.speed = 0.0f;
     } else {
@@ -1476,7 +1474,7 @@ void func_80BADF3C(EnSuttari* this, PlayState* play) {
 }
 
 void EnSuttari_Init(Actor* thisx, PlayState* play) {
-    EnSuttari* this = THIS;
+    EnSuttari* this = (EnSuttari*)thisx;
     s32 pad;
 
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_SAKON_DEAD)) {
@@ -1494,7 +1492,7 @@ void EnSuttari_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnSuttari_Destroy(Actor* thisx, PlayState* play) {
-    EnSuttari* this = THIS;
+    EnSuttari* this = (EnSuttari*)thisx;
 
     if ((play->sceneId == SCENE_BACKTOWN) && !(this->flags2 & 4)) {
         SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 20);
@@ -1503,7 +1501,7 @@ void EnSuttari_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnSuttari_Update(Actor* thisx, PlayState* play) {
-    EnSuttari* this = THIS;
+    EnSuttari* this = (EnSuttari*)thisx;
     s32 pad;
     Player* player = GET_PLAYER(play);
 
@@ -1531,7 +1529,7 @@ void EnSuttari_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnSuttari_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnSuttari* this = THIS;
+    EnSuttari* this = (EnSuttari*)thisx;
 
     if (limbIndex == OBJECT_BOJ_LIMB_0F) {
         *dList = object_boj_DL_00AF90;
@@ -1556,7 +1554,7 @@ s32 EnSuttari_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
 void EnSuttari_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f D_80BAE950 = { 0.0f, 0.0f, 0.0f };
     static Vec3f D_80BAE95C = { 2000.0f, -1000.0f, 0.0f };
-    EnSuttari* this = THIS;
+    EnSuttari* this = (EnSuttari*)thisx;
     s32 pad;
     MtxF* curState;
     Actor* bombBag;
@@ -1595,7 +1593,7 @@ void EnSuttari_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 }
 
 void EnSuttari_Draw(Actor* thisx, PlayState* play) {
-    EnSuttari* this = THIS;
+    EnSuttari* this = (EnSuttari*)thisx;
     s32 pad;
     Vec3f pos;
     Vec3f scale;

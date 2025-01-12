@@ -8,9 +8,7 @@
 #include "z64quake.h"
 #include "assets/objects/object_hariko/object_hariko.h"
 
-#define FLAGS (ACTOR_FLAG_20 | ACTOR_FLAG_UPDATE_DURING_OCARINA)
-
-#define THIS ((ObjHariko*)thisx)
+#define FLAGS (ACTOR_FLAG_DRAW_CULLING_DISABLED | ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
 void ObjHariko_Init(Actor* thisx, PlayState* play);
 void ObjHariko_Destroy(Actor* thisx, PlayState* play);
@@ -36,7 +34,7 @@ ActorProfile Obj_Hariko_Profile = {
 };
 
 void ObjHariko_Init(Actor* thisx, PlayState* play) {
-    ObjHariko* this = THIS;
+    ObjHariko* this = (ObjHariko*)thisx;
 
     Actor_SetScale(&this->actor, 0.1f);
     this->headRot.x = 0;
@@ -80,14 +78,14 @@ void ObjHariko_CheckForQuakes(ObjHariko* this) {
 }
 
 void ObjHariko_Update(Actor* thisx, PlayState* play) {
-    ObjHariko* this = THIS;
+    ObjHariko* this = (ObjHariko*)thisx;
 
     this->actionFunc(this, play);
     ObjHariko_CheckForQuakes(this);
 }
 
 void ObjHariko_Draw(Actor* thisx, PlayState* play) {
-    ObjHariko* this = THIS;
+    ObjHariko* this = (ObjHariko*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

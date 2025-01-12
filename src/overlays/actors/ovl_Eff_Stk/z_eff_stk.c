@@ -7,9 +7,7 @@
 #include "z_eff_stk.h"
 #include "assets/objects/object_stk2/object_stk2.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
-
-#define THIS ((EffStk*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 void EffStk_Init(Actor* thisx, PlayState* play);
 void EffStk_Destroy(Actor* thisx, PlayState* play);
@@ -31,7 +29,7 @@ ActorProfile Eff_Stk_Profile = {
 };
 
 void EffStk_Init(Actor* thisx, PlayState* play) {
-    EffStk* this = THIS;
+    EffStk* this = (EffStk*)thisx;
 
     Actor_SetScale(&this->actor, 0.2f);
     this->actionFunc = func_80BF0DE0;
@@ -71,13 +69,13 @@ void func_80BF0DE0(EffStk* this, PlayState* play) {
 }
 
 void EffStk_Update(Actor* thisx, PlayState* play) {
-    EffStk* this = THIS;
+    EffStk* this = (EffStk*)thisx;
 
     this->actionFunc(this, play);
 }
 
 void EffStk_Draw(Actor* thisx, PlayState* play) {
-    EffStk* this = THIS;
+    EffStk* this = (EffStk*)thisx;
     s32 pad;
     Camera* activeCam = GET_ACTIVE_CAM(play);
     Vec3f eye = activeCam->eye;

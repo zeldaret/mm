@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE)
 
-#define THIS ((EnBigokuta*)thisx)
-
 void EnBigokuta_Init(Actor* thisx, PlayState* play);
 void EnBigokuta_Destroy(Actor* thisx, PlayState* play);
 void EnBigokuta_Update(Actor* thisx, PlayState* play);
@@ -86,7 +84,7 @@ static ColliderCylinderInit sBodyCylinderInit = {
 static CollisionCheckInfoInit sColChkInfoInit = { 4, 130, 120, MASS_HEAVY };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 2500, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDistance, 2500, ICHAIN_CONTINUE),
     ICHAIN_F32(lockOnArrowOffset, 2000, ICHAIN_CONTINUE),
     ICHAIN_U8(attentionRangeType, ATTENTION_RANGE_2, ICHAIN_CONTINUE),
     ICHAIN_S8(hintId, TATL_HINT_ID_BIG_OCTO, ICHAIN_CONTINUE),
@@ -94,7 +92,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void EnBigokuta_Init(Actor* thisx, PlayState* play) {
-    EnBigokuta* this = THIS;
+    EnBigokuta* this = (EnBigokuta*)thisx;
 
     Actor_ProcessInitChain(&this->picto.actor, sInitChain);
     SkelAnime_InitFlex(play, &this->skelAnime, &gBigOctoSkel, &gBigOctoIdleAnim, this->jointTable, this->morphTable,
@@ -122,7 +120,7 @@ void EnBigokuta_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnBigokuta_Destroy(Actor* thisx, PlayState* play) {
-    EnBigokuta* this = THIS;
+    EnBigokuta* this = (EnBigokuta*)thisx;
 
     Collider_DestroyCylinder(play, &this->shellCollider);
     Collider_DestroyCylinder(play, &this->bodyCollider);
@@ -517,7 +515,7 @@ void EnBigokuta_CheckOneHitKill(EnBigokuta* this, PlayState* play) {
 
 void EnBigokuta_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnBigokuta* this = THIS;
+    EnBigokuta* this = (EnBigokuta*)thisx;
 
     if (!EnBigokuta_IsInWater(this, play)) {
         Actor_Kill(&this->picto.actor);
@@ -562,7 +560,7 @@ void EnBigokuta_Update(Actor* thisx, PlayState* play) {
 s32 EnBigokuta_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
                                 Gfx** gfx) {
     if (limbIndex == BIGOKUTA_LIMB_HEAD) {
-        EnBigokuta* this = THIS;
+        EnBigokuta* this = (EnBigokuta*)thisx;
         s32 envColor;
         s16 rotX;
         f32 endFrame;
@@ -592,7 +590,7 @@ s32 EnBigokuta_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
             rot->x -= rotX;
         }
     } else if (limbIndex == BIGOKUTA_LIMB_CENTER_SNOUT) {
-        EnBigokuta* this = THIS;
+        EnBigokuta* this = (EnBigokuta*)thisx;
 
         if (this->actionFunc == EnBigokuta_PlayDeathEffects) {
             if (this->timer < 5) {
@@ -660,7 +658,7 @@ static Vec3f D_80AC45D0[] = {
 };
 
 void EnBigokuta_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
-    EnBigokuta* this = THIS;
+    EnBigokuta* this = (EnBigokuta*)thisx;
     s32 i;
     s8 bodyPartIndex = sLimbToBodyParts[limbIndex];
 
@@ -679,7 +677,7 @@ void EnBigokuta_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s*
 
 void EnBigokuta_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnBigokuta* this = THIS;
+    EnBigokuta* this = (EnBigokuta*)thisx;
     Gfx* gfx;
 
     OPEN_DISPS(play->state.gfxCtx);

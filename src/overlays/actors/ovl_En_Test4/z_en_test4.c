@@ -11,9 +11,7 @@
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
 #include "overlays/actors/ovl_En_Horse/z_en_horse.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_100000)
-
-#define THIS ((EnTest4*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED | ACTOR_FLAG_FREEZE_EXCEPTION)
 
 void EnTest4_Init(Actor* thisx, PlayState* play);
 void EnTest4_Destroy(Actor* thisx, PlayState* play);
@@ -323,7 +321,7 @@ void EnTest4_GetBellTimeAndShrinkScreenBeforeDay3(EnTest4* this, PlayState* play
 
 void EnTest4_Init(Actor* thisx, PlayState* play) {
     s32 eventDayCount;
-    EnTest4* this = THIS;
+    EnTest4* this = (EnTest4*)thisx;
     Player* player = GET_PLAYER(play);
     s8 csId = this->actor.csId;
 
@@ -454,7 +452,7 @@ void EnTest4_HandleEvents(EnTest4* this, PlayState* play) {
                     // Turn day with DayTelop cutscene
                     gSaveContext.screenScale = 0.0f;
                     Play_SetRespawnData(play, RESPAWN_MODE_DOWN, Entrance_CreateFromSpawn(0), player->unk_3CE,
-                                        PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B), &player->unk_3C0, player->unk_3CC);
+                                        PLAYER_PARAMS(0xFF, PLAYER_START_MODE_B), &player->unk_3C0, player->unk_3CC);
                     func_80169EFC(play);
                     if (player->stateFlags1 & PLAYER_STATE1_800000) {
                         EnHorse* rideActor = (EnHorse*)player->rideActor;
@@ -507,9 +505,9 @@ void EnTest4_HandleEvents(EnTest4* this, PlayState* play) {
                     u32 entrance = gSaveContext.save.entrance;
 
                     if (play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON) {
-                        playerParams = PLAYER_PARAMS(0xFF, PLAYER_INITMODE_TELESCOPE);
+                        playerParams = PLAYER_PARAMS(0xFF, PLAYER_START_MODE_TELESCOPE);
                     } else {
-                        playerParams = PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B);
+                        playerParams = PLAYER_PARAMS(0xFF, PLAYER_START_MODE_B);
                     }
 
                     Play_SetRespawnData(play, RESPAWN_MODE_RETURN, entrance, player->unk_3CE, playerParams,
@@ -622,7 +620,7 @@ void EnTest4_SetSkyboxNumStars(EnTest4* this, PlayState* play) {
 }
 
 void EnTest4_Update(Actor* thisx, PlayState* play) {
-    EnTest4* this = THIS;
+    EnTest4* this = (EnTest4*)thisx;
     Player* player = GET_PLAYER(play);
 
     if (player->stateFlags1 & PLAYER_STATE1_2) {

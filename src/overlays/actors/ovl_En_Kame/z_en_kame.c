@@ -7,9 +7,7 @@
 #include "z_en_kame.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_400)
-
-#define THIS ((EnKame*)thisx)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER)
 
 void EnKame_Init(Actor* thisx, PlayState* play);
 void EnKame_Destroy(Actor* thisx, PlayState* play);
@@ -149,7 +147,7 @@ static InitChainEntry sInitChain[] = {
 static s32 sTexturesDesegmented = false;
 
 void EnKame_Init(Actor* thisx, PlayState* play) {
-    EnKame* this = THIS;
+    EnKame* this = (EnKame*)thisx;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     SkelAnime_InitFlex(play, &this->snapperSkelAnime, &gSnapperSkel, &gSnapperIdleAnim, this->snapperJointTable,
@@ -174,7 +172,7 @@ void EnKame_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnKame_Destroy(Actor* thisx, PlayState* play) {
-    EnKame* this = THIS;
+    EnKame* this = (EnKame*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -197,7 +195,7 @@ void EnKame_Freeze(EnKame* this) {
     this->drawDmgEffAlpha = 1.0f;
     this->collider.base.colMaterial = COL_MATERIAL_HIT3;
     this->stunTimer = 80;
-    this->actor.flags &= ~ACTOR_FLAG_400;
+    this->actor.flags &= ~ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER;
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 80);
 }
 
@@ -207,7 +205,7 @@ void EnKame_Thaw(EnKame* this, PlayState* play) {
         this->collider.base.colMaterial = COL_MATERIAL_HIT6;
         this->drawDmgEffAlpha = 0.0f;
         Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, SNAPPER_BODYPART_MAX, 2, 0.3f, 0.2f);
-        this->actor.flags |= ACTOR_FLAG_400;
+        this->actor.flags |= ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER;
     }
 }
 
@@ -394,7 +392,7 @@ void EnKame_SetupPrepareToAttack(EnKame* this) {
         this->timer = 0;
     }
 
-    this->actor.flags |= ACTOR_FLAG_10;
+    this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     this->actionFunc = EnKame_PrepareToAttack;
 }
 
@@ -486,7 +484,7 @@ void EnKame_Attack(EnKame* this, PlayState* play) {
             this->spikesScale -= 0.1f;
             this->collider.base.atFlags &= ~AT_ON;
             if (this->spikesScale < 0.5f) {
-                this->actor.flags &= ~ACTOR_FLAG_10;
+                this->actor.flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED;
                 EnKame_SetupEmergeFromShell(this);
             }
         } else {
@@ -542,7 +540,7 @@ void EnKame_SetupFlip(EnKame* this) {
     this->collider.base.acFlags &= ~AC_ON;
     this->collider.base.atFlags &= ~AT_ON;
     this->collider.base.atFlags &= ~(AT_BOUNCED | AT_HIT);
-    this->actor.flags &= ~ACTOR_FLAG_10;
+    this->actor.flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     this->actor.shape.rot.z = 0;
     Actor_PlaySfx(&this->actor, NA_SE_EN_PAMET_REVERSE);
     this->actionFunc = EnKame_Flip;
@@ -689,7 +687,7 @@ void EnKame_SetupDead(EnKame* this, PlayState* play) {
 
     this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
     this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
-    this->actor.flags |= ACTOR_FLAG_10;
+    this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     Actor_PlaySfx(&this->actor, NA_SE_EN_PAMET_DEAD);
     this->timer = 0;
     this->actionFunc = EnKame_Dead;
@@ -840,7 +838,7 @@ void EnKame_UpdateDamage(EnKame* this, PlayState* play) {
 
 void EnKame_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnKame* this = THIS;
+    EnKame* this = (EnKame*)thisx;
 
     EnKame_Blink(this);
 
@@ -895,7 +893,7 @@ void EnKame_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnKame_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnKame* this = THIS;
+    EnKame* this = (EnKame*)thisx;
 
     if ((this->actionFunc == EnKame_RetreatIntoShell) || (this->actionFunc == EnKame_EmergeFromShell)) {
         if (limbIndex == SNAPPER_LIMB_HEAD) {
@@ -939,7 +937,7 @@ static s8 sLimbToBodyParts[SNAPPER_LIMB_MAX] = {
 };
 
 void EnKame_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnKame* this = THIS;
+    EnKame* this = (EnKame*)thisx;
 
     if (sLimbToBodyParts[limbIndex] != BODYPART_NONE) {
         Matrix_MultZero(&this->bodyPartsPos[sLimbToBodyParts[limbIndex]]);
@@ -973,7 +971,7 @@ void EnKame_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot
 }
 
 void EnKame_Draw(Actor* thisx, PlayState* play) {
-    EnKame* this = THIS;
+    EnKame* this = (EnKame*)thisx;
     Vec3f originalPos;
 
     // If the Snapper is flipping itself upright, we'll update its position inside EnKame_PostLimbDraw
@@ -1013,7 +1011,7 @@ void EnKame_Draw(Actor* thisx, PlayState* play) {
 
 s32 EnKame_SpikedSnapperOverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
                                          Actor* thisx) {
-    EnKame* this = THIS;
+    EnKame* this = (EnKame*)thisx;
 
     if (limbIndex == SPIKED_SNAPPER_LIMB_BODY) {
         pos->y -= 700.0f;
@@ -1027,7 +1025,7 @@ s32 EnKame_SpikedSnapperOverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** d
 }
 
 void EnKame_DrawSpikedSnapper(Actor* thisx, PlayState* play) {
-    EnKame* this = THIS;
+    EnKame* this = (EnKame*)thisx;
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->spikedSnapperSkelAnime.skeleton, this->spikedSnapperSkelAnime.jointTable,

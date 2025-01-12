@@ -21,9 +21,9 @@
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 #include "overlays/actors/ovl_Obj_Aqua/z_obj_aqua.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_UPDATE_DURING_OCARINA)
-
-#define THIS ((EnGo*)thisx)
+#define FLAGS                                                                                  \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
+     ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
 #define ENGO_STANDING_Y_OFFSET 0.0f  // Actor shape offset in use when a Goron is in any standing state.
 #define ENGO_ROLLEDUP_Y_OFFSET 14.0f // Actor shape offset in use when a Goron is "rolled up".
@@ -1486,7 +1486,7 @@ s32 EnGo_UpdateGraveyardAttentionTargetAndReactions(EnGo* this, PlayState* play)
         return false;
     }
 
-    if (player->stateFlags1 & PLAYER_STATE1_40) {
+    if (player->stateFlags1 & PLAYER_STATE1_TALKING) {
         if (this->lastTextId != textId) {
             switch (textId) {
                 case 0xE1A: // Awakening from frozen form, confused, turn to other Goron
@@ -1832,7 +1832,7 @@ void EnGo_MakeSteam(EnGo* this) {
  */
 s32 EnGo_HandleOpenShrineCutscene(Actor* thisx, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    EnGo* this = THIS;
+    EnGo* this = (EnGo*)thisx;
     s32 ret = false;
 
     switch (this->cutsceneState) {
@@ -1959,7 +1959,7 @@ s32 EnGo_HandleOpenShrineCutscene(Actor* thisx, PlayState* play) {
  */
 s32 EnGo_HandleGivePowderKegCutscene(Actor* thisx, PlayState* play) {
     static Vec3f sPowderKegSpawnOffset = { 0.0f, 200.0f, 280.0f };
-    EnGo* this = THIS;
+    EnGo* this = (EnGo*)thisx;
     Vec3f powderKegSpawnPos;
     s32 ret = false;
 
@@ -2653,7 +2653,7 @@ void EnGo_Snowball(EnGo* this, PlayState* play) {
     if ((this->actionFlags & ENGO_FLAG_HIT_BY_OTHER) && (this->actor.colChkInfo.damageEffect == ENGO_DMGEFF_BREAK)) {
         // Stop the Gatekeeper when hit by an appropriate effect
         Actor_PlaySfx(&this->actor, NA_SE_EV_SNOWBALL_BROKEN);
-        this->actor.flags &= ~ACTOR_FLAG_10;
+        this->actor.flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED;
         this->actor.flags |= ACTOR_FLAG_UPDATE_DURING_OCARINA;
         EnGo_InitSnow(this->effectTable, this->actor.world.pos);
         this->actor.shape.rot.x = 0;
@@ -2797,7 +2797,7 @@ void EnGo_Talk(EnGo* this, PlayState* play) {
 }
 
 void EnGo_Init(Actor* thisx, PlayState* play) {
-    EnGo* this = THIS;
+    EnGo* this = (EnGo*)thisx;
 
     this->taisouObjectSlot = SubS_GetObjectSlot(OBJECT_TAISOU, play);
     this->hakuginDemoObjectSlot = SubS_GetObjectSlot(OBJECT_HAKUGIN_DEMO, play);
@@ -2805,7 +2805,7 @@ void EnGo_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnGo_Destroy(Actor* thisx, PlayState* play) {
-    EnGo* this = THIS;
+    EnGo* this = (EnGo*)thisx;
 
     Collider_DestroyCylinder(play, &this->colliderCylinder);
     Collider_DestroySphere(play, &this->colliderSphere);
@@ -2813,7 +2813,7 @@ void EnGo_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnGo_Update(Actor* thisx, PlayState* play) {
-    EnGo* this = THIS;
+    EnGo* this = (EnGo*)thisx;
     f32 xzRange;
 
     EnGo_DetectCollisions(this, play);
@@ -2886,7 +2886,7 @@ void EnGo_Draw_NoSkeleton(EnGo* this, PlayState* play) {
 }
 
 s32 EnGo_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnGo* this = THIS;
+    EnGo* this = (EnGo*)thisx;
     Vec3f worldPos;
     s32 fidgetIndex;
 
@@ -2922,7 +2922,7 @@ s32 EnGo_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
 }
 
 void EnGo_TransfromLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
-    EnGo* this = THIS;
+    EnGo* this = (EnGo*)thisx;
     s32 stepRot;
     s32 overrideRot;
 
@@ -2977,7 +2977,7 @@ void EnGo_Draw(Actor* thisx, PlayState* play) {
     static TexturePtr sEyeTextures[] = {
         gGoronEyeOpenTex, gGoronEyeHalfTex, gGoronEyeClosedTex, gGoronEyeHalfTex, gGoronEyeClosed2Tex,
     };
-    EnGo* this = THIS;
+    EnGo* this = (EnGo*)thisx;
 
     if (!(this->actionFlags & (ENGO_FLAG_SNOWBALLED | ENGO_FLAG_ROLLED_UP))) {
         OPEN_DISPS(play->state.gfxCtx);

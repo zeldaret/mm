@@ -10,9 +10,9 @@
 #include "overlays/actors/ovl_En_Arrow/z_en_arrow.h"
 #include "overlays/effects/ovl_Effect_Ss_Hitmark/z_eff_ss_hitmark.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_100000)
-
-#define THIS ((EnKaizoku*)thisx)
+#define FLAGS                                                                                 \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
+     ACTOR_FLAG_FREEZE_EXCEPTION)
 
 void EnKaizoku_Init(Actor* thisx, PlayState* play);
 void EnKaizoku_Destroy(Actor* thisx, PlayState* play);
@@ -262,7 +262,7 @@ static u8 sAnimationModes[KAIZOKU_ANIM_MAX] = {
 
 void EnKaizoku_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnKaizoku* this = THIS;
+    EnKaizoku* this = (EnKaizoku*)thisx;
     Player* player = GET_PLAYER(play);
     EffectBlureInit1 blureInit;
 
@@ -316,12 +316,12 @@ void EnKaizoku_Init(Actor* thisx, PlayState* play) {
     this->csId = this->picto.actor.csId;
     this->picto.actor.world.pos.y = player->actor.world.pos.y + 160.0f;
     this->picto.validationFunc = EnKaizoku_ValidatePictograph;
-    this->picto.actor.flags |= ACTOR_FLAG_400;
+    this->picto.actor.flags |= ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER;
     EnKaizoku_SetupWaitForApproach(this);
 }
 
 void EnKaizoku_Destroy(Actor* thisx, PlayState* play) {
-    EnKaizoku* this = THIS;
+    EnKaizoku* this = (EnKaizoku*)thisx;
 
     Effect_Destroy(play, this->blureIndex);
     Collider_DestroyCylinder(play, &this->bodyCollider);
@@ -629,7 +629,7 @@ void EnKaizoku_WaitForApproach(EnKaizoku* this, PlayState* play) {
                 CutsceneManager_Stop(this->csId);
                 this->cutsceneState = 0;
                 this->subCamId = SUB_CAM_ID_DONE;
-                this->picto.actor.flags &= ~ACTOR_FLAG_100000;
+                this->picto.actor.flags &= ~ACTOR_FLAG_FREEZE_EXCEPTION;
                 this->picto.actor.flags &= ~ACTOR_FLAG_LOCK_ON_DISABLED;
                 this->picto.actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
                 EnKaizoku_SetupReady(this);
@@ -1630,7 +1630,7 @@ void EnKaizoku_Stunned(EnKaizoku* this, PlayState* play) {
     }
 
     if ((this->iceTimer == 0) && (this->colorFilterTimer == 0) &&
-        !CHECK_FLAG_ALL(this->picto.actor.flags, ACTOR_FLAG_2000) &&
+        !CHECK_FLAG_ALL(this->picto.actor.flags, ACTOR_FLAG_HOOKSHOT_ATTACHED) &&
         (this->picto.actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         this->dontUpdateSkel = false;
         EnKaizoku_ReactToPlayer(this, play, true);
@@ -1640,7 +1640,7 @@ void EnKaizoku_Stunned(EnKaizoku* this, PlayState* play) {
             Actor_SpawnIceEffects(play, &this->picto.actor, this->bodyPartsPos, KAIZOKU_BODYPART_MAX, 2, 0.7f, 0.4f);
             this->colorFilterTimer = 0;
             this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
-            this->picto.actor.flags |= ACTOR_FLAG_400;
+            this->picto.actor.flags |= ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER;
         }
     }
 }
@@ -1662,7 +1662,7 @@ void EnKaizoku_SetupDamaged(EnKaizoku* this, PlayState* play) {
         Actor_SpawnIceEffects(play, &this->picto.actor, this->bodyPartsPos, KAIZOKU_BODYPART_MAX, 2, 0.7f, 0.4f);
         this->colorFilterTimer = 0;
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
-        this->picto.actor.flags |= ACTOR_FLAG_400;
+        this->picto.actor.flags |= ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER;
     }
 
     Actor_PlaySfx(&this->picto.actor, NA_SE_EN_PIRATE_DAMAGE);
@@ -1696,7 +1696,7 @@ void EnKaizoku_Damaged(EnKaizoku* this, PlayState* play) {
 void EnKaizoku_SetupDefeatKnockdown(EnKaizoku* this, PlayState* play) {
     Vec3f sp24;
 
-    this->picto.actor.flags |= ACTOR_FLAG_100000;
+    this->picto.actor.flags |= ACTOR_FLAG_FREEZE_EXCEPTION;
     Matrix_RotateYS(this->picto.actor.yawTowardsPlayer, MTXMODE_NEW);
     Matrix_MultVecZ(-10.0f, &sp24);
     Math_Vec3f_Copy(&this->velocity, &sp24);
@@ -1714,7 +1714,7 @@ void EnKaizoku_SetupDefeatKnockdown(EnKaizoku* this, PlayState* play) {
     Actor_PlaySfx(&this->picto.actor, NA_SE_EN_PIRATE_DEAD);
     this->picto.actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
     this->picto.actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
-    this->picto.actor.flags &= ~ACTOR_FLAG_400;
+    this->picto.actor.flags &= ~ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER;
     this->cutsceneTimer = 0;
     this->cutsceneState = 0;
     this->action = KAIZOKU_ACTION_KNOCK_DOWN;
@@ -1803,7 +1803,7 @@ void EnKaizoku_UpdateDamage(EnKaizoku* this, PlayState* play) {
         if ((gSaveContext.save.saveInfo.playerData.health <= 0x10) && (this->action != KAIZOKU_ACTION_SCENE_FADE)) {
             this->spinAttackState = 2;
             this->subCamId = SUB_CAM_ID_DONE;
-            this->picto.actor.flags |= ACTOR_FLAG_100000;
+            this->picto.actor.flags |= ACTOR_FLAG_FREEZE_EXCEPTION;
 
             if (!CutsceneManager_IsNext(this->csId)) {
                 CutsceneManager_Queue(this->csId);
@@ -1822,7 +1822,7 @@ void EnKaizoku_UpdateDamage(EnKaizoku* this, PlayState* play) {
                 Health_ChangeBy(play, 0x10);
                 this->spinAttackState = 2;
                 this->subCamId = SUB_CAM_ID_DONE;
-                this->picto.actor.flags |= ACTOR_FLAG_100000;
+                this->picto.actor.flags |= ACTOR_FLAG_FREEZE_EXCEPTION;
 
                 if (!CutsceneManager_IsNext(this->csId)) {
                     CutsceneManager_Queue(this->csId);
@@ -1919,7 +1919,7 @@ void EnKaizoku_UpdateDamage(EnKaizoku* this, PlayState* play) {
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_SFX;
                     this->drawDmgEffScale = 0.0f;
                     this->drawDmgEffFrozenSteamScale = 1.5f;
-                    this->picto.actor.flags &= ~ACTOR_FLAG_400;
+                    this->picto.actor.flags &= ~ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER;
                     if (this->picto.actor.colChkInfo.health <= 0) {
                         EnKaizoku_SetupDefeatKnockdown(this, play);
                     } else {
@@ -2008,7 +2008,7 @@ static TexturePtr sEyeTextures[] = {
 };
 
 void EnKaizoku_Update(Actor* thisx, PlayState* play2) {
-    EnKaizoku* this = THIS;
+    EnKaizoku* this = (EnKaizoku*)thisx;
     PlayState* play = play2;
 
     if (!this->dontUpdateSkel) {
@@ -2071,7 +2071,7 @@ void EnKaizoku_Update(Actor* thisx, PlayState* play2) {
 }
 
 s32 EnKaizoku_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnKaizoku* this = THIS;
+    EnKaizoku* this = (EnKaizoku*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -2102,7 +2102,7 @@ s32 EnKaizoku_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
 void EnKaizoku_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     Vec3f swordTip;
     Vec3f swordHilt;
-    EnKaizoku* this = THIS;
+    EnKaizoku* this = (EnKaizoku*)thisx;
 
     if (limbIndex == KAIZOKU_LIMB_R_SWORD) {
         Matrix_MultVec3f(&sSwordQuadOffset1, &this->swordCollider.dim.quad[1]);
@@ -2150,7 +2150,7 @@ void EnKaizoku_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
 }
 
 void EnKaizoku_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
-    EnKaizoku* this = THIS;
+    EnKaizoku* this = (EnKaizoku*)thisx;
 
     if (limbIndex == KAIZOKU_LIMB_R_SWORD) {
         Matrix_Scale(this->swordScaleRight.x, this->swordScaleRight.y, this->swordScaleRight.z, MTXMODE_APPLY);
@@ -2163,7 +2163,7 @@ void EnKaizoku_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 void EnKaizoku_Draw(Actor* thisx, PlayState* play) {
     f32 pad[4];
     f32 drawDmgEffAlpha;
-    EnKaizoku* this = THIS;
+    EnKaizoku* this = (EnKaizoku*)thisx;
 
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     Gfx_SetupDL25_Opa(play->state.gfxCtx);

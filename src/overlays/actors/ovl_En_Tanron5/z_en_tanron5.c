@@ -25,9 +25,7 @@
 #include "assets/objects/object_boss02/object_boss02.h"
 #include "overlays/actors/ovl_Boss_02/z_boss_02.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
-
-#define THIS ((EnTanron5*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 void EnTanron5_Init(Actor* thisx, PlayState* play);
 void EnTanron5_Destroy(Actor* thisx, PlayState* play);
@@ -212,7 +210,7 @@ void EnTanron5_SpawnEffectBlackDust(TwinmoldEffect* effect, Vec3f* pos, f32 scal
 }
 
 void EnTanron5_Init(Actor* thisx, PlayState* play) {
-    EnTanron5* this = THIS;
+    EnTanron5* this = (EnTanron5*)thisx;
 
     if (TWINMOLD_PROP_GET_TYPE(&this->actor) >= TWINMOLD_PROP_TYPE_FRAGMENT_LARGE_1) {
         // This is a ruin fragment or item drop; if there are more than 60 fragments or drops
@@ -284,7 +282,7 @@ void EnTanron5_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnTanron5_Destroy(Actor* thisx, PlayState* play) {
-    EnTanron5* this = THIS;
+    EnTanron5* this = (EnTanron5*)thisx;
 
     if (TWINMOLD_PROP_GET_TYPE(&this->actor) >= TWINMOLD_PROP_TYPE_FRAGMENT_LARGE_1) {
         sFragmentAndItemDropCount--;
@@ -296,7 +294,7 @@ void EnTanron5_Destroy(Actor* thisx, PlayState* play) {
  */
 void EnTanron5_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnTanron5* this = THIS;
+    EnTanron5* this = (EnTanron5*)thisx;
     Boss02* boss02 = (Boss02*)this->actor.parent;
     Player* player = GET_PLAYER(play2);
     s32 i;
@@ -513,7 +511,7 @@ void EnTanron5_RuinFragmentItemDrop_Update(Actor* thisx, PlayState* play2) {
     f32 interactionDistSq;
     s32 i;
     Vec3f pos;
-    EnTanron5* this = THIS;
+    EnTanron5* this = (EnTanron5*)thisx;
     PlayState* play = play2;
 
     // When a ruin fragment hits the floor, it will slowly sink into the sand. After sinking for 38 frames,
@@ -602,7 +600,7 @@ void EnTanron5_RuinFragmentItemDrop_Update(Actor* thisx, PlayState* play2) {
 }
 
 void EnTanron5_Draw(Actor* thisx, PlayState* play) {
-    EnTanron5* this = THIS;
+    EnTanron5* this = (EnTanron5*)thisx;
 
     if ((-500.0f * sGiantModeScaleFactor) < this->actor.projectedPos.z) {
         OPEN_DISPS(play->state.gfxCtx);
@@ -617,7 +615,7 @@ void EnTanron5_Draw(Actor* thisx, PlayState* play) {
 }
 
 void EnTanron5_ItemDrop_Draw(Actor* thisx, PlayState* play) {
-    EnTanron5* this = THIS;
+    EnTanron5* this = (EnTanron5*)thisx;
     TexturePtr texture;
     s32 shouldDraw;
 

@@ -8,9 +8,7 @@
 #include "z_mir_ray.h"
 #include "assets/objects/object_mir_ray/object_mir_ray.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
-
-#define THIS ((MirRay*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 void MirRay_Init(Actor* thisx, PlayState* play);
 void MirRay_Destroy(Actor* thisx, PlayState* play);
@@ -234,9 +232,9 @@ MirRayDataEntry sMirRayData[] = {
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 0, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 1000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 1000, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeDistance, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 1000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 1000, ICHAIN_STOP),
 };
 
 const char D_808E3DD0[] = "反射光 発生失敗";
@@ -289,7 +287,7 @@ void MirRay_MakeShieldLight(MirRay* this, PlayState* play) {
 
 void MirRay_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    MirRay* this = THIS;
+    MirRay* this = (MirRay*)thisx;
     MirRayDataEntry* dataEntry = &sMirRayData[MIRRAY_LOCATION(&this->actor)];
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
@@ -350,7 +348,7 @@ void MirRay_Init(Actor* thisx, PlayState* play) {
 }
 
 void MirRay_Destroy(Actor* thisx, PlayState* play) {
-    MirRay* this = THIS;
+    MirRay* this = (MirRay*)thisx;
 
     LightContext_RemoveLight(play, &play->lightCtx, this->lightNode);
 
@@ -363,7 +361,7 @@ void MirRay_Destroy(Actor* thisx, PlayState* play) {
 
 void MirRay_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    MirRay* this = THIS;
+    MirRay* this = (MirRay*)thisx;
     Player* player = GET_PLAYER(play);
 
     D_808E3BF0 = false;
@@ -592,7 +590,7 @@ void MirRay_ReflectedBeam(MirRay* this, PlayState* play, MirRayShieldReflection*
 
 void MirRay_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
-    MirRay* this = THIS;
+    MirRay* this = (MirRay*)thisx;
     Player* player = GET_PLAYER(play);
     MirRayShieldReflection reflection[6];
     s32 i;

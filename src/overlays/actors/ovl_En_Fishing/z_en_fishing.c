@@ -11,9 +11,7 @@
 #include "assets/objects/object_fish/object_fish.h"
 #include "overlays/actors/ovl_En_Kanban/z_en_kanban.h"
 
-#define FLAGS (ACTOR_FLAG_10)
-
-#define THIS ((EnFishing*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 #define WATER_SURFACE_Y(play) play->colCtx.colHeader->waterBoxes->minPos.y
 
@@ -798,7 +796,7 @@ static InitChainEntry sInitChain[] = {
 
 void EnFishing_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnFishing* this = THIS;
+    EnFishing* this = (EnFishing*)thisx;
     u16 fishCount;
 
     Actor_ProcessInitChain(thisx, sInitChain);
@@ -985,7 +983,7 @@ void EnFishing_Init(Actor* thisx, PlayState* play2) {
 
 void EnFishing_Destroy(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnFishing* this = THIS;
+    EnFishing* this = (EnFishing*)thisx;
 
     SkelAnime_Free(&this->skelAnime, play);
 
@@ -2853,7 +2851,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
     s16 spF2;
     s16 spF0;
     s16 spEE;
-    EnFishing* this = THIS;
+    EnFishing* this = (EnFishing*)thisx;
     PlayState* play = play2;
     Player* player = GET_PLAYER(play);
     Input* input = CONTROLLER1(&play->state);
@@ -2866,8 +2864,8 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
     f32 temp;
     f32 temp2;
 
-    this->actor.uncullZoneForward = 700.0f;
-    this->actor.uncullZoneScale = 50.0f;
+    this->actor.cullingVolumeDistance = 700.0f;
+    this->actor.cullingVolumeScale = 50.0f;
 
     if (this->unk_148 == 0) {
         sp118 = (player->actor.speed * 0.15f) + 0.25f;
@@ -2986,8 +2984,8 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
         case 100:
             EnFishing_HandleAquariumDialog(this, play);
 
-            this->actor.uncullZoneForward = 500.0f;
-            this->actor.uncullZoneScale = 300.0f;
+            this->actor.cullingVolumeDistance = 500.0f;
+            this->actor.cullingVolumeScale = 300.0f;
 
             Lights_PointNoGlowSetInfo(&this->lightInfo, this->actor.world.pos.x, this->actor.world.pos.y + 20.0f,
                                       this->actor.world.pos.z - 50.0f, 255, 255, 255, 255);
@@ -3510,8 +3508,8 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
             break;
 
         case 5:
-            this->actor.uncullZoneForward = 1200.0f;
-            this->actor.uncullZoneScale = 200.0f;
+            this->actor.cullingVolumeDistance = 1200.0f;
+            this->actor.cullingVolumeScale = 200.0f;
 
             D_809171D4++;
 
@@ -4173,7 +4171,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
 }
 
 s32 EnFishing_BassOverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnFishing* this = THIS;
+    EnFishing* this = (EnFishing*)thisx;
 
     if (limbIndex == FISHING_BASS_LIMB_JAW) {
         rot->z -= this->unk_168 - 11000;
@@ -4196,7 +4194,7 @@ s32 EnFishing_BassOverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, 
 }
 
 void EnFishing_BassPostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnFishing* this = THIS;
+    EnFishing* this = (EnFishing*)thisx;
 
     if (limbIndex == FISHING_BASS_LIMB_JAW) {
         Matrix_MultVec3f(&sFishMouthOffset, &this->fishMouthPos);
@@ -4204,7 +4202,7 @@ void EnFishing_BassPostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
 }
 
 s32 EnFishing_LoachOverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnFishing* this = THIS;
+    EnFishing* this = (EnFishing*)thisx;
 
     if (limbIndex == FISHING_LOACH_LIMB_MIDDLE_SEGMENT) {
         rot->y += this->unk_1C4[0];
@@ -4219,7 +4217,7 @@ s32 EnFishing_LoachOverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList,
 
 void EnFishing_LoachPostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f sLoachMouthOffset = { 500.0f, 500.0f, 0.0f };
-    EnFishing* this = THIS;
+    EnFishing* this = (EnFishing*)thisx;
 
     if (limbIndex == FISHING_LOACH_LIMB_JAW) {
         Matrix_MultVec3f(&sLoachMouthOffset, &this->fishMouthPos);
@@ -4227,7 +4225,7 @@ void EnFishing_LoachPostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Ve
 }
 
 void EnFishing_DrawFish(Actor* thisx, PlayState* play) {
-    EnFishing* this = THIS;
+    EnFishing* this = (EnFishing*)thisx;
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
@@ -5058,7 +5056,7 @@ Vec3s sSinkingLureLocationPos[] = {
 
 void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnFishing* this = THIS;
+    EnFishing* this = (EnFishing*)thisx;
     Vec3f sp114;
     Vec3f sp108;
     Vec3f spFC;
@@ -5086,7 +5084,7 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
     if ((D_8090CD04 != 0) || Message_GetState(&play->msgCtx) != TEXT_STATE_NONE) {
         this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     } else {
-        this->actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_20);
+        this->actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED);
     }
 
     if ((this->actor.xzDistToPlayer < 120.0f) || Message_GetState(&play->msgCtx) != TEXT_STATE_NONE) {
@@ -5604,7 +5602,7 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
 }
 
 s32 EnFishing_OwnerOverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnFishing* this = THIS;
+    EnFishing* this = (EnFishing*)thisx;
 
     if (limbIndex == FISHING_OWNER_LIMB_HEAD) {
         rot->x -= this->unk_15C;
@@ -5637,7 +5635,7 @@ TexturePtr sFishingOwnerEyeTexs[] = {
 
 void EnFishing_DrawOwner(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnFishing* this = THIS;
+    EnFishing* this = (EnFishing*)thisx;
     Input* input = CONTROLLER1(&play->state);
 
     OPEN_DISPS(play->state.gfxCtx);

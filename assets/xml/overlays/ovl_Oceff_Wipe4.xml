@@ -7,6 +7,6 @@
         </Array>
         <DList Name="sScarecrowSongMaterialDL" Offset="0xD90"/>
         <DList Name="sScarecrowSongUnusedMaterialDL" Offset="0xDF8"/>
-        <DList Name="sScarecrowSongModelDL" Offset="0xE60"/>
+        <DList Name="sScarecrowSongModelDL" Offset="0xE60"/> <!-- Original name might be "efc_ocarina_5_modelT" or "ocarina_kakashi_model" -->
     </File>
 </Root>

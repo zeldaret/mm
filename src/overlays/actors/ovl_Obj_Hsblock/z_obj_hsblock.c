@@ -10,8 +10,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((ObjHsblock*)thisx)
-
 void ObjHsblock_Init(Actor* thisx, PlayState* play);
 void ObjHsblock_Destroy(Actor* thisx, PlayState* play);
 void ObjHsblock_Update(Actor* thisx, PlayState* play);
@@ -40,9 +38,9 @@ static f32 sFocusHeights[] = { 85.0f, 85.0f, 0.0f };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 200, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeDistance, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 100, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 200, ICHAIN_STOP),
 };
 
 static CollisionHeader* sColHeaders[] = {
@@ -67,7 +65,7 @@ void func_8093DEAC(ObjHsblock* this, PlayState* play) {
 }
 
 void ObjHsblock_Init(Actor* thisx, PlayState* play) {
-    ObjHsblock* this = THIS;
+    ObjHsblock* this = (ObjHsblock*)thisx;
 
     DynaPolyActor_Init(&this->dyna, 0);
     DynaPolyActor_LoadMesh(play, &this->dyna, sColHeaders[OBJHSBLOCK_GET_3(thisx)]);
@@ -94,7 +92,7 @@ void ObjHsblock_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjHsblock_Destroy(Actor* thisx, PlayState* play) {
-    ObjHsblock* this = THIS;
+    ObjHsblock* this = (ObjHsblock*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
@@ -104,7 +102,7 @@ void func_8093E03C(ObjHsblock* this) {
 }
 
 void func_8093E05C(ObjHsblock* this) {
-    this->dyna.actor.flags |= ACTOR_FLAG_10;
+    this->dyna.actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y - 105.0f;
     ObjHsblock_SetupAction(this, func_8093E0A0);
 }
@@ -125,12 +123,12 @@ void func_8093E10C(ObjHsblock* this, PlayState* play) {
                                  this->dyna.actor.velocity.y, 0.3f)) < 0.001f) {
         this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y;
         func_8093E03C(this);
-        this->dyna.actor.flags &= ~ACTOR_FLAG_10;
+        this->dyna.actor.flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     }
 }
 
 void ObjHsblock_Update(Actor* thisx, PlayState* play) {
-    ObjHsblock* this = THIS;
+    ObjHsblock* this = (ObjHsblock*)thisx;
 
     if (this->actionFunc != NULL) {
         this->actionFunc(this, play);

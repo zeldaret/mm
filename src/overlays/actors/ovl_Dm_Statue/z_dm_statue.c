@@ -7,9 +7,7 @@
 #include "z_dm_statue.h"
 #include "assets/objects/object_smtower/object_smtower.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_CAN_PRESS_SWITCHES)
-
-#define THIS ((DmStatue*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED | ACTOR_FLAG_CAN_PRESS_SWITCHES)
 
 void DmStatue_Init(Actor* thisx, PlayState* play);
 void DmStatue_Destroy(Actor* thisx, PlayState* play);
@@ -29,7 +27,7 @@ ActorProfile Dm_Statue_Profile = {
 };
 
 void DmStatue_Init(Actor* thisx, PlayState* play) {
-    DmStatue* this = THIS;
+    DmStatue* this = (DmStatue*)thisx;
 
     Actor_SetScale(&this->actor, 10.0f);
 }

@@ -7,9 +7,7 @@
 #include "z_bg_ikana_block.h"
 #include "assets/objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
 
-#define FLAGS (ACTOR_FLAG_10)
-
-#define THIS ((BgIkanaBlock*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void BgIkanaBlock_Init(Actor* thisx, PlayState* play);
 void BgIkanaBlock_Destroy(Actor* thisx, PlayState* play);
@@ -38,9 +36,9 @@ ActorProfile Bg_Ikana_Block_Profile = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 250, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 250, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDistance, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 250, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 250, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
@@ -181,7 +179,7 @@ s32 func_80B7EEB4(BgIkanaBlock* this, PlayState* play) {
 }
 
 void BgIkanaBlock_Init(Actor* thisx, PlayState* play) {
-    BgIkanaBlock* this = THIS;
+    BgIkanaBlock* this = (BgIkanaBlock*)thisx;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
@@ -194,7 +192,7 @@ void BgIkanaBlock_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgIkanaBlock_Destroy(Actor* thisx, PlayState* play) {
-    BgIkanaBlock* this = THIS;
+    BgIkanaBlock* this = (BgIkanaBlock*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
@@ -343,7 +341,7 @@ void func_80B7F398(BgIkanaBlock* this, PlayState* play) {
 }
 
 void BgIkanaBlock_Update(Actor* thisx, PlayState* play) {
-    BgIkanaBlock* this = THIS;
+    BgIkanaBlock* this = (BgIkanaBlock*)thisx;
 
     if ((this->dyna.actor.shape.rot.x != this->unk_174.x) || (this->dyna.actor.shape.rot.y != this->unk_174.y) ||
         (this->dyna.actor.shape.rot.z != this->unk_174.z)) {
@@ -371,7 +369,7 @@ void BgIkanaBlock_Update(Actor* thisx, PlayState* play) {
 
 void func_80B7F564(Actor* thisx, PlayState* play) {
     s32 pad;
-    BgIkanaBlock* this = THIS;
+    BgIkanaBlock* this = (BgIkanaBlock*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

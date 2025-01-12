@@ -6,9 +6,7 @@
 
 #include "z_en_mm2.h"
 
-#define FLAGS (ACTOR_FLAG_10)
-
-#define THIS ((EnMm2*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void EnMm2_Init(Actor* thisx, PlayState* play);
 void EnMm2_Destroy(Actor* thisx, PlayState* play);
@@ -33,7 +31,7 @@ ActorProfile En_Mm2_Profile = {
 #include "assets/overlays/ovl_En_Mm2/ovl_En_Mm2.c"
 
 void EnMm2_Init(Actor* thisx, PlayState* play) {
-    EnMm2* this = THIS;
+    EnMm2* this = (EnMm2*)thisx;
 
     Actor_SetScale(&this->actor, 0.015f);
     this->actionFunc = EnMm2_WaitForRead;
@@ -77,7 +75,7 @@ void EnMm2_WaitForRead(EnMm2* this, PlayState* play) {
 }
 
 void EnMm2_Update(Actor* thisx, PlayState* play) {
-    EnMm2* this = THIS;
+    EnMm2* this = (EnMm2*)thisx;
 
     this->actionFunc(this, play);
 }

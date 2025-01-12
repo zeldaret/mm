@@ -8,8 +8,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
-#define THIS ((EnDemoheishi*)thisx)
-
 void EnDemoheishi_Init(Actor* thisx, PlayState* play);
 void EnDemoheishi_Destroy(Actor* thisx, PlayState* play);
 void EnDemoheishi_Update(Actor* thisx, PlayState* play);
@@ -55,7 +53,7 @@ static ColliderCylinderInit sCylinderInit = {
 static u16 sTextIds[] = { 0x1473 }; // Shiro initial intro text
 
 void EnDemoheishi_Init(Actor* thisx, PlayState* play) {
-    EnDemoheishi* this = THIS;
+    EnDemoheishi* this = (EnDemoheishi*)thisx;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gSoldierSkel, &gSoldierWaveAnim, this->jointTable, this->morphTable,
@@ -68,7 +66,7 @@ void EnDemoheishi_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnDemoheishi_Destroy(Actor* thisx, PlayState* play) {
-    EnDemoheishi* this = THIS;
+    EnDemoheishi* this = (EnDemoheishi*)thisx;
 
     Collider_DestroyCylinder(play, &this->colliderCylinder);
 }
@@ -157,7 +155,7 @@ void EnDemoheishi_Talk(EnDemoheishi* this, PlayState* play) {
 
 void EnDemoheishi_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnDemoheishi* this = THIS;
+    EnDemoheishi* this = (EnDemoheishi*)thisx;
 
     SkelAnime_Update(&this->skelAnime);
     if (this->timer != 0) {
@@ -181,7 +179,7 @@ void EnDemoheishi_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnDemoheishi_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnDemoheishi* this = THIS;
+    EnDemoheishi* this = (EnDemoheishi*)thisx;
 
     if (limbIndex == SOLDIER_LIMB_HEAD) {
         rot->x += this->headRotX;
@@ -193,7 +191,7 @@ s32 EnDemoheishi_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, V
 }
 
 void EnDemoheishi_Draw(Actor* thisx, PlayState* play) {
-    EnDemoheishi* this = THIS;
+    EnDemoheishi* this = (EnDemoheishi*)thisx;
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,

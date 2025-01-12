@@ -6,9 +6,7 @@
 
 #include "z_en_dns.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
-
-#define THIS ((EnDns*)thisx)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void EnDns_Init(Actor* thisx, PlayState* play);
 void EnDns_Destroy(Actor* thisx, PlayState* play);
@@ -342,7 +340,7 @@ s32 func_8092CC68(PlayState* play) {
 
 s32 func_8092CCEC(Actor* thisx, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    EnDns* this = THIS;
+    EnDns* this = (EnDns*)thisx;
     Vec3f sp3C = player->actor.world.pos;
     Vec3f sp30 = this->actor.world.pos;
     s16 sp2E;
@@ -557,7 +555,7 @@ void EnDns_HandleCutscene(EnDns* this, PlayState* play) {
 }
 
 void EnDns_Init(Actor* thisx, PlayState* play) {
-    EnDns* this = THIS;
+    EnDns* this = (EnDns*)thisx;
 
     if (!func_8092D068(this)) {
         Actor_Kill(&this->actor);
@@ -590,13 +588,13 @@ void EnDns_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnDns_Destroy(Actor* thisx, PlayState* play) {
-    EnDns* this = THIS;
+    EnDns* this = (EnDns*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
 
 void EnDns_Update(Actor* thisx, PlayState* play) {
-    EnDns* this = THIS;
+    EnDns* this = (EnDns*)thisx;
 
     if (!func_8092CAD0(this, play) && func_8092CB98(this, play)) {
         EnDns_HandleCutscene(this, play);
@@ -643,7 +641,7 @@ s32 func_8092D954(s16 arg0, s16 arg1, Vec3f* arg2, Vec3s* arg3, s32 arg4, s32 ar
 }
 
 s32 EnDns_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnDns* this = THIS;
+    EnDns* this = (EnDns*)thisx;
 
     this->unk_1E4[limbIndex] = *dList;
     *dList = NULL;
@@ -651,7 +649,7 @@ s32 EnDns_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 }
 
 void EnDns_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnDns* this = THIS;
+    EnDns* this = (EnDns*)thisx;
     s32 pad;
     s32 phi_v1;
     s32 phi_v0;
@@ -693,7 +691,7 @@ void EnDns_Draw(Actor* thisx, PlayState* play) {
         gKingsChamberDekuGuardEyeClosedTex,
         gKingsChamberDekuGuardEyeHalfTex,
     };
-    EnDns* this = THIS;
+    EnDns* this = (EnDns*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

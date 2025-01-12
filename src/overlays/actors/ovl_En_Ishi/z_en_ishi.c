@@ -12,9 +12,7 @@
 #include "assets/objects/object_ishi/object_ishi.h"
 #include "overlays/actors/ovl_En_Insect/z_en_insect.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_THROW_ONLY)
-
-#define THIS ((EnIshi*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_THROW_ONLY)
 
 void EnIshi_Init(Actor* thisx, PlayState* play);
 void EnIshi_Destroy(Actor* thisx, PlayState* play2);
@@ -128,16 +126,16 @@ static InitChainEntry sInitChain[][5] = {
     {
         ICHAIN_F32_DIV1000(gravity, -1200, ICHAIN_CONTINUE),
         ICHAIN_F32_DIV1000(terminalVelocity, -20000, ICHAIN_CONTINUE),
-        ICHAIN_F32(uncullZoneForward, 1200, ICHAIN_CONTINUE),
-        ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
-        ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_STOP),
+        ICHAIN_F32(cullingVolumeDistance, 1200, ICHAIN_CONTINUE),
+        ICHAIN_F32(cullingVolumeScale, 100, ICHAIN_CONTINUE),
+        ICHAIN_F32(cullingVolumeDownward, 100, ICHAIN_STOP),
     },
     {
         ICHAIN_F32_DIV1000(gravity, -2500, ICHAIN_CONTINUE),
         ICHAIN_F32_DIV1000(terminalVelocity, -20000, ICHAIN_CONTINUE),
-        ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_CONTINUE),
-        ICHAIN_F32(uncullZoneScale, 250, ICHAIN_CONTINUE),
-        ICHAIN_F32(uncullZoneDownward, 400, ICHAIN_STOP),
+        ICHAIN_F32(cullingVolumeDistance, 2000, ICHAIN_CONTINUE),
+        ICHAIN_F32(cullingVolumeScale, 250, ICHAIN_CONTINUE),
+        ICHAIN_F32(cullingVolumeDownward, 400, ICHAIN_STOP),
     },
 };
 
@@ -146,7 +144,7 @@ static u16 D_8095F7AC[] = { NA_SE_PL_PULL_UP_ROCK, NA_SE_PL_PULL_UP_BIGROCK };
 static EnIshiUnkFunc D_8095F7B0[] = { func_8095F210, func_8095F36C };
 
 void func_8095D6E0(Actor* thisx, PlayState* play) {
-    EnIshi* this = THIS;
+    EnIshi* this = (EnIshi*)thisx;
 
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit[ENISHI_GET_1(&this->actor)]);
@@ -171,7 +169,7 @@ s32 func_8095D758(EnIshi* this, PlayState* play, f32 arg2) {
 }
 
 void func_8095D804(Actor* thisx, PlayState* play) {
-    EnIshi* this = THIS;
+    EnIshi* this = (EnIshi*)thisx;
     s32 i;
     s16 objectId;
     Gfx* phi_s4;
@@ -212,7 +210,7 @@ void func_8095D804(Actor* thisx, PlayState* play) {
 }
 
 void func_8095DABC(Actor* thisx, PlayState* play) {
-    EnIshi* this = THIS;
+    EnIshi* this = (EnIshi*)thisx;
     Vec3f spD8;
     Vec3f spCC;
     f32 temp_f20;
@@ -378,7 +376,7 @@ s32 EnIshi_IsUnderwater(EnIshi* this, PlayState* play) {
 
 void EnIshi_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnIshi* this = THIS;
+    EnIshi* this = (EnIshi*)thisx;
     s32 sp34 = ENISHI_GET_1(&this->actor);
     s32 sp30 = ENISHI_GET_4(&this->actor);
 
@@ -389,7 +387,7 @@ void EnIshi_Init(Actor* thisx, PlayState* play) {
     Actor_ProcessInitChain(&this->actor, sInitChain[sp34]);
 
     if (play->csCtx.state != CS_STATE_IDLE) {
-        this->actor.uncullZoneForward += 1000.0f;
+        this->actor.cullingVolumeDistance += 1000.0f;
     }
 
     if ((this->actor.shape.rot.y == 0) && !(this->unk_197 & 2)) {
@@ -436,7 +434,7 @@ void EnIshi_Init(Actor* thisx, PlayState* play) {
 
 void EnIshi_Destroy(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnIshi* this = THIS;
+    EnIshi* this = (EnIshi*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -448,7 +446,7 @@ void func_8095E5AC(EnIshi* this) {
 void func_8095E5C0(EnIshi* this, PlayState* play) {
     if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
         this->actor.objectSlot = this->objectSlot;
-        this->actor.flags &= ~ACTOR_FLAG_10;
+        this->actor.flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED;
         if (!ENISHI_GET_8(&this->actor)) {
             this->actor.draw = func_8095F61C;
         } else {
@@ -526,7 +524,7 @@ void func_8095E660(EnIshi* this, PlayState* play) {
 void func_8095E934(EnIshi* this) {
     this->actionFunc = func_8095E95C;
     this->actor.room = -1;
-    this->actor.flags |= ACTOR_FLAG_10;
+    this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
 }
 
 void func_8095E95C(EnIshi* this, PlayState* play) {
@@ -661,7 +659,7 @@ void func_8095EBDC(EnIshi* this, PlayState* play) {
 }
 
 void func_8095F060(EnIshi* this) {
-    this->actor.flags |= ACTOR_FLAG_10;
+    this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     CutsceneManager_Queue(this->actor.csId);
     this->actionFunc = func_8095F0A4;
 }
@@ -695,7 +693,7 @@ void func_8095F194(EnIshi* this, PlayState* play) {
 }
 
 void EnIshi_Update(Actor* thisx, PlayState* play) {
-    EnIshi* this = THIS;
+    EnIshi* this = (EnIshi*)thisx;
 
     this->actionFunc(this, play);
 }
@@ -757,7 +755,7 @@ void func_8095F36C(EnIshi* this, PlayState* play) {
 }
 
 void func_8095F61C(Actor* thisx, PlayState* play) {
-    EnIshi* this = THIS;
+    EnIshi* this = (EnIshi*)thisx;
 
     D_8095F7B0[ENISHI_GET_1(&this->actor)](this, play);
 }

@@ -6,9 +6,7 @@
 
 #include "z_demo_getitem.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
-
-#define THIS ((DemoGetitem*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 void DemoGetitem_Init(Actor* thisx, PlayState* play);
 void DemoGetitem_Destroy(Actor* thisx, PlayState* play);
@@ -45,7 +43,7 @@ void DemoGetitem_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     s32 objectSlot;
     s32 itemIndex;
-    DemoGetitem* this = THIS;
+    DemoGetitem* this = (DemoGetitem*)thisx;
 
     itemIndex = DEMOGETITEM_ITEM_MASK_GREAT_FAIRY;
     if (DEMOGETITEM_GET_F(&this->actor) == 1) {
@@ -113,13 +111,13 @@ void DemoGetitem_PerformCutsceneActions(DemoGetitem* this, PlayState* play) {
 }
 
 void DemoGetitem_Update(Actor* thisx, PlayState* play) {
-    DemoGetitem* this = THIS;
+    DemoGetitem* this = (DemoGetitem*)thisx;
 
     this->actionFunc(this, play);
 }
 
 void DemoGetitem_Draw(Actor* thisx, PlayState* play) {
-    DemoGetitem* this = THIS;
+    DemoGetitem* this = (DemoGetitem*)thisx;
 
     func_800B8050(&this->actor, play, 0);
     func_800B8118(&this->actor, play, 0);

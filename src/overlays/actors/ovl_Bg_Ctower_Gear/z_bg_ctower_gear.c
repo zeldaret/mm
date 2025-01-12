@@ -7,9 +7,7 @@
 #include "z_bg_ctower_gear.h"
 #include "assets/objects/object_ctower_rot/object_ctower_rot.h"
 
-#define FLAGS (ACTOR_FLAG_10)
-
-#define THIS ((BgCtowerGear*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void BgCtowerGear_Init(Actor* thisx, PlayState* play);
 void BgCtowerGear_Destroy(Actor* thisx, PlayState* play);
@@ -45,28 +43,28 @@ static Vec3f sEnterSplashOffsets[] = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 400, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 400, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeDistance, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 400, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 400, ICHAIN_STOP),
 };
 
 static InitChainEntry sInitChainCenterCog[] = {
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 1500, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 2000, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeDistance, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 1500, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 2000, ICHAIN_STOP),
 };
 
 static InitChainEntry sInitChainOrgan[] = {
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 420, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 570, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeDistance, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 420, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 570, ICHAIN_STOP),
 };
 
 static Gfx* sDLists[] = { gClockTowerCeilingCogDL, gClockTowerCenterCogDL, gClockTowerWaterWheelDL };
 
 void BgCtowerGear_Splash(BgCtowerGear* this, PlayState* play) {
     s32 i;
-    s32 flag40 = this->dyna.actor.flags & ACTOR_FLAG_40;
+    s32 flag40 = this->dyna.actor.flags & ACTOR_FLAG_INSIDE_CULLING_VOLUME;
     Vec3f splashSpawnPos;
     Vec3f splashOffset;
     s32 pad;
@@ -113,7 +111,7 @@ void BgCtowerGear_Splash(BgCtowerGear* this, PlayState* play) {
 }
 
 void BgCtowerGear_Init(Actor* thisx, PlayState* play) {
-    BgCtowerGear* this = THIS;
+    BgCtowerGear* this = (BgCtowerGear*)thisx;
     s32 type = BGCTOWERGEAR_GET_TYPE(&this->dyna.actor);
 
     Actor_SetScale(&this->dyna.actor, 0.1f);
@@ -137,7 +135,7 @@ void BgCtowerGear_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgCtowerGear_Destroy(Actor* thisx, PlayState* play) {
-    BgCtowerGear* this = THIS;
+    BgCtowerGear* this = (BgCtowerGear*)thisx;
     s32 type = BGCTOWERGEAR_GET_TYPE(&this->dyna.actor);
 
     if ((type == BGCTOWERGEAR_WATER_WHEEL) || (type == BGCTOWERGEAR_ORGAN)) {
@@ -146,7 +144,7 @@ void BgCtowerGear_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void BgCtowerGear_Update(Actor* thisx, PlayState* play) {
-    BgCtowerGear* this = THIS;
+    BgCtowerGear* this = (BgCtowerGear*)thisx;
     s32 type = BGCTOWERGEAR_GET_TYPE(&this->dyna.actor);
 
     if (type == BGCTOWERGEAR_CEILING_COG) {
@@ -161,7 +159,7 @@ void BgCtowerGear_Update(Actor* thisx, PlayState* play) {
 }
 
 void BgCtowerGear_UpdateOrgan(Actor* thisx, PlayState* play) {
-    BgCtowerGear* this = THIS;
+    BgCtowerGear* this = (BgCtowerGear*)thisx;
 
     if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_104)) {
         switch (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_104)]->id) {

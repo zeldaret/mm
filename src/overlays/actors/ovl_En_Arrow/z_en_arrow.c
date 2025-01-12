@@ -10,9 +10,7 @@
 #include "overlays/effects/ovl_Effect_Ss_Sbn/z_eff_ss_sbn.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
-
-#define THIS ((EnArrow*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 void EnArrow_Init(Actor* thisx, PlayState* play);
 void EnArrow_Destroy(Actor* thisx, PlayState* play);
@@ -121,7 +119,7 @@ void EnArrow_Init(Actor* thisx, PlayState* play) {
         { 255, 255, 170, 255 },
         { 255, 255, 0, 0 },
     };
-    EnArrow* this = THIS;
+    EnArrow* this = (EnArrow*)thisx;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     if (this->actor.params == -ARROW_TYPE_DEKU_NUT) {
@@ -172,7 +170,7 @@ void EnArrow_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnArrow_Destroy(Actor* thisx, PlayState* play) {
-    EnArrow* this = THIS;
+    EnArrow* this = (EnArrow*)thisx;
 
     if (ARROW_IS_ARROW(this->actor.params)) {
         Effect_Destroy(play, this->unk_240);
@@ -586,7 +584,7 @@ void EnArrow_Update(Actor* thisx, PlayState* play) {
     static Color_RGBA8 sPrimColor = { 255, 255, 100, 255 };
     static Color_RGBA8 sEnvColor = { 255, 50, 0, 0 };
     s32 pad;
-    EnArrow* this = THIS;
+    EnArrow* this = (EnArrow*)thisx;
     Player* player = GET_PLAYER(play);
 
     if ((this->unk_263 != 0) ||
@@ -688,7 +686,7 @@ void EnArrow_Draw(Actor* thisx, PlayState* play) {
             { 0.0f, 0.0f, 20.0f },
         },
     };
-    EnArrow* this = THIS;
+    EnArrow* this = (EnArrow*)thisx;
     s32 phi_v0;
 
     if (ARROW_IS_ARROW(this->actor.params)) {

@@ -6,9 +6,7 @@
 
 #include "z_demo_moonend.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
-
-#define THIS ((DemoMoonend*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 void DemoMoonend_Init(Actor* thisx, PlayState* play);
 void DemoMoonend_Destroy(Actor* thisx, PlayState* play);
@@ -33,7 +31,7 @@ ActorProfile Demo_Moonend_Profile = {
 };
 
 void DemoMoonend_Init(Actor* thisx, PlayState* play) {
-    DemoMoonend* this = THIS;
+    DemoMoonend* this = (DemoMoonend*)thisx;
 
     Actor_SetScale(&this->actor, 0.1f);
     this->actionFunc = DemoMoonend_DoNothing;
@@ -58,7 +56,7 @@ void DemoMoonend_Init(Actor* thisx, PlayState* play) {
 }
 
 void DemoMoonend_Destroy(Actor* thisx, PlayState* play) {
-    DemoMoonend* this = THIS;
+    DemoMoonend* this = (DemoMoonend*)thisx;
 
     if (DEMOMOONEND_GET_PARAM_F(thisx) != 1) {
         Keyframe_DestroyFlex(&this->kfSkelAnime);
@@ -161,14 +159,14 @@ void func_80C17C48(DemoMoonend* this, PlayState* play) {
 }
 
 void DemoMoonend_Update(Actor* thisx, PlayState* play) {
-    DemoMoonend* this = THIS;
+    DemoMoonend* this = (DemoMoonend*)thisx;
 
     this->actionFunc(this, play);
 }
 
 s32 DemoMoonend_OverrideLimbDraw(PlayState* play, KFSkelAnimeFlex* kfSkelAnime, s32 limbIndex, Gfx** dList, u8* flags,
                                  void* thisx, Vec3f* scale, Vec3s* rot, Vec3f* pos) {
-    DemoMoonend* this = THIS;
+    DemoMoonend* this = (DemoMoonend*)thisx;
 
     if (limbIndex == 2) {
         Matrix_Push();
@@ -180,7 +178,7 @@ s32 DemoMoonend_OverrideLimbDraw(PlayState* play, KFSkelAnimeFlex* kfSkelAnime, 
 
 s32 DemoMoonend_PostLimbDraw(PlayState* play, KFSkelAnimeFlex* kfSkelAnime, s32 limbIndex, Gfx** dList, u8* flags,
                              void* thisx, Vec3f* scale, Vec3s* rot, Vec3f* pos) {
-    DemoMoonend* this = THIS;
+    DemoMoonend* this = (DemoMoonend*)thisx;
 
     if (limbIndex == 8) {
         Matrix_Pop();
@@ -190,7 +188,7 @@ s32 DemoMoonend_PostLimbDraw(PlayState* play, KFSkelAnimeFlex* kfSkelAnime, s32 
 }
 
 void DemoMoonend_Draw(Actor* thisx, PlayState* play) {
-    DemoMoonend* this = THIS;
+    DemoMoonend* this = (DemoMoonend*)thisx;
     Mtx* mtxStack;
 
     AnimatedMat_Draw(play, (AnimatedMaterial*)Lib_SegmentedToVirtual(object_moonend_Matanimheader_00B540));

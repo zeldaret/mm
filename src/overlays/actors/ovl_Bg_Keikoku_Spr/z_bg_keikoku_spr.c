@@ -9,8 +9,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((BgKeikokuSpr*)thisx)
-
 void BgKeikokuSpr_Init(Actor* thisx, PlayState* play);
 void BgKeikokuSpr_Destroy(Actor* thisx, PlayState* play);
 void BgKeikokuSpr_Update(Actor* thisx, PlayState* play);
@@ -29,14 +27,14 @@ ActorProfile Bg_Keikoku_Spr_Profile = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 3000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 200, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 400, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDistance, 3000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 200, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 400, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 20, ICHAIN_STOP),
 };
 
 void BgKeikokuSpr_Init(Actor* thisx, PlayState* play) {
-    BgKeikokuSpr* this = THIS;
+    BgKeikokuSpr* this = (BgKeikokuSpr*)thisx;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
 }

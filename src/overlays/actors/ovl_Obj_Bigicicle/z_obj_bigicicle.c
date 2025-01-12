@@ -11,8 +11,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((ObjBigicicle*)thisx)
-
 void ObjBigicicle_Init(Actor* thisx, PlayState* play);
 void ObjBigicicle_Destroy(Actor* thisx, PlayState* play);
 void ObjBigicicle_Update(Actor* thisx, PlayState* play);
@@ -82,7 +80,7 @@ Vec3f D_80AE987C = { 0.0f, -1.0f, 0.0f };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32(gravity, -2, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneForward, 5600, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeDistance, 5600, ICHAIN_STOP),
 };
 
 s32 D_80AE9890 = false;
@@ -99,7 +97,7 @@ Gfx* D_80AE98A8[] = {
 };
 
 void ObjBigicicle_Init(Actor* thisx, PlayState* play) {
-    ObjBigicicle* this = THIS;
+    ObjBigicicle* this = (ObjBigicicle*)thisx;
     f32 sp30;
     s32 sp28;
 
@@ -146,7 +144,7 @@ void ObjBigicicle_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjBigicicle_Destroy(Actor* thisx, PlayState* play) {
-    ObjBigicicle* this = THIS;
+    ObjBigicicle* this = (ObjBigicicle*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider1);
     Collider_DestroyCylinder(play, &this->collider2);
@@ -202,7 +200,7 @@ void func_80AE9090(ObjBigicicle* this, PlayState* play) {
         if (this->unk_149 == 2) {
             f32 temp_f0 = this->actor.scale.y * 2100.0f;
 
-            this->actor.flags |= ACTOR_FLAG_10;
+            this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
             this->actor.shape.yOffset = 2100.0f;
             this->actor.world.pos.y -= temp_f0;
             this->collider1.dim.yShift += TRUNCF_BINANG(temp_f0);
@@ -290,7 +288,7 @@ void func_80AE939C(ObjBigicicle* this, PlayState* play) {
 
 void ObjBigicicle_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    ObjBigicicle* this = THIS;
+    ObjBigicicle* this = (ObjBigicicle*)thisx;
     Vec3f sp44;
 
     this->actionFunc(this, play);
@@ -313,7 +311,7 @@ void ObjBigicicle_Update(Actor* thisx, PlayState* play) {
 }
 
 void ObjBigicicle_Draw(Actor* thisx, PlayState* play) {
-    ObjBigicicle* this = THIS;
+    ObjBigicicle* this = (ObjBigicicle*)thisx;
 
     Gfx_DrawDListXlu(play, D_80AE989C[this->unk_149]);
     Gfx_DrawDListXlu(play, D_80AE98A8[this->unk_149]);

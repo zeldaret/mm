@@ -8,9 +8,7 @@
 #include "z64rumble.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_400)
-
-#define THIS ((EnIk*)thisx)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER)
 
 void EnIk_Init(Actor* thisx, PlayState* play);
 void EnIk_Destroy(Actor* thisx, PlayState* play);
@@ -270,7 +268,7 @@ static EffectBlureInit2 sBlureInit = {
 void EnIk_Init(Actor* thisx, PlayState* play) {
     static s32 sDisplayListDesegmented = false;
     s32 i;
-    EnIk* this = THIS;
+    EnIk* this = (EnIk*)thisx;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     SkelAnime_InitFlex(play, &this->skelAnime, &gIronKnuckleSkel, &gIronKnuckleWalkAnim, this->jointTable,
@@ -296,7 +294,7 @@ void EnIk_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnIk_Destroy(Actor* thisx, PlayState* play) {
-    EnIk* this = THIS;
+    EnIk* this = (EnIk*)thisx;
 
     Collider_DestroyTris(play, &this->colliderTris);
     Collider_DestroyCylinder(play, &this->colliderCylinder);
@@ -310,7 +308,7 @@ void EnIk_Freeze(EnIk* this) {
     this->drawDmgEffFrozenSteamScale = 97.5f * 0.01f;
     this->drawDmgEffAlpha = 1.0f;
     this->timer = 80;
-    this->actor.flags &= ~ACTOR_FLAG_400;
+    this->actor.flags &= ~ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER;
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 80);
 }
 
@@ -319,7 +317,7 @@ void EnIk_Thaw(EnIk* this, PlayState* play) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->drawDmgEffAlpha = 0.0f;
         Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, IRON_KNUCKLE_BODYPART_MAX, 2, 0.3f, 0.2f);
-        this->actor.flags |= ACTOR_FLAG_400;
+        this->actor.flags |= ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER;
     }
 }
 
@@ -871,7 +869,7 @@ void EnIk_UpdateArmor(EnIk* this, PlayState* play) {
 
 void EnIk_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    EnIk* this = THIS;
+    EnIk* this = (EnIk*)thisx;
 
     if (this->actionFunc != EnIk_PlayCutscene) {
         EnIk_UpdateDamage(this, play);
@@ -969,7 +967,7 @@ static s8 sLimbToArmorBodyParts[IRON_KNUCKLE_LIMB_MAX] = {
 };
 
 s32 EnIk_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnIk* this = THIS;
+    EnIk* this = (EnIk*)thisx;
 
     if (this->drawArmorFlags != 0) {
         if (sLimbToArmorBodyParts[limbIndex] >= IRON_KNUCKLE_ARMOR_BODYPART_CHEST_FRONT) {
@@ -1016,7 +1014,7 @@ static s8 sLimbToBodyParts[IRON_KNUCKLE_LIMB_MAX] = {
 };
 
 void EnIk_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnIk* this = THIS;
+    EnIk* this = (EnIk*)thisx;
     s32 armorBodyPart = sLimbToArmorBodyParts[limbIndex];
     Gfx* gfx;
     IronKnuckleEffect* ikEffect;
@@ -1134,7 +1132,7 @@ void EnIk_UpdateArmorDraw(EnIk* this, PlayState* play) {
 
 void EnIk_Draw(Actor* thisx, PlayState* play) {
     static Vec3f sScale = { 0.53f, 0.53f, 0.53f };
-    EnIk* this = THIS;
+    EnIk* this = (EnIk*)thisx;
     Gfx* gfx;
     Gfx** gfxArmorType;
     s32 pad;

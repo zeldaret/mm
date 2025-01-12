@@ -9,9 +9,9 @@
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/actors/ovl_Obj_Ice_Poly/z_obj_ice_poly.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_400)
-
-#define THIS ((EnWf*)thisx)
+#define FLAGS                                                                                 \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
+     ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER)
 
 void EnWf_Init(Actor* thisx, PlayState* play);
 void EnWf_Destroy(Actor* thisx, PlayState* play);
@@ -261,7 +261,7 @@ static InitChainEntry sInitChain[] = {
 
 void EnWf_Init(Actor* thisx, PlayState* play) {
     static s32 sTexturesDesegmented = false;
-    EnWf* this = THIS;
+    EnWf* this = (EnWf*)thisx;
     s32 i;
     s32 temp_s0;
 
@@ -351,7 +351,7 @@ void EnWf_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnWf_Destroy(Actor* thisx, PlayState* play) {
-    EnWf* this = THIS;
+    EnWf* this = (EnWf*)thisx;
 
     Collider_DestroyJntSph(play, &this->collider1);
     Collider_DestroyCylinder(play, &this->collider2);
@@ -366,7 +366,7 @@ void func_809907D4(EnWf* this) {
     this->collider2.base.colMaterial = COL_MATERIAL_HIT3;
     this->collider3.base.colMaterial = COL_MATERIAL_HIT3;
     this->unk_2A0 = 80;
-    this->actor.flags &= ~ACTOR_FLAG_400;
+    this->actor.flags &= ~ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER;
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 80);
 }
 
@@ -377,7 +377,7 @@ void func_80990854(EnWf* this, PlayState* play) {
         this->collider3.base.colMaterial = COL_MATERIAL_HIT5;
         this->drawDmgEffAlpha = 0.0f;
         Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, WOLFOS_BODYPART_MAX, 2, 0.3f, 0.2f);
-        this->actor.flags |= ACTOR_FLAG_400;
+        this->actor.flags |= ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER;
     }
 }
 
@@ -1478,7 +1478,7 @@ void func_8099386C(EnWf* this, PlayState* play) {
 
 void EnWf_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnWf* this = THIS;
+    EnWf* this = (EnWf*)thisx;
 
     if (this->unk_2A2 == 0) {
         this->unk_2A2 = 96;
@@ -1542,7 +1542,7 @@ void EnWf_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnWf_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnWf* this = THIS;
+    EnWf* this = (EnWf*)thisx;
 
     if ((limbIndex == WOLFOS_NORMAL_LIMB_HEAD) || (limbIndex == WOLFOS_NORMAL_LIMB_EYES)) {
         rot->y -= this->unk_29E;
@@ -1576,7 +1576,7 @@ static s8 sLimbToBodyParts[WOLFOS_NORMAL_LIMB_MAX] = {
 };
 
 void EnWf_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnWf* this = THIS;
+    EnWf* this = (EnWf*)thisx;
     Vec3f sp20;
 
     Collider_UpdateSpheres(limbIndex, &this->collider1);
@@ -1594,7 +1594,7 @@ void EnWf_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 }
 
 void EnWf_Draw(Actor* thisx, PlayState* play) {
-    EnWf* this = THIS;
+    EnWf* this = (EnWf*)thisx;
 
     if (this->actionFunc != func_80990F50) {
         OPEN_DISPS(play->state.gfxCtx);

@@ -8,9 +8,7 @@
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_10)
-
-#define THIS ((EnBomChu*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 #define BOMBCHU_SCALE 0.01f
 
@@ -79,7 +77,7 @@ static EffectBlureInit2 sBlureInit = {
 };
 
 void EnBomChu_Init(Actor* thisx, PlayState* play) {
-    EnBomChu* this = THIS;
+    EnBomChu* this = (EnBomChu*)thisx;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     Collider_InitAndSetSphere(play, &this->collider, &this->actor, &sSphereInit);
@@ -96,7 +94,7 @@ void EnBomChu_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnBomChu_Destroy(Actor* thisx, PlayState* play) {
-    EnBomChu* this = THIS;
+    EnBomChu* this = (EnBomChu*)thisx;
 
     Effect_Destroy(play, this->blure1Index);
     Effect_Destroy(play, this->blure2Index);
@@ -468,7 +466,7 @@ void EnBomChu_Update(Actor* thisx, PlayState* play) {
     static Vec3f sBlureP2LeftOffset = { 12.0f, 0.0f, -5.0f };
     static Vec3f sBlureP2RightOffset = { -12.0f, 0.0f, -5.0f };
     s32 pad;
-    EnBomChu* this = THIS;
+    EnBomChu* this = (EnBomChu*)thisx;
     Vec3f blureP1;
     Vec3f blureP2;
     WaterBox* waterBox;
@@ -546,7 +544,7 @@ void EnBomChu_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnBomChu_Draw(Actor* thisx, PlayState* play) {
-    EnBomChu* this = THIS;
+    EnBomChu* this = (EnBomChu*)thisx;
     f32 colorIntensity;
     s32 blinkHalfPeriod;
     s32 blinkTime;

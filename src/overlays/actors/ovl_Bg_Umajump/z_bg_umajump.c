@@ -9,8 +9,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((BgUmajump*)thisx)
-
 void BgUmajump_Init(Actor* thisx, PlayState* play);
 void BgUmajump_Destroy(Actor* thisx, PlayState* play);
 void BgUmajump_Update(Actor* thisx, PlayState* play);
@@ -31,8 +29,8 @@ ActorProfile Bg_Umajump_Profile = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneScale, 1200, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 1200, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 300, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
@@ -79,7 +77,7 @@ void BgUmajump_CheckDistance(BgUmajump* this, PlayState* play) {
 }
 
 void BgUmajump_Init(Actor* thisx, PlayState* play) {
-    BgUmajump* this = THIS;
+    BgUmajump* this = (BgUmajump*)thisx;
 
     Actor_ProcessInitChain(thisx, sInitChain);
 
@@ -97,7 +95,7 @@ void BgUmajump_Init(Actor* thisx, PlayState* play) {
             !CHECK_QUEST_ITEM(QUEST_SONG_EPONA) && (thisx->csId != CS_ID_NONE)) {
             this->actionFunc = BgUmajump_CheckDistance;
             thisx->update = func_8091A5A0;
-            thisx->flags |= ACTOR_FLAG_10;
+            thisx->flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
             this->horse = SubS_FindActor(play, this->horse, ACTORCAT_BG, ACTOR_EN_HORSE);
         } else {
             thisx->update = Actor_Noop;
@@ -118,13 +116,13 @@ void BgUmajump_Init(Actor* thisx, PlayState* play) {
 }
 
 void BgUmajump_Destroy(Actor* thisx, PlayState* play) {
-    BgUmajump* this = THIS;
+    BgUmajump* this = (BgUmajump*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
 void BgUmajump_Update(Actor* thisx, PlayState* play) {
-    BgUmajump* this = THIS;
+    BgUmajump* this = (BgUmajump*)thisx;
 
     if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
         this->dyna.actor.objectSlot = this->objectSlot;
@@ -175,7 +173,7 @@ void BgUmajump_Update(Actor* thisx, PlayState* play) {
 }
 
 void func_8091A5A0(Actor* thisx, PlayState* play) {
-    BgUmajump* this = THIS;
+    BgUmajump* this = (BgUmajump*)thisx;
 
     if (this->actionFunc != NULL) {
         this->actionFunc(this, play);
@@ -209,7 +207,7 @@ void func_8091A5A0(Actor* thisx, PlayState* play) {
 }
 
 void BgUmajump_Draw(Actor* thisx, PlayState* play) {
-    BgUmajump* this = THIS;
+    BgUmajump* this = (BgUmajump*)thisx;
 
     if (this->dyna.bgId != BGACTOR_NEG_ONE) {
         Gfx_DrawDListOpa(play, gHorseJumpFenceDL);

@@ -12,8 +12,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((ObjMure*)thisx)
-
 void ObjMure_Init(Actor* thisx, PlayState* play);
 void ObjMure_Destroy(Actor* thisx, PlayState* play);
 void ObjMure_Update(Actor* thisx, PlayState* play);
@@ -60,17 +58,17 @@ static s16 sSpawnActorIds[OBJMURE_TYPE_MAX] = {
 };
 
 static s16 sSpawnParams[OBJMURE_TYPE_MAX] = {
-    KUSA_BUSH_PARAMS(false, 0, false),   // OBJMURE_TYPE_GRASS
-    PLAYER_PARAMS(2, PLAYER_INITMODE_0), // OBJMURE_TYPE_UNDEFINED
-    FISH_PARAMS(ENFISH_MINUS1),          // OBJMURE_TYPE_FISH
-    ENINSECT_PARAMS(false),              // OBJMURE_TYPE_BUGS
-    BUTTERFLY_PARAMS(BUTTERFLY_MINUS1),  // OBJMURE_TYPE_BUTTERFLY
+    KUSA_BUSH_PARAMS(false, 0, false),           // OBJMURE_TYPE_GRASS
+    PLAYER_PARAMS(2, PLAYER_START_MODE_NOTHING), // OBJMURE_TYPE_UNDEFINED
+    FISH_PARAMS(ENFISH_MINUS1),                  // OBJMURE_TYPE_FISH
+    ENINSECT_PARAMS(false),                      // OBJMURE_TYPE_BUGS
+    BUTTERFLY_PARAMS(BUTTERFLY_MINUS1),          // OBJMURE_TYPE_BUTTERFLY
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 1200, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 200, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 1200, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeDistance, 1200, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 200, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 1200, ICHAIN_STOP),
 };
 
 typedef enum {
@@ -97,7 +95,7 @@ s32 func_808D7928(ObjMure* this, PlayState* play) {
 }
 
 void ObjMure_Init(Actor* thisx, PlayState* play) {
-    ObjMure* this = THIS;
+    ObjMure* this = (ObjMure*)thisx;
 
     this->chNum = OBJ_MURE_GET_CHNUM(&this->actor);
     this->ptn = OBJ_MURE_GET_PTN(&this->actor);
@@ -133,7 +131,7 @@ void ObjMure_GetSpawnPos(Vec3f* outPos, Vec3f* inPos, s32 ptn, s32 idx) {
 }
 
 void ObjMure_SpawnActors0(Actor* thisx, PlayState* play) {
-    ObjMure* this = THIS;
+    ObjMure* this = (ObjMure*)thisx;
     s32 i;
     Vec3f pos;
     s32 pad;
@@ -275,7 +273,7 @@ void ObjMure_InitialAction(ObjMure* this, PlayState* play) {
 void ObjMure_CulledState(ObjMure* this, PlayState* play) {
     if (fabsf(this->actor.projectedPos.z) < sZClip[this->type]) {
         this->actionFunc = ObjMure_ActiveState;
-        this->actor.flags |= ACTOR_FLAG_10;
+        this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
         ObjMure_SpawnActors(this, play);
     }
 }
@@ -398,7 +396,7 @@ void ObjMure_ActiveState(ObjMure* this, PlayState* play) {
     ObjMure_CheckChildren(this, play);
     if ((sZClip[this->type] + 40.0f) <= fabsf(this->actor.projectedPos.z)) {
         this->actionFunc = ObjMure_CulledState;
-        this->actor.flags &= ~ACTOR_FLAG_10;
+        this->actor.flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED;
         ObjMure_KillActors(this, play);
     } else if (sTypeGroupBehaviorFunc[this->type] != NULL) {
         sTypeGroupBehaviorFunc[this->type](this, play);
@@ -406,7 +404,7 @@ void ObjMure_ActiveState(ObjMure* this, PlayState* play) {
 }
 
 void ObjMure_Update(Actor* thisx, PlayState* play) {
-    ObjMure* this = THIS;
+    ObjMure* this = (ObjMure*)thisx;
 
     if (this->unk_19C > 0) {
         this->unk_19C--;

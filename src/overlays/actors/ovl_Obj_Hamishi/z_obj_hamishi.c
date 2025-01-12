@@ -7,9 +7,7 @@
 #include "z_obj_hamishi.h"
 #include "assets/objects/gameplay_field_keep/gameplay_field_keep.h"
 
-#define FLAGS (ACTOR_FLAG_10)
-
-#define THIS ((ObjHamishi*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void ObjHamishi_Init(Actor* thisx, PlayState* play);
 void ObjHamishi_Destroy(Actor* thisx, PlayState* play2);
@@ -56,13 +54,13 @@ s16 D_809A1AD4[] = {
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 400, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 250, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 500, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeDistance, 2000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 250, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 500, ICHAIN_STOP),
 };
 
 void func_809A0F20(Actor* thisx, PlayState* play) {
-    ObjHamishi* this = THIS;
+    ObjHamishi* this = (ObjHamishi*)thisx;
 
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
@@ -161,12 +159,12 @@ s32 ObjHamishi_IsUnderwater(ObjHamishi* this, PlayState* play) {
 }
 
 void ObjHamishi_Init(Actor* thisx, PlayState* play) {
-    ObjHamishi* this = THIS;
+    ObjHamishi* this = (ObjHamishi*)thisx;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
 
     if (play->csCtx.state != CS_STATE_IDLE) {
-        this->actor.uncullZoneForward += 1000.0f;
+        this->actor.cullingVolumeDistance += 1000.0f;
     }
 
     if (this->actor.shape.rot.y == 0) {
@@ -194,14 +192,14 @@ void ObjHamishi_Init(Actor* thisx, PlayState* play) {
 
 void ObjHamishi_Destroy(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    ObjHamishi* this = THIS;
+    ObjHamishi* this = (ObjHamishi*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
 
 void ObjHamishi_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    ObjHamishi* this = THIS;
+    ObjHamishi* this = (ObjHamishi*)thisx;
     s32 sp24 = (this->collider.base.acFlags & AC_HIT) != 0;
 
     func_809A0F78(this);
@@ -250,7 +248,7 @@ void ObjHamishi_Update(Actor* thisx, PlayState* play) {
 
         if (this->unk_1A0 > 0) {
             this->unk_1A0--;
-        } else if ((this->actor.flags & ACTOR_FLAG_40) && (this->actor.xzDistToPlayer < 1000.0f)) {
+        } else if ((this->actor.flags & ACTOR_FLAG_INSIDE_CULLING_VOLUME) && (this->actor.xzDistToPlayer < 1000.0f)) {
             CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
         }
 
@@ -261,7 +259,7 @@ void ObjHamishi_Update(Actor* thisx, PlayState* play) {
 }
 
 void ObjHamishi_Draw(Actor* thisx, PlayState* play) {
-    ObjHamishi* this = THIS;
+    ObjHamishi* this = (ObjHamishi*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

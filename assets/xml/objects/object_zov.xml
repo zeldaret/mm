@@ -3,18 +3,18 @@
     <File Name="object_zov" Segment="6">
 
         <!-- Lulu Animations -->
-        <Animation Name="gLuluTurnAndWalkAnim" Offset="0x17D4" />
-        <Animation Name="gLuluWalkLoopAnim" Offset="0x23F4" />
-        <Animation Name="gLuluSingStartAnim" Offset="0x2B5C" />
-        <Animation Name="gLuluSingLoopAnim" Offset="0x418C" />
-        <Animation Name="gLuluLookForwardAndLeftAnim" Offset="0x5A6C" />
-        <Animation Name="gLuluLookLeftLoopAnim" Offset="0x66A4" />
-        <Animation Name="gLuluPutHandsDownAnim" Offset="0x8120" />
-        <Animation Name="gLuluLookAroundAnim" Offset="0xA888" />
-        <Animation Name="gLuluLookForwardAndDownAnim" Offset="0xB4CC" />
-        <Animation Name="gLuluAngleHeadAnim" Offset="0xC510" />
-        <Animation Name="gLuluNodAnim" Offset="0xCAA8" />
-        <Animation Name="gLuluLookDownAnim" Offset="0xD3EC" />
+        <Animation Name="gLuluTurnAndWalkAnim" Offset="0x17D4" /> <!-- Original name is "ruru_aruku" -->
+        <Animation Name="gLuluWalkLoopAnim" Offset="0x23F4" /> <!-- Original name is "ruru_aruku_loop" -->
+        <Animation Name="gLuluSingStartAnim" Offset="0x2B5C" /> <!-- Original name is "ruru_utau" -->
+        <Animation Name="gLuluSingLoopAnim" Offset="0x418C" /> <!-- Original name is "ruru_utau_loop" -->
+        <Animation Name="gLuluLookForwardAndLeftAnim" Offset="0x5A6C" /> <!-- Original name is "ruru_yokomuku" -->
+        <Animation Name="gLuluLookLeftLoopAnim" Offset="0x66A4" /> <!-- Original name is "ruru_yokomuku_loop" -->
+        <Animation Name="gLuluPutHandsDownAnim" Offset="0x8120" /> <!-- Original name is "zV_hokan2wait02" -->
+        <Animation Name="gLuluLookAroundAnim" Offset="0xA888" /> <!-- Original name is "zV_kyoro2talk02" -->
+        <Animation Name="gLuluLookForwardAndDownAnim" Offset="0xB4CC" /> <!-- Original name is "zV_talk01" -->
+        <Animation Name="gLuluAngleHeadAnim" Offset="0xC510" /> <!-- Original name is "zV_talk03" -->
+        <Animation Name="gLuluNodAnim" Offset="0xCAA8" /> <!-- Original name is "zV_talk04" -->
+        <Animation Name="gLuluLookDownAnim" Offset="0xD3EC" /> <!-- Original name is "zV_wait01" -->
 
         <!-- Lulu Limb DLists -->
         <DList Name="gLuluTorsoDL" Offset="0x107B0" />

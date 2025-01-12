@@ -9,8 +9,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
-#define THIS ((EnBombers*)thisx)
-
 void EnBombers_Init(Actor* thisx, PlayState* play);
 void EnBombers_Destroy(Actor* thisx, PlayState* play);
 void EnBombers_Update(Actor* thisx, PlayState* play);
@@ -136,7 +134,7 @@ TexturePtr D_80C04838[] = {
 };
 
 void EnBombers_Init(Actor* thisx, PlayState* play) {
-    EnBombers* this = THIS;
+    EnBombers* this = (EnBombers*)thisx;
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 19.0f);
@@ -196,7 +194,7 @@ void EnBombers_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnBombers_Destroy(Actor* thisx, PlayState* play) {
-    EnBombers* this = THIS;
+    EnBombers* this = (EnBombers*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -518,7 +516,7 @@ void func_80C043C8(EnBombers* this, PlayState* play) {
 
 void EnBombers_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnBombers* this = THIS;
+    EnBombers* this = (EnBombers*)thisx;
 
     if (this->unk_2AA != 0) {
         this->unk_2AA--;
@@ -552,13 +550,13 @@ void EnBombers_Update(Actor* thisx, PlayState* play) {
     Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f,
                             UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
                                 UPDBGCHECKINFO_FLAG_10);
-    this->actor.uncullZoneForward = 500.0f;
+    this->actor.cullingVolumeDistance = 500.0f;
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 }
 
 s32 EnBombers_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnBombers* this = THIS;
+    EnBombers* this = (EnBombers*)thisx;
 
     if (limbIndex == OBJECT_CS_LIMB_0F) {
         *dList = NULL;
@@ -577,7 +575,7 @@ s32 EnBombers_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
 }
 
 void EnBombers_Draw(Actor* thisx, PlayState* play) {
-    EnBombers* this = THIS;
+    EnBombers* this = (EnBombers*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

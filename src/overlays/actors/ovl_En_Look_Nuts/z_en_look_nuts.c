@@ -7,9 +7,7 @@
 #include "z_en_look_nuts.h"
 #include "overlays/effects/ovl_Effect_Ss_Solder_Srch_Ball/z_eff_ss_solder_srch_ball.h"
 
-#define FLAGS (ACTOR_FLAG_80000000)
-
-#define THIS ((EnLookNuts*)thisx)
+#define FLAGS (ACTOR_FLAG_MINIMAP_ICON_ENABLED)
 
 void EnLookNuts_Init(Actor* thisx, PlayState* play);
 void EnLookNuts_Destroy(Actor* thisx, PlayState* play);
@@ -101,7 +99,7 @@ typedef enum {
 } PalaceGuardState;
 
 void EnLookNuts_Init(Actor* thisx, PlayState* play) {
-    EnLookNuts* this = THIS;
+    EnLookNuts* this = (EnLookNuts*)thisx;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
     SkelAnime_Init(play, &this->skelAnime, &gDekuPalaceGuardSkel, &gDekuPalaceGuardDigAnim, this->jointTable,
@@ -133,7 +131,7 @@ void EnLookNuts_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnLookNuts_Destroy(Actor* thisx, PlayState* play) {
-    EnLookNuts* this = THIS;
+    EnLookNuts* this = (EnLookNuts*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -315,7 +313,7 @@ void EnLookNuts_SendPlayerToSpawn(EnLookNuts* this, PlayState* play) {
 
 void EnLookNuts_Update(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnLookNuts* this = THIS;
+    EnLookNuts* this = (EnLookNuts*)thisx;
 
     if (this->blinkTimer == 0) {
         this->eyeState++;
@@ -368,7 +366,7 @@ void EnLookNuts_Update(Actor* thisx, PlayState* play) {
                     Audio_PlaySfx(NA_SE_SY_FOUND);
                     Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_26);
                     D_80A6862C = true;
-                    this->actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_10);
+                    this->actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_UPDATE_CULLING_DISABLED);
                     this->actor.gravity = 0.0f;
                     EnLookNuts_DetectedPlayer(this, play);
                 } else {
@@ -392,7 +390,7 @@ static TexturePtr sEyeTextures[] = {
 };
 
 void EnLookNuts_Draw(Actor* thisx, PlayState* play) {
-    EnLookNuts* this = THIS;
+    EnLookNuts* this = (EnLookNuts*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

@@ -13,8 +13,6 @@
 
 #define FLAGS 0x00000000
 
-#define THIS ((ObjTaru*)thisx)
-
 void ObjTaru_Init(Actor* thisx, PlayState* play);
 void ObjTaru_Destroy(Actor* thisx, PlayState* play);
 void ObjTaru_Update(Actor* thisx, PlayState* play);
@@ -58,9 +56,9 @@ static ColliderCylinderInit sCylinderInit = {
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneForward, 3300, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 200, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 200, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeDistance, 3300, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 200, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 200, ICHAIN_STOP),
 };
 
 bool func_80B9B6E0(ObjTaru* this, PlayState* play) {
@@ -196,7 +194,7 @@ void func_80B9BD84(ObjTaru* this, PlayState* play) {
 
 void ObjTaru_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    ObjTaru* this = THIS;
+    ObjTaru* this = (ObjTaru*)thisx;
     s32 params8000;
 
     DynaPolyActor_Init(&this->dyna, 0);
@@ -220,7 +218,7 @@ void ObjTaru_Init(Actor* thisx, PlayState* play) {
         if (params8000 == 0) {
             if (Item_CanDropBigFairy(play, OBJ_TARU_GET_3F(&this->dyna.actor), OBJ_TARU_GET_7F00(&this->dyna.actor))) {
                 this->unk_1AC = 1;
-                this->dyna.actor.flags |= ACTOR_FLAG_10;
+                this->dyna.actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
             }
         }
         if ((params8000 != 1) || (!func_80B9B6E0(this, play))) {
@@ -231,7 +229,7 @@ void ObjTaru_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjTaru_Destroy(Actor* thisx, PlayState* play) {
-    ObjTaru* this = THIS;
+    ObjTaru* this = (ObjTaru*)thisx;
 
     if (!OBJ_TARU_GET_80(thisx)) {
         Collider_DestroyCylinder(play, &this->collider);
@@ -278,7 +276,7 @@ void func_80B9C07C(ObjTaru* this, PlayState* play) {
         if (OBJ_TARU_GET_80(&this->dyna.actor)) {
             this->actionFunc = func_80B9C1A0;
         } else {
-            this->dyna.actor.flags |= ACTOR_FLAG_10;
+            this->dyna.actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
             DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
             this->dyna.actor.draw = NULL;
             this->actionFunc = func_80B9C174;
@@ -307,7 +305,7 @@ void func_80B9C1A0(ObjTaru* this, PlayState* play) {
 }
 
 void ObjTaru_Update(Actor* thisx, PlayState* play) {
-    ObjTaru* this = THIS;
+    ObjTaru* this = (ObjTaru*)thisx;
 
     if (!OBJ_TARU_GET_80(thisx)) {
         if (this->unk_1AC != 0) {
@@ -335,7 +333,7 @@ void ObjTaru_Update(Actor* thisx, PlayState* play) {
 
 void ObjTaru_Draw(Actor* thisx, PlayState* play) {
     Gfx* dList;
-    ObjTaru* this = THIS;
+    ObjTaru* this = (ObjTaru*)thisx;
 
     if (OBJ_TARU_GET_80(thisx)) {
         dList = gObjTaruBreakablePiratePanelDL;

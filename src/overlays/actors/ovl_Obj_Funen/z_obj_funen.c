@@ -7,9 +7,7 @@
 #include "z_obj_funen.h"
 #include "assets/objects/object_funen/object_funen.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
-
-#define THIS ((ObjFunen*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 void ObjFunen_Init(Actor* thisx, PlayState* play);
 void ObjFunen_Draw(Actor* thisx, PlayState* play);
@@ -29,7 +27,7 @@ ActorProfile Obj_Funen_Profile = {
 f32 D_80A198D0[] = { 0.1f, 0.024390244f };
 
 void ObjFunen_Init(Actor* thisx, PlayState* play) {
-    ObjFunen* this = THIS;
+    ObjFunen* this = (ObjFunen*)thisx;
 
     Actor_SetScale(&this->actor, D_80A198D0[this->actor.params & 1]);
 }

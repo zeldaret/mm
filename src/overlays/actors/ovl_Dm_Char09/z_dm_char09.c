@@ -6,9 +6,7 @@
 
 #include "z_dm_char09.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
-
-#define THIS ((DmChar09*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 void DmChar09_Init(Actor* thisx, PlayState* play);
 void DmChar09_Destroy(Actor* thisx, PlayState* play);
@@ -55,7 +53,7 @@ void DmChar09_ChangeAnim(SkelAnime* skelAnime, AnimationInfo* animInfo, u16 anim
 }
 
 void DmChar09_Init(Actor* thisx, PlayState* play) {
-    DmChar09* this = THIS;
+    DmChar09* this = (DmChar09*)thisx;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 19.0f);
     SkelAnime_Init(play, &this->skelAnime, &gBeeSkel, &gBeeFlyingAnim, this->jointTable, this->morphTable,
@@ -207,7 +205,7 @@ void func_80AB24BC(DmChar09* this, PlayState* play) {
 }
 
 void DmChar09_Update(Actor* thisx, PlayState* play) {
-    DmChar09* this = THIS;
+    DmChar09* this = (DmChar09*)thisx;
 
     SkelAnime_Update(&this->skelAnime);
     this->actionFunc(this, play);
@@ -219,14 +217,14 @@ void DmChar09_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 DmChar09_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    DmChar09* this = THIS;
+    DmChar09* this = (DmChar09*)thisx;
 
     Matrix_Translate(this->unk_204, this->unk_208, this->unk_20C, MTXMODE_APPLY);
     return false;
 }
 
 void DmChar09_Draw(Actor* thisx, PlayState* play) {
-    DmChar09* this = THIS;
+    DmChar09* this = (DmChar09*)thisx;
 
     if ((play->csCtx.state != CS_STATE_IDLE) && this->unk_22E) {
         Gfx_SetupDL25_Opa(play->state.gfxCtx);

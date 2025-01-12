@@ -6,9 +6,7 @@
 
 #include "z_oceff_storm.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_UPDATE_DURING_OCARINA)
-
-#define THIS ((OceffStorm*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED | ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
 void OceffStorm_Init(Actor* thisx, PlayState* play);
 void OceffStorm_Destroy(Actor* thisx, PlayState* play);
@@ -63,7 +61,7 @@ s32 func_8098176C(PlayState* play) {
 void OceffStorm_Init(Actor* thisx, PlayState* play) {
     s32 pad[2];
     Player* player = GET_PLAYER(play);
-    OceffStorm* this = THIS;
+    OceffStorm* this = (OceffStorm*)thisx;
 
     OceffStorm_SetupAction(this, OceffStorm_DefaultAction);
 
@@ -92,7 +90,7 @@ void OceffStorm_Init(Actor* thisx, PlayState* play) {
 }
 
 void OceffStorm_Destroy(Actor* thisx, PlayState* play) {
-    OceffStorm* this = THIS;
+    OceffStorm* this = (OceffStorm*)thisx;
 
     Magic_Reset(play);
 }
@@ -162,7 +160,7 @@ void func_80981B48(OceffStorm* this, PlayState* play) {
 }
 
 void OceffStorm_Update(Actor* thisx, PlayState* play) {
-    OceffStorm* this = THIS;
+    OceffStorm* this = (OceffStorm*)thisx;
 
     this->actor.shape.rot.y = Camera_GetCamDirYaw(GET_ACTIVE_CAM(play));
     this->actionFunc(this, play);
@@ -172,7 +170,7 @@ void OceffStorm_Update(Actor* thisx, PlayState* play) {
 
 void OceffStorm_Draw2(Actor* thisx, PlayState* play) {
     s32 scroll = play->state.frames & 0xFFF;
-    OceffStorm* this = THIS;
+    OceffStorm* this = (OceffStorm*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

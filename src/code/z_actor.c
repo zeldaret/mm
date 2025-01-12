@@ -66,7 +66,7 @@ Actor* Actor_SpawnEntry(ActorContext* actorCtx, ActorEntry* actorEntry, PlayStat
 Actor* Actor_Delete(ActorContext* actorCtx, Actor* actor, PlayState* play);
 void Attention_FindActor(PlayState* play, ActorContext* actorCtx, Actor** attentionActorP, Actor** cameraDriftActorP,
                          Player* player);
-s32 func_800BA2FC(PlayState* play, Actor* actor, Vec3f* projectedPos, f32 projectedW);
+s32 Actor_CullingVolumeTest(PlayState* play, Actor* actor, Vec3f* projPos, f32 projW);
 void Actor_AddToCategory(ActorContext* actorCtx, Actor* actor, u8 actorCategory);
 Actor* Actor_RemoveFromCategory(PlayState* play, ActorContext* actorCtx, Actor* actorToRemove);
 
@@ -511,7 +511,7 @@ void Attention_Draw(Attention* attention, PlayState* play) {
     Player* player = GET_PLAYER(play);
     Actor* actor; // used for both the reticle actor and arrow hover actor
 
-    if (player->stateFlags1 & (PLAYER_STATE1_2 | PLAYER_STATE1_40 | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 |
+    if (player->stateFlags1 & (PLAYER_STATE1_2 | PLAYER_STATE1_TALKING | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 |
                                PLAYER_STATE1_400 | PLAYER_STATE1_10000000 | PLAYER_STATE1_20000000)) {
         return;
     }
@@ -574,7 +574,7 @@ void Attention_Draw(Attention* attention, PlayState* play) {
 
         Attention_SetReticlePos(attention, attention->curReticle, projectedPos.x, projectedPos.y, projectedPos.z);
 
-        if (!(player->stateFlags1 & PLAYER_STATE1_40) || (actor != player->focusActor)) {
+        if (!(player->stateFlags1 & PLAYER_STATE1_TALKING) || (actor != player->focusActor)) {
             OVERLAY_DISP = Gfx_SetupDL(OVERLAY_DISP, SETUPDL_57);
 
             for (i = 0, curReticle = attention->curReticle; i < numReticles;
@@ -648,7 +648,8 @@ void Attention_Update(Attention* attention, Player* player, Actor* playerFocusAc
 
     actor = NULL;
 
-    if ((player->focusActor != NULL) && (player->unk_AE3[player->unk_ADE] == 2)) {
+    if ((player->focusActor != NULL) &&
+        (player->controlStickDirections[player->controlStickDataIndex] == PLAYER_STICK_DIR_BACKWARD)) {
         // Holding backward on the control stick prevents an arrow appearing over the next lock-on actor.
         // This helps escape a lock-on loop when using Switch Targeting, but note that this still works for
         // Hold Targeting as well.
@@ -977,7 +978,7 @@ void TitleCard_Draw(GameState* gameState, TitleCardContext* titleCtx) {
 
 // unused
 s32 func_800B6434(PlayState* play, TitleCardContext* titleCtx) {
-    if ((play->actorCtx.titleCtxt.delayTimer != 0) || (play->actorCtx.titleCtxt.alpha != 0)) {
+    if ((play->actorCtx.titleCtx.delayTimer != 0) || (play->actorCtx.titleCtx.alpha != 0)) {
         titleCtx->durationTimer = 0;
         titleCtx->delayTimer = 0;
         return false;
@@ -1156,9 +1157,9 @@ void Actor_Init(Actor* actor, PlayState* play) {
     actor->terminalVelocity = -20.0f;
 
     actor->xyzDistToPlayerSq = FLT_MAX;
-    actor->uncullZoneForward = 1000.0f;
-    actor->uncullZoneScale = 350.0f;
-    actor->uncullZoneDownward = 700.0f;
+    actor->cullingVolumeDistance = 1000.0f;
+    actor->cullingVolumeScale = 350.0f;
+    actor->cullingVolumeDownward = 700.0f;
 
     actor->hintId = TATL_HINT_ID_NONE;
 
@@ -1423,7 +1424,7 @@ bool func_800B715C(PlayState* play) {
 }
 
 void Player_SetCameraHorseSetting(PlayState* play, Player* player) {
-    if ((play->roomCtx.curRoom.behaviorType1 != ROOM_BEHAVIOR_TYPE1_4) && (player->actor.id == ACTOR_PLAYER)) {
+    if ((play->roomCtx.curRoom.type != ROOM_TYPE_4) && (player->actor.id == ACTOR_PLAYER)) {
         EnHorse* rideActor = (EnHorse*)player->rideActor;
 
         if ((rideActor != NULL) && !(rideActor->unk_1EC & 0x10)) {
@@ -2108,42 +2109,49 @@ PlayerItemAction Player_GetExchangeItemAction(PlayState* play) {
     return player->exchangeItemAction;
 }
 
-s32 func_800B8718(Actor* actor, GameState* gameState) {
-    if (actor->flags & ACTOR_FLAG_20000000) {
-        actor->flags &= ~ACTOR_FLAG_20000000;
+/**
+ * When a given ocarina interaction offer is accepted, Player will set `ACTOR_FLAG_OCARINA_INTERACTION` for that actor.
+ * An exception is made for EN_ZOT, see `Player_ActionHandler_13`.
+ * This function serves to acknowledge that the offer was accepted by Player, and notifies the actor
+ * that it should proceed with its own internal processes for handling further interactions.
+ *
+ * @return  true if the ocarina interaction offer was accepted, false otherwise
+ */
+s32 Actor_OcarinaInteractionAccepted(Actor* actor, GameState* gameState) {
+    if (actor->flags & ACTOR_FLAG_OCARINA_INTERACTION) {
+        actor->flags &= ~ACTOR_FLAG_OCARINA_INTERACTION;
         return true;
     }
 
     return false;
 }
 
-// Similar to Actor_OfferTalkExchange
-s32 func_800B874C(Actor* actor, PlayState* play, f32 xzRange, f32 yRange) {
+s32 Actor_OfferOcarinaInteraction(Actor* actor, PlayState* play, f32 xzRange, f32 yRange) {
     Player* player = GET_PLAYER(play);
 
-    if ((player->actor.flags & ACTOR_FLAG_20000000) || Player_InCsMode(play) ||
-        (yRange < fabsf(actor->playerHeightRel)) || ((player->unk_A94 < actor->xzDistToPlayer)) ||
+    if ((player->actor.flags & ACTOR_FLAG_OCARINA_INTERACTION) || Player_InCsMode(play) ||
+        (yRange < fabsf(actor->playerHeightRel)) || ((player->ocarinaInteractionDistance < actor->xzDistToPlayer)) ||
         (xzRange < actor->xzDistToPlayer)) {
         return false;
     }
 
-    player->unk_A90 = actor;
-    player->unk_A94 = actor->xzDistToPlayer;
+    player->ocarinaInteractionActor = actor;
+    player->ocarinaInteractionDistance = actor->xzDistToPlayer;
     return true;
 }
 
-s32 func_800B8804(Actor* actor, PlayState* play, f32 xzRange) {
-    return func_800B874C(actor, play, xzRange, 20.0f);
+s32 Actor_OfferOcarinaInteractionNearby(Actor* actor, PlayState* play, f32 xzRange) {
+    return Actor_OfferOcarinaInteraction(actor, play, xzRange, 20.0f);
 }
 
-s32 func_800B882C(Actor* actor, PlayState* play) {
+s32 Actor_OfferOcarinaInteractionColChkInfoCylinder(Actor* actor, PlayState* play) {
     f32 cylRadius = actor->colChkInfo.cylRadius + 50.0f;
 
-    return func_800B8804(actor, play, cylRadius);
+    return Actor_OfferOcarinaInteractionNearby(actor, play, cylRadius);
 }
 
-s32 func_800B886C(Actor* actor, PlayState* play) {
-    if (!(GET_PLAYER(play)->actor.flags & ACTOR_FLAG_20000000)) {
+s32 Actor_NoOcarinaInteraction(Actor* actor, PlayState* play) {
+    if (!(GET_PLAYER(play)->actor.flags & ACTOR_FLAG_OCARINA_INTERACTION)) {
         return true;
     }
 
@@ -2206,8 +2214,8 @@ s32 Actor_OfferGetItem(Actor* actor, PlayState* play, GetItemId getItemId, f32 x
     Player* player = GET_PLAYER(play);
 
     if (!(player->stateFlags1 &
-          (PLAYER_STATE1_DEAD | PLAYER_STATE1_1000 | PLAYER_STATE1_2000 | PLAYER_STATE1_4000 | PLAYER_STATE1_40000 |
-           PLAYER_STATE1_80000 | PLAYER_STATE1_100000 | PLAYER_STATE1_200000)) &&
+          (PLAYER_STATE1_DEAD | PLAYER_STATE1_CHARGING_SPIN_ATTACK | PLAYER_STATE1_2000 | PLAYER_STATE1_4000 |
+           PLAYER_STATE1_40000 | PLAYER_STATE1_80000 | PLAYER_STATE1_100000 | PLAYER_STATE1_200000)) &&
         (Player_GetExplosiveHeld(player) <= PLAYER_EXPLOSIVE_NONE)) {
         if ((actor->xzDistToPlayer <= xzRange) && (fabsf(actor->playerHeightRel) <= fabsf(yRange))) {
             if (((getItemId == GI_MASK_CIRCUS_LEADER) || (getItemId == GI_PENDANT_OF_MEMORIES) ||
@@ -2294,9 +2302,10 @@ s32 Actor_HasRider(PlayState* play, Actor* horse) {
 s32 Actor_SetRideActor(PlayState* play, Actor* horse, s32 mountSide) {
     Player* player = GET_PLAYER(play);
 
-    if (!(player->stateFlags1 & (PLAYER_STATE1_DEAD | PLAYER_STATE1_CARRYING_ACTOR | PLAYER_STATE1_1000 |
-                                 PLAYER_STATE1_2000 | PLAYER_STATE1_4000 | PLAYER_STATE1_40000 | PLAYER_STATE1_80000 |
-                                 PLAYER_STATE1_100000 | PLAYER_STATE1_200000))) {
+    if (!(player->stateFlags1 &
+          (PLAYER_STATE1_DEAD | PLAYER_STATE1_CARRYING_ACTOR | PLAYER_STATE1_CHARGING_SPIN_ATTACK | PLAYER_STATE1_2000 |
+           PLAYER_STATE1_4000 | PLAYER_STATE1_40000 | PLAYER_STATE1_80000 | PLAYER_STATE1_100000 |
+           PLAYER_STATE1_200000))) {
         player->rideActor = horse;
         player->mountSide = mountSide;
         CutsceneManager_Queue(CS_ID_GLOBAL_TALK);
@@ -2490,7 +2499,7 @@ void Actor_InitContext(PlayState* play, ActorContext* actorCtx, ActorEntry* acto
     actorCtx->sceneFlags.collectible[0] = cycleFlags->collectible;
     actorCtx->sceneFlags.clearedRoom = cycleFlags->clearedRoom;
 
-    TitleCard_ContextInit(&play->state, &actorCtx->titleCtxt);
+    TitleCard_ContextInit(&play->state, &actorCtx->titleCtx);
     Actor_InitPlayerImpact(play);
 
     actorCtx->absoluteSpace = NULL;
@@ -2547,9 +2556,8 @@ typedef struct {
     /* 0x0C */ u32 canFreezeCategory;
     /* 0x10 */ Actor* talkActor;
     /* 0x14 */ Player* player;
-    /* 0x18 */ u32 unk_18; // Bitmask of actor flags. The actor will only have main called if it has at least 1
-                           // flag set that matches this bitmask
-} UpdateActor_Params;      // size = 0x1C
+    /* 0x18 */ u32 updateActorFlagsMask; // Actor will update only if at least 1 actor flag is set in this bitmask
+} UpdateActor_Params;                    // size = 0x1C
 
 Actor* Actor_UpdateActor(UpdateActor_Params* params) {
     PlayState* play = params->play;
@@ -2582,7 +2590,7 @@ Actor* Actor_UpdateActor(UpdateActor_Params* params) {
             Actor_Kill(actor);
         } else if (((params->freezeExceptionFlag != 0) && !(actor->flags & params->freezeExceptionFlag)) ||
                    (((!params->freezeExceptionFlag) != 0) &&
-                    (!(actor->flags & ACTOR_FLAG_100000) ||
+                    (!(actor->flags & ACTOR_FLAG_FREEZE_EXCEPTION) ||
                      ((actor->category == ACTORCAT_EXPLOSIVES) && (params->player->stateFlags1 & PLAYER_STATE1_200))) &&
                     params->canFreezeCategory && (actor != params->talkActor) && (actor != params->player->heldActor) &&
                     (actor->parent != &params->player->actor))) {
@@ -2596,7 +2604,7 @@ Actor* Actor_UpdateActor(UpdateActor_Params* params) {
             actor->yawTowardsPlayer = Actor_WorldYawTowardActor(actor, &params->player->actor);
             actor->flags &= ~ACTOR_FLAG_SFX_FOR_PLAYER_BODY_HIT;
 
-            if ((DECR(actor->freezeTimer) == 0) && (actor->flags & params->unk_18)) {
+            if ((DECR(actor->freezeTimer) == 0) && (actor->flags & params->updateActorFlagsMask)) {
                 if (actor == params->player->focusActor) {
                     actor->isLockedOn = true;
                 } else {
@@ -2626,33 +2634,33 @@ Actor* Actor_UpdateActor(UpdateActor_Params* params) {
 
 u32 sCategoryFreezeMasks[ACTORCAT_MAX] = {
     /* ACTORCAT_SWITCH */
-    PLAYER_STATE1_2 | PLAYER_STATE1_40 | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_10000000,
+    PLAYER_STATE1_2 | PLAYER_STATE1_TALKING | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_10000000,
     /* ACTORCAT_BG */
-    PLAYER_STATE1_2 | PLAYER_STATE1_40 | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_10000000,
+    PLAYER_STATE1_2 | PLAYER_STATE1_TALKING | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_10000000,
     /* ACTORCAT_PLAYER */
     PLAYER_STATE1_200,
     /* ACTORCAT_EXPLOSIVES */
-    PLAYER_STATE1_2 | PLAYER_STATE1_40 | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_400 |
+    PLAYER_STATE1_2 | PLAYER_STATE1_TALKING | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_400 |
         PLAYER_STATE1_10000000,
     /* ACTORCAT_NPC */
     PLAYER_STATE1_2 | PLAYER_STATE1_DEAD | PLAYER_STATE1_200,
     /* ACTORCAT_ENEMY */
-    PLAYER_STATE1_2 | PLAYER_STATE1_40 | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_10000000 |
+    PLAYER_STATE1_2 | PLAYER_STATE1_TALKING | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_10000000 |
         PLAYER_STATE1_20000000,
     /* ACTORCAT_PROP */
     PLAYER_STATE1_2 | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_10000000,
     /* ACTORCAT_ITEMACTION */
     PLAYER_STATE1_2,
     /* ACTORCAT_MISC */
-    PLAYER_STATE1_2 | PLAYER_STATE1_40 | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_10000000 |
+    PLAYER_STATE1_2 | PLAYER_STATE1_TALKING | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_10000000 |
         PLAYER_STATE1_20000000,
     /* ACTORCAT_BOSS */
-    PLAYER_STATE1_2 | PLAYER_STATE1_40 | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_400 |
+    PLAYER_STATE1_2 | PLAYER_STATE1_TALKING | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_400 |
         PLAYER_STATE1_10000000,
     /* ACTORCAT_DOOR */
     PLAYER_STATE1_2,
     /* ACTORCAT_CHEST */
-    PLAYER_STATE1_2 | PLAYER_STATE1_40 | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_10000000,
+    PLAYER_STATE1_2 | PLAYER_STATE1_TALKING | PLAYER_STATE1_DEAD | PLAYER_STATE1_200 | PLAYER_STATE1_10000000,
 };
 
 void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
@@ -2668,10 +2676,11 @@ void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
     params.player = player;
     params.play = play;
 
-    if (play->unk_18844) {
-        params.unk_18 = ACTOR_FLAG_200000;
+    if (play->soaringCsOrSoTCsPlaying) {
+        params.updateActorFlagsMask = ACTOR_FLAG_UPDATE_DURING_SOARING_AND_SOT_CS;
     } else {
-        params.unk_18 = ACTOR_FLAG_200000 | ACTOR_FLAG_40 | ACTOR_FLAG_10;
+        params.updateActorFlagsMask = ACTOR_FLAG_UPDATE_DURING_SOARING_AND_SOT_CS | ACTOR_FLAG_INSIDE_CULLING_VOLUME |
+                                      ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     }
 
     Actor_SpawnSetupActors(play, actorCtx);
@@ -2688,7 +2697,7 @@ void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
         params.freezeExceptionFlag = 0;
     }
 
-    if ((player->stateFlags1 & PLAYER_STATE1_40) && ((player->actor.textId & 0xFF00) != 0x1900)) {
+    if ((player->stateFlags1 & PLAYER_STATE1_TALKING) && ((player->actor.textId & 0xFF00) != 0x1900)) {
         params.talkActor = player->talkActor;
     } else {
         params.talkActor = NULL;
@@ -2750,7 +2759,7 @@ void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
         Attention_Update(&actorCtx->attention, player, actor, play);
     }
 
-    TitleCard_Update(&play->state, &actorCtx->titleCtxt);
+    TitleCard_Update(&play->state, &actorCtx->titleCtx);
     Actor_UpdatePlayerImpact(play);
     DynaPoly_UpdateBgActorTransforms(play, &play->colCtx.dyna);
 }
@@ -2761,12 +2770,16 @@ void Actor_Draw(PlayState* play, Actor* actor) {
     OPEN_DISPS(play->state.gfxCtx);
 
     light = LightContext_NewLights(&play->lightCtx, play->state.gfxCtx);
-    if ((actor->flags & ACTOR_FLAG_10000000) && (play->roomCtx.curRoom.enablePosLights || (MREG(93) != 0))) {
+    if ((actor->flags & ACTOR_FLAG_UCODE_POINT_LIGHT_ENABLED) &&
+        (play->roomCtx.curRoom.enablePosLights || (MREG(93) != 0))) {
         light->enablePosLights = true;
     }
 
     Lights_BindAll(light, play->lightCtx.listHead,
-                   (actor->flags & (ACTOR_FLAG_10000000 | ACTOR_FLAG_400000)) ? NULL : &actor->world.pos, play);
+                   (actor->flags & (ACTOR_FLAG_UCODE_POINT_LIGHT_ENABLED | ACTOR_FLAG_IGNORE_LEGACY_POINT_LIGHTS))
+                       ? NULL
+                       : &actor->world.pos,
+                   play);
     Lights_Draw(light, play->state.gfxCtx);
 
     if (actor->flags & ACTOR_FLAG_IGNORE_QUAKE) {
@@ -3001,31 +3014,113 @@ void Actor_DrawLensActors(PlayState* play, s32 numLensActors, Actor** lensActors
     CLOSE_DISPS(gfxCtx);
 }
 
-s32 func_800BA2D8(PlayState* play, Actor* actor) {
-    return func_800BA2FC(play, actor, &actor->projectedPos, actor->projectedW);
+/**
+ * Checks if an actor should be culled or not, by seeing if it is contained within its own culling volume.
+ * For more details on the culling test, see `Actor_CullingVolumeTest`.
+ *
+ * Returns true if the actor is inside its culling volume. In other words, it should not cull.
+ *
+ * "Culling" in this context refers to the removal of something for the sake of improving performance.
+ * For actors, being culled means that their Update and Draw processes are halted.
+ * While halted, an Actor's update state is frozen and it will not draw, making it invisible.
+ *
+ * Actors that are within the bounds of their culling volume may update and draw, while actors that are
+ * out of bounds of its culling volume may be excluded from updating and drawing until they are within bounds.
+ *
+ * It is possible for actors to opt out of update culling or draw culling.
+ * This is set per-actor with `ACTOR_FLAG_UPDATE_CULLING_DISABLED` and `ACTOR_FLAG_DRAW_CULLING_DISABLED`.
+ *
+ * Note: Even if either `ACTOR_FLAG_UPDATE_CULLING_DISABLED` or `ACTOR_FLAG_DRAW_CULLING_DISABLED` are set, the actor
+ * will still undergo the culling test and set `ACTOR_FLAG_INSIDE_CULLING_VOLUME` accordingly.
+ * So, `ACTOR_FLAG_INSIDE_CULLING_VOLUME` cannot be used on it own to determine if an actor is actually culled.
+ * It simply says whether or not they are physically located within the bounds of the culling volume.
+ */
+s32 Actor_CullingCheck(PlayState* play, Actor* actor) {
+    return Actor_CullingVolumeTest(play, actor, &actor->projectedPos, actor->projectedW);
 }
 
-s32 func_800BA2FC(PlayState* play, Actor* actor, Vec3f* projectedPos, f32 projectedW) {
-    if ((-actor->uncullZoneScale < projectedPos->z) &&
-        (projectedPos->z < (actor->uncullZoneForward + actor->uncullZoneScale))) {
-        f32 phi_f12;
-        f32 phi_f2 = CLAMP_MIN(projectedW, 1.0f);
-        f32 phi_f14;
-        f32 phi_f16;
+/**
+ * Tests if an actor is currently within the bounds of its own culling volume.
+ *
+ * The culling volume is a 3D shape composed of a frustum with a box attached to the end of it. The frustum sits at the
+ * camera's position and projects forward, encompassing the player's current view; the box extrudes behind the camera,
+ * allowing actors in the immediate vicinity behind and to the sides of the camera to be detected.
+ *
+ * This function returns true if the actor is within bounds, false if not.
+ * The comparison is done in projected space against the actor's projected position as the viewing frustum
+ * in world space transforms to a box in projected space, making the calculation easy.
+ *
+ * Every actor can set properties for their own culling volume, changing its dimensions to suit the needs of
+ * it and its environment. These properties are in units of projected space (i.e. compared to the actor's position
+ * after perspective projection is applied) are therefore not directly comparable to world units.
+ * These depend on the current view parameters (aspect, scale, znear, zfar).
+ * The default parameters considered are (4/3, 1.0, 10, 12800).
+ *
+ *    cullingVolumeDistance: Configures how far forward the far plane of the frustum should extend.
+ *                           This along with cullingVolumeScale determines the maximum distance from
+ *                           the camera eye that the actor can be detected at. This quantity is related
+ *                           to world units by a factor of
+ *                                   (znear - zfar) / ((znear + zfar) * scale).
+ *                           For default view parameters, increasing this property by 1 increases the
+ *                           distance by ~0.995 world units.
+ *
+ *    cullingVolumeScale: Scales the entire culling volume in all directions except the downward
+ *                        direction. Both the frustum and the box will scale in size. This quantity is
+ *                        related to world units by different factors based on direction:
+ *                         - For the forward and backward directions, they are related in the same way
+ *                           as above. For default view parameters, increasing this property by 1 increases
+ *                           the forward and backward scales by ~0.995 world units.
+ *                         - For the sideways directions, the relation to world units is
+ *                                   (aspect / scale) * sqrt(3)/3
+ *                           For default view parameters, increasing this property by 1 increases the
+ *                           sideways scales by ~0.77 world units.
+ *                         - For the upward direction, the relation to world units is
+ *                                   (1 / scale) * sqrt(3)/3
+ *                           For default view parameters, increasing this property by 1 increases the
+ *                           scale by ~0.58 world units.
+ *
+ *    cullingVolumeDownward: Sets the height of the culling volume in the downward direction. Increasing
+ *                           this value will make actors below the camera more easily detected. This
+ *                           quantity is related to world units by the same factor as the upward scale.
+ *                           For default view parameters, increasing this property by 1 increases the
+ *                           downward height by ~0.58 world units.
+ *
+ * This interactive 3D graph visualizes the shape of the culling volume and has sliders for the 3 properties mentioned
+ * above: https://www.desmos.com/3d/4ztkxqky2a.
+ */
+s32 Actor_CullingVolumeTest(PlayState* play, Actor* actor, Vec3f* projPos, f32 projW) {
+    if ((projPos->z > -actor->cullingVolumeScale) &&
+        (projPos->z < (actor->cullingVolumeDistance + actor->cullingVolumeScale))) {
+        f32 invW;
+        f32 cullingVolumeScaleX;
+        f32 cullingVolumeScaleY;
+        f32 cullingVolumeDownward;
+
+        // Clamping `projW` affects points behind the camera, so that the culling volume has
+        // a frustum shape in front of the camera and a box shape behind the camera.
+        invW = CLAMP_MIN(projW, 1.0f);
 
         if (play->view.fovy != 60.0f) {
-            phi_f12 = actor->uncullZoneScale * play->projectionMtxFDiagonal.x * 0.76980036f; // sqrt(16/27)
+            // If the fov isn't 60 degrees, make the cull parameters behave as if it were 60 degrees.
+            // To do this, multiply by the ratios of the x and y diagonal elements of the projection matrix.
+            // The x diagonal element is cot(0.5 * fov) / aspect and the y diagonal element is just cot(0.5 * fov).
+            // When the fov is 60 degrees, cot(0.5 * 60 degrees) = sqrt(3) so the x element is 3sqrt(3)/4 and the y
+            // element is sqrt(3). The current diagonal element divided by (or multiplied by their inverse) gives
+            // the ratio.
 
-            phi_f14 = play->projectionMtxFDiagonal.y * 0.57735026f; // 1 / sqrt(3)
-            phi_f16 = actor->uncullZoneScale * phi_f14;
-            phi_f14 *= actor->uncullZoneDownward;
+            cullingVolumeScaleX = actor->cullingVolumeScale * play->projectionMtxFDiagonal.x *
+                                  0.76980036f; // sqrt(16/27) = aspect / cot(0.5 * f) = (4/3) / sqrt(3)
+
+            cullingVolumeDownward = play->projectionMtxFDiagonal.y * 0.57735026f; // 1 / sqrt(3) = 1 / cot(0.5 * f)
+            cullingVolumeScaleY = actor->cullingVolumeScale * cullingVolumeDownward;
+            cullingVolumeDownward *= actor->cullingVolumeDownward;
         } else {
-            phi_f16 = phi_f12 = actor->uncullZoneScale;
-            phi_f14 = actor->uncullZoneDownward;
+            cullingVolumeScaleY = cullingVolumeScaleX = actor->cullingVolumeScale;
+            cullingVolumeDownward = actor->cullingVolumeDownward;
         }
 
-        if (((fabsf(projectedPos->x) - phi_f12) < phi_f2) && ((-phi_f2 < (projectedPos->y + phi_f14))) &&
-            ((projectedPos->y - phi_f16) < phi_f2)) {
+        if (((fabsf(projPos->x) - cullingVolumeScaleX) < invW) && ((-invW < (projPos->y + cullingVolumeDownward))) &&
+            ((projPos->y - cullingVolumeScaleY) < invW)) {
             return true;
         }
     }
@@ -3041,13 +3136,14 @@ void Actor_DrawAll(PlayState* play, ActorContext* actorCtx) {
     Gfx* sp58;
     ActorListEntry* actorEntry;
     Actor* actor;
-    s32 actorFlags;
+    s32 drawActorFlagsMask;
     s32 category;
 
-    if (play->unk_18844) {
-        actorFlags = ACTOR_FLAG_200000;
+    if (play->soaringCsOrSoTCsPlaying) {
+        drawActorFlagsMask = ACTOR_FLAG_UPDATE_DURING_SOARING_AND_SOT_CS;
     } else {
-        actorFlags = ACTOR_FLAG_200000 | ACTOR_FLAG_40 | ACTOR_FLAG_20;
+        drawActorFlagsMask = ACTOR_FLAG_UPDATE_DURING_SOARING_AND_SOT_CS | ACTOR_FLAG_INSIDE_CULLING_VOLUME |
+                             ACTOR_FLAG_DRAW_CULLING_DISABLED;
     }
 
     OPEN_DISPS(play->state.gfxCtx);
@@ -3068,14 +3164,14 @@ void Actor_DrawAll(PlayState* play, ActorContext* actorCtx) {
                 Actor_UpdateFlaggedAudio(actor);
             }
 
-            if (func_800BA2D8(play, actor)) {
-                actor->flags |= ACTOR_FLAG_40;
+            if (Actor_CullingCheck(play, actor)) {
+                actor->flags |= ACTOR_FLAG_INSIDE_CULLING_VOLUME;
             } else {
-                actor->flags &= ~ACTOR_FLAG_40;
+                actor->flags &= ~ACTOR_FLAG_INSIDE_CULLING_VOLUME;
             }
 
             actor->isDrawn = false;
-            if ((actor->init == NULL) && (actor->draw != NULL) && (actor->flags & actorFlags)) {
+            if ((actor->init == NULL) && (actor->draw != NULL) && (actor->flags & drawActorFlagsMask)) {
                 if ((actor->flags & ACTOR_FLAG_REACT_TO_LENS) &&
                     ((play->roomCtx.curRoom.lensMode == LENS_MODE_SHOW_ACTORS) ||
                      (play->actorCtx.lensMaskSize == LENS_MASK_ACTIVE_SIZE) ||
@@ -3117,11 +3213,11 @@ void Actor_DrawAll(PlayState* play, ActorContext* actorCtx) {
     gSPBranchList(ref2, &tmp2[1]);
     POLY_XLU_DISP = &tmp2[1];
 
-    if (!play->unk_18844) {
+    if (!play->soaringCsOrSoTCsPlaying) {
         Lights_DrawGlow(play);
     }
 
-    TitleCard_Draw(&play->state, &actorCtx->titleCtxt);
+    TitleCard_Draw(&play->state, &actorCtx->titleCtx);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }

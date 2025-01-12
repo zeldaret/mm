@@ -1,13 +1,13 @@
 ﻿<Root>
     <File Name="object_zm" Segment="6">
-        <Animation Name="object_zm_Anim_000C80" Offset="0xC80" />
-        <Animation Name="object_zm_Anim_001324" Offset="0x1324" />
-        <Animation Name="object_zm_Anim_0016A4" Offset="0x16A4" />
-        <Animation Name="object_zm_Anim_001DF0" Offset="0x1DF0" />
-        <Animation Name="object_zm_Anim_0022C8" Offset="0x22C8" />
-        <Animation Name="object_zm_Anim_0028B8" Offset="0x28B8" />
-        <Animation Name="object_zm_Anim_002F20" Offset="0x2F20" />
-        <Animation Name="object_zm_Anim_003AA8" Offset="0x3AA8" />
+        <Animation Name="object_zm_Anim_000C80" Offset="0xC80" /> <!-- Original name is "zM_aisatsu" -->
+        <Animation Name="object_zm_Anim_001324" Offset="0x1324" /> <!-- Original name is "zM_furimuki" -->
+        <Animation Name="object_zm_Anim_0016A4" Offset="0x16A4" /> <!-- Original name is "zM_furimuki2wait" -->
+        <Animation Name="object_zm_Anim_001DF0" Offset="0x1DF0" /> <!-- Original name is "zM_maru" -->
+        <Animation Name="object_zm_Anim_0022C8" Offset="0x22C8" /> <!-- Original name is "zM_ok2furimuki" -->
+        <Animation Name="object_zm_Anim_0028B8" Offset="0x28B8" /> <!-- Original name is "zM_suwaritalk01" -->
+        <Animation Name="object_zm_Anim_002F20" Offset="0x2F20" /> <!-- Original name is "zM_suwaritalk02" -->
+        <Animation Name="object_zm_Anim_003AA8" Offset="0x3AA8" /> <!-- Original name is "zM_suwariwait" -->
         <DList Name="object_zm_DL_0063A0" Offset="0x63A0" />
         <DList Name="object_zm_DL_0066D0" Offset="0x66D0" />
         <DList Name="object_zm_DL_006898" Offset="0x6898" />
@@ -56,9 +56,9 @@
         <Limb Name="object_zm_Standardlimb_00A91C" Type="Standard" EnumName="OBJECT_ZM_LIMB_10" Offset="0xA91C" />
         <Limb Name="object_zm_Standardlimb_00A928" Type="Standard" EnumName="OBJECT_ZM_LIMB_11" Offset="0xA928" />
         <Skeleton Name="object_zm_Skel_00A978" Type="Flex" LimbType="Standard" LimbNone="OBJECT_ZM_LIMB_NONE" LimbMax="OBJECT_ZM_LIMB_MAX" EnumName="ObjectZmLimb" Offset="0xA978" />
-        <Animation Name="object_zm_Anim_00B3E0" Offset="0xB3E0" />
-        <Animation Name="object_zm_Anim_00B894" Offset="0xB894" />
-        <Animation Name="object_zm_Anim_00BC08" Offset="0xBC08" />
-        <Animation Name="object_zm_Anim_00C880" Offset="0xC880" />
+        <Animation Name="object_zm_Anim_00B3E0" Offset="0xB3E0" /> <!-- Original name is "zM_talk" -->
+        <Animation Name="object_zm_Anim_00B894" Offset="0xB894" /> <!-- Original name is "zM_talk01TOtalk02" -->
+        <Animation Name="object_zm_Anim_00BC08" Offset="0xBC08" /> <!-- Original name is "zM_talk02TOtalk01" -->
+        <Animation Name="object_zm_Anim_00C880" Offset="0xC880" /> <!-- Original name is "zM_wait" -->
     </File>
 </Root>

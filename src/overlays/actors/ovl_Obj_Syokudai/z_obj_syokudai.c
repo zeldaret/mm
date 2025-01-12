@@ -9,9 +9,7 @@
 #include "overlays/actors/ovl_En_Arrow/z_en_arrow.h"
 #include "assets/objects/object_syokudai/object_syokudai.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_400)
-
-#define THIS ((ObjSyokudai*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_HOOKSHOT_PULLS_PLAYER)
 
 void ObjSyokudai_Init(Actor* thisx, PlayState* play);
 void ObjSyokudai_Destroy(Actor* thisx, PlayState* play);
@@ -72,9 +70,9 @@ static ColliderCylinderInit sFlameColliderInit = {
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 800, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 800, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeDistance, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 800, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 800, ICHAIN_STOP),
 };
 
 static u8 sColMaterials[] = { COL_MATERIAL_METAL, COL_MATERIAL_WOOD, COL_MATERIAL_WOOD };
@@ -88,7 +86,7 @@ static Gfx* sDLists[] = {
 static s32 sNumLitTorchesInGroup;
 
 void ObjSyokudai_Init(Actor* thisx, PlayState* play) {
-    ObjSyokudai* this = THIS;
+    ObjSyokudai* this = (ObjSyokudai*)thisx;
     s32 pad;
     s32 type = OBJ_SYOKUDAI_GET_TYPE(thisx);
     s32 switchFlag = OBJ_SYOKUDAI_GET_SWITCH_FLAG(thisx);
@@ -121,7 +119,7 @@ void ObjSyokudai_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjSyokudai_Destroy(Actor* thisx, PlayState* play) {
-    ObjSyokudai* this = THIS;
+    ObjSyokudai* this = (ObjSyokudai*)thisx;
 
     Collider_DestroyCylinder(play, &this->standCollider);
     Collider_DestroyCylinder(play, &this->flameCollider);
@@ -130,7 +128,7 @@ void ObjSyokudai_Destroy(Actor* thisx, PlayState* play) {
 
 void ObjSyokudai_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    ObjSyokudai* this = THIS;
+    ObjSyokudai* this = (ObjSyokudai*)thisx;
     s32 groupSize = OBJ_SYOKUDAI_GET_GROUP_SIZE(thisx);
     s32 switchFlag = OBJ_SYOKUDAI_GET_SWITCH_FLAG(thisx);
     s32 type = OBJ_SYOKUDAI_GET_TYPE(thisx);
@@ -288,7 +286,7 @@ void ObjSyokudai_Update(Actor* thisx, PlayState* play2) {
 }
 
 void ObjSyokudai_Draw(Actor* thisx, PlayState* play) {
-    ObjSyokudai* this = THIS;
+    ObjSyokudai* this = (ObjSyokudai*)thisx;
     s32 pad;
     s32 groupSize = OBJ_SYOKUDAI_GET_GROUP_SIZE(thisx);
     f32 flameScale;

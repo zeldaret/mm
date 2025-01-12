@@ -3,9 +3,7 @@
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "assets/objects/object_boyo/object_boyo.h"
 
-#define FLAGS (ACTOR_FLAG_10)
-
-#define THIS ((ObjBoyo*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void ObjBoyo_Init(Actor* thisx, PlayState* play);
 void ObjBoyo_Destroy(Actor* thisx, PlayState* play2);
@@ -62,9 +60,9 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 300, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDistance, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeScale, 300, ICHAIN_CONTINUE),
+    ICHAIN_F32(cullingVolumeDownward, 300, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
@@ -75,7 +73,7 @@ static ObjBoyoUnkStruct sCollisionHandlers[] = {
 };
 
 void ObjBoyo_Init(Actor* thisx, PlayState* play) {
-    ObjBoyo* this = THIS;
+    ObjBoyo* this = (ObjBoyo*)thisx;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     Collider_InitCylinder(play, &this->collider);
@@ -87,7 +85,7 @@ void ObjBoyo_Init(Actor* thisx, PlayState* play) {
 
 void ObjBoyo_Destroy(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    ObjBoyo* this = THIS;
+    ObjBoyo* this = (ObjBoyo*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -140,7 +138,7 @@ Actor* ObjBoyo_FindCollidedActor(ObjBoyo* this, PlayState* play, s32* index) {
 
 void ObjBoyo_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    ObjBoyo* this = THIS;
+    ObjBoyo* this = (ObjBoyo*)thisx;
     Actor* collidedActor;
     s32 index;
 
@@ -202,7 +200,7 @@ void ObjBoyo_Update(Actor* thisx, PlayState* play2) {
 }
 
 void ObjBoyo_Draw(Actor* thisx, PlayState* play) {
-    ObjBoyo* this = THIS;
+    ObjBoyo* this = (ObjBoyo*)thisx;
 
     AnimatedMat_Draw(play, this->animatedMaterial);
     Gfx_DrawDListOpa(play, object_boyo_DL_000300);

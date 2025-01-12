@@ -7,8 +7,6 @@
 #include "global.h"
 #include "z_fbdemo_wipe1.h"
 
-#define THIS ((TransitionWipe1*)thisx)
-
 void* TransitionWipe1_Init(void* thisx);
 void TransitionWipe1_Destroy(void* thisx);
 void TransitionWipe1_Update(void* thisx, s32 updateRate);
@@ -33,7 +31,7 @@ typedef enum {
 } TransitionWipe1Direction;
 
 void TransitionWipe1_Start(void* thisx) {
-    TransitionWipe1* this = THIS;
+    TransitionWipe1* this = (TransitionWipe1*)thisx;
 
     this->isDone = false;
 
@@ -48,7 +46,7 @@ void TransitionWipe1_Start(void* thisx) {
 }
 
 void* TransitionWipe1_Init(void* thisx) {
-    TransitionWipe1* this = THIS;
+    TransitionWipe1* this = (TransitionWipe1*)thisx;
 
     bzero(this, sizeof(TransitionWipe1));
     return this;
@@ -58,7 +56,7 @@ void TransitionWipe1_Destroy(void* thisx) {
 }
 
 void TransitionWipe1_Update(void* thisx, s32 updateRate) {
-    TransitionWipe1* this = THIS;
+    TransitionWipe1* this = (TransitionWipe1*)thisx;
 
     if (this->direction != TRANS_WIPE1_DIR_IN) {
         this->texY += (((void)0, gSaveContext.transWipeSpeed) * 3) / updateRate;
@@ -78,7 +76,7 @@ void TransitionWipe1_Update(void* thisx, s32 updateRate) {
 void TransitionWipe1_Draw(void* thisx, Gfx** gfxP) {
     Gfx* gfx = *gfxP;
     Mtx* modelView;
-    TransitionWipe1* this = THIS;
+    TransitionWipe1* this = (TransitionWipe1*)thisx;
     Gfx* texScroll;
     s32 pad[4];
 
@@ -104,13 +102,13 @@ void TransitionWipe1_Draw(void* thisx, Gfx** gfxP) {
 }
 
 s32 TransitionWipe1_IsDone(void* thisx) {
-    TransitionWipe1* this = THIS;
+    TransitionWipe1* this = (TransitionWipe1*)thisx;
 
     return this->isDone;
 }
 
 void TransitionWipe1_SetType(void* thisx, s32 type) {
-    TransitionWipe1* this = THIS;
+    TransitionWipe1* this = (TransitionWipe1*)thisx;
 
     if (type == TRANS_INSTANCE_TYPE_FILL_OUT) {
         this->direction = TRANS_WIPE1_DIR_OUT;
@@ -126,13 +124,13 @@ void TransitionWipe1_SetType(void* thisx, s32 type) {
 }
 
 void TransitionWipe1_SetColor(void* thisx, u32 color) {
-    TransitionWipe1* this = THIS;
+    TransitionWipe1* this = (TransitionWipe1*)thisx;
 
     this->primColor.rgba = color;
 }
 
 void TransitionWipe1_SetEnvColor(void* thisx, u32 color) {
-    TransitionWipe1* this = THIS;
+    TransitionWipe1* this = (TransitionWipe1*)thisx;
 
     this->envColor.rgba = color;
 }

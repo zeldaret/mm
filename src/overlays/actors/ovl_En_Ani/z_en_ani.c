@@ -10,8 +10,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
-#define THIS ((EnAni*)thisx)
-
 // clang-format off
 #define ANI_STATE_STANDING  (0)
 #define ANI_STATE_UNK       (1 << 0)
@@ -75,7 +73,7 @@ static ColliderCylinderInit sCylinderInit = {
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneForward, 850, ICHAIN_STOP),
+    ICHAIN_F32(cullingVolumeDistance, 850, ICHAIN_STOP),
 };
 
 void EnAni_DefaultBlink(EnAni* this) {
@@ -113,7 +111,7 @@ void EnAni_WaitForEyeOpen(EnAni* this) {
 
 void EnAni_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    EnAni* this = THIS;
+    EnAni* this = (EnAni*)thisx;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
@@ -136,7 +134,7 @@ void EnAni_Init(Actor* thisx, PlayState* play) {
         this->actor.velocity.y = 0.0f;
         this->actor.terminalVelocity = 0.0f;
         this->actor.gravity = 0.0f;
-        this->actor.flags |= ACTOR_FLAG_10;
+        this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
         this->stateFlags |= ANI_STATE_CLIMBING;
         CLEAR_EVENTINF(EVENTINF_14);
     } else { // ANI_TYPE_STANDING
@@ -152,7 +150,7 @@ void EnAni_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnAni_Destroy(Actor* thisx, PlayState* play) {
-    EnAni* this = THIS;
+    EnAni* this = (EnAni*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider1);
     Collider_DestroyCylinder(play, &this->collider2);
@@ -212,7 +210,7 @@ void EnAni_FallToGround(EnAni* this, PlayState* play) {
     s16 quakeIndex;
 
     if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
-        this->actor.flags &= ~ACTOR_FLAG_10;
+        this->actor.flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED;
         this->actionFunc = EnAni_LandOnFoot;
         this->actor.velocity.x = 0.0f;
         this->actor.velocity.z = 0.0f;
@@ -274,7 +272,7 @@ void EnAni_HangInTree(EnAni* this, PlayState* play) {
 }
 
 void EnAni_Update(Actor* thisx, PlayState* play) {
-    EnAni* this = THIS;
+    EnAni* this = (EnAni*)thisx;
     f32 minVelocity;
 
     Collider_UpdateCylinder(&this->actor, &this->collider1);
@@ -319,7 +317,7 @@ void EnAni_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnAni_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnAni* this = THIS;
+    EnAni* this = (EnAni*)thisx;
 
     if (limbIndex == ANI_LIMB_HEAD) {
         rot->x += this->headRot.y;
@@ -340,7 +338,7 @@ void EnAni_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
 void EnAni_Draw(Actor* thisx, PlayState* play) {
     static TexturePtr sEyeTextures[] = { gAniOpenEyeTex, gAniClosingEyeTex, gAniClosedEyeTex };
     s32 pad;
-    EnAni* this = THIS;
+    EnAni* this = (EnAni*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

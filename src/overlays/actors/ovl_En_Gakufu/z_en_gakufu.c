@@ -7,9 +7,7 @@
 #include "z_en_gakufu.h"
 #include "assets/interface/parameter_static/parameter_static.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_UPDATE_DURING_OCARINA)
-
-#define THIS ((EnGakufu*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
 void EnGakufu_Init(Actor* thisx, PlayState* play);
 void EnGakufu_Destroy(Actor* thisx, PlayState* play);
@@ -130,7 +128,7 @@ void EnGakufu_ProcessNotes(EnGakufu* this) {
 }
 
 void EnGakufu_Init(Actor* thisx, PlayState* play) {
-    EnGakufu* this = THIS;
+    EnGakufu* this = (EnGakufu*)thisx;
 
     this->songIndex = OCARINA_SONG_TERMINA_WALL;
     EnGakufu_ProcessNotes(this);
@@ -155,7 +153,7 @@ void EnGakufu_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnGakufu_Destroy(Actor* thisx, PlayState* play) {
-    EnGakufu* this = THIS;
+    EnGakufu* this = (EnGakufu*)thisx;
 
     if (GAKUFU_GET_TYPE(&this->actor) != GAKUFU_MILK_BAR) {
         CLEAR_EVENTINF(EVENTINF_31);
@@ -252,7 +250,7 @@ void EnGakufu_WaitForSong(EnGakufu* this, PlayState* play) {
 }
 
 void EnGakufu_Update(Actor* thisx, PlayState* play) {
-    EnGakufu* this = THIS;
+    EnGakufu* this = (EnGakufu*)thisx;
 
     this->actionFunc(this, play);
 }
@@ -260,7 +258,7 @@ void EnGakufu_Update(Actor* thisx, PlayState* play) {
 void EnGakufu_Draw(Actor* thisx, PlayState* play) {
     s32 i;
     s32 pad;
-    EnGakufu* this = THIS;
+    EnGakufu* this = (EnGakufu*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 

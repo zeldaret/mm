@@ -11,8 +11,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE)
 
-#define THIS ((EnDekunuts*)thisx)
-
 void EnDekunuts_Init(Actor* thisx, PlayState* play);
 void EnDekunuts_Destroy(Actor* thisx, PlayState* play);
 void EnDekunuts_Update(Actor* thisx, PlayState* play);
@@ -116,7 +114,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void EnDekunuts_Init(Actor* thisx, PlayState* play) {
-    EnDekunuts* this = THIS;
+    EnDekunuts* this = (EnDekunuts*)thisx;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 35.0f);
@@ -143,7 +141,7 @@ void EnDekunuts_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnDekunuts_Destroy(Actor* thisx, PlayState* play) {
-    EnDekunuts* this = THIS;
+    EnDekunuts* this = (EnDekunuts*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -373,7 +371,7 @@ void func_808BDE7C(EnDekunuts* this) {
     this->actor.colChkInfo.mass = 50;
     Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_DAMAGE);
     this->actor.world.rot.x = 0;
-    this->actor.flags |= ACTOR_FLAG_20;
+    this->actor.flags |= ACTOR_FLAG_DRAW_CULLING_DISABLED;
     this->collider.base.acFlags &= ~AC_ON;
     this->actionFunc = func_808BDEF8;
 }
@@ -436,7 +434,7 @@ void func_808BDFB8(EnDekunuts* this, PlayState* play) {
     if ((this->unk_18D == 0) && (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) < 20.0f) &&
         (fabsf(this->actor.world.pos.y - this->actor.home.pos.y) < 2.0f)) {
         this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-        this->actor.flags &= ~ACTOR_FLAG_20;
+        this->actor.flags &= ~ACTOR_FLAG_DRAW_CULLING_DISABLED;
         this->actor.speed = 0.0f;
         func_808BDC9C(this);
     } else if (this->unk_190 == 0) {
@@ -639,7 +637,7 @@ void func_808BE73C(EnDekunuts* this, PlayState* play) {
 }
 
 void EnDekunuts_Update(Actor* thisx, PlayState* play) {
-    EnDekunuts* this = THIS;
+    EnDekunuts* this = (EnDekunuts*)thisx;
     s32 pad;
 
     func_808BE73C(this, play);
@@ -668,7 +666,7 @@ void EnDekunuts_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnDekunuts_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnDekunuts* this = THIS;
+    EnDekunuts* this = (EnDekunuts*)thisx;
     f32 arg1;
     f32 arg2;
     f32 arg3;
@@ -722,7 +720,7 @@ static Vec3f D_808BEFA4[] = {
 };
 
 void EnDekunuts_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnDekunuts* this = THIS;
+    EnDekunuts* this = (EnDekunuts*)thisx;
     s32 i;
     Vec3f* ptr1;
     Vec3f* ptr2;
@@ -749,7 +747,7 @@ void EnDekunuts_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s*
 }
 
 void EnDekunuts_Draw(Actor* thisx, PlayState* play) {
-    EnDekunuts* this = THIS;
+    EnDekunuts* this = (EnDekunuts*)thisx;
 
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnDekunuts_OverrideLimbDraw,
                       EnDekunuts_PostLimbDraw, &this->actor);

@@ -400,37 +400,10 @@ s32 func_800CB924(Camera* camera) {
 }
 
 s32 func_800CB950(Camera* camera) {
-    Player* player;
-    s32 phi_v0;
-    s32 ret;
-    f32 yDiff;
-
     if (camera->focalActor == &GET_PLAYER(camera->play)->actor) {
-        yDiff = Camera_fabsf(camera->focalActorPosRot.pos.y - camera->focalActorFloorHeight);
-
-        phi_v0 = false;
-        if (yDiff < 11.0f) {
-            phi_v0 = true;
-        }
-
-        ret = phi_v0;
-
-        if (!ret) {
-
-            ret = false;
-
-            if (camera->focalActor->gravity > -0.1f) {
-                ret = true;
-            }
-
-            player = (Player*)camera->focalActor;
-            if (!ret) {
-                // Using zora fins
-                ret = player->stateFlags1 & PLAYER_STATE1_200000;
-                ret = !!ret;
-            }
-        }
-        return ret;
+        return ((Camera_fabsf(camera->focalActorPosRot.pos.y - camera->focalActorFloorHeight)) < 11.0f) ||
+               (camera->focalActor->gravity > -0.1f) ||
+               (((Player*)camera->focalActor)->stateFlags1 & PLAYER_STATE1_200000);
     } else {
         return true;
     }
@@ -446,18 +419,12 @@ s32 Camera_IsClimbingLedge(Camera* camera) {
     }
 }
 
-s32 Camera_IsChargingSwordOrDekuFlowerDive(Camera* camera) {
+s32 Camera_IsChargingSpinAttackOrDekuFlowerDive(Camera* camera) {
     Actor* focalActor = camera->focalActor;
-    s32 ret;
 
     if (focalActor == &GET_PLAYER(camera->play)->actor) {
-        // Charging Sword
-        ret = !!(((Player*)focalActor)->stateFlags1 & PLAYER_STATE1_1000);
-        if (!ret) {
-            // Deku Flower Dive
-            ret = !!(((Player*)focalActor)->stateFlags3 & PLAYER_STATE3_100);
-        }
-        return ret;
+        return (((Player*)focalActor)->stateFlags1 & PLAYER_STATE1_CHARGING_SPIN_ATTACK) ||
+               (((Player*)focalActor)->stateFlags3 & PLAYER_STATE3_100);
     } else {
         return false;
     }
@@ -527,7 +494,7 @@ s32 func_800CBB88(Camera* camera) {
     return 0;
 }
 
-s32 Camera_IsUsingZoraFins(Camera* camera) {
+s32 func_800CBC00(Camera* camera) {
     Actor* focalActor = camera->focalActor;
 
     if (camera->focalActor == &GET_PLAYER(camera->play)->actor) {
@@ -2954,7 +2921,7 @@ s32 Camera_Parallel1(Camera* camera) {
         rwData->unk_1C = 0;
     }
 
-    if (func_800CB950(camera) || (((Player*)camera->focalActor)->stateFlags1 & PLAYER_STATE1_1000) ||
+    if (func_800CB950(camera) || (((Player*)camera->focalActor)->stateFlags1 & PLAYER_STATE1_CHARGING_SPIN_ATTACK) ||
         (((Player*)camera->focalActor)->stateFlags3 & PLAYER_STATE3_100)) {
         rwData->unk_04 = camera->focalActorPosRot.pos.y;
         sp72 = false;
@@ -3595,7 +3562,7 @@ s32 Camera_Battle1(Camera* camera) {
     swingPitchFinal = roData->swingPitchFinal;
     fov = roData->fov;
 
-    if (Camera_IsChargingSwordOrDekuFlowerDive(camera)) {
+    if (Camera_IsChargingSpinAttackOrDekuFlowerDive(camera)) {
         camera->pitchUpdateRateInv = Camera_ScaledStepToCeilF(18.0f, camera->pitchUpdateRateInv, 0.5f, 0.1f);
         camera->yOffsetUpdateRate = Camera_ScaledStepToCeilF(0.2f, camera->yOffsetUpdateRate, 0.5f, 0.0001f);
         camera->xzOffsetUpdateRate = Camera_ScaledStepToCeilF(0.2f, camera->xzOffsetUpdateRate, 0.5f, 0.0001f);
@@ -3691,7 +3658,7 @@ s32 Camera_Battle1(Camera* camera) {
         sp104 = PREG(86) + 800.0f;
     }
 
-    if ((spA4.r > sp104) || Camera_IsChargingSwordOrDekuFlowerDive(camera)) {
+    if ((spA4.r > sp104) || Camera_IsChargingSpinAttackOrDekuFlowerDive(camera)) {
         distRatio = 1.0f;
         spF8 = 10.0f;
     } else {
@@ -3898,7 +3865,7 @@ s32 Camera_Battle0(Camera* camera) {
 }
 
 /**
- * Used for following a secondary target such as zora fins or a z-target
+ * Used for following a secondary target such as zora boomerangs or a z-target
  */
 s32 Camera_KeepOn1(Camera* camera) {
     Vec3f* eye = &camera->eye;
@@ -7027,18 +6994,18 @@ void func_800DDFE0(Camera* camera) {
         camera->prevSetting = camera->setting = CAM_SET_FREE0;
         Camera_UnsetStateFlag(camera, CAM_STATE_2);
     } else {
-        switch (camera->play->roomCtx.curRoom.behaviorType1) {
-            case ROOM_BEHAVIOR_TYPE1_1:
+        switch (camera->play->roomCtx.curRoom.type) {
+            case ROOM_TYPE_DUNGEON:
                 camera->prevSetting = CAM_SET_DUNGEON0;
                 Camera_ChangeSettingFlags(camera, CAM_SET_DUNGEON0, CAM_CHANGE_SETTING_1);
                 break;
 
-            case ROOM_BEHAVIOR_TYPE1_0:
+            case ROOM_TYPE_NORMAL:
                 camera->prevSetting = CAM_SET_NORMAL0;
                 Camera_ChangeSettingFlags(camera, CAM_SET_NORMAL0, CAM_CHANGE_SETTING_1);
                 break;
 
-            case ROOM_BEHAVIOR_TYPE1_2:
+            case ROOM_TYPE_INDOORS:
                 camera->prevSetting = CAM_SET_ROOM0;
                 Camera_ChangeSettingFlags(camera, CAM_SET_ROOM0, CAM_CHANGE_SETTING_1);
                 break;
@@ -7279,7 +7246,7 @@ void Camera_EarthquakeDay3(Camera* camera) {
  */
 s32 Camera_UpdateHotRoom(Camera* camera) {
     Distortion_RemoveRequest(DISTORTION_TYPE_HOT_ROOM);
-    if (camera->play->roomCtx.curRoom.behaviorType2 == ROOM_BEHAVIOR_TYPE2_HOT) {
+    if (camera->play->roomCtx.curRoom.environmentType == ROOM_ENV_HOT) {
         Distortion_Request(DISTORTION_TYPE_HOT_ROOM);
     }
     return true;
@@ -7450,7 +7417,7 @@ Vec3s Camera_Update(Camera* camera) {
 
                 bgCamIndex = Camera_GetBgCamIndex(camera, &bgId, sp90);
                 if ((bgCamIndex != -1) && (camera->bgId == BGCHECK_SCENE)) {
-                    if (!Camera_IsUsingZoraFins(camera)) {
+                    if (!func_800CBC00(camera)) {
                         camera->nextCamSceneDataId = bgCamIndex | CAM_DATA_IS_BG;
                     }
                 }
@@ -7736,7 +7703,7 @@ s32 Camera_ChangeModeFlags(Camera* camera, s16 mode, u8 forceChange) {
                 break;
 
             case CAM_CHANGE_MODE_1:
-                if (camera->play->roomCtx.curRoom.behaviorType1 == ROOM_BEHAVIOR_TYPE1_1) {
+                if (camera->play->roomCtx.curRoom.type == ROOM_TYPE_DUNGEON) {
                     Audio_PlaySfx(NA_SE_SY_ATTENTION_URGENCY);
                 } else {
 
@@ -8094,7 +8061,7 @@ s32 Camera_GetNegOne(void) {
     return sCameraNegOne;
 }
 
-s16 func_800E0238(Camera* camera) {
+s16 Camera_SetFinishedFlag(Camera* camera) {
     Camera_SetStateFlag(camera, CAM_STATE_3);
     if ((camera->camId == CAM_ID_MAIN) && (camera->play->activeCamId != CAM_ID_MAIN)) {
         Camera_SetStateFlag(GET_ACTIVE_CAM(camera->play), CAM_STATE_3);

@@ -10,8 +10,6 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
-#define THIS ((ShotSun*)thisx)
-
 void ShotSun_Init(Actor* thisx, PlayState* play);
 void ShotSun_Destroy(Actor* thisx, PlayState* play);
 void ShotSun_Update(Actor* thisx, PlayState* play);
@@ -53,12 +51,12 @@ static ColliderCylinderInit sCylinderInit = {
 
 void ShotSun_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    ShotSun* this = THIS;
+    ShotSun* this = (ShotSun*)thisx;
 
     if ((SHOTSUN_GET_TYPE(thisx) == SHOTSUN_FAIRY_SPAWNER_SUNS) ||
         (SHOTSUN_GET_TYPE(thisx) == SHOTSUN_FAIRY_SPAWNER_STORMS)) {
         this->fairySpawnerState = SPAWNER_OUT_OF_RANGE; // never read after here
-        this->actor.flags |= ACTOR_FLAG_10;
+        this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
         this->actor.flags |= ACTOR_FLAG_UPDATE_DURING_OCARINA;
         this->actionFunc = ShotSun_UpdateForOcarina;
         this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
@@ -71,7 +69,7 @@ void ShotSun_Init(Actor* thisx, PlayState* play) {
 }
 
 void ShotSun_Destroy(Actor* thisx, PlayState* play) {
-    ShotSun* this = THIS;
+    ShotSun* this = (ShotSun*)thisx;
 
     if ((SHOTSUN_GET_TYPE(thisx) != SHOTSUN_FAIRY_SPAWNER_SUNS) &&
         (SHOTSUN_GET_TYPE(thisx) != SHOTSUN_FAIRY_SPAWNER_STORMS)) {
@@ -195,7 +193,7 @@ void ShotSun_UpdateHyliaSun(ShotSun* this, PlayState* play) {
 }
 
 void ShotSun_Update(Actor* thisx, PlayState* play) {
-    ShotSun* this = THIS;
+    ShotSun* this = (ShotSun*)thisx;
 
     this->actionFunc(this, play);
 }

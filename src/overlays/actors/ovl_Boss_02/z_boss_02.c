@@ -4,6 +4,7 @@
  * Description: Twinmold
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_boss_02.h"
 #include "z64rumble.h"
 #include "z64shrink_window.h"
@@ -13,9 +14,9 @@
 #include "overlays/actors/ovl_Item_B_Heart/z_item_b_heart.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20)
-
-#define THIS ((Boss02*)thisx)
+#define FLAGS                                                                                 \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
+     ACTOR_FLAG_DRAW_CULLING_DISABLED)
 
 void Boss02_Init(Actor* thisx, PlayState* play);
 void Boss02_Destroy(Actor* thisx, PlayState* play);
@@ -582,7 +583,7 @@ void func_809DA50C(s32 arg0, ColliderJntSph* collider, Vec3f* arg2) {
 }
 
 void Boss02_Init(Actor* thisx, PlayState* play) {
-    Boss02* this = THIS;
+    Boss02* this = (Boss02*)thisx;
     s32 i;
     s32 pad[2];
 
@@ -1173,7 +1174,7 @@ void func_809DBFB4(Boss02* this, PlayState* play) {
 }
 
 void Boss02_Tail_Update(Actor* thisx, PlayState* play) {
-    Boss02* this = THIS;
+    Boss02* this = (Boss02*)thisx;
     s32 pad;
     Vec3f pos;
     CollisionPoly* outPoly;
@@ -1198,7 +1199,7 @@ void Boss02_Tail_Update(Actor* thisx, PlayState* play) {
 
 void Boss02_Twinmold_Update(Actor* thisx, PlayState* play) {
     Vec3f sp3C;
-    Boss02* this = THIS;
+    Boss02* this = (Boss02*)thisx;
     s32 pad;
     s16 i;
 
@@ -1315,7 +1316,7 @@ void Boss02_Twinmold_Update(Actor* thisx, PlayState* play) {
 }
 
 void Boss02_BattleHandler_Update(Actor* thisx, PlayState* play) {
-    Boss02* this = THIS;
+    Boss02* this = (Boss02*)thisx;
 
     this->giantModeScaleFactor = sGiantModeScaleFactor;
     play->envCtx.sandstormState = SANDSTORM_D;
@@ -1370,7 +1371,7 @@ Vec3f D_809DFAF4 = { -10000.0f, -100000.0f, -100000.0f };
 
 void Boss02_Twinmold_Draw(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    Boss02* this = THIS;
+    Boss02* this = (Boss02*)thisx;
     s32 i;
     s32 idx;
     Mtx* mtxHead = GRAPH_ALLOC(play->state.gfxCtx, 23 * sizeof(Mtx));
@@ -2215,7 +2216,7 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
             }
 
             if (this->unk_1D1C == (u32)(KREG(92) + 125)) {
-                TitleCard_InitBossName(&play->state, &play->actorCtx.titleCtxt,
+                TitleCard_InitBossName(&play->state, &play->actorCtx.titleCtx,
                                        Lib_SegmentedToVirtual(gTwinmoldTitleCardTex), 160, 180, 128, 40);
             }
 

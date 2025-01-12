@@ -6,9 +6,7 @@
 
 #include "z_obj_etcetera.h"
 
-#define FLAGS (ACTOR_FLAG_10)
-
-#define THIS ((ObjEtcetera*)thisx)
+#define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void ObjEtcetera_Init(Actor* thisx, PlayState* play);
 void ObjEtcetera_Destroy(Actor* thisx, PlayState* play);
@@ -70,7 +68,7 @@ static f32 sOscillationTable[] = {
 
 void ObjEtcetera_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    ObjEtcetera* this = THIS;
+    ObjEtcetera* this = (ObjEtcetera*)thisx;
     s32 objectSlot;
     s32 type = DEKU_FLOWER_TYPE(&this->dyna.actor);
     s32 floorBgId;
@@ -99,7 +97,7 @@ void ObjEtcetera_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjEtcetera_Destroy(Actor* thisx, PlayState* play) {
-    ObjEtcetera* this = THIS;
+    ObjEtcetera* this = (ObjEtcetera*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
     Collider_DestroyCylinder(play, &this->collider);
@@ -321,7 +319,7 @@ void ObjEtcetera_Setup(ObjEtcetera* this, PlayState* play) {
 }
 
 void ObjEtcetera_Update(Actor* thisx, PlayState* play) {
-    ObjEtcetera* this = THIS;
+    ObjEtcetera* this = (ObjEtcetera*)thisx;
     CollisionPoly* floorPoly;
     u8 floorBgId = this->dyna.actor.floorBgId;
 
@@ -342,7 +340,7 @@ void ObjEtcetera_Update(Actor* thisx, PlayState* play) {
  * When an animation is finished, functions are expected to set the actor's draw function to this.
  */
 void ObjEtcetera_DrawIdle(Actor* thisx, PlayState* play) {
-    ObjEtcetera* this = THIS;
+    ObjEtcetera* this = (ObjEtcetera*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -359,7 +357,7 @@ void ObjEtcetera_DrawIdle(Actor* thisx, PlayState* play) {
  * When a function wants to play an animation, it is expected to set the actor's draw function to this.
  */
 void ObjEtcetera_DrawAnimated(Actor* thisx, PlayState* play) {
-    ObjEtcetera* this = THIS;
+    ObjEtcetera* this = (ObjEtcetera*)thisx;
 
     Gfx_SetupDL37_Opa(play->state.gfxCtx);
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, NULL, &this->dyna.actor);
