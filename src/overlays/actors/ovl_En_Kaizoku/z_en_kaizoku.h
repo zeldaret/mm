@@ -41,7 +41,7 @@ typedef enum EnKaizokuAnimation {
     /* 19 */ KAIZOKU_ANIM_MAX
 } EnKaizokuAnimation;
 
-// this predates actor object xml enums right?
+// this is a different size than limb enum in object..?
 typedef enum EnKaizokuBodyPart {
     /*  0 */ KAIZOKU_BODYPART_0,
     /*  1 */ KAIZOKU_BODYPART_1,
@@ -67,7 +67,6 @@ typedef enum KaizokuTextOffset{
     /*  2 */ KAIZOKU_COVERSATION_WIN,  // after losing to player
     /*  3 */ KAIZOKU_COVERSATION_LOSS  // after defeating player 
 } KaizokuTextOffset;
-
 
 typedef struct EnKaizoku {
     /* 0x000 */ PictoActor picto;

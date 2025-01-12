@@ -14674,7 +14674,7 @@
     0x80B87900:("EnKaizoku_SetupBlock",),
     0x80B8798C:("EnKaizoku_Block",),
     0x80B87C7C:("EnKaizoku_SetupJump",),
-    0x80B87CF8:("EnKaizoku_SpawnFootDust",),
+    0x80B87CF8:("EnKaizoku_SpawnVerticalFootDust",),
     0x80B87D3C:("EnKaizoku_Jump",),
     0x80B87E28:("EnKaizoku_SetupRollBack",),
     0x80B87E9C:("EnKaizoku_RollBack",),

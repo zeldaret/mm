@@ -32,7 +32,7 @@ void EnKaizoku_SpinDodge(EnKaizoku* this, PlayState* play);
 void EnKaizoku_SetupBlock(EnKaizoku* this);
 void EnKaizoku_Block(EnKaizoku* this, PlayState* play);
 void EnKaizoku_SetupJump(EnKaizoku* this);
-void EnKaizoku_SpawnFootDust(PlayState* play, Vec3f* pos);
+void EnKaizoku_SpawnVerticalFootDust(PlayState* play, Vec3f* pos);
 void EnKaizoku_Jump(EnKaizoku* this, PlayState* play);
 void EnKaizoku_SetupRollBack(EnKaizoku* this);
 void EnKaizoku_RollBack(EnKaizoku* this, PlayState* play);
@@ -111,7 +111,6 @@ Color_RGBA8 sKaizokuLipstickColors[] = {
 };
 
 static Color_RGBA8 sKaizokuOutfitColors[] = {
-
     { 255, 130, 10, 255 },  // orange
     { 185, 130, 210, 255 }, // lavender
     { 135, 195, 80, 255 },  // pale green
@@ -275,14 +274,16 @@ void EnKaizoku_Init(Actor* thisx, PlayState* play) {
     this->exitIndex = KAIZOKU_GET_EXIT_INDEX(&this->picto.actor);
     this->switchFlag = KAIZOKU_GET_SWITCH_FLAG(&this->picto.actor);
 
+    // There are three spawns (0,1,2)
+    // they decided to re-align 2 into 0 instead of making a third text combination
     if (this->textType >= 2) {
         this->textType = 0;
-    } else if (this->textType == 2) { // @Bug: '2' also matches '>= 2'
+    } else if (this->textType == 2) { // @Bug: '== 2' also matches '>= 2'
         this->textType = 0;
     }
 
     this->colorType = KAIZOKU_GET_TYPE(this);
-    KAIZOKU_GET_TYPE(this) = 0;
+    KAIZOKU_GET_TYPE(this) = 0; // clear param, which was rot.z, resets skew
     this->picto.actor.colChkInfo.damageTable = &sDamageTable;
     SkelAnime_InitFlex(play, &this->skelAnime, &gKaizokuSkel, &gKaizokuWalkAnim, this->jointTable, this->morphTable,
                        KAIZOKU_LIMB_MAX);
@@ -485,7 +486,7 @@ void EnKaizoku_WaitForApproach(EnKaizoku* this, PlayState* play) {
     s32 nextTextId;
 
     switch (this->cutsceneState) {
-        case 0: // waiting
+        case 0: // waiting for proximity
             if (!(this->picto.actor.xzDistToPlayer < 200.0f)) {
                 break;
             }
@@ -525,7 +526,7 @@ void EnKaizoku_WaitForApproach(EnKaizoku* this, PlayState* play) {
             Audio_SetMainBgmVolume(0, 0xA);
             this->cutsceneState++;
             FALLTHROUGH;
-        case 1: // try message lock to player
+        case 1: // waiting for (intro1) text advance
             player->actor.shape.rot.y = player->actor.world.rot.y =
                 Math_Vec3f_Yaw(&player->actor.world.pos, &this->picto.actor.world.pos);
             this->picto.actor.shape.rot.y = this->picto.actor.world.rot.y = this->picto.actor.yawTowardsPlayer;
@@ -547,7 +548,7 @@ void EnKaizoku_WaitForApproach(EnKaizoku* this, PlayState* play) {
             }
             break;
 
-        case 2: // waiting for landing
+        case 2: // waiting for fall to land
             if (this->picto.actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
                 if (this->dontUpdateSkel != false) {
                     this->dontUpdateSkel = false;
@@ -613,8 +614,8 @@ void EnKaizoku_WaitForApproach(EnKaizoku* this, PlayState* play) {
             Math_ApproachF(&this->subCamVelocity, 5.0f, 0.3f, 1.0f);
             if (curFrame >= this->animEndFrame) {
                 this->cutsceneTimer = 7;
-                this->swordScaleRight.x = 1.0f;
                 this->cutsceneState++;
+                this->swordScaleRight.x = 1.0f;
                 this->swordScaleRight.y = 1.0f;
                 this->swordScaleRight.z = 1.0f;
                 this->swordScaleLeft.x = 1.0f;
@@ -623,7 +624,7 @@ void EnKaizoku_WaitForApproach(EnKaizoku* this, PlayState* play) {
             }
             break;
 
-        case 7: // wait for cutscene timer, then finish
+        case 7: // wait for cutscene timer, then start fight
             if (this->cutsceneTimer == 0) {
                 Player_SetCsActionWithHaltedActors(play, &this->picto.actor, PLAYER_CSACTION_END);
                 CutsceneManager_Stop(this->csId);
@@ -1116,7 +1117,6 @@ void EnKaizoku_Block(EnKaizoku* this, PlayState* play) {
     }
 }
 
-// this might be JUMP not flip
 void EnKaizoku_SetupJump(EnKaizoku* this) {
     EnKaizoku_ChangeAnim(this, KAIZOKU_ANIM_FLIP);
     this->picto.actor.speed = 6.5f;
@@ -1136,8 +1136,8 @@ static Color_RGBA8 sKaizokuDustEnvColor = { 130, 90, 50, 255 };    // darker bro
 static Vec3f sKaizokuDustVelocity = { 0.0f, -1.5f, 0.0f };
 static Vec3f sKaizokuDustAccel = { 0.0f, -0.2f, 0.0f };
 
-void EnKaizoku_SpawnFootDust(PlayState* play, Vec3f* pos) {
-    // reusing sparkles instead of the actual dust effect? is this left over from OOT?
+// Used for backflip
+void EnKaizoku_SpawnVerticalFootDust(PlayState* play, Vec3f* pos) {
     EffectSsKirakira_SpawnSmall(play, pos, &sKaizokuDustVelocity, &sKaizokuDustAccel, &sKaizokuDustPrimColor,
                                 &sKaizokuDustEnvColor);
 }
@@ -1147,8 +1147,8 @@ void EnKaizoku_Jump(EnKaizoku* this, PlayState* play) {
 
     Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.yawTowardsPlayer, 1, 0xFA0, 1);
     if (this->picto.actor.velocity.y >= 5.0f) {
-        EnKaizoku_SpawnFootDust(play, &this->leftFootPos);
-        EnKaizoku_SpawnFootDust(play, &this->rightFootPos);
+        EnKaizoku_SpawnVerticalFootDust(play, &this->leftFootPos);
+        EnKaizoku_SpawnVerticalFootDust(play, &this->rightFootPos);
     }
 
     this->dontUpdateSkel = false;
