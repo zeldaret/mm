@@ -1421,7 +1421,7 @@ void Player_SetAutoLockOnActor(struct PlayState* play, Actor* actor);
 s32 Player_SetBButtonAmmo(struct PlayState* play, s32 ammo);
 bool Player_IsBurningStickInRange(struct PlayState* play, Vec3f* pos, f32 xzRange, f32 yRange);
 u8 Player_GetStrength(void);
-PlayerMask Player_GetMask(struct PlayState* play);
+s32 Player_GetMask(struct PlayState* play);
 void Player_RemoveMask(struct PlayState* play);
 bool Player_HasMirrorShieldEquipped(struct PlayState* play);
 bool Player_IsHoldingMirrorShield(struct PlayState* play);

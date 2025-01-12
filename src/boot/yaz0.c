@@ -112,7 +112,7 @@ s32 Yaz0_DecompressImpl(u8* src, u8* dst) {
             // N = chunkSize; B = back offset
             // 3 bytes 0B BB NN
             // 2 bytes NB BB
-            chunkSize = (nibble == 0) ? *src++ + 0x12 : nibble + 2;
+            chunkSize = (nibble == 0) ? (u32)(*src++ + 0x12) : nibble + 2;
 
             do {
                 *dst++ = *(backPtr++ - 1);

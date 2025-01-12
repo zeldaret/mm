@@ -5671,7 +5671,7 @@ void func_80833864(PlayState* play, Player* this, PlayerMeleeWeaponAnimation mel
     }
 
     // Accumulate consecutive slashes to do the "third slash" types
-    if ((meleeWeaponAnim != this->meleeWeaponAnimation) || (this->unk_ADD >= 3)) {
+    if (((s32)meleeWeaponAnim != this->meleeWeaponAnimation) || (this->unk_ADD >= 3)) {
         this->unk_ADD = 0;
     }
 
@@ -11406,7 +11406,7 @@ void func_808425B4(Player* this) {
  *     - Tatl C-up icon for hints
  */
 void Player_UpdateInterface(PlayState* play, Player* this) {
-    DoAction doActionB;
+    s32 doActionB;
     s32 sp38;
 
     if (this != GET_PLAYER(play)) {
@@ -18584,12 +18584,19 @@ void func_80855218(PlayState* play, Player* this, struct_8085D910** arg2) {
     }
 }
 
+//! @bug This array may be indexed with PLAYER_FORM_HUMAN, causing an out-of-bounds access
 u16 D_8085D908[] = {
     WEEKEVENTREG_30_80, // PLAYER_FORM_FIERCE_DEITY
     WEEKEVENTREG_30_20, // PLAYER_FORM_GORON
     WEEKEVENTREG_30_40, // PLAYER_FORM_ZORA
     WEEKEVENTREG_30_10, // PLAYER_FORM_DEKU
+#ifdef AVOID_UB
+    // Avoid UB: Provide the data that would be read by indexing this with PLAYER_FORM_HUMAN.
+    // Both this array and D_8085D910 are read-only so this is not expected to change.
+    WEEKEVENTREG_16_02 | WEEKEVENTREG_16_08, // PLAYER_FORM_HUMAN
+#endif
 };
+
 struct_8085D910 D_8085D910[] = {
     { 0x10, 0xA, 0x3B, 0x3F },
     { 9, 0x32, 0xA, 0xD },

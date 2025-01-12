@@ -1307,6 +1307,17 @@ struct_80124618 D_801C0560[] = {
     { 2, { 95, 95, 100 } },
     { 3, { 105, 105, 100 } },
     { 5, { 102, 102, 102 } },
+#ifdef AVOID_UB
+    //! @bug gPlayerAnim_pz_gakkiplay uses this array with a frame count
+    //! of up to (and including) 6, which is larger than the last
+    //! keyframe frame number (5). This causes it to continue to read into
+    //! the next array in search of a keyframe that bounds frame 6.
+    // Avoid UB: Provide extra data elements that would be read in an
+    // out-of-bounds read from the next array. Both are read-only so are
+    // not expected to change.
+    { 0, { 100, 100, 100 } },
+    { 9, { 100, 100, 100 } },
+#endif
 };
 struct_80124618 D_801C0580[] = {
     { 0, { 100, 100, 100 } }, { 9, { 100, 100, 100 } }, { 10, { 150, 150, 150 } },
@@ -1581,7 +1592,7 @@ u8 Player_GetStrength(void) {
     return sPlayerStrengths[GET_PLAYER_FORM];
 }
 
-PlayerMask Player_GetMask(PlayState* play) {
+s32 Player_GetMask(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     return player->currentMask;
