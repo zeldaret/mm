@@ -341,7 +341,7 @@ void EnSb_UpdateDamage(EnSb* this, PlayState* play) {
             }
             this->isDead = true;
             Enemy_StartFinishingBlow(play, &this->actor);
-            //! @bug Incorrect sfx:
+            //! @bug Incorrect sfx
             //! In OoT, NA_SE_EN_SHELL_DEAD is the value 0x384A
             //! But in MM, certain sfxIds got reordered this was not updated:
             //! In MM, NA_SE_EN_BEE_FLY is the old value 0x384A
