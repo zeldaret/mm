@@ -683,6 +683,9 @@ endif
 
 # then assemble the samplebanks...
 
+$(BUILD_DIR)/assets/audio/samples/%.bin: assets/audio/samples/%.bin
+	cp $< $@
+
 $(BUILD_DIR)/assets/audio/samples/%.bin: $(EXTRACTED_DIR)/assets/audio/samples/%.bin
 	cp $< $@
 
