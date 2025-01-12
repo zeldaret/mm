@@ -5,9 +5,9 @@
  */
 
 #include "z_en_tg.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnTg*)thisx)
 
@@ -21,7 +21,7 @@ void EnTg_UpdateHearts(PlayState* play, EnTgHeartEffect* effect, s32 numEffects)
 void EnTg_DrawHearts(PlayState* play, EnTgHeartEffect* effect, s32 numEffects);
 void EnTg_SpawnHeart(EnTg* this, EnTgHeartEffect* effect, Vec3f* heartStartPos, s32 numEffects);
 
-ActorInit En_Tg_InitVars = {
+ActorProfile En_Tg_Profile = {
     /**/ ACTOR_EN_TG,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -35,7 +35,7 @@ ActorInit En_Tg_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_HIT0,
+        COL_MATERIAL_HIT0,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -43,11 +43,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK1,
+        ELEM_MATERIAL_UNK1,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 18, 64, 0, { 0, 0, 0 } },
@@ -90,8 +90,13 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
-static AnimationInfoS sAnimationInfo[] = {
-    { &gHoneyAndDarlingIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+typedef enum EnTgAnimation {
+    /* 0 */ ENTG_ANIM_IDLE,
+    /* 1 */ ENTG_ANIM_MAX
+} EnTgAnimation;
+
+static AnimationInfoS sAnimationInfo[ENTG_ANIM_MAX] = {
+    { &gHoneyAndDarlingIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENTG_ANIM_IDLE
 };
 
 void EnTg_ChangeAnim(SkelAnime* skelAnime, AnimationInfoS* animationInfo, s16 animIndex) {
@@ -126,7 +131,7 @@ void EnTg_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gHoneyAndDarlingSkel, NULL, this->jointTable, this->morphTable,
                        HONEY_AND_DARLING_LIMB_MAX);
-    EnTg_ChangeAnim(&this->skelAnime, sAnimationInfo, 0);
+    EnTg_ChangeAnim(&this->skelAnime, sAnimationInfo, ENTG_ANIM_IDLE);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
@@ -274,7 +279,7 @@ void EnTg_DrawHearts(PlayState* play, EnTgHeartEffect* effect, s32 numEffects) {
             Matrix_Scale(effect->scale, effect->scale, effect->scale, MTXMODE_APPLY);
 
             gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gDropRecoveryHeartTex));
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_OPA_DISP++, gHoneyAndDarlingHeartModelDL);
         }
     }

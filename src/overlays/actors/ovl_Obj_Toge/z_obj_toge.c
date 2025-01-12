@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_toge.h"
-#include "objects/object_trap/object_trap.h"
+#include "assets/objects/object_trap/object_trap.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -23,7 +23,7 @@ void func_809A481C(ObjToge* this, PlayState* play);
 void func_809A488C(ObjToge* this);
 void func_809A48AC(ObjToge* this, PlayState* play);
 
-ActorInit Obj_Toge_InitVars = {
+ActorProfile Obj_Toge_Profile = {
     /**/ ACTOR_OBJ_TOGE,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -37,7 +37,7 @@ ActorInit Obj_Toge_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_NONE,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -45,11 +45,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0x01C37BB6, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 30, 20, 0, { 0, 0, 0 } },
@@ -161,7 +161,7 @@ void ObjToge_Init(Actor* thisx, PlayState* play) {
         this->unk_1C8 = Math_CosS(sp36);
         this->unk_1CC = Math_SinS(sp36);
         this->unk_1C0 = sp3E * 7.5f;
-        this->unk_1C4 = Math3D_Distance(&this->unk_198[0], &this->unk_198[1]) * 0.5f;
+        this->unk_1C4 = Math3D_Vec3f_DistXYZ(&this->unk_198[0], &this->unk_198[1]) * 0.5f;
     } else {
         this->unk_1B4 = false;
     }
@@ -278,7 +278,7 @@ void ObjToge_Update(Actor* thisx, PlayState* play) {
     ColliderCylinder* collider = &this->collider;
 
     if (this->collider.base.acFlags & AC_HIT) {
-        if (this->collider.info.acHitInfo->toucher.dmgFlags & 0x1000) {
+        if (this->collider.elem.acHitElem->atDmgInfo.dmgFlags & 0x1000) {
             func_809A43A8(this, play);
             Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 250, COLORFILTER_BUFFLAG_OPA, 250);
         }

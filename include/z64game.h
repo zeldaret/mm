@@ -3,11 +3,12 @@
 
 #include "ultra64.h"
 
-#include "libc/stdbool.h"
-#include "libc/stdint.h"
+#include "stdbool.h"
+#include "stdint.h"
 #include "gamealloc.h"
 #include "padmgr.h"
-#include "padutils.h"
+#include "libu64/pad.h"
+#include "romfile.h"
 #include "tha.h"
 #include "unk.h"
 
@@ -29,10 +30,9 @@ typedef enum GameStateId {
 
 typedef void (*GameStateFunc)(struct GameState* gameState);
 
-typedef struct {
+typedef struct GameStateOverlay {
     /* 0x00 */ void*         loadedRamAddr;
-    /* 0x04 */ uintptr_t     vromStart; // if applicable
-    /* 0x08 */ uintptr_t     vromEnd;   // if applicable
+    /* 0x04 */ RomFile       file;      // if applicable
     /* 0x0C */ void*         vramStart; // if applicable
     /* 0x10 */ void*         vramEnd;   // if applicable
     /* 0x14 */ UNK_PTR       unk_14;

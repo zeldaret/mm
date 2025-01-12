@@ -1,7 +1,7 @@
-#include "global.h"
-#include "libc64/malloc.h"
-#include "yaz0.h"
+#include "sys_cmpdma.h"
 
+#include "libc64/malloc.h"
+#include "color.h"
 #include "yaz0.h"
 #include "z64dma.h"
 

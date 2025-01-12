@@ -19,7 +19,7 @@ void EnPart_Draw(Actor* thisx, PlayState* play);
 void func_80865390(EnPart* this, PlayState* play);
 void func_808654C4(EnPart* this, PlayState* play);
 
-ActorInit En_Part_InitVars = {
+ActorProfile En_Part_Profile = {
     /**/ ACTOR_EN_PART,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -140,7 +140,7 @@ void EnPart_Draw(Actor* thisx, PlayState* play) {
         gSPSegment(POLY_OPA_DISP++, 0x0C, gEmptyDL);
     }
     if (this->dList != NULL) {
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, this->dList);
     }
 

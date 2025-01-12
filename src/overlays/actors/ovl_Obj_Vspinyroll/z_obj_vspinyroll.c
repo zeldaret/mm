@@ -5,7 +5,8 @@
  */
 
 #include "z_obj_vspinyroll.h"
-#include "objects/object_spinyroll/object_spinyroll.h"
+#include "assets/objects/object_spinyroll/object_spinyroll.h"
+#include "overlays/effects/ovl_Effect_Ss_Hitmark/z_eff_ss_hitmark.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -27,7 +28,7 @@ void func_80A3D0E8(ObjVspinyroll* this);
 void func_80A3D0FC(ObjVspinyroll* this, PlayState* play);
 void func_80A3D2C0(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Vspinyroll_InitVars = {
+ActorProfile Obj_Vspinyroll_Profile = {
     /**/ ACTOR_OBJ_VSPINYROLL,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -47,7 +48,7 @@ s16 D_80A3D478[] = { 1, 10, 20, 30, 40, 50, 60, 70 };
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -55,11 +56,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x20000000, 0x00, 0x04 },
         { 0x01C37BB6, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_NONE,
     },
     { 30, 120, 0, { 0, 0, 0 } },
@@ -130,7 +131,7 @@ s32 func_80A3C700(ObjVspinyroll* this) {
     this->dyna.actor.world.pos.z += this->dyna.actor.speed * this->unk_3B4.z;
 
     Math_Vec3f_Diff(&this->unk_39C[sp30], &this->dyna.actor.world.pos, &sp24);
-    return Math3D_LengthSquared(&sp24) < (SQ(this->dyna.actor.speed) + 0.05f);
+    return Math3D_Vec3fMagnitudeSq(&sp24) < (SQ(this->dyna.actor.speed) + 0.05f);
 }
 
 void func_80A3C7E8(ObjVspinyroll* this) {
@@ -207,7 +208,7 @@ s32 func_80A3C8D8(ObjVspinyroll* this, PlayState* play, Vec3f* arg2, s32 arg3) {
                 spB4.y += this->dyna.actor.world.pos.y;
                 spB4.z += this->dyna.actor.world.pos.z;
 
-                EffectSsHitmark_SpawnFixedScale(play, 3, &spB4);
+                EffectSsHitmark_SpawnFixedScale(play, EFFECT_HITMARK_METAL, &spB4);
                 Actor_PlaySfx(&this->dyna.actor, NA_SE_IT_SHIELD_REFLECT_SW);
             }
 
@@ -443,12 +444,12 @@ void func_80A3D2C0(Actor* thisx, PlayState* play) {
     Matrix_RotateXS(sp3C.x, MTXMODE_APPLY);
     Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, object_spinyroll_DL_000460);
 
     func_80A3CC84(120.0f);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, object_spinyroll_DL_000460);
 
     CLOSE_DISPS(play->state.gfxCtx);

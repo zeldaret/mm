@@ -22,7 +22,7 @@ void EnElforg_FreeFloating(EnElforg* this, PlayState* play);
 void EnElforg_SetupTrappedByEnemy(EnElforg* this, PlayState* play);
 void EnElforg_HiddenByCollider(EnElforg* this, PlayState* play);
 
-ActorInit En_Elforg_InitVars = {
+ActorProfile En_Elforg_Profile = {
     /**/ ACTOR_EN_ELFORG,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -36,7 +36,7 @@ ActorInit En_Elforg_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_PLAYER,
@@ -44,11 +44,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_NONE,
     },
     { 16, 32, 0, { 0, 0, 0 } },
@@ -107,8 +107,8 @@ void EnElforg_Init(Actor* thisx, PlayState* play) {
             break;
     }
 
-    if (Map_IsInDungeonOrBossArea(play)) {
-        this->area = gSaveContext.dungeonIndex + STRAY_FAIRY_AREA_WOODFALL;
+    if (Map_IsInDungeonOrBossScene(play)) {
+        this->area = gSaveContext.dungeonSceneSharedIndex + STRAY_FAIRY_AREA_WOODFALL;
     } else {
         this->area = STRAY_FAIRY_GET_NON_DUNGEON_AREA(thisx);
     }
@@ -497,11 +497,11 @@ void EnElforg_FreeFloating(EnElforg* this, PlayState* play) {
                 return;
             }
 
-            if (Map_IsInDungeonOrBossArea(play)) {
-                gSaveContext.save.saveInfo.inventory.strayFairies[gSaveContext.dungeonIndex]++;
+            if (Map_IsInDungeonOrBossScene(play)) {
+                gSaveContext.save.saveInfo.inventory.strayFairies[gSaveContext.dungeonSceneSharedIndex]++;
                 // You found a Stray Fairy!
                 Message_StartTextbox(play, 0x11, NULL);
-                if (gSaveContext.save.saveInfo.inventory.strayFairies[(void)0, gSaveContext.dungeonIndex] >=
+                if (gSaveContext.save.saveInfo.inventory.strayFairies[(void)0, gSaveContext.dungeonSceneSharedIndex] >=
                     STRAY_FAIRY_SCATTERED_TOTAL) {
                     Audio_PlayFanfare(NA_BGM_GET_ITEM | 0x900);
                 }

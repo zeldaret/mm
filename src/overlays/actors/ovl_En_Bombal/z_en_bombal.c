@@ -7,7 +7,7 @@
 #include "z_en_bombal.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "assets/objects/object_fusen/object_fusen.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -26,7 +26,7 @@ void EnBombal_InitEffects(EnBombal* this, Vec3f* pos, s16 fadeDelay);
 void EnBombal_UpdateEffects(EnBombal* this, PlayState* play);
 void EnBombal_DrawEffects(EnBombal* this, PlayState* play);
 
-ActorInit En_Bombal_InitVars = {
+ActorProfile En_Bombal_Profile = {
     /**/ ACTOR_EN_BOMBAL,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -40,7 +40,7 @@ ActorInit En_Bombal_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -48,11 +48,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0x004138B0, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_NONE,
     },
     { 60, 90, -50, { 0, 0, 0 } },
@@ -64,7 +64,7 @@ void EnBombal_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
     this->actor.colChkInfo.mass = 0;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
-    this->actor.targetMode = TARGET_MODE_6;
+    this->actor.attentionRangeType = ATTENTION_RANGE_6;
     this->actor.colChkInfo.health = 1;
     this->scale = 0.1f;
     this->csId = this->actor.csId;
@@ -272,7 +272,7 @@ void EnBombal_DrawEffects(EnBombal* this, PlayState* play) {
             Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
             Matrix_RotateZF(DEG_TO_RAD(play->state.frames * 20.0f), MTXMODE_APPLY);
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_XLU_DISP++, &gSunSparkleModelDL);
         }
     }

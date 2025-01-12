@@ -6,7 +6,7 @@
 
 #include "z_en_ja.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnJa*)thisx)
 
@@ -21,25 +21,89 @@ void func_80BC2EA4(EnJa* this);
 void func_80BC32D8(EnJa* this, PlayState* play);
 void func_80BC3594(EnJa* this, PlayState* play);
 
-#include "build/src/overlays/actors/ovl_En_Ja/scheduleScripts.schl.inc"
+#include "src/overlays/actors/ovl_En_Ja/scheduleScripts.schl.inc"
 
-s32 D_80BC360C[] = {
-    0x0E29370C, 0x170E2938, 0x0C180E29, 0x390C170E, 0x293A0C09, 0x0000180E, 0x293B0C09, 0x00001000,
+MsgScript D_80BC360C[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x2937),
+    /* 0x0003 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0004 0x01 */ MSCRIPT_CMD_FOCUS_TO_CHILD(),
+    /* 0x0005 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x2938),
+    /* 0x0008 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0009 0x01 */ MSCRIPT_CMD_FOCUS_TO_SELF(),
+    /* 0x000A 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x2939),
+    /* 0x000D 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x000E 0x01 */ MSCRIPT_CMD_FOCUS_TO_CHILD(),
+    /* 0x000F 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x293A),
+    /* 0x0012 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0013 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0016 0x01 */ MSCRIPT_CMD_FOCUS_TO_SELF(),
+    /* 0x0017 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x293B),
+    /* 0x001A 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x001B 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x001E 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
-s32 D_80BC362C[] = {
-    0x0E29400C, 0x170E2941, 0x0C180E29, 0x420C170E, 0x29430C09, 0x0000180E, 0x293B0C09, 0x00001000,
+MsgScript D_80BC362C[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x2940),
+    /* 0x0003 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0004 0x01 */ MSCRIPT_CMD_FOCUS_TO_CHILD(),
+    /* 0x0005 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x2941),
+    /* 0x0008 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0009 0x01 */ MSCRIPT_CMD_FOCUS_TO_SELF(),
+    /* 0x000A 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x2942),
+    /* 0x000D 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x000E 0x01 */ MSCRIPT_CMD_FOCUS_TO_CHILD(),
+    /* 0x000F 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x2943),
+    /* 0x0012 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0013 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0016 0x01 */ MSCRIPT_CMD_FOCUS_TO_SELF(),
+    /* 0x0017 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x293B),
+    /* 0x001A 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x001B 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x001E 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
-s32 D_80BC364C[] = {
-    0x0E293C0C, 0x170E293D, 0x0C180E29, 0x3E0C170E, 0x293F0C09, 0x0000180E, 0x293B0C09, 0x00001000,
+MsgScript D_80BC364C[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x293C),
+    /* 0x0003 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0004 0x01 */ MSCRIPT_CMD_FOCUS_TO_CHILD(),
+    /* 0x0005 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x293D),
+    /* 0x0008 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0009 0x01 */ MSCRIPT_CMD_FOCUS_TO_SELF(),
+    /* 0x000A 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x293E),
+    /* 0x000D 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x000E 0x01 */ MSCRIPT_CMD_FOCUS_TO_CHILD(),
+    /* 0x000F 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x293F),
+    /* 0x0012 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0013 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0016 0x01 */ MSCRIPT_CMD_FOCUS_TO_SELF(),
+    /* 0x0017 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x293B),
+    /* 0x001A 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x001B 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x001E 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
-s32 D_80BC366C[] = {
-    0x0E29440C, 0x170E2945, 0x0C180E29, 0x460C170E, 0x29470C09, 0x0000180E, 0x293B0C09, 0x00001000,
+MsgScript D_80BC366C[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x2944),
+    /* 0x0003 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0004 0x01 */ MSCRIPT_CMD_FOCUS_TO_CHILD(),
+    /* 0x0005 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x2945),
+    /* 0x0008 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0009 0x01 */ MSCRIPT_CMD_FOCUS_TO_SELF(),
+    /* 0x000A 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x2946),
+    /* 0x000D 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x000E 0x01 */ MSCRIPT_CMD_FOCUS_TO_CHILD(),
+    /* 0x000F 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x2947),
+    /* 0x0012 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0013 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0016 0x01 */ MSCRIPT_CMD_FOCUS_TO_SELF(),
+    /* 0x0017 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x293B),
+    /* 0x001A 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x001B 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x001E 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
-ActorInit En_Ja_InitVars = {
+ActorProfile En_Ja_Profile = {
     /**/ ACTOR_EN_JA,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -58,7 +122,7 @@ Vec3f D_80BC36D0 = { 0.0f, 58.0f, 20.0f };
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_HIT1,
+        COL_MATERIAL_HIT1,
         AT_NONE,
         AC_NONE,
         OC1_ON | OC1_TYPE_ALL,
@@ -66,11 +130,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK1,
+        ELEM_MATERIAL_UNK1,
         { 0x00000000, 0x00, 0x00 },
         { 0x00000000, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_NONE,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_NONE,
         OCELEM_ON,
     },
     { 12, 64, 0, { 0, 0, 0 } },
@@ -161,8 +225,8 @@ Actor* func_80BC1AE0(EnJa* this, PlayState* play) {
     return this->actor.child;
 }
 
-Player* func_80BC1B50(EnJa* this, PlayState* play) {
-    return GET_PLAYER(play);
+Actor* func_80BC1B50(EnJa* this, PlayState* play) {
+    return &GET_PLAYER(play)->actor;
 }
 
 s32 func_80BC1B60(EnJa* this, PlayState* play) {
@@ -171,7 +235,7 @@ s32 func_80BC1B60(EnJa* this, PlayState* play) {
     Vec3f sp34;
     s16 sp32;
 
-    Math_Vec3f_Copy(&sp40, &this->unk_1D8.player->actor.world.pos);
+    Math_Vec3f_Copy(&sp40, &this->unk_1E0->world.pos);
     Math_Vec3f_Copy(&sp34, &this->actor.world.pos);
     sp32 = Math_Vec3f_Yaw(&sp34, &sp40);
     Math_ApproachS(&this->unk_356, (sp32 - this->unk_35A) - this->actor.shape.rot.y, 4, 0x2AA8);
@@ -180,10 +244,10 @@ s32 func_80BC1B60(EnJa* this, PlayState* play) {
     Math_ApproachS(&this->unk_35A, (sp32 - this->unk_356) - this->actor.shape.rot.y, 4, 0x2AA8);
     this->unk_35A = CLAMP(this->unk_35A, -0x1C70, 0x1C70);
 
-    if (this->unk_1D8.player->actor.id == ACTOR_PLAYER) {
-        sp40.y = this->unk_1D8.player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
+    if (this->unk_1E0->id == ACTOR_PLAYER) {
+        sp40.y = ((Player*)this->unk_1E0)->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
     } else {
-        Math_Vec3f_Copy(&sp40, &this->unk_1D8.player->actor.focus.pos);
+        Math_Vec3f_Copy(&sp40, &this->unk_1E0->focus.pos);
     }
 
     Math_Vec3f_Copy(&sp34, &this->actor.focus.pos);
@@ -198,8 +262,8 @@ s32 func_80BC1B60(EnJa* this, PlayState* play) {
 
 s32 func_80BC1D70(EnJa* this, PlayState* play) {
     if (this->unk_340 & 8) {
-        this->unk_1D8.player = func_80BC1B50(this, play);
-        if (this->unk_1D8.player != NULL) {
+        this->unk_1E0 = func_80BC1B50(this, play);
+        if (this->unk_1E0 != NULL) {
             func_80BC1B60(this, play);
         }
         this->unk_340 &= ~0x10;
@@ -300,31 +364,31 @@ s32 func_80BC213C(EnJa* this, PlayState* play) {
 }
 
 void func_80BC2150(EnJa* this, PlayState* play) {
-    if ((this->unk_1D8.unk_00 == 1) || (this->unk_1D8.unk_00 == 2)) {
+    if ((this->scheduleResult == 1) || (this->scheduleResult == 2)) {
         func_80BC213C(this, play);
     }
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 4, 0x1554);
 }
 
 void func_80BC21A8(EnJa* this, PlayState* play) {
-    ScheduleOutput sp18;
+    ScheduleOutput scheduleOutput;
 
     this->unk_35C = R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset);
-    if (!Schedule_RunScript(play, D_80BC35F0, &sp18) ||
-        ((this->unk_1D8.unk_00 != sp18.result) && !func_80BC20D0(this, play, &sp18))) {
+    if (!Schedule_RunScript(play, D_80BC35F0, &scheduleOutput) ||
+        ((this->scheduleResult != scheduleOutput.result) && !func_80BC20D0(this, play, &scheduleOutput))) {
         this->actor.shape.shadowDraw = NULL;
-        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
-        sp18.result = 0;
+        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
+        scheduleOutput.result = 0;
     } else {
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
-        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+        this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
     }
-    this->unk_1D8.unk_00 = sp18.result;
+    this->scheduleResult = scheduleOutput.result;
     func_80BC2150(this, play);
 }
 
-s32* func_80BC2274(EnJa* this, PlayState* play) {
-    switch (this->unk_1D8.unk_00) {
+MsgScript* EnJa_GetMsgScript(EnJa* this, PlayState* play) {
+    switch (this->scheduleResult) {
         case 1:
             if (ENJA_GET_3(&this->actor) == 0) {
                 return D_80BC360C;
@@ -343,10 +407,11 @@ s32* func_80BC2274(EnJa* this, PlayState* play) {
 }
 
 void func_80BC22F4(EnJa* this, PlayState* play) {
-    if (func_8010BF58(&this->actor, play, func_80BC2274(this, play), this->unk_368, &this->unk_1D8.unk_04)) {
+    if (MsgEvent_RunScript(&this->actor, play, EnJa_GetMsgScript(this, play), this->msgScriptCallback,
+                           &this->msgScriptPos)) {
         this->unk_340 &= ~8;
         SubS_SetOfferMode(&this->unk_340, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
-        this->unk_1D8.unk_04 = 0;
+        this->msgScriptPos = 0;
         this->unk_340 |= 0x10;
         this->actor.shape.rot.y = this->actor.world.rot.y;
         this->actionFunc = func_80BC21A8;
@@ -364,13 +429,13 @@ void EnJa_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
     Actor_SetScale(&this->actor, 0.01f);
-    this->actor.targetMode = TARGET_MODE_0;
+    this->actor.attentionRangeType = ATTENTION_RANGE_0;
     this->actor.uncullZoneForward = 800.0f;
     this->actor.gravity = 0.0f;
     SubS_SetOfferMode(&this->unk_340, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
     this->unk_340 |= 0x10;
-    this->unk_1D8.unk_00 = 0;
-    this->unk_368 = NULL;
+    this->scheduleResult = 0;
+    this->msgScriptCallback = NULL;
     this->actionFunc = func_80BC21A8;
 }
 
@@ -389,7 +454,7 @@ void EnJa_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
 
-    if (this->unk_1D8.unk_00 != 0) {
+    if (this->scheduleResult != 0) {
         EnJa_UpdateSkelAnime(this);
         func_80BC1A68(this);
         func_80BC1D70(this, play);
@@ -398,14 +463,14 @@ void EnJa_Update(Actor* thisx, PlayState* play) {
         height = this->collider.dim.height + 10;
         SubS_Offer(&this->actor, play, radius, height, PLAYER_IA_NONE, this->unk_340 & SUBS_OFFER_MODE_MASK);
 
-        if (this->unk_1D8.unk_00 != 2) {
+        if (this->scheduleResult != 2) {
             Actor_MoveWithGravity(&this->actor);
             Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
         }
         func_80BC1984(this, play);
     }
 
-    if (this->unk_1D8.unk_00 == 1) {
+    if (this->scheduleResult == 1) {
         func_80BC32D8(this, play);
     }
 }
@@ -423,7 +488,7 @@ void EnJa_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
     static Vec3f D_80BC3774 = { -87.0f, 444.0f, -49.0f };
     static Vec3f D_80BC3780 = { 600.0f, 0.0f, 0.0f };
     static Vec3f D_80BC378C = { 400.0f, 0.0f, -400.0f };
-    static Vec3f D_80BC3798 = { 400.0, 0.0f, 400.0f };
+    static Vec3f D_80BC3798 = { 400.0f, 0.0f, 400.0f };
     static Vec3s D_80BC37A4 = { 0x7770, -0x4BC, -0x251C };
     s32 pad;
     EnJa* this = THIS;
@@ -438,7 +503,7 @@ void EnJa_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
         Matrix_Push();
         Matrix_TranslateRotateZYX(&D_80BC3774, &D_80BC37A4);
 
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, object_boj_DL_00BA30);
 
         Matrix_Pop();
@@ -446,7 +511,7 @@ void EnJa_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
         CLOSE_DISPS(play->state.gfxCtx);
     }
 
-    if (this->unk_1D8.unk_00 == 1) {
+    if (this->scheduleResult == 1) {
         if ((limbIndex == OBJECT_BOJ_LIMB_0B) &&
             (((this->skelAnime.curFrame >= 0.0f) && (this->skelAnime.curFrame <= 6.0f)) ||
              ((this->skelAnime.curFrame >= 35.0f) && (this->skelAnime.curFrame <= 47.0f)))) {
@@ -480,7 +545,7 @@ void EnJa_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
                     break;
             }
 
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_OPA_DISP++, object_boj_DL_00BCC8);
 
             Matrix_Pop();
@@ -519,8 +584,7 @@ void EnJa_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
                         break;
                 }
 
-                gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                          G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
                 gSPDisplayList(POLY_OPA_DISP++, object_boj_DL_00BCC8);
 
                 Matrix_Pop();
@@ -608,7 +672,7 @@ void EnJa_Draw(Actor* thisx, PlayState* play) {
         phi_t2 = 1;
     }
 
-    if (this->unk_1D8.unk_00 != 0) {
+    if (this->scheduleResult != 0) {
         OPEN_DISPS(play->state.gfxCtx);
 
         Gfx_SetupDL25_Opa(play->state.gfxCtx);
@@ -629,7 +693,7 @@ void EnJa_Draw(Actor* thisx, PlayState* play) {
         CLOSE_DISPS(play->state.gfxCtx);
     }
 
-    if (this->unk_1D8.unk_00 == 1) {
+    if (this->scheduleResult == 1) {
         func_80BC3594(this, play);
     }
 }
@@ -766,7 +830,7 @@ void func_80BC33C0(EnJaStruct* ptr, PlayState* play) {
                 break;
         }
 
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, object_boj_DL_00BCC8);
 
         CLOSE_DISPS(play->state.gfxCtx);

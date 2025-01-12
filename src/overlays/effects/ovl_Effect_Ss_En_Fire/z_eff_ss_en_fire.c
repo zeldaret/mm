@@ -5,7 +5,7 @@
  */
 
 #include "z_eff_ss_en_fire.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define rScaleMax regs[0]
 #define rScale regs[1]
@@ -24,7 +24,7 @@ u32 EffectSsEnFire_Init(PlayState* play, u32 index, EffectSs* this, void* initPa
 void EffectSsEnFire_Update(PlayState* play, u32 index, EffectSs* this);
 void EffectSsEnFire_Draw(PlayState* play, u32 index, EffectSs* this);
 
-EffectSsInit Effect_Ss_En_Fire_InitVars = {
+EffectSsProfile Effect_Ss_En_Fire_Profile = {
     EFFECT_SS_EN_FIRE,
     EffectSsEnFire_Init,
 };
@@ -80,7 +80,7 @@ void EffectSsEnFire_Draw(PlayState* play, u32 index, EffectSs* this) {
 
     scale = Math_SinS(this->life * 0x333) * (this->rScale * 0.00005f);
     Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
 
     redGreen = this->life - 5;
 

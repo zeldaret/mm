@@ -2,7 +2,7 @@
 #define Z_EN_SW_H
 
 #include "global.h"
-#include "objects/object_st/object_st.h"
+#include "assets/objects/object_st/object_st.h"
 
 struct EnSw;
 
@@ -10,6 +10,8 @@ typedef void (*EnSwActionFunc)(struct EnSw*, PlayState*);
 
 #define ENSW_GETS_3(params) ((params & 3) & 0xFF)
 #define ENSW_GET_3(thisx) (ENSW_GETS_3((thisx)->params))
+#define ENSW_GETS_FC(params) (((params & 0xFC) >> 2) & 0xFF)
+#define ENSW_GET_FC(thisx) (ENSW_GETS_FC((thisx)->params))
 #define ENSW_GETS_3FC(params) (((params & 0x3FC) >> 2) & 0xFF)
 #define ENSW_GET_3FC(thisx) (ENSW_GETS_3FC((thisx)->params))
 #define ENSW_GET_PATH_INDEX(thisx) ((((thisx)->params & 0xFF00) >> 8) & 0xFF)

@@ -6,9 +6,9 @@
 
 #include "z_en_maruta.h"
 #include "overlays/actors/ovl_En_Kendo_Js/z_en_kendo_js.h"
-#include "objects/object_maruta/object_maruta.h"
+#include "assets/objects/object_maruta/object_maruta.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_10)
 
 #define THIS ((EnMaruta*)thisx)
 
@@ -36,7 +36,7 @@ void func_80B38060(EnMaruta* this, Vec3f* arg1);
 void func_80B3828C(Vec3f* arg0, Vec3f* arg1, s16 arg2, s16 arg3, s32 arg4);
 void func_80B382E4(PlayState* play, Vec3f arg1);
 
-ActorInit En_Maruta_InitVars = {
+ActorProfile En_Maruta_Profile = {
     /**/ ACTOR_EN_MARUTA,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -150,7 +150,7 @@ Vec3f D_80B38A9C[] = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -158,11 +158,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK1,
+        ELEM_MATERIAL_UNK1,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON | BUMP_HOOKABLE,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON | ACELEM_HOOKABLE,
         OCELEM_ON,
     },
     { 12, 65, 0, { 0, 0, 0 } },
@@ -214,7 +214,7 @@ void EnMaruta_Init(Actor* thisx, PlayState* play) {
 
     Actor_SetScale(&this->actor, 0.1f);
 
-    this->actor.targetMode = TARGET_MODE_6;
+    this->actor.attentionRangeType = ATTENTION_RANGE_6;
 
     this->actor.focus.pos = this->actor.world.pos;
     this->actor.focus.pos.y += 50.0f;
@@ -322,7 +322,7 @@ void func_80B37428(EnMaruta* this, PlayState* play) {
 }
 
 void func_80B374B8(EnMaruta* this) {
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     if (this->actionFunc != func_80B37428) {
         this->unk_21E = 0;
         this->actor.gravity = -2.0f;
@@ -422,7 +422,7 @@ void func_80B37590(EnMaruta* this, PlayState* play) {
         this->unk_21A |= 0xFF;
     }
 
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->actionFunc = func_80B37950;
 }
 
@@ -703,7 +703,7 @@ void EnMaruta_Draw(Actor* thisx, PlayState* play) {
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     if (this->unk_210 == 0) {
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, object_maruta_DL_002EC0);
     } else {
         sp50 = D_80B387E4[this->unk_210];
@@ -713,7 +713,7 @@ void EnMaruta_Draw(Actor* thisx, PlayState* play) {
         Matrix_RotateAxisS(this->unk_218, &this->unk_194, MTXMODE_APPLY);
         Matrix_Translate(-sp50.x, -sp50.y, -sp50.z, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
 
         for (i = 0; i < 8; i++) {
             if (D_80B386C0[this->unk_210] & (1 << i)) {

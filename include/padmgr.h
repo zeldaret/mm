@@ -1,10 +1,12 @@
 #ifndef PADMGR_H
 #define PADMGR_H
 
-#include "libc/stdbool.h"
 #include "ultra64.h"
+
+#include "stdbool.h"
+
 #include "irqmgr.h"
-#include "padutils.h"
+#include "libu64/pad.h"
 
 typedef enum {
     /*  0 */ PADMGR_CONT_NONE,
@@ -21,7 +23,7 @@ typedef enum {
     /* 2 */ CONT_PAK_OTHER
 } ControllerPakType;
 
-typedef struct {
+typedef struct PadMgr {
     /* 0x000 */ u8 validCtrlrsMask;
     /* 0x004 */ void (*rumbleRetraceCallback)(void*);
     /* 0x008 */ void* rumbleRetraceArg;
@@ -52,7 +54,6 @@ typedef struct {
 
 // Initialization
 
-s32 PadSetup_Init(OSMesgQueue* mq, u8* outMask, OSContStatus* status);
 void PadMgr_Init(OSMesgQueue* siEvtQ, IrqMgr* irqMgr, OSId threadId, OSPri pri, void* stack);
 
 // Fetching inputs
@@ -85,5 +86,7 @@ void PadMgr_RumblePause(void);
 void PadMgr_RumbleSetSingle(s32 port, s32 enable);
 void PadMgr_RumbleSet(u8 enable[MAXCONTROLLERS]);
 s32 PadMgr_ControllerHasRumblePak(s32 port);
+
+extern PadMgr gPadMgr;
 
 #endif

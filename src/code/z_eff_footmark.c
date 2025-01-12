@@ -1,7 +1,7 @@
 #include "z64eff_footmark.h"
+
 #include "z64.h"
 #include "macros.h"
-#include "functions.h"
 
 #include "assets/code/eff_footmark/eff_footmark.c"
 
@@ -103,23 +103,26 @@ void EffFootmark_Update(PlayState* play) {
 void EffFootmark_Draw(PlayState* play) {
     EffFootmark* footmark;
     s32 i;
-    GraphicsContext* gfxCtx = play->state.gfxCtx;
+
+    OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL44_Xlu(play->state.gfxCtx);
 
-    gSPDisplayList(gfxCtx->polyXlu.p++, gEffFootprintMaterialDL);
+    gSPDisplayList(POLY_XLU_DISP++, gEffFootprintMaterialDL);
 
     for (footmark = play->footprintInfo, i = 0; i < ARRAY_COUNT(play->footprintInfo); i++, footmark++) {
         if (footmark->actor != NULL) {
             Matrix_Put(&footmark->mf);
             Matrix_Scale(footmark->size * (1.0f / 0x100) * 0.7f, 1, footmark->size * (1.0f / 0x100), MTXMODE_APPLY);
 
-            gSPMatrix(gfxCtx->polyXlu.p++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
 
-            gDPSetPrimColor(gfxCtx->polyXlu.p++, 0, 0, footmark->red, footmark->green, footmark->blue,
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, footmark->red, footmark->green, footmark->blue,
                             footmark->alpha >> 8);
 
-            gSPDisplayList(gfxCtx->polyXlu.p++, gEffFootprintModelDL);
+            gSPDisplayList(POLY_XLU_DISP++, gEffFootprintModelDL);
         }
     }
+
+    CLOSE_DISPS(gfxCtx);
 }

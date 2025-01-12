@@ -4,7 +4,7 @@
  * Description: Beaver Race Ring
  */
 #include "z_en_twig.h"
-#include "objects/object_twig/object_twig.h"
+#include "assets/objects/object_twig/object_twig.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -24,7 +24,7 @@ void func_80AC0AC8(EnTwig* this, PlayState* play);
 void func_80AC0CC4(EnTwig* this, PlayState* play);
 void func_80AC0D2C(EnTwig* this, PlayState* play);
 
-ActorInit En_Twig_InitVars = {
+ActorProfile En_Twig_Profile = {
     /**/ ACTOR_EN_TWIG,
     /**/ ACTORCAT_MISC,
     /**/ FLAGS,
@@ -241,6 +241,7 @@ void EnTwig_Draw(Actor* thisx, PlayState* play) {
         case 1:
             Gfx_DrawDListOpa(play, object_twig_DL_001C38);
             break;
+
         case 2:
             Gfx_DrawDListOpa(play, object_twig_DL_0014C8);
             break;

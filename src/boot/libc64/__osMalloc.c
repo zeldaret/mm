@@ -1,9 +1,9 @@
 #include "libc64/os_malloc.h"
 
 #include "alignment.h"
-#include "libc/stdbool.h"
-#include "libc/stdint.h"
-#include "libc/string.h"
+#include "stdbool.h"
+#include "stdint.h"
+#include "string.h"
 #include "macros.h"
 
 #define FILL_ALLOCBLOCK (1 << 0)
@@ -123,7 +123,7 @@ void __osMallocCleanup(Arena* arena) {
  * @param arena  The Arena to check.
  * @return u8    `true` if the \p arena has been initialized. `false` otherwise.
  */
-u8 __osMallocIsInitalized(Arena* arena) {
+u8 __osMallocIsInitialized(Arena* arena) {
     return arena->isInit;
 }
 

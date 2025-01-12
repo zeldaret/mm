@@ -18,9 +18,9 @@
 #include "overlays/actors/ovl_Item_B_Heart/z_item_b_heart.h"
 #include "overlays/effects/ovl_Effect_Ss_Hitmark/z_eff_ss_hitmark.h"
 
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((BossHakugin*)thisx)
 
@@ -101,7 +101,7 @@ typedef enum GohtShadowSize {
     /* 3 */ GOHT_SHADOW_SIZE_SMALL
 } GohtShadowSize;
 
-ActorInit Boss_Hakugin_InitVars = {
+ActorProfile Boss_Hakugin_Profile = {
     /**/ ACTOR_BOSS_HAKUGIN,
     /**/ ACTORCAT_BOSS,
     /**/ FLAGS,
@@ -116,209 +116,209 @@ ActorInit Boss_Hakugin_InitVars = {
 static ColliderJntSphElementInit sJntSphElementsInit[GOHT_COLLIDER_BODYPART_MAX] = {
     {
         {
-            ELEMTYPE_UNK2,
+            ELEM_MATERIAL_UNK2,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NONE,
-            BUMP_ON | BUMP_NO_HITMARK,
+            ATELEM_ON | ATELEM_SFX_NONE,
+            ACELEM_ON | ACELEM_NO_HITMARK,
             OCELEM_ON,
         },
         { GOHT_LIMB_HEAD, { { 1300, 200, 0 }, 30 }, 270 },
     },
     {
         {
-            ELEMTYPE_UNK2,
+            ELEM_MATERIAL_UNK2,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON | BUMP_NO_HITMARK,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON | ACELEM_NO_HITMARK,
             OCELEM_ON,
         },
         { GOHT_LIMB_THORAX, { { 1400, 300, 0 }, 35 }, 270 },
     },
     {
         {
-            ELEMTYPE_UNK2,
+            ELEM_MATERIAL_UNK2,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON | BUMP_NO_HITMARK,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON | ACELEM_NO_HITMARK,
             OCELEM_ON,
         },
         { GOHT_LIMB_PELVIS, { { 1600, -400, 0 }, 26 }, 270 },
     },
     {
         {
-            ELEMTYPE_UNK2,
+            ELEM_MATERIAL_UNK2,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON | BUMP_NO_HITMARK,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON | ACELEM_NO_HITMARK,
             OCELEM_ON,
         },
         { GOHT_LIMB_FRONT_RIGHT_UPPER_LEG, { { 1700, 200, 400 }, 18 }, 270 },
     },
     {
         {
-            ELEMTYPE_UNK2,
+            ELEM_MATERIAL_UNK2,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON | BUMP_NO_HITMARK,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON | ACELEM_NO_HITMARK,
             OCELEM_ON,
         },
         { GOHT_LIMB_FRONT_RIGHT_LOWER_LEG, { { 1000, 0, 0 }, 10 }, 270 },
     },
     {
         {
-            ELEMTYPE_UNK2,
+            ELEM_MATERIAL_UNK2,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON | BUMP_NO_HITMARK,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON | ACELEM_NO_HITMARK,
             OCELEM_ON,
         },
         { GOHT_LIMB_FRONT_RIGHT_HOOF, { { 500, 0, 0 }, 9 }, 270 },
     },
     {
         {
-            ELEMTYPE_UNK2,
+            ELEM_MATERIAL_UNK2,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON | BUMP_NO_HITMARK,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON | ACELEM_NO_HITMARK,
             OCELEM_ON,
         },
         { GOHT_LIMB_FRONT_LEFT_UPPER_LEG, { { 1700, 200, -400 }, 18 }, 270 },
     },
     {
         {
-            ELEMTYPE_UNK2,
+            ELEM_MATERIAL_UNK2,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON | BUMP_NO_HITMARK,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON | ACELEM_NO_HITMARK,
             OCELEM_ON,
         },
         { GOHT_LIMB_FRONT_LEFT_LOWER_LEG, { { 1000, 0, 0 }, 10 }, 270 },
     },
     {
         {
-            ELEMTYPE_UNK2,
+            ELEM_MATERIAL_UNK2,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON | BUMP_NO_HITMARK,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON | ACELEM_NO_HITMARK,
             OCELEM_ON,
         },
         { GOHT_LIMB_FRONT_LEFT_HOOF, { { 500, 0, 0 }, 9 }, 270 },
     },
     {
         {
-            ELEMTYPE_UNK2,
+            ELEM_MATERIAL_UNK2,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON | BUMP_NO_HITMARK,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON | ACELEM_NO_HITMARK,
             OCELEM_ON,
         },
         { GOHT_LIMB_BACK_RIGHT_THIGH, { { 800, 0, 400 }, 15 }, 270 },
     },
     {
         {
-            ELEMTYPE_UNK2,
+            ELEM_MATERIAL_UNK2,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON | BUMP_NO_HITMARK,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON | ACELEM_NO_HITMARK,
             OCELEM_ON,
         },
         { GOHT_LIMB_BACK_RIGHT_SHIN, { { 500, 200, 0 }, 9 }, 270 },
     },
     {
         {
-            ELEMTYPE_UNK2,
+            ELEM_MATERIAL_UNK2,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON | BUMP_NO_HITMARK,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON | ACELEM_NO_HITMARK,
             OCELEM_ON,
         },
         { GOHT_LIMB_BACK_RIGHT_PASTERN, { { 300, 0, 0 }, 8 }, 270 },
     },
     {
         {
-            ELEMTYPE_UNK2,
+            ELEM_MATERIAL_UNK2,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON | BUMP_NO_HITMARK,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON | ACELEM_NO_HITMARK,
             OCELEM_ON,
         },
         { GOHT_LIMB_BACK_RIGHT_HOOF, { { 500, 100, 0 }, 9 }, 270 },
     },
     {
         {
-            ELEMTYPE_UNK2,
+            ELEM_MATERIAL_UNK2,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON | BUMP_NO_HITMARK,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON | ACELEM_NO_HITMARK,
             OCELEM_ON,
         },
         { GOHT_LIMB_BACK_LEFT_THIGH, { { 800, 0, -400 }, 15 }, 270 },
     },
     {
         {
-            ELEMTYPE_UNK2,
+            ELEM_MATERIAL_UNK2,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON | BUMP_NO_HITMARK,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON | ACELEM_NO_HITMARK,
             OCELEM_ON,
         },
         { GOHT_LIMB_BACK_LEFT_SHIN, { { 500, 200, 0 }, 9 }, 270 },
     },
     {
         {
-            ELEMTYPE_UNK2,
+            ELEM_MATERIAL_UNK2,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON | BUMP_NO_HITMARK,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON | ACELEM_NO_HITMARK,
             OCELEM_ON,
         },
         { GOHT_LIMB_BACK_LEFT_PASTERN, { { 300, 0, 0 }, 8 }, 270 },
     },
     {
         {
-            ELEMTYPE_UNK2,
+            ELEM_MATERIAL_UNK2,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON | BUMP_NO_HITMARK,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON | ACELEM_NO_HITMARK,
             OCELEM_ON,
         },
         { GOHT_LIMB_BACK_LEFT_HOOF, { { 500, 100, 0 }, 9 }, 270 },
     },
     {
         {
-            ELEMTYPE_UNK2,
+            ELEM_MATERIAL_UNK2,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON | BUMP_NO_HITMARK,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON | ACELEM_NO_HITMARK,
             OCELEM_ON,
         },
         { GOHT_LIMB_HEAD, { { 2400, -400, -2900 }, 12 }, 270 },
     },
     {
         {
-            ELEMTYPE_UNK2,
+            ELEM_MATERIAL_UNK2,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON | BUMP_NO_HITMARK,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON | ACELEM_NO_HITMARK,
             OCELEM_ON,
         },
         { GOHT_LIMB_HEAD, { { 2400, -400, 2900 }, 12 }, 270 },
@@ -327,7 +327,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[GOHT_COLLIDER_BODYPART_MAX]
 
 static ColliderJntSphInit sJntSphInit = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -341,11 +341,11 @@ static ColliderJntSphInit sJntSphInit = {
 static ColliderTrisElementInit sTrisElementsInit[1] = {
     {
         {
-            ELEMTYPE_UNK5,
+            ELEM_MATERIAL_UNK5,
             { 0x20000000, 0x03, 0x08 },
             { 0x00000000, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NONE,
-            BUMP_NONE,
+            ATELEM_ON | ATELEM_SFX_NONE,
+            ACELEM_NONE,
             OCELEM_NONE,
         },
         { { { 22.0f, 0.0f, 100.0f }, { 0.0f, 0.0f, -100.0f }, { -22.0f, 0.0f, 100.0f } } },
@@ -354,7 +354,7 @@ static ColliderTrisElementInit sTrisElementsInit[1] = {
 
 static ColliderTrisInit sTrisInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_ENEMY,
         AC_NONE,
         OC1_NONE,
@@ -367,7 +367,7 @@ static ColliderTrisInit sTrisInit = {
 
 static ColliderSphereInit sSphereInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_ENEMY,
         AC_NONE,
         OC1_NONE,
@@ -375,11 +375,11 @@ static ColliderSphereInit sSphereInit = {
         COLSHAPE_SPHERE,
     },
     {
-        ELEMTYPE_UNK5,
+        ELEM_MATERIAL_UNK5,
         { 0x20000000, 0x00, 0x08 },
         { 0x00000000, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_HARD,
-        BUMP_NONE,
+        ATELEM_ON | ATELEM_SFX_HARD,
+        ACELEM_NONE,
         OCELEM_NONE,
     },
     { 1, { { 0, 0, 0 }, 23 }, 100 },
@@ -387,7 +387,7 @@ static ColliderSphereInit sSphereInit = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_HARD,
+        COL_MATERIAL_HARD,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -395,11 +395,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0xF7CFFFFF, 0x02, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NONE,
-        BUMP_ON,
+        ATELEM_ON | ATELEM_SFX_NONE,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 170, 40, 0, { 0, 0, 0 } },
@@ -549,7 +549,7 @@ void BossHakugin_Init(Actor* thisx, PlayState* play2) {
     static InitChainEntry sInitChain[] = {
         ICHAIN_S8(hintId, TATL_HINT_ID_GOHT, ICHAIN_CONTINUE),
         ICHAIN_VEC3F_DIV1000(scale, 27, ICHAIN_CONTINUE),
-        ICHAIN_U8(targetMode, TARGET_MODE_5, ICHAIN_CONTINUE),
+        ICHAIN_U8(attentionRangeType, ATTENTION_RANGE_5, ICHAIN_CONTINUE),
         ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_STOP),
     };
     PlayState* play = play2;
@@ -620,7 +620,7 @@ void BossHakugin_Init(Actor* thisx, PlayState* play2) {
         this->iceScaleY = 2.7f;
         BossHakugin_SpawnLargeStalactiteWalls(this);
         Animation_PlayOnce(&this->skelAnime, &gGohtThawAndBreakWallAnim);
-        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         BossHakugin_SetupFrozenBeforeFight(this);
     } else {
         this->iceAlpha = 255;
@@ -684,7 +684,7 @@ void BossHakugin_StepVector(Vec3f* norm, Vec3f* targetNorm, f32 angleStep) {
         maxAngle = 0.0f;
     } else {
         // Either the dot product is exactly -1.0f, or a non-unit vector was passed into this function.
-        maxAngle = M_PI;
+        maxAngle = M_PIf;
     }
 
     angleStep = CLAMP_MAX(angleStep, maxAngle);
@@ -692,7 +692,7 @@ void BossHakugin_StepVector(Vec3f* norm, Vec3f* targetNorm, f32 angleStep) {
         return;
     }
 
-    Math3D_CrossProduct(norm, targetNorm, &crossProduct);
+    Math3D_Vec3f_Cross(norm, targetNorm, &crossProduct);
 
     if (BossHakugin_Vec3fNormalize(&crossProduct)) {
         Matrix_RotateAxisF(angleStep, &crossProduct, MTXMODE_NEW);
@@ -783,7 +783,7 @@ void BossHakugin_ApplyGoronSpikeBoost(BossHakugin* this, Player* player) {
     if (!this->hasAppliedGoronSpikeBoost && (player->stateFlags3 & PLAYER_STATE3_80000) &&
         !(player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && (player->actor.velocity.y > 5.0f)) {
         player->actor.velocity.y *= 1.3f;
-        player->linearVelocity *= 1.3f;
+        player->speedXZ *= 1.3f;
         this->hasAppliedGoronSpikeBoost = true;
     } else if (player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         this->hasAppliedGoronSpikeBoost = false;
@@ -1007,12 +1007,12 @@ void BossHakugin_AddLightningSegments(BossHakugin* this, Vec3f* startPos, PlaySt
     targetPos.x = player->actor.world.pos.x - (Math_SinS(this->actor.shape.rot.y) * 50.0f);
     targetPos.y = player->actor.world.pos.y + 40.0f;
     targetPos.z = player->actor.world.pos.z - (Math_CosS(this->actor.shape.rot.y) * 50.0f);
-    Actor_OffsetOfPointInActorCoords(&this->actor, &transformedTargetPos, &targetPos);
+    Actor_WorldToActorCoords(&this->actor, &transformedTargetPos, &targetPos);
     Audio_PlaySfx_AtPos(&this->sfxPos, NA_SE_EN_COMMON_THUNDER_THR);
 
     for (i = 0; i < GOHT_LIGHTNING_SEGMENT_COUNT; i++) {
         lightningSegment = &this->lightningSegments[i];
-        Actor_OffsetOfPointInActorCoords(&this->actor, &transformedRootPos, &rootPos);
+        Actor_WorldToActorCoords(&this->actor, &transformedRootPos, &rootPos);
 
         if (transformedTargetPos.z < transformedRootPos.z) {
             lightningSegment->rot.y = this->actor.shape.rot.y + ((s32)Rand_Next() >> 0x13);
@@ -1498,9 +1498,9 @@ void BossHakugin_UpdateDrawDmgEffect(BossHakugin* this, PlayState* play, s32 col
         this->drawDmgEffAlpha = 3.0f;
         this->drawDmgEffScale = 2.5f;
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG,
-                    this->bodyCollider.elements[colliderIndex].info.bumper.hitPos.x,
-                    this->bodyCollider.elements[colliderIndex].info.bumper.hitPos.y,
-                    this->bodyCollider.elements[colliderIndex].info.bumper.hitPos.z, 0, 0, 0,
+                    this->bodyCollider.elements[colliderIndex].base.acDmgInfo.hitPos.x,
+                    this->bodyCollider.elements[colliderIndex].base.acDmgInfo.hitPos.y,
+                    this->bodyCollider.elements[colliderIndex].base.acDmgInfo.hitPos.z, 0, 0, 0,
                     CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
     } else if (this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_FREEZE) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
@@ -1512,9 +1512,9 @@ void BossHakugin_UpdateDrawDmgEffect(BossHakugin* this, PlayState* play, s32 col
         this->drawDmgEffScale = 2.5f;
         this->drawDmgEffAlpha = 3.0f;
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG,
-                    this->bodyCollider.elements[colliderIndex].info.bumper.hitPos.x,
-                    this->bodyCollider.elements[colliderIndex].info.bumper.hitPos.y,
-                    this->bodyCollider.elements[colliderIndex].info.bumper.hitPos.z, 0, 0, 3,
+                    this->bodyCollider.elements[colliderIndex].base.acDmgInfo.hitPos.x,
+                    this->bodyCollider.elements[colliderIndex].base.acDmgInfo.hitPos.y,
+                    this->bodyCollider.elements[colliderIndex].base.acDmgInfo.hitPos.z, 0, 0, 3,
                     CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
     }
 }
@@ -1550,7 +1550,7 @@ void BossHakugin_SetupEntranceCutscene(BossHakugin* this, PlayState* play) {
     Vec3f subCamAt;
 
     Animation_PlayOnce(&this->skelAnime, &gGohtThawAndBreakWallAnim);
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
 
     this->subCamId = CutsceneManager_GetCurrentSubCamId(this->actor.csId);
 
@@ -1617,7 +1617,7 @@ void BossHakugin_FrozenBeforeFight(BossHakugin* this, PlayState* play) {
     }
 
     if ((this->iceCollider.base.acFlags & AC_HIT) &&
-        (this->iceCollider.info.acHitInfo->toucher.dmgFlags == DMG_FIRE_ARROW)) {
+        (this->iceCollider.elem.acHitElem->atDmgInfo.dmgFlags == DMG_FIRE_ARROW)) {
         this->iceCollider.base.atFlags &= ~AT_HIT;
         this->iceCollider.base.acFlags &= ~AC_HIT;
         this->iceCollider.base.ocFlags1 &= ~OC1_HIT;
@@ -1724,7 +1724,7 @@ void BossHakugin_SetupIntroCutsceneWakeUp(BossHakugin* this, PlayState* play) {
     player->actor.world.pos.x = 250.0f;
     player->actor.world.pos.z = -1560.0f;
     player->actor.shape.rot.y = this->actor.yawTowardsPlayer + 0x8000;
-    player->currentYaw = player->actor.world.rot.y = player->actor.shape.rot.y;
+    player->yaw = player->actor.world.rot.y = player->actor.shape.rot.y;
     Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_131);
     this->actionFunc = BossHakugin_IntroCutsceneWakeUp;
 }
@@ -1839,7 +1839,7 @@ void BossHakugin_IntroCutsceneRun(BossHakugin* this, PlayState* play) {
         this->subCamEye.y = subCam->eye.y;
         this->subCamEye.z = subCam->eye.z + 450.0f;
     } else if (this->timer == 62) {
-        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+        this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
         CutsceneManager_Stop(this->actor.csId);
         player->stateFlags1 &= ~PLAYER_STATE1_20;
         SET_EVENTINF(EVENTINF_INTRO_CS_WATCHED_GOHT);
@@ -2362,7 +2362,7 @@ void BossHakugin_SetupDeathCutsceneRun(BossHakugin* this) {
     this->deathCutsceneRandomHeadRot = Rand_ZeroFloat(6144.0f);
     this->headRot.y = 0;
     this->headRot.z = 0;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->actor.speed = CLAMP_MIN(this->actor.speed, 16.0f);
     this->actionFunc = BossHakugin_DeathCutsceneRun;
 }
@@ -2390,7 +2390,7 @@ void BossHakugin_DeathCutsceneRun(BossHakugin* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.home.rot.y, this->baseRotY, 5, 0x800, 0x100);
     this->timer--;
     this->actor.shape.rot.y =
-        (s32)(Math_SinF(this->timer * (M_PI / 18.0f)) * this->runOffsetRot) + this->actor.home.rot.y;
+        (s32)(Math_SinF(this->timer * (M_PIf / 18.0f)) * this->runOffsetRot) + this->actor.home.rot.y;
 
     if (this->timer == 0) {
         if (this->runOffsetRot > 0) {
@@ -2403,10 +2403,10 @@ void BossHakugin_DeathCutsceneRun(BossHakugin* this, PlayState* play) {
         this->deathCutsceneRandomHeadRot = Rand_ZeroFloat(6144.0f);
     }
 
-    this->headRot.z = (8192.0f * Math_SinS(this->deathCutsceneRandomHeadRot)) * Math_SinF(this->timer * (M_PI / 9));
-    this->headRot.y = (8192.0f * Math_CosS(this->deathCutsceneRandomHeadRot)) * Math_SinF(this->timer * (M_PI / 9));
+    this->headRot.z = (8192.0f * Math_SinS(this->deathCutsceneRandomHeadRot)) * Math_SinF(this->timer * (M_PIf / 9));
+    this->headRot.y = (8192.0f * Math_CosS(this->deathCutsceneRandomHeadRot)) * Math_SinF(this->timer * (M_PIf / 9));
 
-    this->actor.shape.rot.z = Math_SinF(this->timer * (M_PI / 18)) * -(this->runOffsetRot * 0.3f);
+    this->actor.shape.rot.z = Math_SinF(this->timer * (M_PIf / 18)) * -(this->runOffsetRot * 0.3f);
     this->actor.world.rot.y = this->actor.shape.rot.y;
 
     subCamAt.x = (Math_SinS(this->actor.shape.rot.y) * 100.0f) + this->actor.world.pos.x;
@@ -2470,10 +2470,11 @@ void BossHakugin_DeathCutsceneSwerveIntoWall(BossHakugin* this, PlayState* play)
     BossHakugin_RunUpdateCommon(this, play);
 
     if (Math_ScaledStepToS(&this->actor.shape.rot.y, this->targetRotY, 0x300) &&
-        ((this->distToRightWall <= 189.00002f) || (this->distToLeftWall <= 189.00002f))) {
+        ((this->distToRightWall <= (189000.0f * 0.001f)) || (this->distToLeftWall <= (189000.0f * 0.001f)))) {
         BossHakugin_SetupDeathCutsceneCrushedByRocks(this);
-    } else if (((this->direction == GOHT_DIRECTION_CLOCKWISE) && (this->distToRightWall <= 189.00002f)) ||
-               ((this->direction == GOHT_DIRECTION_COUNTERCLOCKWISE) && (this->distToLeftWall <= 189.00002f))) {
+    } else if (((this->direction == GOHT_DIRECTION_CLOCKWISE) && (this->distToRightWall <= (189000.0f * 0.001f))) ||
+               ((this->direction == GOHT_DIRECTION_COUNTERCLOCKWISE) &&
+                (this->distToLeftWall <= (189000.0f * 0.001f)))) {
         absTargetRotY = ABS_ALT(this->targetRotY);
         if (absTargetRotY < 0x2000) {
             this->actor.world.pos.z = -1389.0f;
@@ -2620,18 +2621,18 @@ void BossHakugin_CheckForBodyColliderHit(BossHakugin* this, PlayState* play) {
     if ((this->bodyCollider.base.atFlags & AT_HIT) &&
         ((this->actionFunc == BossHakugin_Charge) || !(player->stateFlags3 & PLAYER_STATE3_80000))) {
         if ((this->actionFunc == BossHakugin_Charge) &&
-            (this->bodyCollider.elements[GOHT_COLLIDER_BODYPART_HEAD].info.toucherFlags & TOUCH_HIT) &&
+            (this->bodyCollider.elements[GOHT_COLLIDER_BODYPART_HEAD].base.atElemFlags & ATELEM_HIT) &&
             !(this->bodyCollider.base.atFlags & AT_BOUNCED) && play->grabPlayer(play, player)) {
             BossHakugin_SetupThrow(this, play);
         } else if (player->stateFlags3 & PLAYER_STATE3_1000) {
             //! @bug This block is unreachable. This is trying to check if the player curled up as a Goron without
             //! spikes, but if the player gets hit in this state, they will be forcibly uncurled before this function
             //! gets called; it's impossible to have the state flags necessary to end up here in the final game.
-            player->unk_B08 = player->linearVelocity = -5.0f;
+            player->unk_B08 = player->speedXZ = -5.0f;
             player->unk_B0C += player->unk_B08 * 0.05f;
             player->actor.velocity.y = 10.0f;
             player->unk_B8C = 4;
-            player->actor.shape.rot.y = player->actor.home.rot.y = player->currentYaw = player->actor.world.rot.y;
+            player->actor.shape.rot.y = player->actor.home.rot.y = player->yaw = player->actor.world.rot.y;
         } else if (!(this->bodyCollider.base.atFlags & AT_BOUNCED)) {
             s16 knockbackYaw = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
 
@@ -2655,7 +2656,7 @@ s32 BossHakugin_UpdateDamage(BossHakugin* this, PlayState* play) {
         s32 i;
 
         for (i = 0; i < GOHT_COLLIDER_BODYPART_MAX; i++) {
-            if (this->bodyCollider.elements[i].info.bumperFlags & BUMP_HIT) {
+            if (this->bodyCollider.elements[i].base.acElemFlags & ACELEM_HIT) {
                 break;
             }
         }
@@ -2667,7 +2668,7 @@ s32 BossHakugin_UpdateDamage(BossHakugin* this, PlayState* play) {
         // DMG_DEKU_NUT | DMG_DEKU_STICK | DMG_ZORA_BOOMERANG | DMG_NORMAL_ARROW | DMG_HOOKSHOT | DMG_ICE_ARROW
         // | DMG_LIGHT_ARROW | DMG_DEKU_SPIN | DMG_DEKU_BUBBLE | DMG_DEKU_LAUNCH | DMG_ZORA_BARRIER
         if ((this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) &&
-            (this->bodyCollider.elements[i].info.acHitInfo->toucher.dmgFlags & 0x000DB0B3)) {
+            (this->bodyCollider.elements[i].base.acHitElem->atDmgInfo.dmgFlags & 0x000DB0B3)) {
             return false;
         }
 
@@ -2713,7 +2714,7 @@ s32 BossHakugin_UpdateDamage(BossHakugin* this, PlayState* play) {
             Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 15);
             this->damagedSpeedUpCounter += 35;
             BossHakugin_UpdateDrawDmgEffect(this, play, i);
-            this->actor.colChkInfo.damage = this->bodyCollider.elements[i].info.acHitInfo->toucher.damage;
+            this->actor.colChkInfo.damage = this->bodyCollider.elements[i].base.acHitElem->atDmgInfo.damage;
 
             if (Actor_ApplyDamage(&this->actor) == 0) {
                 Enemy_StartFinishingBlow(play, &this->actor);
@@ -2723,19 +2724,19 @@ s32 BossHakugin_UpdateDamage(BossHakugin* this, PlayState* play) {
                 if ((this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_EXPLOSIVE) ||
                     ((this->actor.colChkInfo.damageEffect == GOHT_DMGEFF_GORON_SPIKES) &&
                      (this->actionFunc != BossHakugin_Charge) &&
-                     ((this->bodyCollider.elements[GOHT_COLLIDER_BODYPART_HEAD].info.bumperFlags & BUMP_HIT) ||
-                      (this->bodyCollider.elements[GOHT_COLLIDER_BODYPART_THORAX].info.bumperFlags & BUMP_HIT) ||
-                      (this->bodyCollider.elements[GOHT_COLLIDER_BODYPART_PELVIS].info.bumperFlags & BUMP_HIT) ||
-                      (this->bodyCollider.elements[GOHT_COLLIDER_BODYPART_FRONT_RIGHT_UPPER_LEG].info.bumperFlags &
-                       BUMP_HIT) ||
-                      (this->bodyCollider.elements[GOHT_COLLIDER_BODYPART_FRONT_LEFT_UPPER_LEG].info.bumperFlags &
-                       BUMP_HIT) ||
-                      (this->bodyCollider.elements[GOHT_COLLIDER_BODYPART_BACK_RIGHT_THIGH].info.bumperFlags &
-                       BUMP_HIT) ||
-                      (this->bodyCollider.elements[GOHT_COLLIDER_BODYPART_BACK_LEFT_THIGH].info.bumperFlags &
-                       BUMP_HIT) ||
-                      (this->bodyCollider.elements[GOHT_COLLIDER_BODYPART_RIGHT_HORN].info.bumperFlags & BUMP_HIT) ||
-                      (this->bodyCollider.elements[GOHT_COLLIDER_BODYPART_LEFT_HORN].info.bumperFlags & BUMP_HIT)))) {
+                     ((this->bodyCollider.elements[GOHT_COLLIDER_BODYPART_HEAD].base.acElemFlags & ACELEM_HIT) ||
+                      (this->bodyCollider.elements[GOHT_COLLIDER_BODYPART_THORAX].base.acElemFlags & ACELEM_HIT) ||
+                      (this->bodyCollider.elements[GOHT_COLLIDER_BODYPART_PELVIS].base.acElemFlags & ACELEM_HIT) ||
+                      (this->bodyCollider.elements[GOHT_COLLIDER_BODYPART_FRONT_RIGHT_UPPER_LEG].base.acElemFlags &
+                       ACELEM_HIT) ||
+                      (this->bodyCollider.elements[GOHT_COLLIDER_BODYPART_FRONT_LEFT_UPPER_LEG].base.acElemFlags &
+                       ACELEM_HIT) ||
+                      (this->bodyCollider.elements[GOHT_COLLIDER_BODYPART_BACK_RIGHT_THIGH].base.acElemFlags &
+                       ACELEM_HIT) ||
+                      (this->bodyCollider.elements[GOHT_COLLIDER_BODYPART_BACK_LEFT_THIGH].base.acElemFlags &
+                       ACELEM_HIT) ||
+                      (this->bodyCollider.elements[GOHT_COLLIDER_BODYPART_RIGHT_HORN].base.acElemFlags & ACELEM_HIT) ||
+                      (this->bodyCollider.elements[GOHT_COLLIDER_BODYPART_LEFT_HORN].base.acElemFlags & ACELEM_HIT)))) {
                     BossHakugin_SetupDowned(this);
                 } else if ((this->electricBallState == GOHT_ELECTRIC_BALL_STATE_NONE) &&
                            (this->electricBallCount == 0) && (this->actionFunc == BossHakugin_Run) &&
@@ -2756,11 +2757,11 @@ s32 BossHakugin_UpdateDamage(BossHakugin* this, PlayState* play) {
             this->disableBodyCollidersTimer = 20;
             for (j = 0; j < ARRAY_COUNT(this->bodyColliderElements); j++) {
                 Vec3f hitPos;
-                ColliderInfo* colliderInfo = &this->bodyCollider.elements[j].info;
+                ColliderElement* elem = &this->bodyCollider.elements[j].base;
 
-                if ((colliderInfo->bumperFlags & BUMP_HIT) && (colliderInfo->acHitInfo != NULL) &&
-                    !(colliderInfo->acHitInfo->toucherFlags & TOUCH_SFX_NONE)) {
-                    Math_Vec3s_ToVec3f(&hitPos, &colliderInfo->bumper.hitPos);
+                if ((elem->acElemFlags & ACELEM_HIT) && (elem->acHitElem != NULL) &&
+                    !(elem->acHitElem->atElemFlags & ATELEM_SFX_NONE)) {
+                    Math_Vec3s_ToVec3f(&hitPos, &elem->acDmgInfo.hitPos);
                     EffectSsHitmark_SpawnFixedScale(play, EFFECT_HITMARK_METAL, &hitPos);
                     CollisionCheck_SpawnShieldParticlesMetalSound(play, &hitPos, &this->actor.projectedPos);
                     break;
@@ -2909,7 +2910,7 @@ void BossHakugin_UpdateElectricBalls(BossHakugin* this, PlayState* play) {
     } else if (this->electricBallState == GOHT_ELECTRIC_BALL_STATE_FLY_TOWARDS_PLAYER) {
         angleStep =
             BINANG_TO_RAD(Math3D_Vec3fDistSq(firstBallPos, &player->actor.world.pos) * (1.0f / SQ(120.0f)) * 32.0f);
-        angleStep = CLAMP_MAX(angleStep, M_PI / 4.0f);
+        angleStep = CLAMP_MAX(angleStep, M_PIf / 4.0f);
 
         Math_Vec3f_Diff(&player->actor.world.pos, firstBallPos, &targetRot);
 
@@ -2980,7 +2981,7 @@ void BossHakugin_UpdateElectricBalls(BossHakugin* this, PlayState* play) {
                     normal.x = COLPOLY_GET_NORMAL(poly->normal.x);
                     normal.y = COLPOLY_GET_NORMAL(poly->normal.y);
                     normal.z = COLPOLY_GET_NORMAL(poly->normal.z);
-                    func_80179F64(&this->electricBallRot, &normal, &targetRot);
+                    Math3D_Vec3fReflect(&this->electricBallRot, &normal, &targetRot);
                     Math_Vec3f_Copy(&this->electricBallRot, &targetRot);
                 }
             } else {
@@ -3011,7 +3012,7 @@ void BossHakugin_Update(Actor* thisx, PlayState* play) {
     }
 
     BossHakugin_UpdateBaseRot(this, play);
-    Actor_OffsetOfPointInActorCoords(&this->actor, &this->transformedPlayerPos, &player->actor.world.pos);
+    Actor_WorldToActorCoords(&this->actor, &this->transformedPlayerPos, &player->actor.world.pos);
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(play, &this->actor, 450.0f, (89100.0f * 0.001f), 0.0f,
@@ -3216,7 +3217,7 @@ void BossHakugin_DrawRockEffects(BossHakugin* this, PlayState* play) {
         if ((rockEffect->timer >= 0) && (rockEffect->type == GOHT_ROCK_EFFECT_TYPE_BOULDER)) {
             Matrix_SetTranslateRotateYXZ(rockEffect->pos.x, rockEffect->pos.y, rockEffect->pos.z, &rockEffect->rot);
             Matrix_Scale(rockEffect->scale, rockEffect->scale, rockEffect->scale, MTXMODE_APPLY);
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_OPA_DISP++, gGohtRockModelDL);
         }
     }
@@ -3227,7 +3228,7 @@ void BossHakugin_DrawRockEffects(BossHakugin* this, PlayState* play) {
         if ((rockEffect->timer >= 0) && (rockEffect->type == GOHT_ROCK_EFFECT_TYPE_STALACTITE)) {
             Matrix_SetTranslateRotateYXZ(rockEffect->pos.x, rockEffect->pos.y, rockEffect->pos.z, &rockEffect->rot);
             Matrix_Scale(rockEffect->scale, rockEffect->scale, rockEffect->scale, MTXMODE_APPLY);
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_OPA_DISP++, gGohtStalactiteModelDL);
         }
     }
@@ -3264,8 +3265,7 @@ void BossHakugin_DrawMalfunctionEffects(BossHakugin* this, PlayState* play) {
                                  MTXMODE_NEW);
                 Matrix_RotateYS(camYaw, MTXMODE_APPLY);
                 Matrix_Scale(malfunctionEffect->scaleXY, malfunctionEffect->scaleXY, 1.0f, MTXMODE_APPLY);
-                gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                          G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
                 gSPDisplayList(POLY_XLU_DISP++, gFrozenSteamModelDL);
             }
         }
@@ -3299,12 +3299,12 @@ void BossHakugin_DrawChargingLightning(BossHakugin* this, PlayState* play) {
             Matrix_Scale(0.62f, 0.62f, this->chargingLightningScale, MTXMODE_APPLY);
             Matrix_Translate(0.0f, 0.0f, this->chargingLightningTranslateZ * i, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_XLU_DISP++, gGohtLightningModelDL);
 
             Matrix_RotateZS(0x4000, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_XLU_DISP++, gGohtLightningModelDL);
         }
 
@@ -3316,7 +3316,7 @@ void BossHakugin_DrawChargingLightning(BossHakugin* this, PlayState* play) {
         Matrix_Scale(this->chargingLightOrbScale, this->chargingLightOrbScale, this->chargingLightOrbScale,
                      MTXMODE_APPLY);
         Matrix_RotateZS(this->lightOrbRotZ, MTXMODE_APPLY);
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, gGohtLightOrbMaterialDL);
         gSPDisplayList(POLY_XLU_DISP++, gGohtLightOrbModelDL);
     }
@@ -3348,12 +3348,12 @@ void BossHakugin_DrawLightningSegments(BossHakugin* this, PlayState* play) {
 
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, lightningSegment->alpha);
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_XLU_DISP++, gGohtLightningModelDL);
 
             Matrix_RotateZS(0x4000, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_XLU_DISP++, gGohtLightningModelDL);
         }
     }
@@ -3402,7 +3402,7 @@ void BossHakugin_DrawElectricBalls(BossHakugin* this, PlayState* play2) {
         Matrix_ReplaceRotation(&play->billboardMtxF);
         Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
         Matrix_RotateZS(rotZ, MTXMODE_APPLY);
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, gGohtLightOrbModelDL);
 
         scale += 1.5f;
@@ -3430,7 +3430,7 @@ void BossHakugin_DrawIce(BossHakugin* this, PlayState* play) {
     Matrix_RotateXS(0x500, MTXMODE_APPLY);
     Matrix_RotateZS(-0x500, MTXMODE_APPLY);
 
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
     gSPSegment(POLY_XLU_DISP++, 0x08,
                Gfx_TwoTexScroll(play->state.gfxCtx, G_TX_RENDERTILE, 0, play->gameplayFrames & 0xFF, 32, 16, 1, 0,
                                 (play->gameplayFrames * 2) & 0xFF, 64, 32));
@@ -3685,7 +3685,7 @@ void BossHakugin_DrawShadowTex(u8* tex, BossHakugin* this, PlayState* play) {
     }
 
     Matrix_Scale(4.25f, 1.0f, 4.25f, MTXMODE_APPLY);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, gShadowMaterialDL);
     gDPLoadTextureBlock(POLY_OPA_DISP++, tex, G_IM_FMT_I, G_IM_SIZ_8b, GOHT_SHADOW_TEX_WIDTH, GOHT_SHADOW_TEX_HEIGHT, 0,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, 6, 6, G_TX_NOLOD, G_TX_NOLOD);
@@ -3777,28 +3777,28 @@ void BossHakugin_SpawnCrushingRocks(BossHakugin* this) {
 void BossHakugin_UpdateCrushingRocksCollision(BossHakugin* this) {
     s32 i;
     GohtCrushingRock* crushingRock;
-    ColliderJntSphElement* element;
+    ColliderJntSphElement* jntSphElem;
 
     for (i = 0; i < GOHT_CRUSHING_ROCK_COUNT / 2; i++) {
         crushingRock = &this->crushingRocks[i << 1];
-        element = &this->bodyCollider.elements[i];
+        jntSphElem = &this->bodyCollider.elements[i];
 
-        element->dim.worldSphere.center.x = crushingRock->pos.x;
-        element->dim.worldSphere.center.y = crushingRock->pos.y;
-        element->dim.worldSphere.center.z = crushingRock->pos.z;
-        element->dim.worldSphere.radius = crushingRock->scale * 3000.0f;
-        element->info.bumper.dmgFlags = 0xF3CFBBFF;
-        element->info.bumperFlags &= ~BUMP_NO_HITMARK;
-        element->info.elemType = ELEMTYPE_UNK0;
+        jntSphElem->dim.worldSphere.center.x = crushingRock->pos.x;
+        jntSphElem->dim.worldSphere.center.y = crushingRock->pos.y;
+        jntSphElem->dim.worldSphere.center.z = crushingRock->pos.z;
+        jntSphElem->dim.worldSphere.radius = crushingRock->scale * 3000.0f;
+        jntSphElem->base.acDmgInfo.dmgFlags = 0xF3CFBBFF;
+        jntSphElem->base.acElemFlags &= ~ACELEM_NO_HITMARK;
+        jntSphElem->base.elemMaterial = ELEM_MATERIAL_UNK0;
     }
 
     // This for-loop will update the collider for GOHT_COLLIDER_BODYPART_LEFT_HORN.
     for (; i < ARRAY_COUNT(this->bodyColliderElements); i++) {
-        this->bodyCollider.elements[i].info.bumperFlags &= ~BUMP_ON;
-        this->bodyCollider.elements[i].info.ocElemFlags &= ~OCELEM_ON;
+        this->bodyCollider.elements[i].base.acElemFlags &= ~ACELEM_ON;
+        this->bodyCollider.elements[i].base.ocElemFlags &= ~OCELEM_ON;
     }
 
-    this->bodyCollider.base.colType = COLTYPE_HARD;
+    this->bodyCollider.base.colMaterial = COL_MATERIAL_HARD;
 }
 
 /**
@@ -3833,7 +3833,7 @@ void BossHakugin_DrawCrushingRocks(Actor* thisx, PlayState* play) {
         Matrix_SetTranslateRotateYXZ(crushingRock->pos.x, crushingRock->pos.y, crushingRock->pos.z, &crushingRock->rot);
         Matrix_Scale(crushingRock->scale, crushingRock->scale, crushingRock->scale, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, gGohtRockModelDL);
     }
 

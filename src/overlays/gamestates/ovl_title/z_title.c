@@ -9,7 +9,7 @@
 #include "z64view.h"
 #include "CIC6105.h"
 #include "overlays/gamestates/ovl_opening/z_opening.h"
-#include "misc/nintendo_rogo_static/nintendo_rogo_static.h"
+#include "assets/misc/nintendo_rogo_static/nintendo_rogo_static.h"
 
 void ConsoleLogo_UpdateCounters(ConsoleLogoState* this) {
     if ((this->coverAlpha == 0) && (this->visibleDuration != 0)) {
@@ -87,7 +87,7 @@ void ConsoleLogo_Draw(GameState* thisx) {
     Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
     Matrix_RotateZYX(0, sTitleRotation, 0, MTXMODE_APPLY);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(this->state.gfxCtx), G_MTX_LOAD);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, this->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, gNintendo64LogoNDL);
 
     Gfx_SetupDL39_Opa(this->state.gfxCtx);

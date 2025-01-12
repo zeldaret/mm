@@ -5,7 +5,7 @@
  */
 
 #include "z_eff_ss_dt_bubble.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define rPrimColorR regs[0]
 #define rPrimColorG regs[1]
@@ -39,7 +39,7 @@ static Color_RGBA8 sEnvColors[] = {
     { 150, 150, 150, 0 },
 };
 
-EffectSsInit Effect_Ss_Dt_Bubble_InitVars = {
+EffectSsProfile Effect_Ss_Dt_Bubble_Profile = {
     EFFECT_SS_DT_BUBBLE,
     EffectSsDtBubble_Init,
 };
@@ -96,7 +96,7 @@ void EffectSsDtBubble_Draw(PlayState* play, u32 index, EffectSs* this) {
     scale = this->rScale * 0.004f;
     Matrix_Translate(this->pos.x, this->pos.y, this->pos.z, MTXMODE_NEW);
     Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, gfxCtx);
     Gfx_SetupDL25_Opa(gfxCtx);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->rPrimColorR, this->rPrimColorG, this->rPrimColorB,
                     (this->rPrimColorA * this->life) / this->rLifespan);

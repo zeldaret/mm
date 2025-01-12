@@ -1,7 +1,9 @@
 #include "z64jpeg.h"
-#include "libc/stdbool.h"
-#include "variables.h"
-#include "functions.h"
+
+#include "stdbool.h"
+#include "scheduler.h"
+#include "sys_ucode.h"
+#include "macros.h"
 
 #define MARKER_ESCAPE 0x00
 #define MARKER_SOI 0xD8
@@ -107,7 +109,7 @@ void Jpeg_CopyToZbuffer(u16* src, u16* zbuffer, s32 x, s32 y) {
  * unaligned values in JPEG header files.
  */
 u16 Jpeg_GetUnalignedU16(u8* ptr) {
-    if (((u32)ptr & 1) == 0) {
+    if (((uintptr_t)ptr & 1) == 0) {
         // Read the value normally if it's aligned to a 16-bit address.
         return *(u16*)ptr;
     } else {
@@ -134,46 +136,46 @@ void Jpeg_ParseMarkers(u8* ptr, JpegContext* jpegCtx) {
         // 0xFF indicates the start of a JPEG marker, so look for the next.
         if (*ptr++ == 0xFF) {
             switch (*ptr++) {
-                case MARKER_ESCAPE: {
+                case MARKER_ESCAPE:
                     // Compressed value 0xFF is stored as 0xFF00 to escape it, so ignore it.
                     break;
-                }
-                case MARKER_SOI: {
+
+                case MARKER_SOI:
                     // Start of Image
                     break;
-                }
-                case MARKER_APP0: {
+
+                case MARKER_APP0:
                     // Application marker for JFIF
                     ptr += Jpeg_GetUnalignedU16(ptr);
                     break;
-                }
-                case MARKER_APP1: {
+
+                case MARKER_APP1:
                     // Application marker for EXIF
                     ptr += Jpeg_GetUnalignedU16(ptr);
                     break;
-                }
-                case MARKER_APP2: {
+
+                case MARKER_APP2:
                     ptr += Jpeg_GetUnalignedU16(ptr);
                     break;
-                }
-                case MARKER_DQT: {
+
+                case MARKER_DQT:
                     // Define Quantization Table, stored for later processing
                     jpegCtx->dqtPtr[jpegCtx->dqtCount++] = ptr + 2;
                     ptr += Jpeg_GetUnalignedU16(ptr);
                     break;
-                }
-                case MARKER_DHT: {
+
+                case MARKER_DHT:
                     // Define Huffman Table, stored for later processing
                     jpegCtx->dhtPtr[jpegCtx->dhtCount++] = ptr + 2;
                     ptr += Jpeg_GetUnalignedU16(ptr);
                     break;
-                }
-                case MARKER_DRI: {
+
+                case MARKER_DRI:
                     // Define Restart Interval
                     ptr += Jpeg_GetUnalignedU16(ptr);
                     break;
-                }
-                case MARKER_SOF: {
+
+                case MARKER_SOF:
                     // Start of Frame, stores important metadata of the image.
                     // Only used for extracting the sampling factors (jpegCtx->mode).
 
@@ -186,22 +188,21 @@ void Jpeg_ParseMarkers(u8* ptr, JpegContext* jpegCtx) {
                     }
                     ptr += Jpeg_GetUnalignedU16(ptr);
                     break;
-                }
-                case MARKER_SOS: {
+
+                case MARKER_SOS:
                     // Start of Scan marker, indicates the start of the image data.
                     ptr += Jpeg_GetUnalignedU16(ptr);
                     jpegCtx->imageData = ptr;
                     break;
-                }
-                case MARKER_EOI: {
+
+                case MARKER_EOI:
                     // End of Image
                     exit = true;
                     break;
-                }
-                default: {
+
+                default:
                     ptr += Jpeg_GetUnalignedU16(ptr);
                     break;
-                }
             }
         }
     }

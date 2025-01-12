@@ -5,7 +5,7 @@
  */
 
 #include "z_en_scopecoin.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -16,7 +16,7 @@ void EnScopecoin_Destroy(Actor* thisx, PlayState* play);
 void EnScopecoin_Update(Actor* thisx, PlayState* play);
 void EnScopecoin_Draw(Actor* thisx, PlayState* play);
 
-ActorInit En_Scopecoin_InitVars = {
+ActorProfile En_Scopecoin_Profile = {
     /**/ ACTOR_EN_SCOPECOIN,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -95,7 +95,7 @@ void EnScopecoin_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(gfxCtx);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sRupeeTextures[this->rupeeIndex]));
     gSPDisplayList(POLY_OPA_DISP++, gRupeeDL);
 

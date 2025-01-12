@@ -94,7 +94,7 @@ static AnimationSpeedInfo sAnimationSpeedInfo[BEAVER_ANIM_IDLE_FACE_MAX] = {
     { &gBeaverIdleFaceRightAnim, 1.0f, ANIMMODE_LOOP, -5.0f },        // BEAVER_ANIM_IDLE_FACE_RIGHT
 };
 
-ActorInit En_Az_InitVars = {
+ActorProfile En_Az_Profile = {
     /**/ ACTOR_EN_AZ,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -108,7 +108,7 @@ ActorInit En_Az_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_HIT0,
+        COL_MATERIAL_HIT0,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER | AC_TYPE_ENEMY,
         OC1_ON | OC1_TYPE_ALL,
@@ -116,11 +116,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK1,
+        ELEM_MATERIAL_UNK1,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 18, 46, 0, { 0, 0, 0 } },
@@ -206,7 +206,7 @@ void EnAz_Init(Actor* thisx, PlayState* play2) {
     Actor_ProcessInitChain(&this->actor, sInitChain);
     this->unk_374 = 0;
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->actor.targetMode = TARGET_MODE_1;
+    this->actor.attentionRangeType = ATTENTION_RANGE_1;
     switch (BEAVER_GET_PARAM_F00(thisx)) {
         case 0:
             phi_v1 =
@@ -304,12 +304,12 @@ void EnAz_Init(Actor* thisx, PlayState* play2) {
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_93_01)) {
                 this->unk_2FA = 5;
                 if (this->unk_374 & 2) {
-                    this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+                    this->actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
                     this->unk_374 |= 0x20;
                 }
             } else {
                 this->unk_2FA = 0;
-                this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+                this->actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
                 this->unk_374 |= 0x20;
             }
             func_80A94B20(play);
@@ -323,7 +323,8 @@ void EnAz_Init(Actor* thisx, PlayState* play2) {
         case ENTRANCE(WATERFALL_RAPIDS, 3):
             this->unk_2FA = 0;
             if (!(this->unk_374 & 2)) {
-                this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10000);
+                this->actor.flags |=
+                    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED);
             }
             if (gSaveContext.save.entrance == ENTRANCE(WATERFALL_RAPIDS, 3)) {
                 this->unk_2FA = 0xA;
@@ -379,18 +380,20 @@ void EnAz_Init(Actor* thisx, PlayState* play2) {
             if (this->unk_2FA == 2) {
                 if (!(this->unk_374 & 2)) {
                     this->unk_374 |= 0x20;
-                    this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10000);
+                    this->actor.flags |=
+                        (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED);
                     this->actionFunc = func_80A97C24;
                 } else {
-                    this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+                    this->actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
                     func_80A95C5C(this, play);
                 }
             } else {
                 if (this->unk_374 & 2) {
                     this->unk_374 |= 0x20;
-                    this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10000);
+                    this->actor.flags |=
+                        (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED);
                 } else {
-                    this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+                    this->actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
                 }
                 this->actionFunc = func_80A97C24;
             }
@@ -433,7 +436,7 @@ f32 func_80A954AC(EnAz* this) {
     sp1C.x = pathing->curPoint.x - pathing->prevPoint.x;
     sp1C.y = pathing->curPoint.y - pathing->prevPoint.y;
     sp1C.z = pathing->curPoint.z - pathing->prevPoint.z;
-    return Math3D_Parallel(&sp28, &sp1C);
+    return Math3D_Cos(&sp28, &sp1C);
 }
 
 s32 func_80A95534(PlayState* play, ActorPathing* actorPathing) {
@@ -593,7 +596,7 @@ void func_80A95C5C(EnAz* this, PlayState* play) {
     this->actor.world.pos.y = this->actor.home.pos.y + 120.0f;
     this->actor.gravity = -1.0f;
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_IDLE, &this->animIndex);
-    this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+    this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
     this->actor.bgCheckFlags &= ~(BGCHECKFLAG_GROUND | BGCHECKFLAG_WATER);
     this->unk_3C0 = 0;
     this->actionFunc = func_80A95CEC;
@@ -628,7 +631,7 @@ void func_80A95DA0(EnAz* this, PlayState* play) {
     this->actor.gravity = 0.0f;
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_SWIM_WITH_SPINNING_TAIL,
                                     &this->animIndex);
-    this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+    this->actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
     this->actor.bgCheckFlags &= ~(BGCHECKFLAG_GROUND | BGCHECKFLAG_WATER);
     this->unk_374 |= 0x1000;
     Math_Vec3f_Copy(&this->actor.world.pos, &sp40->curPoint);
@@ -959,7 +962,6 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                                 case 9:
                                 default:
                                     this->unk_2FA = 8;
-
                                     break;
                             }
                             ret = 0;
@@ -1004,11 +1006,11 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
 
                     case 0x10F1:
                         SET_WEEKEVENTREG(WEEKEVENTREG_93_01);
-                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_23_80)) {
+                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BEAVER_RACE_BOTTLE)) {
                             this->getItemId = GI_RUPEE_RED;
                         } else {
                             this->getItemId = GI_BOTTLE;
-                            SET_WEEKEVENTREG(WEEKEVENTREG_23_80);
+                            SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BEAVER_RACE_BOTTLE);
                         }
                         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_IDLE,
                                                         &this->animIndex);
@@ -1059,7 +1061,7 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                     case 0x10F8:
                         if (play->msgCtx.choiceIndex == 0) {
                             Audio_PlaySfx_MessageDecide();
-                            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_25_01)) {
+                            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BEAVER_BROS_HEART_PIECE)) {
                                 this->actor.textId = 0x1107;
                             } else {
                                 this->actor.textId = 0x10FA;
@@ -1117,7 +1119,7 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                     case 0x10FE:
                         if (play->msgCtx.choiceIndex == 0) {
                             Audio_PlaySfx_MessageDecide();
-                            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_25_01)) {
+                            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BEAVER_BROS_HEART_PIECE)) {
                                 this->actor.textId = 0x1108;
                             } else {
                                 this->actor.textId = 0x1101;
@@ -1176,11 +1178,11 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                         break;
 
                     case 0x1105:
-                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_25_01)) {
+                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BEAVER_BROS_HEART_PIECE)) {
                             this->getItemId = GI_RUPEE_PURPLE;
                         } else {
                             this->getItemId = GI_HEART_PIECE;
-                            SET_WEEKEVENTREG(WEEKEVENTREG_25_01);
+                            SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BEAVER_BROS_HEART_PIECE);
                         }
                         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_IDLE,
                                                         &this->animIndex);
@@ -1225,7 +1227,7 @@ void func_80A97114(EnAz* this, PlayState* play) {
     EnAz* brother = this->brother;
     s32 sp20 = false;
 
-    this->actor.flags &= ~ACTOR_FLAG_10000;
+    this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
     switch (this->actor.textId) {
         case 0x10DA:
         case 0x10DD:
@@ -1383,7 +1385,7 @@ void func_80A97410(EnAz* this, PlayState* play) {
     if (this->unk_378 == 2) {
         this->unk_378 = func_80A9617C(this, play);
         if (this->unk_378 == 0) {
-            this->actor.flags &= ~ACTOR_FLAG_10000;
+            this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         }
     }
     if (this->unk_378 == 3) {
@@ -1548,6 +1550,8 @@ void func_80A97AB4(EnAz* this, PlayState* play) {
                         break;
                 }
             }
+            break;
+
         case TEXT_STATE_NEXT:
         case TEXT_STATE_CLOSING:
         default:
@@ -1593,7 +1597,7 @@ void func_80A97D5C(EnAz* this, PlayState* play) {
     play->interfaceCtx.minigameState = MINIGAME_STATE_COUNTDOWN_SETUP_3;
     if ((this->unk_2FA == 1) || (this->unk_2FA == 3)) {
         Interface_StartTimer(TIMER_ID_MINIGAME_2, 120);
-    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_25_01)) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BEAVER_BROS_HEART_PIECE)) {
         Interface_StartTimer(TIMER_ID_MINIGAME_2, 100);
     } else {
         Interface_StartTimer(TIMER_ID_MINIGAME_2, 110);
@@ -1621,8 +1625,8 @@ void func_80A97EAC(EnAz* this, PlayState* play) {
     this->actor.velocity.y = 6.0f;
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_SWIM_WITH_SPINNING_TAIL,
                                     &this->animIndex);
-    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
-    this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+    this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
+    this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
     this->actor.bgCheckFlags &= ~(BGCHECKFLAG_GROUND | BGCHECKFLAG_WATER);
     this->unk_374 |= 0x1000;
     this->unk_3C2 = 0;
@@ -1633,10 +1637,8 @@ void func_80A97EAC(EnAz* this, PlayState* play) {
 void func_80A97F9C(EnAz* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    D_80A99E8C =
-        Math3D_XZDistanceSquared(player->actor.world.pos.x, player->actor.world.pos.z, D_80A99E80.x, D_80A99E80.z);
-    if (Math3D_XZDistanceSquared(this->actor.world.pos.x, this->actor.world.pos.z, D_80A99E80.x, D_80A99E80.z) >=
-        SQ(1000.0f)) {
+    D_80A99E8C = Math3D_Dist2DSq(player->actor.world.pos.x, player->actor.world.pos.z, D_80A99E80.x, D_80A99E80.z);
+    if (Math3D_Dist2DSq(this->actor.world.pos.x, this->actor.world.pos.z, D_80A99E80.x, D_80A99E80.z) >= SQ(1000.0f)) {
         this->unk_374 |= 0x1000;
     }
     if (!(this->unk_300.flags & ACTOR_PATHING_REACHED_END_PERMANENT)) {
@@ -1704,8 +1706,8 @@ void func_80A982E0(PlayState* play, ActorPathing* actorPathing) {
     sp28.x = actorPathing->curPoint.x - actorPathing->worldPos->x;
     sp28.y = actorPathing->curPoint.y - actorPathing->worldPos->y;
     sp28.z = actorPathing->curPoint.z - actorPathing->worldPos->z;
-    actorPathing->distSqToCurPointXZ = Math3D_XZLengthSquared(sp28.x, sp28.z);
-    actorPathing->distSqToCurPoint = Math3D_LengthSquared(&sp28);
+    actorPathing->distSqToCurPointXZ = Math3D_Dist1DSq(sp28.x, sp28.z);
+    actorPathing->distSqToCurPoint = Math3D_Vec3fMagnitudeSq(&sp28);
     actorPathing->rotToCurPoint.y = Math_Atan2S_XY(sp28.z, sp28.x);
     actorPathing->rotToCurPoint.x = Math_Atan2S_XY(sqrtf(actorPathing->distSqToCurPointXZ), -sp28.y);
     actorPathing->rotToCurPoint.z = 0;
@@ -1938,8 +1940,7 @@ void EnAz_Draw(Actor* thisx, PlayState* play2) {
                     gSPSegment(POLY_XLU_DISP++, 0x09,
                                Gfx_PrimColor(play->state.gfxCtx, 0x80, 255, 255, 255, D_80A9919C[i]));
                 }
-                gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                          G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
                 gSPDisplayList(POLY_XLU_DISP++, D_80A9916C[i]);
                 Matrix_Pop();
             }
@@ -1953,13 +1954,13 @@ void EnAz_Draw(Actor* thisx, PlayState* play2) {
             } else {
                 gSPSegment(POLY_XLU_DISP++, 0x08, Gfx_PrimColor(play->state.gfxCtx, 0x80, 255, 255, 255, 85));
             }
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_XLU_DISP++, gBeaverYoungerBrotherTailVortexDL);
             Matrix_Pop();
             Matrix_Translate(0.0f, 2000.0f, -2100.0f, MTXMODE_APPLY);
             Matrix_RotateZS(DEG_TO_BINANG(D_80A993D0[this->unk_384].z), MTXMODE_APPLY);
             Matrix_Scale(D_80A993D0[this->unk_384].x, D_80A993D0[this->unk_384].y, 0.0f, MTXMODE_APPLY);
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_XLU_DISP++, gBeaverYoungerBrotherTailSplashDL);
         }
     }

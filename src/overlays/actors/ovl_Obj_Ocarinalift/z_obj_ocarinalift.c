@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_ocarinalift.h"
-#include "objects/object_raillift/object_raillift.h"
+#include "assets/objects/object_raillift/object_raillift.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -31,7 +31,7 @@ void func_80AC9B5C(ObjOcarinalift* this, PlayState* play);
 void func_80AC9C20(ObjOcarinalift* this);
 void func_80AC9C48(ObjOcarinalift* this, PlayState* play);
 
-ActorInit Obj_Ocarinalift_InitVars = {
+ActorProfile Obj_Ocarinalift_Profile = {
     /**/ ACTOR_OBJ_OCARINALIFT,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -44,8 +44,10 @@ ActorInit Obj_Ocarinalift_InitVars = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_U8(targetMode, TARGET_MODE_2, ICHAIN_CONTINUE), ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 200, ICHAIN_CONTINUE),     ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_CONTINUE),
+    ICHAIN_U8(attentionRangeType, ATTENTION_RANGE_2, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 200, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
@@ -197,7 +199,8 @@ void func_80AC9A7C(ObjOcarinalift* this, PlayState* play) {
 }
 
 void func_80AC9AB8(ObjOcarinalift* this) {
-    this->dyna.actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_2000000 | ACTOR_FLAG_CANT_LOCK_ON);
+    this->dyna.actor.flags |=
+        (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_UPDATE_DURING_OCARINA | ACTOR_FLAG_LOCK_ON_DISABLED);
     this->actionFunc = func_80AC9AE0;
 }
 
@@ -234,7 +237,8 @@ void func_80AC9B5C(ObjOcarinalift* this, PlayState* play) {
 }
 
 void func_80AC9C20(ObjOcarinalift* this) {
-    this->dyna.actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_2000000 | ACTOR_FLAG_CANT_LOCK_ON);
+    this->dyna.actor.flags &=
+        ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_UPDATE_DURING_OCARINA | ACTOR_FLAG_LOCK_ON_DISABLED);
     this->actionFunc = func_80AC9C48;
 }
 

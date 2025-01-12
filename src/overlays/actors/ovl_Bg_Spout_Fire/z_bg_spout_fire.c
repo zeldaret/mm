@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_spout_fire.h"
-#include "objects/object_fwall/object_fwall.h"
+#include "assets/objects/object_fwall/object_fwall.h"
 
 #define FLAGS 0x00000000
 
@@ -22,7 +22,7 @@ void func_80A60CDC(BgSpoutFire* this, PlayState* play);
 void func_80A60D10(BgSpoutFire* this, PlayState* play);
 void func_80A60E08(BgSpoutFire* this, PlayState* play);
 
-ActorInit Bg_Spout_Fire_InitVars = {
+ActorProfile Bg_Spout_Fire_Profile = {
     /**/ ACTOR_BG_SPOUT_FIRE,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -36,7 +36,7 @@ ActorInit Bg_Spout_Fire_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_ENEMY,
         AC_NONE,
         OC1_ON | OC1_TYPE_PLAYER,
@@ -44,11 +44,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x20000000, 0x01, 0x04 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NONE,
-        BUMP_NONE,
+        ATELEM_ON | ATELEM_SFX_NONE,
+        ACELEM_NONE,
         OCELEM_ON,
     },
     { 30, 83, 0, { 0, 0, 0 } },
@@ -94,7 +94,7 @@ s32 func_80A60C24(BgSpoutFire* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     Vec3f sp18;
 
-    Actor_OffsetOfPointInActorCoords(&this->actor, &sp18, &player->actor.world.pos);
+    Actor_WorldToActorCoords(&this->actor, &sp18, &player->actor.world.pos);
     if ((fabsf(sp18.x) < 100.0f) && (fabsf(sp18.z) < 120.0f)) {
         return true;
     } else {
@@ -147,7 +147,7 @@ void func_80A60E08(BgSpoutFire* this, PlayState* play) {
     f32 cos;
     f32 sin;
 
-    Actor_OffsetOfPointInActorCoords(&this->actor, &sp30, &player->actor.world.pos);
+    Actor_WorldToActorCoords(&this->actor, &sp30, &player->actor.world.pos);
     sp30.x = CLAMP(sp30.x, -74.25f, 74.25f);
     if (this->timer == 0) {
         if (sp30.z > 0.0f) {
@@ -196,7 +196,7 @@ void BgSpoutFire_Draw(Actor* thisx, PlayState* play) {
     gDPSetPrimColor(&gfx[1], 0, 1, 255, 255, 0, 150);
     gDPSetEnvColor(&gfx[2], 255, 0, 0, 255);
     Matrix_Translate(-55.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-    gSPMatrix(&gfx[3], Matrix_NewMtx(play->state.gfxCtx), (G_MTX_NOPUSH | G_MTX_LOAD) | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(&gfx[3], play->state.gfxCtx);
     gSPDisplayList(&gfx[4], object_fwall_DL_000040);
     POLY_XLU_DISP = &gfx[5];
 

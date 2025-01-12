@@ -4,9 +4,8 @@
  * Description: Great Bay Temple - Waterwheels, push switches, gear shafts, and whirlpools
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_bg_dblue_movebg.h"
-#include "objects/object_dblue_object/object_dblue_object.h"
+#include "assets/objects/object_dblue_object/object_dblue_object.h"
 #include "overlays/actors/ovl_Obj_Hunsui/z_obj_hunsui.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
@@ -45,7 +44,7 @@ u8 D_80A2B870[][2] = {
     { 0x03, 0x03 }, { 0x03, 0x05 }, { 0x03, 0x01 }, { 0x03, 0x06 }, { 0x03, 0x02 }, { 0x03, 0x04 }, { 0x03, 0x00 },
 };
 
-ActorInit Bg_Dblue_Movebg_InitVars = {
+ActorProfile Bg_Dblue_Movebg_Profile = {
     /**/ ACTOR_BG_DBLUE_MOVEBG,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -686,8 +685,8 @@ void func_80A2AED0(BgDblueMovebg* this, PlayState* play) {
         Vec3f sp54;
         f32 sp50;
 
-        if (Math3D_PointDistToLine2D(play->view.eye.x, play->view.eye.z, this->unk_190.x, this->unk_190.z,
-                                     this->unk_19C.x, this->unk_19C.z, &sp54.x, &sp54.z, &sp50)) {
+        if (Math3D_PointDistSqToLine2DImpl(play->view.eye.x, play->view.eye.z, this->unk_190.x, this->unk_190.z,
+                                           this->unk_19C.x, this->unk_19C.z, &sp54.x, &sp54.z, &sp50)) {
             sp54.y = this->dyna.actor.world.pos.y;
         } else {
             if (Math_Vec3f_DistXYZ(&play->view.eye, &this->unk_190) <=
@@ -754,7 +753,7 @@ void func_80A2B308(Actor* thisx, PlayState* play) {
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, this->opaDList);
 
     CLOSE_DISPS(play->state.gfxCtx);
@@ -780,7 +779,7 @@ void BgDblueMovebg_Draw(Actor* thisx, PlayState* play2) {
         if ((this->opaDList != NULL) || (this->unk_160 == 6)) {
             gfx2 = Gfx_SetupDL(POLY_OPA_DISP, SETUPDL_25);
 
-            gSPMatrix(&gfx2[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(&gfx2[0], play->state.gfxCtx);
 
             if (this->unk_160 == 6) {
                 gSPDisplayList(&gfx2[1], gGreatBayTempleObjectGearShaftDL);
@@ -799,7 +798,7 @@ void BgDblueMovebg_Draw(Actor* thisx, PlayState* play2) {
         if (this->xluDList != NULL) {
             gfx = Gfx_SetupDL71(POLY_XLU_DISP);
 
-            gSPMatrix(&gfx[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(&gfx[0], play->state.gfxCtx);
             gSPDisplayList(&gfx[1], this->xluDList);
 
             POLY_XLU_DISP = &gfx[2];
@@ -841,7 +840,7 @@ void BgDblueMovebg_Draw(Actor* thisx, PlayState* play2) {
                                  this->unk_1F8[j][i] * this->dyna.actor.scale.y,
                                  this->unk_1F8[j][i] * this->dyna.actor.scale.z, MTXMODE_APPLY);
 
-                    gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    MATRIX_FINALIZE_AND_LOAD(gfx++, play->state.gfxCtx);
                     gDPSetEnvColor(gfx++, 255, 255, 255, this->unk_1D8[j][i]);
                     gSPDisplayList(gfx++, gGreatBayTempleObjectWaterwheelSplashDL);
 

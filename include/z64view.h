@@ -3,16 +3,17 @@
 
 #include "PR/ultratypes.h"
 #include "PR/gbi.h"
+#include "main.h"
 #include "z64math.h"
 #include "unk.h"
 
 struct GraphicsContext;
 
 typedef struct Viewport {
-    /* 0x00 */ s32 topY;    // uly (upper left y)
-    /* 0x04 */ s32 bottomY; // lry (lower right y)
-    /* 0x08 */ s32 leftX;   // ulx (upper left x)
-    /* 0x0C */ s32 rightX;  // lrx (lower right x)
+    /* 0x0 */ s32 topY;    // uly (upper left y)
+    /* 0x4 */ s32 bottomY; // lry (lower right y)
+    /* 0x8 */ s32 leftX;   // ulx (upper left x)
+    /* 0xC */ s32 rightX;  // lrx (lower right x)
 } Viewport; // size = 0x10
 
 typedef struct View {
@@ -94,10 +95,10 @@ s32 View_InitDistortion(View* view);
 s32 View_ClearDistortion(View* view);
 s32 View_SetDistortion(View* view, Vec3f orientation, Vec3f scale, f32 speed);
 
-void View_Apply(View* view, s32 mask);
+s32 View_Apply(View* view, s32 mask);
 s32 View_ApplyOrthoToOverlay(View* view);
 s32 View_ApplyPerspectiveToOverlay(View* view);
 s32 View_UpdateViewingMatrix(View* view);
-s32 View_ApplyTo(View* view, Gfx** gfxp);
+s32 View_ApplyTo(View* view, Gfx** gfxP);
 
 #endif

@@ -17,7 +17,7 @@ void EnDrs_Draw(Actor* thisx, PlayState* play);
 
 void EnDrs_Idle(EnDrs* this, PlayState* play);
 
-ActorInit En_Drs_InitVars = {
+ActorProfile En_Drs_Profile = {
     /**/ ACTOR_EN_DRS,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -31,7 +31,7 @@ ActorInit En_Drs_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_HIT1,
+        COL_MATERIAL_HIT1,
         AT_NONE,
         AC_NONE,
         OC1_ON | OC1_TYPE_ALL,
@@ -39,11 +39,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK1,
+        ELEM_MATERIAL_UNK1,
         { 0x00000000, 0x00, 0x00 },
         { 0x00000000, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_NONE,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_NONE,
         OCELEM_ON,
     },
     { 16, 62, 0, { 0, 0, 0 } },

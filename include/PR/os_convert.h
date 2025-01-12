@@ -1,7 +1,7 @@
 #ifndef PR_CONVERT_H
 #define PR_CONVERT_H
 
-#include "libc/stdint.h"
+#include "stdint.h"
 
 #define OS_CLOCK_RATE           62500000LL
 #define OS_CPU_COUNTER          (OS_CLOCK_RATE*3/4)

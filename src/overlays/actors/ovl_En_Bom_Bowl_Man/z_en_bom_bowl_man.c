@@ -5,9 +5,9 @@
  */
 
 #include "z_en_bom_bowl_man.h"
-#include "objects/object_cs/object_cs.h"
+#include "assets/objects/object_cs/object_cs.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnBomBowlMan*)thisx)
 
@@ -37,7 +37,7 @@ s32 D_809C6100 = 0;
 
 s32 D_809C6104 = 0;
 
-ActorInit En_Bom_Bowl_Man_InitVars = {
+ActorProfile En_Bom_Bowl_Man_Profile = {
     /**/ ACTOR_EN_BOM_BOWL_MAN,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -139,7 +139,7 @@ void EnBomBowlMan_Init(Actor* thisx, PlayState* play) {
                        this->morphTable, OBJECT_CS_LIMB_MAX);
     this->unk_2F6 = ENBOMBOWLMAN_GET_F0(&this->actor);
     this->unk_2F4 = ENBOMBOWLMAN_GET_F(&this->actor);
-    this->actor.targetMode = TARGET_MODE_6;
+    this->actor.attentionRangeType = ATTENTION_RANGE_6;
     Actor_SetScale(&this->actor, 0.01f);
 
     if (this->unk_2F6 == ENBOMBOWLMAN_F0_0) {
@@ -413,8 +413,8 @@ void func_809C51B4(EnBomBowlMan* this, PlayState* play) {
 void func_809C52B4(EnBomBowlMan* this) {
     this->actor.draw = NULL;
     this->actor.flags |= ACTOR_FLAG_10;
-    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->actor.world.pos.x = 1340.0f;
     this->actor.world.pos.z = -1795.0f;
     this->unk_29C = 3;
@@ -718,7 +718,7 @@ s32 EnBomBowlMan_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, V
     return false;
 }
 
-#include "overlays/ovl_En_Bom_Bowl_Man/ovl_En_Bom_Bowl_Man.c"
+#include "assets/overlays/ovl_En_Bom_Bowl_Man/ovl_En_Bom_Bowl_Man.c"
 
 TexturePtr D_809C6200[] = {
     gEnBomBowlMan_D_809C61E0, gEnBomBowlMan_D_809C61F0, gEnBomBowlMan_D_809C61F0,

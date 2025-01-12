@@ -8,7 +8,8 @@
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/actors/ovl_Obj_Syokudai/z_obj_syokudai.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_4000)
+#define FLAGS \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_CAN_ATTACH_TO_ARROW)
 
 #define THIS ((EnFirefly*)thisx)
 
@@ -44,7 +45,7 @@ typedef enum {
     /* 2 */ KEESE_AURA_ICE
 } KeeseAuraType;
 
-ActorInit En_Firefly_InitVars = {
+ActorProfile En_Firefly_Profile = {
     /**/ ACTOR_EN_FIREFLY,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -58,7 +59,7 @@ ActorInit En_Firefly_InitVars = {
 
 static ColliderSphereInit sSphereInit = {
     {
-        COLTYPE_HIT3,
+        COL_MATERIAL_HIT3,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -66,11 +67,11 @@ static ColliderSphereInit sSphereInit = {
         COLSHAPE_SPHERE,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0xF7CFFFFF, 0x01, 0x08 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_HARD,
-        BUMP_ON,
+        ATELEM_ON | ATELEM_SFX_HARD,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 1, { { 0, 1000, 0 }, 15 }, 100 },
@@ -125,8 +126,8 @@ static DamageTable sDamageTable = {
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 5, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -500, ICHAIN_CONTINUE),
-    ICHAIN_U8(targetMode, TARGET_MODE_2, ICHAIN_CONTINUE),
-    ICHAIN_F32(targetArrowOffset, 4000, ICHAIN_STOP),
+    ICHAIN_U8(attentionRangeType, ATTENTION_RANGE_2, ICHAIN_CONTINUE),
+    ICHAIN_F32(lockOnArrowOffset, 4000, ICHAIN_STOP),
 };
 
 void EnFirefly_Init(Actor* thisx, PlayState* play) {
@@ -154,13 +155,13 @@ void EnFirefly_Init(Actor* thisx, PlayState* play) {
         this->actionFunc = EnFirefly_FlyIdle;
     } else if (this->actor.params == KEESE_ICE_FLY) {
         this->auraType = KEESE_AURA_ICE;
-        this->collider.info.toucher.effect = 2; // Freeze
+        this->collider.elem.atDmgInfo.effect = 2; // Freeze
         this->actor.hintId = TATL_HINT_ID_ICE_KEESE;
         this->maxAltitude = this->actor.home.pos.y + 100.0f;
         this->actionFunc = EnFirefly_FlyIdle;
     } else {
         this->auraType = KEESE_AURA_NONE;
-        this->collider.info.toucher.effect = 0; // Nothing
+        this->collider.elem.atDmgInfo.effect = 0; // Nothing
         this->actor.hintId = TATL_HINT_ID_KEESE;
         this->maxAltitude = this->actor.home.pos.y + 100.0f;
         this->actionFunc = EnFirefly_Perch;
@@ -186,7 +187,7 @@ void EnFirefly_SpawnIceEffects(EnFirefly* this, PlayState* play) {
 
 void EnFirefly_Extinguish(EnFirefly* this) {
     this->currentType = KEESE_NORMAL;
-    this->collider.info.toucher.effect = 0; // Nothing
+    this->collider.elem.atDmgInfo.effect = 0; // Nothing
     this->auraType = KEESE_AURA_NONE;
     this->actor.hintId = TATL_HINT_ID_KEESE;
 }
@@ -194,7 +195,7 @@ void EnFirefly_Extinguish(EnFirefly* this) {
 void EnFirefly_Ignite(EnFirefly* this) {
     if (this->actor.params == KEESE_FIRE_FLY) {
         this->currentType = KEESE_FIRE;
-        this->collider.info.toucher.effect = 1; // Fire
+        this->collider.elem.atDmgInfo.effect = 1; // Fire
         this->auraType = KEESE_AURA_FIRE;
         this->actor.hintId = TATL_HINT_ID_FIRE_KEESE;
     }
@@ -359,8 +360,8 @@ void EnFirefly_SetupFall(EnFirefly* this, PlayState* play) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
         this->drawDmgEffAlpha = 4.0f;
         this->drawDmgEffScale = 0.55f;
-        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.info.bumper.hitPos.x,
-                    this->collider.info.bumper.hitPos.y, this->collider.info.bumper.hitPos.z, 0, 0, 0,
+        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.elem.acDmgInfo.hitPos.x,
+                    this->collider.elem.acDmgInfo.hitPos.y, this->collider.elem.acDmgInfo.hitPos.z, 0, 0, 0,
                     CLEAR_TAG_PARAMS(CLEAR_TAG_SMALL_LIGHT_RAYS));
     } else if (this->actor.colChkInfo.damageEffect == KEESE_DMGEFF_FIRE) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
@@ -372,7 +373,7 @@ void EnFirefly_SetupFall(EnFirefly* this, PlayState* play) {
         this->auraType = KEESE_AURA_NONE;
     }
 
-    if (this->actor.flags & ACTOR_FLAG_8000) {
+    if (this->actor.flags & ACTOR_FLAG_ATTACHED_TO_ARROW) {
         this->actor.speed = 0.0f;
     }
 
@@ -384,7 +385,7 @@ void EnFirefly_Fall(EnFirefly* this, PlayState* play) {
     this->actor.colorFilterTimer = 40;
     Math_StepToF(&this->actor.speed, 0.0f, 0.5f);
 
-    if (!(this->actor.flags & ACTOR_FLAG_8000)) {
+    if (!(this->actor.flags & ACTOR_FLAG_ATTACHED_TO_ARROW)) {
         if (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
             Math_ScaledStepToS(&this->actor.shape.rot.x, 0x6800, 0x200);
             this->actor.shape.rot.y -= 0x300;
@@ -644,7 +645,7 @@ void EnFirefly_DisturbDiveAttack(EnFirefly* this, PlayState* play) {
 void EnFirefly_UpdateDamage(EnFirefly* this, PlayState* play) {
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
-        Actor_SetDropFlag(&this->actor, &this->collider.info);
+        Actor_SetDropFlag(&this->actor, &this->collider.elem);
 
         if (this->actor.colChkInfo.damageEffect == KEESE_DMGEFF_STUN) {
             this->timer = 40;
@@ -658,7 +659,7 @@ void EnFirefly_UpdateDamage(EnFirefly* this, PlayState* play) {
         } else {
             Enemy_StartFinishingBlow(play, &this->actor);
             this->actor.colChkInfo.health = 0;
-            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+            this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
 
             // Negate effects of fire on Fire Keese and Ice on Ice Keese
             if (((this->currentType == KEESE_FIRE) && (this->actor.colChkInfo.damageEffect == KEESE_DMGEFF_FIRE)) ||
@@ -691,7 +692,7 @@ void EnFirefly_Update(Actor* thisx, PlayState* play2) {
     EnFirefly_UpdateDamage(this, play);
     this->actionFunc(this, play);
 
-    if (!(this->actor.flags & ACTOR_FLAG_8000)) {
+    if (!(this->actor.flags & ACTOR_FLAG_ATTACHED_TO_ARROW)) {
         if ((this->actor.colChkInfo.health == 0) || (this->actionFunc == EnFirefly_Stunned)) {
             Actor_MoveWithGravity(&this->actor);
         } else {

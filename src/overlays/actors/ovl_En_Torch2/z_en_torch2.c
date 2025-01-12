@@ -5,7 +5,7 @@
  */
 
 #include "z_en_torch2.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -19,7 +19,7 @@ void EnTorch2_Draw(Actor* thisx, PlayState* play2);
 void EnTorch2_UpdateIdle(Actor* thisx, PlayState* play);
 void EnTorch2_UpdateDeath(Actor* thisx, PlayState* play);
 
-ActorInit En_Torch2_InitVars = {
+ActorProfile En_Torch2_Profile = {
     /**/ ACTOR_EN_TORCH2,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -33,7 +33,7 @@ ActorInit En_Torch2_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_NONE,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_PLAYER | OC1_TYPE_1 | OC1_TYPE_2,
@@ -41,11 +41,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK2,
+        ELEM_MATERIAL_UNK2,
         { 0x00100000, 0, 0 },
         { 0xF7CFFFFF, 0, 0 },
-        TOUCH_NONE,
-        BUMP_ON | BUMP_HOOKABLE,
+        ATELEM_NONE,
+        ACELEM_ON | ACELEM_HOOKABLE,
         OCELEM_ON,
     },
     { 20, 60, 0, { 0, 0, 0 } },
@@ -68,9 +68,9 @@ void EnTorch2_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
 
     if (this->actor.params != TORCH2_PARAM_DEKU) {
-        this->actor.flags |= ACTOR_FLAG_CAN_PRESS_SWITCH;
+        this->actor.flags |= ACTOR_FLAG_CAN_PRESS_SWITCHES;
         if (this->actor.params == TORCH2_PARAM_GORON) {
-            this->actor.flags |= ACTOR_FLAG_CAN_PRESS_HEAVY_SWITCH;
+            this->actor.flags |= ACTOR_FLAG_CAN_PRESS_HEAVY_SWITCHES;
         }
     }
     this->framesUntilNextState = 20;
@@ -80,7 +80,7 @@ void EnTorch2_Destroy(Actor* thisx, PlayState* play) {
     EnTorch2* this = THIS;
 
     Collider_DestroyCylinder(play, &this->collider);
-    Play_SetRespawnData(&play->state, this->actor.params + RESPAWN_MODE_GORON - 1, 0xFF, 0,
+    Play_SetRespawnData(play, this->actor.params + RESPAWN_MODE_GORON - 1, 0xFF, 0,
                         PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B), &this->actor.world.pos, this->actor.shape.rot.y);
     play->actorCtx.elegyShells[this->actor.params] = NULL;
 }

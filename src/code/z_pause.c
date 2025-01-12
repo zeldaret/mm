@@ -20,9 +20,10 @@
  */
 
 #include "z64frameadvance.h"
-#include "libc/stdbool.h"
-#include "padutils.h"
-#include "macros.h"
+
+#include "controller.h"
+#include "libu64/pad.h"
+#include "stdbool.h"
 
 void FrameAdvance_Init(FrameAdvanceContext* frameAdvCtx) {
     frameAdvCtx->timer = 0;

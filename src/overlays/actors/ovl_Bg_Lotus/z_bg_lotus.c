@@ -1,5 +1,5 @@
 #include "z_bg_lotus.h"
-#include "objects/object_lotus/object_lotus.h"
+#include "assets/objects/object_lotus/object_lotus.h"
 
 #define FLAGS 0x00000000
 
@@ -14,7 +14,7 @@ void func_80AD68DC(BgLotus* this, PlayState* play);
 void func_80AD6A88(BgLotus* this, PlayState* play);
 void func_80AD6B68(BgLotus* this, PlayState* play);
 
-ActorInit Bg_Lotus_InitVars = {
+ActorProfile Bg_Lotus_Profile = {
     /**/ ACTOR_BG_LOTUS,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -33,12 +33,12 @@ static InitChainEntry sInitChain[] = {
 void BgLotus_Init(Actor* thisx, PlayState* play) {
     BgLotus* this = THIS;
     s32 pad;
-    s32 sp2C;
+    s32 bgId;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &gLilyPadCol);
-    this->dyna.actor.floorHeight = BgCheck_EntityRaycastFloor5(&play->colCtx, &this->dyna.actor.floorPoly, &sp2C,
+    this->dyna.actor.floorHeight = BgCheck_EntityRaycastFloor5(&play->colCtx, &this->dyna.actor.floorPoly, &bgId,
                                                                &this->dyna.actor, &this->dyna.actor.world.pos);
     this->unk168 = 0x60;
     this->dyna.actor.world.rot.y = (s32)Rand_Next() >> 0x10;
@@ -55,7 +55,7 @@ void func_80AD6830(BgLotus* this) {
     f32 temp_fv1;
 
     if (this->dyna.actor.params == 0) {
-        temp_fv1 = Math_SinF(this->unk166 * (M_PI / 4)) * ((0.014f * (this->unk166 / (80.0f * 0.1f))) + 0.01f);
+        temp_fv1 = Math_SinF(this->unk166 * (M_PIf / 4)) * ((0.014f * (this->unk166 / (80.0f * 0.1f))) + 0.01f);
         this->dyna.actor.scale.x = (1.0f + temp_fv1) * 0.1f;
         this->dyna.actor.scale.z = (1.0f - temp_fv1) * 0.1f;
     }
@@ -65,7 +65,7 @@ void func_80AD68DC(BgLotus* this, PlayState* play) {
     f32 sp34;
 
     this->unk168--;
-    sp34 = Math_SinF(this->unk168 * (M_PI / 48)) * 6.0f;
+    sp34 = Math_SinF(this->unk168 * (M_PIf / 48)) * 6.0f;
 
     if (this->dyna.actor.params == 0) {
         this->dyna.actor.world.pos.x = (Math_SinS(this->dyna.actor.world.rot.y) * sp34) + this->dyna.actor.home.pos.x;

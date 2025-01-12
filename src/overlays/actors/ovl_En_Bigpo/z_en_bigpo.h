@@ -2,7 +2,7 @@
 #define Z_EN_BIGPO_H
 
 #include "global.h"
-#include "objects/object_bigpo/object_bigpo.h"
+#include "assets/objects/object_bigpo/object_bigpo.h"
 
 struct EnBigpo;
 

@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_tobira01.h"
-#include "objects/object_spot11_obj/object_spot11_obj.h"
+#include "assets/objects/object_spot11_obj/object_spot11_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -16,7 +16,7 @@ void BgTobira01_Destroy(Actor* thisx, PlayState* play);
 void BgTobira01_Update(Actor* thisx, PlayState* play);
 void BgTobira01_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Bg_Tobira01_InitVars = {
+ActorProfile Bg_Tobira01_Profile = {
     /**/ ACTOR_BG_TOBIRA01,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -99,7 +99,7 @@ void BgTobira01_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, gGoronDoorDL);
 
     CLOSE_DISPS(play->state.gfxCtx);

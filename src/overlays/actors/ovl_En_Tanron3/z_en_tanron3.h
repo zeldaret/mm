@@ -2,7 +2,7 @@
 #define Z_EN_TANRON3_H
 
 #include "global.h"
-#include "objects/object_boss03/object_boss03.h"
+#include "assets/objects/object_boss03/object_boss03.h"
 
 struct EnTanron3;
 

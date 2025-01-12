@@ -7,7 +7,7 @@
 #include "z_en_takaraya.h"
 #include "overlays/actors/ovl_En_Box/z_en_box.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnTakaraya*)thisx)
 
@@ -31,7 +31,7 @@ void func_80ADF730(EnTakaraya* this, PlayState* play);
 void func_80ADF7B8(EnTakaraya* this);
 void func_80ADF7CC(EnTakaraya* this, PlayState* play);
 
-ActorInit En_Takaraya_InitVars = {
+ActorProfile En_Takaraya_Profile = {
     /**/ ACTOR_EN_TAKARAYA,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -58,8 +58,8 @@ TexturePtr sEyesDownTextures[] = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_U8(targetMode, TARGET_MODE_6, ICHAIN_CONTINUE),
-    ICHAIN_F32(targetArrowOffset, 1000, ICHAIN_STOP),
+    ICHAIN_U8(attentionRangeType, ATTENTION_RANGE_6, ICHAIN_CONTINUE),
+    ICHAIN_F32(lockOnArrowOffset, 1000, ICHAIN_STOP),
 };
 
 static s32 sTexturesDesegmented = false;
@@ -217,7 +217,9 @@ void EnTakaraya_Talk(EnTakaraya* this, PlayState* play) {
             Animation_PlayLoop(&this->skelAnime, &object_bg_Anim_009890);
         }
     }
+
     talkState = Message_GetState(&play->msgCtx);
+
     if ((talkState == TEXT_STATE_CLOSING) || (talkState == TEXT_STATE_DONE)) {
         if (this->actor.textId == 0x778) {
             func_80ADF2D4(this);
@@ -259,7 +261,7 @@ void EnTakaraya_Talk(EnTakaraya* this, PlayState* play) {
 }
 
 void func_80ADF2D4(EnTakaraya* this) {
-    Actor_PlaySfx_FlaggedCentered2(&this->actor, NA_SE_SY_FOUND);
+    Actor_PlaySfx_FlaggedCentered1(&this->actor, NA_SE_SY_FOUND);
     Audio_PlaySubBgm(NA_BGM_TIMED_MINI_GAME);
     this->timer = 145;
     SET_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_WAIT);
@@ -284,9 +286,9 @@ void func_80ADF338(EnTakaraya* this, PlayState* play) {
         } else {
             sp2C = ((chest->xzDistToPlayer - 250.0f) * (25 - this->timer) * 0.04f) + 250.0f;
         }
-        subCamEye.x = (Math_SinS(chest->yawTowardsPlayer) * sp2C) + chest->world.pos.x;
+        subCamEye.x = chest->world.pos.x + (Math_SinS(chest->yawTowardsPlayer) * sp2C);
         subCamEye.y = player->actor.world.pos.y + 120.0f;
-        subCamEye.z = (Math_CosS(chest->yawTowardsPlayer) * sp2C) + chest->world.pos.z;
+        subCamEye.z = chest->world.pos.z + (Math_CosS(chest->yawTowardsPlayer) * sp2C);
         subCamAt.x = subCamEye.x - (Math_SinS(chest->yawTowardsPlayer) * 250.0f);
         subCamAt.y = subCamEye.y - 90.0f;
         subCamAt.z = subCamEye.z - (Math_CosS(chest->yawTowardsPlayer) * 250.0f);
@@ -346,14 +348,14 @@ void func_80ADF654(EnTakaraya* this, PlayState* play) {
 void func_80ADF6DC(EnTakaraya* this) {
     Animation_PlayLoop(&this->skelAnime, &object_bg_Anim_001384);
     this->eyeTexIndex = 0;
-    this->actor.flags |= ACTOR_FLAG_10000;
+    this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
     this->actionFunc = func_80ADF730;
 }
 
 void func_80ADF730(EnTakaraya* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
-        this->actor.flags &= ~ACTOR_FLAG_10000;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         func_80ADF7B8(this);
     } else {
         this->formSwitchFlag = GET_PLAYER_FORM + this->switchFlag;

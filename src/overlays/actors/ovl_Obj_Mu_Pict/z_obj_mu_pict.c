@@ -6,7 +6,7 @@
 
 #include "z_obj_mu_pict.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((ObjMuPict*)thisx)
 
@@ -25,7 +25,7 @@ void func_80C06D90(ObjMuPict* this, PlayState* play);
 void func_80C06DC8(ObjMuPict* this, PlayState* play);
 void func_80C06E88(ObjMuPict* this, PlayState* play);
 
-ActorInit Obj_Mu_Pict_InitVars = {
+ActorProfile Obj_Mu_Pict_Profile = {
     /**/ ACTOR_OBJ_MU_PICT,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -46,7 +46,7 @@ void ObjMuPict_Init(Actor* thisx, PlayState* play) {
 
     func_80C06D90(this, play);
     this->unk14A = OBJMUPICT_GET_F000(&this->actor);
-    this->actor.targetMode = TARGET_MODE_6;
+    this->actor.attentionRangeType = ATTENTION_RANGE_6;
     this->actor.focus.pos = this->actor.world.pos;
     this->actor.focus.pos.y += 30.0f;
     this->unk148 = 0;
@@ -162,26 +162,32 @@ void func_80C06E88(ObjMuPict* this, PlayState* play) {
                 Message_StartTextbox(play, 0x159B, &this->actor);
                 this->textId = 0x159B;
                 break;
+
             case 0x159B:
                 Message_StartTextbox(play, 0x159C, &this->actor);
                 this->textId = 0x159C;
                 break;
+
             case 0x159D:
                 Message_StartTextbox(play, 0x159E, &this->actor);
                 this->textId = 0x159E;
                 break;
+
             case 0x159E:
                 Message_StartTextbox(play, 0x159F, &this->actor);
                 this->textId = 0x159F;
                 break;
+
             case 0x15A0:
                 Message_StartTextbox(play, 0x15A1, &this->actor);
                 this->textId = 0x15A1;
                 break;
+
             case 0x15A1:
                 Message_StartTextbox(play, 0x15A2, &this->actor);
                 this->textId = 0x15A2;
                 break;
+
             case 0x15A3:
                 Message_StartTextbox(play, 0x15A4, &this->actor);
                 this->textId = 0x15A4;

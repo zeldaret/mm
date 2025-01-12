@@ -2,11 +2,15 @@
 #define Z64CAMERA_H
 
 #include "ultra64.h"
+#include "z64math.h"
 #include "z64actor.h"
 #include "z64save.h"
 #include "unk.h"
 
+struct CollisionContext;
 struct CollisionPoly;
+struct PlayState;
+struct View;
 
 // these two angle conversion macros are slightly inaccurate
 #define CAM_DEG_TO_BINANG(degrees) (s16)((degrees) * ((f32)0xFFFF / 360) + .5f)
@@ -1018,10 +1022,10 @@ typedef struct {
     { interfaceFlags, CAM_DATA_INTERFACE_FLAGS }
 
 typedef struct {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ f32 fov;
-    /* 0x0C */ s16 interfaceFlags;
+    /* 0x0 */ f32 unk_00;
+    /* 0x4 */ f32 unk_04;
+    /* 0x8 */ f32 fov;
+    /* 0xC */ s16 interfaceFlags;
 } Fixed1ReadOnlyData; // size = 0x10
 
 typedef struct {
@@ -1158,8 +1162,8 @@ typedef struct {
 } Unique2ReadOnlyData; // size = 0x14
 
 typedef struct {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ s16 unk_04;
+    /* 0x0 */ f32 unk_00;
+    /* 0x4 */ s16 unk_04;
 } Unique2ReadWriteData; // size = 0x8
 
 typedef struct {
@@ -1193,8 +1197,7 @@ typedef struct {
     /* 0x00 */ Vec3f unk_00;
     /* 0x0C */ Vec3f unk_0C;
     /* 0x18 */ f32 unk_18;
-    /* 0x1C */ Vec3f unk_1C;
-    /* 0x28 */ Vec3f unk_28;
+    /* 0x1C */ InfiniteLine unk_1C;
     /* 0x34 */ Vec3s unk_34;
     /* 0x3A */ s16 unk_3A;
     /* 0x3C */ s16 timer;
@@ -1202,8 +1205,8 @@ typedef struct {
 } Unique0ReadWriteData; // size = 0x40
 
 typedef struct {
-    /* 0x00 */ Unique0ReadOnlyData roData;
-    /* 0x0C */ Unique0ReadWriteData rwData;
+    /* 0x0 */ Unique0ReadOnlyData roData;
+    /* 0xC */ Unique0ReadWriteData rwData;
 } Unique0; // size = 0x4C
 
 #define UNIQUE0_FLAG_0 (1 << 0)
@@ -1217,11 +1220,11 @@ typedef struct {
  */
 
 typedef struct {
-    /* 0x00 */ s16 interfaceFlags;
+    /* 0x0 */ s16 interfaceFlags;
 } Unique6ReadOnlyData; // size = 0x4
 
 typedef struct {
-    /* 0x00 */ Unique6ReadOnlyData roData;
+    /* 0x0 */ Unique6ReadOnlyData roData;
 } Unique6; // size = 0x4
 
 #define UNIQUE6_FLAG_0 (1 << 0)
@@ -1243,7 +1246,7 @@ typedef struct {
  */
 
 typedef struct {
-    /* 0x00 */ s16 interfaceFlags;
+    /* 0x0 */ s16 interfaceFlags;
 } Demo1ReadOnlyData; // size = 0x4
 
 typedef struct {
@@ -1254,8 +1257,8 @@ typedef struct {
 } Demo1ReadWriteData; // size = 0x20
 
 typedef struct {
-    /* 0x00 */ Demo1ReadOnlyData roData;
-    /* 0x04 */ Demo1ReadWriteData rwData;
+    /* 0x0 */ Demo1ReadOnlyData roData;
+    /* 0x4 */ Demo1ReadWriteData rwData;
 } Demo1; // size = 0x24
 
 
@@ -1270,9 +1273,9 @@ typedef struct {
     { interfaceFlags, CAM_DATA_INTERFACE_FLAGS }
 
 typedef struct {
-    /* 0x00 */ f32 fov;
-    /* 0x04 */ f32 unk_04; // unused
-    /* 0x08 */ s16 interfaceFlags;
+    /* 0x0 */ f32 fov;
+    /* 0x4 */ f32 unk_04; // unused
+    /* 0x8 */ s16 interfaceFlags;
 } Demo2ReadOnlyData; // size = 0xC
 
 typedef struct {
@@ -1283,8 +1286,8 @@ typedef struct {
 } Demo2ReadWriteData; // size = 0x14
 
 typedef struct {
-    /* 0x08 */ Demo2ReadOnlyData roData;
-    /* 0x0C */ Demo2ReadWriteData rwData;
+    /* 0x8 */ Demo2ReadOnlyData roData;
+    /* 0xC */ Demo2ReadWriteData rwData;
 } Demo2; // size = 0x20
 
 
@@ -1294,18 +1297,18 @@ typedef struct {
  */
 
 typedef struct {
-    /* 0x00 */ s16 interfaceFlags;
+    /* 0x0 */ s16 interfaceFlags;
 } Demo3ReadOnlyData; // size = 0x4
 
 typedef struct {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 timer;
+    /* 0x0 */ f32 unk_00;
+    /* 0x4 */ s16 unk_04;
+    /* 0x6 */ s16 timer;
 } Demo3ReadWriteData; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ Demo3ReadOnlyData roData;
-    /* 0x04 */ Demo3ReadWriteData rwData;
+    /* 0x0 */ Demo3ReadOnlyData roData;
+    /* 0x4 */ Demo3ReadWriteData rwData;
 } Demo3; // size = 0xC
 
 
@@ -1315,7 +1318,7 @@ typedef struct {
  */
 
 typedef struct {
-    /* 0x00 */ s16 interfaceFlags;
+    /* 0x0 */ s16 interfaceFlags;
 } Demo4ReadOnlyData; // size = 0x4
 
 typedef struct {
@@ -1329,8 +1332,8 @@ typedef struct {
 } Demo4ReadWriteData; // size = 0x24
 
 typedef struct {
-    /* 0x00 */ Demo4ReadOnlyData roData;
-    /* 0x04 */ Demo4ReadWriteData rwData;
+    /* 0x0 */ Demo4ReadOnlyData roData;
+    /* 0x4 */ Demo4ReadWriteData rwData;
 } Demo4; // size = 0x28
 
 
@@ -1340,7 +1343,7 @@ typedef struct {
  */
 
 typedef struct {
-    /* 0x00 */ s16 interfaceFlags;
+    /* 0x0 */ s16 interfaceFlags;
 } Demo5ReadOnlyData; // size = 0x4
 
 typedef struct {
@@ -1355,8 +1358,8 @@ typedef struct {
 } Demo5ReadWriteData; // size = 0x28
 
 typedef struct {
-    /* 0x00 */ Demo5ReadOnlyData roData;
-    /* 0x04 */ Demo5ReadWriteData rwData;
+    /* 0x0 */ Demo5ReadOnlyData roData;
+    /* 0x4 */ Demo5ReadWriteData rwData;
 } Demo5; // size = 0x2C
 
 
@@ -1366,7 +1369,7 @@ typedef struct {
  */
 
 typedef struct {
-    /* 0x00 */ s16 interfaceFlags;
+    /* 0x0 */ s16 interfaceFlags;
 } Demo0ReadOnlyData; // size = 0x4
 
 typedef struct {
@@ -1380,8 +1383,8 @@ typedef struct {
 } Demo0ReadWriteData; // size = 0x1C
 
 typedef struct {
-    /* 0x00 */ Demo0ReadOnlyData roData;
-    /* 0x04 */ Demo0ReadWriteData rwData;
+    /* 0x0 */ Demo0ReadOnlyData roData;
+    /* 0x4 */ Demo0ReadWriteData rwData;
 } Demo0; // size = 0x20
 
 
@@ -1412,7 +1415,7 @@ typedef struct {
 } Special5ReadOnlyData; // size = 0x1C
 
 typedef struct {
-    /* 0x00 */ s16 animTimer;
+    /* 0x0 */ s16 animTimer;
 } Special5ReadWriteData; // size = 0x4
 
 typedef struct {
@@ -1429,9 +1432,9 @@ typedef struct {
 // For functions that deal with doors, an extra struct is added to the paramData
 
 typedef struct {
-    /* 0x00 */ Actor* doorActor;
-    /* 0x04 */ s16 bgCamIndex;
-    /* 0x06 */ union {
+    /* 0x0 */ Actor* doorActor;
+    /* 0x4 */ s16 bgCamIndex;
+    /* 0x6 */ union {
         Vec3s eye; // position of the camera while exiting a spiral staircase
         struct {
             s16 timer1; // timer while camera is fixed in front of the door
@@ -1467,9 +1470,9 @@ typedef struct {
 } Special8ReadOnlyData; // size = 0x14
 
 typedef struct {
-    /* 0x00 */ Vec3f eye;
-    /* 0x0C */ s16 spiralDoorCsFrame; // 1/5th of the length of the cutscene
-    /* 0x0E */ s16 fov;
+    /* 0x0 */ Vec3f eye;
+    /* 0xC */ s16 spiralDoorCsFrame; // 1/5th of the length of the cutscene
+    /* 0xE */ s16 fov;
 } Special8ReadWriteData; // size = 0x10
 
 typedef struct {
@@ -1492,18 +1495,18 @@ typedef struct {
     { interfaceFlags, CAM_DATA_INTERFACE_FLAGS }
 
 typedef struct {
-    /* 0x00 */ f32 yOffset;
-    /* 0x04 */ f32 fov;
-    /* 0x08 */ s16 interfaceFlags;
+    /* 0x0 */ f32 yOffset;
+    /* 0x4 */ f32 fov;
+    /* 0x8 */ s16 interfaceFlags;
 } Special9ReadOnlyData; // size = 0xC
 
 typedef struct {
-    /* 0x00 */ s16 unk_00;
+    /* 0x0 */ s16 unk_00;
 } Special9ReadWriteData; // size = 0x4
 
 typedef struct {
-    /* 0x00 */ Special9ReadOnlyData roData;
-    /* 0x0C */ Special9ReadWriteData rwData;
+    /* 0x0 */ Special9ReadOnlyData roData;
+    /* 0xC */ Special9ReadWriteData rwData;
 } Special9; // size = 0x10
 
 #define SPECIAL9_FLAG_0 (1 << 0)
@@ -1611,5 +1614,48 @@ typedef struct Camera {
     /* 0x168 */ s16 unk168;
     /* 0x16C */ Vec3f meshActorPos;
 } Camera; // size = 0x178
+
+Camera* Camera_Create(struct View* view, struct CollisionContext* colCtx, struct PlayState* play);
+void Camera_Destroy(Camera* camera);
+void Camera_Init(Camera* camera, struct View* view, struct CollisionContext* colCtx, struct PlayState* play);
+void func_800DDFE0(Camera* camera);
+void Camera_InitFocalActorSettings(Camera* camera, struct Actor* focalActor);
+s32 Camera_ChangeStatus(Camera* camera, s16 status);
+s32 Camera_UpdateWater(Camera* camera);
+void Camera_EarthquakeDay3(Camera* camera);
+s32 Camera_UpdateHotRoom(Camera* camera);
+s32 Camera_SetSwordDistortion(Camera* camera);
+s32 Camera_RequestGiantsMaskSetting(Camera* camera);
+Vec3s Camera_Update(Camera* camera);
+s32 func_800DF498(Camera* camera);
+s32 Camera_ChangeModeFlags(Camera* camera, s16 mode, u8 forceChange);
+s32 Camera_ChangeMode(Camera* camera, s16 mode);
+s32 Camera_CheckValidMode(Camera* camera, s16 mode);
+s16 Camera_ChangeSettingFlags(Camera* camera, s16 setting, s16 flags);
+s32 Camera_ChangeSetting(Camera* camera, s16 setting);
+s32 Camera_ChangeActorCsCamIndex(Camera* camera, s32 bgCamIndex);
+Vec3s Camera_GetInputDir(Camera* camera);
+s16 Camera_GetInputDirPitch(Camera* camera);
+s16 Camera_GetInputDirYaw(Camera* camera);
+Vec3s Camera_GetCamDir(Camera* camera);
+s16 Camera_GetCamDirPitch(Camera* camera);
+s16 Camera_GetCamDirYaw(Camera* camera);
+s32 Camera_AddQuake(Camera* camera, s32 arg1, s16 y, s32 countdown);
+s32 Camera_SetViewParam(Camera* camera, s32 viewFlag, void* param);
+s32 Camera_UnsetViewFlag(Camera* camera, s16 viewFlag);
+s32 Camera_OverwriteStateFlags(Camera* camera, s16 stateFlags);
+s16 Camera_SetStateFlag(Camera* camera, s16 flags);
+s16 Camera_UnsetStateFlag(Camera* camera, s16 flags);
+s32 Camera_ChangeDoorCam(Camera* camera, struct Actor* doorActor, s16 bgCamIndex, f32 arg3, s16 timer1, s16 timer2, s16 timer3);
+s32 Camera_Copy(Camera* dstCam, Camera* srcCam);
+s32 Camera_IsDbgCamEnabled(void);
+Vec3f Camera_GetQuakeOffset(Camera* camera);
+void Camera_SetCameraData(Camera* camera, s16 setDataFlags, void* data0, void* data1, s16 data2, s16 data3);
+s32 Camera_GetNegOne(void);
+s16 func_800E0238(Camera* camera);
+void Camera_SetFocalActor(Camera* camera, struct Actor* actor);
+void Camera_SetTargetActor(Camera* camera, struct Actor* actor);
+f32 Camera_GetWaterYPos(Camera* camera);
+void func_800E0348(Camera* camera);
 
 #endif

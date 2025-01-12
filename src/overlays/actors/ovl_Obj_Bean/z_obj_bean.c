@@ -5,8 +5,8 @@
  */
 
 #include "z_obj_bean.h"
-#include "objects/object_mamenoki/object_mamenoki.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_mamenoki/object_mamenoki.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_400000)
 
@@ -60,7 +60,7 @@ void func_80938C1C(Actor* thisx, PlayState* play);
 void func_80938E00(Actor* thisx, PlayState* play);
 void func_80938F50(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Bean_InitVars = {
+ActorProfile Obj_Bean_Profile = {
     /**/ ACTOR_OBJ_BEAN,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -74,7 +74,7 @@ ActorInit Obj_Bean_InitVars = {
 
 static ColliderCylinderInit sCylinderInit1 = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_NONE,
         OC1_ON | OC1_TYPE_PLAYER,
@@ -82,11 +82,11 @@ static ColliderCylinderInit sCylinderInit1 = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0x00000000, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_NONE,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_NONE,
         OCELEM_ON,
     },
     { 64, 30, -31, { 0, 0, 0 } },
@@ -94,7 +94,7 @@ static ColliderCylinderInit sCylinderInit1 = {
 
 static ColliderCylinderInit sCylinderInit2 = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_OTHER,
         OC1_NONE,
@@ -102,11 +102,11 @@ static ColliderCylinderInit sCylinderInit2 = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_NONE,
     },
     { 10, 10, 0, { 0, 0, 0 } },
@@ -121,19 +121,19 @@ static Vec2f D_80938FF8[4] = {
 
 void func_80936CF0(ObjBean* this, PlayState* play) {
     Vec3f sp24;
-    s32 sp20;
+    s32 bgId;
 
     sp24.x = this->dyna.actor.world.pos.x;
     sp24.y = this->dyna.actor.world.pos.y + 29.999998f;
     sp24.z = this->dyna.actor.world.pos.z;
     this->dyna.actor.floorHeight =
-        BgCheck_EntityRaycastFloor5(&play->colCtx, &this->dyna.actor.floorPoly, &sp20, &this->dyna.actor, &sp24);
+        BgCheck_EntityRaycastFloor5(&play->colCtx, &this->dyna.actor.floorPoly, &bgId, &this->dyna.actor, &sp24);
 }
 
 s32 func_80936D58(ObjBean* this, PlayState* play) {
     static Vec3f D_80939018 = { 0.0f, 30.0f, 0.0f };
     s32 pad;
-    s32 spB8;
+    s32 bgId;
     Vec3f spAC;
     Vec3f spA0;
     Vec3f sp94;
@@ -148,7 +148,7 @@ s32 func_80936D58(ObjBean* this, PlayState* play) {
     Math_Vec3f_Diff(&this->dyna.actor.world.pos, &spAC, &sp94);
 
     if (BgCheck_EntityLineTest2(&play->colCtx, &spA0, &sp94, &sp88, &this->dyna.actor.floorPoly, true, true, true, true,
-                                &spB8, &this->dyna.actor)) {
+                                &bgId, &this->dyna.actor)) {
         this->dyna.actor.world.pos.x = (COLPOLY_GET_NORMAL(this->dyna.actor.floorPoly->normal.x) * 1.9f) + sp88.x;
         this->dyna.actor.world.pos.y = (COLPOLY_GET_NORMAL(this->dyna.actor.floorPoly->normal.y) * 1.9f) + sp88.y;
         this->dyna.actor.world.pos.z = (COLPOLY_GET_NORMAL(this->dyna.actor.floorPoly->normal.z) * 1.9f) + sp88.z;
@@ -592,7 +592,7 @@ void func_809381C4(ObjBean* this, PlayState* play) {
 
     if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
         CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
-        if (this->dyna.actor.csId >= 0) {
+        if (this->dyna.actor.csId > CS_ID_NONE) {
             Player_SetCsActionWithHaltedActors(play, &this->dyna.actor, PLAYER_CSACTION_1);
         }
         this->unk_1E4 = 2;
@@ -749,7 +749,7 @@ void func_8093876C(ObjBean* this) {
 void func_80938780(ObjBean* this, PlayState* play) {
     if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
         CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
-        if (this->dyna.actor.csId >= 0) {
+        if (this->dyna.actor.csId > CS_ID_NONE) {
             Player_SetCsActionWithHaltedActors(play, &this->dyna.actor, PLAYER_CSACTION_1);
         }
         this->unk_1B4 = 36;
@@ -943,7 +943,7 @@ void func_80938E00(Actor* thisx, PlayState* play) {
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
 
     if (this->unk_1FE & 4) {
         gSPDisplayList(POLY_OPA_DISP++, object_mamenoki_DL_000090);
@@ -958,7 +958,7 @@ void func_80938E00(Actor* thisx, PlayState* play) {
                                      this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
         Matrix_Scale(this->unk_1B8, this->unk_1B8, this->unk_1B8, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, object_mamenoki_DL_000530);
     }
 

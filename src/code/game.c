@@ -1,15 +1,20 @@
+#include "z64game.h"
+
 #include "global.h"
 #include "audiomgr.h"
+#include "libu64/debug.h"
+#include "gfx.h"
+#include "gfxalloc.h"
 #include "idle.h"
+#include "regs.h"
 #include "sys_cfb.h"
 #include "libc64/malloc.h"
+
 #include "z64debug_text.h"
 #include "z64rumble.h"
 #include "z64speed_meter.h"
 #include "z64vimode.h"
 #include "z64vis.h"
-#include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
-#include "debug.h"
 
 s32 gFramerateDivisor = 1;
 f32 gFramerateDivisorF = 1.0f;
@@ -84,7 +89,7 @@ void GameState_Draw(GameState* gameState, GraphicsContext* gfxCtx) {
 
     OPEN_DISPS(gfxCtx);
 
-    gfx = Graph_GfxPlusOne(gfxHead = POLY_OPA_DISP);
+    gfx = Gfx_Open(gfxHead = POLY_OPA_DISP);
     gSPDisplayList(OVERLAY_DISP++, gfx);
 
     if ((R_FB_FILTER_TYPE != 0) && (R_FB_FILTER_ENV_COLOR(3) == 0)) {
@@ -96,7 +101,7 @@ void GameState_Draw(GameState* gameState, GraphicsContext* gfxCtx) {
     }
 
     gSPEndDisplayList(gfx++);
-    Graph_BranchDlist(gfxHead, gfx);
+    Gfx_Close(gfxHead, gfx);
     POLY_OPA_DISP = gfx;
 
     CLOSE_DISPS(gfxCtx);
@@ -128,10 +133,10 @@ void GameState_DrawEnd(GraphicsContext* gfxCtx) {
 
     OPEN_DISPS(gfxCtx);
 
-    gfx = Graph_GfxPlusOne(gfxHead = POLY_OPA_DISP);
+    gfx = Gfx_Open(gfxHead = POLY_OPA_DISP);
     gSPDisplayList(OVERLAY_DISP++, gfx);
     gSPEndDisplayList(gfx++);
-    Graph_BranchDlist(gfxHead, gfx);
+    Gfx_Close(gfxHead, gfx);
 
     POLY_OPA_DISP = gfx;
 

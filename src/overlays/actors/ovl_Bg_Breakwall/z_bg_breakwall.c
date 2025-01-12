@@ -5,15 +5,15 @@
  */
 
 #include "z_bg_breakwall.h"
-#include "objects/object_omoya_obj/object_omoya_obj.h"
-#include "objects/object_yukimura_obj/object_yukimura_obj.h"
-#include "objects/object_keikoku_obj/object_keikoku_obj.h"
-#include "objects/object_posthouse_obj/object_posthouse_obj.h"
-#include "objects/object_kumo30/object_kumo30.h"
-#include "objects/object_mnk/object_mnk.h"
-#include "objects/object_ikninside_obj/object_ikninside_obj.h"
-#include "objects/object_kaizoku_obj/object_kaizoku_obj.h"
-#include "objects/object_spot11_obj/object_spot11_obj.h"
+#include "assets/objects/object_omoya_obj/object_omoya_obj.h"
+#include "assets/objects/object_yukimura_obj/object_yukimura_obj.h"
+#include "assets/objects/object_keikoku_obj/object_keikoku_obj.h"
+#include "assets/objects/object_posthouse_obj/object_posthouse_obj.h"
+#include "assets/objects/object_kumo30/object_kumo30.h"
+#include "assets/objects/object_mnk/object_mnk.h"
+#include "assets/objects/object_ikninside_obj/object_ikninside_obj.h"
+#include "assets/objects/object_kaizoku_obj/object_kaizoku_obj.h"
+#include "assets/objects/object_spot11_obj/object_spot11_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -45,7 +45,7 @@ void func_808B7B54(Actor* thisx, PlayState* play);
 void func_808B7D34(Actor* thisx, PlayState* play);
 void BgBreakwall_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Bg_Breakwall_InitVars = {
+ActorProfile Bg_Breakwall_Profile = {
     /**/ ACTOR_BG_BREAKWALL,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -151,7 +151,7 @@ bool func_808B736C(BgBreakwall* this, PlayState* play) {
 }
 
 bool func_808B7380(BgBreakwall* this, PlayState* play) {
-    if ((gSaveContext.save.day >= 2) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
+    if ((gSaveContext.save.day >= 2) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS)) {
         return false;
     }
     return true;
@@ -362,14 +362,14 @@ void func_808B7B54(Actor* thisx, PlayState* play) {
 
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
 
     Environment_LerpSandstormColors(D_808B8310, &sp50);
     Environment_LerpSandstormColors(D_808B8330, &sp4C);
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, sp50.r, sp50.g, sp50.b, 255);
     gDPSetEnvColor(POLY_XLU_DISP++, sp4C.r, sp4C.g, sp4C.b, 255);
-    gSPDisplayList(POLY_XLU_DISP++, object_posthouse_obj_DL_000A50);
+    gSPDisplayList(POLY_XLU_DISP++, object_kumo30_DL_000A50);
 
     Environment_LerpSandstormColors(D_808B8320, &sp50);
     Environment_LerpSandstormColors(D_808B8340, &sp4C);
@@ -430,14 +430,14 @@ void BgBreakwall_Draw(Actor* thisx, PlayState* play) {
     if (temp_s2->unk_04 != NULL) {
         Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, temp_s2->unk_04);
     }
 
     if (temp_s2->unk_08 != NULL) {
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, temp_s2->unk_08);
     }
 

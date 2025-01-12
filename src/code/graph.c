@@ -1,22 +1,26 @@
-#include "z64.h"
-#include "regs.h"
-#include "functions.h"
-#include "fault.h"
+#include "ultra64.h"
+
+#include "scheduler.h"
 
 // Variables are put before most headers as a hacky way to bypass bss reordering
-FaultAddrConvClient sGraphFaultAddrConvClient;
-FaultClient sGraphFaultClient;
-GfxMasterList* gGfxMasterDL;
+struct FaultAddrConvClient sGraphFaultAddrConvClient;
+struct FaultClient sGraphFaultClient;
+struct GfxMasterList* gGfxMasterDL;
 CfbInfo sGraphCfbInfos[3];
 OSTime sGraphPrevUpdateEndTime;
 
-#include "variables.h"
+#include "regs.h"
+#include "fault.h"
+
 #include "macros.h"
 #include "buffers.h"
 #include "idle.h"
 #include "sys_cfb.h"
+#include "sys_ucode.h"
 #include "libc64/malloc.h"
+#include "z64DLF.h"
 #include "z64speed_meter.h"
+
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
 #include "overlays/gamestates/ovl_file_choose/z_file_select.h"
 #include "overlays/gamestates/ovl_opening/z_opening.h"
@@ -137,8 +141,8 @@ void Graph_Destroy(GraphicsContext* gfxCtx) {
  * If it does not signal completion in that time, retry or trigger a crash.
  */
 void Graph_TaskSet00(GraphicsContext* gfxCtx, GameState* gameState) {
-    static s32 retryCount = 10;
-    static s32 cfbIdx = 0;
+    static s32 sRetryCount = 10;
+    static s32 sCfbIndex = 0;
     OSTask_t* task = &gfxCtx->task.list.t;
     OSScTask* scTask = &gfxCtx->task;
     OSTimer timer;
@@ -152,8 +156,8 @@ retry:
 
     if (msg == (OSMesg)666) {
         osSyncPrintf("GRAPH SP TIMEOUT\n");
-        if (retryCount >= 0) {
-            retryCount--;
+        if (sRetryCount >= 0) {
+            sRetryCount--;
             Sched_SendGfxCancelMsg(&gScheduler);
             goto retry;
         } else {
@@ -199,8 +203,8 @@ retry:
 
     { s32 pad; }
 
-    cfb = &sGraphCfbInfos[cfbIdx];
-    cfbIdx = (cfbIdx + 1) % ARRAY_COUNT(sGraphCfbInfos);
+    cfb = &sGraphCfbInfos[sCfbIndex];
+    sCfbIndex = (sCfbIndex + 1) % ARRAY_COUNT(sGraphCfbInfos);
 
     cfb->framebuffer = gfxCtx->curFrameBuffer;
     cfb->swapBuffer = gfxCtx->curFrameBuffer;
@@ -361,7 +365,7 @@ void Graph_ThreadEntry(void* arg) {
 
         size = ovl->instanceSize;
 
-        func_800809F4(ovl->vromStart);
+        func_800809F4(ovl->file.vromStart);
 
         gameState = malloc(size);
 

@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_hsblock.h"
-#include "objects/object_d_hsblock/object_d_hsblock.h"
+#include "assets/objects/object_d_hsblock/object_d_hsblock.h"
 #include "overlays/actors/ovl_Obj_Ice_Poly/z_obj_ice_poly.h"
 
 #define FLAGS 0x00000000
@@ -24,7 +24,7 @@ void func_8093E05C(ObjHsblock* this);
 void func_8093E0E8(ObjHsblock* this);
 void func_8093E10C(ObjHsblock* this, PlayState* play);
 
-ActorInit Obj_Hsblock_InitVars = {
+ActorProfile Obj_Hsblock_Profile = {
     /**/ ACTOR_OBJ_HSBLOCK,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -79,6 +79,7 @@ void ObjHsblock_Init(Actor* thisx, PlayState* play) {
         case 2:
             func_8093E03C(this);
             break;
+
         case 1:
             if (Flags_GetSwitch(play, OBJHSBLOCK_GET_SWITCH_FLAG(thisx))) {
                 func_8093E03C(this);
@@ -86,6 +87,7 @@ void ObjHsblock_Init(Actor* thisx, PlayState* play) {
                 func_8093E05C(this);
             }
             break;
+
         default:
             break;
     }
@@ -148,7 +150,7 @@ void ObjHsblock_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gDPSetEnvColor(POLY_OPA_DISP++, envColor->r, envColor->g, envColor->b, 255);
     gSPDisplayList(POLY_OPA_DISP++, sDisplayLists[OBJHSBLOCK_GET_3(thisx)]);
 

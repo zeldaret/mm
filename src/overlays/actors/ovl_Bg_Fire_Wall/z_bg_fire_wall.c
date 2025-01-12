@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_fire_wall.h"
-#include "objects/object_fwall/object_fwall.h"
+#include "assets/objects/object_fwall/object_fwall.h"
 #include "overlays/actors/ovl_En_Encount4/z_en_encount4.h"
 
 #define FLAGS 0x00000000
@@ -21,7 +21,7 @@ void func_809AC638(BgFireWall* this, PlayState* play);
 void func_809AC68C(BgFireWall* this, PlayState* play);
 void func_809AC6C0(BgFireWall* this, PlayState* play);
 
-ActorInit Bg_Fire_Wall_InitVars = {
+ActorProfile Bg_Fire_Wall_Profile = {
     /**/ ACTOR_BG_FIRE_WALL,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -35,7 +35,7 @@ ActorInit Bg_Fire_Wall_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_ENEMY,
         AC_NONE,
         OC1_ON | OC1_TYPE_PLAYER,
@@ -43,11 +43,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x20000000, 0x01, 0x04 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NONE,
-        BUMP_NONE,
+        ATELEM_ON | ATELEM_SFX_NONE,
+        ACELEM_NONE,
         OCELEM_ON,
     },
     { 34, 85, 0, { 0, 0, 0 } },
@@ -90,7 +90,7 @@ s32 func_809AC5C0(BgFireWall* thisx, PlayState* play) {
     Player* player = GET_PLAYER(play);
     Vec3f sp1C;
 
-    Actor_OffsetOfPointInActorCoords(&this->actor, &sp1C, &player->actor.world.pos);
+    Actor_WorldToActorCoords(&this->actor, &sp1C, &player->actor.world.pos);
     if ((fabsf(sp1C.x) < this->unk_160) && (fabsf(sp1C.z) < (this->unk_160 + 20.0f))) {
         return true;
     }
@@ -143,7 +143,7 @@ void func_809AC7F8(BgFireWall* this, PlayState* play) {
     f32 sin;
     f32 cos;
 
-    Actor_OffsetOfPointInActorCoords(&this->actor, &sp38, &player->actor.world.pos);
+    Actor_WorldToActorCoords(&this->actor, &sp38, &player->actor.world.pos);
     sp38.x = CLAMP(sp38.x, -80.0f, 80.0f);
 
     if (this->step == 0) {
@@ -209,7 +209,7 @@ void BgFireWall_Draw(Actor* thisx, PlayState* play) {
     gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sFlameTextures[this->texIndex]));
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x01, 255, 255, 0, 150);
     gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 255);
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_XLU_DISP++, object_fwall_DL_000040);
 
     CLOSE_DISPS(play->state.gfxCtx);

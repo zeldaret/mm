@@ -8,16 +8,17 @@
 
 s16 sPathDayFlags[] = { 0x40, 0x20, 0x10, 8, 4, 2, 1, 0 };
 
-#include "code/sub_s/sub_s.c"
+#include "assets/code/sub_s/sub_s.c"
 
 Vec3f gOneVec3f = { 1.0f, 1.0f, 1.0f };
 
 s32 D_801C5DBC[] = { 0, 1 }; // Unused
 
 /**
- * Finds the first EnDoor instance with doorType == ENDOOR_TYPE_5 and the specified switchFlag.
+ * Finds the first EnDoor instance of type `ENDOOR_TYPE_SCHEDULE` and the specified schType (a value from the
+ * EnDoorScheduleType enum).
  */
-EnDoor* SubS_FindDoor(PlayState* play, s32 switchFlag) {
+EnDoor* SubS_FindScheduleDoor(PlayState* play, s32 schType) {
     Actor* actor = NULL;
     EnDoor* door;
 
@@ -29,7 +30,7 @@ EnDoor* SubS_FindDoor(PlayState* play, s32 switchFlag) {
             break;
         }
 
-        if ((door->doorType == ENDOOR_TYPE_5) && (door->switchFlag == (u8)switchFlag)) {
+        if ((door->doorType == ENDOOR_TYPE_SCHEDULE) && (door->typeVar.schType == (u8)schType)) {
             break;
         }
 
@@ -411,6 +412,7 @@ s32 SubS_TimePathing_Update(Path* path, f32* progress, s32* elapsedTime, s32 way
             SubS_TimePathing_ComputeTargetPosXZ(&targetPos->x, &targetPos->z, *progress, SUBS_TIME_PATHING_ORDER,
                                                 *waypoint, points, knots);
             break;
+
         case SUBS_TIME_PATHING_PROGRESS_STATUS_SHOULD_REACH_END:
             endX = points[path->count - 1].x;
             endZ = points[path->count - 1].z;
@@ -577,7 +579,7 @@ s32 SubS_HasReachedPoint(Actor* actor, Path* path, s32 pointIndex) {
         diffZ = points[index + 1].z - points[index - 1].z;
     }
 
-    func_8017B7F8(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
+    Math3D_RotateXZPlane(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
 
     if (((px * actor->world.pos.x) + (pz * actor->world.pos.z) + d) > 0.0f) {
         reached = true;
@@ -859,7 +861,7 @@ s32 SubS_Offer(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 itemI
             xzRange = actor->xzDistToPlayer + 1.0f;
             xzDistToPlayerTemp = actor->xzDistToPlayer;
             actor->xzDistToPlayer = 0.0f;
-            actor->flags |= ACTOR_FLAG_10000;
+            actor->flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
             canAccept = Actor_OfferTalkExchange(actor, play, xzRange, yRange, itemId);
             actor->xzDistToPlayer = xzDistToPlayerTemp;
             break;
@@ -869,7 +871,7 @@ s32 SubS_Offer(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 itemI
             if (((screenPosX >= 0) || (screenPosX < SCREEN_WIDTH)) &&
                 ((screenPosY >= 0) || (screenPosY < SCREEN_HEIGHT)) && (fabsf(actor->playerHeightRel) <= yRange) &&
                 (actor->xzDistToPlayer <= xzRange) && actor->isLockedOn) {
-                actor->flags |= ACTOR_FLAG_10000;
+                actor->flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
                 canAccept = Actor_OfferTalkExchange(actor, play, xzRange, yRange, itemId);
             }
             break;
@@ -879,7 +881,7 @@ s32 SubS_Offer(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 itemI
             if (((screenPosX >= 0) || (screenPosX < SCREEN_WIDTH)) &&
                 ((screenPosY >= 0) || (screenPosY < SCREEN_HEIGHT)) && (fabsf(actor->playerHeightRel) <= yRange) &&
                 (actor->xzDistToPlayer <= xzRange)) {
-                actor->flags |= ACTOR_FLAG_10000;
+                actor->flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
                 canAccept = Actor_OfferTalkExchange(actor, play, xzRange, yRange, itemId);
             }
             break;
@@ -1011,7 +1013,7 @@ void SubS_DrawShadowTex(Actor* actor, GameState* gameState, u8* tex) {
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
     Matrix_Translate(actor->world.pos.x, 0.0f, actor->world.pos.z, MTXMODE_NEW);
     Matrix_Scale(0.6f, 1.0f, 0.6f, MTXMODE_APPLY);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, gShadowMaterialDL);
     gDPLoadTextureBlock(POLY_OPA_DISP++, tex, G_IM_FMT_I, G_IM_SIZ_8b, SUBS_SHADOW_TEX_WIDTH, SUBS_SHADOW_TEX_HEIGHT, 0,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, 6, 6, G_TX_NOLOD, G_TX_NOLOD);
@@ -1147,12 +1149,12 @@ s32 SubS_MoveActorToPoint(Actor* actor, Vec3f* point, s16 rotStep) {
     f32 distSqBefore;
     f32 distSqAfter;
 
-    Actor_OffsetOfPointInActorCoords(actor, &offsetBefore, point);
+    Actor_WorldToActorCoords(actor, &offsetBefore, point);
     Math_SmoothStepToS(&actor->world.rot.y, SubS_GetDistSqAndOrientPoints(point, &actor->world.pos, &distSqBefore), 4,
                        rotStep, 1);
     actor->shape.rot.y = actor->world.rot.y;
     Actor_MoveWithGravity(actor);
-    Actor_OffsetOfPointInActorCoords(actor, &offsetAfter, point);
+    Actor_WorldToActorCoords(actor, &offsetAfter, point);
     SubS_GetDistSqAndOrientPoints(point, &actor->world.pos, &distSqAfter);
     return ((offsetBefore.z > 0.0f) && (offsetAfter.z <= 0.0f)) ? true : false;
 }
@@ -1327,8 +1329,8 @@ void SubS_ActorPathing_ComputePointInfo(PlayState* play, ActorPathing* actorPath
     diff.x = actorPath->curPoint.x - actorPath->worldPos->x;
     diff.y = actorPath->curPoint.y - actorPath->worldPos->y;
     diff.z = actorPath->curPoint.z - actorPath->worldPos->z;
-    actorPath->distSqToCurPointXZ = Math3D_XZLengthSquared(diff.x, diff.z);
-    actorPath->distSqToCurPoint = Math3D_LengthSquared(&diff);
+    actorPath->distSqToCurPointXZ = Math3D_Dist1DSq(diff.x, diff.z);
+    actorPath->distSqToCurPoint = Math3D_Vec3fMagnitudeSq(&diff);
     actorPath->rotToCurPoint.y = Math_Atan2S_XY(diff.z, diff.x);
     actorPath->rotToCurPoint.x = Math_Atan2S_XY(sqrtf(actorPath->distSqToCurPointXZ), -diff.y);
     actorPath->rotToCurPoint.z = 0;

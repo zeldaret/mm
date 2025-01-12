@@ -5,9 +5,10 @@
  */
 
 #include "z_en_fsn.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "attributes.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnFsn*)thisx)
 
@@ -52,7 +53,7 @@ typedef enum {
     /* 2 */ ENFSN_CUTSCENESTATE_PLAYING
 } EnFsnCutsceneState;
 
-ActorInit En_Fsn_InitVars = {
+ActorProfile En_Fsn_Profile = {
     /**/ ACTOR_EN_FSN,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -99,7 +100,7 @@ static AnimationInfoS sAnimationInfo[FSN_ANIM_MAX] = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -107,11 +108,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK1,
+        ELEM_MATERIAL_UNK1,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 18, 64, 0, { 0, 0, 0 } },
@@ -417,8 +418,8 @@ void EnFsn_EndInteraction(EnFsn* this, PlayState* play) {
     this->drawCursor = 0;
     this->stickLeftPrompt.isEnabled = false;
     this->stickRightPrompt.isEnabled = false;
-    play->interfaceCtx.unk_222 = 0;
-    play->interfaceCtx.unk_224 = 0;
+    play->interfaceCtx.bButtonInterfaceDoActionActive = false;
+    play->interfaceCtx.bButtonInterfaceDoAction = 0;
     this->actor.textId = 0;
     this->actionFunc = EnFsn_Idle;
 }
@@ -826,7 +827,7 @@ void EnFsn_BeginInteraction(EnFsn* this, PlayState* play) {
             CutsceneManager_StartWithPlayerCsAndSetFlag(this->csId, &this->actor);
             this->cutsceneState = ENFSN_CUTSCENESTATE_PLAYING;
             if (Player_GetMask(play) == PLAYER_MASK_NONE) {
-                func_8011552C(play, DO_ACTION_NEXT);
+                Interface_SetAButtonDoAction(play, DO_ACTION_NEXT);
                 if (EnFsn_HasItemsToSell()) {
                     this->actionFunc = EnFsn_AskBuyOrSell;
                 } else {
@@ -917,7 +918,7 @@ void EnFsn_AskBuyOrSell(EnFsn* this, PlayState* play) {
             }
         }
     } else if (talkState == TEXT_STATE_CHOICE) {
-        func_8011552C(play, DO_ACTION_DECIDE);
+        Interface_SetAButtonDoAction(play, DO_ACTION_DECIDE);
         if (!EnFsn_TestEndInteraction(this, play, CONTROLLER1(&play->state)) && Message_ShouldAdvance(play)) {
             switch (play->msgCtx.choiceIndex) {
                 case 0:
@@ -1101,7 +1102,7 @@ void EnFsn_ResumeShoppingInteraction(EnFsn* this, PlayState* play) {
             } else if (this->actor.textId != 0x29D6) {
                 this->actionFunc = EnFsn_AskCanBuyAterRunningOutOfItems;
             } else {
-                func_8011552C(play, DO_ACTION_DECIDE);
+                Interface_SetAButtonDoAction(play, DO_ACTION_DECIDE);
                 this->stickLeftPrompt.isEnabled = false;
                 this->stickRightPrompt.isEnabled = true;
                 this->actionFunc = EnFsn_FaceShopkeeperSelling;
@@ -1152,7 +1153,7 @@ void EnFsn_BrowseShelf(EnFsn* this, PlayState* play) {
         this->stickLeftPrompt.isEnabled = true;
         EnFsn_UpdateCursorPos(this, play);
         if (talkstate == TEXT_STATE_EVENT) {
-            func_8011552C(play, DO_ACTION_DECIDE);
+            Interface_SetAButtonDoAction(play, DO_ACTION_DECIDE);
             if (!EnFsn_HasPlayerSelectedItem(this, play, CONTROLLER1(&play->state))) {
                 EnFsn_CursorLeftRight(this);
                 if (this->cursorIndex != prevCursorIdx) {
@@ -1195,7 +1196,7 @@ void EnFsn_HandleCanPlayerBuyItem(EnFsn* this, PlayState* play) {
         case CANBUY_RESULT_SUCCESS_2:
             Audio_PlaySfx_MessageDecide();
             SET_WEEKEVENTREG(WEEKEVENTREG_BOUGHT_CURIOSITY_SHOP_SPECIAL_ITEM);
-            // fallthrough
+            FALLTHROUGH;
         case CANBUY_RESULT_SUCCESS_1:
             if (this->cutsceneState == ENFSN_CUTSCENESTATE_PLAYING) {
                 CutsceneManager_Stop(this->csId);
@@ -1260,7 +1261,7 @@ void EnFsn_SelectItem(EnFsn* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
     if (EnFsn_TakeItemOffShelf(this) && (talkState == TEXT_STATE_CHOICE)) {
-        func_8011552C(play, DO_ACTION_DECIDE);
+        Interface_SetAButtonDoAction(play, DO_ACTION_DECIDE);
         if (!EnFsn_TestCancelOption(this, play, CONTROLLER1(&play->state)) && Message_ShouldAdvance(play)) {
             switch (play->msgCtx.choiceIndex) {
                 case 0:
@@ -1393,7 +1394,7 @@ void EnFsn_FaceShopkeeperSelling(EnFsn* this, PlayState* play) {
     u8 cursorIndex;
 
     if (talkState == TEXT_STATE_CHOICE) {
-        func_8011552C(play, DO_ACTION_DECIDE);
+        Interface_SetAButtonDoAction(play, DO_ACTION_DECIDE);
         if (!EnFsn_TestEndInteraction(this, play, CONTROLLER1(&play->state)) &&
             (!Message_ShouldAdvance(play) || !EnFsn_FacingShopkeeperDialogResult(this, play)) &&
             this->stickAccumX > 0) {
@@ -1401,7 +1402,7 @@ void EnFsn_FaceShopkeeperSelling(EnFsn* this, PlayState* play) {
             if (cursorIndex != CURSOR_INVALID) {
                 this->cursorIndex = cursorIndex;
                 this->actionFunc = EnFsn_LookToShelf;
-                func_8011552C(play, DO_ACTION_DECIDE);
+                Interface_SetAButtonDoAction(play, DO_ACTION_DECIDE);
                 this->stickRightPrompt.isEnabled = false;
                 Audio_PlaySfx(NA_SE_SY_CURSOR);
             }
@@ -1425,7 +1426,7 @@ void EnFsn_IdleBackroom(EnFsn* this, PlayState* play) {
         this->textId = 0;
         EnFsn_HandleConversationBackroom(this, play);
         this->actionFunc = EnFsn_ConverseBackroom;
-    } else if (this->actor.xzDistToPlayer < 100.0f || this->actor.isLockedOn) {
+    } else if ((this->actor.xzDistToPlayer < 100.0f) || this->actor.isLockedOn) {
         Actor_OfferTalk(&this->actor, play, 100.0f);
     }
 }
@@ -1480,7 +1481,7 @@ void EnFsn_Init(Actor* thisx, PlayState* play) {
 
     if (ENFSN_IS_SHOP(&this->actor)) {
         this->actor.shape.rot.y = BINANG_ROT180(this->actor.shape.rot.y);
-        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         EnFsn_GetCutscenes(this);
         EnFsn_InitShop(this, play);
     } else {
@@ -1492,8 +1493,8 @@ void EnFsn_Init(Actor* thisx, PlayState* play) {
         Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
         this->blinkTimer = 20;
         this->eyeTexIndex = 0;
-        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
-        this->actor.targetMode = TARGET_MODE_0;
+        this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
+        this->actor.attentionRangeType = ATTENTION_RANGE_0;
         this->animIndex = FSN_ANIM_IDLE;
         SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
         this->actionFunc = EnFsn_IdleBackroom;

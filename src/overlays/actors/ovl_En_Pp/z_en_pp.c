@@ -6,9 +6,9 @@
 
 #include "z_en_pp.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE)
 
 #define THIS ((EnPp*)thisx)
 
@@ -116,7 +116,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, EN_PP_DMGEFF_KNOCK_OFF_MASK),
 };
 
-ActorInit En_Pp_InitVars = {
+ActorProfile En_Pp_Profile = {
     /**/ ACTOR_EN_PP,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -131,11 +131,11 @@ ActorInit En_Pp_InitVars = {
 static ColliderJntSphElementInit sMaskColliderJntSphElementsInit[1] = {
     {
         {
-            ELEMTYPE_UNK2,
+            ELEM_MATERIAL_UNK2,
             { 0xF7CFFFFF, 0x04, 0x10 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON | BUMP_HOOKABLE,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON | ACELEM_HOOKABLE,
             OCELEM_ON,
         },
         { 1, { { 0, 0, 0 }, 0 }, 1 },
@@ -144,7 +144,7 @@ static ColliderJntSphElementInit sMaskColliderJntSphElementsInit[1] = {
 
 static ColliderJntSphInit sMaskColliderJntSphInit = {
     {
-        COLTYPE_HARD,
+        COL_MATERIAL_HARD,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -158,11 +158,11 @@ static ColliderJntSphInit sMaskColliderJntSphInit = {
 static ColliderJntSphElementInit sBodyColliderJntSphElementsInit[1] = {
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x04, 0x04 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON | BUMP_HOOKABLE,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON | ACELEM_HOOKABLE,
             OCELEM_ON,
         },
         { 1, { { 0, 0, 0 }, 0 }, 1 },
@@ -171,7 +171,7 @@ static ColliderJntSphElementInit sBodyColliderJntSphElementsInit[1] = {
 
 static ColliderJntSphInit sBodyColliderJntSphInit = {
     {
-        COLTYPE_HARD,
+        COL_MATERIAL_HARD,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -184,7 +184,7 @@ static ColliderJntSphInit sBodyColliderJntSphInit = {
 
 static ColliderQuadInit sQuadInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_ENEMY,
         AC_NONE,
         OC1_NONE,
@@ -192,11 +192,11 @@ static ColliderQuadInit sQuadInit = {
         COLSHAPE_QUAD,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0xF7CFFFFF, 0x04, 0x08 },
         { 0x00000000, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL | TOUCH_UNK7,
-        BUMP_NONE,
+        ATELEM_ON | ATELEM_SFX_NORMAL | ATELEM_UNK7,
+        ACELEM_NONE,
         OCELEM_NONE,
     },
     { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
@@ -210,7 +210,7 @@ void EnPp_Init(Actor* thisx, PlayState* play) {
     EnPp* this = THIS;
     EffectBlureInit1 blureInit;
 
-    this->actor.targetMode = TARGET_MODE_4;
+    this->actor.attentionRangeType = ATTENTION_RANGE_4;
     this->actor.colChkInfo.mass = 60;
     this->actor.colChkInfo.health = 3;
     this->actor.colChkInfo.damageTable = &sDamageTable;
@@ -248,10 +248,10 @@ void EnPp_Init(Actor* thisx, PlayState* play) {
         this->bodyCollider.elements[0].dim.scale = 1.0f;
         if (EN_PP_GET_TYPE(&this->actor) > EN_PP_TYPE_MASKED) {
             this->actor.hintId = TATL_HINT_ID_HIPLOOP;
-            this->maskColliderElements[0].info.toucherFlags &= ~TOUCH_ON;
-            this->maskColliderElements[0].info.bumperFlags &= ~BUMP_ON;
-            this->maskColliderElements[0].info.ocElemFlags &= ~OCELEM_ON;
-            this->maskCollider.base.colType = COLTYPE_HIT2;
+            this->maskColliderElements[0].base.atElemFlags &= ~ATELEM_ON;
+            this->maskColliderElements[0].base.acElemFlags &= ~ACELEM_ON;
+            this->maskColliderElements[0].base.ocElemFlags &= ~OCELEM_ON;
+            this->maskCollider.base.colMaterial = COL_MATERIAL_HIT2;
             this->maskCollider.elements[0].dim.modelSphere.radius = 42;
             this->maskCollider.elements[0].dim.scale = 1.0f;
             this->maskCollider.elements[0].dim.modelSphere.center.x = 400;
@@ -270,8 +270,8 @@ void EnPp_Init(Actor* thisx, PlayState* play) {
             this->bodyCollider.elements[0].dim.scale = 1.0f;
             this->bodyCollider.elements[0].dim.modelSphere.center.x = 400;
             this->bodyCollider.elements[0].dim.modelSphere.center.y = -400;
-            this->bodyColliderElements[0].info.bumperFlags |= BUMP_HOOKABLE;
-            this->maskCollider.elements[0].info.toucher.damage = 0x10;
+            this->bodyColliderElements[0].base.acElemFlags |= ACELEM_HOOKABLE;
+            this->maskCollider.elements[0].base.atDmgInfo.damage = 0x10;
         }
 
         Collider_InitQuad(play, &this->hornCollider);
@@ -1012,8 +1012,8 @@ void EnPp_SetupDead(EnPp* this, PlayState* play) {
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 25);
     Enemy_StartFinishingBlow(play, &this->actor);
     SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 30, NA_SE_EN_HIPLOOP_DEAD);
-    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->action = EN_PP_ACTION_DEAD;
     this->actionFunc = EnPp_Dead;
 }
@@ -1107,8 +1107,8 @@ void EnPp_Mask_SetupDetach(EnPp* this, PlayState* play) {
         }
 
         this->actor.gravity = 0.0f;
-        this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
-        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
+        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         this->actionVar.maskDetachState = EN_PP_MASK_DETACH_STATE_START;
         EnPp_ChangeAnim(this, EN_PP_ANIM_IDLE);
         SkelAnime_Update(&this->skelAnime);
@@ -1257,7 +1257,7 @@ void EnPp_UpdateDamage(EnPp* this, PlayState* play) {
     }
 
     if ((EN_PP_GET_TYPE(&this->actor) == EN_PP_TYPE_MASKED) && (this->action < EN_PP_ACTION_MASK_DETACH)) {
-        if (this->maskCollider.elements[0].info.bumperFlags & BUMP_HIT) {
+        if (this->maskCollider.elements[0].base.acElemFlags & ACELEM_HIT) {
             if (yawDiff < (BREG(2) + 0x4A9C)) {
                 if (this->actor.colChkInfo.damageEffect == EN_PP_DMGEFF_HOOKSHOT) {
                     EnPp_Mask_SetupDetach(this, play);
@@ -1269,12 +1269,12 @@ void EnPp_UpdateDamage(EnPp* this, PlayState* play) {
             } else {
                 attackBouncedOffMask = true;
             }
-        } else if (this->maskCollider.elements[0].info.bumperFlags & BUMP_HIT) {
+        } else if (this->maskCollider.elements[0].base.acElemFlags & ACELEM_HIT) {
             attackBouncedOffMask = true;
         }
     }
 
-    if (this->bodyCollider.elements[0].info.bumperFlags & BUMP_HIT) {
+    if (this->bodyCollider.elements[0].base.acElemFlags & ACELEM_HIT) {
         if (EN_PP_GET_TYPE(&this->actor) != EN_PP_TYPE_MASKED) {
             if ((this->action < EN_PP_ACTION_DAMAGED) && (this->action != EN_PP_ACTION_JUMP)) {
                 if (this->actor.colChkInfo.damageEffect == EN_PP_DMGEFF_HOOKSHOT) {
@@ -1637,7 +1637,7 @@ void EnPp_Draw(Actor* thisx, PlayState* play) {
 
             Matrix_Mult(&mtxF, MTXMODE_NEW);
             Matrix_Scale(0.5f, 1.0f, 0.5f, MTXMODE_APPLY);
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_XLU_DISP++, gCircleShadowDL);
 
             CLOSE_DISPS(play->state.gfxCtx);

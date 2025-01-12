@@ -7,7 +7,7 @@
 #include "z_en_tru_mt.h"
 #include "overlays/actors/ovl_En_Jc_Mato/z_en_jc_mato.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnTruMt*)thisx)
 
@@ -20,27 +20,7 @@ void func_80B76A64(EnTruMt* this, PlayState* play);
 void func_80B76BB8(EnTruMt* this, PlayState* play);
 void func_80B76C38(EnTruMt* this, PlayState* play);
 
-typedef enum {
-    /* 0x00 */ KOUME_MT_ANIM_INJURED_LYING_DOWN,
-    /* 0x01 */ KOUME_MT_ANIM_INJURED_LYING_DOWN_MORPH,
-    /* 0x02 */ KOUME_MT_ANIM_TRY_GET_UP,
-    /* 0x03 */ KOUME_MT_ANIM_INJURED_RAISE_HEAD,
-    /* 0x04 */ KOUME_MT_ANIM_INJURED_TALK,
-    /* 0x05 */ KOUME_MT_ANIM_INJURED_HEAD_UP,
-    /* 0x06 */ KOUME_MT_ANIM_INJURED_HEAD_UP_MORPH,
-    /* 0x07 */ KOUME_MT_ANIM_TAKE,
-    /* 0x08 */ KOUME_MT_ANIM_SHAKE, // Unused
-    /* 0x09 */ KOUME_MT_ANIM_DRINK,
-    /* 0x0A */ KOUME_MT_ANIM_FINISHED_DRINKING,
-    /* 0x0B */ KOUME_MT_ANIM_HEALED,
-    /* 0x0C */ KOUME_MT_ANIM_HOVER1,
-    /* 0x0D */ KOUME_MT_ANIM_TAKE_OFF,
-    /* 0x0E */ KOUME_MT_ANIM_FLY,
-    /* 0x0F */ KOUME_MT_ANIM_HOVER2,
-    /* 0x10 */ KOUME_MT_ANIM_MAX
-} KoumeMtAnimation;
-
-ActorInit En_Tru_Mt_InitVars = {
+ActorProfile En_Tru_Mt_Profile = {
     /**/ ACTOR_EN_TRU_MT,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -54,7 +34,7 @@ ActorInit En_Tru_Mt_InitVars = {
 
 static ColliderSphereInit sSphereInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -62,11 +42,11 @@ static ColliderSphereInit sSphereInit = {
         COLSHAPE_SPHERE,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0xF7CFFFFF, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 0, { { 0, 0, 0 }, 22 }, 100 },
@@ -107,28 +87,44 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-static AnimationInfoS sAnimationInfo[] = {
-    { &gKoumeInjuredLyingDownAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gKoumeInjuredLyingDownAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gKoumeTryGetUpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &gKoumeInjuredRaiseHeadAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &gKoumeInjuredTalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gKoumeInjuredHeadUpAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gKoumeInjuredHeadUpAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gKoumeTakeAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gKoumeShakeAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gKoumeDrinkAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &gKoumeFinishedDrinkingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gKoumeHealedAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &gKoumeHoverAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gKoumeTakeOffAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &gKoumeFlyAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gKoumeHoverAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+typedef enum KoumeMtAnimation {
+    /* 0x00 */ KOUME_MT_ANIM_INJURED_LYING_DOWN,
+    /* 0x01 */ KOUME_MT_ANIM_INJURED_LYING_DOWN_MORPH,
+    /* 0x02 */ KOUME_MT_ANIM_TRY_GET_UP,
+    /* 0x03 */ KOUME_MT_ANIM_INJURED_RAISE_HEAD,
+    /* 0x04 */ KOUME_MT_ANIM_INJURED_TALK,
+    /* 0x05 */ KOUME_MT_ANIM_INJURED_HEAD_UP,
+    /* 0x06 */ KOUME_MT_ANIM_INJURED_HEAD_UP_MORPH,
+    /* 0x07 */ KOUME_MT_ANIM_TAKE,
+    /* 0x08 */ KOUME_MT_ANIM_SHAKE,
+    /* 0x09 */ KOUME_MT_ANIM_DRINK,
+    /* 0x0A */ KOUME_MT_ANIM_FINISHED_DRINKING,
+    /* 0x0B */ KOUME_MT_ANIM_HEALED,
+    /* 0x0C */ KOUME_MT_ANIM_HOVER1,
+    /* 0x0D */ KOUME_MT_ANIM_TAKE_OFF,
+    /* 0x0E */ KOUME_MT_ANIM_FLY,
+    /* 0x0F */ KOUME_MT_ANIM_HOVER2,
+    /* 0x10 */ KOUME_MT_ANIM_MAX
+} KoumeMtAnimation;
+
+static AnimationInfoS sAnimationInfo[KOUME_MT_ANIM_MAX] = {
+    { &gKoumeInjuredLyingDownAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // KOUME_MT_ANIM_INJURED_LYING_DOWN
+    { &gKoumeInjuredLyingDownAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // KOUME_MT_ANIM_INJURED_LYING_DOWN_MORPH
+    { &gKoumeTryGetUpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },         // KOUME_MT_ANIM_TRY_GET_UP
+    { &gKoumeInjuredRaiseHeadAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 }, // KOUME_MT_ANIM_INJURED_RAISE_HEAD
+    { &gKoumeInjuredTalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },      // KOUME_MT_ANIM_INJURED_TALK
+    { &gKoumeInjuredHeadUpAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },     // KOUME_MT_ANIM_INJURED_HEAD_UP
+    { &gKoumeInjuredHeadUpAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },    // KOUME_MT_ANIM_INJURED_HEAD_UP_MORPH
+    { &gKoumeTakeAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },              // KOUME_MT_ANIM_TAKE
+    { &gKoumeShakeAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },             // KOUME_MT_ANIM_SHAKE
+    { &gKoumeDrinkAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },            // KOUME_MT_ANIM_DRINK
+    { &gKoumeFinishedDrinkingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // KOUME_MT_ANIM_FINISHED_DRINKING
+    { &gKoumeHealedAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },           // KOUME_MT_ANIM_HEALED
+    { &gKoumeHoverAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },             // KOUME_MT_ANIM_HOVER1
+    { &gKoumeTakeOffAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },          // KOUME_MT_ANIM_TAKE_OFF
+    { &gKoumeFlyAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },               // KOUME_MT_ANIM_FLY
+    { &gKoumeHoverAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },             // KOUME_MT_ANIM_HOVER2
 };
-
-Vec3f D_80B7765C = { 3000.0f, -800.0f, 0.0f };
-
-Vec3f D_80B77668 = { 0.0f, 0.0f, -3000.0f };
 
 s32 EnTruMt_ChangeAnim(SkelAnime* skelAnime, s16 animIndex) {
     s16 endFrame;
@@ -299,7 +295,7 @@ s32 EnTruMt_HasReachedPoint(EnTruMt* this, Path* path, s32 pointIndex) {
         diffZ = points[index + 1].z - points[index - 1].z;
     }
 
-    func_8017B7F8(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
+    Math3D_RotateXZPlane(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
 
     if (((px * this->actor.world.pos.x) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
         reached = true;
@@ -428,7 +424,7 @@ void EnTruMt_Init(Actor* thisx, PlayState* play) {
     this->collider.dim.worldSphere.radius = 22;
     this->actor.colChkInfo.damageTable = &sDamageTable;
     this->path = SubS_GetPathByIndex(play, ENTRUMT_GET_FF(&this->actor), ENTRUMT_PATH_INDEX_NONE);
-    this->actor.targetMode = TARGET_MODE_0;
+    this->actor.attentionRangeType = ATTENTION_RANGE_0;
 
     Actor_SetScale(&this->actor, 0.008f);
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
@@ -490,6 +486,7 @@ void func_80B76ED4(s16 arg0, s16 arg1, Vec3f* arg2, Vec3s* arg3, s32 arg4) {
 }
 
 s32 EnTruMt_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+    static Vec3f D_80B7765C = { 3000.0f, -800.0f, 0.0f };
     EnTruMt* this = THIS;
 
     if (limbIndex == KOUME_LIMB_HEAD) {
@@ -503,6 +500,7 @@ s32 EnTruMt_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
 }
 
 void EnTruMt_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    static Vec3f D_80B77668 = { 0.0f, 0.0f, -3000.0f };
     s32 pad;
     EnTruMt* this = THIS;
     MtxF* sp54;
@@ -534,7 +532,7 @@ void EnTruMt_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
         Matrix_RotateXS(this->unk_38E.x, MTXMODE_APPLY);
         Matrix_Scale(0.008f, 0.008f, 0.008f, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, gKoumeChainDL);
 
         CLOSE_DISPS(play->state.gfxCtx);

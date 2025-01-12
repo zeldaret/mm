@@ -5,10 +5,10 @@
  */
 
 #include "z_obj_pzlblock.h"
-#include "objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
-#include "objects/object_secom_obj/object_secom_obj.h"
+#include "assets/objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
+#include "assets/objects/object_secom_obj/object_secom_obj.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_CAN_PRESS_SWITCH)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_CAN_PRESS_SWITCHES)
 
 #define THIS ((ObjPzlblock*)thisx)
 
@@ -25,7 +25,7 @@ void func_809A3D38(ObjPzlblock* this, PlayState* play);
 void func_809A3E58(Actor* thisx, PlayState* play);
 void func_809A3F0C(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Pzlblock_InitVars = {
+ActorProfile Obj_Pzlblock_Profile = {
     /**/ ACTOR_OBJ_PZLBLOCK,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -366,7 +366,7 @@ void func_809A3F0C(Actor* thisx, PlayState* play) {
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, sp28->r, sp28->g, sp28->b, 255);
     gSPDisplayList(POLY_OPA_DISP++, sp2C->unk_08);
 

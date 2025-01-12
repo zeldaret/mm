@@ -7,7 +7,7 @@
 #include "z_obj_bigicicle.h"
 #include "overlays/actors/ovl_Obj_Ice_Poly/z_obj_ice_poly.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
-#include "objects/object_bigicicle/object_bigicicle.h"
+#include "assets/objects/object_bigicicle/object_bigicicle.h"
 
 #define FLAGS 0x00000000
 
@@ -24,7 +24,7 @@ void func_80AE9180(ObjBigicicle* this, PlayState* play);
 void func_80AE9258(ObjBigicicle* this, PlayState* play);
 void func_80AE939C(ObjBigicicle* this, PlayState* play);
 
-ActorInit Obj_Bigicicle_InitVars = {
+ActorProfile Obj_Bigicicle_Profile = {
     /**/ ACTOR_OBJ_BIGICICLE,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -38,7 +38,7 @@ ActorInit Obj_Bigicicle_InitVars = {
 
 static ColliderCylinderInit sCylinderInit1 = {
     {
-        COLTYPE_HARD,
+        COL_MATERIAL_HARD,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -46,11 +46,11 @@ static ColliderCylinderInit sCylinderInit1 = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0x00003820, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 23, 68, -40, { 0, 0, 0 } },
@@ -58,7 +58,7 @@ static ColliderCylinderInit sCylinderInit1 = {
 
 static ColliderCylinderInit sCylinderInit2 = {
     {
-        COLTYPE_HARD,
+        COL_MATERIAL_HARD,
         AT_NONE,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -66,11 +66,11 @@ static ColliderCylinderInit sCylinderInit2 = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 31, 90, -150, { 0, 0, 0 } },
@@ -180,7 +180,7 @@ void func_80AE8DE4(ObjBigicicle* this, PlayState* play) {
 
 void func_80AE8FD4(ObjBigicicle* this, PlayState* play) {
     if ((this->collider1.base.acFlags & AC_HIT) ||
-        ((this->collider2.base.acFlags & AC_HIT) && (this->collider2.info.acHitInfo->toucher.dmgFlags & 0x3820))) {
+        ((this->collider2.base.acFlags & AC_HIT) && (this->collider2.elem.acHitElem->atDmgInfo.dmgFlags & 0x3820))) {
         if ((this->unk_148 == 0) || (this->unk_149 == 1)) {
             CutsceneManager_Queue(this->actor.csId);
             this->actionFunc = func_80AE9090;

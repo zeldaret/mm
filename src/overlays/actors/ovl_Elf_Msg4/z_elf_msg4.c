@@ -21,7 +21,7 @@ void func_80AFD770(ElfMsg4* this, PlayState* play);
 s32 func_80AFD380(ElfMsg4* this, PlayState* play);
 s32 ElfMsg4_GetTextId(ElfMsg4* this);
 
-ActorInit Elf_Msg4_InitVars = {
+ActorProfile Elf_Msg4_Profile = {
     /**/ ACTOR_ELF_MSG4,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

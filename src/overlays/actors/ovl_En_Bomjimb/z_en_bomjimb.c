@@ -7,7 +7,7 @@
 #include "z_en_bomjimb.h"
 #include "overlays/actors/ovl_En_Niw/z_en_niw.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnBomjimb*)thisx)
 
@@ -39,7 +39,7 @@ void func_80C02DAC(EnBomjimb* this, PlayState* play);
 
 static Actor* D_80C03170 = NULL;
 
-ActorInit En_Bomjimb_InitVars = {
+ActorProfile En_Bomjimb_Profile = {
     /**/ ACTOR_EN_BOMJIMB,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -53,7 +53,7 @@ ActorInit En_Bomjimb_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -61,11 +61,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 20, 30, 0, { 0, 0, 0 } },
@@ -157,7 +157,7 @@ void EnBomjimb_Init(Actor* thisx, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &object_cs_Skel_00F82C, &gBomberIdleAnim, this->jointTable,
                        this->morphTable, OBJECT_CS_LIMB_MAX);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
-    this->actor.targetMode = TARGET_MODE_6;
+    this->actor.attentionRangeType = ATTENTION_RANGE_6;
     Actor_SetScale(&this->actor, 0.01f);
 
     this->unk_2C6 = ENBOMJIMB_GET_F0(&this->actor);
@@ -328,7 +328,7 @@ void func_80C014E4(EnBomjimb* this, PlayState* play) {
     Vec3f sp60;
     Vec3f sp54;
     Vec3f sp48;
-    s32 sp44;
+    s32 bgId;
 
     if (func_80C012FC(this, play) || func_80C013B4(this) || func_80C013F0(this, play)) {
         return;
@@ -343,7 +343,7 @@ void func_80C014E4(EnBomjimb* this, PlayState* play) {
 
                 abs = ABS_ALT(BINANG_SUB(this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &sp48)));
                 if ((abs < 0x4000) && !BgCheck_EntityLineTest1(&play->colCtx, &this->actor.world.pos, &sp48, &sp60,
-                                                               &colPoly, true, false, false, true, &sp44)) {
+                                                               &colPoly, true, false, false, true, &bgId)) {
                     EnBomjimb_ChangeAnim(this, ENBOMJIMB_ANIM_5, 1.0f);
                     Math_Vec3f_Copy(&this->unk_294, &sp48);
                     this->unk_2B0 = Rand_S16Offset(30, 50);
@@ -363,7 +363,7 @@ void func_80C014E4(EnBomjimb* this, PlayState* play) {
                 sp54.x += Math_SinS(this->actor.world.rot.y) * 60.0f;
                 sp54.z += Math_CosS(this->actor.world.rot.y) * 60.0f;
                 if (BgCheck_EntityLineTest1(&play->colCtx, &this->actor.world.pos, &sp54, &sp60, &colPoly, true, false,
-                                            false, true, &sp44)) {
+                                            false, true, &bgId)) {
                     this->unk_2AE = 0;
                     if (Rand_ZeroOne() < 0.5f) {
                         EnBomjimb_ChangeAnim(this, ENBOMJIMB_ANIM_20, 1.0f);
@@ -594,8 +594,8 @@ void func_80C0217C(EnBomjimb* this, PlayState* play) {
     Vec3f sp74;
     CollisionPoly* sp70;
     Vec3f sp64;
-    s32 sp60;
-    s32 sp5C = this->actor.floorBgId;
+    s32 bgId;
+    s32 floorBgId = this->actor.floorBgId;
     CollisionPoly* sp58 = this->actor.floorPoly;
     Player* player = GET_PLAYER(play);
     s32 sp50 = false;
@@ -627,7 +627,7 @@ void func_80C0217C(EnBomjimb* this, PlayState* play) {
     sp74.z += Math_CosS(this->actor.world.rot.y) * 50.0f;
 
     if (BgCheck_EntityLineTest1(&play->colCtx, &this->actor.world.pos, &sp74, &sp64, &sp70, true, false, false, true,
-                                &sp60)) {
+                                &bgId)) {
         s16 temp = BINANG_SUB((this->actor.world.rot.y - this->actor.yawTowardsPlayer), 0x8000);
         this->unk_2D6 = temp;
 
@@ -656,7 +656,7 @@ void func_80C0217C(EnBomjimb* this, PlayState* play) {
 
     this->actor.world.rot.y = this->unk_2D6 + this->unk_2D4;
 
-    if (SurfaceType_GetSceneExitIndex(&play->colCtx, sp58, sp5C) != 0) {
+    if (SurfaceType_GetSceneExitIndex(&play->colCtx, sp58, floorBgId) != 0) {
         s16 temp = BINANG_SUB(this->actor.world.rot.y, this->actor.yawTowardsPlayer - 0x8000);
 
         if (temp < 0) {
@@ -962,7 +962,7 @@ s32 EnBomjimb_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
     return false;
 }
 
-#include "overlays/ovl_En_Bomjimb/ovl_En_Bomjimb.c"
+#include "assets/overlays/ovl_En_Bomjimb/ovl_En_Bomjimb.c"
 
 void EnBomjimb_Draw(Actor* thisx, PlayState* play) {
     static Gfx* D_80C03260[] = {

@@ -15,7 +15,7 @@ void ObjSound_Destroy(Actor* thisx, PlayState* play);
 void ObjSound_Update(Actor* thisx, PlayState* play);
 void ObjSound_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Sound_InitVars = {
+ActorProfile Obj_Sound_Profile = {
     /**/ ACTOR_OBJ_SOUND,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -54,7 +54,7 @@ void ObjSound_Update(Actor* thisx, PlayState* play) {
         if (this->sfxType != 0) {
             Actor_PlaySfx_Flagged(&this->actor, gAudioEnvironmentalSfx[this->actor.params]);
         } else {
-            Actor_PlaySfx_FlaggedCentered3(&this->actor, gAudioEnvironmentalSfx[this->actor.params]);
+            Actor_PlaySfx_FlaggedCentered2(&this->actor, gAudioEnvironmentalSfx[this->actor.params]);
         }
     } else if (this->unk_144) {
         if (this->soundType == OBJ_SOUND_TYPE_BGM) {

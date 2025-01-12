@@ -10,7 +10,7 @@
 #include "overlays/actors/ovl_En_Elf/z_en_elf.h"
 #include "overlays/effects/ovl_Effect_Ss_Solder_Srch_Ball/z_eff_ss_solder_srch_ball.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnSuttari*)thisx)
 
@@ -38,7 +38,7 @@ void func_80BADE14(EnSuttari* this, PlayState* play);
 void func_80BADE8C(EnSuttari* this, PlayState* play);
 void func_80BADF3C(EnSuttari* this, PlayState* play);
 
-ActorInit En_Suttari_InitVars = {
+ActorProfile En_Suttari_Profile = {
     /**/ ACTOR_EN_SUTTARI,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -78,7 +78,7 @@ static AnimationInfo sAnimationInfo[SUTTARI_ANIM_MAX] = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -86,11 +86,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK1,
+        ELEM_MATERIAL_UNK1,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 18, 64, 0, { 0, 0, 0 } },
@@ -142,7 +142,7 @@ static TrackOptionsSet sTrackOptions = {
     { 0x1770, 4, 1, 6 },
 };
 
-#include "build/src/overlays/actors/ovl_En_Suttari/scheduleScripts.schl.inc"
+#include "src/overlays/actors/ovl_En_Suttari/scheduleScripts.schl.inc"
 
 static s32 D_80BAE8F8[] = {
     -1, -1, -1, -1, -1, -1, 1, 2, 0, 3, 1, 2, 0, 0, 3, 0,
@@ -239,6 +239,7 @@ void func_80BAA9B4(EnSuttari* this) {
                 this->animIndex = SUTTARI_ANIM_1;
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
             }
+            break;
     }
 }
 
@@ -591,7 +592,7 @@ s32 EnSuttari_HasReachedPointForward(EnSuttari* this, Path* path, s32 pointIndex
         diffZ = points[index + 1].z - points[index - 1].z;
     }
 
-    func_8017B7F8(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
+    Math3D_RotateXZPlane(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
 
     if (((px * this->actor.world.pos.x) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
         reached = true;
@@ -625,7 +626,7 @@ s32 EnSuttari_HasReachedPointReverse(EnSuttari* this, Path* path, s32 pointIndex
         diffZ = points[index - 1].z - points[index + 1].z;
     }
 
-    func_8017B7F8(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
+    Math3D_RotateXZPlane(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
 
     if (((px * this->actor.world.pos.x) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
         reached = true;
@@ -685,7 +686,7 @@ void func_80BABB90(EnSuttari* this, s32 arg1) {
 }
 
 s32 func_80BABC48(EnSuttari* this, PlayState* play, ScheduleOutput* scheduleOutput) {
-    u16 sp26 = SCHEDULE_TIME_NOW;
+    u16 sp26 = SCRIPT_TIME_NOW;
     u16 phi_a0;
     u8 pathIndex = ENSUTTARI_GET_PATH_INDEX(&this->actor);
     u16 tmp;
@@ -696,7 +697,7 @@ s32 func_80BABC48(EnSuttari* this, PlayState* play, ScheduleOutput* scheduleOutp
     if (this->timePath == NULL) {
         return 0;
     }
-    if ((this->unk428 != 0) && (this->unk428 < 0xC) && (this->timePathTimeSpeed >= 0)) {
+    if ((this->scheduleResult != 0) && (this->scheduleResult < 0xC) && (this->timePathTimeSpeed >= 0)) {
         phi_a0 = sp26;
     } else {
         phi_a0 = scheduleOutput->time0;
@@ -717,23 +718,23 @@ s32 func_80BABC48(EnSuttari* this, PlayState* play, ScheduleOutput* scheduleOutp
 
 s32 func_80BABDD8(EnSuttari* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 pad;
-    EnDoor* sp48;
+    EnDoor* door;
     u8 pathIndex = ENSUTTARI_GET_PATH_INDEX(&this->actor);
-    u16 sp44 = SCHEDULE_TIME_NOW;
+    u16 sp44 = SCRIPT_TIME_NOW;
     Vec3f sp38;
     Vec3f sp2C;
     Vec3s* sp28;
     s32 sp24;
 
-    if ((this->unk428 == 10) || (this->unk428 == 11) || (this->unk428 == 2)) {
+    if ((this->scheduleResult == 10) || (this->scheduleResult == 11) || (this->scheduleResult == 2)) {
         return false;
     }
-    sp48 = (EnDoor*)SubS_FindNearestActor(&this->actor, play, ACTORCAT_DOOR, ACTOR_EN_DOOR);
+    door = (EnDoor*)SubS_FindNearestActor(&this->actor, play, ACTORCAT_DOOR, ACTOR_EN_DOOR);
     sp24 = D_80BAE8F8[scheduleOutput->result];
-    if ((sp48 != NULL) && (sp24 >= 0)) {
+    if ((door != NULL) && (sp24 >= 0)) {
         this->timePath = SubS_GetAdditionalPath(play, pathIndex, sp24);
     }
-    if ((sp48 == NULL) || (this->timePath == NULL)) {
+    if ((door == NULL) || (this->timePath == NULL)) {
         return false;
     }
     sp28 = Lib_SegmentedToVirtual(this->timePath->points);
@@ -742,7 +743,7 @@ s32 func_80BABDD8(EnSuttari* this, PlayState* play, ScheduleOutput* scheduleOutp
     this->unk434 = sp44 - scheduleOutput->time0;
     this->unk436 = scheduleOutput->time1 - scheduleOutput->time0;
     if ((scheduleOutput->result != 10) && (scheduleOutput->result != 11)) {
-        sp48->openTimer = 75;
+        door->openTimer = 75;
     }
     Math_Vec3f_Copy(&this->unk438, &sp38);
     Math_Vec3f_Copy(&this->unk444, &sp2C);
@@ -858,7 +859,7 @@ void func_80BAC2FC(EnSuttari* this, PlayState* play) {
     s16 curFrame = this->skelAnime.curFrame;
     s16 endFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
-    switch (this->unk428) {
+    switch (this->scheduleResult) {
         case 12:
         case 13:
             this->flags1 |= 0x80;
@@ -967,7 +968,7 @@ void func_80BAC6E8(EnSuttari* this, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &object_boj_Skel_00C240, &object_boj_Anim_00071C, this->jointTable,
                        this->morphTable, OBJECT_BOJ_LIMB_MAX);
     this->actor.draw = EnSuttari_Draw;
-    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+    this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
     if (play->sceneId == SCENE_IKANA) {
         this->flags1 |= 1;
         if ((gSaveContext.save.day == 1) || (gSaveContext.save.day == 2)) {
@@ -1130,16 +1131,16 @@ void func_80BACEE0(EnSuttari* this, PlayState* play) {
 
     this->timePathTimeSpeed = R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset);
     if (!Schedule_RunScript(play, D_80BAE820, &scheduleOutput) ||
-        ((this->unk428 != scheduleOutput.result) && !func_80BABF64(this, play, &scheduleOutput))) {
-        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        ((this->scheduleResult != scheduleOutput.result) && !func_80BABF64(this, play, &scheduleOutput))) {
+        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         scheduleOutput.result = 0;
     } else {
-        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+        this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
     }
-    this->unk428 = scheduleOutput.result;
+    this->scheduleResult = scheduleOutput.result;
     func_80BAC2FC(this, play);
     func_80BAB434(this);
-    if (this->unk428 == 5) {
+    if (this->scheduleResult == 5) {
         SET_WEEKEVENTREG(WEEKEVENTREG_58_80);
         this->actionFunc = func_80BADDB4;
         this->actor.speed = 0.0f;
@@ -1154,20 +1155,23 @@ void func_80BAD004(EnSuttari* this, PlayState* play) {
 
     this->timePathTimeSpeed = R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset);
     if (!Schedule_RunScript(play, D_80BAE820, &scheduleOutput) ||
-        ((this->unk428 != scheduleOutput.result) && !func_80BABF64(this, play, &scheduleOutput))) {
-        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        ((this->scheduleResult != scheduleOutput.result) && !func_80BABF64(this, play, &scheduleOutput))) {
+        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         scheduleOutput.result = 0;
     } else {
-        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+        this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
     }
-    this->unk428 = scheduleOutput.result;
+
+    this->scheduleResult = scheduleOutput.result;
     func_80BAC2FC(this, play);
+
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         Message_StartTextbox(play, 0x2A3A, &this->actor);
         this->actionFunc = func_80BAD130;
     } else if ((this->actor.xzDistToPlayer < 200.0f) || this->actor.isLockedOn) {
         Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
     }
+
     Actor_MoveWithGravity(&this->actor);
 }
 
@@ -1281,13 +1285,13 @@ void func_80BAD5F8(EnSuttari* this, PlayState* play) {
     }
     this->timePathTimeSpeed = R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset);
     if (!Schedule_RunScript(play, D_80BAE820, &scheduleOutput) ||
-        ((this->unk428 != scheduleOutput.result) && !func_80BABF64(this, play, &scheduleOutput))) {
-        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        ((this->scheduleResult != scheduleOutput.result) && !func_80BABF64(this, play, &scheduleOutput))) {
+        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         scheduleOutput.result = 0;
     } else {
-        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+        this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
     }
-    this->unk428 = scheduleOutput.result;
+    this->scheduleResult = scheduleOutput.result;
     func_80BAC2FC(this, play);
     if ((this->unk430 == 1) && (this->timePath->additionalPathIndex == ADDITIONAL_PATH_INDEX_NONE)) {
         Actor_Kill(&this->actor);
@@ -1319,13 +1323,13 @@ void func_80BAD7F8(EnSuttari* this, PlayState* play) {
         }
         this->timePathTimeSpeed = R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset);
         if (!Schedule_RunScript(play, D_80BAE820, &scheduleOutput) ||
-            ((this->unk428 != scheduleOutput.result) && !func_80BABF64(this, play, &scheduleOutput))) {
-            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+            ((this->scheduleResult != scheduleOutput.result) && !func_80BABF64(this, play, &scheduleOutput))) {
+            this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
             scheduleOutput.result = 0;
         } else {
-            this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+            this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
         }
-        this->unk428 = scheduleOutput.result;
+        this->scheduleResult = scheduleOutput.result;
         func_80BAC2FC(this, play);
         if ((this->unk430 == 1) && (this->timePath->additionalPathIndex == ADDITIONAL_PATH_INDEX_NONE)) {
             Actor_Kill(&this->actor);
@@ -1345,11 +1349,11 @@ void func_80BAD7F8(EnSuttari* this, PlayState* play) {
 
 void func_80BADA08(EnSuttari* this, PlayState* play) {
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
-        this->actor.flags &= ~ACTOR_FLAG_10000;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         func_80BAAB78(this, play);
         SET_WEEKEVENTREG(WEEKEVENTREG_81_04);
     } else if (this->actor.xzDistToPlayer < 500.0f) {
-        this->actor.flags |= ACTOR_FLAG_10000;
+        this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         Actor_OfferTalk(&this->actor, play, 500.0f);
     }
 }
@@ -1450,11 +1454,11 @@ void func_80BADE8C(EnSuttari* this, PlayState* play) {
     this->unk3F2 = this->headRot.y;
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 1, 0xBB8, 0);
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
-        this->actor.flags &= ~ACTOR_FLAG_10000;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         Message_StartTextbox(play, 0x2A3A, &this->actor);
         this->actionFunc = func_80BAD130;
     } else {
-        this->actor.flags |= ACTOR_FLAG_10000;
+        this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         Actor_OfferTalk(&this->actor, play, 500.0f);
     }
 }
@@ -1482,7 +1486,7 @@ void EnSuttari_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit2);
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     EnSuttari_GetPaths(this, play);
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = func_80BAC6E8;
@@ -1513,7 +1517,7 @@ void EnSuttari_Update(Actor* thisx, PlayState* play) {
     if (this->flags2 & 2) {
         EnSuttari_AdvanceTime();
     }
-    if (this->unk428 != 0) {
+    if (this->scheduleResult != 0) {
         if ((this->animIndex == SUTTARI_ANIM_2) || (this->animIndex == SUTTARI_ANIM_6)) {
             if (Animation_OnFrame(&this->skelAnime, 8.0f) || Animation_OnFrame(&this->skelAnime, 16.0f)) {
                 Actor_PlaySfx(&this->actor, NA_SE_EV_PAMERA_WALK);

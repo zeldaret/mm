@@ -24,7 +24,7 @@ void EnLookNuts_RunToPlayer(EnLookNuts* this, PlayState* play);
 void EnLookNuts_SetupSendPlayerToSpawn(EnLookNuts* this);
 void EnLookNuts_SendPlayerToSpawn(EnLookNuts* this, PlayState* play);
 
-ActorInit En_Look_Nuts_InitVars = {
+ActorProfile En_Look_Nuts_Profile = {
     /**/ ACTOR_EN_LOOK_NUTS,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -38,7 +38,7 @@ ActorInit En_Look_Nuts_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -46,11 +46,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0xF7CFFFFF, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_NONE,
     },
     { 20, 50, 0, { 0, 0, 0 } },
@@ -109,9 +109,9 @@ void EnLookNuts_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.colChkInfo.damageTable = &sDamageTable;
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->actor.targetMode = TARGET_MODE_1;
+    this->actor.attentionRangeType = ATTENTION_RANGE_1;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
-    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+    this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
     this->pathIndex = LOOKNUTS_GET_PATH_INDEX(&this->actor);
     this->switchFlag = LOOKNUTS_GET_SWITCH_FLAG(&this->actor);
     this->spawnIndex = LOOKNUTS_GET_SPAWN_INDEX(&this->actor);
@@ -368,7 +368,7 @@ void EnLookNuts_Update(Actor* thisx, PlayState* play) {
                     Audio_PlaySfx(NA_SE_SY_FOUND);
                     Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_26);
                     D_80A6862C = true;
-                    this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_10);
+                    this->actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_10);
                     this->actor.gravity = 0.0f;
                     EnLookNuts_DetectedPlayer(this, play);
                 } else {

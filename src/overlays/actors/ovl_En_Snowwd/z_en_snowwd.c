@@ -5,7 +5,7 @@
  */
 
 #include "z_en_snowwd.h"
-#include "objects/object_snowwd/object_snowwd.h"
+#include "assets/objects/object_snowwd/object_snowwd.h"
 
 #define FLAGS 0x00000000
 
@@ -18,7 +18,7 @@ void EnSnowwd_Draw(Actor* thisx, PlayState* play);
 
 void EnSnowwd_Idle(EnSnowwd* this, PlayState* play);
 
-ActorInit En_Snowwd_InitVars = {
+ActorProfile En_Snowwd_Profile = {
     /**/ ACTOR_EN_SNOWWD,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -32,7 +32,7 @@ ActorInit En_Snowwd_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_TREE,
+        COL_MATERIAL_TREE,
         AT_NONE,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -40,11 +40,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK5,
+        ELEM_MATERIAL_UNK5,
         { 0x00000000, 0x00, 0x00 },
         { 0x0100020A, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 18, 60, 0, { 0, 0, 0 } },
@@ -125,7 +125,7 @@ void EnSnowwd_Update(Actor* thisx, PlayState* play) {
 void EnSnowwd_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gSnowTreeSnowLeavesTex));
     gSPDisplayList(POLY_OPA_DISP++, gSnowTreeDL);

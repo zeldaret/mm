@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_ending.h"
-#include "objects/object_ending_obj/object_ending_obj.h"
+#include "assets/objects/object_ending_obj/object_ending_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -15,7 +15,7 @@ void ObjEnding_Init(Actor* thisx, PlayState* play);
 void ObjEnding_Update(Actor* thisx, PlayState* play);
 void ObjEnding_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Ending_InitVars = {
+ActorProfile Obj_Ending_Profile = {
     /**/ ACTOR_OBJ_ENDING,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

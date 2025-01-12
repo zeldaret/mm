@@ -1,13 +1,13 @@
 #include "z64eff_blure.h"
 
-#include "libc/stdbool.h"
+#include "stdbool.h"
 #include "gfx.h"
 #include "macros.h"
 #include "sys_matrix.h"
 #include "z64effect_ss.h"
 #include "global.h"
 
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 void EffectBlure_AddVertex(EffectBlure* this, Vec3f* p1, Vec3f* p2) {
     EffectBlureElement* elem;
@@ -286,8 +286,8 @@ void EffectBlure_UpdateFlags(EffectBlureElement* elem) {
         Math_Vec3s_DiffToVec3f(&sp4C, &next->p1, &elem->p1);
         Math_Vec3s_DiffToVec3f(&sp40, &next->p2, &elem->p2);
 
-        if (Math3D_AngleBetweenVectors(&sp64, &sp4C, &sp34) || Math3D_AngleBetweenVectors(&sp58, &sp40, &sp30) ||
-            Math3D_AngleBetweenVectors(&sp4C, &sp40, &sp2C)) {
+        if (Math3D_CosOut(&sp64, &sp4C, &sp34) || Math3D_CosOut(&sp58, &sp40, &sp30) ||
+            Math3D_CosOut(&sp4C, &sp40, &sp2C)) {
             elem->flags &= ~(EFFECT_BLURE_ELEMENT_FLAG_1 | EFFECT_BLURE_ELEMENT_FLAG_2);
             elem->flags |= 0;
         } else if ((sp34 <= -0.5f) || (sp30 <= -0.5f) || (sp2C <= 0.7071f)) {
@@ -390,7 +390,7 @@ void EffectBlure_SetupSmooth(EffectBlure* this, GraphicsContext* gfxCtx) {
 
 void EffectBlure_DrawElemNoInterpolation(EffectBlure* this, EffectBlureElement* elem, s32 index,
                                          GraphicsContext* gfxCtx) {
-    static Vtx_t baseVtx = VTX_T(0, 0, 0, 0, 0, 255, 255, 255, 255);
+    static Vtx_t sBaseVtx = VTX_T(0, 0, 0, 0, 0, 255, 255, 255, 255);
     Vtx* vtx;
     Vec3s sp8C;
     Vec3s sp84;
@@ -408,10 +408,10 @@ void EffectBlure_DrawElemNoInterpolation(EffectBlure* this, EffectBlureElement* 
     vtx = GRAPH_ALLOC(gfxCtx, 4 * sizeof(Vtx));
     if (vtx == NULL) {
     } else {
-        vtx[0].v = baseVtx;
-        vtx[1].v = baseVtx;
-        vtx[2].v = baseVtx;
-        vtx[3].v = baseVtx;
+        vtx[0].v = sBaseVtx;
+        vtx[1].v = sBaseVtx;
+        vtx[2].v = sBaseVtx;
+        vtx[3].v = sBaseVtx;
 
         ratio = (f32)elem->timer / (f32)this->elemDuration;
         EffectBlure_GetComputedValues(this, index, ratio, &sp8C, &sp84, &sp7C, &sp78);
@@ -480,7 +480,7 @@ void EffectBlure_DrawElemNoInterpolation(EffectBlure* this, EffectBlureElement* 
 
 void EffectBlure_DrawElemHermiteInterpolation(EffectBlure* this, EffectBlureElement* elem, s32 index,
                                               GraphicsContext* gfxCtx) {
-    static Vtx_t baseVtx = VTX_T(0, 0, 0, 0, 0, 255, 255, 255, 255);
+    static Vtx_t sBaseVtx = VTX_T(0, 0, 0, 0, 0, 255, 255, 255, 255);
     Vtx* vtx;
     Vec3s sp1EC;
     Vec3s sp1E4;
@@ -568,8 +568,8 @@ void EffectBlure_DrawElemHermiteInterpolation(EffectBlure* this, EffectBlureElem
         Color_RGBA8_Copy(&sp148, &sp1A4);
         Color_RGBA8_Copy(&sp144, &sp1A0);
 
-        vtx[0].v = baseVtx;
-        vtx[1].v = baseVtx;
+        vtx[0].v = sBaseVtx;
+        vtx[1].v = sBaseVtx;
 
         vtx[0].v.ob[0] = Math_FNearbyIntF(sp158.x);
         vtx[0].v.ob[1] = Math_FNearbyIntF(sp158.y);
@@ -613,8 +613,8 @@ void EffectBlure_DrawElemHermiteInterpolation(EffectBlure* this, EffectBlureElem
             Math_Vec3f_Diff(&spE0, &sp138, &sp14C);
             Math_Vec3f_Scale(&sp14C, 10.0f);
 
-            vtx[j1].v = baseVtx;
-            vtx[j2].v = baseVtx;
+            vtx[j1].v = sBaseVtx;
+            vtx[j2].v = sBaseVtx;
 
             vtx[j1].v.ob[0] = Math_FNearbyIntF(sp158.x);
             vtx[j1].v.ob[1] = Math_FNearbyIntF(sp158.y);
@@ -658,6 +658,7 @@ void EffectBlure_DrawSmooth(EffectBlure* this2, GraphicsContext* gfxCtx) {
     OPEN_DISPS(gfxCtx);
 
     if (this->numElements < 2) {
+        //! @bug Skips CLOSE_DISPS
         return;
     }
 
@@ -678,6 +679,7 @@ void EffectBlure_DrawSmooth(EffectBlure* this2, GraphicsContext* gfxCtx) {
 
     mtx = SkinMatrix_MtxFToNewMtx(gfxCtx, &sp5C);
     if (mtx == NULL) {
+        //! @bug Skips CLOSE_DISPS
         return;
     }
 
@@ -965,6 +967,7 @@ void EffectBlure_Draw(void* thisx, GraphicsContext* gfxCtx) {
                                 vtx[j + 1].v.ob[1] = elem->p2.y;
                                 vtx[j + 1].v.ob[2] = elem->p2.z;
                                 break;
+
                             case 2:
                                 vtx[j].v.ob[0] = elem->p1.x;
                                 vtx[j].v.ob[1] = elem->p1.y;
@@ -973,6 +976,7 @@ void EffectBlure_Draw(void* thisx, GraphicsContext* gfxCtx) {
                                 vtx[j + 1].v.ob[1] = func_800B09D0(elem->p2.y, elem->p1.y, ratio);
                                 vtx[j + 1].v.ob[2] = func_800B09D0(elem->p2.z, elem->p1.z, ratio);
                                 break;
+
                             case 3:
                                 ratio *= 0.5f;
                                 vtx[j].v.ob[0] = func_800B09D0(elem->p1.x, elem->p2.x, ratio);
@@ -983,6 +987,7 @@ void EffectBlure_Draw(void* thisx, GraphicsContext* gfxCtx) {
                                 vtx[j + 1].v.ob[2] = func_800B09D0(elem->p2.z, elem->p1.z, ratio);
                                 ratio *= 2.0f;
                                 break;
+
                             case 0:
                             default:
                                 vtx[j].v.ob[0] = elem->p1.x;

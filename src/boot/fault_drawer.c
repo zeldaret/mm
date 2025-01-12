@@ -34,7 +34,10 @@ typedef struct {
     /* 0x38 */ FaultDrawerCallback inputCallback;
 } FaultDrawer; // size = 0x3C
 
-extern const u32 sFaultDrawerFont[];
+//! TODO: Extract the font data properly so we don't have to cast in sFaultDrawerDefault below
+const u8 sFaultDrawerFont[] = {
+#include "assets/boot/fault_drawer/sFaultDrawerFont.bin.inc.c"
+};
 
 FaultDrawer sFaultDrawer;
 
@@ -55,7 +58,7 @@ FaultDrawer sFaultDrawerDefault = {
     GPACK_RGBA5551(0, 0, 0, 0),                // backColor
     FAULT_DRAWER_CURSOR_X,                     // cursorX
     FAULT_DRAWER_CURSOR_Y,                     // cursorY
-    sFaultDrawerFont,                          // fontData
+    (const u32*)sFaultDrawerFont,              // fontData
     8,                                         // charW
     8,                                         // charH
     0,                                         // charWPad
@@ -77,9 +80,6 @@ FaultDrawer sFaultDrawerDefault = {
     false, // osSyncPrintfEnabled
     NULL,  // inputCallback
 };
-
-//! TODO: Needs to be extracted
-#pragma GLOBAL_ASM("asm/non_matchings/boot/fault_drawer/sFaultDrawerFont.s")
 
 void FaultDrawer_SetOsSyncPrintfEnabled(u32 enabled) {
     sFaultDrawerInstance->osSyncPrintfEnabled = enabled;
@@ -244,6 +244,7 @@ void* FaultDrawer_FormatStringFunc(void* arg, const char* str, size_t count) {
 
                     FaultDrawer_DrawChar(*str);
                     sFaultDrawerInstance->cursorX += sFaultDrawerInstance->charW + sFaultDrawerInstance->charWPad;
+                    break;
             }
         }
 

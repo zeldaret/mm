@@ -2,7 +2,7 @@
 #define Z_BOSS_HAKUGIN_H
 
 #include "global.h"
-#include "objects/object_boss_hakugin/object_boss_hakugin.h"
+#include "assets/objects/object_boss_hakugin/object_boss_hakugin.h"
 #include "overlays/effects/ovl_Effect_Ss_Fhg_Flash/z_eff_ss_fhg_flash.h"
 
 struct BossHakugin;

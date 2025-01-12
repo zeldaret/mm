@@ -2,7 +2,7 @@
 #define Z_OBJ_UM_H
 
 #include "global.h"
-#include "objects/object_um/object_um.h"
+#include "assets/objects/object_um/object_um.h"
 #include "overlays/actors/ovl_En_Horse/z_en_horse.h"
 
 struct ObjUm;

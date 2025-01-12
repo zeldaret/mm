@@ -2,7 +2,7 @@
 #define Z_EN_FIREFLY_H
 
 #include "global.h"
-#include "objects/object_firefly/object_firefly.h"
+#include "assets/objects/object_firefly/object_firefly.h"
 
 struct EnFirefly;
 

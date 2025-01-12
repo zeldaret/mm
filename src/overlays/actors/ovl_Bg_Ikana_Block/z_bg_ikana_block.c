@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_ikana_block.h"
-#include "objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
+#include "assets/objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -25,7 +25,7 @@ void func_80B7F360(BgIkanaBlock* this);
 void func_80B7F398(BgIkanaBlock* this, PlayState* play);
 void func_80B7F564(Actor* thisx, PlayState* play);
 
-ActorInit Bg_Ikana_Block_InitVars = {
+ActorProfile Bg_Ikana_Block_Profile = {
     /**/ ACTOR_BG_IKANA_BLOCK,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -92,7 +92,7 @@ s32 func_80B7EB94(BgIkanaBlock* this, PlayState* play) {
     Vec3f sp64;
     Vec3f sp58;
     CollisionPoly* sp54;
-    s32 sp50;
+    s32 bgId;
     s32 sp4C = false;
     s16 phi_a0;
     f32 phi_f12;
@@ -125,7 +125,7 @@ s32 func_80B7EB94(BgIkanaBlock* this, PlayState* play) {
     sp64.y += this->dyna.actor.world.pos.y + this->unk_170 + 2.0f;
     sp64.z += this->dyna.actor.world.pos.z;
 
-    return !BgCheck_EntityLineTest3(&play->colCtx, &sp70, &sp64, &sp58, &sp54, true, false, false, true, &sp50,
+    return !BgCheck_EntityLineTest3(&play->colCtx, &sp70, &sp64, &sp58, &sp54, true, false, false, true, &bgId,
                                     &this->dyna.actor, 0.0f);
 }
 
@@ -147,15 +147,15 @@ void func_80B7ED54(BgIkanaBlock* this) {
 s32 func_80B7EDC4(BgIkanaBlock* this, PlayState* play) {
     s32 pad;
     Vec3f sp30;
-    s32 sp2C;
+    s32 bgId;
 
     sp30.x = this->dyna.actor.world.pos.x;
     sp30.y = this->dyna.actor.world.pos.y + this->unk_170 + 40.0f;
     sp30.z = this->dyna.actor.world.pos.z;
 
     this->dyna.actor.floorHeight = BgCheck_EntityRaycastFloor5_2(play, &play->colCtx, &this->dyna.actor.floorPoly,
-                                                                 &sp2C, &this->dyna.actor, &sp30);
-    this->dyna.actor.floorBgId = sp2C;
+                                                                 &bgId, &this->dyna.actor, &sp30);
+    this->dyna.actor.floorBgId = bgId;
 
     return ((this->dyna.actor.world.pos.y + this->unk_170) - this->dyna.actor.floorHeight) < 2.0f;
 }
@@ -378,7 +378,7 @@ void func_80B7F564(Actor* thisx, PlayState* play) {
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     AnimatedMat_DrawStep(play, this->unk_15C, 0);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gDPSetPrimColor(POLY_OPA_DISP++, 0xFF, 0xFF, 255, 255, 255, 255);
     gSPDisplayList(POLY_OPA_DISP++, gameplay_dangeon_keep_DL_0182A8);
 

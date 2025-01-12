@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_kzsaku.h"
-#include "objects/object_kzsaku/object_kzsaku.h"
+#include "assets/objects/object_kzsaku/object_kzsaku.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -23,7 +23,7 @@ void ObjKzsaku_Idle(ObjKzsaku* this, PlayState* play);
 void ObjKzsaku_Rise(ObjKzsaku* this, PlayState* play);
 void func_80C08CB0(ObjKzsaku* this, PlayState* play);
 
-ActorInit Obj_Kzsaku_InitVars = {
+ActorProfile Obj_Kzsaku_Profile = {
     /**/ ACTOR_OBJ_KZSAKU,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -123,7 +123,7 @@ void ObjKzsaku_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, gUnderwaterGrateDL);
 
     CLOSE_DISPS(play->state.gfxCtx);

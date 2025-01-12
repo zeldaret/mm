@@ -5,7 +5,7 @@
  */
 
 #include "z_eff_dust.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 #include "libc64/malloc.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
@@ -24,7 +24,7 @@ void func_80919230(EffDust* this, PlayState* play);
 void func_80919768(Actor* thisx, PlayState* play2);
 void func_809199FC(Actor* thisx, PlayState* play2);
 
-ActorInit Eff_Dust_InitVars = {
+ActorProfile Eff_Dust_Profile = {
     /**/ ACTOR_EFF_DUST,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -301,7 +301,7 @@ void func_80919768(Actor* thisx, PlayState* play2) {
 
             Matrix_ReplaceRotation(&play->billboardMtxF);
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, gfxCtx);
 
             gSPClearGeometryMode(POLY_XLU_DISP++, G_FOG | G_LIGHTING);
 
@@ -359,7 +359,7 @@ void func_809199FC(Actor* thisx, PlayState* play2) {
 
             Matrix_ReplaceRotation(&play->billboardMtxF);
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, gfxCtx);
             gSPClearGeometryMode(POLY_XLU_DISP++, G_FOG | G_LIGHTING);
 
             gSPDisplayList(POLY_XLU_DISP++, gEffSparklesDL);

@@ -8,8 +8,8 @@
 #include "overlays/actors/ovl_En_Sw/z_en_sw.h"
 #include "overlays/effects/ovl_Effect_Ss_Kakera/z_eff_ss_kakera.h"
 #include "overlays/actors/ovl_Obj_Tsubo/z_obj_tsubo.h"
-#include "objects/object_taru/object_taru.h"
-#include "objects/object_kibako2/object_kibako2.h"
+#include "assets/objects/object_taru/object_taru.h"
+#include "assets/objects/object_kibako2/object_kibako2.h"
 
 #define FLAGS 0x00000000
 
@@ -24,7 +24,7 @@ void func_80B9C07C(ObjTaru* this, PlayState* play);
 void func_80B9C174(ObjTaru* this, PlayState* play);
 void func_80B9C1A0(ObjTaru* this, PlayState* play);
 
-ActorInit Obj_Taru_InitVars = {
+ActorProfile Obj_Taru_Profile = {
     /**/ ACTOR_OBJ_TARU,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -38,7 +38,7 @@ ActorInit Obj_Taru_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -46,11 +46,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0x80000508, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_NONE,
     },
     { 30, 50, 0, { 0, 0, 0 } },
@@ -243,21 +243,21 @@ s32 func_80B9BF7C(ObjTaru* this) {
     s32 pad;
     s32 phi_a3 = false;
 
-    if ((!OBJ_TARU_GET_80(&this->dyna.actor)) && (this->collider.base.acFlags & AC_HIT)) {
+    if (!OBJ_TARU_GET_80(&this->dyna.actor) && (this->collider.base.acFlags & AC_HIT)) {
         Actor* ac = this->collider.base.ac;
 
         this->collider.base.acFlags &= ~AC_HIT;
         if (ac != NULL) {
-            if (this->collider.info.acHitInfo->toucher.dmgFlags & 0x80000000) {
+            if (this->collider.elem.acHitElem->atDmgInfo.dmgFlags & 0x80000000) {
                 phi_a3 = false;
                 if (Math3D_Vec3fDistSq(&this->dyna.actor.world.pos, &ac->world.pos) < SQ(160.0f)) {
                     phi_a3 = true;
                 }
-            } else if (this->collider.info.acHitInfo->toucher.dmgFlags & 8) {
+            } else if (this->collider.elem.acHitElem->atDmgInfo.dmgFlags & 8) {
                 if (Math3D_Vec3fDistSq(&this->dyna.actor.world.pos, &ac->world.pos) < SQ(100.0f)) {
                     phi_a3 = true;
                 }
-            } else if (this->collider.info.acHitInfo->toucher.dmgFlags & 0x500) {
+            } else if (this->collider.elem.acHitElem->atDmgInfo.dmgFlags & 0x500) {
                 phi_a3 = true;
             }
         }
@@ -323,6 +323,7 @@ void ObjTaru_Update(Actor* thisx, PlayState* play) {
                         this->unk_1AD = 8;
                     }
                     break;
+
                 default:
                     this->unk_1AD--;
                     break;

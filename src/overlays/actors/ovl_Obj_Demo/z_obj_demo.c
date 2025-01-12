@@ -17,7 +17,7 @@ void func_80983678(ObjDemo* this, PlayState* play);
 void func_80983704(ObjDemo* this, PlayState* play);
 void func_80983634(PlayState* play);
 
-ActorInit Obj_Demo_InitVars = {
+ActorProfile Obj_Demo_Profile = {
     /**/ ACTOR_OBJ_DEMO,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,

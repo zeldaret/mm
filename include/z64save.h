@@ -3,8 +3,11 @@
 
 #include "ultra64.h"
 #include "PR/os.h"
+
+#include "z64inventory.h"
 #include "z64item.h"
 #include "z64math.h"
+
 #include "unk.h"
 
 struct GameState;
@@ -292,7 +295,7 @@ typedef struct SaveInfo {
     /* 0xE58 */ u32 pictoFlags1;                       // Flags set by Snap_ValidatePictograph() to record errors; volatile since that function is run many times in succession
     /* 0xE5C */ u32 unk_E5C;
     /* 0xE60 */ u32 unk_E60;
-    /* 0xE64 */ u32 unk_E64[7];                        // Invadepoh flags
+    /* 0xE64 */ u32 alienInfo[7];                      // Used by EnInvadepoh to hold alien spawn times and how many aliens the player has killed
     /* 0xE80 */ u32 scenesVisible[7];                  // tingle maps and clouded regions on pause map. Stores scenes bitwise for up to 224 scenes even though there are not that many scenes
     /* 0xE9C */ u32 skullTokenCount;                   // upper 16 bits store Swamp skulls, lower 16 bits store Ocean skulls
     /* 0xEA0 */ u32 unk_EA0;                           // Gossic stone heart piece flags
@@ -317,36 +320,36 @@ typedef struct SaveInfo {
 } SaveInfo; // size = 0xFE8
 
 typedef struct Save {
-    /* 0x00 */ s32 entrance;                            // "scene_no"
-    /* 0x04 */ u8 equippedMask;                         // "player_mask"
-    /* 0x05 */ u8 isFirstCycle;                         // "opening_flag"
+    /* 0x00 */ s32 entrance;        // "scene_no"
+    /* 0x04 */ u8 equippedMask;     // "player_mask"
+    /* 0x05 */ u8 isFirstCycle;     // "opening_flag"
     /* 0x06 */ u8 unk_06;
-    /* 0x07 */ u8 linkAge;                              // "link_age"
-    /* 0x08 */ s32 cutsceneIndex;                       // "day_time"
-    /* 0x0C */ u16 time;                                // "zelda_time"
-    /* 0x0E */ u16 owlWarpId; // See `OwlWarpId` enum
-    /* 0x10 */ s32 isNight;                             // "asahiru_fg"
-    /* 0x14 */ s32 timeSpeedOffset;                     // "change_zelda_time"
-    /* 0x18 */ s32 day;                                 // "totalday"
-    /* 0x1C */ s32 eventDayCount;                       // "eventday"
-    /* 0x20 */ u8 playerForm;                           // "player_character"
-    /* 0x21 */ u8 snowheadCleared;                      // "spring_flag"
-    /* 0x22 */ u8 hasTatl;                              // "bell_flag"
+    /* 0x07 */ u8 linkAge;          // "link_age"
+    /* 0x08 */ s32 cutsceneIndex;   // "day_time"
+    /* 0x0C */ u16 time;            // "zelda_time"
+    /* 0x0E */ u16 owlWarpId;       // See `OwlWarpId` enum
+    /* 0x10 */ s32 isNight;         // "asahiru_fg"
+    /* 0x14 */ s32 timeSpeedOffset; // "change_zelda_time"
+    /* 0x18 */ s32 day;             // "totalday"
+    /* 0x1C */ s32 eventDayCount;   // "eventday"
+    /* 0x20 */ u8 playerForm;       // "player_character"
+    /* 0x21 */ u8 snowheadCleared;  // "spring_flag"
+    /* 0x22 */ u8 hasTatl;          // "bell_flag"
     /* 0x23 */ u8 isOwlSave;
     /* 0x24 */ SaveInfo saveInfo;
 } Save; // size = 0x100C
 
 typedef struct SaveContext {
     /* 0x0000 */ Save save;
-    /* 0x100C */ u8 eventInf[8];                        // "event_inf"
-    /* 0x1014 */ u8 unk_1014;                           // "stone_set_flag"
+    /* 0x100C */ u8 eventInf[8]; // "event_inf"
+    /* 0x1014 */ u8 unk_1014;    // "stone_set_flag"
     /* 0x1015 */ u8 bButtonStatus;
     /* 0x1016 */ u16 jinxTimer;
-    /* 0x1018 */ s16 rupeeAccumulator;                  // "lupy_udct"
-    /* 0x101A */ u8 bottleTimerStates[BOTTLE_MAX]; // See the `BottleTimerState` enum. "bottle_status"
+    /* 0x1018 */ s16 rupeeAccumulator;                       // "lupy_udct"
+    /* 0x101A */ u8 bottleTimerStates[BOTTLE_MAX];           // See the `BottleTimerState` enum. "bottle_status"
     /* 0x1020 */ OSTime bottleTimerStartOsTimes[BOTTLE_MAX]; // The osTime when the timer starts. "bottle_ostime"
     /* 0x1050 */ u64 bottleTimerTimeLimits[BOTTLE_MAX]; // The original total time given before the timer expires, in centiseconds (1/100th sec). "bottle_sub"
-    /* 0x1080 */ u64 bottleTimerCurTimes[BOTTLE_MAX]; // The remaining time left before the timer expires, in centiseconds (1/100th sec). "bottle_time"
+    /* 0x1080 */ u64 bottleTimerCurTimes[BOTTLE_MAX];   // The remaining time left before the timer expires, in centiseconds (1/100th sec). "bottle_time"
     /* 0x10B0 */ OSTime bottleTimerPausedOsTimes[BOTTLE_MAX]; // The cumulative osTime spent with the timer paused. "bottle_stop_time"
     /* 0x10E0 */ u8 pictoPhotoI5[PICTO_PHOTO_COMPRESSED_SIZE]; // buffer containing the pictograph photo, compressed to I5 from I8
     /* 0x3CA0 */ s32 fileNum;                           // "file_no"
@@ -367,58 +370,58 @@ typedef struct SaveContext {
     /* 0x3DC0 */ s16 nayrusLoveTimer;                   // remnant of OoT, "shield_magic_timer"
     /* 0x3DC2 */ u8 unk_3DC2;                           // "pad1"
     /* 0x3DC8 */ OSTime postmanTimerStopOsTime; // The osTime when the timer stops for the postman minigame. "get_time"
-    /* 0x3DD0 */ u8 timerStates[TIMER_ID_MAX]; // See the `TimerState` enum. "event_fg"
+    /* 0x3DD0 */ u8 timerStates[TIMER_ID_MAX];  // See the `TimerState` enum. "event_fg"
     /* 0x3DD7 */ u8 timerDirections[TIMER_ID_MAX]; // See the `TimerDirection` enum. "calc_flag"
     /* 0x3DE0 */ u64 timerCurTimes[TIMER_ID_MAX]; // For countdown, the remaining time left. For countup, the time since the start. In centiseconds (1/100th sec). "event_ostime"
     /* 0x3E18 */ u64 timerTimeLimits[TIMER_ID_MAX]; // The original total time given for the timer to count from, in centiseconds (1/100th sec). "event_sub"
     /* 0x3E50 */ OSTime timerStartOsTimes[TIMER_ID_MAX]; // The osTime when the timer starts. "func_time"
     /* 0x3E88 */ u64 timerStopTimes[TIMER_ID_MAX];  // The total amount of time taken between the start and end of the timer, in centiseconds (1/100th sec). "func_end_time"
     /* 0x3EC0 */ OSTime timerPausedOsTimes[TIMER_ID_MAX]; // The cumulative osTime spent with the timer paused. "func_stop_time"
-    /* 0x3EF8 */ s16 timerX[TIMER_ID_MAX];              // "event_xp"
-    /* 0x3F06 */ s16 timerY[TIMER_ID_MAX];              // "event_yp"
-    /* 0x3F14 */ s16 unk_3F14;                          // "character_change"
-    /* 0x3F16 */ u8 seqId;                              // "old_bgm"
-    /* 0x3F17 */ u8 ambienceId;                         // "old_env"
-    /* 0x3F18 */ u8 buttonStatus[6];                    // "button_item"
+    /* 0x3EF8 */ s16 timerX[TIMER_ID_MAX]; // "event_xp"
+    /* 0x3F06 */ s16 timerY[TIMER_ID_MAX]; // "event_yp"
+    /* 0x3F14 */ s16 unk_3F14;             // "character_change"
+    /* 0x3F16 */ u8 seqId;                 // "old_bgm"
+    /* 0x3F17 */ u8 ambienceId;            // "old_env"
+    /* 0x3F18 */ u8 buttonStatus[6];       // "button_item"
     /* 0x3F1E */ u8 hudVisibilityForceButtonAlphasByStatus; // if btn alphas are updated through Interface_UpdateButtonAlphas, instead update them through Interface_UpdateButtonAlphasByStatus "ck_fg"
-    /* 0x3F20 */ u16 nextHudVisibility; // triggers the hud to change visibility to the requested value. Reset to HUD_VISIBILITY_IDLE when target is reached "alpha_type"
-    /* 0x3F22 */ u16 hudVisibility; // current hud visibility "prev_alpha_type"
+    /* 0x3F20 */ u16 nextHudVisibility;  // triggers the hud to change visibility to the requested value. Reset to HUD_VISIBILITY_IDLE when target is reached "alpha_type"
+    /* 0x3F22 */ u16 hudVisibility;      // current hud visibility "prev_alpha_type"
     /* 0x3F24 */ u16 hudVisibilityTimer; // number of frames in the transition to a new hud visibility. Used to step alpha "alpha_count"
     /* 0x3F26 */ u16 prevHudVisibility; // used to store and recover hud visibility for pause menu and text boxes "last_time_type"
-    /* 0x3F28 */ s16 magicState; // determines magic meter behavior on each frame "magic_flag"
-    /* 0x3F2A */ s16 isMagicRequested; // a request to add magic has been given "recovery_magic_flag"
-    /* 0x3F2C */ s16 magicFlag; // Set to 0 in func_80812D94(), otherwise unused "keep_magic_flag"
-    /* 0x3F2E */ s16 magicCapacity; // maximum magic available "magic_now_max"
-    /* 0x3F30 */ s16 magicFillTarget; // target used to fill magic "magic_now_now"
-    /* 0x3F32 */ s16 magicToConsume; // accumulated magic that is requested to be consumed "magic_used"
-    /* 0x3F34 */ s16 magicToAdd; // accumulated magic that is requested to be added "magic_recovery"
-    /* 0x3F36 */ u16 mapIndex;                          // "scene_ID"
-    /* 0x3F38 */ u16 minigameStatus;                    // "yabusame_mode"
-    /* 0x3F3A */ u16 minigameScore;                     // "yabusame_total"
-    /* 0x3F3C */ u16 minigameHiddenScore;               // "yabusame_out_ct"
-    /* 0x3F3E */ u8 unk_3F3E;                           // "no_save"
-    /* 0x3F3F */ u8 flashSaveAvailable;                 // "flash_flag"
+    /* 0x3F28 */ s16 magicState;          // determines magic meter behavior on each frame "magic_flag"
+    /* 0x3F2A */ s16 isMagicRequested;    // a request to add magic has been given "recovery_magic_flag"
+    /* 0x3F2C */ s16 magicFlag;           // Set to 0 in func_80812D94(), otherwise unused "keep_magic_flag"
+    /* 0x3F2E */ s16 magicCapacity;       // maximum magic available "magic_now_max"
+    /* 0x3F30 */ s16 magicFillTarget;     // target used to fill magic "magic_now_now"
+    /* 0x3F32 */ s16 magicToConsume;      // accumulated magic that is requested to be consumed "magic_used"
+    /* 0x3F34 */ s16 magicToAdd;          // accumulated magic that is requested to be added "magic_recovery"
+    /* 0x3F36 */ u16 mapIndex;            // set to enum DungeonSceneIndex when entering a dungeon related scene, or Map_GetMapIndexForOverworld on certain overworld scenes "scene_ID"
+    /* 0x3F38 */ u16 minigameStatus;      // "yabusame_mode"
+    /* 0x3F3A */ u16 minigameScore;       // "yabusame_total"
+    /* 0x3F3C */ u16 minigameHiddenScore; // "yabusame_out_ct"
+    /* 0x3F3E */ u8 unk_3F3E;             // "no_save"
+    /* 0x3F3F */ u8 flashSaveAvailable;   // "flash_flag"
     /* 0x3F40 */ SaveOptions options;
-    /* 0x3F46 */ u16 forcedSeqId;                       // "NottoriBgm"
-    /* 0x3F48 */ u8 cutsceneTransitionControl;          // "fade_go"
-    /* 0x3F4A */ u16 nextCutsceneIndex;                 // "next_daytime"
-    /* 0x3F4C */ u8 cutsceneTrigger;                    // "doukidemo"
-    /* 0x3F4D */ u8 chamberCutsceneNum;                 // remnant of OoT "Kenjya_no"
-    /* 0x3F4E */ u16 nextDayTime;                       // "next_zelda_time"
-    /* 0x3F50 */ u8 transFadeDuration;                  // "fade_speed"
-    /* 0x3F51 */ u8 transWipeSpeed;                     // "wipe_speed"           transition related
-    /* 0x3F52 */ u16 skyboxTime;                        // "kankyo_time"
-    /* 0x3F54 */ u8 dogIsLost;                          // "dog_event_flag"
-    /* 0x3F55 */ u8 nextTransitionType;                 // "next_wipe"
-    /* 0x3F56 */ s16 worldMapArea;                      // "area_type"
-    /* 0x3F58 */ s16 sunsSongState;                     // "sunmoon_flag"
-    /* 0x3F5A */ s16 healthAccumulator;                 // "life_mode"
-    /* 0x3F5C */ s32 unk_3F5C;                          // "bet_rupees"
-    /* 0x3F60 */ u8 screenScaleFlag;                    // "framescale_flag"
-    /* 0x3F64 */ f32 screenScale;                       // "framescale_scale"
-    /* 0x3F68 */ CycleSceneFlags cycleSceneFlags[120];  // Scene flags that are temporarily stored over the duration of a single 3-day cycle
-    /* 0x48C8 */ u16 dungeonIndex;                      // "scene_id_mix"
-    /* 0x48CA */ u8 masksGivenOnMoon[27];               // bit-packed, masks given away on the Moon. "mask_mask_bit"
+    /* 0x3F46 */ u16 forcedSeqId;              // "NottoriBgm"
+    /* 0x3F48 */ u8 cutsceneTransitionControl; // "fade_go"
+    /* 0x3F4A */ u16 nextCutsceneIndex;        // "next_daytime"
+    /* 0x3F4C */ u8 cutsceneTrigger;           // "doukidemo"
+    /* 0x3F4D */ u8 chamberCutsceneNum;        // remnant of OoT "Kenjya_no"
+    /* 0x3F4E */ u16 nextDayTime;              // "next_zelda_time"
+    /* 0x3F50 */ u8 transFadeDuration;         // "fade_speed"
+    /* 0x3F51 */ u8 transWipeSpeed;            // "wipe_speed"           transition related
+    /* 0x3F52 */ u16 skyboxTime;               // "kankyo_time"
+    /* 0x3F54 */ u8 dogIsLost;                 // "dog_event_flag"
+    /* 0x3F55 */ u8 nextTransitionType;        // "next_wipe"
+    /* 0x3F56 */ s16 worldMapArea;             // "area_type"
+    /* 0x3F58 */ s16 sunsSongState;            // "sunmoon_flag"
+    /* 0x3F5A */ s16 healthAccumulator;        // "life_mode"
+    /* 0x3F5C */ s32 unk_3F5C;                 // "bet_rupees"
+    /* 0x3F60 */ u8 screenScaleFlag;           // "framescale_flag"
+    /* 0x3F64 */ f32 screenScale;              // "framescale_scale"
+    /* 0x3F68 */ CycleSceneFlags cycleSceneFlags[120]; // Scene flags that are temporarily stored over the duration of a single 3-day cycle
+    /* 0x48C8 */ u16 dungeonSceneSharedIndex; // similar to mapIndex, except values correspond to one of the four dungeons "scene_id_mix"
+    /* 0x48CA */ u8 masksGivenOnMoon[27];     // bit-packed, masks given away on the Moon. "mask_mask_bit"
 } SaveContext; // size = 0x48C8
 
 typedef enum ButtonStatus {
@@ -497,9 +500,16 @@ typedef enum {
 #define DECREMENT_QUEST_HEART_PIECE_COUNT (gSaveContext.save.saveInfo.inventory.questItems -= (1 << QUEST_HEART_PIECE_COUNT))
 #define RESET_HEART_PIECE_COUNT (gSaveContext.save.saveInfo.inventory.questItems ^= (4 << QUEST_HEART_PIECE_COUNT))
 
-#define CHECK_DUNGEON_ITEM(item, dungeonIndex) (gSaveContext.save.saveInfo.inventory.dungeonItems[(void)0, dungeonIndex] & gBitFlags[item])
-#define SET_DUNGEON_ITEM(item, dungeonIndex) (gSaveContext.save.saveInfo.inventory.dungeonItems[(void)0, dungeonIndex] |= (u8)gBitFlags[item])
-#define DUNGEON_KEY_COUNT(dungeonIndex) (gSaveContext.save.saveInfo.inventory.dungeonKeys[(void)0, dungeonIndex])
+#define CHECK_DUNGEON_ITEM(item, dungeonSceneIndex) (gSaveContext.save.saveInfo.inventory.dungeonItems[(void)0, dungeonSceneIndex] & gBitFlags[item])
+#define CHECK_DUNGEON_ITEM_ALT(item, dungeonSceneIndex) (gSaveContext.save.saveInfo.inventory.dungeonItems[dungeonSceneIndex] & gBitFlags[item])
+#define SET_DUNGEON_ITEM(item, dungeonSceneIndex) (gSaveContext.save.saveInfo.inventory.dungeonItems[(void)0, dungeonSceneIndex] |= (u8)gBitFlags[item])
+#define DUNGEON_KEY_COUNT(dungeonSceneIndex) (gSaveContext.save.saveInfo.inventory.dungeonKeys[(void)0, dungeonSceneIndex])
+#define GET_DUNGEON_FLOOR_VISITED(sceneId, floor) (gSaveContext.save.saveInfo.permanentSceneFlags[(sceneId)].unk_14 & gBitFlags[floor])
+#define SET_DUNGEON_FLOOR_VISITED(sceneId, floor) (gSaveContext.save.saveInfo.permanentSceneFlags[(sceneId)].unk_14 |= gBitFlags[floor])
+#define GET_ROOM_VISITED(sceneId, room) (((void)0, gSaveContext.save.saveInfo.permanentSceneFlags[(sceneId)].rooms) & (1 << (room)))
+#define SET_ROOM_VISITED(sceneId, room) (gSaveContext.save.saveInfo.permanentSceneFlags[(sceneId)].rooms |= gBitFlags[room])
+#define GET_CYCLE_CHEST_OPENED(sceneId, chestFlagId) ((void)0, gSaveContext.cycleSceneFlags[(sceneId)].chest) & (1 << (chestFlagId));
+
 
 #define GET_CUR_FORM_BTN_ITEM(btn) ((u8)((btn) == EQUIP_SLOT_B ? BUTTON_ITEM_EQUIP(CUR_FORM, btn) : BUTTON_ITEM_EQUIP(0, btn)))
 #define GET_CUR_FORM_BTN_SLOT(btn) ((u8)((btn) == EQUIP_SLOT_B ? C_SLOT_EQUIP(CUR_FORM, btn) : C_SLOT_EQUIP(0, btn)))
@@ -556,6 +566,24 @@ typedef enum {
 #define HS_SET_TOWN_SHOOTING_GALLERY_HIGH_SCORE(score) (HIGH_SCORE(HS_SHOOTING_GALLERY) = (HIGH_SCORE(HS_SHOOTING_GALLERY) & 0xFFFF0000) | ((u16)(score)))
 #define HS_GET_SWAMP_SHOOTING_GALLERY_HIGH_SCORE() ((s32)((HIGH_SCORE(HS_SHOOTING_GALLERY) & 0xFFFF0000) >> 0x10))
 #define HS_SET_SWAMP_SHOOTING_GALLERY_HIGH_SCORE(score) (HIGH_SCORE(HS_SHOOTING_GALLERY) = (HIGH_SCORE(HS_SHOOTING_GALLERY) & 0xFFFF) | ((u16)(score) << 0x10))
+
+// Note that the time that each alien spawns is stored as an offset from 2:30 AM. To get the actual time that they spawn, you need to add
+// `CLOCK_TIME(2, 30)` to the value retrieved using this macro. These spawn time macros are only intended to be used with an `index` value
+// ranging from 0 to 7; using an `index` of 8 or 9 will overwrite data used to track the alien kill count. You can technically supply an
+// `index` value between 10 and 13 and have it work, however, since these indices are unused in the final game.
+#define ALIEN_GET_SPAWN_TIME_OFFSET(index) \
+    (((index % 2) == 0) ? ((gSaveContext.save.saveInfo.alienInfo[index >> 1] & 0xFFFF)) \
+                        : ((gSaveContext.save.saveInfo.alienInfo[index >> 1] & ~0xFFFF) >> 0x10))
+
+#define ALIEN_SET_SPAWN_TIME_OFFSET(index, spawnTime) \
+    ((index % 2) == 0) ? (gSaveContext.save.saveInfo.alienInfo[index >> 1] = (gSaveContext.save.saveInfo.alienInfo[index >> 1] & ~0xFFFF) | (spawnTime & 0xFFFF)) \
+                       : (gSaveContext.save.saveInfo.alienInfo[index >> 1] = (gSaveContext.save.saveInfo.alienInfo[index >> 1] & 0xFFFF) | ((spawnTime & 0xFFFF) << 0x10))
+
+#define ALIEN_GET_KILL_COUNT() \
+    gSaveContext.save.saveInfo.alienInfo[4] & 0xFF
+
+#define ALIEN_SET_KILL_COUNT(count) \
+    gSaveContext.save.saveInfo.alienInfo[4] = (gSaveContext.save.saveInfo.alienInfo[4] & ~0xFF) | (count & 0xFF)
 
 /**
  * gSaveContext.save.saveInfo.weekEventReg
@@ -670,7 +698,7 @@ typedef enum {
 #define WEEKEVENTREG_TALKED_TINGLE PACK_WEEKEVENTREG_FLAG(10, 0x01)
 #define WEEKEVENTREG_10_02 PACK_WEEKEVENTREG_FLAG(10, 0x02)
 #define WEEKEVENTREG_10_04 PACK_WEEKEVENTREG_FLAG(10, 0x04)
-#define WEEKEVENTREG_10_08 PACK_WEEKEVENTREG_FLAG(10, 0x08)
+#define WEEKEVENTREG_RECEIVED_BANK_WALLET_UPGRADE PACK_WEEKEVENTREG_FLAG(10, 0x08)
 #define WEEKEVENTREG_10_10 PACK_WEEKEVENTREG_FLAG(10, 0x10)
 #define WEEKEVENTREG_10_20 PACK_WEEKEVENTREG_FLAG(10, 0x20)
 #define WEEKEVENTREG_10_40 PACK_WEEKEVENTREG_FLAG(10, 0x40)
@@ -746,7 +774,7 @@ typedef enum {
 #define WEEKEVENTREG_17_10 PACK_WEEKEVENTREG_FLAG(17, 0x10)
 #define WEEKEVENTREG_17_20 PACK_WEEKEVENTREG_FLAG(17, 0x20)
 #define WEEKEVENTREG_17_40 PACK_WEEKEVENTREG_FLAG(17, 0x40)
-#define WEEKEVENTREG_17_80 PACK_WEEKEVENTREG_FLAG(17, 0x80)
+#define WEEKEVENTREG_RECEIVED_LAND_TITLE_DEED PACK_WEEKEVENTREG_FLAG(17, 0x80)
 #define WEEKEVENTREG_18_01 PACK_WEEKEVENTREG_FLAG(18, 0x01)
 #define WEEKEVENTREG_18_02 PACK_WEEKEVENTREG_FLAG(18, 0x02)
 #define WEEKEVENTREG_TALKED_CURIOSITY_SHOP_MAN_AS_GORON PACK_WEEKEVENTREG_FLAG(18, 0x04)
@@ -785,15 +813,18 @@ typedef enum {
 #define WEEKEVENTREG_TALKED_THAWED_GRAVEYARD_GORON PACK_WEEKEVENTREG_FLAG(21, 0x08)
 
 #define WEEKEVENTREG_21_10 PACK_WEEKEVENTREG_FLAG(21, 0x10)
-#define WEEKEVENTREG_PROMISED_TO_HELP_WITH_THEM PACK_WEEKEVENTREG_FLAG(21, 0x20)
+
+// Player talked with Romani before the alien invasion and agreed to help her
+#define WEEKEVENTREG_PROMISED_TO_HELP_WITH_ALIENS PACK_WEEKEVENTREG_FLAG(21, 0x20)
+
 #define WEEKEVENTREG_21_40 PACK_WEEKEVENTREG_FLAG(21, 0x40)
 #define WEEKEVENTREG_21_80 PACK_WEEKEVENTREG_FLAG(21, 0x80)
 
-// Aliens defeated
-// "Winning" the alien invasion
-#define WEEKEVENTREG_DEFENDED_AGAINST_THEM PACK_WEEKEVENTREG_FLAG(22, 0x01)
+// Player successfully defended Romani Ranch from the alien invasion on Night 1
+#define WEEKEVENTREG_DEFENDED_AGAINST_ALIENS PACK_WEEKEVENTREG_FLAG(22, 0x01)
 
-#define WEEKEVENTREG_22_02 PACK_WEEKEVENTREG_FLAG(22, 0x02)
+// Player received the Bottle of Milk from Romani for defending the ranch from the aliens for the first time
+#define WEEKEVENTREG_RECEIVED_ALIENS_BOTTLE PACK_WEEKEVENTREG_FLAG(22, 0x02)
 
 // Goron Elder's son has been calmed from Goron's Lullaby.
 #define WEEKEVENTREG_CALMED_GORON_ELDERS_SON PACK_WEEKEVENTREG_FLAG(22, 0x04)
@@ -802,15 +833,15 @@ typedef enum {
 #define WEEKEVENTREG_22_10 PACK_WEEKEVENTREG_FLAG(22, 0x10)
 #define WEEKEVENTREG_22_20 PACK_WEEKEVENTREG_FLAG(22, 0x20)
 #define WEEKEVENTREG_22_40 PACK_WEEKEVENTREG_FLAG(22, 0x40)
-#define WEEKEVENTREG_22_80 PACK_WEEKEVENTREG_FLAG(22, 0x80)
+#define WEEKEVENTREG_RECEIVED_HONEY_AND_DARLING_HEART_PIECE PACK_WEEKEVENTREG_FLAG(22, 0x80)
 #define WEEKEVENTREG_23_01 PACK_WEEKEVENTREG_FLAG(23, 0x01)
-#define WEEKEVENTREG_OBTAINED_GREAT_SPIN_ATTACK PACK_WEEKEVENTREG_FLAG(23, 0x02)
+#define WEEKEVENTREG_RECEIVED_GREAT_SPIN_ATTACK PACK_WEEKEVENTREG_FLAG(23, 0x02)
 #define WEEKEVENTREG_23_04 PACK_WEEKEVENTREG_FLAG(23, 0x04)
 #define WEEKEVENTREG_23_08 PACK_WEEKEVENTREG_FLAG(23, 0x08)
 #define WEEKEVENTREG_23_10 PACK_WEEKEVENTREG_FLAG(23, 0x10)
 #define WEEKEVENTREG_23_20 PACK_WEEKEVENTREG_FLAG(23, 0x20)
 #define WEEKEVENTREG_23_40 PACK_WEEKEVENTREG_FLAG(23, 0x40)
-#define WEEKEVENTREG_23_80 PACK_WEEKEVENTREG_FLAG(23, 0x80)
+#define WEEKEVENTREG_RECEIVED_BEAVER_RACE_BOTTLE PACK_WEEKEVENTREG_FLAG(23, 0x80)
 #define WEEKEVENTREG_24_01 PACK_WEEKEVENTREG_FLAG(24, 0x01)
 #define WEEKEVENTREG_24_02 PACK_WEEKEVENTREG_FLAG(24, 0x02)
 #define WEEKEVENTREG_24_04 PACK_WEEKEVENTREG_FLAG(24, 0x04)
@@ -827,7 +858,7 @@ typedef enum {
 // The player has talked to the Goron Child at least once
 #define WEEKEVENTREG_24_80 PACK_WEEKEVENTREG_FLAG(24, 0x80)
 
-#define WEEKEVENTREG_25_01 PACK_WEEKEVENTREG_FLAG(25, 0x01)
+#define WEEKEVENTREG_RECEIVED_BEAVER_BROS_HEART_PIECE PACK_WEEKEVENTREG_FLAG(25, 0x01)
 #define WEEKEVENTREG_25_02 PACK_WEEKEVENTREG_FLAG(25, 0x02)
 #define WEEKEVENTREG_25_04 PACK_WEEKEVENTREG_FLAG(25, 0x04)
 
@@ -896,7 +927,7 @@ typedef enum {
 // Player is playing the Milk Run
 #define WEEKEVENTREG_31_80 PACK_WEEKEVENTREG_FLAG(31, 0x80)
 
-#define WEEKEVENTREG_32_01 PACK_WEEKEVENTREG_FLAG(32, 0x01)
+#define WEEKEVENTREG_RECEIVED_SEAHORSE_HEART_PIECE PACK_WEEKEVENTREG_FLAG(32, 0x01)
 #define WEEKEVENTREG_RECEIVED_SWAMP_SHOOTING_GALLERY_HEART_PIECE PACK_WEEKEVENTREG_FLAG(32, 0x02)
 #define WEEKEVENTREG_RECEIVED_TOWN_SHOOTING_GALLERY_HEART_PIECE PACK_WEEKEVENTREG_FLAG(32, 0x04)
 #define WEEKEVENTREG_32_08 PACK_WEEKEVENTREG_FLAG(32, 0x08)
@@ -944,7 +975,7 @@ typedef enum {
 #define WEEKEVENTREG_35_40 PACK_WEEKEVENTREG_FLAG(35, 0x40)
 
 // Obtained Heart Piece from Five Frogs of the Frog Choir
-#define WEEKEVENTREG_35_80 PACK_WEEKEVENTREG_FLAG(35, 0x80)
+#define WEEKEVENTREG_RECEIVED_FROG_CHOIR_HEART_PIECE PACK_WEEKEVENTREG_FLAG(35, 0x80)
 
 // Player has spoken to certain shrine gorons in the winter
 #define WEEKEVENTREG_36_01 PACK_WEEKEVENTREG_FLAG(36, 0x01)
@@ -977,7 +1008,7 @@ typedef enum {
 #define WEEKEVENTREG_39_04 PACK_WEEKEVENTREG_FLAG(39, 0x04)
 #define WEEKEVENTREG_39_08 PACK_WEEKEVENTREG_FLAG(39, 0x08)
 #define WEEKEVENTREG_39_10 PACK_WEEKEVENTREG_FLAG(39, 0x10)
-#define WEEKEVENTREG_39_20 PACK_WEEKEVENTREG_FLAG(39, 0x20)
+#define WEEKEVENTREG_RECEIVED_EVAN_HEART_PIECE PACK_WEEKEVENTREG_FLAG(39, 0x20)
 #define WEEKEVENTREG_39_40 PACK_WEEKEVENTREG_FLAG(39, 0x40)
 #define WEEKEVENTREG_39_80 PACK_WEEKEVENTREG_FLAG(39, 0x80)
 #define WEEKEVENTREG_40_01 PACK_WEEKEVENTREG_FLAG(40, 0x01)
@@ -991,7 +1022,7 @@ typedef enum {
 #define WEEKEVENTREG_41_01 PACK_WEEKEVENTREG_FLAG(41, 0x01)
 #define WEEKEVENTREG_41_02 PACK_WEEKEVENTREG_FLAG(41, 0x02)
 #define WEEKEVENTREG_41_04 PACK_WEEKEVENTREG_FLAG(41, 0x04)
-#define WEEKEVENTREG_41_08 PACK_WEEKEVENTREG_FLAG(41, 0x08)
+#define WEEKEVENTREG_RECEIVED_GORON_RACE_BOTTLE PACK_WEEKEVENTREG_FLAG(41, 0x08)
 #define WEEKEVENTREG_41_10 PACK_WEEKEVENTREG_FLAG(41, 0x10)
 #define WEEKEVENTREG_41_20 PACK_WEEKEVENTREG_FLAG(41, 0x20)
 #define WEEKEVENTREG_41_40 PACK_WEEKEVENTREG_FLAG(41, 0x40)
@@ -1041,7 +1072,7 @@ typedef enum {
 #define WEEKEVENTREG_52_40 PACK_WEEKEVENTREG_FLAG(52, 0x40)
 #define WEEKEVENTREG_52_80 PACK_WEEKEVENTREG_FLAG(52, 0x80)
 #define WEEKEVENTREG_53_01 PACK_WEEKEVENTREG_FLAG(53, 0x01)
-#define WEEKEVENTREG_53_02 PACK_WEEKEVENTREG_FLAG(53, 0x02)
+#define WEEKEVENTREG_RECEIVED_BUSINESS_SCRUB_HEART_PIECE PACK_WEEKEVENTREG_FLAG(53, 0x02)
 #define WEEKEVENTREG_53_04 PACK_WEEKEVENTREG_FLAG(53, 0x04)
 #define WEEKEVENTREG_GAVE_KOTAKE_MUSHROOM PACK_WEEKEVENTREG_FLAG(53, 0x08)
 #define WEEKEVENTREG_RECEIVED_FREE_BLUE_POTION PACK_WEEKEVENTREG_FLAG(53, 0x10)
@@ -1052,9 +1083,9 @@ typedef enum {
 #define WEEKEVENTREG_54_02 PACK_WEEKEVENTREG_FLAG(54, 0x02)
 #define WEEKEVENTREG_54_04 PACK_WEEKEVENTREG_FLAG(54, 0x04)
 #define WEEKEVENTREG_54_08 PACK_WEEKEVENTREG_FLAG(54, 0x08)
-#define WEEKEVENTREG_54_10 PACK_WEEKEVENTREG_FLAG(54, 0x10)
+#define WEEKEVENTREG_TALKED_ROMANI_ON_NIGHT_1 PACK_WEEKEVENTREG_FLAG(54, 0x10)
 #define WEEKEVENTREG_54_20 PACK_WEEKEVENTREG_FLAG(54, 0x20)
-#define WEEKEVENTREG_54_40 PACK_WEEKEVENTREG_FLAG(54, 0x40)
+#define WEEKEVENTREG_RECEIVED_SPIRIT_HOUSE_HEART_PIECE PACK_WEEKEVENTREG_FLAG(54, 0x40)
 #define WEEKEVENTREG_54_80 PACK_WEEKEVENTREG_FLAG(54, 0x80)
 #define WEEKEVENTREG_55_01 PACK_WEEKEVENTREG_FLAG(55, 0x01)
 
@@ -1071,7 +1102,7 @@ typedef enum {
 #define WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE PACK_WEEKEVENTREG_FLAG(55, 0x80)
 
 #define WEEKEVENTREG_56_01 PACK_WEEKEVENTREG_FLAG(56, 0x01)
-#define WEEKEVENTREG_56_02 PACK_WEEKEVENTREG_FLAG(56, 0x02)
+#define WEEKEVENTREG_RECEIVED_MARINE_RESEARCH_LAB_FISH_HEART_PIECE PACK_WEEKEVENTREG_FLAG(56, 0x02)
 #define WEEKEVENTREG_56_04 PACK_WEEKEVENTREG_FLAG(56, 0x04)
 #define WEEKEVENTREG_56_08 PACK_WEEKEVENTREG_FLAG(56, 0x08)
 #define WEEKEVENTREG_56_10 PACK_WEEKEVENTREG_FLAG(56, 0x10)
@@ -1100,7 +1131,7 @@ typedef enum {
 // Unconfirmed: "Entered South Clock Town"
 #define WEEKEVENTREG_59_04 PACK_WEEKEVENTREG_FLAG(59, 0x04)
 
-#define WEEKEVENTREG_59_08 PACK_WEEKEVENTREG_FLAG(59, 0x08)
+#define WEEKEVENTREG_RECEIVED_BANK_HEART_PIECE PACK_WEEKEVENTREG_FLAG(59, 0x08)
 #define WEEKEVENTREG_RECEIVED_SWAMP_SHOOTING_GALLERY_QUIVER_UPGRADE PACK_WEEKEVENTREG_FLAG(59, 0x10)
 #define WEEKEVENTREG_RECEIVED_TOWN_SHOOTING_GALLERY_QUIVER_UPGRADE PACK_WEEKEVENTREG_FLAG(59, 0x20)
 #define WEEKEVENTREG_59_40 PACK_WEEKEVENTREG_FLAG(59, 0x40)
@@ -1108,10 +1139,10 @@ typedef enum {
 #define WEEKEVENTREG_60_01 PACK_WEEKEVENTREG_FLAG(60, 0x01)
 #define WEEKEVENTREG_60_02 PACK_WEEKEVENTREG_FLAG(60, 0x02)
 #define WEEKEVENTREG_60_04 PACK_WEEKEVENTREG_FLAG(60, 0x04)
-#define WEEKEVENTREG_60_08 PACK_WEEKEVENTREG_FLAG(60, 0x08)
-#define WEEKEVENTREG_60_10 PACK_WEEKEVENTREG_FLAG(60, 0x10)
+#define WEEKEVENTREG_ATTENDED_MAYOR_MEETING PACK_WEEKEVENTREG_FLAG(60, 0x08)
+#define WEEKEVENTREG_RECEIVED_MAYOR_HEART_PIECE PACK_WEEKEVENTREG_FLAG(60, 0x10)
 #define WEEKEVENTREG_60_20 PACK_WEEKEVENTREG_FLAG(60, 0x20)
-#define WEEKEVENTREG_60_40 PACK_WEEKEVENTREG_FLAG(60, 0x40)
+#define WEEKEVENTREG_TALKED_MAYOR_NIGHT_3 PACK_WEEKEVENTREG_FLAG(60, 0x40)
 #define WEEKEVENTREG_60_80 PACK_WEEKEVENTREG_FLAG(60, 0x80)
 #define WEEKEVENTREG_61_01 PACK_WEEKEVENTREG_FLAG(61, 0x01)
 #define WEEKEVENTREG_61_02 PACK_WEEKEVENTREG_FLAG(61, 0x02)
@@ -1138,11 +1169,11 @@ typedef enum {
 #define WEEKEVENTREG_63_04 PACK_WEEKEVENTREG_FLAG(63, 0x04)
 #define WEEKEVENTREG_63_08 PACK_WEEKEVENTREG_FLAG(63, 0x08)
 #define WEEKEVENTREG_63_10 PACK_WEEKEVENTREG_FLAG(63, 0x10)
-#define WEEKEVENTREG_63_20 PACK_WEEKEVENTREG_FLAG(63, 0x20)
+#define WEEKEVENTREG_RECEIVED_SWORDSMANS_SCHOOL_HEART_PIECE PACK_WEEKEVENTREG_FLAG(63, 0x20)
 #define WEEKEVENTREG_63_40 PACK_WEEKEVENTREG_FLAG(63, 0x40)
 
-// showed Couple's Mask to meeting
-#define WEEKEVENTREG_63_80 PACK_WEEKEVENTREG_FLAG(63, 0x80)
+// Showed Couple's Mask at meeting
+#define WEEKEVENTREG_RESOLVED_MAYOR_MEETING PACK_WEEKEVENTREG_FLAG(63, 0x80)
 
 #define WEEKEVENTREG_64_01 PACK_WEEKEVENTREG_FLAG(64, 0x01)
 #define WEEKEVENTREG_64_02 PACK_WEEKEVENTREG_FLAG(64, 0x02)
@@ -1195,9 +1226,9 @@ typedef enum {
 #define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_PENDANT_OF_MEMORIES    PACK_WEEKEVENTREG_FLAG(69, 0x02)
 #define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_DELIVERED_PENDANT_OF_MEMORIES   PACK_WEEKEVENTREG_FLAG(69, 0x04)
 #define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_ESCAPED_SAKONS_HIDEOUT          PACK_WEEKEVENTREG_FLAG(69, 0x08)
-#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_PROMISED_TO_HELP_WITH_THEM      PACK_WEEKEVENTREG_FLAG(69, 0x10)
-#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_DEFENDED_AGAINST_THEM           PACK_WEEKEVENTREG_FLAG(69, 0x20)
-#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_MILK_BOTTLE            PACK_WEEKEVENTREG_FLAG(69, 0x40)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_PROMISED_TO_HELP_WITH_ALIENS    PACK_WEEKEVENTREG_FLAG(69, 0x10)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_DEFENDED_AGAINST_ALIENS         PACK_WEEKEVENTREG_FLAG(69, 0x20)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_ALIENS_BOTTLE            PACK_WEEKEVENTREG_FLAG(69, 0x40)
 #define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_ESCORTED_CREMIA                 PACK_WEEKEVENTREG_FLAG(69, 0x80)
 #define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_ROMANIS_MASK           PACK_WEEKEVENTREG_FLAG(70, 0x01)
 #define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_KEATON_MASK            PACK_WEEKEVENTREG_FLAG(70, 0x02)
@@ -1250,7 +1281,7 @@ typedef enum {
 #define WEEKEVENTREG_RECEIVED_ROOM_KEY PACK_WEEKEVENTREG_FLAG(75, 0x10)
 #define WEEKEVENTREG_75_20 PACK_WEEKEVENTREG_FLAG(75, 0x20)
 #define WEEKEVENTREG_75_40 PACK_WEEKEVENTREG_FLAG(75, 0x40)
-#define WEEKEVENTREG_75_80 PACK_WEEKEVENTREG_FLAG(75, 0x80)
+#define WEEKEVENTREG_RECEIVED_ROSA_SISTERS_HEART_PIECE PACK_WEEKEVENTREG_FLAG(75, 0x80)
 #define WEEKEVENTREG_76_01 PACK_WEEKEVENTREG_FLAG(76, 0x01)
 #define WEEKEVENTREG_76_02 PACK_WEEKEVENTREG_FLAG(76, 0x02)
 #define WEEKEVENTREG_76_04 PACK_WEEKEVENTREG_FLAG(76, 0x04)
@@ -1259,7 +1290,7 @@ typedef enum {
 #define WEEKEVENTREG_76_20 PACK_WEEKEVENTREG_FLAG(76, 0x20)
 #define WEEKEVENTREG_76_40 PACK_WEEKEVENTREG_FLAG(76, 0x40)
 #define WEEKEVENTREG_76_80 PACK_WEEKEVENTREG_FLAG(76, 0x80)
-#define WEEKEVENTREG_77_01 PACK_WEEKEVENTREG_FLAG(77, 0x01)
+#define WEEKEVENTREG_RECEIVED_POSTMAN_COUNTING_GAME_HEART_PIECE PACK_WEEKEVENTREG_FLAG(77, 0x01)
 #define WEEKEVENTREG_77_02 PACK_WEEKEVENTREG_FLAG(77, 0x02)
 #define WEEKEVENTREG_77_04 PACK_WEEKEVENTREG_FLAG(77, 0x04)
 #define WEEKEVENTREG_77_08 PACK_WEEKEVENTREG_FLAG(77, 0x08)
@@ -1285,7 +1316,7 @@ typedef enum {
 #define WEEKEVENTREG_79_10 PACK_WEEKEVENTREG_FLAG(79, 0x10)
 #define WEEKEVENTREG_79_20 PACK_WEEKEVENTREG_FLAG(79, 0x20)
 #define WEEKEVENTREG_SAKON_DEAD PACK_WEEKEVENTREG_FLAG(79, 0x40)
-#define WEEKEVENTREG_79_80 PACK_WEEKEVENTREG_FLAG(79, 0x80)
+#define WEEKEVENTREG_RECEIVED_KEATON_HEART_PIECE PACK_WEEKEVENTREG_FLAG(79, 0x80)
 #define WEEKEVENTREG_80_01 PACK_WEEKEVENTREG_FLAG(80, 0x01)
 #define WEEKEVENTREG_80_02 PACK_WEEKEVENTREG_FLAG(80, 0x02)
 #define WEEKEVENTREG_80_04 PACK_WEEKEVENTREG_FLAG(80, 0x04)
@@ -1313,7 +1344,7 @@ typedef enum {
 
 // Related to Swordsman's log minigame
 #define WEEKEVENTREG_82_08 PACK_WEEKEVENTREG_FLAG(82, 0x08)
-#define WEEKEVENTREG_82_10 PACK_WEEKEVENTREG_FLAG(82, 0x10)
+#define WEEKEVENTREG_RECEIVED_FISHERMANS_JUMPING_GAME_HEART_PIECE PACK_WEEKEVENTREG_FLAG(82, 0x10)
 #define WEEKEVENTREG_82_20 PACK_WEEKEVENTREG_FLAG(82, 0x20)
 #define WEEKEVENTREG_82_40 PACK_WEEKEVENTREG_FLAG(82, 0x40)
 #define WEEKEVENTREG_82_80 PACK_WEEKEVENTREG_FLAG(82, 0x80)
@@ -1401,7 +1432,11 @@ typedef enum {
 // Unconfirmed: "Postman has delivered priority mail"
 #define WEEKEVENTREG_89_08 PACK_WEEKEVENTREG_FLAG(89, 0x08)
 
-#define WEEKEVENTREG_89_10 PACK_WEEKEVENTREG_FLAG(89, 0x10)
+// Player tried but failed to defend Romani Ranch from the alien invasion on Night 1
+// This is only set if the player is actually in the ranch when the aliens reach the barn.
+// If the player isn't in the ranch when this happens, then this weekeventreg will remain unset.
+#define WEEKEVENTREG_FAILED_TO_DEFEND_AGAINST_ALIENS PACK_WEEKEVENTREG_FLAG(89, 0x10)
+
 #define WEEKEVENTREG_89_20 PACK_WEEKEVENTREG_FLAG(89, 0x20)
 
 // Unconfirmed: "Postman is about to flee"
@@ -1415,7 +1450,7 @@ typedef enum {
 #define WEEKEVENTREG_90_02 PACK_WEEKEVENTREG_FLAG(90, 0x02)
 #define WEEKEVENTREG_90_04 PACK_WEEKEVENTREG_FLAG(90, 0x04)
 #define WEEKEVENTREG_90_08 PACK_WEEKEVENTREG_FLAG(90, 0x08)
-#define WEEKEVENTREG_90_10 PACK_WEEKEVENTREG_FLAG(90, 0x10)
+#define WEEKEVENTREG_RECEIVED_GOSSIP_STONE_GROTTO_HEART_PIECE PACK_WEEKEVENTREG_FLAG(90, 0x10)
 
 // Related to Fishermans's jumping minigame
 #define WEEKEVENTREG_90_20 PACK_WEEKEVENTREG_FLAG(90, 0x20)
@@ -1648,11 +1683,18 @@ typedef enum {
     gSaveContext.eventInf[7] = (temp)
 
 typedef enum {
-    /* 0 */ DUNGEON_INDEX_WOODFALL_TEMPLE,
-    /* 1 */ DUNGEON_INDEX_SNOWHEAD_TEMPLE,
-    /* 2 */ DUNGEON_INDEX_GREAT_BAY_TEMPLE,
-    /* 3 */ DUNGEON_INDEX_STONE_TOWER_TEMPLE // Also applies to Inverted Stone Tower Temple
-} DungeonIndex;
+    // These first 4 values are also used represent the index of the temple the player is currently in
+    /* 0 */ DUNGEON_SCENE_INDEX_WOODFALL_TEMPLE,
+    /* 1 */ DUNGEON_SCENE_INDEX_SNOWHEAD_TEMPLE,
+    /* 2 */ DUNGEON_SCENE_INDEX_GREAT_BAY_TEMPLE,
+    /* 3 */ DUNGEON_SCENE_INDEX_STONE_TOWER_TEMPLE,
+
+    /* 4 */ DUNGEON_SCENE_INDEX_STONE_TOWER_TEMPLE_INVERTED,
+    /* 5 */ DUNGEON_SCENE_INDEX_WOODFALL_TEMPLE_BOSS,
+    /* 6 */ DUNGEON_SCENE_INDEX_SNOWHEAD_TEMPLE_BOSS,
+    /* 7 */ DUNGEON_SCENE_INDEX_GREAT_BAY_TEMPLE_BOSS,
+    /* 8 */ DUNGEON_SCENE_INDEX_STONE_TOWER_TEMPLE_BOSS
+} DungeonSceneIndex;
 
 #define STRAY_FAIRY_TOTAL 25 // total number of stray fairies, including those already in the Great Fairy Fountain
 #define STRAY_FAIRY_SCATTERED_TOTAL 15 // original number of stray fairies in one dungeon area

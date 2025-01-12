@@ -7,9 +7,9 @@
 
 #include "z_en_horse_link_child.h"
 #include "z64horse.h"
-#include "objects/object_horse_link_child/object_horse_link_child.h"
+#include "assets/objects/object_horse_link_child/object_horse_link_child.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
 #define THIS ((EnHorseLinkChild*)thisx)
 
@@ -30,7 +30,7 @@ void EnHorseLinkChild_ActionFunc5(EnHorseLinkChild* this, PlayState* play);
 void EnHorseLinkChild_SetupActionFunc4(EnHorseLinkChild* this);
 void EnHorseLinkChild_ActionFunc4(EnHorseLinkChild* this, PlayState* play);
 
-ActorInit En_Horse_Link_Child_InitVars = {
+ActorProfile En_Horse_Link_Child_Profile = {
     /**/ ACTOR_EN_HORSE_LINK_CHILD,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -62,11 +62,11 @@ static AnimationHeader* sAnimations[OOT_CHILD_EPONA_ANIM_MAX] = {
 static ColliderJntSphElementInit sJntSphElementsInit[] = {
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0x00000000, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_NONE,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_NONE,
             OCELEM_ON,
         },
         { 13, { { 0, 0, 0 }, 10 }, 100 },
@@ -75,7 +75,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[] = {
 
 static ColliderJntSphInit sJntSphInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -362,7 +362,7 @@ void func_808DF088(EnHorseLinkChild* this, PlayState* play) {
         s32 newYawDir;
         s32 pad;
 
-        if (Math3D_Distance(&player->actor.world.pos, &this->actor.home.pos) < 250.0f) {
+        if (Math3D_Vec3f_DistXYZ(&player->actor.world.pos, &this->actor.home.pos) < 250.0f) {
             newYawDiff = player->actor.shape.rot.y;
             if (Actor_WorldYawTowardActor(&this->actor, &player->actor) > 0) {
                 newYawDir = 1;
@@ -407,10 +407,10 @@ void EnHorseLinkChild_LonLonIdle(EnHorseLinkChild* this, PlayState* play) {
         (this->animIndex == OOT_CHILD_EPONA_ANIM_IDLE)) {
         //! @bug: The carry-over of this flag from OoT was not done correctly
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_ENTERED_ZORA_HALL)) {
-            f32 distToHome = Math3D_Distance(&this->actor.world.pos, &this->actor.home.pos);
+            f32 distToHome = Math3D_Vec3f_DistXYZ(&this->actor.world.pos, &this->actor.home.pos);
             s32 pad;
 
-            if (Math3D_Distance(&player->actor.world.pos, &this->actor.home.pos) > 250.0f) {
+            if (Math3D_Vec3f_DistXYZ(&player->actor.world.pos, &this->actor.home.pos) > 250.0f) {
                 if (distToHome >= 300.0f) {
                     animIndex = OOT_CHILD_EPONA_ANIM_GALLOP;
                     this->actor.speed = 6.0f;
@@ -544,7 +544,7 @@ void EnHorseLinkChild_ActionFunc4(EnHorseLinkChild* this, PlayState* play) {
         if (!this->isReturningHome) {
             distToTargetPos = Actor_WorldDistXZToActor(&this->actor, &GET_PLAYER(play)->actor);
         } else {
-            distToTargetPos = Math3D_Distance(&this->actor.world.pos, &this->actor.home.pos);
+            distToTargetPos = Math3D_Vec3f_DistXYZ(&this->actor.world.pos, &this->actor.home.pos);
         }
 
         if (!this->isReturningHome) {

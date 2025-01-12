@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_haka_tomb.h"
-#include "objects/object_haka_obj/object_haka_obj.h"
+#include "assets/objects/object_haka_obj/object_haka_obj.h"
 
 #define FLAGS 0x00000000
 
@@ -23,7 +23,7 @@ void func_80BD6768(BgHakaTomb* this, PlayState* play);
 void BgHakaTomb_SetupDoNothing(BgHakaTomb* this);
 void BgHakaTomb_DoNothing(BgHakaTomb* this, PlayState* play);
 
-ActorInit Bg_Haka_Tomb_InitVars = {
+ActorProfile Bg_Haka_Tomb_Profile = {
     /**/ ACTOR_BG_HAKA_TOMB,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -67,7 +67,7 @@ s32 func_80BD6638(s16* csId, s16* csIdList, s32 numCutscenes) {
     s32 i;
 
     *csId = CutsceneManager_GetCurrentCsId();
-    if (*csId >= 0) {
+    if (*csId > CS_ID_NONE) {
         for (i = 0; i < numCutscenes; i++) {
             if (*csId == csIdList[i]) {
                 retVal = true;
@@ -83,16 +83,16 @@ void func_80BD66AC(BgHakaTomb* this, PlayState* play) {
     s16 csId;
 
     if (Flags_GetClear(play, this->dyna.actor.room)) {
-        this->dyna.actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+        this->dyna.actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
     }
     if (!func_80BD6638(&csId, this->csIdList, ARRAY_COUNT(this->csIdList)) && (csId <= CS_ID_NONE) &&
         Flags_GetClear(play, this->dyna.actor.room)) {
-        this->dyna.actor.flags |= ACTOR_FLAG_TARGETABLE;
+        this->dyna.actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
         if (this->dyna.actor.isLockedOn) {
             func_80BD6754(this);
         }
     } else {
-        this->dyna.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->dyna.actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     }
 }
 

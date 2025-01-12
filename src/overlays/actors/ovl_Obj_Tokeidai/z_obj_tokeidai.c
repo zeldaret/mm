@@ -30,7 +30,7 @@
  */
 
 #include "z_obj_tokeidai.h"
-#include "objects/object_obj_tokeidai/object_obj_tokeidai.h"
+#include "assets/objects/object_obj_tokeidai/object_obj_tokeidai.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -62,7 +62,7 @@ void ObjTokeidai_Clock_Draw(Actor* thisx, PlayState* play);
 void ObjTokeidai_Counterweight_Draw(Actor* thisx, PlayState* play);
 void ObjTokeidai_ExteriorGear_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Tokeidai_InitVars = {
+ActorProfile Obj_Tokeidai_Profile = {
     /**/ ACTOR_OBJ_TOKEIDAI,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -796,13 +796,13 @@ void ObjTokeidai_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     if (this->opaDList != NULL) {
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         Gfx_SetupDL25_Opa(play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, this->opaDList);
     }
 
     if (this->xluDList != NULL) {
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, this->xluDList);
     }
@@ -823,16 +823,16 @@ void ObjTokeidai_Clock_Draw(Actor* thisx, PlayState* play) {
 
     Matrix_Push();
     Matrix_RotateZS(-this->minuteRingOrExteriorGearRotation, MTXMODE_APPLY);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, gClockTowerMinuteRingDL);
     Matrix_Pop();
 
     Matrix_Translate(0.0f, 0.0f, this->clockFaceZTranslation, MTXMODE_APPLY);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, gClockTowerClockCenterAndHandDL);
 
     Matrix_RotateZS(-this->clockFaceRotation * 2, MTXMODE_APPLY);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     if (OBJ_TOKEIDAI_TYPE(&this->actor) == OBJ_TOKEIDAI_TYPE_WALL_CLOCK ||
         OBJ_TOKEIDAI_TYPE(&this->actor) == OBJ_TOKEIDAI_TYPE_SMALL_WALL_CLOCK) {
         gSPDisplayList(POLY_OPA_DISP++, gWallClockClockFaceDL);
@@ -842,7 +842,7 @@ void ObjTokeidai_Clock_Draw(Actor* thisx, PlayState* play) {
 
     Matrix_Translate(0.0f, -1112.0f, -19.6f, MTXMODE_APPLY);
     Matrix_RotateYS(this->sunMoonPanelRotation, MTXMODE_APPLY);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, gClockTowerSunAndMoonPanelDL);
 
     CLOSE_DISPS(play->state.gfxCtx);
@@ -867,12 +867,12 @@ void ObjTokeidai_Counterweight_Draw(Actor* thisx, PlayState* play) {
                Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, -gameplayFrames, 0, 0x20, 0x20));
 
     // Draws the counterweight
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, this->opaDList);
 
     // Draws the spotlight
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 255, 255, 235, 180, (s32)(this->spotlightIntensity * 2.55f));
     gSPDisplayList(POLY_XLU_DISP++, this->xluDList);
@@ -892,7 +892,7 @@ void ObjTokeidai_ExteriorGear_Draw(Actor* thisx, PlayState* play) {
     Matrix_RotateYS(thisx->shape.rot.y, MTXMODE_APPLY);
     Matrix_Translate(0.0f, 0.0f, 1791.0f, MTXMODE_APPLY);
     Matrix_RotateZS(this->minuteRingOrExteriorGearRotation, MTXMODE_APPLY);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, gClockTowerExteriorGearDL);
 

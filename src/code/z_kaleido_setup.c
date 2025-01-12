@@ -1,7 +1,9 @@
-#include "global.h"
+#include "z64pause_menu.h"
+
+#include "z64.h"
 #include "z64rumble.h"
 #include "z64shrink_window.h"
-#include "z64view.h"
+
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
 s16 sKaleidoSetupRightPageIndex[] = {
@@ -10,12 +12,14 @@ s16 sKaleidoSetupRightPageIndex[] = {
     PAUSE_MASK,  // PAUSE_QUEST
     PAUSE_ITEM,  // PAUSE_MASK
 };
+
 f32 sKaleidoSetupRightPageEyeX[] = {
     PAUSE_EYE_DIST * -PAUSE_MAP_X,   // PAUSE_ITEM
     PAUSE_EYE_DIST * -PAUSE_QUEST_X, // PAUSE_MAP
     PAUSE_EYE_DIST * -PAUSE_MASK_X,  // PAUSE_QUEST
     PAUSE_EYE_DIST * -PAUSE_ITEM_X,  // PAUSE_MASK
 };
+
 f32 sKaleidoSetupRightPageEyeZ[] = {
     PAUSE_EYE_DIST * -PAUSE_MAP_Z,   // PAUSE_ITEM
     PAUSE_EYE_DIST * -PAUSE_QUEST_Z, // PAUSE_MAP
@@ -89,39 +93,52 @@ void KaleidoSetup_Update(PlayState* play) {
         if (msgCtx && msgCtx) {}
     }
 
-    if ((pauseCtx->state == PAUSE_STATE_OFF) && (pauseCtx->debugEditor == DEBUG_EDITOR_NONE) &&
-        (play->gameOverCtx.state == GAMEOVER_INACTIVE)) {
-        if ((play->transitionTrigger == TRANS_TRIGGER_OFF) && (play->transitionMode == TRANS_MODE_OFF)) {
-            if ((gSaveContext.save.cutsceneIndex < 0xFFF0) && (gSaveContext.nextCutsceneIndex < 0xFFF0)) {
-                if (!Play_InCsMode(play) || ((msgCtx->msgMode != MSGMODE_NONE) && (msgCtx->currentTextId == 0xFF))) {
-                    if ((play->unk_1887C < 2) && (gSaveContext.magicState != MAGIC_STATE_STEP_CAPACITY) &&
-                        (gSaveContext.magicState != MAGIC_STATE_FILL)) {
-                        if (!CHECK_EVENTINF(EVENTINF_17) && !(player->stateFlags1 & PLAYER_STATE1_20)) {
-                            if (!(play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON) &&
-                                !(play->actorCtx.flags & ACTORCTX_FLAG_PICTO_BOX_ON)) {
-                                if (!play->actorCtx.isOverrideInputOn &&
-                                    CHECK_BTN_ALL(input->press.button, BTN_START)) {
-                                    gSaveContext.prevHudVisibility = gSaveContext.hudVisibility;
-                                    pauseCtx->itemDescriptionOn = false;
-                                    pauseCtx->state = PAUSE_STATE_OPENING_0;
-                                    func_800F4A10(play);
-                                    // Set next page mode to scroll left
-                                    pauseCtx->nextPageMode = pauseCtx->pageIndex * 2 + 1;
-                                    Audio_SetPauseState(true);
-                                }
+    if (IS_PAUSED(pauseCtx) || (play->gameOverCtx.state != GAMEOVER_INACTIVE)) {
+        return;
+    }
 
-                                if (pauseCtx->state == PAUSE_STATE_OPENING_0) {
-                                    GameState_SetFramerateDivisor(&play->state, 2);
-                                    if (ShrinkWindow_Letterbox_GetSizeTarget() != 0) {
-                                        ShrinkWindow_Letterbox_SetSizeTarget(0);
-                                    }
-                                    Audio_PlaySfx_PauseMenuOpenOrClose(SFX_PAUSE_MENU_OPEN);
-                                }
-                            }
-                        }
-                    }
-                }
+    if ((play->transitionTrigger != TRANS_TRIGGER_OFF) || (play->transitionMode != TRANS_MODE_OFF)) {
+        return;
+    }
+
+    if ((gSaveContext.save.cutsceneIndex >= 0xFFF0) || (gSaveContext.nextCutsceneIndex >= 0xFFF0)) {
+        return;
+    }
+
+    if (!Play_InCsMode(play) || ((msgCtx->msgMode != MSGMODE_NONE) && (msgCtx->currentTextId == 0xFF))) {
+        if (play->bButtonAmmoPlusOne >= 2) {
+            return;
+        }
+
+        if ((gSaveContext.magicState == MAGIC_STATE_STEP_CAPACITY) || (gSaveContext.magicState == MAGIC_STATE_FILL)) {
+            return;
+        }
+
+        if (CHECK_EVENTINF(EVENTINF_17) || (player->stateFlags1 & PLAYER_STATE1_20)) {
+            return;
+        }
+
+        if ((play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON) ||
+            (play->actorCtx.flags & ACTORCTX_FLAG_PICTO_BOX_ON)) {
+            return;
+        }
+
+        if (!play->actorCtx.isOverrideInputOn && CHECK_BTN_ALL(input->press.button, BTN_START)) {
+            gSaveContext.prevHudVisibility = gSaveContext.hudVisibility;
+            pauseCtx->itemDescriptionOn = false;
+            pauseCtx->state = PAUSE_STATE_OPENING_0;
+            func_800F4A10(play);
+            // Set next page mode to scroll left
+            pauseCtx->nextPageMode = pauseCtx->pageIndex * 2 + 1;
+            Audio_SetPauseState(true);
+        }
+
+        if (pauseCtx->state == PAUSE_STATE_OPENING_0) {
+            GameState_SetFramerateDivisor(&play->state, 2);
+            if (ShrinkWindow_Letterbox_GetSizeTarget() != 0) {
+                ShrinkWindow_Letterbox_SetSizeTarget(0);
             }
+            Audio_PlaySfx_PauseMenuOpenOrClose(SFX_PAUSE_MENU_OPEN);
         }
     }
 }
@@ -143,18 +160,18 @@ void KaleidoSetup_Init(PlayState* play) {
     pauseCtx->unk_20C = 936.0f;
     pauseCtx->roll = -314.0f;
 
-    pauseCtx->cursorPoint[PAUSE_MAP] = R_REVERSE_FLOOR_INDEX + (DUNGEON_FLOOR_INDEX_4 - 1);
+    pauseCtx->cursorPoint[PAUSE_MAP] = R_PLAYER_FLOOR_REVERSE_INDEX + (DUNGEON_FLOOR_INDEX_4 - 1);
 
     pauseCtx->cursorSpecialPos = PAUSE_CURSOR_PAGE_RIGHT;
     pauseCtx->pageSwitchInputTimer = 0;
 
     pauseCtx->cursorItem[PAUSE_ITEM] = PAUSE_ITEM_NONE;
-    pauseCtx->cursorItem[PAUSE_MAP] = R_REVERSE_FLOOR_INDEX + (DUNGEON_FLOOR_INDEX_4 - 1);
+    pauseCtx->cursorItem[PAUSE_MAP] = R_PLAYER_FLOOR_REVERSE_INDEX + (DUNGEON_FLOOR_INDEX_4 - 1);
     pauseCtx->cursorItem[PAUSE_QUEST] = PAUSE_ITEM_NONE;
     pauseCtx->cursorItem[PAUSE_MASK] = PAUSE_ITEM_NONE;
 
     pauseCtx->cursorSlot[PAUSE_ITEM] = 0;
-    pauseCtx->cursorSlot[PAUSE_MAP] = R_REVERSE_FLOOR_INDEX + (DUNGEON_FLOOR_INDEX_4 - 1);
+    pauseCtx->cursorSlot[PAUSE_MAP] = R_PLAYER_FLOOR_REVERSE_INDEX + (DUNGEON_FLOOR_INDEX_4 - 1);
 
     pauseCtx->cursorColorSet = PAUSE_CURSOR_COLOR_SET_YELLOW;
     pauseCtx->ocarinaSongIndex = -1;

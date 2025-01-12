@@ -9,7 +9,7 @@
 
 #include "z_en_dnq.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnDnq*)thisx)
 
@@ -20,12 +20,48 @@ void EnDnq_Draw(Actor* thisx, PlayState* play);
 
 void func_80A52FB8(EnDnq* this, PlayState* play);
 
-static s32 D_80A53400[] = {
-    0x00120100, 0x150E0899, 0x0C120F08, 0x9A0C0F08, 0x9B0C0F08, 0x9C0C1112, 0x01100E08, 0x980C1000, 0x00120200,
-    0x0C0E089D, 0x0C0F089E, 0x0C111202, 0x100E089F, 0x0C100000, 0x0E08A10C, 0x0F08A20C, 0x10000000,
+static MsgScript D_80A53400[] = {
+    /* 0x0000 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_18_01, 0x001A - 0x0005),
+    /* 0x0005 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0899),
+    /* 0x0008 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0009 0x01 */ MSCRIPT_CMD_CLOSE_TEXT(),
+    /* 0x000A 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x089A),
+    /* 0x000D 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x000E 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x089B),
+    /* 0x0011 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0012 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x089C),
+    /* 0x0015 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0016 0x03 */ MSCRIPT_CMD_SET_WEEK_EVENT_REG(WEEKEVENTREG_18_01),
+    /* 0x0019 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x001A 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0898),
+    /* 0x001D 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x001E 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
-ActorInit En_Dnq_InitVars = {
+static MsgScript D_80A53420[] = {
+    /* 0x0000 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_18_02, 0x0011 - 0x0005),
+    /* 0x0005 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x089D),
+    /* 0x0008 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0009 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x089E),
+    /* 0x000C 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x000D 0x03 */ MSCRIPT_CMD_SET_WEEK_EVENT_REG(WEEKEVENTREG_18_02),
+    /* 0x0010 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x0011 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x089F),
+    /* 0x0014 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0015 0x01 */ MSCRIPT_CMD_DONE(),
+};
+
+static MsgScript D_80A53438[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x08A1),
+    /* 0x0003 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0004 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x08A2),
+    /* 0x0007 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0008 0x01 */ MSCRIPT_CMD_DONE(),
+};
+
+ActorProfile En_Dnq_Profile = {
     /**/ ACTOR_EN_DNQ,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -39,7 +75,7 @@ ActorInit En_Dnq_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_HIT1,
+        COL_MATERIAL_HIT1,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -47,11 +83,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK1,
+        ELEM_MATERIAL_UNK1,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 34, 80, 0, { 0, 0, 0 } },
@@ -148,7 +184,7 @@ s32 func_80A52648(EnDnq* this, PlayState* play) {
 
     if (play->csCtx.state != CS_STATE_IDLE) {
         if (!(this->unk_37C & 0x20)) {
-            this->picto.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+            this->picto.actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
             this->cueId = 255;
             this->unk_37C |= 0x20;
         }
@@ -156,7 +192,7 @@ s32 func_80A52648(EnDnq* this, PlayState* play) {
         ret = true;
     } else {
         if (this->unk_37C & 0x20) {
-            this->picto.actor.flags |= ACTOR_FLAG_TARGETABLE;
+            this->picto.actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
             this->cueId = 255;
             this->unk_37C &= ~0x20;
             SubS_SetOfferMode(&this->unk_37C, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
@@ -340,16 +376,16 @@ void func_80A52C6C(EnDnq* this, PlayState* play) {
     this->picto.actor.xzDistToPlayer = Math_Vec3f_DistXZ(&sp28, &sp1C);
 }
 
-s32* func_80A52CF8(EnDnq* this, PlayState* play) {
+MsgScript* EnDnq_GetMsgScript(EnDnq* this, PlayState* play) {
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) {
-        return &D_80A53400[14];
+        return D_80A53438;
     }
 
     if (this->unk_3A4 != 0) {
-        return &D_80A53400[8];
+        return D_80A53420;
     }
 
-    return &D_80A53400[0];
+    return D_80A53400;
 }
 
 s32 func_80A52D44(EnDnq* this, PlayState* play) {
@@ -358,7 +394,7 @@ s32 func_80A52D44(EnDnq* this, PlayState* play) {
     if (((this->unk_37C & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
         Actor_TalkOfferAccepted(&this->picto.actor, &play->state)) {
         SubS_SetOfferMode(&this->unk_37C, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
-        this->unk_380 = func_80A52CF8(this, play);
+        this->msgScript = EnDnq_GetMsgScript(this, play);
         this->actionFunc = func_80A52FB8;
         ret = true;
     }
@@ -411,7 +447,7 @@ void func_80A52DC8(EnDnq* this, PlayState* play) {
 void func_80A52FB8(EnDnq* this, PlayState* play) {
     s16 sp2E = this->picto.actor.yawTowardsPlayer;
 
-    if (func_8010BF58(&this->picto.actor, play, this->unk_380, NULL, &this->unk_1E0)) {
+    if (MsgEvent_RunScript(&this->picto.actor, play, this->msgScript, NULL, &this->msgScriptPos)) {
         SubS_SetOfferMode(&this->unk_37C, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_386 = 0;
         this->actionFunc = func_80A52DC8;
@@ -462,7 +498,7 @@ void EnDnq_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->collider, &this->picto.actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->picto.actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
     Actor_SetScale(&this->picto.actor, 0.02f);
-    this->picto.actor.targetMode = TARGET_MODE_1;
+    this->picto.actor.attentionRangeType = ATTENTION_RANGE_1;
     this->unk_386 = 0;
     this->unk_37C = 0;
     SubS_SetOfferMode(&this->unk_37C, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);

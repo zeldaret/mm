@@ -5,7 +5,7 @@
  */
 
 #include "z_eff_ss_solder_srch_ball.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define rFlags regs[0]
 
@@ -15,7 +15,7 @@ u32 EffectSsSolderSrchBall_Init(PlayState* play, u32 index, EffectSs* this, void
 void EffectSsSolderSrchBall_Update(PlayState* play, u32 index, EffectSs* this);
 void EffectSsSolderSrchBall_Draw(PlayState* play, u32 index, EffectSs* this);
 
-EffectSsInit Effect_Ss_Solder_Srch_Ball_InitVars = {
+EffectSsProfile Effect_Ss_Solder_Srch_Ball_Profile = {
     EFFECT_SS_SOLDER_SRCH_BALL,
     EffectSsSolderSrchBall_Init,
 };
@@ -61,7 +61,7 @@ void EffectSsSolderSrchBall_Draw(PlayState* play, u32 index, EffectSs* this) {
     gDPSetEnvColor(POLY_XLU_DISP++, 250, 180, 255, 255);
     Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
     Matrix_RotateZF(DEG_TO_RAD(20.0f * play->state.frames), MTXMODE_APPLY);
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_XLU_DISP++, gSunSparkleModelDL);
 
     CLOSE_DISPS(gfxCtx);

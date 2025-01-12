@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_ikana_bombwall.h"
-#include "objects/object_ikana_obj/object_ikana_obj.h"
+#include "assets/objects/object_ikana_obj/object_ikana_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10000000)
 
@@ -25,7 +25,7 @@ void func_80BD503C(BgIkanaBombwall* this, PlayState* play);
 void func_80BD5118(BgIkanaBombwall* this);
 void func_80BD5134(BgIkanaBombwall* this, PlayState* play);
 
-ActorInit Bg_Ikana_Bombwall_InitVars = {
+ActorProfile Bg_Ikana_Bombwall_Profile = {
     /**/ ACTOR_BG_IKANA_BOMBWALL,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -39,7 +39,7 @@ ActorInit Bg_Ikana_Bombwall_InitVars = {
 
 static ColliderCylinderInit sCylinderInit1 = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -47,11 +47,11 @@ static ColliderCylinderInit sCylinderInit1 = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0x00000008, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_NONE,
     },
     { 80, 80, 0, { 0, 0, 0 } },
@@ -59,7 +59,7 @@ static ColliderCylinderInit sCylinderInit1 = {
 
 static ColliderCylinderInit sCylinderInit2 = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -67,11 +67,11 @@ static ColliderCylinderInit sCylinderInit2 = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0x00000008, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_NONE,
     },
     { 50, 20, 0, { 0, 0, 0 } },
@@ -355,7 +355,7 @@ void func_80BD5134(BgIkanaBombwall* this, PlayState* play) {
             CutsceneManager_Stop(this->dyna.actor.csId);
             Actor_Kill(&this->dyna.actor);
         }
-    } else if (this->dyna.actor.csId >= 0) {
+    } else if (this->dyna.actor.csId > CS_ID_NONE) {
         if (CutsceneManager_GetCurrentCsId() != this->dyna.actor.csId) {
             Actor_Kill(&this->dyna.actor);
         }

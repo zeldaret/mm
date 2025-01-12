@@ -5,7 +5,7 @@
  */
 
 #include "z_eff_ss_ice_piece.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define rLifespan regs[0]
 #define rYaw regs[1]
@@ -19,7 +19,7 @@ u32 EffectSsIcePiece_Init(PlayState* play, u32 index, EffectSs* this, void* init
 void EffectSsIcePiece_Update(PlayState* play, u32 index, EffectSs* this);
 void EffectSsIcePiece_Draw(PlayState* play, u32 index, EffectSs* this);
 
-EffectSsInit Effect_Ss_Ice_Piece_InitVars = {
+EffectSsProfile Effect_Ss_Ice_Piece_Profile = {
     EFFECT_SS_ICE_PIECE,
     EffectSsIcePiece_Init,
 };
@@ -64,7 +64,7 @@ void EffectSsIcePiece_Draw(PlayState* play, u32 index, EffectSs* this) {
     Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
     Matrix_RotateYS(this->rYaw, MTXMODE_APPLY);
     Matrix_RotateXS(this->rPitch, MTXMODE_APPLY);
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, gfxCtx);
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     gDPSetEnvColor(POLY_XLU_DISP++, 0, 50, 100, (u8)(s32)alpha);
     func_800BCC68(&this->pos, play);

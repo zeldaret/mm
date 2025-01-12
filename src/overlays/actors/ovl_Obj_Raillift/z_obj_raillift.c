@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_raillift.h"
-#include "objects/object_raillift/object_raillift.h"
+#include "assets/objects/object_raillift/object_raillift.h"
 #include "overlays/actors/ovl_Obj_Etcetera/z_obj_etcetera.h"
 
 #define FLAGS (ACTOR_FLAG_10)
@@ -28,7 +28,7 @@ void ObjRaillift_Teleport(ObjRaillift* this, PlayState* play);
 void ObjRaillift_Wait(ObjRaillift* this, PlayState* play);
 void ObjRaillift_Move(ObjRaillift* this, PlayState* play);
 
-ActorInit Obj_Raillift_InitVars = {
+ActorProfile Obj_Raillift_Profile = {
     /**/ ACTOR_OBJ_RAILLIFT,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -263,7 +263,7 @@ void ObjRaillift_Draw(Actor* thisx, PlayState* play) {
     gSPSegment(POLY_OPA_DISP++, 0x08,
                Gfx_TwoTexScrollEnvColor(play->state.gfxCtx, 0, play->gameplayFrames, 0, 32, 32, 1, 0, 0, 32, 32, 0, 0,
                                         0, 160));
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, object_raillift_DL_004BF0);
 
     CLOSE_DISPS(play->state.gfxCtx);

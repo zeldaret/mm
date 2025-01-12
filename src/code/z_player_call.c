@@ -1,16 +1,16 @@
-#include "prevent_bss_reordering.h"
 #include "global.h"
+#include "kaleido_manager.h"
 
-#define FLAGS                                                                                          \
-    (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_200000 | \
-     ACTOR_FLAG_2000000 | ACTOR_FLAG_CAN_PRESS_SWITCH | ACTOR_FLAG_80000000)
+#define FLAGS                                                                                                 \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_200000 | \
+     ACTOR_FLAG_UPDATE_DURING_OCARINA | ACTOR_FLAG_CAN_PRESS_SWITCHES | ACTOR_FLAG_80000000)
 
 ActorFunc sPlayerCallInitFunc;
 ActorFunc sPlayerCallDestroyFunc;
 ActorFunc sPlayerCallUpdateFunc;
 ActorFunc sPlayerCallDrawFunc;
 
-ActorInit Player_InitVars = {
+ActorProfile Player_Profile = {
     /**/ ACTOR_PLAYER,
     /**/ ACTORCAT_PLAYER,
     /**/ FLAGS,

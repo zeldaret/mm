@@ -6,7 +6,7 @@
 
 #include "z_obj_lift.h"
 #include "z64quake.h"
-#include "objects/object_d_lift/object_d_lift.h"
+#include "assets/objects/object_d_lift/object_d_lift.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -27,7 +27,7 @@ void func_8093DB70(ObjLift* this);
 void func_8093DB90(ObjLift* this, PlayState* play);
 void func_8093DC90(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Lift_InitVars = {
+ActorProfile Obj_Lift_Profile = {
     /**/ ACTOR_OBJ_LIFT,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -180,14 +180,14 @@ void func_8093D9C0(ObjLift* this) {
 
 void func_8093DA48(ObjLift* this, PlayState* play) {
     s32 pad;
-    s32 sp38;
+    s32 bgId;
     Vec3f pos;
 
     Actor_MoveWithGravity(&this->dyna.actor);
     Math_Vec3f_Copy(&pos, &this->dyna.actor.prevPos);
     pos.y += yOffsets[OBJLIFT_GET_1(&this->dyna.actor)];
     this->dyna.actor.floorHeight =
-        BgCheck_EntityRaycastFloor5(&play->colCtx, &this->dyna.actor.floorPoly, &sp38, &this->dyna.actor, &pos);
+        BgCheck_EntityRaycastFloor5(&play->colCtx, &this->dyna.actor.floorPoly, &bgId, &this->dyna.actor, &pos);
     if ((yOffsets[OBJLIFT_GET_1(&this->dyna.actor)] - 0.001f) <=
         (this->dyna.actor.floorHeight - this->dyna.actor.world.pos.y)) {
         func_8093D3C0(this, play);

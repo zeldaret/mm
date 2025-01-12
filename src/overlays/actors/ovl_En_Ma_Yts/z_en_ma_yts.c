@@ -6,7 +6,8 @@
 
 #include "z_en_ma_yts.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_100000 | ACTOR_FLAG_2000000)
+#define FLAGS \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_100000 | ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
 #define THIS ((EnMaYts*)thisx)
 
@@ -29,7 +30,7 @@ void EnMaYts_SetFaceExpression(EnMaYts* this, s16 overrideEyeTexIndex, s16 mouth
 
 void EnMaYts_DrawSleeping(Actor* thisx, PlayState* play);
 
-ActorInit En_Ma_Yts_InitVars = {
+ActorProfile En_Ma_Yts_Profile = {
     /**/ ACTOR_EN_MA_YTS,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -55,7 +56,7 @@ void EnMaYts_UpdateEyes(EnMaYts* this) {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_NONE,
         OC1_ON | OC1_TYPE_ALL,
@@ -63,11 +64,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0x00000000, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_NONE,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_NONE,
         OCELEM_ON,
     },
     { 18, 46, 0, { 0, 0, 0 } },
@@ -164,14 +165,14 @@ void func_80B8D12C(EnMaYts* this, PlayState* play) {
 void EnMaYts_InitAnimation(EnMaYts* this, PlayState* play) {
     switch (this->type) {
         case MA_YTS_TYPE_BARN:
-            this->actor.targetMode = TARGET_MODE_0;
+            this->actor.attentionRangeType = ATTENTION_RANGE_0;
             EnMaYts_ChangeAnim(this, ENMATYS_ANIM_0);
             break;
 
         case MA_YTS_TYPE_SITTING:
-            this->actor.targetMode = TARGET_MODE_6;
+            this->actor.attentionRangeType = ATTENTION_RANGE_6;
             // Day 1 or "Winning" the alien invasion
-            if ((CURRENT_DAY == 1) || CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
+            if ((CURRENT_DAY == 1) || CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS)) {
                 EnMaYts_ChangeAnim(this, ENMATYS_ANIM_14);
             } else {
                 EnMaYts_ChangeAnim(this, ENMATYS_ANIM_18);
@@ -179,13 +180,13 @@ void EnMaYts_InitAnimation(EnMaYts* this, PlayState* play) {
             break;
 
         case MA_YTS_TYPE_SLEEPING:
-            this->actor.targetMode = TARGET_MODE_0;
+            this->actor.attentionRangeType = ATTENTION_RANGE_0;
             this->actor.draw = EnMaYts_DrawSleeping;
             EnMaYts_ChangeAnim(this, ENMATYS_ANIM_0);
             break;
 
         case MA_YTS_TYPE_ENDCREDITS:
-            this->actor.targetMode = TARGET_MODE_0;
+            this->actor.attentionRangeType = ATTENTION_RANGE_0;
             EnMaYts_ChangeAnim(this, ENMATYS_ANIM_0);
             break;
 
@@ -204,14 +205,14 @@ s32 EnMaYts_CheckValidSpawn(EnMaYts* this, PlayState* play) {
 
                 case 2:
                     // Failing the alien invasion
-                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
+                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS)) {
                         return false;
                     }
                     break;
 
                 case 3:
                     // "Winning" the alien invasion
-                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
+                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS)) {
                         return false;
                     }
                     break;
@@ -223,7 +224,7 @@ s32 EnMaYts_CheckValidSpawn(EnMaYts* this, PlayState* play) {
 
         case MA_YTS_TYPE_BARN:
             // Failing the alien invasion
-            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS)) {
                 return false;
             } else if ((CURRENT_TIME >= CLOCK_TIME(20, 0)) && (CURRENT_DAY == 3)) {
                 return false;
@@ -232,7 +233,7 @@ s32 EnMaYts_CheckValidSpawn(EnMaYts* this, PlayState* play) {
 
         case MA_YTS_TYPE_SLEEPING:
             // "Winning" the alien invasion
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS)) {
                 return false;
             }
             break;
@@ -281,7 +282,7 @@ void EnMaYts_Init(Actor* thisx, PlayState* play) {
         this->hasBow = false;
     }
 
-    if ((CURRENT_DAY == 1) || CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
+    if ((CURRENT_DAY == 1) || CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS)) {
         this->overrideEyeTexIndex = 0;
         this->eyeTexIndex = 0;
         this->mouthTexIndex = 0;
@@ -300,7 +301,7 @@ void EnMaYts_Init(Actor* thisx, PlayState* play) {
         this->unk_32C = 2;
         EnMaYts_SetupEndCreditsHandler(this);
     } else if ((CURRENT_DAY == 2) && (gSaveContext.save.isNight == 1) &&
-               CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
+               CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS)) {
         EnMaYts_SetupStartDialogue(this);
     } else {
         EnMaYts_SetupDoNothing(this);
@@ -355,7 +356,7 @@ void EnMaYts_StartDialogue(EnMaYts* this, PlayState* play) {
                 this->textId = 0x3366;
                 Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
             }
-        } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_PROMISED_TO_HELP_WITH_THEM)) {
+        } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_PROMISED_TO_HELP_WITH_ALIENS)) {
             EnMaYts_SetFaceExpression(this, 0, 0);
             Message_StartTextbox(play, 0x3367, &this->actor);
             this->textId = 0x3367;
@@ -595,7 +596,7 @@ void EnMaYts_DrawSleeping(Actor* thisx, PlayState* play) {
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, gRomaniSleepingDL);
 
     CLOSE_DISPS(play->state.gfxCtx);

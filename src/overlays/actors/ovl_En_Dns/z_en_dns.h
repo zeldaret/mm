@@ -2,12 +2,11 @@
 #define Z_EN_DNS_H
 
 #include "global.h"
-#include "objects/object_dns/object_dns.h"
+#include "assets/objects/object_dns/object_dns.h"
 
 struct EnDns;
 
 typedef void (*EnDnsActionFunc)(struct EnDns*, PlayState*);
-typedef s32 (*EnDnsFunc)(struct EnDns*, PlayState*);
 
 #define ENDNS_GET_7(thisx) ((thisx)->params & 7)
 #define ENDNS_GET_4000(thisx) ((thisx)->params & 0x4000)
@@ -26,8 +25,8 @@ typedef struct EnDns {
     /* 0x188 */ EnDnsActionFunc actionFunc;
     /* 0x18C */ ColliderCylinder collider;
     /* 0x1D8 */ u8 cueId;
-    /* 0x1DC */ s32 unk_1DC;
-    /* 0x1E0 */ s32* unk_1E0;
+    /* 0x1DC */ s32 msgScriptPos;
+    /* 0x1E0 */ MsgScript* msgScript;
     /* 0x1E4 */ Gfx* unk_1E4[KINGS_CHAMBER_DEKU_GUARD_LIMB_MAX];
     /* 0x218 */ Vec3f unk_218;
     /* 0x224 */ Vec3s unk_224;
@@ -51,7 +50,7 @@ typedef struct EnDns {
     /* 0x2E8 */ UNK_TYPE1 unk_2E8[0x4];
     /* 0x2EC */ f32 unk_2EC;
     /* 0x2F0 */ f32 animCurFrame;
-    /* 0x2F4 */ EnDnsFunc unk_2F4;
+    /* 0x2F4 */ MsgScriptCallback msgScriptCallback;
     /* 0x2F8 */ s32 animIndex;
     /* 0x2FC */ s32 unk_2FC;
 } EnDns; // size = 0x300

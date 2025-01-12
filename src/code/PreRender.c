@@ -7,17 +7,19 @@
  */
 #include "z64prerender.h"
 
-#include "libc/alloca.h"
-#include "libc/stdbool.h"
+#include "alloca.h"
+#include "stdbool.h"
 #include "PR/gs2dex.h"
 
 #include "global.h"
 #include "color.h"
 #include "macros.h"
 #include "gfx.h"
+#include "gfxalloc.h"
 #include "slowly.h"
 #include "stack.h"
-#include "stackcheck.h"
+#include "libu64/stackcheck.h"
+#include "sys_ucode.h"
 
 /**
  * Assigns the "save" values in PreRender
@@ -57,8 +59,8 @@ void PreRender_Destroy(PreRender* this) {
     ListAlloc_FreeAll(&this->alloc);
 }
 
-void PreRender_CopyImage(PreRender* this, Gfx** gfxp, void* img, void* imgDst, u32 useThresholdAlphaCompare) {
-    Gfx* gfx = *gfxp;
+void PreRender_CopyImage(PreRender* this, Gfx** gfxP, void* img, void* imgDst, u32 useThresholdAlphaCompare) {
+    Gfx* gfx = *gfxP;
     u32 flags;
 
     gDPPipeSync(gfx++);
@@ -75,15 +77,15 @@ void PreRender_CopyImage(PreRender* this, Gfx** gfxp, void* img, void* imgDst, u
     gDPPipeSync(gfx++);
     gDPSetColorImage(gfx++, G_IM_FMT_RGBA, G_IM_SIZ_16b, this->width, this->fbuf);
 
-    *gfxp = gfx;
+    *gfxP = gfx;
 }
 
-void PreRender_RestoreBuffer(PreRender* this, Gfx** gfxp, void* buf, void* bufSave) {
-    PreRender_CopyImage(this, gfxp, buf, bufSave, false);
+void PreRender_RestoreBuffer(PreRender* this, Gfx** gfxP, void* buf, void* bufSave) {
+    PreRender_CopyImage(this, gfxP, buf, bufSave, false);
 }
 
-void func_8016FF90(PreRender* this, Gfx** gfxp, void* buf, void* bufSave, s32 envR, s32 envG, s32 envB, s32 envA) {
-    Gfx* gfx = *gfxp;
+void func_8016FF90(PreRender* this, Gfx** gfxP, void* buf, void* bufSave, s32 envR, s32 envG, s32 envB, s32 envA) {
+    Gfx* gfx = *gfxP;
 
     gDPPipeSync(gfx++);
 
@@ -111,23 +113,23 @@ void func_8016FF90(PreRender* this, Gfx** gfxp, void* buf, void* bufSave, s32 en
     gDPPipeSync(gfx++);
     gDPSetColorImage(gfx++, G_IM_FMT_RGBA, G_IM_SIZ_16b, this->width, this->fbuf);
 
-    *gfxp = gfx;
+    *gfxP = gfx;
 }
 
-void func_80170200(PreRender* this, Gfx** gfxp, void* buf, void* bufSave) {
-    func_8016FF90(this, gfxp, buf, bufSave, 255, 255, 255, 255);
+void func_80170200(PreRender* this, Gfx** gfxP, void* buf, void* bufSave) {
+    func_8016FF90(this, gfxP, buf, bufSave, 255, 255, 255, 255);
 }
 
 /**
  * Reads the coverage values stored in the RGBA16 format `img` with dimensions `this->width`, `this->height` and
  * converts it to an 8-bpp intensity image.
  *
- * @param gfxp      Display list pointer
+ * @param gfxP      Display list pointer
  * @param img       Image to read coverage from
  * @param cvgDst    Buffer to store coverage into
  */
-void PreRender_CoverageRgba16ToI8(PreRender* this, Gfx** gfxp, void* img, void* cvgDst) {
-    Gfx* gfx = *gfxp;
+void PreRender_CoverageRgba16ToI8(PreRender* this, Gfx** gfxP, void* img, void* cvgDst) {
+    Gfx* gfx = *gfxP;
     s32 rowsRemaining;
     s32 curRow;
     s32 nRows;
@@ -200,24 +202,24 @@ void PreRender_CoverageRgba16ToI8(PreRender* this, Gfx** gfxp, void* img, void* 
     gDPPipeSync(gfx++);
     gDPSetColorImage(gfx++, G_IM_FMT_RGBA, G_IM_SIZ_16b, this->width, this->fbuf);
 
-    *gfxp = gfx;
+    *gfxP = gfx;
 }
 
 /**
  * Saves zbuf to zbufSave
  */
-void PreRender_SaveZBuffer(PreRender* this, Gfx** gfxp) {
+void PreRender_SaveZBuffer(PreRender* this, Gfx** gfxP) {
     if ((this->zbufSave != NULL) && (this->zbuf != NULL)) {
-        PreRender_RestoreBuffer(this, gfxp, this->zbuf, this->zbufSave);
+        PreRender_RestoreBuffer(this, gfxP, this->zbuf, this->zbufSave);
     }
 }
 
 /**
  * Saves fbuf to fbufSave
  */
-void PreRender_SaveFramebuffer(PreRender* this, Gfx** gfxp) {
+void PreRender_SaveFramebuffer(PreRender* this, Gfx** gfxP) {
     if ((this->fbufSave != NULL) && (this->fbuf != NULL)) {
-        func_80170200(this, gfxp, this->fbuf, this->fbufSave);
+        func_80170200(this, gfxP, this->fbuf, this->fbufSave);
     }
 }
 
@@ -225,8 +227,8 @@ void PreRender_SaveFramebuffer(PreRender* this, Gfx** gfxp) {
  * Fetches the coverage of the current framebuffer into an image of the same format as the current color image, storing
  * it over the framebuffer in memory.
  */
-void PreRender_FetchFbufCoverage(PreRender* this, Gfx** gfxp) {
-    Gfx* gfx = *gfxp;
+void PreRender_FetchFbufCoverage(PreRender* this, Gfx** gfxP) {
+    Gfx* gfx = *gfxP;
 
     gDPPipeSync(gfx++);
     // Set the blend color to full white and set maximum depth
@@ -255,33 +257,33 @@ void PreRender_FetchFbufCoverage(PreRender* this, Gfx** gfxp) {
     gDPFillRectangle(gfx++, 0, 0, this->width, this->height);
     gDPPipeSync(gfx++);
 
-    *gfxp = gfx;
+    *gfxP = gfx;
 }
 
 /**
  * Draws the coverage of the current framebuffer `this->fbuf` to an I8 image at `this->cvgSave`. Overwrites
  * `this->fbuf` in the process.
  */
-void PreRender_DrawCoverage(PreRender* this, Gfx** gfxp) {
-    PreRender_FetchFbufCoverage(this, gfxp);
+void PreRender_DrawCoverage(PreRender* this, Gfx** gfxP) {
+    PreRender_FetchFbufCoverage(this, gfxP);
 
     if (this->cvgSave != NULL) {
-        PreRender_CoverageRgba16ToI8(this, gfxp, this->fbuf, this->cvgSave);
+        PreRender_CoverageRgba16ToI8(this, gfxP, this->fbuf, this->cvgSave);
     }
 }
 
 /**
  * Restores zbufSave to zbuf
  */
-void PreRender_RestoreZBuffer(PreRender* this, Gfx** gfxp) {
-    PreRender_RestoreBuffer(this, gfxp, this->zbufSave, this->zbuf);
+void PreRender_RestoreZBuffer(PreRender* this, Gfx** gfxP) {
+    PreRender_RestoreBuffer(this, gfxP, this->zbufSave, this->zbuf);
 }
 
 /**
  * Draws a full-screen image to the current framebuffer, that sources the rgb channel from `this->fbufSave` and
  * the alpha channel from `this->cvgSave` modulated by environment color.
  */
-void func_80170798(PreRender* this, Gfx** gfxp) {
+void func_80170798(PreRender* this, Gfx** gfxP) {
     Gfx* gfx;
     s32 rowsRemaining;
     s32 curRow;
@@ -289,7 +291,7 @@ void func_80170798(PreRender* this, Gfx** gfxp) {
     s32 rtile = 1;
 
     if (this->cvgSave != NULL) {
-        gfx = *gfxp;
+        gfx = *gfxP;
 
         gDPPipeSync(gfx++);
         gDPSetEnvColor(gfx++, 255, 255, 255, 32);
@@ -345,19 +347,19 @@ void func_80170798(PreRender* this, Gfx** gfxp) {
         }
 
         gDPPipeSync(gfx++);
-        *gfxp = gfx;
+        *gfxP = gfx;
     }
 }
 
-void func_80170AE0(PreRender* this, Gfx** gfxp, s32 alpha) {
-    func_8016FF90(this, gfxp, this->fbufSave, this->fbuf, 255, 255, 255, alpha);
+void func_80170AE0(PreRender* this, Gfx** gfxP, s32 alpha) {
+    func_8016FF90(this, gfxP, this->fbufSave, this->fbuf, 255, 255, 255, alpha);
 }
 
 /**
  * Copies fbufSave to fbuf
  */
-void PreRender_RestoreFramebuffer(PreRender* this, Gfx** gfxp) {
-    PreRender_RestoreBuffer(this, gfxp, this->fbufSave, this->fbuf);
+void PreRender_RestoreFramebuffer(PreRender* this, Gfx** gfxP) {
+    PreRender_RestoreBuffer(this, gfxP, this->fbufSave, this->fbuf);
 }
 
 /**
@@ -404,7 +406,7 @@ void PreRender_AntiAliasFilterPixel(PreRender* this, s32 x, s32 y) {
     s32 buffB[3 * 5];
     s32 xi;
     s32 yi;
-    s32 temp;
+    s32 invCvg;
     s32 pmaxR;
     s32 pmaxG;
     s32 pmaxB;
@@ -511,10 +513,10 @@ void PreRender_AntiAliasFilterPixel(PreRender* this, s32 x, s32 y) {
     //      BackGround = (pMax + pMin) - (ForeGround) * 2
 
     // OutputColor = cvg * ForeGround + (1.0 - cvg) * BackGround
-    temp = 7 - buffCvg[7];
-    outR = buffR[7] + ((s32)(temp * (pmaxR + pminR - (buffR[7] * 2)) + 4) >> 3);
-    outG = buffG[7] + ((s32)(temp * (pmaxG + pminG - (buffG[7] * 2)) + 4) >> 3);
-    outB = buffB[7] + ((s32)(temp * (pmaxB + pminB - (buffB[7] * 2)) + 4) >> 3);
+    invCvg = 7 - buffCvg[7];
+    outR = buffR[7] + ((s32)(invCvg * (pmaxR + pminR - (buffR[7] * 2)) + 4) >> 3);
+    outG = buffG[7] + ((s32)(invCvg * (pmaxG + pminG - (buffG[7] * 2)) + 4) >> 3);
+    outB = buffB[7] + ((s32)(invCvg * (pmaxB + pminB - (buffB[7] * 2)) + 4) >> 3);
 
     pxOut.r = outR >> 3;
     pxOut.g = outG >> 3;
@@ -757,7 +759,7 @@ typedef struct {
     /* 0x24 */ u32 flags;
 } PreRenderBackground2DParams; // size = 0x28
 
-void Prerender_DrawBackground2DImpl(PreRenderBackground2DParams* bg2D, Gfx** gfxp) {
+void Prerender_DrawBackground2DImpl(PreRenderBackground2DParams* bg2D, Gfx** gfxP) {
     Gfx* gfx;
     uObjBg* bg;
     u32 alphaCompare;
@@ -767,8 +769,8 @@ void Prerender_DrawBackground2DImpl(PreRenderBackground2DParams* bg2D, Gfx** gfx
     loadS2DEX2 = (bg2D->flags & BG2D_FLAGS_LOAD_S2DEX2) != 0;
     alphaCompare = (bg2D->flags & BG2D_FLAGS_AC_THRESHOLD) ? G_AC_THRESHOLD : G_AC_NONE;
 
-    gfxTemp = *gfxp;
-    bg = Graph_DlistAlloc(&gfxTemp, sizeof(uObjBg));
+    gfxTemp = *gfxP;
+    bg = Gfx_Alloc(&gfxTemp, sizeof(uObjBg));
     gfx = gfxTemp;
 
     bg->b.imageX = 0;
@@ -835,10 +837,10 @@ void Prerender_DrawBackground2DImpl(PreRenderBackground2DParams* bg2D, Gfx** gfx
         gSPLoadUcode(gfx++, SysUcode_GetUCode(), SysUcode_GetUCodeData());
     }
 
-    *gfxp = gfx;
+    *gfxP = gfx;
 }
 
-void Prerender_DrawBackground2D(Gfx** gfxp, void* timg, void* tlut, u16 width, u16 height, u8 fmt, u8 siz, u16 tt,
+void Prerender_DrawBackground2D(Gfx** gfxP, void* timg, void* tlut, u16 width, u16 height, u8 fmt, u8 siz, u16 tt,
                                 u16 tlutCount, f32 x, f32 y, f32 xScale, f32 yScale, u32 flags) {
     PreRenderBackground2DParams bg2D;
     PreRenderBackground2DParams* bg2DPtr = &bg2D;
@@ -857,5 +859,5 @@ void Prerender_DrawBackground2D(Gfx** gfxp, void* timg, void* tlut, u16 width, u
     bg2D.yScale = yScale;
     bg2D.flags = flags;
 
-    Prerender_DrawBackground2DImpl(bg2DPtr, gfxp);
+    Prerender_DrawBackground2DImpl(bg2DPtr, gfxP);
 }

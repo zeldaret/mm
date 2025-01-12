@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_ikana_ray.h"
-#include "objects/object_ikana_obj/object_ikana_obj.h"
+#include "assets/objects/object_ikana_obj/object_ikana_obj.h"
 
 #define FLAGS 0x00000000
 
@@ -21,7 +21,7 @@ void BgIkanaRay_UpdateCheckForActivation(BgIkanaRay* this, PlayState* play);
 void BgIkanaRay_SetActivated(BgIkanaRay* this);
 void BgIkanaRay_UpdateActivated(BgIkanaRay* this, PlayState* play);
 
-ActorInit Bg_Ikana_Ray_InitVars = {
+ActorProfile Bg_Ikana_Ray_Profile = {
     /**/ ACTOR_BG_IKANA_RAY,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -35,7 +35,7 @@ ActorInit Bg_Ikana_Ray_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_OTHER,
         AC_NONE,
         OC1_NONE,
@@ -43,11 +43,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00200000, 0x00, 0x00 },
         { 0x00000000, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NONE,
-        BUMP_NONE,
+        ATELEM_ON | ATELEM_SFX_NONE,
+        ACELEM_NONE,
         OCELEM_ON,
     },
     { 90, 420, -420, { 0, 0, 0 } },

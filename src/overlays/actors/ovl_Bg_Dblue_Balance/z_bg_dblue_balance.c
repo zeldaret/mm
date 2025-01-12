@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_dblue_balance.h"
-#include "objects/object_dblue_object/object_dblue_object.h"
+#include "assets/objects/object_dblue_object/object_dblue_object.h"
 
 #define FLAGS 0x00000000
 
@@ -29,7 +29,7 @@ void func_80B83758(Actor* thisx, PlayState* play);
 AnimatedMaterial* D_80B83C70;
 AnimatedMaterial* D_80B83C74;
 
-ActorInit Bg_Dblue_Balance_InitVars = {
+ActorProfile Bg_Dblue_Balance_Profile = {
     /**/ ACTOR_BG_DBLUE_BALANCE,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -665,7 +665,7 @@ void BgDblueBalance_Draw(Actor* thisx, PlayState* play) {
         gfx = POLY_XLU_DISP;
 
         gSPDisplayList(gfx++, gSetupDLs[SETUPDL_25]);
-        gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(gfx++, play->state.gfxCtx);
         gDPSetEnvColor(gfx++, 0, 0, 0, this->unk_183);
         gSPDisplayList(gfx++, gGreatBayTempleObjectSeesawSplashDL);
 
@@ -718,7 +718,7 @@ void func_80B83758(Actor* thisx, PlayState* play) {
 
                     temp = ptr->unk_0E * (f32)this->unk_183 * 0.003921569f;
                     gDPSetEnvColor(gfx++, 0, 0, 0, temp);
-                    gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    MATRIX_FINALIZE_AND_LOAD(gfx++, play->state.gfxCtx);
                     gSPDisplayList(gfx++, gGreatBayTempleObjectWaterwheelSplashDL);
                 }
             }

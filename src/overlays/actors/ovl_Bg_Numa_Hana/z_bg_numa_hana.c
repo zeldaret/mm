@@ -5,8 +5,8 @@
  */
 
 #include "z_bg_numa_hana.h"
-#include "objects/object_numa_obj/object_numa_obj.h"
-#include "objects/object_syokudai/object_syokudai.h"
+#include "assets/objects/object_numa_obj/object_numa_obj.h"
+#include "assets/objects/object_syokudai/object_syokudai.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_400)
 
@@ -30,7 +30,7 @@ void BgNumaHana_RaiseFlower(BgNumaHana* this, PlayState* play);
 void BgNumaHana_SetupOpenedIdle(BgNumaHana* this);
 void BgNumaHana_OpenedIdle(BgNumaHana* this, PlayState* play);
 
-ActorInit Bg_Numa_Hana_InitVars = {
+ActorProfile Bg_Numa_Hana_Profile = {
     /**/ ACTOR_BG_NUMA_HANA,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -44,7 +44,7 @@ ActorInit Bg_Numa_Hana_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_NONE,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -52,11 +52,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK2,
+        ELEM_MATERIAL_UNK2,
         { 0x00000000, 0x00, 0x00 },
         { 0x01CBFBB6, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON | BUMP_HOOKABLE,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON | ACELEM_HOOKABLE,
         OCELEM_ON,
     },
     { 18, 16, 0, { 0, 0, 0 } },
@@ -384,7 +384,7 @@ void BgNumaHana_Draw(Actor* thisx, PlayState* play2) {
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, gWoodenFlowerStalkDL);
 
     for (i = 0; i < ARRAY_COUNT(this->innerPetalPosRot); i++) {
@@ -394,13 +394,13 @@ void BgNumaHana_Draw(Actor* thisx, PlayState* play2) {
         Matrix_SetTranslateRotateYXZ(innerPetalPosRot->pos.x, innerPetalPosRot->pos.y, innerPetalPosRot->pos.z,
                                      &innerPetalPosRot->rot);
         Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, gWoodenFlowerInnerPetalDL);
 
         Matrix_SetTranslateRotateYXZ(outerPetalPosRot->pos.x, outerPetalPosRot->pos.y, outerPetalPosRot->pos.z,
                                      &outerPetalPosRot->rot);
         Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, gWoodenFlowerOuterPetalDL);
     }
 
@@ -409,7 +409,7 @@ void BgNumaHana_Draw(Actor* thisx, PlayState* play2) {
         Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y - 64.5f,
                                      this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
         Matrix_Scale(1.5f, 1.5f, 1.5f, MTXMODE_APPLY);
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.slots[objectSlot].segment);
         gSPDisplayList(POLY_OPA_DISP++, gObjectSyokudaiTypeNoSwitchDL);
     }

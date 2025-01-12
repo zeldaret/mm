@@ -1,6 +1,14 @@
 #include "global.h"
 #include "buffers.h"
 
+static s32 sBssPad[36];
+AudioContext gAudioCtx;
+AudioCustomUpdateFunction gAudioCustomUpdateFunction;
+AudioCustomSeqFunction gAudioCustomSeqFunction;
+AudioCustomReverbFunction gAudioCustomReverbFunction;
+AudioCustomSynthFunction gAudioCustomSynthFunction;
+static s32 sBssPad2[3];
+
 const s16 gAudioTatumInit[] = {
     0x1C00,          // unused
     TATUMS_PER_BEAT, // gTatumsPerBeat

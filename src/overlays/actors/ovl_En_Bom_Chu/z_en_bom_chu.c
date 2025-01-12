@@ -6,7 +6,7 @@
 
 #include "z_en_bom_chu.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -25,7 +25,7 @@ void EnBomChu_Move(EnBomChu* this, PlayState* play);
 void EnBomChu_Explode(EnBomChu* this, PlayState* play);
 void EnBomChu_WaitForDeath(EnBomChu* this, PlayState* play);
 
-ActorInit En_Bom_Chu_InitVars = {
+ActorProfile En_Bom_Chu_Profile = {
     /**/ ACTOR_EN_BOM_CHU,
     /**/ ACTORCAT_EXPLOSIVES,
     /**/ FLAGS,
@@ -39,7 +39,7 @@ ActorInit En_Bom_Chu_InitVars = {
 
 static ColliderSphereInit sSphereInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_1 | OC1_TYPE_2,
@@ -47,18 +47,18 @@ static ColliderSphereInit sSphereInit = {
         COLSHAPE_SPHERE,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 1, { { 0, 0, 0 }, 13 }, 100 },
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_U8(targetMode, TARGET_MODE_2, ICHAIN_CONTINUE),
+    ICHAIN_U8(attentionRangeType, ATTENTION_RANGE_2, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 1000 * BOMBCHU_SCALE, ICHAIN_STOP),
 };
 
@@ -136,7 +136,7 @@ s32 EnBomChu_UpdateFloorPoly(EnBomChu* this, CollisionPoly* floorPoly, PlayState
         return false;
     }
 
-    Math3D_CrossProduct(&this->axisUp, &normal, &vec);
+    Math3D_Vec3f_Cross(&this->axisUp, &normal, &vec);
 
     magnitude = Math3D_Vec3fMagnitude(&vec);
     if (magnitude < 0.001f) {
@@ -148,7 +148,7 @@ s32 EnBomChu_UpdateFloorPoly(EnBomChu* this, CollisionPoly* floorPoly, PlayState
     Matrix_RotateAxisF(angle, &vec, MTXMODE_NEW);
     Matrix_MultVec3f(&this->axisLeft, &vec);
     Math_Vec3f_Copy(&this->axisLeft, &vec);
-    Math3D_CrossProduct(&this->axisLeft, &normal, &this->axisForwards);
+    Math3D_Vec3f_Cross(&this->axisLeft, &normal, &this->axisForwards);
 
     magnitude = Math3D_Vec3fMagnitude(&this->axisForwards);
     if (magnitude < 0.001f) {
@@ -191,7 +191,7 @@ void EnBomChu_WaitForRelease(EnBomChu* this, PlayState* play) {
         Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 
         this->actor.shape.rot.y = player->actor.shape.rot.y;
-        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+        this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
         Actor_PlaySfx_SurfaceBomb(play, &this->actor);
 
         this->isMoving = true;
@@ -203,7 +203,7 @@ void EnBomChu_WaitForRelease(EnBomChu* this, PlayState* play) {
 
 s32 EnBomChu_IsOnCollisionPoly(PlayState* play, Vec3f* posA, Vec3f* posB, Vec3f* posResult, CollisionPoly** poly,
                                s32* bgId) {
-    if ((BgCheck_EntityLineTest1(&play->colCtx, posA, posB, posResult, poly, true, true, true, true, bgId)) &&
+    if (BgCheck_EntityLineTest1(&play->colCtx, posA, posB, posResult, poly, true, true, true, true, bgId) &&
         !(SurfaceType_GetWallFlags(&play->colCtx, *poly, *bgId) & (WALL_FLAG_4 | WALL_FLAG_5))) {
         return true;
     }
@@ -324,7 +324,7 @@ void EnBomChu_Move(EnBomChu* this, PlayState* play) {
     }
 
     if (this->isMoving) {
-        Actor_PlaySfx_FlaggedCentered1(&this->actor, NA_SE_IT_BOMBCHU_MOVE - SFX_FLAG);
+        Actor_PlaySfx_Flagged2(&this->actor, NA_SE_IT_BOMBCHU_MOVE - SFX_FLAG);
     }
 
     if (this->actor.speed != 0.0f) {
@@ -575,7 +575,7 @@ void EnBomChu_Draw(Actor* thisx, PlayState* play) {
     gDPSetEnvColor(POLY_OPA_DISP++, (s32)(colorIntensity * 209.0f) + 9, (s32)(colorIntensity * 34.0f) + 9,
                    (s32)(colorIntensity * -35.0f) + 35, 255);
     Matrix_Translate(this->visualJitter * (1.0f / BOMBCHU_SCALE), 0.0f, 0.0f, MTXMODE_APPLY);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, gBombchuDL);
 
     CLOSE_DISPS(play->state.gfxCtx);

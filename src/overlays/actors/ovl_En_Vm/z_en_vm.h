@@ -2,6 +2,7 @@
 #define Z_EN_VM_H
 
 #include "global.h"
+#include "assets/objects/object_vm/object_vm.h"
 
 struct EnVm;
 
@@ -16,8 +17,8 @@ typedef void (*EnVmActionFunc)(struct EnVm*, PlayState*);
 typedef struct EnVm {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
-    /* 0x188 */ Vec3s jointTable[11];
-    /* 0x1CA */ Vec3s morphTable[11];
+    /* 0x188 */ Vec3s jointTable[BEAMOS_LIMB_MAX];
+    /* 0x1CA */ Vec3s morphTable[BEAMOS_LIMB_MAX];
     /* 0x20C */ EnVmActionFunc actionFunc;
     /* 0x210 */ u8 unk_210;
     /* 0x212 */ s16 unk_212;

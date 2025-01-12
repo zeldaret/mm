@@ -2,7 +2,7 @@
 #define Z_EN_PO_SISTERS_H
 
 #include "global.h"
-#include "objects/object_po_sisters/object_po_sisters.h"
+#include "assets/objects/object_po_sisters/object_po_sisters.h"
 
 struct EnPoSisters;
 

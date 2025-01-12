@@ -1,6 +1,11 @@
+#include "gfx.h"
+
 #include "global.h"
+#include "gfxalloc.h"
+#include "regs.h"
 #include "sys_cfb.h"
-#include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
+
+#include "z64pause_menu.h"
 
 Gfx gSetupDLs[SETUPDL_MAX][6] = {
     {
@@ -903,8 +908,8 @@ Gfx* Gfx_SetupDL(Gfx* gfx, u32 i) {
     return Gfx_SetupDLImpl(gfx, i);
 }
 
-void Gfx_SetupDLAtPtr(Gfx** gfxp, u32 i) {
-    *gfxp = Gfx_SetupDL(*gfxp, i);
+void Gfx_SetupDLAtPtr(Gfx** gfxP, u32 i) {
+    *gfxP = Gfx_SetupDL(*gfxP, i);
 }
 
 Gfx* Gfx_SetupDL57(Gfx* gfx) {
@@ -1207,11 +1212,11 @@ void Gfx_SetupDL39_Overlay(GraphicsContext* gfxCtx) {
     CLOSE_DISPS(gfxCtx);
 }
 
-void Gfx_SetupDL39_Ptr(Gfx** gfxp) {
-    Gfx* gfx = *gfxp;
+void Gfx_SetupDL39_Ptr(Gfx** gfxP) {
+    Gfx* gfx = *gfxP;
 
     gSPDisplayList(gfx++, gSetupDLs[SETUPDL_39]);
-    *gfxp = gfx;
+    *gfxP = gfx;
 }
 
 void Gfx_SetupDL40_Opa(GraphicsContext* gfxCtx) {
@@ -1342,11 +1347,11 @@ void Gfx_SetupDL56_Opa(GraphicsContext* gfxCtx) {
     CLOSE_DISPS(gfxCtx);
 }
 
-void Gfx_SetupDL56_Ptr(Gfx** gfxp) {
-    Gfx* gfx = *gfxp;
+void Gfx_SetupDL56_Ptr(Gfx** gfxP) {
+    Gfx* gfx = *gfxP;
 
     gSPDisplayList(gfx++, gSetupDLs[SETUPDL_56]);
-    *gfxp = gfx;
+    *gfxP = gfx;
 }
 
 void Gfx_SetupDL59_Opa(GraphicsContext* gfxCtx) {
@@ -1357,8 +1362,8 @@ void Gfx_SetupDL59_Opa(GraphicsContext* gfxCtx) {
     CLOSE_DISPS(gfxCtx);
 }
 
-Gfx* Gfx_BranchTexScroll(Gfx** gfxp, u32 x, u32 y, s32 width, s32 height) {
-    Gfx* gfx = Graph_DlistAlloc(gfxp, 3 * sizeof(Gfx));
+Gfx* Gfx_BranchTexScroll(Gfx** gfxP, u32 x, u32 y, s32 width, s32 height) {
+    Gfx* gfx = Gfx_Alloc(gfxP, 3 * sizeof(Gfx));
 
     gDPTileSync(&gfx[0]);
     gDPSetTileSize(&gfx[1], 0, x, y, (x + ((width - 1) << 2)), (y + ((height - 1) << 2)));
@@ -1367,8 +1372,8 @@ Gfx* Gfx_BranchTexScroll(Gfx** gfxp, u32 x, u32 y, s32 width, s32 height) {
     return gfx;
 }
 
-void func_8012CB04(Gfx** gfxp, u32 x, u32 y) {
-    Gfx_BranchTexScroll(gfxp, x, y, 0, 0);
+void func_8012CB04(Gfx** gfxP, u32 x, u32 y) {
+    Gfx_BranchTexScroll(gfxP, x, y, 0, 0);
 }
 
 Gfx* func_8012CB28(GraphicsContext* gfxCtx, u32 x, u32 y) {

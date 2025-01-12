@@ -20,7 +20,7 @@ void func_809200F8(ItemEtcetera* this, PlayState* play);
 void ItemEtcetera_DrawThroughLens(Actor* thisx, PlayState* play);
 void ItemEtcetera_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Item_Etcetera_InitVars = {
+ActorProfile Item_Etcetera_Profile = {
     /**/ ACTOR_ITEM_ETCETERA,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -74,6 +74,7 @@ void ItemEtcetera_Init(Actor* thisx, PlayState* play) {
             this->actor.draw = NULL;
             this->actor.shape.yOffset = 50.0f;
             break;
+
         case ITEM_ETC_RUPEE_GREEN_CHEST_GAME:
         case ITEM_ETC_RUPEE_BLUE_CHEST_GAME:
         case ITEM_ETC_RUPEE_RED_CHEST_GAME:
@@ -84,6 +85,8 @@ void ItemEtcetera_Init(Actor* thisx, PlayState* play) {
             this->futureActionFunc = func_809200F8;
             this->drawFunc = ItemEtcetera_DrawThroughLens;
             this->actor.world.pos.y += 15.0f;
+            break;
+
         default:
             break;
     }

@@ -985,10 +985,10 @@ Acmd* AudioSynth_ProcessSample(s32 noteIndex, NoteSampleState* sampleState, Note
             synthState->stopLoop = true;
         }
 
-        if ((loopInfo->count == 2) && synthState->stopLoop) {
-            sampleEndPos = loopInfo->sampleEnd;
+        if ((loopInfo->header.count == 2) && synthState->stopLoop) {
+            sampleEndPos = loopInfo->header.sampleEnd;
         } else {
-            sampleEndPos = loopInfo->loopEnd;
+            sampleEndPos = loopInfo->header.loopEnd;
         }
 
         sampleAddr = sample->sampleAddr;
@@ -1028,7 +1028,7 @@ Acmd* AudioSynth_ProcessSample(s32 noteIndex, NoteSampleState* sampleState, Note
                             break;
                     }
 
-                    numEntries = SAMPLES_PER_FRAME * sample->book->order * sample->book->numPredictors;
+                    numEntries = SAMPLES_PER_FRAME * sample->book->header.order * sample->book->header.numPredictors;
                     aLoadADPCM(cmd++, numEntries, gAudioCtx.adpcmCodeBook);
                 }
             }
@@ -1066,8 +1066,8 @@ Acmd* AudioSynth_ProcessSample(s32 noteIndex, NoteSampleState* sampleState, Note
                         numSamplesInFirstFrame = numSamplesUntilEnd;
                     }
                     numFramesToDecode = (numSamplesToDecode + SAMPLES_PER_FRAME - 1) / SAMPLES_PER_FRAME;
-                    if (loopInfo->count != 0) {
-                        if ((loopInfo->count == 2) && synthState->stopLoop) {
+                    if (loopInfo->header.count != 0) {
+                        if ((loopInfo->header.count == 2) && synthState->stopLoop) {
                             sampleFinished = true;
                         } else {
                             // Loop around and restart
@@ -1293,7 +1293,7 @@ Acmd* AudioSynth_ProcessSample(s32 noteIndex, NoteSampleState* sampleState, Note
                     break; // break out of the for-loop
                 } else if (loopToPoint) {
                     synthState->atLoopPoint = true;
-                    synthState->samplePosInt = loopInfo->start;
+                    synthState->samplePosInt = loopInfo->header.start;
                 } else {
                     synthState->samplePosInt += numSamplesToProcess;
                 }

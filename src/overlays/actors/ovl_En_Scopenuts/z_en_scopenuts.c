@@ -5,9 +5,9 @@
  */
 
 #include "z_en_scopenuts.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnScopenuts*)thisx)
 
@@ -32,7 +32,7 @@ void func_80BCC288(EnScopenuts* this, PlayState* play);
 s32 EnScopenuts_HasReachedPoint(EnScopenuts* this, Path* path, s32 pointIndex);
 f32 func_80BCC448(Path* path, s32 arg1, Vec3f* arg2, Vec3s* arg3);
 
-ActorInit En_Scopenuts_InitVars = {
+ActorProfile En_Scopenuts_Profile = {
     /**/ ACTOR_EN_SCOPENUTS,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -46,18 +46,18 @@ ActorInit En_Scopenuts_InitVars = {
 
 static ColliderCylinderInitType1 sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 27, 32, 0, { 0, 0, 0 } },
@@ -122,8 +122,8 @@ Gfx* D_80BCCCDC[] = { gKakeraLeafMiddleDL, gKakeraLeafTipDL };
 Vec3f D_80BCCCE4 = { 0.0f, -0.5f, 0.0f };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_U8(targetMode, TARGET_MODE_0, ICHAIN_CONTINUE),
-    ICHAIN_F32(targetArrowOffset, 30, ICHAIN_STOP),
+    ICHAIN_U8(attentionRangeType, ATTENTION_RANGE_0, ICHAIN_CONTINUE),
+    ICHAIN_F32(lockOnArrowOffset, 30, ICHAIN_STOP),
 };
 
 s16 func_80BCABF0(Path* path) {
@@ -197,7 +197,7 @@ void func_80BCAE78(EnScopenuts* this, PlayState* play) {
 s16 func_80BCAF0C(EnScopenuts* this) {
     switch (this->unk_33C) {
         case 0x0:
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_53_02)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BUSINESS_SCRUB_HEART_PIECE)) {
                 this->unk_328 |= 1;
                 return 0x1638;
             }
@@ -353,7 +353,7 @@ void func_80BCB6D0(EnScopenuts* this, PlayState* play) {
                 this->unk_328 &= ~1;
                 play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                 play->msgCtx.stateTimer = 4;
-                this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+                this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
                 this->unk_328 &= ~4;
                 this->animIndex = ENSCOPENUTS_ANIM_8;
                 SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, ENSCOPENUTS_ANIM_8);
@@ -405,7 +405,7 @@ void func_80BCB6D0(EnScopenuts* this, PlayState* play) {
 void func_80BCB90C(EnScopenuts* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
-        SET_WEEKEVENTREG(WEEKEVENTREG_53_02);
+        SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BUSINESS_SCRUB_HEART_PIECE);
         this->actionFunc = func_80BCB6D0;
     } else {
         Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 300.0f, 300.0f);
@@ -694,7 +694,7 @@ s32 EnScopenuts_HasReachedPoint(EnScopenuts* this, Path* path, s32 pointIndex) {
         diffZ = points[index + 1].z - points[index - 1].z;
     }
 
-    func_8017B7F8(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
+    Math3D_RotateXZPlane(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
 
     if (((px * this->actor.world.pos.x) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
         reached = true;

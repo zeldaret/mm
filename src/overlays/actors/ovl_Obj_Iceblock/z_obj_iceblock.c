@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_iceblock.h"
-#include "objects/object_ice_block/object_ice_block.h"
+#include "assets/objects/object_ice_block/object_ice_block.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -45,7 +45,7 @@ void func_80A26B64(ObjIceblock* this, PlayState* play);
 void func_80A26B74(ObjIceblock* this, PlayState* play);
 void func_80A26BF8(ObjIceblock* this, PlayState* play);
 
-ActorInit Obj_Iceblock_InitVars = {
+ActorProfile Obj_Iceblock_Profile = {
     /**/ ACTOR_OBJ_ICEBLOCK,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -59,7 +59,7 @@ ActorInit Obj_Iceblock_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_NO_PUSH | OC1_TYPE_PLAYER,
@@ -67,11 +67,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0x00000800, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 44, 62, -31, { 0, 0, 0 } },
@@ -421,7 +421,7 @@ s32 func_80A24118(ObjIceblock* this, PlayState* play, f32 arg2, Vec3f* arg3) {
     Vec3f spC4;
     Vec3f spB8;
     s32 pad[2];
-    s32 spAC;
+    s32 bgId;
     CollisionPoly* spA8;
     s32 ret;
     s32 i;
@@ -436,7 +436,7 @@ s32 func_80A24118(ObjIceblock* this, PlayState* play, f32 arg2, Vec3f* arg3) {
 
     spF0 = Math_SinS(sp9E);
     spEC = Math_CosS(sp9E);
-    temp_f20 = Math3D_Distance(&this->dyna.actor.world.pos, &this->dyna.actor.prevPos) +
+    temp_f20 = Math3D_Vec3f_DistXYZ(&this->dyna.actor.world.pos, &this->dyna.actor.prevPos) +
                (300.0f * this->dyna.actor.scale.z) + arg2;
     temp_f24 = temp_f20 * spF0;
     temp_f26 = temp_f20 * spEC;
@@ -459,7 +459,7 @@ s32 func_80A24118(ObjIceblock* this, PlayState* play, f32 arg2, Vec3f* arg3) {
         spD0.y = spDC.y;
         spD0.z = temp_f26 + spDC.z;
 
-        if (BgCheck_EntityLineTest3(&play->colCtx, &spDC, &spD0, &spB8, &spA8, true, false, false, true, &spAC,
+        if (BgCheck_EntityLineTest3(&play->colCtx, &spDC, &spD0, &spB8, &spA8, true, false, false, true, &bgId,
                                     &this->dyna.actor, 0.0f)) {
             temp_f20 = Math3D_Vec3fDistSq(&spDC, &spB8);
             if (temp_f20 < phi_f20) {
@@ -496,7 +496,7 @@ s32 func_80A243E0(ObjIceblock* this, PlayState* play, Vec3f* arg0) {
     Vec3f spC8;
     s16 temp_s6;
     f32 temp_f28;
-    s32 spBC;
+    s32 bgId;
     CollisionPoly* spB8;
     s32 ret;
     f32 temp_f30;
@@ -511,7 +511,7 @@ s32 func_80A243E0(ObjIceblock* this, PlayState* play, Vec3f* arg0) {
     sp100 = Math_SinS(temp_s6);
     spFC = Math_CosS(temp_s6);
 
-    temp_f0 = ((Math3D_Distance(&this->dyna.actor.world.pos, &this->dyna.actor.prevPos) +
+    temp_f0 = ((Math3D_Vec3f_DistXYZ(&this->dyna.actor.world.pos, &this->dyna.actor.prevPos) +
                 (300.0f * this->dyna.actor.scale.z)) +
                2.0f);
     temp_f12 = -temp_f0;
@@ -535,7 +535,7 @@ s32 func_80A243E0(ObjIceblock* this, PlayState* play, Vec3f* arg0) {
         spE0.y = spEC.y;
         spE0.z = temp_f30 + spEC.z;
 
-        if (BgCheck_EntityLineTest3(&play->colCtx, &spEC, &spE0, &spC8, &spB8, true, false, false, true, &spBC,
+        if (BgCheck_EntityLineTest3(&play->colCtx, &spEC, &spE0, &spC8, &spB8, true, false, false, true, &bgId,
                                     &this->dyna.actor, 0.0f)) {
             temp_f12 = Math3D_Vec3fDistSq(&spEC, &spC8);
             if (temp_f12 < phi_f22) {
@@ -575,7 +575,7 @@ s32 func_80A246D8(ObjIceblock* this, PlayState* play, Vec3f* arg2) {
     Vec3f spB4;
     Vec3f spA8;
     Vec3f sp9C;
-    s32 sp98;
+    s32 bgId;
     CollisionPoly* sp94;
     ObjIceblock* temp_v0;
     f32 temp_f20 = (this->dyna.actor.scale.z * 300.0f) + 2.0f;
@@ -599,10 +599,10 @@ s32 func_80A246D8(ObjIceblock* this, PlayState* play, Vec3f* arg2) {
             spB4.y = spC0.y;
             spB4.z = (Math_CosS(phi_s3) * temp_f20) + spC0.z;
 
-            if (BgCheck_EntityLineTest3(&play->colCtx, &spC0, &spB4, &sp9C, &sp94, true, false, false, true, &sp98,
+            if (BgCheck_EntityLineTest3(&play->colCtx, &spC0, &spB4, &sp9C, &sp94, true, false, false, true, &bgId,
                                         &this->dyna.actor, 0.0f)) {
                 ret = true;
-                temp_v0 = (ObjIceblock*)DynaPoly_GetActor(&play->colCtx, sp98);
+                temp_v0 = (ObjIceblock*)DynaPoly_GetActor(&play->colCtx, bgId);
                 if ((temp_v0 != NULL) && (temp_v0->dyna.actor.id == ACTOR_OBJ_ICEBLOCK) && (temp_v0->unk_2B0 == 3)) {
                     temp_v0->unk_1B0 |= 0x80;
                 }
@@ -1223,7 +1223,7 @@ void func_80A25FD4(ObjIceblock* this, PlayState* play) {
 }
 
 void func_80A260E8(ObjIceblock* this) {
-    static f32 D_80A26FC0[] = { 14.0, -14.0, 14.0, -14.0 };
+    static f32 D_80A26FC0[] = { 14.0f, -14.0f, 14.0f, -14.0f };
 
     this->unk_260 = D_80A26FC0[this->unk_26C];
     this->unk_25C = 0.0f;
@@ -1448,7 +1448,7 @@ void ObjIceblock_Update(Actor* thisx, PlayState* play) {
         }
     }
 
-    if (((this->collider.base.acFlags & AC_HIT) && (this->collider.info.acHitInfo->toucher.dmgFlags & 0x800)) ||
+    if (((this->collider.base.acFlags & AC_HIT) && (this->collider.elem.acHitElem->atDmgInfo.dmgFlags & 0x800)) ||
         (this->meltTimer == 0)) {
         this->meltTimer = -1;
         this->unk_2B0 = 4;
@@ -1488,7 +1488,7 @@ void ObjIceblock_Update(Actor* thisx, PlayState* play) {
         if (ICEBLOCK_GET_ICEBERG(&this->dyna.actor) && (this->unk_2B4 > 0.0f)) {
             this->collider.base.ocFlags1 &= ~OC1_NO_PUSH;
             this->collider.base.ocFlags1 |= (OC1_TYPE_2 | OC1_TYPE_1 | OC1_TYPE_PLAYER);
-            this->collider.info.bumper.dmgFlags |=
+            this->collider.elem.acDmgInfo.dmgFlags |=
                 (0x800000 | 0x400000 | 0x10000 | 0x2000 | 0x1000 | 0x800 | 0x200 | 0x100 | 0x80 | 0x20 | 0x10 | 0x2);
             CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
         }
@@ -1539,7 +1539,7 @@ void func_80A26BF8(ObjIceblock* this, PlayState* play) {
                                      this->dyna.actor.world.pos.z, &sp70);
         Matrix_Scale(ptr->unk_04, ptr->unk_08, ptr->unk_0C, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, gIceBlockCubeDL);
     }
 
@@ -1549,7 +1549,7 @@ void func_80A26BF8(ObjIceblock* this, PlayState* play) {
                                      this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
         Matrix_Scale(this->unk_2B4, this->unk_2B4, this->unk_2B4, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, gIceBlockIceBergDL);
     }
 

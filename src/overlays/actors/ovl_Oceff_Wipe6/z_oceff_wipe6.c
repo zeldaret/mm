@@ -6,7 +6,7 @@
 
 #include "z_oceff_wipe6.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
 #define THIS ((OceffWipe6*)thisx)
 
@@ -15,7 +15,7 @@ void OceffWipe6_Destroy(Actor* thisx, PlayState* play);
 void OceffWipe6_Update(Actor* thisx, PlayState* play);
 void OceffWipe6_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Oceff_Wipe6_InitVars = {
+ActorProfile Oceff_Wipe6_Profile = {
     /**/ ACTOR_OCEFF_WIPE6,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -27,7 +27,7 @@ ActorInit Oceff_Wipe6_InitVars = {
     /**/ OceffWipe6_Draw,
 };
 
-#include "overlays/ovl_Oceff_Wipe6/ovl_Oceff_Wipe6.c"
+#include "assets/overlays/ovl_Oceff_Wipe6/ovl_Oceff_Wipe6.c"
 
 void OceffWipe6_Init(Actor* thisx, PlayState* play) {
     OceffWipe6* this = THIS;
@@ -90,7 +90,7 @@ void OceffWipe6_Draw(Actor* thisx, PlayState* play) {
     Matrix_ReplaceRotation(&play->billboardMtxF);
     Matrix_RotateXS(0x708, MTXMODE_APPLY);
     Matrix_Translate(0.0f, 0.0f, -z, MTXMODE_APPLY);
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
     AnimatedMat_Draw(play, ovl_Oceff_Wipe6_Matanimheader_000338);
     gSPDisplayList(POLY_XLU_DISP++, gOceff6DL);
 

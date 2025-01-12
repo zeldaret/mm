@@ -1,8 +1,8 @@
 #include "z64effect_ss.h"
 
 #include "tha.h"
-#include "loadfragment.h"
-#include "z64malloc.h"
+#include "libu64/loadfragment.h"
+#include "zelda_arena.h"
 #include "global.h"
 
 void EffectSS_ResetEntry(EffectSs* particle);
@@ -159,7 +159,7 @@ s32 EffectSS_FindFreeSpace(s32 priority, s32* tableEntry) {
 void EffectSS_Copy(PlayState* play, EffectSs* effectsSs) {
     s32 index;
 
-    if (FrameAdvance_IsEnabled(&play->state) != true) {
+    if (FrameAdvance_IsEnabled(play) != true) {
         if (EffectSS_FindFreeSpace(effectsSs->priority, &index) == 0) {
             sEffectSsInfo.searchIndex = index + 1;
             sEffectSsInfo.dataTable[index] = *effectsSs;
@@ -171,7 +171,7 @@ void EffectSs_Spawn(PlayState* play, s32 type, s32 priority, void* initData) {
     s32 index;
     u32 overlaySize;
     EffectSsOverlay* overlayEntry = &gParticleOverlayTable[type];
-    EffectSsInit* initInfo;
+    EffectSsProfile* profile;
 
     if (EffectSS_FindFreeSpace(priority, &index) != 0) {
         // Abort because we couldn't find a suitable slot to add this effect in
@@ -182,7 +182,7 @@ void EffectSs_Spawn(PlayState* play, s32 type, s32 priority, void* initData) {
     overlaySize = (uintptr_t)overlayEntry->vramEnd - (uintptr_t)overlayEntry->vramStart;
 
     if (overlayEntry->vramStart == NULL) {
-        initInfo = overlayEntry->initInfo;
+        profile = overlayEntry->profile;
     } else {
         if (overlayEntry->loadedRamAddr == NULL) {
             overlayEntry->loadedRamAddr = ZeldaArena_MallocR(overlaySize);
@@ -191,25 +191,25 @@ void EffectSs_Spawn(PlayState* play, s32 type, s32 priority, void* initData) {
                 return;
             }
 
-            Overlay_Load(overlayEntry->vromStart, overlayEntry->vromEnd, overlayEntry->vramStart, overlayEntry->vramEnd,
-                         overlayEntry->loadedRamAddr);
+            Overlay_Load(overlayEntry->file.vromStart, overlayEntry->file.vromEnd, overlayEntry->vramStart,
+                         overlayEntry->vramEnd, overlayEntry->loadedRamAddr);
         }
 
-        initInfo = (void*)(uintptr_t)((overlayEntry->initInfo != NULL)
-                                          ? (void*)((uintptr_t)overlayEntry->initInfo -
-                                                    (intptr_t)((uintptr_t)overlayEntry->vramStart -
-                                                               (uintptr_t)overlayEntry->loadedRamAddr))
-                                          : NULL);
+        profile = (void*)(uintptr_t)((overlayEntry->profile != NULL)
+                                         ? (void*)((uintptr_t)overlayEntry->profile -
+                                                   (intptr_t)((uintptr_t)overlayEntry->vramStart -
+                                                              (uintptr_t)overlayEntry->loadedRamAddr))
+                                         : NULL);
     }
 
-    if (initInfo->init != NULL) {
+    if (profile->init != NULL) {
         // Delete the previous effect in the slot, in case the slot wasn't free
         EffectSS_Delete(&sEffectSsInfo.dataTable[index]);
 
         sEffectSsInfo.dataTable[index].type = type;
         sEffectSsInfo.dataTable[index].priority = priority;
 
-        if (initInfo->init(play, index, &sEffectSsInfo.dataTable[index], initData) == 0) {
+        if (profile->init(play, index, &sEffectSsInfo.dataTable[index], initData) == 0) {
             EffectSS_ResetEntry(&sEffectSsInfo.dataTable[index]);
         }
     }

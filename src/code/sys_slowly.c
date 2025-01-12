@@ -11,7 +11,7 @@
 
 #include "slowly.h"
 #include "global.h"
-#include "stackcheck.h"
+#include "libu64/stackcheck.h"
 #include "z64thread.h"
 
 void Slowly_Main(SlowlyMgr* slowly) {

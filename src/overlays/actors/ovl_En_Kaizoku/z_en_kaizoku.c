@@ -5,10 +5,12 @@
  */
 
 #include "z_en_kaizoku.h"
+#include "attributes.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/actors/ovl_En_Arrow/z_en_arrow.h"
+#include "overlays/effects/ovl_Effect_Ss_Hitmark/z_eff_ss_hitmark.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_100000)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_100000)
 
 #define THIS ((EnKaizoku*)thisx)
 
@@ -162,7 +164,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, KAIZOKU_DMGEFF_ALWAYS_HIT),
 };
 
-ActorInit En_Kaizoku_InitVars = {
+ActorProfile En_Kaizoku_Profile = {
     /**/ ACTOR_EN_KAIZOKU,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -176,7 +178,7 @@ ActorInit En_Kaizoku_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -184,11 +186,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK4,
+        ELEM_MATERIAL_UNK4,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON | BUMP_HOOKABLE,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON | ACELEM_HOOKABLE,
         OCELEM_ON,
     },
     { 20, 50, 0, { 0, 0, 0 } },
@@ -196,7 +198,7 @@ static ColliderCylinderInit sCylinderInit = {
 
 static ColliderQuadInit sQuadInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_PLAYER | AT_TYPE_ENEMY,
         AC_NONE,
         OC1_NONE,
@@ -204,11 +206,11 @@ static ColliderQuadInit sQuadInit = {
         COLSHAPE_QUAD,
     },
     {
-        ELEMTYPE_UNK4,
+        ELEM_MATERIAL_UNK4,
         { 0xF7CFFFFF, 0x00, 0x00 },
         { 0x00000000, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL | TOUCH_UNK7,
-        BUMP_NONE,
+        ATELEM_ON | ATELEM_SFX_NORMAL | ATELEM_UNK7,
+        ACELEM_NONE,
         OCELEM_NONE,
     },
     { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
@@ -265,7 +267,7 @@ void EnKaizoku_Init(Actor* thisx, PlayState* play) {
     EffectBlureInit1 blureInit;
 
     this->picto.actor.hintId = TATL_HINT_ID_PIRATE;
-    this->picto.actor.targetMode = TARGET_MODE_3;
+    this->picto.actor.attentionRangeType = ATTENTION_RANGE_3;
     this->picto.actor.colChkInfo.mass = 80;
     ActorShape_Init(&this->picto.actor.shape, 0.0f, ActorShadow_DrawFeet, 0.0f);
     this->textType = KAIZOKU_GET_TYPE(this);
@@ -297,8 +299,8 @@ void EnKaizoku_Init(Actor* thisx, PlayState* play) {
     blureInit.calcMode = 2;
     Effect_Add(play, &this->blureIndex, EFFECT_BLURE1, 0, 0, &blureInit);
     Actor_SetScale(&this->picto.actor, 0.0125f);
-    this->picto.actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
-    this->picto.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->picto.actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
+    this->picto.actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     if (this->switchFlag == KAIZOKU_SWITCH_FLAG_NONE) {
         this->switchFlag = SWITCH_FLAG_NONE;
     }
@@ -512,7 +514,7 @@ void EnKaizoku_WaitForApproach(EnKaizoku* this, PlayState* play) {
             this->picto.actor.world.pos.z = this->picto.actor.home.pos.z;
             Message_StartTextbox(play, sKaizokuTextIds[nextTextId], &this->picto.actor);
             this->textidOffset++; // KAIZOKU_COVERSATION_INTRO_2
-            this->picto.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+            this->picto.actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
             player->actor.shape.rot.y = player->actor.world.rot.y =
                 Math_Vec3f_Yaw(&player->actor.world.pos, &this->picto.actor.world.pos);
             Math_Vec3f_Copy(&this->subCamEye, &this->subCamEyeTarget);
@@ -522,7 +524,7 @@ void EnKaizoku_WaitForApproach(EnKaizoku* this, PlayState* play) {
             this->cutsceneTimer = 0;
             Audio_SetMainBgmVolume(0, 0xA);
             this->cutsceneState++;
-            // fallthrough
+            FALLTHROUGH;
         case 1: // try message lock to player
             player->actor.shape.rot.y = player->actor.world.rot.y =
                 Math_Vec3f_Yaw(&player->actor.world.pos, &this->picto.actor.world.pos);
@@ -628,8 +630,8 @@ void EnKaizoku_WaitForApproach(EnKaizoku* this, PlayState* play) {
                 this->cutsceneState = 0;
                 this->subCamId = SUB_CAM_ID_DONE;
                 this->picto.actor.flags &= ~ACTOR_FLAG_100000;
-                this->picto.actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
-                this->picto.actor.flags |= ACTOR_FLAG_TARGETABLE;
+                this->picto.actor.flags &= ~ACTOR_FLAG_LOCK_ON_DISABLED;
+                this->picto.actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
                 EnKaizoku_SetupReady(this);
             }
             break;
@@ -692,7 +694,7 @@ void EnKaizoku_SetupLoss(EnKaizoku* this, PlayState* play) {
     Player_SetCsActionWithHaltedActors(play, &this->picto.actor, PLAYER_CSACTION_96);
     this->subCamId = CutsceneManager_GetCurrentSubCamId(this->picto.actor.csId);
     this->combatTimer = 30;
-    this->picto.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->picto.actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->cutsceneTimer = 0;
     this->cutsceneState = 0;
     this->dontUpdateSkel = false;
@@ -933,7 +935,7 @@ void EnKaizoku_Ready(EnKaizoku* this, PlayState* play) {
             this->picto.actor.shape.rot.y = this->picto.actor.world.rot.y = this->picto.actor.yawTowardsPlayer;
             EnKaizoku_SetupCircle(this);
         } else if (Actor_IsFacingPlayer(&this->picto.actor, 0xBB8)) {
-            if ((this->picto.actor.xzDistToPlayer < 400.0f && this->picto.actor.xzDistToPlayer > 150.0f) &&
+            if ((this->picto.actor.xzDistToPlayer < 400.0f) && (this->picto.actor.xzDistToPlayer > 150.0f) &&
                 (Rand_ZeroOne() < 0.7f)) {
                 if ((Rand_ZeroOne() > 0.5f) || (ABS_ALT(angleToLink) < 0x3000)) {
                     EnKaizoku_SetupRollForward(this);
@@ -1099,7 +1101,7 @@ void EnKaizoku_Block(EnKaizoku* this, PlayState* play) {
             EnKaizoku_SetupSpinDodge(this, play);
         } else if (!EnKaizoku_DodgeRanged(this, play)) {
             if (!(play->gameplayFrames & 1)) {
-                if (this->picto.actor.xzDistToPlayer < 100.0f && Rand_ZeroOne() > 0.7f) {
+                if ((this->picto.actor.xzDistToPlayer < 100.0f) && (Rand_ZeroOne() > 0.7f)) {
                     this->bodyCollider.base.acFlags &= ~AC_HARD;
                     EnKaizoku_SetupJump(this);
                 } else {
@@ -1120,9 +1122,9 @@ void EnKaizoku_SetupJump(EnKaizoku* this) {
     this->picto.actor.velocity.y = 15.0f;
     Actor_PlaySfx(&this->picto.actor, NA_SE_EN_TEKU_JUMP);
     this->picto.actor.world.rot.y = this->picto.actor.shape.rot.y;
-    this->bodyCollider.info.elemType = ELEMTYPE_UNK4;
-    this->bodyCollider.base.colType = COLTYPE_NONE;
-    this->swordCollider.info.elemType = ELEMTYPE_UNK4;
+    this->bodyCollider.elem.elemMaterial = ELEM_MATERIAL_UNK4;
+    this->bodyCollider.base.colMaterial = COL_MATERIAL_NONE;
+    this->swordCollider.elem.elemMaterial = ELEM_MATERIAL_UNK4;
     this->action = KAIZOKU_ACTION_JUMP;
     this->actionFunc = EnKaizoku_Jump;
 }
@@ -1150,9 +1152,9 @@ void EnKaizoku_Jump(EnKaizoku* this, PlayState* play) {
     this->dontUpdateSkel = false;
     if ((curFrame >= this->animEndFrame) &&
         (this->picto.actor.bgCheckFlags & (BGCHECKFLAG_GROUND | BGCHECKFLAG_GROUND_TOUCH))) {
-        this->bodyCollider.info.elemType = ELEMTYPE_UNK1;
-        this->bodyCollider.base.colType = COLTYPE_HIT3;
-        this->swordCollider.info.elemType = ELEMTYPE_UNK2;
+        this->bodyCollider.elem.elemMaterial = ELEM_MATERIAL_UNK1;
+        this->bodyCollider.base.colMaterial = COL_MATERIAL_HIT3;
+        this->swordCollider.elem.elemMaterial = ELEM_MATERIAL_UNK2;
         this->picto.actor.shape.rot.x = 0;
         this->picto.actor.world.rot.y = this->picto.actor.shape.rot.y = this->picto.actor.yawTowardsPlayer;
         this->picto.actor.speed = 0.0f;
@@ -1166,9 +1168,9 @@ void EnKaizoku_SetupRollBack(EnKaizoku* this) {
     EnKaizoku_ChangeAnim(this, KAIZOKU_ANIM_FLIP);
     this->picto.actor.speed = -8.0f;
     Actor_PlaySfx(&this->picto.actor, NA_SE_EN_TEKU_JUMP);
-    this->bodyCollider.info.elemType = ELEMTYPE_UNK4;
-    this->bodyCollider.base.colType = COLTYPE_NONE;
-    this->swordCollider.info.elemType = ELEMTYPE_UNK4;
+    this->bodyCollider.elem.elemMaterial = ELEM_MATERIAL_UNK4;
+    this->bodyCollider.base.colMaterial = COL_MATERIAL_NONE;
+    this->swordCollider.elem.elemMaterial = ELEM_MATERIAL_UNK4;
     this->action = KAIZOKU_ACTION_ROLL_BACK;
     this->actionFunc = EnKaizoku_RollBack;
     this->picto.actor.shape.rot.y = this->picto.actor.world.rot.y = this->picto.actor.yawTowardsPlayer;
@@ -1237,7 +1239,7 @@ void EnKaizoku_Slash(EnKaizoku* this, PlayState* play2) {
                 this->lookTimer = 20;
             }
         } else {
-            if (Rand_ZeroOne() > 0.7f || this->picto.actor.xzDistToPlayer >= 120.0f) {
+            if ((Rand_ZeroOne() > 0.7f) || (this->picto.actor.xzDistToPlayer >= 120.0f)) {
                 EnKaizoku_SetupReady(this);
                 return;
             }
@@ -1678,7 +1680,7 @@ void EnKaizoku_Damaged(EnKaizoku* this, PlayState* play) {
         }
 
         if ((this->picto.actor.xzDistToPlayer <= 65.0f) && ((play->gameplayFrames % 8) != 0)) {
-            this->swordCollider.info.elemType = ELEMTYPE_UNK2;
+            this->swordCollider.elem.elemMaterial = ELEM_MATERIAL_UNK2;
             EnKaizoku_SetupSlash(this);
         } else {
             EnKaizoku_SetupRollBack(this);
@@ -1705,8 +1707,8 @@ void EnKaizoku_SetupDefeatKnockdown(EnKaizoku* this, PlayState* play) {
     Player_SetCsActionWithHaltedActors(play, &this->picto.actor, PLAYER_CSACTION_123);
     Enemy_StartFinishingBlow(play, &this->picto.actor);
     Actor_PlaySfx(&this->picto.actor, NA_SE_EN_PIRATE_DEAD);
-    this->picto.actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
-    this->picto.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->picto.actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
+    this->picto.actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->picto.actor.flags &= ~ACTOR_FLAG_400;
     this->cutsceneTimer = 0;
     this->cutsceneState = 0;
@@ -1787,9 +1789,9 @@ void EnKaizoku_UpdateDamage(EnKaizoku* this, PlayState* play) {
     s32 wasHit = false;
 
     if (gSaveContext.save.saveInfo.playerData.health <= 0x10) {
-        this->swordCollider.info.toucher.damage = 0;
+        this->swordCollider.elem.atDmgInfo.damage = 0;
     } else {
-        this->swordCollider.info.toucher.damage = 4;
+        this->swordCollider.elem.atDmgInfo.damage = 4;
     }
 
     if (!(this->swordCollider.base.atFlags & AT_BOUNCED) && (this->swordCollider.base.atFlags & AT_HIT)) {
@@ -1845,7 +1847,7 @@ void EnKaizoku_UpdateDamage(EnKaizoku* this, PlayState* play) {
     if ((this->bodyCollider.base.acFlags & AC_HIT) && (this->action > KAIZOKU_ACTION_HIDDEN) && (this->spinAttackState < 2) &&
         (this->action != KAIZOKU_ACTION_JUMP) && (this->action != KAIZOKU_ACTION_BLOCK) &&
         (this->action != KAIZOKU_ACTION_DAMAGED) && (this->action != KAIZOKU_ACTION_KNOCK_DOWN)) {
-        Actor_SetDropFlag(&this->picto.actor, &this->bodyCollider.info);
+        Actor_SetDropFlag(&this->picto.actor, &this->bodyCollider.elem);
         AudioSfx_StopByPosAndId(&this->picto.actor.projectedPos, NA_SE_EN_PIRATE_BREATH);
 
         switch (this->picto.actor.colChkInfo.damageEffect) {
@@ -1856,16 +1858,16 @@ void EnKaizoku_UpdateDamage(EnKaizoku* this, PlayState* play) {
                     this->colorFilterTimer = 40;
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_MEDIUM;
                 }
-                // fallthrough
+                FALLTHROUGH;
             case KAIZOKU_DMGEFF_STUNNED:
                 if (((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_SFX) &&
                      (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX)) ||
                     this->colorFilterTimer == 0) {
                     Actor_SetColorFilter(&this->picto.actor, COLORFILTER_COLORFLAG_BLUE, 120, COLORFILTER_BUFFLAG_OPA,
                                          40);
-                    this->bodyCollider.info.elemType = ELEMTYPE_UNK1;
-                    this->bodyCollider.base.colType = COLTYPE_HIT3;
-                    this->swordCollider.info.elemType = ELEMTYPE_UNK2;
+                    this->bodyCollider.elem.elemMaterial = ELEM_MATERIAL_UNK1;
+                    this->bodyCollider.base.colMaterial = COL_MATERIAL_HIT3;
+                    this->swordCollider.elem.elemMaterial = ELEM_MATERIAL_UNK2;
                     EnKaizoku_SetupStunned(this);
                 }
                 break;
@@ -1903,9 +1905,9 @@ void EnKaizoku_UpdateDamage(EnKaizoku* this, PlayState* play) {
                      (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX)) ||
                     (this->colorFilterTimer == 0)) {
                     Actor_ApplyDamage(&this->picto.actor);
-                    this->bodyCollider.info.elemType = ELEMTYPE_UNK1;
-                    this->bodyCollider.base.colType = COLTYPE_HIT3;
-                    this->swordCollider.info.elemType = ELEMTYPE_UNK4;
+                    this->bodyCollider.elem.elemMaterial = ELEM_MATERIAL_UNK1;
+                    this->bodyCollider.base.colMaterial = COL_MATERIAL_HIT3;
+                    this->swordCollider.elem.elemMaterial = ELEM_MATERIAL_UNK4;
                     this->colorFilterTimer = 80;
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_SFX;
                     this->drawDmgEffScale = 0.0f;
@@ -1947,9 +1949,9 @@ void EnKaizoku_UpdateDamage(EnKaizoku* this, PlayState* play) {
                 return;
             }
 
-            this->bodyCollider.info.elemType = ELEMTYPE_UNK1;
-            this->bodyCollider.base.colType = COLTYPE_HIT3;
-            this->swordCollider.info.elemType = ELEMTYPE_UNK4;
+            this->bodyCollider.elem.elemMaterial = ELEM_MATERIAL_UNK1;
+            this->bodyCollider.base.colMaterial = COL_MATERIAL_HIT3;
+            this->swordCollider.elem.elemMaterial = ELEM_MATERIAL_UNK4;
             Math_Vec3f_Copy(&bloodPos, &this->picto.actor.focus.pos);
             for (i = 0; i < 3; i++) {
                 bloodPos.y += Rand_ZeroFloat(20.0f);
@@ -1964,9 +1966,9 @@ void EnKaizoku_UpdateDamage(EnKaizoku* this, PlayState* play) {
             Vec3f pos;
             Player* player = GET_PLAYER(play);
 
-            pos.x = this->bodyCollider.info.bumper.hitPos.x;
-            pos.y = this->bodyCollider.info.bumper.hitPos.y;
-            pos.z = this->bodyCollider.info.bumper.hitPos.z;
+            pos.x = this->bodyCollider.elem.acDmgInfo.hitPos.x;
+            pos.y = this->bodyCollider.elem.acDmgInfo.hitPos.y;
+            pos.z = this->bodyCollider.elem.acDmgInfo.hitPos.z;
 
             if (player->transformation != PLAYER_FORM_HUMAN) {
                 player->pushedYaw = this->picto.actor.yawTowardsPlayer;
@@ -1975,7 +1977,7 @@ void EnKaizoku_UpdateDamage(EnKaizoku* this, PlayState* play) {
 
             this->bodyCollider.base.acFlags &= ~AC_HIT;
             Actor_PlaySfx(&this->picto.actor, NA_SE_IT_SHIELD_BOUND);
-            EffectSsHitmark_SpawnFixedScale(play, 3, &pos);
+            EffectSsHitmark_SpawnFixedScale(play, EFFECT_HITMARK_METAL, &pos);
             CollisionCheck_SpawnShieldParticlesMetal(play, &pos);
         }
     }

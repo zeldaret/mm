@@ -30,7 +30,7 @@
         <Texture Name="object_um_Tex_006D10" OutName="tex_006D10" Format="ci8" Width="32" Height="64" Offset="0x6D10" />
         <Texture Name="object_um_Tex_007510" OutName="tex_007510" Format="rgba16" Width="32" Height="32" Offset="0x7510" />
 
-        <!-- <Blob Name="object_um_Blob_007D10" Size="0x10" Offset="0x7D10" /> -->
+        <TextureAnimation Name="object_um_Matanimheader_007D10" Offset="0x7D10" /> <!-- Empty TexAnim -->
 
         <Collision Name="object_um_Colheader_007E20" Offset="0x7E20" />
         <Collision Name="object_um_Colheader_007F50" Offset="0x7F50" />

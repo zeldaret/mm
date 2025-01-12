@@ -2,7 +2,7 @@
 #define Z_EN_MA_YTO_H
 
 #include "global.h"
-#include "objects/object_ma2/object_ma2.h"
+#include "assets/objects/object_ma2/object_ma2.h"
 
 struct EnMaYto;
 

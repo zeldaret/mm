@@ -7,8 +7,9 @@
 #include "z_en_kendo_js.h"
 #include "overlays/actors/ovl_En_Maruta/z_en_maruta.h"
 
-#define FLAGS \
-    (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000 | ACTOR_FLAG_CANT_LOCK_ON)
+#define FLAGS                                                                                                \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_UPDATE_DURING_OCARINA | \
+     ACTOR_FLAG_LOCK_ON_DISABLED)
 
 #define THIS ((EnKendoJs*)thisx)
 
@@ -37,7 +38,7 @@ s32 EnKendoJs_MovePlayerToPos(PlayState* play, Vec3f targetPos);
 void func_80B279F0(EnKendoJs* this, PlayState* play, s32 arg2);
 void func_80B27A90(EnKendoJs* this, PlayState* play);
 
-ActorInit En_Kendo_Js_InitVars = {
+ActorProfile En_Kendo_Js_Profile = {
     /**/ ACTOR_EN_KENDO_JS,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -51,7 +52,7 @@ ActorInit En_Kendo_Js_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_NONE,
         OC1_ON | OC1_TYPE_ALL,
@@ -59,11 +60,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_NONE,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_NONE,
         OCELEM_ON,
     },
     { 18, 30, 0, { 0, 0, 0 } },
@@ -141,7 +142,7 @@ void EnKendoJs_Init(Actor* thisx, PlayState* play) {
         this->pathPoints = Lib_SegmentedToVirtual(path->points);
     }
 
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->actor.focus.pos = this->actor.world.pos;
     this->actor.focus.pos.y += 30.0f;
     this->actor.child = NULL;
@@ -266,6 +267,7 @@ void func_80B26758(EnKendoJs* this, PlayState* play) {
                 Audio_PlaySfx_MessageCancel();
                 Message_StartTextbox(play, 0x2717, &this->actor);
                 this->unk_288 = 0x2717;
+                break;
 
             default:
                 break;
@@ -355,6 +357,7 @@ void func_80B26AFC(EnKendoJs* this, PlayState* play) {
                 player->stateFlags1 &= ~PLAYER_STATE1_20;
                 func_80B26538(this);
             }
+            break;
 
         case TEXT_STATE_NONE:
         case TEXT_STATE_NEXT:
@@ -512,9 +515,9 @@ void func_80B27030(EnKendoJs* this, PlayState* play) {
     sp20.z += 200.0f;
 
     if (EnKendoJs_MovePlayerToPos(play, sp20)) {
-        this->actor.flags |= ACTOR_FLAG_10000;
+        this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
-            this->actor.flags &= ~ACTOR_FLAG_10000;
+            this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
             player->stateFlags1 &= ~PLAYER_STATE1_20;
             func_80B279F0(this, play, 0);
             Message_StartTextbox(play, 0x271A, &this->actor);
@@ -671,7 +674,7 @@ void func_80B276D8(EnKendoJs* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
         func_80B27760(this);
-    } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_63_20)) {
+    } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_SWORDSMANS_SCHOOL_HEART_PIECE)) {
         Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 800.0f, 100.0f);
     } else {
         Actor_OfferGetItem(&this->actor, play, GI_RUPEE_RED, 800.0f, 100.0f);
@@ -686,8 +689,8 @@ void func_80B27774(EnKendoJs* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
-        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_63_20)) {
-            SET_WEEKEVENTREG(WEEKEVENTREG_63_20);
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_SWORDSMANS_SCHOOL_HEART_PIECE)) {
+            SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_SWORDSMANS_SCHOOL_HEART_PIECE);
             Message_StartTextbox(play, 0x272F, &this->actor);
             this->unk_288 = 0x272F;
         } else {

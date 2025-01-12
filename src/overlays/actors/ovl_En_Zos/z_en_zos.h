@@ -2,7 +2,7 @@
 #define Z_EN_ZOS_H
 
 #include "global.h"
-#include "objects/object_zos/object_zos.h"
+#include "assets/objects/object_zos/object_zos.h"
 
 struct EnZos;
 

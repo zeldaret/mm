@@ -3,7 +3,7 @@
 
 #include "global.h"
 #include "overlays/actors/ovl_En_Sob1/z_en_sob1.h"
-#include "objects/object_bba/object_bba.h"
+#include "assets/objects/object_bba/object_bba.h"
 
 struct EnBaba;
 
@@ -34,14 +34,14 @@ typedef struct EnBaba {
     /* 0x1E4 */ Path* path;
     /* 0x1E8 */ s16 waypoint;
     /* 0x1EA */ UNK_TYPE1 unk1EA[0x1C];
-    /* 0x206 */ Vec3s jointTable[BBA_LIMB_MAX];
-    /* 0x272 */ Vec3s morphTable[BBA_LIMB_MAX];
+    /* 0x206 */ Vec3s jointTable[BOMB_SHOP_LADY_LIMB_MAX];
+    /* 0x272 */ Vec3s morphTable[BOMB_SHOP_LADY_LIMB_MAX];
     /* 0x2DE */ Vec3s trackTarget;
     /* 0x2E4 */ Vec3s headRot;
     /* 0x2EA */ Vec3s torsoRot;
     /* 0x2F0 */ UNK_TYPE1 unk2F0[0x12];
-    /* 0x302 */ s16 fidgetTableY[BBA_LIMB_MAX];
-    /* 0x326 */ s16 fidgetTableZ[BBA_LIMB_MAX];
+    /* 0x302 */ s16 fidgetTableY[BOMB_SHOP_LADY_LIMB_MAX];
+    /* 0x326 */ s16 fidgetTableZ[BOMB_SHOP_LADY_LIMB_MAX];
     /* 0x34A */ UNK_TYPE1 unk34A[0xBA];
     /* 0x404 */ s16 sakonDeadTimer;
     /* 0x406 */ UNK_TYPE1 unk406[4];

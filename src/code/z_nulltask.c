@@ -1,7 +1,6 @@
 #include "scheduler.h"
 
 #include "macros.h"
-#include "main.h"
 
 /**
  * Blocks the current thread until all queued scheduler tasks have completed.

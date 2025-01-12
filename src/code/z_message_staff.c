@@ -1,6 +1,7 @@
 #include "global.h"
 #include "message_data_fmt_staff.h"
 #include "message_data_static.h"
+#include "attributes.h"
 
 void Message_FindCreditsMessage(PlayState* play, u16 textId) {
     MessageContext* msgCtx = &play->msgCtx;
@@ -137,7 +138,7 @@ void Message_DrawTextCredits(PlayState* play, Gfx** gfxP) {
                     i = j - 1;
                     msgCtx->textDrawPos = i + 1;
                 }
-                // fallthrough
+                FALLTHROUGH;
             case MESSAGE_QUICKTEXT_DISABLE:
                 break;
 
@@ -259,7 +260,7 @@ void Message_DrawTextCredits(PlayState* play, Gfx** gfxP) {
                         Audio_PlaySfx(NA_SE_SY_MESSAGE_END);
                         Font_LoadMessageBoxEndIcon(font, 1);
                         if (play->csCtx.state == CS_STATE_IDLE) {
-                            func_8011552C(play, DO_ACTION_RETURN);
+                            Interface_SetAButtonDoAction(play, DO_ACTION_RETURN);
                         }
                     }
                 }
@@ -281,7 +282,7 @@ void Message_DrawTextCredits(PlayState* play, Gfx** gfxP) {
                     msgCtx->stateTimer = msgCtx->decodedBuffer.schar[++i];
                     Font_LoadMessageBoxEndIcon(font, 1);
                     if (play->csCtx.state == CS_STATE_IDLE) {
-                        func_8011552C(play, DO_ACTION_RETURN);
+                        Interface_SetAButtonDoAction(play, DO_ACTION_RETURN);
                     }
                 }
                 *gfxP = gfx;

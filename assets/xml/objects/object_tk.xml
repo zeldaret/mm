@@ -1,12 +1,12 @@
 ﻿<Root>
     <File Name="object_tk" Segment="6">
-        <Animation Name="object_tk_Anim_001144" Offset="0x1144" />
-        <Animation Name="object_tk_Anim_001FA8" Offset="0x1FA8" />
-        <Animation Name="object_tk_Anim_0020C8" Offset="0x20C8" />
-        <Animation Name="object_tk_Anim_0030A4" Offset="0x30A4" />
-        <Animation Name="object_tk_Anim_003724" Offset="0x3724" />
-        <Animation Name="object_tk_Anim_003B10" Offset="0x3B10" />
-        <Animation Name="object_tk_Anim_003FB8" Offset="0x3FB8" />
+        <Animation Name="object_tk_Anim_001144" Offset="0x1144" /> <!-- Original name is "tk_ana_hori" -->
+        <Animation Name="object_tk_Anim_001FA8" Offset="0x1FA8" /> <!-- Original name is "tk_aruku" -->
+        <Animation Name="object_tk_Anim_0020C8" Offset="0x20C8" /> <!-- Original name is "tk_furueru" -->
+        <Animation Name="object_tk_Anim_0030A4" Offset="0x30A4" /> <!-- Original name is "tk_matsu" -->
+        <Animation Name="object_tk_Anim_003724" Offset="0x3724" /> <!-- Original name is "tk_odoroku" -->
+        <Animation Name="object_tk_Anim_003B10" Offset="0x3B10" /> <!-- Original name is "tk_odorokuloop" -->
+        <Animation Name="object_tk_Anim_003FB8" Offset="0x3FB8" /> <!-- Original name is "tk_run" -->
         <Texture Name="object_tk_TLUT_003FD0" OutName="tlut_003FD0" Format="rgba16" Width="16" Height="16" Offset="0x3FD0" />
         <Texture Name="object_tk_Tex_0041D0" OutName="tex_0041D0" Format="ci8" Width="8" Height="8" Offset="0x41D0" />
         <Texture Name="object_tk_Tex_004210" OutName="tex_004210" Format="ci8" Width="8" Height="8" Offset="0x4210" />
@@ -17,7 +17,8 @@
         <Texture Name="object_tk_Tex_005390" OutName="tex_005390" Format="rgba16" Width="32" Height="32" Offset="0x5390" />
         <Texture Name="object_tk_Tex_005B90" OutName="tex_005B90" Format="ci8" Width="16" Height="16" Offset="0x5B90" />
         <Texture Name="object_tk_Tex_005C90" OutName="tex_005C90" Format="ci8" Width="16" Height="16" Offset="0x5C90" />
-        <!-- <Blob Name="object_tk_Blob_005D90" Size="0x180" Offset="0x5D90" /> -->
+        <Texture Name="object_tk_Tex_005D90" OutName="tex_005D90" Format="ci8" Width="16" Height="16" Offset="0x5D90" TlutOffset="0x3FD0" />
+        <Texture Name="object_tk_Tex_005E90" OutName="tex_005E90" Format="ci8" Width="8" Height="16" Offset="0x5E90" TlutOffset="0x3FD0" />
         <Texture Name="object_tk_Tex_005F10" OutName="tex_005F10" Format="ci8" Width="16" Height="16" Offset="0x5F10" />
         <DList Name="object_tk_DL_008870" Offset="0x8870" />
         <DList Name="object_tk_DL_0089B0" Offset="0x89B0" />
@@ -34,7 +35,7 @@
         <DList Name="object_tk_DL_009F88" Offset="0x9F88" />
         <DList Name="object_tk_DL_00A068" Offset="0xA068" />
         <DList Name="object_tk_DL_00A220" Offset="0xA220" />
-        <!-- <Blob Name="object_tk_Blob_00A300" Size="0x50" Offset="0xA300" /> -->
+        <Texture Name="object_tk_TLUT_00A300" OutName="tlut_00A300" Format="rgba16" Width="40" Height="1" Offset="0xA300" />
         <Texture Name="object_tk_Tex_00A350" OutName="tex_00A350" Format="ci8" Width="16" Height="16" Offset="0xA350" />
         <Texture Name="object_tk_Tex_00A450" OutName="tex_00A450" Format="ci8" Width="8" Height="16" Offset="0xA450" />
         <Texture Name="object_tk_Tex_00A4D0" OutName="tex_00A4D0" Format="i8" Width="8" Height="8" Offset="0xA4D0" />

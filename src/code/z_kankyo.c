@@ -60,12 +60,14 @@ u8 sGameOverLightsIntensity;
 Gfx* sSkyboxStarsDList;
 
 #include "z64environment.h"
+
+#include "gfxalloc.h"
 #include "global.h"
+#include "string.h"
 #include "sys_cfb.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
-#include "objects/gameplay_field_keep/gameplay_field_keep.h"
-#include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
-#include "libc/string.h"
+
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_field_keep/gameplay_field_keep.h"
 
 // Data
 f32 sSandstormLerpScale = 0.0f;
@@ -1168,8 +1170,7 @@ void Environment_WipeRumbleRequests(void) {
 }
 
 void Environment_UpdateSkyboxRotY(PlayState* play) {
-    if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE) &&
-        ((play->skyboxId == SKYBOX_NORMAL_SKY) || (play->skyboxId == SKYBOX_3))) {
+    if (!IS_PAUSED(&play->pauseCtx) && ((play->skyboxId == SKYBOX_NORMAL_SKY) || (play->skyboxId == SKYBOX_3))) {
         play->skyboxCtx.rot.y -= R_TIME_SPEED * 1.0e-4f;
     }
 }
@@ -1204,7 +1205,7 @@ void Environment_UpdateTime(PlayState* play, EnvironmentContext* envCtx, PauseCo
             (msgCtx->currentTextId == 0x140C) ||
             ((msgCtx->currentTextId >= 0x100) && (msgCtx->currentTextId <= 0x200)) ||
             (gSaveContext.gameMode == GAMEMODE_END_CREDITS)) {
-            if (!FrameAdvance_IsEnabled(&play->state) &&
+            if (!FrameAdvance_IsEnabled(play) &&
                 ((play->transitionMode == TRANS_MODE_OFF) || (gSaveContext.gameMode != GAMEMODE_NORMAL))) {
                 if (play->transitionTrigger == TRANS_TRIGGER_OFF) {
                     if ((CutsceneManager_GetCurrentCsId() == CS_ID_NONE) && !Play_InCsMode(play)) {
@@ -1674,27 +1675,27 @@ void func_800F88C4(u16 weekEventFlag) {
 }
 
 void func_800F8970(void) {
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_27_40) && (SCHEDULE_TIME_NOW >= SCHEDULE_TIME(9, 31))) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_27_40) && (SCRIPT_TIME_NOW >= SCRIPT_TIME(9, 31))) {
         SET_WEEKEVENTREG(WEEKEVENTREG_27_40);
         func_800F88C4(WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_SOUTH_UPPER_CLOCKTOWN);
     }
 
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_27_80) && (SCHEDULE_TIME_NOW >= SCHEDULE_TIME(10, 3))) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_27_80) && (SCRIPT_TIME_NOW >= SCRIPT_TIME(10, 3))) {
         SET_WEEKEVENTREG(WEEKEVENTREG_27_80);
         func_800F88C4(WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_NORTH_CLOCKTOWN);
     }
 
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_28_01) && (SCHEDULE_TIME_NOW >= SCHEDULE_TIME(10, 35))) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_28_01) && (SCRIPT_TIME_NOW >= SCRIPT_TIME(10, 35))) {
         SET_WEEKEVENTREG(WEEKEVENTREG_28_01);
         func_800F88C4(WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_EAST_UPPER_CLOCKTOWN);
     }
 
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_28_02) && (SCHEDULE_TIME_NOW >= SCHEDULE_TIME(10, 53))) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_28_02) && (SCRIPT_TIME_NOW >= SCRIPT_TIME(10, 53))) {
         SET_WEEKEVENTREG(WEEKEVENTREG_28_02);
         func_800F88C4(WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_EAST_LOWER_CLOCKTOWN);
     }
 
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_28_04) && (SCHEDULE_TIME_NOW >= SCHEDULE_TIME(11, 25))) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_28_04) && (SCRIPT_TIME_NOW >= SCRIPT_TIME(11, 25))) {
         SET_WEEKEVENTREG(WEEKEVENTREG_28_04);
         func_800F88C4(WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_SOUTH_LOWER_CLOCKTOWN);
     }
@@ -1729,7 +1730,7 @@ void Environment_UpdatePostmanEvents(PlayState* play) {
         CLEAR_WEEKEVENTREG(WEEKEVENTREG_28_04);
     }
 
-    if ((SCHEDULE_TIME_NOW < SCHEDULE_TIME(9, 0)) || (SCHEDULE_TIME_NOW > SCHEDULE_TIME(12, 0))) {
+    if ((SCRIPT_TIME_NOW < SCRIPT_TIME(9, 0)) || (SCRIPT_TIME_NOW > SCRIPT_TIME(12, 0))) {
         CLEAR_WEEKEVENTREG(WEEKEVENTREG_90_08);
     }
 
@@ -1738,14 +1739,14 @@ void Environment_UpdatePostmanEvents(PlayState* play) {
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_ROOM_KEY) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_55_02)) {
         if (((void)0, gSaveContext.save.day) >= 2) {
             SET_WEEKEVENTREG(WEEKEVENTREG_55_02);
-        } else if ((((void)0, gSaveContext.save.day) == 1) && (SCHEDULE_TIME_NOW >= SCHEDULE_TIME(16, 30))) {
+        } else if ((((void)0, gSaveContext.save.day) == 1) && (SCRIPT_TIME_NOW >= SCRIPT_TIME(16, 30))) {
             SET_WEEKEVENTREG(WEEKEVENTREG_55_02);
         }
     }
 
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_90_01)) {
         temp_a2_2 = CURRENT_TIME - D_801F4E78;
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_89_40) && ((u16)SCHEDULE_TIME_NOW >= (u16)SCHEDULE_TIME(5, 0))) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_89_40) && ((u16)SCRIPT_TIME_NOW >= (u16)SCRIPT_TIME(5, 0))) {
             SET_WEEKEVENTREG(WEEKEVENTREG_90_01);
         } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_89_08) && (temp_a2_2 >= CLOCK_TIME(0, 23))) {
             SET_WEEKEVENTREG(WEEKEVENTREG_89_40);
@@ -1797,7 +1798,7 @@ void Environment_DrawSun(PlayState* play) {
                 gDPSetEnvColor(POLY_OPA_DISP++, 180, (u8)(sSunColor * 255.0f), (u8)(sSunColor * 200.0f), sSunEnvAlpha);
             }
             Matrix_Scale(sSunScale, sSunScale, sSunScale, MTXMODE_APPLY);
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_LOAD);
+            MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
             Gfx_SetupDL54_Opa(play->state.gfxCtx);
             gSPDisplayList(POLY_OPA_DISP++, gSunDL);
         }
@@ -1880,7 +1881,7 @@ void Environment_DrawLensFlare(PlayState* play, EnvironmentContext* envCtx, View
 
     OPEN_DISPS(gfxCtx);
 
-    dist = Math3D_Distance(&pos, &view->eye) / 12.0f;
+    dist = Math3D_Vec3f_DistXYZ(&pos, &view->eye) / 12.0f;
 
     // compute a unit vector in the look direction
     tempX = view->at.x - view->eye.x;
@@ -1930,8 +1931,8 @@ void Environment_DrawLensFlare(PlayState* play, EnvironmentContext* envCtx, View
             if (sSunDepthTestY < 0) {
                 sSunDepthTestY = 0;
             }
-            if (sSunScreenDepth != GPACK_ZDZ(G_MAXFBZ, 0) || screenPos.x < 0.0f || screenPos.y < 0.0f ||
-                screenPos.x > SCREEN_WIDTH || screenPos.y > SCREEN_HEIGHT) {
+            if ((sSunScreenDepth != GPACK_ZDZ(G_MAXFBZ, 0)) || (screenPos.x < 0.0f) || (screenPos.y < 0.0f) ||
+                (screenPos.x > SCREEN_WIDTH) || (screenPos.y > SCREEN_HEIGHT)) {
                 isOffScreen = true;
             }
         }
@@ -1976,7 +1977,7 @@ void Environment_DrawLensFlare(PlayState* play, EnvironmentContext* envCtx, View
             POLY_XLU_DISP = Gfx_SetupDL65_NoCD(POLY_XLU_DISP++);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, sLensFlareColors[i].r, sLensFlareColors[i].g, sLensFlareColors[i].b,
                             alpha * envCtx->lensFlareAlphaScale);
-            mtx = Matrix_NewMtx(gfxCtx);
+            mtx = Matrix_Finalize(gfxCtx);
             if (mtx != NULL) {
                 gSPMatrix(POLY_XLU_DISP++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                 gDPSetCombineLERP(POLY_XLU_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE,
@@ -2120,7 +2121,7 @@ void Environment_DrawRainImpl(PlayState* play, View* view, GraphicsContext* gfxC
         Matrix_RotateYS(yaw + (s16)(i << 5), MTXMODE_APPLY);
         Matrix_RotateXS(pitch + (s16)(i << 5), MTXMODE_APPLY);
         Matrix_Scale(0.3f, 1.0f, 0.3f, MTXMODE_APPLY);
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, gFallingRainDropDL);
     }
 
@@ -2137,7 +2138,7 @@ void Environment_DrawRainImpl(PlayState* play, View* view, GraphicsContext* gfxC
                              (Environment_RandCentered() * 220.0f) + spE0, MTXMODE_NEW);
             scale = (Rand_ZeroOne() * 0.05f) + 0.05f;
             Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, gfxCtx);
             gSPDisplayList(POLY_XLU_DISP++, gEffShockwaveDL);
         }
     }
@@ -2409,7 +2410,7 @@ void Environment_DrawLightning(PlayState* play, s32 unused) {
             Matrix_Scale(22.0f, 100.0f, 22.0f, MTXMODE_APPLY);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 128);
             gDPSetEnvColor(POLY_XLU_DISP++, 0, 255, 255, 128);
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
             gSPSegment(POLY_XLU_DISP++, 0x08,
                        Lib_SegmentedToVirtual(sLightningTextures[sLightningBolts[i].textureIndex]));
             Gfx_SetupDL61_Xlu(play->state.gfxCtx);
@@ -2436,28 +2437,28 @@ void Environment_PlaySceneSequence(PlayState* play) {
             gSaveContext.forcedSeqId = NA_BGM_GENERAL_SFX;
         } else if (!Environment_IsFinalHours(play) || func_800FE5D0(play) ||
                    (AudioSeq_GetActiveSeqId(SEQ_PLAYER_BGM_MAIN) != NA_BGM_FINAL_HOURS)) {
-            if (play->sequenceCtx.seqId == NA_BGM_NO_MUSIC) {
-                if (play->sequenceCtx.ambienceId == AMBIENCE_ID_13) {
+            if (play->sceneSequences.seqId == NA_BGM_NO_MUSIC) {
+                if (play->sceneSequences.ambienceId == AMBIENCE_ID_13) {
                     return;
                 }
-                if (play->sequenceCtx.ambienceId != ((void)0, gSaveContext.ambienceId)) {
-                    Audio_PlayAmbience(play->sequenceCtx.ambienceId);
+                if (play->sceneSequences.ambienceId != ((void)0, gSaveContext.ambienceId)) {
+                    Audio_PlayAmbience(play->sceneSequences.ambienceId);
                 }
-            } else if (play->sequenceCtx.ambienceId == AMBIENCE_ID_13) {
-                if (play->sequenceCtx.seqId != ((void)0, gSaveContext.seqId)) {
-                    Audio_PlaySceneSequence(play->sequenceCtx.seqId, dayMinusOne);
+            } else if (play->sceneSequences.ambienceId == AMBIENCE_ID_13) {
+                if (play->sceneSequences.seqId != ((void)0, gSaveContext.seqId)) {
+                    Audio_PlaySceneSequence(play->sceneSequences.seqId, dayMinusOne);
                 }
             } else if ((CURRENT_TIME >= CLOCK_TIME(6, 0)) && (CURRENT_TIME <= CLOCK_TIME(17, 10))) {
                 if (gSceneSeqState != SCENESEQ_DEFAULT) {
-                    Audio_PlayMorningSceneSequence(play->sequenceCtx.seqId, dayMinusOne);
+                    Audio_PlayMorningSceneSequence(play->sceneSequences.seqId, dayMinusOne);
                 } else if ((CURRENT_TIME >= CLOCK_TIME(6, 1)) &&
-                           (play->sequenceCtx.seqId != ((void)0, gSaveContext.seqId))) {
-                    Audio_PlaySceneSequence(play->sequenceCtx.seqId, dayMinusOne);
+                           (play->sceneSequences.seqId != ((void)0, gSaveContext.seqId))) {
+                    Audio_PlaySceneSequence(play->sceneSequences.seqId, dayMinusOne);
                 }
                 play->envCtx.timeSeqState = TIMESEQ_FADE_DAY_BGM;
             } else {
-                if (play->sequenceCtx.ambienceId != ((void)0, gSaveContext.ambienceId)) {
-                    Audio_PlayAmbience(play->sequenceCtx.ambienceId);
+                if (play->sceneSequences.ambienceId != ((void)0, gSaveContext.ambienceId)) {
+                    Audio_PlayAmbience(play->sceneSequences.ambienceId);
                 }
                 if ((CURRENT_TIME > CLOCK_TIME(17, 10)) && (CURRENT_TIME < CLOCK_TIME(19, 0))) {
                     play->envCtx.timeSeqState = TIMESEQ_EARLY_NIGHT_CRITTERS;
@@ -2499,7 +2500,7 @@ void Environment_UpdateTimeBasedSequence(PlayState* play) {
 
             case TIMESEQ_EARLY_NIGHT_CRITTERS:
                 if (play->envCtx.precipitation[PRECIP_RAIN_CUR] < 9) {
-                    Audio_PlayAmbience(play->sequenceCtx.ambienceId);
+                    Audio_PlayAmbience(play->sceneSequences.ambienceId);
                     Audio_SetAmbienceChannelIO(AMBIENCE_CHANNEL_CRITTER_0, 1, 1);
                 }
                 play->envCtx.timeSeqState++;
@@ -2600,7 +2601,7 @@ void Environment_FadeInGameOverLights(PlayState* play) {
         sGameOverLightsIntensity += 2;
     }
 
-    if (Play_CamIsNotFixed(&play->state)) {
+    if (Play_CamIsNotFixed(play)) {
         for (i = 0; i < 3; i++) {
             if (play->envCtx.adjLightSettings.ambientColor[i] > -255) {
                 play->envCtx.adjLightSettings.ambientColor[i] -= 12;
@@ -2647,7 +2648,7 @@ void Environment_FadeOutGameOverLights(PlayState* play) {
                                   sGameOverLightsIntensity, sGameOverLightsIntensity, sGameOverLightsIntensity, 255);
     }
 
-    if (Play_CamIsNotFixed(&play->state)) {
+    if (Play_CamIsNotFixed(play)) {
         for (i = 0; i < 3; i++) {
             Math_SmoothStepToS(&play->envCtx.adjLightSettings.ambientColor[i], 0, 5, 12, 1);
             Math_SmoothStepToS(&play->envCtx.adjLightSettings.light1Color[i], 0, 5, 12, 1);
@@ -2944,7 +2945,7 @@ s32 Environment_AdjustLights(PlayState* play, f32 arg1, f32 arg2, f32 arg3, f32 
         return 0;
     }
 
-    if (!Play_CamIsNotFixed(&play->state)) {
+    if (!Play_CamIsNotFixed(play)) {
         return 0;
     }
     if (play->unk_18880) {
@@ -3050,12 +3051,12 @@ s32 Environment_IsForcedSequenceDisabled(void) {
 }
 
 void Environment_PlayStormNatureAmbience(PlayState* play) {
-    if (((play->sequenceCtx.seqId != NA_BGM_NO_MUSIC) && (play->sequenceCtx.ambienceId == AMBIENCE_ID_13)) ||
+    if (((play->sceneSequences.seqId != NA_BGM_NO_MUSIC) && (play->sceneSequences.ambienceId == AMBIENCE_ID_13)) ||
         (AudioSeq_GetActiveSeqId(SEQ_PLAYER_BGM_MAIN) == NA_BGM_FINAL_HOURS)) {
         Audio_PlayAmbience(AMBIENCE_ID_07);
-    } else if ((play->sequenceCtx.seqId != NA_BGM_NO_MUSIC) && (play->sequenceCtx.ambienceId != AMBIENCE_ID_13)) {
+    } else if ((play->sceneSequences.seqId != NA_BGM_NO_MUSIC) && (play->sceneSequences.ambienceId != AMBIENCE_ID_13)) {
         if ((CURRENT_TIME >= CLOCK_TIME(6, 0)) && (CURRENT_TIME < CLOCK_TIME(18, 0))) {
-            Audio_PlayAmbience(play->sequenceCtx.ambienceId);
+            Audio_PlayAmbience(play->sceneSequences.ambienceId);
         }
     }
 
@@ -3064,10 +3065,10 @@ void Environment_PlayStormNatureAmbience(PlayState* play) {
 }
 
 void Environment_StopStormNatureAmbience(PlayState* play) {
-    if (((play->sequenceCtx.seqId != NA_BGM_NO_MUSIC) && (play->sequenceCtx.ambienceId == AMBIENCE_ID_13)) ||
+    if (((play->sceneSequences.seqId != NA_BGM_NO_MUSIC) && (play->sceneSequences.ambienceId == AMBIENCE_ID_13)) ||
         (AudioSeq_GetActiveSeqId(SEQ_PLAYER_BGM_MAIN) == NA_BGM_FINAL_HOURS)) {
         SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_AMBIENCE, 20);
-    } else if ((play->sequenceCtx.seqId != NA_BGM_NO_MUSIC) && (play->sequenceCtx.ambienceId != AMBIENCE_ID_13)) {
+    } else if ((play->sceneSequences.seqId != NA_BGM_NO_MUSIC) && (play->sceneSequences.ambienceId != AMBIENCE_ID_13)) {
         if ((CURRENT_TIME >= CLOCK_TIME(6, 0)) && (CURRENT_TIME < CLOCK_TIME(18, 0))) {
             SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_AMBIENCE, 20);
         }
@@ -3123,8 +3124,8 @@ void Environment_SetupSkyboxStars(PlayState* play) {
     }
 }
 
-void Environment_DrawSkyboxStar(Gfx** gfxp, f32 x, f32 y, s32 width, s32 height) {
-    Gfx* gfx = *gfxp;
+void Environment_DrawSkyboxStar(Gfx** gfxP, f32 x, f32 y, s32 width, s32 height) {
+    Gfx* gfx = *gfxP;
     u32 xl = x * 4.0f;
     u32 yl = y * 4.0f;
     u32 xd = width;
@@ -3132,7 +3133,7 @@ void Environment_DrawSkyboxStar(Gfx** gfxp, f32 x, f32 y, s32 width, s32 height)
 
     gSPTextureRectangle(gfx++, xl, yl, xl + xd, yl + yd, 0, 0, 0, 0, 0);
 
-    *gfxp = gfx;
+    *gfxP = gfx;
 }
 
 void Environment_DrawSkyboxStarsImpl(PlayState* play, Gfx** gfxP) {
@@ -3308,7 +3309,7 @@ void Environment_DrawSkyboxStars(PlayState* play) {
         OPEN_DISPS(play->state.gfxCtx);
 
         gfxHead = POLY_OPA_DISP;
-        gfx = Graph_GfxPlusOne(gfxHead);
+        gfx = Gfx_Open(gfxHead);
 
         gSPDisplayList(sSkyboxStarsDList, gfx);
 
@@ -3316,7 +3317,7 @@ void Environment_DrawSkyboxStars(PlayState* play) {
 
         gSPEndDisplayList(gfx++);
 
-        Graph_BranchDlist(gfxHead, gfx);
+        Gfx_Close(gfxHead, gfx);
 
         POLY_OPA_DISP = gfx;
         sSkyboxStarsDList = NULL;
@@ -3341,7 +3342,7 @@ u32 Environment_GetStormState(PlayState* play) {
     u32 stormState = play->envCtx.stormState;
 
     if ((play->sceneId == SCENE_OMOYA) && (play->roomCtx.curRoom.num == 0)) {
-        stormState = ((gSaveContext.save.day >= 2) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM))
+        stormState = ((gSaveContext.save.day >= 2) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS))
                          ? STORM_STATE_ON
                          : STORM_STATE_OFF;
     }

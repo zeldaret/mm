@@ -6,7 +6,7 @@
 
 #include "z_en_tanron1.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnTanron1*)thisx)
 
@@ -18,7 +18,7 @@ void EnTanron1_Draw(Actor* thisx, PlayState* play);
 void func_80BB5318(EnTanron1* this, PlayState* play);
 void func_80BB5AAC(EnTanron1* this, PlayState* play);
 
-ActorInit En_Tanron1_InitVars = {
+ActorProfile En_Tanron1_Profile = {
     /**/ ACTOR_EN_TANRON1,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -32,12 +32,12 @@ ActorInit En_Tanron1_InitVars = {
 
 static s32 sPad = 0;
 
-#include "overlays/ovl_En_Tanron1/ovl_En_Tanron1.c"
+#include "assets/overlays/ovl_En_Tanron1/ovl_En_Tanron1.c"
 
 void EnTanron1_Init(Actor* thisx, PlayState* play) {
     EnTanron1* this = THIS;
 
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     if (!ENTANRON1_GET_100(&this->actor)) {
         this->unk_144 = 0;
     } else {
@@ -116,7 +116,7 @@ void EnTanron1_Update(Actor* thisx, PlayState* play) {
                     }
 
                     temp.x = this->unk_14C.x - temp_a0->world.pos.x;
-                    temp.y = (this->unk_14C.y - temp_a0->world.pos.y) + 70.0f;
+                    temp.y = this->unk_14C.y - temp_a0->world.pos.y + 70.0f;
                     temp.z = this->unk_14C.z - temp_a0->world.pos.z;
 
                     if (sqrtf(SQXYZ(temp)) < phi_f18) {
@@ -146,6 +146,9 @@ void EnTanron1_Update(Actor* thisx, PlayState* play) {
                 }
             }
             this->unk_144 = 1;
+            break;
+
+        default:
             break;
     }
 
@@ -382,7 +385,7 @@ void func_80BB5AAC(EnTanron1* this, PlayState* play) {
             Matrix_RotateXS(ptr->unk_18 * -1, MTXMODE_APPLY);
             Matrix_Scale(1.2f, ptr->unk_2C, 1.2f, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_OPA_DISP++, ovl_En_Tanron1_DL_001900);
         }
     }
@@ -404,7 +407,7 @@ void func_80BB5AAC(EnTanron1* this, PlayState* play) {
             Matrix_RotateXS(ptr->unk_18 * -1, MTXMODE_APPLY);
             Matrix_Scale(1.0f, ptr->unk_2C, 1.0f, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_OPA_DISP++, ovl_En_Tanron1_DL_001900);
         }
     }

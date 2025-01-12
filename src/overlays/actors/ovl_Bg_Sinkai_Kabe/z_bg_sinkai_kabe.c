@@ -13,7 +13,7 @@
 
 #include "z_bg_sinkai_kabe.h"
 #include "overlays/actors/ovl_En_Ot/z_en_ot.h"
-#include "objects/object_sinkai_kabe/object_sinkai_kabe.h"
+#include "assets/objects/object_sinkai_kabe/object_sinkai_kabe.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -25,7 +25,7 @@ void BgSinkaiKabe_Update(Actor* thisx, PlayState* play);
 
 void BgSinkaiKabe_WaitForPlayer(BgSinkaiKabe* this, PlayState* play);
 
-ActorInit Bg_Sinkai_Kabe_InitVars = {
+ActorProfile Bg_Sinkai_Kabe_Profile = {
     /**/ ACTOR_BG_SINKAI_KABE,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

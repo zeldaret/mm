@@ -7,18 +7,18 @@
 #include "z_door_shutter.h"
 #include "z64quake.h"
 #include "z64rumble.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
-#include "objects/object_bdoor/object_bdoor.h"
-#include "objects/object_numa_obj/object_numa_obj.h"
-#include "objects/object_hakugin_obj/object_hakugin_obj.h"
-#include "objects/object_dblue_object/object_dblue_object.h"
-#include "objects/object_ikana_obj/object_ikana_obj.h"
-#include "objects/object_redead_obj/object_redead_obj.h"
-#include "objects/object_ikninside_obj/object_ikninside_obj.h"
-#include "objects/object_random_obj/object_random_obj.h"
-#include "objects/object_kinsta1_obj/object_kinsta1_obj.h"
-#include "objects/object_kaizoku_obj/object_kaizoku_obj.h"
-#include "objects/object_last_obj/object_last_obj.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_bdoor/object_bdoor.h"
+#include "assets/objects/object_numa_obj/object_numa_obj.h"
+#include "assets/objects/object_hakugin_obj/object_hakugin_obj.h"
+#include "assets/objects/object_dblue_object/object_dblue_object.h"
+#include "assets/objects/object_ikana_obj/object_ikana_obj.h"
+#include "assets/objects/object_redead_obj/object_redead_obj.h"
+#include "assets/objects/object_ikninside_obj/object_ikninside_obj.h"
+#include "assets/objects/object_random_obj/object_random_obj.h"
+#include "assets/objects/object_kinsta1_obj/object_kinsta1_obj.h"
+#include "assets/objects/object_kaizoku_obj/object_kaizoku_obj.h"
+#include "assets/objects/object_last_obj/object_last_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -40,7 +40,7 @@ void func_808A1B48(DoorShutter* this, PlayState* play);
 void func_808A1C50(DoorShutter* this, PlayState* play);
 void DoorShutter_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Door_Shutter_InitVars = {
+ActorProfile Door_Shutter_Profile = {
     /**/ ACTOR_DOOR_SHUTTER,
     /**/ ACTORCAT_DOOR,
     /**/ FLAGS,
@@ -140,7 +140,7 @@ void DoorShutter_SetupAction(DoorShutter* this, DoorShutterActionFunc actionFunc
 
 s32 func_808A0900(DoorShutter* this, PlayState* play) {
     TransitionActorEntry* transitionEntry =
-        &play->doorCtx.transitionActorList[DOOR_GET_TRANSITION_ID(&this->slidingDoor.dyna.actor)];
+        &play->transitionActors.list[DOOR_GET_TRANSITION_ID(&this->slidingDoor.dyna.actor)];
     s8 frontRoom = transitionEntry->sides[0].room;
 
     if (frontRoom == transitionEntry->sides[1].room) {
@@ -156,31 +156,31 @@ s32 DoorShutter_SetupDoor(DoorShutter* this, PlayState* play) {
     ShutterObjectInfo* sp24 = &D_808A2180[this->unk_163];
     s32 doorType = this->doorType;
 
-    if (doorType != 4) {
+    if (doorType != DOORSHUTTER_TYPE_4) {
         if (func_808A0900(this, play)) {
-            if ((doorType == 7) || (doorType == 6)) {
-                doorType = 1;
-            } else if (doorType == 5) {
-                doorType = 3;
+            if ((doorType == DOORSHUTTER_TYPE_7) || (doorType == DOORSHUTTER_TYPE_6)) {
+                doorType = DOORSHUTTER_TYPE_1;
+            } else if (doorType == DOORSHUTTER_TYPE_BOSS_DOOR) {
+                doorType = DOORSHUTTER_TYPE_3;
             } else {
-                doorType = 0;
+                doorType = DOORSHUTTER_TYPE_0;
             }
         }
     }
 
-    if (doorType == 0) {
+    if (doorType == DOORSHUTTER_TYPE_0) {
         this->unk_164 = sp24->index1;
     } else {
         this->unk_164 = sp24->index2;
     }
 
-    if (doorType == 1) {
+    if (doorType == DOORSHUTTER_TYPE_1) {
         if (!Flags_GetClear(play, this->slidingDoor.dyna.actor.room)) {
             DoorShutter_SetupAction(this, func_808A0F88);
             this->unk_168 = 1.0f;
             return true;
         }
-    } else if ((doorType == 2) || (doorType == 7)) {
+    } else if ((doorType == DOORSHUTTER_TYPE_2) || (doorType == DOORSHUTTER_TYPE_7)) {
         if (!Flags_GetSwitch(play, DOORSHUTTER_GET_SWITCH_FLAG(&this->slidingDoor.dyna.actor))) {
             DoorShutter_SetupAction(this, func_808A1548);
             this->unk_168 = 1.0f;
@@ -188,7 +188,7 @@ s32 DoorShutter_SetupDoor(DoorShutter* this, PlayState* play) {
         }
         DoorShutter_SetupAction(this, func_808A1618);
         return false;
-    } else if (doorType == 3) {
+    } else if (doorType == DOORSHUTTER_TYPE_3) {
         DoorShutter_SetupAction(this, func_808A1080);
         this->unk_168 = 1.0f;
         return false;
@@ -204,7 +204,7 @@ void DoorShutter_Init(Actor* thisx, PlayState* play2) {
     s32 i;
 
     Actor_ProcessInitChain(&this->slidingDoor.dyna.actor, sInitChain);
-    this->doorType = DOORSHUTTER_GET_380(&this->slidingDoor.dyna.actor);
+    this->doorType = DOORSHUTTER_GET_TYPE(&this->slidingDoor.dyna.actor);
     sp24 = D_808A2240[this->doorType];
 
     if (sp24 < 0) {
@@ -242,7 +242,7 @@ void DoorShutter_Init(Actor* thisx, PlayState* play2) {
     DoorShutter_SetupAction(this, DoorShutter_SetupType);
     this->unk_163 = sp24;
 
-    if ((this->doorType == 4) || (this->doorType == 5)) {
+    if ((this->doorType == DOORSHUTTER_TYPE_4) || (this->doorType == DOORSHUTTER_TYPE_BOSS_DOOR)) {
         if (!Flags_GetSwitch(play, DOORSHUTTER_GET_SWITCH_FLAG(&this->slidingDoor.dyna.actor))) {
             this->unk_166 = 10;
         }
@@ -257,8 +257,7 @@ void DoorShutter_Destroy(Actor* thisx, PlayState* play) {
     if (this->slidingDoor.dyna.actor.room >= 0) {
         s32 transitionActorId = DOOR_GET_TRANSITION_ID(&this->slidingDoor.dyna.actor);
 
-        play->doorCtx.transitionActorList[transitionActorId].id =
-            -play->doorCtx.transitionActorList[transitionActorId].id;
+        play->transitionActors.list[transitionActorId].id = -play->transitionActors.list[transitionActorId].id;
     }
 }
 
@@ -280,7 +279,7 @@ f32 func_808A0D90(PlayState* play, DoorShutter* this, f32 arg2, f32 arg3, f32 ar
     sp28.y = player->actor.world.pos.y + arg2;
     sp28.z = player->actor.world.pos.z;
 
-    Actor_OffsetOfPointInActorCoords(&this->slidingDoor.dyna.actor, &sp1C, &sp28);
+    Actor_WorldToActorCoords(&this->slidingDoor.dyna.actor, &sp1C, &sp28);
 
     if ((arg3 < fabsf(sp1C.x)) || (arg4 < fabsf(sp1C.y))) {
         return FLT_MAX;
@@ -314,7 +313,7 @@ void func_808A0F88(DoorShutter* this, PlayState* play) {
     if (Flags_GetClear(play, this->slidingDoor.dyna.actor.room) ||
         Flags_GetClearTemp(play, this->slidingDoor.dyna.actor.room)) {
         this->csId = this->slidingDoor.dyna.actor.csId;
-        if (this->doorType == 7) {
+        if (this->doorType == DOORSHUTTER_TYPE_7) {
             if (this->csId != CS_ID_NONE) {
                 this->csId = CutsceneManager_GetAdditionalCsId(this->csId);
             }
@@ -347,7 +346,7 @@ void func_808A1090(DoorShutter* this, PlayState* play) {
         this->slidingDoor.dyna.actor.velocity.y = 0.0f;
         if (this->unk_166 != 0) {
             Flags_SetSwitch(play, DOORSHUTTER_GET_SWITCH_FLAG(&this->slidingDoor.dyna.actor));
-            if (this->doorType != 5) {
+            if (this->doorType != DOORSHUTTER_TYPE_BOSS_DOOR) {
                 DUNGEON_KEY_COUNT(gSaveContext.mapIndex) = DUNGEON_KEY_COUNT(gSaveContext.mapIndex) - 1;
                 Actor_PlaySfx(&this->slidingDoor.dyna.actor, NA_SE_EV_CHAIN_KEY_UNLOCK);
             } else {
@@ -370,14 +369,14 @@ void func_808A1090(DoorShutter* this, PlayState* play) {
                 player->doorTimer = 0;
             }
 
-            if (this->doorType == 6) {
+            if (this->doorType == DOORSHUTTER_TYPE_6) {
                 if (gSaveContext.save.saveInfo.playerData.healthCapacity <
                     (DOORSHUTTER_GET_1F(&this->slidingDoor.dyna.actor) * 0x10)) {
                     player->doorType = PLAYER_DOORTYPE_TALKING;
                     this->slidingDoor.dyna.actor.textId = 0x14FC;
                 }
             } else if (this->unk_166 != 0) {
-                if (this->doorType == 5) {
+                if (this->doorType == DOORSHUTTER_TYPE_BOSS_DOOR) {
                     if (!CHECK_DUNGEON_ITEM(DUNGEON_BOSS_KEY, gSaveContext.mapIndex)) {
                         player->doorType = PLAYER_DOORTYPE_TALKING;
                         this->slidingDoor.dyna.actor.textId = 0x1803;
@@ -507,7 +506,7 @@ void func_808A1684(DoorShutter* this, PlayState* play) {
     f32 phi_f0;
 
     if ((DECR(this->unk_166) == 0) && (play->roomCtx.status == 0) && func_808A1340(this, play)) {
-        if (this->doorType == 5) {
+        if (this->doorType == DOORSHUTTER_TYPE_BOSS_DOOR) {
             phi_f0 = 20.0f;
         } else {
             phi_f0 = 50.0f;
@@ -541,8 +540,8 @@ void func_808A1784(DoorShutter* this, PlayState* play) {
     } else if (func_808A1478(this, play, 0.0f)) {
         u8 doorType = this->doorType;
 
-        if ((doorType != 0) && (doorType != 1) &&
-            (((doorType != 7) && (doorType != 6)) || !func_808A0900(this, play))) {
+        if ((doorType != DOORSHUTTER_TYPE_0) && (doorType != DOORSHUTTER_TYPE_1) &&
+            (((doorType != DOORSHUTTER_TYPE_7) && (doorType != DOORSHUTTER_TYPE_6)) || !func_808A0900(this, play))) {
             DoorShutter_SetupAction(this, func_808A1618);
         } else {
             DoorShutter_SetupAction(this, func_808A1090);
@@ -557,10 +556,10 @@ void func_808A1884(DoorShutter* this, PlayState* play) {
     Vec3f sp44;
 
     if (this->slidingDoor.dyna.actor.room >= 0) {
-        Actor_OffsetOfPointInActorCoords(&this->slidingDoor.dyna.actor, &sp44, &player->actor.world.pos);
+        Actor_WorldToActorCoords(&this->slidingDoor.dyna.actor, &sp44, &player->actor.world.pos);
 
         this->slidingDoor.dyna.actor.room =
-            play->doorCtx.transitionActorList[DOOR_GET_TRANSITION_ID(&this->slidingDoor.dyna.actor)]
+            play->transitionActors.list[DOOR_GET_TRANSITION_ID(&this->slidingDoor.dyna.actor)]
                 .sides[(sp44.z < 0.0f) ? 0 : 1]
                 .room;
 
@@ -569,15 +568,15 @@ void func_808A1884(DoorShutter* this, PlayState* play) {
 
             play->roomCtx.curRoom = play->roomCtx.prevRoom;
             play->roomCtx.prevRoom = temp;
-            play->roomCtx.activeMemPage ^= 1;
+            play->roomCtx.activeBufPage ^= 1;
         }
-        func_8012EBF8(play, &play->roomCtx);
+        Room_FinishRoomChange(play, &play->roomCtx);
     }
 
     this->slidingDoor.unk_15C = 0;
     this->slidingDoor.dyna.actor.velocity.y = 0.0f;
 
-    if (DoorShutter_SetupDoor(this, play) && !(player->stateFlags1 & PLAYER_STATE1_800)) {
+    if (DoorShutter_SetupDoor(this, play) && !(player->stateFlags1 & PLAYER_STATE1_CARRYING_ACTOR)) {
         DoorShutter_SetupAction(this, func_808A1C50);
         if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_DOOR) {
             func_801226E0(play, ((void)0, gSaveContext.respawn[RESPAWN_MODE_DOWN].data));
@@ -647,7 +646,7 @@ void DoorShutter_Update(Actor* thisx, PlayState* play) {
     DoorShutter* this = THIS;
     Player* player = GET_PLAYER(play);
 
-    if (!(player->stateFlags1 & (PLAYER_STATE1_40 | PLAYER_STATE1_80 | PLAYER_STATE1_400 | PLAYER_STATE1_10000000)) ||
+    if (!(player->stateFlags1 & (PLAYER_STATE1_40 | PLAYER_STATE1_DEAD | PLAYER_STATE1_400 | PLAYER_STATE1_10000000)) ||
         (this->actionFunc == DoorShutter_SetupType)) {
         this->actionFunc(this, play);
 
@@ -700,7 +699,7 @@ void DoorShutter_Draw(Actor* thisx, PlayState* play) {
 
         if (sp44->unk_04 != 0) {
             TransitionActorEntry* transitionEntry =
-                &play->doorCtx.transitionActorList[DOOR_GET_TRANSITION_ID(&this->slidingDoor.dyna.actor)];
+                &play->transitionActors.list[DOOR_GET_TRANSITION_ID(&this->slidingDoor.dyna.actor)];
 
             if ((play->roomCtx.prevRoom.num >= 0) ||
                 (transitionEntry->sides[0].room == transitionEntry->sides[1].room)) {
@@ -708,28 +707,29 @@ void DoorShutter_Draw(Actor* thisx, PlayState* play) {
                           Math_Vec3f_Yaw(&play->view.eye, &this->slidingDoor.dyna.actor.world.pos);
 
                 if (ABS_ALT(yaw) < 0x4000) {
-                    Matrix_RotateYF(M_PI, MTXMODE_APPLY);
+                    Matrix_RotateYF(M_PIf, MTXMODE_APPLY);
                 }
             } else if (this->slidingDoor.dyna.actor.room == transitionEntry->sides[0].room) {
-                Matrix_RotateYF(M_PI, MTXMODE_APPLY);
+                Matrix_RotateYF(M_PIf, MTXMODE_APPLY);
             }
-        } else if (this->doorType == 5) {
+        } else if (this->doorType == DOORSHUTTER_TYPE_BOSS_DOOR) {
             gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_808A22DC[this->slidingDoor.unk_15E]));
         }
 
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, sp44->unk_00);
 
         if ((this->unk_168 != 0.0f) && (sp44->unk_04 != 0)) {
             Matrix_Translate(0.0f, sp44->unk_08 * (1.0f - this->unk_168), sp44->translateZ, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_OPA_DISP++, sp44->unk_04);
         }
 
         if (this->unk_166 != 0) {
             Matrix_Scale(0.01f, 0.01f, 0.025f, MTXMODE_APPLY);
-            Actor_DrawDoorLock(play, this->unk_166, (this->doorType == 5) ? DOORLOCK_BOSS : DOORLOCK_NORMAL);
+            Actor_DrawDoorLock(play, this->unk_166,
+                               (this->doorType == DOORSHUTTER_TYPE_BOSS_DOOR) ? DOORLOCK_BOSS : DOORLOCK_NORMAL);
         }
 
         CLOSE_DISPS(play->state.gfxCtx);

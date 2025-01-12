@@ -5,9 +5,9 @@
  */
 
 #include "z_obj_hakaisi.h"
-#include "objects/object_hakaisi/object_hakaisi.h"
+#include "assets/objects/object_hakaisi/object_hakaisi.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_20)
 
 #define THIS ((ObjHakaisi*)thisx)
 
@@ -37,7 +37,7 @@ void func_80B15330(ObjHakaisi* this, PlayState* play);
 void func_80B1544C(Actor* thisx, PlayState* play);
 void func_80B154A0(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Hakaisi_InitVars = {
+ActorProfile Obj_Hakaisi_Profile = {
     /**/ ACTOR_OBJ_HAKAISI,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -88,7 +88,7 @@ void ObjHakaisi_Init(Actor* thisx, PlayState* play) {
     }
 
     Actor_SetScale(&this->dyna.actor, 1.0f);
-    this->dyna.actor.targetMode = TARGET_MODE_0;
+    this->dyna.actor.attentionRangeType = ATTENTION_RANGE_0;
     this->dyna.actor.colChkInfo.health = 30;
     if (OBJHAKAISI_GET_FF(&this->dyna.actor) == 3) {
         this->dyna.actor.draw = NULL;
@@ -197,8 +197,8 @@ void func_80B1456C(ObjHakaisi* this, PlayState* play) {
 
 void func_80B145F4(ObjHakaisi* this) {
     this->unk_19A = 0;
-    this->dyna.actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
-    this->dyna.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->dyna.actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
+    this->dyna.actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_WALL_BROKEN);
     this->actionFunc = func_80B14648;
 }
@@ -344,17 +344,17 @@ void ObjHakaisi_Draw(Actor* thisx, PlayState* play) {
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     if (this->unk_194 == 0) {
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, object_hakaisi_DL_002650);
     } else if (this->unk_194 == 1) {
         Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, object_hakaisi_DL_0029C0);
     } else {
         Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, object_hakaisi_DL_002CC0);
     }
 
@@ -367,7 +367,7 @@ void func_80B151E0(ObjHakaisi* this, PlayState* play) {
     this->dyna.actor.destroy = func_80B15254;
     Actor_SetScale(&this->dyna.actor, 0.1f);
     this->dyna.actor.shape.yOffset = 100.0f;
-    this->dyna.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->dyna.actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     func_80B15264(this);
 }
 
@@ -425,10 +425,10 @@ void func_80B154A0(Actor* thisx, PlayState* play) {
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     if (OBJHAKAISI_GET_FF(thisx) == 4) {
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, object_hakaisi_DL_001F10);
     } else {
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, object_hakaisi_DL_0021B0);
     }
 

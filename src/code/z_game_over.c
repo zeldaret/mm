@@ -1,4 +1,5 @@
 #include "z64game_over.h"
+
 #include "z64rumble.h"
 #include "z64shrink_window.h"
 #include "z64.h"
@@ -74,7 +75,7 @@ void GameOver_Update(PlayState* play) {
 
         case GAMEOVER_DEATH_FADE_OUT:
             if (AudioSeq_GetActiveSeqId(SEQ_PLAYER_FANFARE) != NA_BGM_GAME_OVER) {
-                func_80169F78(&play->state);
+                func_80169F78(play);
                 if (gSaveContext.respawnFlag != -7) {
                     gSaveContext.respawnFlag = -6;
                 }

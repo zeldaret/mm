@@ -6,7 +6,7 @@
 
 #include "z_obj_lightblock.h"
 #include "overlays/actors/ovl_Demo_Effect/z_demo_effect.h"
-#include "objects/object_lightblock/object_lightblock.h"
+#include "assets/objects/object_lightblock/object_lightblock.h"
 
 #define FLAGS 0x00000000
 
@@ -23,7 +23,7 @@ void ObjLightblock_PlayCutscene(ObjLightblock* this, PlayState* play);
 void ObjLightblock_SetupFadeAway(ObjLightblock* this);
 void ObjLightblock_FadeAway(ObjLightblock* this, PlayState* play);
 
-ActorInit Obj_Lightblock_InitVars = {
+ActorProfile Obj_Lightblock_Profile = {
     /**/ ACTOR_OBJ_LIGHTBLOCK,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -37,7 +37,7 @@ ActorInit Obj_Lightblock_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER | AC_TYPE_OTHER,
         OC1_NONE,
@@ -45,11 +45,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0x00202000, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_NONE,
     },
     { 84, 120, 0, { 0, 0, 0 } },
@@ -73,9 +73,6 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneScale, 500, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 500, ICHAIN_STOP),
 };
-
-extern Gfx D_801AEF88[];
-extern Gfx D_801AEFA0[];
 
 void ObjLightblock_SpawnEffect(ObjLightblock* this, PlayState* play) {
     LightblockTypeVars* typeVars = &sLightblockTypeVars[LIGHTBLOCK_TYPE(&this->dyna.actor)];
@@ -126,7 +123,7 @@ void ObjLightblock_Wait(ObjLightblock* this, PlayState* play) {
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
         // light arrows
-        if (this->collider.info.acHitInfo->toucher.dmgFlags & (1 << 13)) {
+        if (this->collider.elem.acHitElem->atDmgInfo.dmgFlags & (1 << 13)) {
             this->collisionCounter = 8;
         }
         // light ray
@@ -198,13 +195,13 @@ void ObjLightblock_Draw(Actor* thisx, PlayState* play) {
     if (this->alpha < 255) {
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         gSPSegment(POLY_XLU_DISP++, 0x08, D_801AEF88);
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, this->alpha);
         gSPDisplayList(POLY_XLU_DISP++, gSunBlockDL);
     } else {
         Gfx_SetupDL25_Opa(play->state.gfxCtx);
         gSPSegment(POLY_OPA_DISP++, 0x08, D_801AEFA0);
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, 255, 255, 255, 255);
         gSPDisplayList(POLY_OPA_DISP++, gSunBlockDL);
     }

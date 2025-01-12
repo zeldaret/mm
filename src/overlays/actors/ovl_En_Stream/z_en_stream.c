@@ -5,7 +5,7 @@
  */
 
 #include "z_en_stream.h"
-#include "objects/object_stream/object_stream.h"
+#include "assets/objects/object_stream/object_stream.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -18,7 +18,7 @@ void EnStream_Draw(Actor* thisx, PlayState* play);
 
 void EnStream_WaitForPlayer(EnStream* this, PlayState* play);
 
-ActorInit En_Stream_InitVars = {
+ActorProfile En_Stream_Profile = {
     /**/ ACTOR_EN_STREAM,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -127,7 +127,7 @@ void EnStream_Update(Actor* thisx, PlayState* play) {
     EnStream* this = THIS;
 
     this->actionFunc(this, play);
-    Actor_PlaySfx_FlaggedCentered3(&this->actor, NA_SE_EV_WHIRLPOOL - SFX_FLAG);
+    Actor_PlaySfx_FlaggedCentered2(&this->actor, NA_SE_EV_WHIRLPOOL - SFX_FLAG);
 }
 
 void EnStream_Draw(Actor* thisx, PlayState* play) {
@@ -139,7 +139,7 @@ void EnStream_Draw(Actor* thisx, PlayState* play) {
 
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     gfx = POLY_XLU_DISP;
-    gSPMatrix(&gfx[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(&gfx[0], play->state.gfxCtx);
     multipliedFrames = frames * 20;
     gSPSegment(&gfx[1], 0x08,
                Gfx_TwoTexScroll(play->state.gfxCtx, 0, frames * 30, -multipliedFrames, 64, 64, 1, multipliedFrames,

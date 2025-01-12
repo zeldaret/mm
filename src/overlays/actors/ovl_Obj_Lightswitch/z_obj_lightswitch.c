@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_lightswitch.h"
-#include "objects/object_lightswitch/object_lightswitch.h"
+#include "assets/objects/object_lightswitch/object_lightswitch.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -27,7 +27,7 @@ void ObjLightSwitch_SetupDisabled(ObjLightswitch* this);
 void ObjLightSwitch_Disabled(ObjLightswitch* this, PlayState* play);
 void ObjLightswitch_Idle(ObjLightswitch* this, PlayState* play);
 
-ActorInit Obj_Lightswitch_InitVars = {
+ActorProfile Obj_Lightswitch_Profile = {
     /**/ ACTOR_OBJ_LIGHTSWITCH,
     /**/ ACTORCAT_SWITCH,
     /**/ FLAGS,
@@ -42,11 +42,11 @@ ActorInit Obj_Lightswitch_InitVars = {
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0x00202000, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 0, { { 0, 0, 0 }, 19 }, 100 },
@@ -55,7 +55,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 
 static ColliderJntSphInit sJntSphInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER | AC_TYPE_OTHER,
         OC1_ON | OC1_TYPE_ALL,
@@ -328,7 +328,7 @@ void ObjLightswitch_Update(Actor* thisx, PlayState* play) {
 
     if (this->collider.base.acFlags & AC_HIT) {
         // dmgFlags enum doesn't exist yet, 0x2000 is light arrows
-        if ((this->collider.elements->info.acHitInfo->toucher.dmgFlags & 0x2000) != 0) {
+        if ((this->collider.elements[0].base.acHitElem->atDmgInfo.dmgFlags & 0x2000) != 0) {
             this->hitState = 10;
         } else if (LIGHTSWITCH_GET_TYPE(&this->actor) == LIGHTSWITCH_TYPE_FLIP) {
             if (this->hitState == 0) {
@@ -348,7 +348,7 @@ void ObjLightswitch_Update(Actor* thisx, PlayState* play) {
     }
 
     // why wouldn't this be in the action func?
-    if ((this->cutsceneTimer > 0) && ((s32)this->actionFunc != (s32)ObjLightswitch_PlayCinema)) {
+    if ((this->cutsceneTimer > 0) && (this->actionFunc != ObjLightswitch_PlayCinema)) {
         this->cutsceneTimer--;
         if (this->cutsceneTimer == 0) {
             CutsceneManager_Stop(this->actor.csId);
@@ -378,7 +378,7 @@ void ObjLightSwitch_DrawOpa(ObjLightswitch* this, PlayState* play) {
     tempPos.x = this->actor.world.pos.x;
     tempPos.y = this->actor.world.pos.y + (this->actor.shape.yOffset * this->actor.scale.y);
     tempPos.z = this->actor.world.pos.z;
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sLightswitchFaceGfx[this->faceState]));
     gSPDisplayList(POLY_OPA_DISP++, object_lightswitch_DL_000260);
 
@@ -387,13 +387,13 @@ void ObjLightSwitch_DrawOpa(ObjLightswitch* this, PlayState* play) {
     tempRot.z = this->actor.shape.rot.z + this->edgeRot;
     Matrix_SetTranslateRotateYXZ(tempPos.x, tempPos.y, tempPos.z, &tempRot);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, object_lightswitch_DL_000398);
 
     tempRot.z = this->actor.shape.rot.z - this->edgeRot;
     Matrix_SetTranslateRotateYXZ(tempPos.x, tempPos.y, tempPos.z, &tempRot);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, object_lightswitch_DL_000408);
 
     CLOSE_DISPS(play->state.gfxCtx);
@@ -414,7 +414,7 @@ void ObjLightSwitch_DrawXlu(ObjLightswitch* this, PlayState* play) {
     tempPos.x = this->actor.world.pos.x;
     tempPos.y = this->actor.world.pos.y + (this->actor.shape.yOffset * this->actor.scale.y);
     tempPos.z = this->actor.world.pos.z;
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
     gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sLightswitchFaceGfx[this->faceState]));
     gSPDisplayList(POLY_XLU_DISP++, object_lightswitch_DL_000260);
 
@@ -423,13 +423,13 @@ void ObjLightSwitch_DrawXlu(ObjLightswitch* this, PlayState* play) {
     tempRot.z = this->actor.shape.rot.z + this->edgeRot;
     Matrix_SetTranslateRotateYXZ(tempPos.x, tempPos.y, tempPos.z, &tempRot);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_XLU_DISP++, object_lightswitch_DL_000398);
 
     tempRot.z = this->actor.shape.rot.z - this->edgeRot;
     Matrix_SetTranslateRotateYXZ(tempPos.x, tempPos.y, tempPos.z, &tempRot);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_XLU_DISP++, object_lightswitch_DL_000408);
 
     CLOSE_DISPS(play->state.gfxCtx);

@@ -2,8 +2,8 @@
     <!-- Assets for seagulls -->
     <File Name="object_tanron4" Segment="6">
         <!-- The glide animation goes unused, instead the flap animation is frozen while it glides -->
-        <Animation Name="gSeagullGlideAnim" Offset="0x58" />
-        <Animation Name="gSeagullFlapAnim" Offset="0x168" />
+        <Animation Name="gSeagullGlideAnim" Offset="0x58" /> <!-- Original name is "kamome" -->
+        <Animation Name="gSeagullFlapAnim" Offset="0x168" /> <!-- Original name is "kamome_fly" -->
 
         <DList Name="gSeagullBodyDL" Offset="0x300" />
         <DList Name="gSeagullRightWingEndDL" Offset="0x3A0" />

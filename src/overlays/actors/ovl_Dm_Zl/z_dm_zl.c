@@ -17,7 +17,7 @@ void DmZl_Draw(Actor* thisx, PlayState* play);
 
 void DmZl_DoNothing(DmZl* this, PlayState* play);
 
-ActorInit Dm_Zl_InitVars = {
+ActorProfile Dm_Zl_Profile = {
     /**/ ACTOR_DM_ZL,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -116,7 +116,7 @@ void DmZl_Init(Actor* thisx, PlayState* play) {
 
     this->animIndex = ZELDA_ANIM_FACING_AWAY;
     this->unk_2BA = 0;
-    this->actor.targetArrowOffset = 1000.0f;
+    this->actor.lockOnArrowOffset = 1000.0f;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     // these three set to NULL should mean they are dynamically allocated
     SkelAnime_InitFlex(play, &this->skelAnime, &gZl4Skel, NULL, NULL, NULL, 0);
@@ -201,33 +201,39 @@ void DmZl_UpdateFace(DmZl* this) {
                 this->blinkTimer = Rand_S16Offset(30, 30);
             }
             break;
+
         case ZELDA_EYE_STATE_CLOSED:
             if (this->blinkTimer == 0) {
                 this->eyeTextureIndexLeft = this->eyeTextureIndexRight = ZELDA_EYE_CLOSED;
             }
             break;
+
         case ZELDA_EYE_STATE_LOOKING_LEFT:
             if (this->blinkTimer == 0) {
                 this->eyeTextureIndexLeft = ZELDA_EYE_OPEN_LOOKING_LEFT;
                 this->eyeTextureIndexRight = ZELDA_EYE_OPEN_LOOKING_RIGHT;
             }
             break;
+
         case ZELDA_EYE_STATE_LOOKING_RIGHT:
             if (this->blinkTimer == 0) {
                 this->eyeTextureIndexLeft = ZELDA_EYE_OPEN_LOOKING_RIGHT;
                 this->eyeTextureIndexRight = ZELDA_EYE_OPEN_LOOKING_LEFT;
             }
             break;
+
         case ZELDA_EYE_STATE_WIDE:
             if (this->blinkTimer == 0) {
                 this->eyeTextureIndexLeft = this->eyeTextureIndexRight = ZELDA_EYE_WIDE;
             }
             break;
+
         case ZELDA_EYE_STATE_HAPPY:
             if (this->blinkTimer == 0) {
                 this->eyeTextureIndexLeft = this->eyeTextureIndexRight = ZELDA_EYE_HAPPY;
             }
             break;
+
         case ZELDA_EYE_STATE_CLOSED2:
             if (this->blinkTimer >= 3) {
                 this->blinkTimer = 0;
@@ -240,12 +246,15 @@ void DmZl_UpdateFace(DmZl* this) {
         default:
             this->mouthTextureIndex = ZELDA_MOUTH_NEUTRAL;
             break;
+
         case ZELDA_MOUTH_SMILING:
             this->mouthTextureIndex = ZELDA_MOUTH_SMILING;
             break;
+
         case ZELDA_MOUTH_FROWNING:
             this->mouthTextureIndex = ZELDA_MOUTH_FROWNING;
             break;
+
         case ZELDA_MOUTH_OPEN:
             this->mouthTextureIndex = ZELDA_MOUTH_OPEN;
             break;

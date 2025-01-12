@@ -6,7 +6,9 @@
 
 #include "z_en_dai.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_2000000)
+#define FLAGS                                                                             \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20 | \
+     ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
 #define THIS ((EnDai*)thisx)
 
@@ -18,7 +20,7 @@ void EnDai_Draw(Actor* thisx, PlayState* play);
 void func_80B3F00C(EnDai* this, PlayState* play);
 void func_80B3EF90(EnDai* this, PlayState* play);
 
-ActorInit En_Dai_InitVars = {
+ActorProfile En_Dai_Profile = {
     /**/ ACTOR_EN_DAI,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -87,7 +89,7 @@ void func_80B3E168(EnDaiEffect* effect, PlayState* play2) {
             Matrix_ReplaceRotation(&play->billboardMtxF);
             Matrix_Scale(effect->unk_34, effect->unk_34, 1.0f, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_XLU_DISP++, object_dai_DL_0002E8);
 
             Matrix_Pop();
@@ -246,10 +248,28 @@ void func_80B3E834(EnDai* this) {
     }
 }
 
-// Some kind of struct?
-static s32 D_80B3FC8C[] = {
-    0x0100060E, 0x0C900C12, 0x10005520, 0x00110E0C, 0x910C0F0C,
-    0x920C0F0C, 0x930C1211, 0x5520100E, 0x0C940C12, 0x10000000,
+static MsgScript sMsgScript[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_CHECK_GORON(0x0009 - 0x0003),
+    /* 0x0003 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0C90),
+    /* 0x0006 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0007 0x01 */ MSCRIPT_CMD_CLOSE_TEXT(),
+    /* 0x0008 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x0009 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_85_20, 0x001F - 0x000E),
+    /* 0x000E 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0C91),
+    /* 0x0011 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0012 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x0C92),
+    /* 0x0015 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0016 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x0C93),
+    /* 0x0019 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x001A 0x01 */ MSCRIPT_CMD_CLOSE_TEXT(),
+    /* 0x001B 0x03 */ MSCRIPT_CMD_SET_WEEK_EVENT_REG(WEEKEVENTREG_85_20),
+    /* 0x001E 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x001F 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0C94),
+    /* 0x0022 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0023 0x01 */ MSCRIPT_CMD_CLOSE_TEXT(),
+    /* 0x0024 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
 static f32 D_80B3FCB4[] = {
@@ -433,7 +453,7 @@ void func_80B3EEDC(EnDai* this, PlayState* play) {
         (play->msgCtx.lastPlayedSong == OCARINA_SONG_GORON_LULLABY)) {
         EnDai_ChangeAnim(this, ENDAI_ANIM_1);
         this->actionFunc = func_80B3EE8C;
-    } else if (!(player->stateFlags2 & PLAYER_STATE2_8000000)) {
+    } else if (!(player->stateFlags2 & PLAYER_STATE2_USING_OCARINA)) {
         func_80B3E96C(this, play);
         this->unk_A6C = 0;
     } else if (this->unk_A6C == 0) {
@@ -443,9 +463,9 @@ void func_80B3EEDC(EnDai* this, PlayState* play) {
 }
 
 void func_80B3EF90(EnDai* this, PlayState* play) {
-    if (func_8010BF58(&this->actor, play, D_80B3FC8C, NULL, &this->unk_1D0)) {
+    if (MsgEvent_RunScript(&this->actor, play, sMsgScript, NULL, &this->msgScriptPos)) {
         SubS_SetOfferMode(&this->unk_1CE, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
-        this->unk_1D0 = 0;
+        this->msgScriptPos = 0;
         this->actionFunc = func_80B3F00C;
     } else {
         Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 0x2AA8);
@@ -541,7 +561,7 @@ void EnDai_Init(Actor* thisx, PlayState* play) {
     this->animIndex = ENDAI_ANIM_NONE;
     EnDai_ChangeAnim(this, ENDAI_ANIM_0);
     Actor_SetScale(&this->actor, 0.2f);
-    this->actor.targetMode = TARGET_MODE_10;
+    this->actor.attentionRangeType = ATTENTION_RANGE_10;
     this->unk_1F0 = D_80B3FBF0;
     this->unk_1FC = D_80B3FBF0;
     this->unk_1CE = 0;
@@ -561,7 +581,7 @@ void EnDai_Init(Actor* thisx, PlayState* play) {
     }
 
     this->unk_1CD = 0;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->unk_1CE |= (0x100 | 0x20);
     this->unk_1CE |= 0x80;
     this->actionFunc = func_80B3EEDC;
@@ -582,7 +602,7 @@ void EnDai_Update(Actor* thisx, PlayState* play) {
         func_80B3E460(this);
     } else {
         this->actionFunc(this, play);
-        if (!(player->stateFlags2 & PLAYER_STATE2_8000000)) {
+        if (!(player->stateFlags2 & PLAYER_STATE2_USING_OCARINA)) {
             SkelAnime_Update(&this->skelAnime);
             func_80B3E834(this);
             if (!(this->unk_1CE & 0x200)) {
@@ -692,7 +712,7 @@ void func_80B3F78C(EnDai* this, PlayState* play) {
     if (this->unk_1CE & 0x40) {
         Matrix_Put(&this->unk_18C);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, object_dai_DL_00C538);
     }
 
@@ -723,7 +743,7 @@ void func_80B3F920(EnDai* this, PlayState* play) {
                                                EnDai_TransformLimbDraw, &this->actor, POLY_OPA_DISP);
         Matrix_Put(&this->unk_18C);
 
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, object_dai_DL_00C538);
 
         CLOSE_DISPS(play->state.gfxCtx);
@@ -742,7 +762,7 @@ void func_80B3F920(EnDai* this, PlayState* play) {
                                                EnDai_TransformLimbDraw, &this->actor, POLY_XLU_DISP);
         Matrix_Put(&this->unk_18C);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, object_dai_DL_00C538);
 
         CLOSE_DISPS(play->state.gfxCtx);

@@ -5,7 +5,7 @@
  */
 
 #include "z_eff_stk.h"
-#include "objects/object_stk2/object_stk2.h"
+#include "assets/objects/object_stk2/object_stk2.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -18,7 +18,7 @@ void EffStk_Draw(Actor* thisx, PlayState* play);
 
 void func_80BF0DE0(EffStk* this, PlayState* play);
 
-ActorInit Eff_Stk_InitVars = {
+ActorProfile Eff_Stk_Profile = {
     /**/ ACTOR_EFF_STK,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -93,7 +93,7 @@ void EffStk_Draw(Actor* thisx, PlayState* play) {
     Matrix_ReplaceRotation(&play->billboardMtxF);
     Matrix_Translate(0.0f, 0.0f, this->unk148, MTXMODE_APPLY);
 
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
     AnimatedMat_DrawAlphaStep(play, Lib_SegmentedToVirtual(object_stk2_Matanimheader_009F60), 1.0f, this->unk144);
     gDPSetColorDither(POLY_XLU_DISP++, G_CD_NOISE);
     gDPSetAlphaDither(POLY_XLU_DISP++, G_AD_NOISE);

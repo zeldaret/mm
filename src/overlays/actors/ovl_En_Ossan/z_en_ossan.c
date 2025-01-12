@@ -5,9 +5,9 @@
  */
 
 #include "z_en_ossan.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnOssan*)thisx)
 
@@ -57,7 +57,7 @@ typedef enum EnOssanCutsceneState {
     /* 2 */ ENOSSAN_CUTSCENESTATE_PLAYING
 } EnOssanCutsceneState;
 
-ActorInit En_Ossan_InitVars = {
+ActorProfile En_Ossan_Profile = {
     /**/ ACTOR_EN_OSSAN,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -186,7 +186,7 @@ static u16 sBuySuccessTextIds[] = { 0x06BF, 0x06DC };
 static u16 sCannotGetNowTextIds[] = { 0x06C0, 0x06DD };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(targetArrowOffset, 500, ICHAIN_STOP),
+    ICHAIN_F32(lockOnArrowOffset, 500, ICHAIN_STOP),
 };
 
 void EnOssan_SetupAction(EnOssan* this, EnOssanActionFunc action) {
@@ -310,8 +310,8 @@ void EnOssan_EndInteraction(PlayState* play, EnOssan* this) {
     this->stickLeftPrompt.isEnabled = false;
     this->stickRightPrompt.isEnabled = false;
     player->stateFlags2 &= ~PLAYER_STATE2_20000000;
-    play->interfaceCtx.unk_222 = 0;
-    play->interfaceCtx.unk_224 = 0;
+    play->interfaceCtx.bButtonInterfaceDoActionActive = false;
+    play->interfaceCtx.bButtonInterfaceDoAction = 0;
     if (this->cutsceneState == ENOSSAN_CUTSCENESTATE_PLAYING) {
         CutsceneManager_Stop(this->csId);
         this->cutsceneState = ENOSSAN_CUTSCENESTATE_STOPPED;
@@ -342,7 +342,7 @@ s32 EnOssan_TestCancelOption(EnOssan* this, PlayState* play, Input* input) {
 }
 
 void EnOssan_SetupStartShopping(PlayState* play, EnOssan* this, u8 skipHello) {
-    func_8011552C(play, DO_ACTION_NEXT);
+    Interface_SetAButtonDoAction(play, DO_ACTION_NEXT);
     if (!skipHello) {
         EnOssan_SetupAction(this, EnOssan_Hello);
     } else {
@@ -353,7 +353,7 @@ void EnOssan_SetupStartShopping(PlayState* play, EnOssan* this, u8 skipHello) {
 void EnOssan_StartShopping(PlayState* play, EnOssan* this) {
     EnOssan_SetupAction(this, EnOssan_FaceShopkeeper);
     Message_ContinueTextbox(play, 0x640);
-    func_8011552C(play, DO_ACTION_DECIDE);
+    Interface_SetAButtonDoAction(play, DO_ACTION_DECIDE);
     this->stickRightPrompt.isEnabled = true;
     this->stickLeftPrompt.isEnabled = true;
 }
@@ -611,7 +611,7 @@ s32 EnOssan_FacingShopkeeperDialogResult(EnOssan* this, PlayState* play) {
             }
             EnOssan_SetupAction(this, EnOssan_TalkToShopkeeper);
             Message_ContinueTextbox(play, sTalkOptionTextIds[this->actor.params]);
-            func_8011552C(play, DO_ACTION_DECIDE);
+            Interface_SetAButtonDoAction(play, DO_ACTION_DECIDE);
             this->stickLeftPrompt.isEnabled = false;
             this->stickRightPrompt.isEnabled = false;
             return true;
@@ -641,7 +641,7 @@ void EnOssan_FaceShopkeeper(EnOssan* this, PlayState* play) {
         this->cutsceneState = ENOSSAN_CUTSCENESTATE_WAITING;
     } else {
         if (talkState == TEXT_STATE_CHOICE) {
-            func_8011552C(play, DO_ACTION_DECIDE);
+            Interface_SetAButtonDoAction(play, DO_ACTION_DECIDE);
             if (EnOssan_TestEndInteraction(this, play, CONTROLLER1(&play->state))) {
                 return;
             }
@@ -655,7 +655,7 @@ void EnOssan_FaceShopkeeper(EnOssan* this, PlayState* play) {
                 if (cursorIndex != CURSOR_INVALID) {
                     this->cursorIndex = cursorIndex;
                     EnOssan_SetupAction(this, EnOssan_LookToLeftShelf);
-                    func_8011552C(play, DO_ACTION_DECIDE);
+                    Interface_SetAButtonDoAction(play, DO_ACTION_DECIDE);
                     this->stickLeftPrompt.isEnabled = false;
                     Audio_PlaySfx(NA_SE_SY_CURSOR);
                 }
@@ -664,7 +664,7 @@ void EnOssan_FaceShopkeeper(EnOssan* this, PlayState* play) {
                 if (cursorIndex != CURSOR_INVALID) {
                     this->cursorIndex = cursorIndex;
                     EnOssan_SetupAction(this, EnOssan_LookToRightShelf);
-                    func_8011552C(play, DO_ACTION_DECIDE);
+                    Interface_SetAButtonDoAction(play, DO_ACTION_DECIDE);
                     this->stickRightPrompt.isEnabled = false;
                     Audio_PlaySfx(NA_SE_SY_CURSOR);
                 }
@@ -867,7 +867,7 @@ void EnOssan_BrowseLeftShelf(EnOssan* this, PlayState* play) {
         this->stickRightPrompt.isEnabled = true;
         EnOssan_UpdateCursorPos(play, this);
         if (talkState == TEXT_STATE_EVENT) {
-            func_8011552C(play, DO_ACTION_DECIDE);
+            Interface_SetAButtonDoAction(play, DO_ACTION_DECIDE);
             if (!EnOssan_HasPlayerSelectedItem(play, this, CONTROLLER1(&play->state))) {
                 if (this->moveHorizontal) {
                     if (this->stickAccumX > 0) {
@@ -925,7 +925,7 @@ void EnOssan_BrowseRightShelf(EnOssan* this, PlayState* play) {
         this->stickLeftPrompt.isEnabled = true;
         EnOssan_UpdateCursorPos(play, this);
         if (talkState == TEXT_STATE_EVENT) {
-            func_8011552C(play, DO_ACTION_DECIDE);
+            Interface_SetAButtonDoAction(play, DO_ACTION_DECIDE);
             if (!EnOssan_HasPlayerSelectedItem(play, this, CONTROLLER1(&play->state))) {
                 if (this->moveHorizontal != 0) {
                     if (this->stickAccumX < 0) {
@@ -1075,7 +1075,7 @@ void EnOssan_SelectItem(EnOssan* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
     if (EnOssan_TakeItemOffShelf(this) && (talkState == TEXT_STATE_CHOICE)) {
-        func_8011552C(play, DO_ACTION_DECIDE);
+        Interface_SetAButtonDoAction(play, DO_ACTION_DECIDE);
         if (!EnOssan_TestCancelOption(this, play, CONTROLLER1(&play->state)) && Message_ShouldAdvance(play)) {
             switch (play->msgCtx.choiceIndex) {
                 case 0:
@@ -1146,7 +1146,7 @@ void EnOssan_ContinueShopping(EnOssan* this, PlayState* play) {
     EnGirlA* item;
 
     if (talkState == TEXT_STATE_CHOICE) {
-        func_8011552C(play, DO_ACTION_DECIDE);
+        Interface_SetAButtonDoAction(play, DO_ACTION_DECIDE);
         if (Message_ShouldAdvance(play)) {
             EnOssan_ResetItemPosition(this);
             item = this->items[this->cursorIndex];
@@ -1578,7 +1578,7 @@ void EnOssan_InitShop(EnOssan* this, PlayState* play) {
         this->blinkTimer = 20;
         this->eyeTexIndex = 0;
         this->blinkFunc = EnOssan_WaitForBlink;
-        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         EnOssan_SetupAction(this, EnOssan_Idle);
     }
 }

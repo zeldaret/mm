@@ -2,7 +2,7 @@
 #define AUDIO_HEAP_H
 
 #include "PR/ultratypes.h"
-#include "libc/stddef.h"
+#include "stddef.h"
 #include "unk.h"
 
 typedef struct AudioHeapInitSizes {
@@ -12,7 +12,7 @@ typedef struct AudioHeapInitSizes {
 } AudioHeapInitSizes; // size = 0xC
 
 /**
- * Meta-data associated with a pool (contain withing the Audio Heap)
+ * Meta-data associated with a pool (contain within the Audio Heap)
  */
 typedef struct AudioAllocPool {
     /* 0x0 */ u8* startAddr; // start addr of the pool

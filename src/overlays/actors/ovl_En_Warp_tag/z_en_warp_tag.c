@@ -6,9 +6,10 @@
  */
 
 #include "z_en_warp_tag.h"
-#include "objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
+#include "assets/objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_10 | ACTOR_FLAG_2000000 | ACTOR_FLAG_CANT_LOCK_ON)
+#define FLAGS \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_10 | ACTOR_FLAG_UPDATE_DURING_OCARINA | ACTOR_FLAG_LOCK_ON_DISABLED)
 
 #define THIS ((EnWarptag*)thisx)
 
@@ -24,7 +25,7 @@ void EnWarpTag_Unused809C0A20(EnWarptag* this, PlayState* play);
 void EnWarpTag_RespawnPlayer(EnWarptag* this, PlayState* play);
 void EnWarpTag_GrottoReturn(EnWarptag* this, PlayState* play);
 
-ActorInit En_Warp_tag_InitVars = {
+ActorProfile En_Warp_tag_Profile = {
     /**/ ACTOR_EN_WARP_TAG,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -54,7 +55,7 @@ void EnWarptag_Init(Actor* thisx, PlayState* play) {
     Actor_SetFocus(&this->dyna.actor, 0.0f);
 
     if (WARPTAG_GET_3C0_MAX(thisx) == WARPTAG_3C0_MAX) {
-        this->dyna.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->dyna.actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
 
         if (WARPTAG_GET_INVISIBLE(&this->dyna.actor)) {
             this->actionFunc = EnWarpTag_WaitForPlayer;
@@ -86,7 +87,7 @@ void EnWarptag_Destroy(Actor* thisx, PlayState* play) {
 void EnWarpTag_CheckDungeonKeepObject(EnWarptag* this, PlayState* play) {
     if (Object_IsLoaded(&play->objectCtx, this->dangeonKeepObjectSlot)) {
         this->actionFunc = EnWarpTag_WaitForPlayer;
-        DynaPolyActor_Init(&this->dyna, 0x1);
+        DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
         DynaPolyActor_LoadMesh(play, &this->dyna, &gWarpTagGoronTrialBaseCol);
         this->dyna.actor.objectSlot = this->dangeonKeepObjectSlot;
         this->dyna.actor.draw = EnWarpTag_Draw;
@@ -211,11 +212,11 @@ void EnWarpTag_RespawnPlayer(EnWarptag* this, PlayState* play) {
 
                 // why are we getting player home rotation from the room data? doesnt player have home.rot.y?
                 // especially because we are converting from deg to binang, but isnt home.rot.y already in binang??
-                Play_SetRespawnData(&play->state, RESPAWN_MODE_DOWN, entrance,
-                                    play->setupEntranceList[playerSpawnIndex].room, playerParams, &newRespawnPos,
+                Play_SetRespawnData(play, RESPAWN_MODE_DOWN, entrance, play->setupEntranceList[playerSpawnIndex].room,
+                                    playerParams, &newRespawnPos,
                                     DEG_TO_BINANG_ALT((playerActorEntry->rot.y >> 7) & 0x1FF));
 
-                func_80169EFC(&play->state);
+                func_80169EFC(play);
                 gSaveContext.respawnFlag = -5;
                 Play_DisableMotionBlur();
             }
@@ -266,7 +267,7 @@ void EnWarpTag_Draw(Actor* thisx, PlayState* play) {
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gWarpTagRainbowTexAnim));
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
 
     gSPDisplayList(POLY_OPA_DISP++, gWarpTagGoronTrialBaseDL);
 

@@ -5,9 +5,9 @@
  */
 
 #include "z_en_baisen.h"
-#include "objects/object_bai/object_bai.h"
+#include "assets/objects/object_bai/object_bai.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnBaisen*)thisx)
 
@@ -23,7 +23,7 @@ void func_80BE895C(EnBaisen* this, PlayState* play);
 void func_80BE8AAC(EnBaisen* this, PlayState* play);
 void func_80BE89D8(EnBaisen* this, PlayState* play);
 
-ActorInit En_Baisen_InitVars = {
+ActorProfile En_Baisen_Profile = {
     /**/ ACTOR_EN_BAISEN,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -37,7 +37,7 @@ ActorInit En_Baisen_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_NONE,
         OC1_ON | OC1_TYPE_ALL,
@@ -45,11 +45,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_NONE,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_NONE,
         OCELEM_ON,
     },
     { 20, 60, 0, { 0, 0, 0 } },
@@ -86,18 +86,20 @@ void EnBaisen_Init(Actor* thisx, PlayState* play) {
     this->paramCopy = this->actor.params;
     if (this->actor.params == 0) {
         this->unk290 = true;
-        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_63_80) && ((gSaveContext.save.day != 3) || !gSaveContext.save.isNight)) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RESOLVED_MAYOR_MEETING) &&
+            ((gSaveContext.save.day != 3) || !gSaveContext.save.isNight)) {
             Actor_Kill(&this->actor);
         }
     } else {
         this->collider.dim.radius = 30;
         this->collider.dim.height = 60;
         this->collider.dim.yShift = 0;
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_80) || ((gSaveContext.save.day == 3) && gSaveContext.save.isNight)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RESOLVED_MAYOR_MEETING) ||
+            ((gSaveContext.save.day == 3) && gSaveContext.save.isNight)) {
             Actor_Kill(&this->actor);
         }
     }
-    this->actor.targetMode = TARGET_MODE_6;
+    this->actor.attentionRangeType = ATTENTION_RANGE_6;
     this->actor.gravity = -3.0f;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     if (this->paramCopy == 0) {
@@ -168,13 +170,13 @@ void func_80BE887C(EnBaisen* this, PlayState* play) {
     } else {
         if (this->paramCopy != 0) {
             this->textIdIndex = 0;
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_60_08)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_ATTENDED_MAYOR_MEETING)) {
                 this->textIdIndex = 1;
             }
             if (Player_GetMask(play) == PLAYER_MASK_COUPLE) {
                 this->textIdIndex = 6;
             }
-            if (this->unk2AC == 1) {
+            if (this->cutsceneState == 1) {
                 func_80BE895C(this, play);
                 return;
             }
@@ -185,14 +187,14 @@ void func_80BE887C(EnBaisen* this, PlayState* play) {
 }
 
 void func_80BE895C(EnBaisen* this, PlayState* play) {
-    if (this->unk2A4 != NULL) {
+    if (this->targetActor != NULL) {
         this->unk290 = true;
-        this->unk2AC = 1;
-        Actor_ChangeFocus(this->unk2A4, play, this->unk2A4);
+        this->cutsceneState = 1;
+        Actor_ChangeFocus(this->targetActor, play, this->targetActor);
     }
     this->unk29C = 1;
     if (this->paramCopy == 0) {
-        this->unk2A4 = this->heishiPointer;
+        this->targetActor = this->heishiPointer;
         this->actionFunc = func_80BE8AAC;
     } else {
         this->actionFunc = func_80BE89D8;
@@ -200,13 +202,13 @@ void func_80BE895C(EnBaisen* this, PlayState* play) {
 }
 
 void func_80BE89D8(EnBaisen* this, PlayState* play) {
-    if (&this->actor == this->unk2A4) {
+    if (&this->actor == this->targetActor) {
         this->unk29E = this->actor.world.rot.y;
         if (this->animIndex == ENBAISEN_ANIM_0) {
             EnBaisen_ChangeAnim(this, ENBAISEN_ANIM_1);
         }
     } else {
-        this->unk29E = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk2A4->world.pos);
+        this->unk29E = Math_Vec3f_Yaw(&this->actor.world.pos, &this->targetActor->world.pos);
         if (this->animIndex != ENBAISEN_ANIM_0) {
             EnBaisen_ChangeAnim(this, ENBAISEN_ANIM_0);
         }
@@ -216,7 +218,7 @@ void func_80BE89D8(EnBaisen* this, PlayState* play) {
         this->skelAnime.playSpeed = 0.0f;
         this->unk29E = this->actor.yawTowardsPlayer;
     }
-    if (this->unk2AC == 2) { // Note: This variable is only ever set to 1.
+    if (this->cutsceneState == 2) { // Note: This variable is also set by EnDt.
         func_80BE87FC(this);
     }
 }
@@ -228,8 +230,8 @@ void func_80BE8AAC(EnBaisen* this, PlayState* play) {
             EnBaisen_ChangeAnim(this, ENBAISEN_ANIM_1);
         }
     } else {
-        if (this->unk2A4 != NULL) {
-            this->unk29E = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk2A4->world.pos);
+        if (this->targetActor != NULL) {
+            this->unk29E = Math_Vec3f_Yaw(&this->actor.world.pos, &this->targetActor->world.pos);
         }
         if (this->animIndex != ENBAISEN_ANIM_0) {
             EnBaisen_ChangeAnim(this, ENBAISEN_ANIM_0);
@@ -241,11 +243,11 @@ void func_80BE8AAC(EnBaisen* this, PlayState* play) {
         if (this->textIdIndex < 6) {
             Message_ContinueTextbox(play, sTextIds[this->textIdIndex]);
             if ((this->textIdIndex % 2) == 0) {
-                this->unk2A4 = this->heishiPointer;
+                this->targetActor = this->heishiPointer;
             } else {
-                this->unk2A4 = &this->actor;
+                this->targetActor = &this->actor;
             }
-            Actor_ChangeFocus(this->unk2A4, play, this->unk2A4);
+            Actor_ChangeFocus(this->targetActor, play, this->targetActor);
         } else {
             func_80BE87FC(this);
         }

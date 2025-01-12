@@ -9,7 +9,7 @@
 
 #include "z_en_nwc.h"
 #include "overlays/actors/ovl_En_Niw/z_en_niw.h"
-#include "objects/object_nwc/object_nwc.h"
+#include "assets/objects/object_nwc/object_nwc.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -40,7 +40,7 @@ typedef enum EnNwcState {
     /*  4 */ NWC_STATE_RUNNING          // running from the player after failed breman march
 } EnNwcState;
 
-ActorInit En_Nwc_InitVars = {
+ActorProfile En_Nwc_Profile = {
     /**/ ACTOR_EN_NWC,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -499,7 +499,7 @@ void EnNwc_Draw(Actor* thisx, PlayState* play) {
 
     gSPSegment(&gfx[0], 0x08, Lib_SegmentedToVirtual(eyeTextures[this->blinkState]));
 
-    gSPMatrix(&gfx[1], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(&gfx[1], play->state.gfxCtx);
 
     gSPDisplayList(&gfx[2], &gNwcBodyDL);
 

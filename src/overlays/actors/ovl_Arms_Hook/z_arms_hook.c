@@ -5,8 +5,8 @@
  */
 
 #include "z_arms_hook.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
-#include "objects/object_link_child/object_link_child.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_link_child/object_link_child.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -20,7 +20,7 @@ void ArmsHook_Draw(Actor* thisx, PlayState* play);
 void ArmsHook_Wait(ArmsHook* this, PlayState* play);
 void ArmsHook_Shoot(ArmsHook* this, PlayState* play);
 
-ActorInit Arms_Hook_InitVars = {
+ActorProfile Arms_Hook_Profile = {
     /**/ ACTOR_ARMS_HOOK,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -34,7 +34,7 @@ ActorInit Arms_Hook_InitVars = {
 
 static ColliderQuadInit D_808C1BC0 = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_PLAYER,
         AC_NONE,
         OC1_NONE,
@@ -42,11 +42,11 @@ static ColliderQuadInit D_808C1BC0 = {
         COLSHAPE_QUAD,
     },
     {
-        ELEMTYPE_UNK2,
+        ELEM_MATERIAL_UNK2,
         { 0x00000080, 0x00, 0x02 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_NEAREST | TOUCH_SFX_NORMAL,
-        BUMP_NONE,
+        ATELEM_ON | ATELEM_NEAREST | ATELEM_SFX_NORMAL,
+        ACELEM_NONE,
         OCELEM_NONE,
     },
     { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
@@ -110,7 +110,7 @@ s32 ArmsHook_CheckForCancel(ArmsHook* this) {
 
     if (Player_IsHoldingHookshot(player)) {
         if ((player->itemAction != player->heldItemAction) || (player->actor.flags & ACTOR_FLAG_TALK) ||
-            (player->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_4000000))) {
+            (player->stateFlags1 & (PLAYER_STATE1_DEAD | PLAYER_STATE1_4000000))) {
             this->timer = 0;
             ArmsHook_DetachHookFromActor(this);
             Math_Vec3f_Copy(&this->actor.world.pos, &player->rightHandWorld.pos);
@@ -135,15 +135,15 @@ void ArmsHook_Shoot(ArmsHook* this, PlayState* play) {
         return;
     }
 
-    Actor_PlaySfx_FlaggedCentered1(&player->actor, NA_SE_IT_HOOKSHOT_CHAIN - SFX_FLAG);
+    Actor_PlaySfx_Flagged2(&player->actor, NA_SE_IT_HOOKSHOT_CHAIN - SFX_FLAG);
     ArmsHook_CheckForCancel(this);
 
     if ((this->timer != 0) && (this->collider.base.atFlags & AT_HIT) &&
-        (this->collider.info.atHitInfo->elemType != ELEMTYPE_UNK4)) {
+        (this->collider.elem.atHitElem->elemMaterial != ELEM_MATERIAL_UNK4)) {
         Actor* touchedActor = this->collider.base.at;
 
         if ((touchedActor->update != NULL) && (touchedActor->flags & (ACTOR_FLAG_200 | ACTOR_FLAG_400))) {
-            if (this->collider.info.atHitInfo->bumperFlags & BUMP_HOOKABLE) {
+            if (this->collider.elem.atHitElem->acElemFlags & ACELEM_HOOKABLE) {
                 ArmsHook_AttachHookToActor(this, touchedActor);
                 if (CHECK_FLAG_ALL(touchedActor->flags, ACTOR_FLAG_400)) {
                     func_808C1154(this);
@@ -256,8 +256,11 @@ void ArmsHook_Shoot(ArmsHook* this, PlayState* play) {
             if (SurfaceType_IsHookshotSurface(&play->colCtx, poly, bgId)) {
                 DynaPolyActor* dynaPolyActor;
 
-                if ((bgId != BGCHECK_SCENE) && (dynaPolyActor = DynaPoly_GetActor(&play->colCtx, bgId)) != NULL) {
-                    ArmsHook_AttachHookToActor(this, &dynaPolyActor->actor);
+                if (bgId != BGCHECK_SCENE) {
+                    dynaPolyActor = DynaPoly_GetActor(&play->colCtx, bgId);
+                    if (dynaPolyActor != NULL) {
+                        ArmsHook_AttachHookToActor(this, &dynaPolyActor->actor);
+                    }
                 }
                 func_808C1154(this);
                 Audio_PlaySfx_AtPos(&this->actor.projectedPos, NA_SE_IT_HOOKSHOT_STICK_OBJ);
@@ -316,7 +319,7 @@ void ArmsHook_Draw(Actor* thisx, PlayState* play) {
         Gfx_SetupDL25_Opa(play->state.gfxCtx);
         func_80122868(play, player);
 
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, object_link_child_DL_01D960);
         Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
         Math_Vec3f_Diff(&player->rightHandWorld.pos, &this->actor.world.pos, &sp68);
@@ -326,7 +329,7 @@ void ArmsHook_Draw(Actor* thisx, PlayState* play) {
         Matrix_RotateXS(Math_Atan2S(-sp68.y, sp4C), MTXMODE_APPLY);
         f0 = sqrtf(SQ(sp68.y) + sp48);
         Matrix_Scale(0.015f, 0.015f, f0 * 0.01f, MTXMODE_APPLY);
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, gHookshotChainDL);
         func_801229A0(play, player);
 

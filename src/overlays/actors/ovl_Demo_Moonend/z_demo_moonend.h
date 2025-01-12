@@ -2,7 +2,7 @@
 #define Z_DEMO_MOONEND_H
 
 #include "global.h"
-#include "objects/object_moonend/object_moonend.h"
+#include "assets/objects/object_moonend/object_moonend.h"
 
 struct DemoMoonend;
 
@@ -12,7 +12,7 @@ typedef void (*DemoMoonendActionFunc)(struct DemoMoonend*, PlayState*);
 
 typedef struct DemoMoonend {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ SkeletonInfo skeletonInfo;
+    /* 0x144 */ KFSkelAnimeFlex kfSkelAnime;
     /* 0x174 */ Vec3s jointTable[30];
     /* 0x228 */ Vec3s morphTable[30];
     /* 0x2DC */ u16 cueType;

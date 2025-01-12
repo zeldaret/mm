@@ -719,11 +719,14 @@ void AudioList_ClearNotePool(NotePool* pool) {
                 source = &pool->active;
                 dest = &gAudioCtx.noteFreeLists.active;
                 break;
+
+            default:
+                break;
         }
 
-        for (;;) {
+        while (true) {
             cur = source->next;
-            if (cur == source || cur == NULL) {
+            if ((cur == source) || (cur == NULL)) {
                 break;
             }
             AudioList_Remove(cur);
@@ -858,10 +861,10 @@ void AudioPlayback_NoteInitForLayer(Note* note, SequenceLayer* layer) {
     if (noteSampleState->bitField1.isSyntheticWave) {
         AudioPlayback_BuildSyntheticWave(note, layer, instId);
     } else if (channel->startSamplePos == 1) {
-        playbackState->startSamplePos = noteSampleState->tunedSample->sample->loop->start;
+        playbackState->startSamplePos = noteSampleState->tunedSample->sample->loop->header.start;
     } else {
         playbackState->startSamplePos = channel->startSamplePos;
-        if (playbackState->startSamplePos >= noteSampleState->tunedSample->sample->loop->loopEnd) {
+        if (playbackState->startSamplePos >= noteSampleState->tunedSample->sample->loop->header.loopEnd) {
             playbackState->startSamplePos = 0;
         }
     }

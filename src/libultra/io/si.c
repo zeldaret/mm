@@ -1,5 +1,5 @@
 #include "ultra64.h"
-#include "libc/stdbool.h"
+#include "stdbool.h"
 
 s32 __osSiDeviceBusy() {
     register u32 status = IO_READ(SI_STATUS_REG);

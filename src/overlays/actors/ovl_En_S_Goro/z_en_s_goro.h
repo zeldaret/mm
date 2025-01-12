@@ -2,7 +2,7 @@
 #define Z_EN_S_GORO_H
 
 #include "global.h"
-#include "objects/object_oF1d_map/object_oF1d_map.h"
+#include "assets/objects/object_oF1d_map/object_oF1d_map.h"
 
 #define EN_S_GORO_GET_MAIN_TYPE(thisx) ((thisx)->params & 0xF)
 #define EN_S_GORO_GET_SWITCH_FLAG(thisx) (((thisx)->params & 0x7F0) >> 4)

@@ -5,10 +5,11 @@
  */
 
 #include "z_en_kanban.h"
-#include "objects/object_kanban/object_kanban.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "attributes.h"
+#include "assets/objects/object_kanban/object_kanban.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnKanban*)thisx)
 
@@ -17,7 +18,7 @@ void EnKanban_Destroy(Actor* thisx, PlayState* play);
 void EnKanban_Update(Actor* thisx, PlayState* play);
 void EnKanban_Draw(Actor* thisx, PlayState* play);
 
-ActorInit En_Kanban_InitVars = {
+ActorProfile En_Kanban_Profile = {
     /**/ ACTOR_EN_KANBAN,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -31,7 +32,7 @@ ActorInit En_Kanban_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -39,11 +40,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0xF7CFFFFF, 0x00, 0x00 },
         { 0xF3CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 20, 50, 5, { 0, 0, 0 } },
@@ -146,8 +147,8 @@ void EnKanban_Init(Actor* thisx, PlayState* play) {
 
     Actor_SetScale(&this->actor, 0.01f);
     if (this->actor.params != ENKANBAN_PIECE) {
-        this->actor.targetMode = TARGET_MODE_0;
-        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+        this->actor.attentionRangeType = ATTENTION_RANGE_0;
+        this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
         this->unk_19A = Rand_ZeroFloat(1.9f);
         Collider_InitCylinder(play, &this->collider);
         Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
@@ -227,7 +228,7 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
             }
 
             if (this->zTargetTimer == 1) {
-                this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+                this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
             }
 
             if (this->partFlags == 0xFFFF) {
@@ -246,13 +247,13 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
                         this->actor.world.pos.y, this->actor.world.pos.z, this->actor.shape.rot.x,
                         this->actor.shape.rot.y, this->actor.shape.rot.z, ENKANBAN_PIECE);
                     if (piece != NULL) {
-                        ColliderInfo* hitItem = this->collider.info.acHitInfo;
+                        ColliderElement* acHitElem = this->collider.elem.acHitElem;
                         s16 yawDiff = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
                         u8 i;
 
-                        if (hitItem->toucher.dmgFlags & 0x200) {
+                        if (acHitElem->atDmgInfo.dmgFlags & 0x200) {
                             this->cutType = sCutTypes[player->meleeWeaponAnimation];
-                        } else if (hitItem->toucher.dmgFlags & 0x10) {
+                        } else if (acHitElem->atDmgInfo.dmgFlags & 0x10) {
                             this->invincibilityTimer = 0;
                             this->cutType = this->unk_19A + 3;
                             this->unk_19A = 1 - this->unk_19A;
@@ -264,7 +265,7 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
                             this->cutType = 0;
                         }
 
-                        if ((ABS_ALT(yawDiff) > 0x4000) && !(hitItem->toucher.dmgFlags & 0x10)) {
+                        if ((ABS_ALT(yawDiff) > 0x4000) && !(acHitElem->atDmgInfo.dmgFlags & 0x10)) {
                             if (this->cutType == 4) {
                                 this->cutType = 3;
                             } else if (this->cutType == 1) {
@@ -361,8 +362,8 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
                         piece->actor.world.rot.y =
                             BINANG_ROT180((s32)Rand_CenteredFloat(0x4000) + this->actor.yawTowardsPlayer);
 
-                        if ((hitItem->toucher.dmgFlags & 0x10) || (hitItem->toucher.dmgFlags & 8) ||
-                            (hitItem->toucher.dmgFlags & 0x80000000)) {
+                        if ((acHitElem->atDmgInfo.dmgFlags & 0x10) || (acHitElem->atDmgInfo.dmgFlags & 8) ||
+                            (acHitElem->atDmgInfo.dmgFlags & 0x80000000)) {
                             piece->actor.velocity.y = Rand_ZeroFloat(3.0f) + 6.0f;
                             piece->actor.speed = Rand_ZeroFloat(4.0f) + 6.0f;
                         } else {
@@ -386,8 +387,8 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
                             piece->direction = -1;
                         }
                         piece->airTimer = 100;
-                        piece->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
-                        piece->actor.flags |= ACTOR_FLAG_2000000;
+                        piece->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
+                        piece->actor.flags |= ACTOR_FLAG_UPDATE_DURING_OCARINA;
                         this->cutMarkTimer = 5;
                         Actor_PlaySfx(&this->actor, NA_SE_IT_SWORD_STRIKE);
                     }
@@ -402,7 +403,7 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
             CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 
             if (this->actor.xzDistToPlayer > 500.0f) {
-                this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+                this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
                 this->partFlags = 0xFFFF;
             }
 
@@ -673,8 +674,8 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
                 this->actionState = ENKANBAN_GROUND;
             }
         }
+            FALLTHROUGH;
         nextCase:
-        // fallthrough
         case ENKANBAN_GROUND:
         case ENKANBAN_WATER:
             signpost = (EnKanban*)this->actor.parent;
@@ -887,7 +888,7 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
                 ((pDiff + yDiff + rDiff + this->spinRot.x + this->spinRot.z) == 0) && (this->floorRot.x == 0.0f) &&
                 (this->floorRot.z == 0.0f)) {
                 signpost->partFlags |= this->partFlags;
-                signpost->actor.flags |= ACTOR_FLAG_TARGETABLE;
+                signpost->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
                 Actor_Kill(&this->actor);
                 return;
             }
@@ -908,17 +909,17 @@ static Gfx* sDisplayLists[] = {
 #include "z_en_kanban_gfx.c"
 
 static f32 sCutAngles[] = {
-    /* CUT_POST   */ 0.50f * M_PI,
-    /* CUT_VERT_L */ 0.00f * M_PI,
-    /* CUT_HORIZ  */ 0.50f * M_PI,
-    /* CUT_DIAG_L */ 0.66f * M_PI,
-    /* CUT_DIAG_R */ 0.34f * M_PI,
-    /* CUT_VERT_R */ 0.00f * M_PI,
-    /*            */ 0.00f * M_PI,
-    /*            */ 0.00f * M_PI,
+    /* CUT_POST   */ 0.50f * M_PIf,
+    /* CUT_VERT_L */ 0.00f * M_PIf,
+    /* CUT_HORIZ  */ 0.50f * M_PIf,
+    /* CUT_DIAG_L */ 0.66f * M_PIf,
+    /* CUT_DIAG_R */ 0.34f * M_PIf,
+    /* CUT_VERT_R */ 0.00f * M_PIf,
+    /*            */ 0.00f * M_PIf,
+    /*            */ 0.00f * M_PIf,
 };
 
-#include "overlays/ovl_En_Kanban/ovl_En_Kanban.c"
+#include "assets/overlays/ovl_En_Kanban/ovl_En_Kanban.c"
 
 void EnKanban_Draw(Actor* thisx, PlayState* play) {
     EnKanban* this = THIS;
@@ -954,7 +955,7 @@ void EnKanban_Draw(Actor* thisx, PlayState* play) {
         Matrix_RotateYS(this->spinRot.z, MTXMODE_APPLY);
         Matrix_Translate(this->offset.x, this->offset.y, this->offset.z - 100.0f, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
 
         for (i = 0; i < ARRAY_COUNT(sPartFlags); i++) {
             if (sPartFlags[i] & this->partFlags) {
@@ -969,7 +970,7 @@ void EnKanban_Draw(Actor* thisx, PlayState* play) {
         }
         this->actor.world.pos.y = this->actor.home.pos.y + phi_f0;
         Matrix_Translate(0.0f, 0.0f, -100.0f, MTXMODE_APPLY);
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
 
         if (this->partFlags == 0xFFFF) {
             gSPDisplayList(POLY_OPA_DISP++, gSignRectangularDL);
@@ -991,7 +992,7 @@ void EnKanban_Draw(Actor* thisx, PlayState* play) {
             gDPPipeSync(POLY_XLU_DISP++);
             gDPSetPrimColor(POLY_XLU_DISP++, 0x00, 0x00, 255, 255, 255, this->cutMarkAlpha);
             gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 150, 0);
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_XLU_DISP++, gSignParticleDL);
         }
     }
@@ -1025,7 +1026,7 @@ void EnKanban_Draw(Actor* thisx, PlayState* play) {
         Matrix_Scale(this->actor.scale.x, 0.0f, this->actor.scale.z, MTXMODE_APPLY);
 
         if (this->actionState == ENKANBAN_SIGN) {
-            Matrix_RotateXFApply(-M_PI / 5);
+            Matrix_RotateXFApply(-M_PIf / 5);
         }
 
         Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
@@ -1033,7 +1034,7 @@ void EnKanban_Draw(Actor* thisx, PlayState* play) {
         Matrix_RotateXS(this->spinRot.x, MTXMODE_APPLY);
         Matrix_RotateYS(this->spinRot.z, MTXMODE_APPLY);
         Matrix_Translate(this->offset.x, this->offset.y, this->offset.z, MTXMODE_APPLY);
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
 
         for (i = 0; i < ARRAY_COUNT(sShadowTexFlags); i++) {
             if (sShadowTexFlags[i] & this->partFlags) {

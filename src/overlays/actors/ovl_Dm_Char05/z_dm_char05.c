@@ -5,7 +5,7 @@
  */
 
 #include "z_dm_char05.h"
-#include "objects/object_dmask/object_dmask.h"
+#include "assets/objects/object_dmask/object_dmask.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -35,7 +35,7 @@ void func_80AADF54(PlayState* play, DmChar05* this);
 void func_80AAE030(PlayState* play, DmChar05* this);
 void func_80AAE114(PlayState* play, DmChar05* this);
 
-ActorInit Dm_Char05_InitVars = {
+ActorProfile Dm_Char05_Profile = {
     /**/ ACTOR_DM_CHAR05,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

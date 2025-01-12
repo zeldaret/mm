@@ -6,7 +6,7 @@
  */
 
 #include "z_mir_ray.h"
-#include "objects/object_mir_ray/object_mir_ray.h"
+#include "assets/objects/object_mir_ray/object_mir_ray.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -41,7 +41,7 @@ typedef struct {
     /* 0x1F */ u8 params;
 } MirRayDataEntry; // size = 0x20
 
-ActorInit Mir_Ray_InitVars = {
+ActorProfile Mir_Ray_Profile = {
     /**/ ACTOR_MIR_RAY,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -57,7 +57,7 @@ u8 D_808E3BF0 = false;
 
 static ColliderQuadInit sQuadInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_PLAYER,
         AC_NONE,
         OC1_NONE,
@@ -65,11 +65,11 @@ static ColliderQuadInit sQuadInit = {
         COLSHAPE_QUAD,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00200000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
-        BUMP_NONE,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
+        ACELEM_NONE,
         OCELEM_NONE,
     },
     { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
@@ -78,11 +78,11 @@ static ColliderQuadInit sQuadInit = {
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00200000, 0x00, 0x00 },
             { 0x00000000, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_NONE,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_NONE,
             OCELEM_NONE,
         },
         { 0, { { 0, 0, 0 }, 50 }, 100 },
@@ -91,7 +91,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 
 static ColliderJntSphInit sJntSphInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_PLAYER,
         AC_NONE,
         OC1_NONE,
@@ -247,11 +247,11 @@ void MirRay_SetupCollider(MirRay* this) {
     f32 y = (this->poolPt.y - this->sourcePt.y) * dataEntry->unk_10;
     f32 z = (this->poolPt.z - this->sourcePt.z) * dataEntry->unk_10;
 
-    this->collider1.elements[0].dim.worldSphere.center.x = this->sourcePt.x + x;
-    this->collider1.elements[0].dim.worldSphere.center.y = this->sourcePt.y + y;
-    this->collider1.elements[0].dim.worldSphere.center.z = this->sourcePt.z + z;
+    this->collider1.elements->dim.worldSphere.center.x = this->sourcePt.x + x;
+    this->collider1.elements->dim.worldSphere.center.y = this->sourcePt.y + y;
+    this->collider1.elements->dim.worldSphere.center.z = this->sourcePt.z + z;
 
-    this->collider1.elements[0].dim.worldSphere.radius = dataEntry->unk_14 * this->collider1.elements->dim.scale;
+    this->collider1.elements->dim.worldSphere.radius = dataEntry->unk_14 * this->collider1.elements->dim.scale;
 }
 
 // Set up a light point between source point and reflection point. Reflection point is the pool point (for windows) or
@@ -383,7 +383,7 @@ void MirRay_Update(Actor* thisx, PlayState* play) {
         MirRay_MakeShieldLight(this, play);
 
         if (this->reflectIntensity > 0.0f) {
-            Actor_PlaySfx_FlaggedCentered1(&player->actor, NA_SE_IT_SHIELD_BEAM - SFX_FLAG);
+            Actor_PlaySfx_Flagged2(&player->actor, NA_SE_IT_SHIELD_BEAM - SFX_FLAG);
         }
     }
 }
@@ -455,7 +455,7 @@ void MirRay_SetupReflectionPolys(MirRay* this, PlayState* play, MirRayShieldRefl
         posB.y = sp60[1] + posA.y;
         posB.z = sp60[2] + posA.z;
 
-        if (BgCheck_AnyLineTest1(&play->colCtx, &posA, &posB, &sp70, &outPoly, 1)) {
+        if (BgCheck_AnyLineTest1(&play->colCtx, &posA, &posB, &sp70, &outPoly, true)) {
             reflection[i].reflectionPoly = outPoly;
         } else {
             reflection[i].reflectionPoly = NULL;
@@ -612,7 +612,7 @@ void MirRay_Draw(Actor* thisx, PlayState* play) {
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         Matrix_Scale(1.0f, 1.0f, this->reflectIntensity, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (u8)(s8)(this->reflectIntensity * 100.0f));
 
         AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_mir_ray_Matanimheader_0003F8));
@@ -641,8 +641,7 @@ void MirRay_Draw(Actor* thisx, PlayState* play) {
                 Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
                 Matrix_Mult(&reflection[i].mtx, MTXMODE_APPLY);
 
-                gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                          G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
                 gDPSetRenderMode(POLY_XLU_DISP++, G_RM_FOG_SHADE_A, G_RM_AA_ZB_XLU_DECAL2);
                 gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, reflection[0].opacity);
                 gSPDisplayList(POLY_XLU_DISP++, object_mir_ray_DL_0004B0);
@@ -702,7 +701,7 @@ s32 MirRay_CheckInFrustum(Vec3f* vecA, Vec3f* vecB, f32 pointx, f32 pointy, f32 
         sp50.y = pointy - vecA->y;
         sp50.z = pointz - vecA->z;
 
-        if (Math3D_Parallel(&sp5C, &sp50) < 0.0f) {
+        if (Math3D_Cos(&sp5C, &sp50) < 0.0f) {
             return false;
         }
 
@@ -710,7 +709,7 @@ s32 MirRay_CheckInFrustum(Vec3f* vecA, Vec3f* vecB, f32 pointx, f32 pointy, f32 
         sp44.y = pointy - vecB->y;
         sp44.z = pointz - vecB->z;
 
-        if (Math3D_Parallel(&sp5C, &sp44) > 0.0f) {
+        if (Math3D_Cos(&sp5C, &sp44) > 0.0f) {
             return false;
         }
         return true;

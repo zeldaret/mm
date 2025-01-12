@@ -51,7 +51,7 @@
         <Texture Name="gGohtLightningTex" OutName="goht_lightning" Format="i4" Width="32" Height="96" Offset="0x11290" />
 
         <!-- A large amount of zeroes that are unused and have seemingly no purpose. -->
-        <Blob Name="gGohtUnusedZeroesBlob" Size="0x600" Offset="0x11890" />
+        <Blob Name="gGohtEmptyBlob" Size="0x600" Offset="0x11890" />
         
         <!-- Assets for the light orb that Goht can shoot at the player, or out of which he can shoot lightning. -->
         <Texture Name="gGohtLightOrbTex" OutName="goht_light_orb" Format="i8" Width="64" Height="64" Offset="0x11E90" />

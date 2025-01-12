@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_hakugin_elvpole.h"
-#include "objects/object_hakugin_obj/object_hakugin_obj.h"
+#include "assets/objects/object_hakugin_obj/object_hakugin_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -18,7 +18,7 @@ void BgHakuginElvpole_Draw(Actor* thisx, PlayState* play);
 
 void func_80ABD92C(BgHakuginElvpole* this, PlayState* play);
 
-ActorInit Bg_Hakugin_Elvpole_InitVars = {
+ActorProfile Bg_Hakugin_Elvpole_Profile = {
     /**/ ACTOR_BG_HAKUGIN_ELVPOLE,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -129,7 +129,7 @@ void BgHakuginElvpole_Update(Actor* thisx, PlayState* play) {
 void BgHakuginElvpole_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, object_hakugin_obj_DL_00ACB8);
 

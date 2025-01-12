@@ -2,7 +2,7 @@
 #define Z_EN_RAT_H
 
 #include "global.h"
-#include "objects/object_rat/object_rat.h"
+#include "assets/objects/object_rat/object_rat.h"
 
 #define EN_RAT_IS_OVERWORLD_TYPE(thisx) ((thisx)->params & 0x8000)
 #define EN_RAT_GET_TYPE(thisx) ((thisx)->params)

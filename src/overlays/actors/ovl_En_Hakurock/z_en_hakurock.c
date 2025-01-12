@@ -25,8 +25,8 @@
 
 #include "z_en_hakurock.h"
 #include "overlays/actors/ovl_Boss_Hakugin/z_boss_hakugin.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
-#include "objects/object_boss_hakugin/object_boss_hakugin.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_boss_hakugin/object_boss_hakugin.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -58,7 +58,7 @@ typedef enum EnHakurockEffectType {
     /* 3 */ EN_HAKUROCK_EFFECT_TYPE_STALACTITE_DESTROYED
 } EnHakurockEffectType;
 
-ActorInit En_Hakurock_InitVars = {
+ActorProfile En_Hakurock_Profile = {
     /**/ ACTOR_EN_HAKUROCK,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -72,7 +72,7 @@ ActorInit En_Hakurock_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_HARD,
+        COL_MATERIAL_HARD,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_ON | OC1_NO_PUSH | OC1_TYPE_ALL,
@@ -80,11 +80,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x20000000, 0x00, 0x00 },
         { 0xF3CFBBFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_HARD,
-        BUMP_ON,
+        ATELEM_ON | ATELEM_SFX_HARD,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 60, 60, -30, { 0, 0, 0 } },
@@ -325,7 +325,7 @@ void EnHakurock_Stalactite_StuckInGround(EnHakurock* this, PlayState* play) {
     if (this->timer > 0) {
         this->timer--;
         if ((this->timer % 2) == 0) {
-            this->actor.world.pos.y = (Math_SinF(this->timer * (M_PI / 20)) * 4.0f) + this->actor.floorHeight;
+            this->actor.world.pos.y = (Math_SinF(this->timer * (M_PIf / 20)) * 4.0f) + this->actor.floorHeight;
         } else {
             this->actor.world.pos.y = this->actor.floorHeight;
         }
@@ -338,12 +338,11 @@ void EnHakurock_Stalactite_StuckInGround(EnHakurock* this, PlayState* play) {
             EnHakurock_SpawnEffect(this, EN_HAKUROCK_EFFECT_TYPE_STALACTITE_DESTROYED);
             EnHakurock_SetupWaitForSignal(this);
         } else if ((&player->actor == this->collider.base.oc) &&
-                   (player->stateFlags3 & (PLAYER_STATE3_1000 | PLAYER_STATE3_80000)) &&
-                   (player->linearVelocity > 8.0f)) {
-            player->unk_B08 = player->linearVelocity = -5.0f;
-            player->unk_B0C += (player->linearVelocity * 0.05f);
+                   (player->stateFlags3 & (PLAYER_STATE3_1000 | PLAYER_STATE3_80000)) && (player->speedXZ > 8.0f)) {
+            player->unk_B08 = player->speedXZ = -5.0f;
+            player->unk_B0C += player->speedXZ * 0.05f;
             player->actor.velocity.y = 5.0f;
-            player->currentYaw = player->actor.world.rot.y;
+            player->yaw = player->actor.world.rot.y;
             player->actor.home.rot.y = player->actor.world.rot.y;
             player->actor.shape.rot.y = player->actor.world.rot.y;
             player->unk_B8C = 4;
@@ -412,7 +411,7 @@ void EnHakurock_DrawBoulder(Actor* thisx, PlayState* play) {
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, 255, 185, 24, 255);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_06AB30);
 
     CLOSE_DISPS(play->state.gfxCtx);
@@ -423,7 +422,7 @@ void EnHakurock_DrawStalactite(Actor* thisx, PlayState* play) {
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     Matrix_Translate(-100.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, gGohtStalactiteMaterialDL);
     gSPDisplayList(POLY_OPA_DISP++, gGohtStalactiteModelDL);
 

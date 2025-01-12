@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_smork.h"
-#include "objects/object_f53_obj/object_f53_obj.h"
+#include "assets/objects/object_f53_obj/object_f53_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -16,7 +16,7 @@ void ObjSmork_Destroy(Actor* thisx, PlayState* play);
 void ObjSmork_Update(Actor* thisx, PlayState* play);
 void ObjSmork_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Smork_InitVars = {
+ActorProfile Obj_Smork_Profile = {
     /**/ ACTOR_OBJ_SMORK,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -28,7 +28,7 @@ ActorInit Obj_Smork_InitVars = {
     /**/ ObjSmork_Draw,
 };
 
-#include "overlays/ovl_Obj_Smork/ovl_Obj_Smork.c"
+#include "assets/overlays/ovl_Obj_Smork/ovl_Obj_Smork.c"
 
 u8 func_80A3D680(s16 arg0) {
     u8 ret = 0;
@@ -120,7 +120,7 @@ void func_80A3D9C4(ObjSmork* this, PlayState* play) {
         gSPSegment(POLY_XLU_DISP++, 0x08,
                    Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, sp57, 0x20, 0x20, 1, 0, sp56, 0x20, 0x20));
         gSPSegment(POLY_XLU_DISP++, 0x09, Lib_SegmentedToVirtual(this->unk_148));
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, object_f53_obj_DL_001C00);
 
         CLOSE_DISPS(play->state.gfxCtx);

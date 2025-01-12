@@ -6,7 +6,7 @@
 
 #include "z_en_mm3.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnMm3*)thisx)
 
@@ -28,7 +28,7 @@ void func_80A6FEEC(EnMm3* this, PlayState* play);
 s32 func_80A6FFAC(EnMm3* this, PlayState* play);
 void func_80A70084(EnMm3* this, PlayState* play);
 
-ActorInit En_Mm3_InitVars = {
+ActorProfile En_Mm3_Profile = {
     /**/ ACTOR_EN_MM3,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -42,7 +42,7 @@ ActorInit En_Mm3_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -50,11 +50,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0x00000000, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 18, 63, 0, { 0, 0, 0 } },
@@ -85,7 +85,7 @@ static AnimationInfo sAnimationInfo[ENMM3_ANIM_MAX] = {
     { &object_mm_Anim_00DA50, 1.0f, 0.0f, 10.0f, ANIMMODE_ONCE, -10.0f }, // ENMM3_ANIM_7
 };
 
-#include "overlays/ovl_En_Mm3/ovl_En_Mm3.c"
+#include "assets/overlays/ovl_En_Mm3/ovl_En_Mm3.c"
 
 Vec3f D_80A704F0 = { 0.0f, 0.0f, 0.0f };
 
@@ -105,7 +105,7 @@ void EnMm3_Init(Actor* thisx, PlayState* play) {
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, NULL, &sColChkInfoInit);
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     this->actor.parent = NULL;
-    this->actor.targetMode = TARGET_MODE_0;
+    this->actor.attentionRangeType = ATTENTION_RANGE_0;
     this->unk_1DC = 1;
     this->unk_2B4 = 0;
     this->unk_2AE = 0;
@@ -404,7 +404,7 @@ void func_80A6FBFC(EnMm3* this, PlayState* play) {
 
     if (gSaveContext.timerStates[TIMER_ID_POSTMAN] == TIMER_STATE_POSTMAN_END) {
         player->stateFlags1 &= ~PLAYER_STATE1_20;
-        this->actor.flags |= ACTOR_FLAG_10000;
+        this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         if (gSaveContext.timerCurTimes[TIMER_ID_POSTMAN] > SECONDS_TO_TIMER(15)) {
             gSaveContext.timerCurTimes[TIMER_ID_POSTMAN] = SECONDS_TO_TIMER(15);
         } else if ((((void)0, gSaveContext.timerCurTimes[TIMER_ID_POSTMAN]) >=
@@ -425,12 +425,12 @@ void func_80A6FBFC(EnMm3* this, PlayState* play) {
         this->unk_2B4 = 0x2791;
         this->unk_2AC = 7;
         gSaveContext.timerStates[TIMER_ID_POSTMAN] = TIMER_STATE_OFF;
-        this->actor.flags &= ~ACTOR_FLAG_10000;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         Audio_PlaySfx(NA_SE_SY_START_SHOT);
         func_80A6F9C8(this);
     } else {
         Actor_OfferTalk(&this->actor, play, this->actor.xzDistToPlayer + 10.0f);
-        func_80123E90(play, &this->actor);
+        Player_SetAutoLockOnActor(play, &this->actor);
         if (Player_GetMask(play) == PLAYER_MASK_BUNNY) {
             Audio_PlaySfx(NA_SE_SY_STOPWATCH_TIMER_INF - SFX_FLAG);
         } else {
@@ -445,12 +445,12 @@ void func_80A6FE1C(EnMm3* this) {
 
 void func_80A6FE30(EnMm3* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
-        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_77_01)) {
-            SET_WEEKEVENTREG(WEEKEVENTREG_77_01);
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_POSTMAN_COUNTING_GAME_HEART_PIECE)) {
+            SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_POSTMAN_COUNTING_GAME_HEART_PIECE);
         }
         this->actor.parent = NULL;
         func_80A6FED8(this);
-    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_77_01)) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_POSTMAN_COUNTING_GAME_HEART_PIECE)) {
         Actor_OfferGetItem(&this->actor, play, GI_RUPEE_PURPLE, 500.0f, 100.0f);
     } else {
         Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);
@@ -470,7 +470,7 @@ void func_80A6FEEC(EnMm3* this, PlayState* play) {
         this->unk_2B4 = 0x2794;
         Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_POSTMAN);
         Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_POSTMAN_HP);
-        this->actor.flags &= ~ACTOR_FLAG_10000;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         func_80A6F9C8(this);
     } else {
         Actor_OfferTalkExchangeEquiCylinder(&this->actor, play, 200.0f, PLAYER_IA_MINUS1);

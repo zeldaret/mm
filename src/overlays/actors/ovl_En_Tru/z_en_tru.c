@@ -5,9 +5,10 @@
  */
 
 #include "z_en_tru.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "attributes.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnTru*)thisx)
 
@@ -21,62 +22,104 @@ s32 func_80A8777C(Actor* thisx, PlayState* play);
 s32 func_80A87880(Actor* thisx, PlayState* play);
 s32 func_80A87B48(Actor* thisx, PlayState* play);
 s32 func_80A87DC0(Actor* thisx, PlayState* play);
-void func_80A87FD0(EnTru* this, PlayState* play);
 void func_80A881E0(EnTru* this, PlayState* play);
 
-typedef enum {
-    /* 0x00 */ KOUME_ANIM_INJURED_LYING_DOWN,
-    /* 0x01 */ KOUME_ANIM_INJURED_LYING_DOWN_MORPH,
-    /* 0x02 */ KOUME_ANIM_TRY_GET_UP,
-    /* 0x03 */ KOUME_ANIM_INJURED_RAISE_HEAD,
-    /* 0x04 */ KOUME_ANIM_INJURED_TALK,
-    /* 0x05 */ KOUME_ANIM_INJURED_HEAD_UP,
-    /* 0x06 */ KOUME_ANIM_INJURED_HEAD_UP_MORPH,
-    /* 0x07 */ KOUME_ANIM_TAKE,
-    /* 0x08 */ KOUME_ANIM_SHAKE, // Unused
-    /* 0x09 */ KOUME_ANIM_DRINK,
-    /* 0x0A */ KOUME_ANIM_FINISHED_DRINKING,
-    /* 0x0B */ KOUME_ANIM_HEALED,
-    /* 0x0C */ KOUME_ANIM_HOVER1,
-    /* 0x0D */ KOUME_ANIM_TAKE_OFF,
-    /* 0x0E */ KOUME_ANIM_FLY,
-    /* 0x0F */ KOUME_ANIM_HOVER2,
-    /* 0x10 */ KOUME_ANIM_MAX
-} KoumeAnimation;
-
-static UNK_TYPE D_80A88910[] = {
-    0x0E08520C,
-    0x16100000,
+static MsgScript D_80A88910[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0852),
+    /* 0x0003 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0004 0x01 */ MSCRIPT_CMD_UNSET_AUTOTALK(),
+    /* 0x0005 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
-static UNK_TYPE D_80A88918[] = {
-    0x0900000E,
-    0x08630C12,
-    0x16100000,
+static MsgScript D_80A88918[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0003 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0863),
+    /* 0x0006 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0007 0x01 */ MSCRIPT_CMD_CLOSE_TEXT(),
+    /* 0x0008 0x01 */ MSCRIPT_CMD_UNSET_AUTOTALK(),
+    /* 0x0009 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
-static UNK_TYPE D_80A88924[] = {
-    0x0E08660C,
-    0x10000000,
+static MsgScript D_80A88924[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0866),
+    /* 0x0003 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0004 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
-static UNK_TYPE D_80A8892C[] = {
-    0x09000004, 0x00050E08, 0x650C1000, 0x1010000B, 0x0E08530C, 0x0F08540C, 0x1900040E, 0x08560C11,
-    0x10100E00, 0xFF2B0000, 0x001E0027, 0x2C08640C, 0x2F00000C, 0x15090000, 0x0E08570C, 0x15090000,
-    0x0E08580C, 0x15090000, 0x12102C08, 0x550C2F00, 0x000C100E, 0x08550C10,
+static MsgScript D_80A8892C[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0003 0x03 */ MSCRIPT_CMD_CHECK_HUMAN(0x000B - 0x0006),
+    /* 0x0006 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0865),
+    /* 0x0009 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x000A 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x000B 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_TALKED_KOUME_INJURED, 0x001B - 0x0010),
+    /* 0x0010 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0853),
+    /* 0x0013 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0014 0x03 */ MSCRIPT_CMD_CONTINUE_TEXT(0x0854),
+    /* 0x0017 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0018 0x03 */ MSCRIPT_CMD_JUMP(0x001F - 0x001B),
+    /* 0x001B 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0856),
+    /* 0x001E 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x001F 0x03 */ MSCRIPT_CMD_SET_WEEK_EVENT_REG(WEEKEVENTREG_TALKED_KOUME_INJURED),
+    /* 0x0022 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x00FF),
+    /* 0x0025 0x07 */ MSCRIPT_CMD_CHECK_CALLBACK_MULTI(0x0, 0x004A - 0x002C, 0x0053 - 0x002C),
+    /* 0x002C 0x03 */ MSCRIPT_CMD_PLAYER_TALK(0x0864),
+    /* 0x002F 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0030 0x03 */ MSCRIPT_CMD_JUMP_3(0x0),
+    /* 0x0033 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0034 0x01 */ MSCRIPT_CMD_PAUSE(),
+    /* 0x0035 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0038 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0857),
+    /* 0x003B 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x003C 0x01 */ MSCRIPT_CMD_PAUSE(),
+    /* 0x003D 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0040 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0858),
+    /* 0x0043 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0044 0x01 */ MSCRIPT_CMD_PAUSE(),
+    /* 0x0045 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0048 0x01 */ MSCRIPT_CMD_CLOSE_TEXT(),
+    /* 0x0049 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x004A 0x03 */ MSCRIPT_CMD_PLAYER_TALK(0x0855),
+    /* 0x004D 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x004E 0x03 */ MSCRIPT_CMD_JUMP_3(0x0),
+    /* 0x0051 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0052 0x01 */ MSCRIPT_CMD_DONE(),
+
+    /* 0x0053 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0855),
+    /* 0x0056 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0057 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
-static UNK_TYPE D_80A88984[] = {
-    0x2CFFFF09, 0x00000E08, 0x640C1509, 0x00000E08, 0x570C1509, 0x00000E08, 0x580C1509, 0x00001210,
+static MsgScript D_80A88984[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_PLAYER_TALK(0xFFFF),
+    /* 0x0003 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0006 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0864),
+    /* 0x0009 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x000A 0x01 */ MSCRIPT_CMD_PAUSE(),
+    /* 0x000B 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x000E 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0857),
+    /* 0x0011 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x0012 0x01 */ MSCRIPT_CMD_PAUSE(),
+    /* 0x0013 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0016 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0858),
+    /* 0x0019 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x001A 0x01 */ MSCRIPT_CMD_PAUSE(),
+    /* 0x001B 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x001E 0x01 */ MSCRIPT_CMD_CLOSE_TEXT(),
+    /* 0x001F 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
-static UNK_TYPE D_80A889A4[] = {
-    0x2CFFFF09,
-    0x00000E08,
-    0x550C1000,
+static MsgScript D_80A889A4[] = {
+    /* 0x0000 0x03 */ MSCRIPT_CMD_PLAYER_TALK(0xFFFF),
+    /* 0x0003 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
+    /* 0x0006 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0855),
+    /* 0x0009 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
+    /* 0x000A 0x01 */ MSCRIPT_CMD_DONE(),
 };
 
-ActorInit En_Tru_InitVars = {
+ActorProfile En_Tru_Profile = {
     /**/ ACTOR_EN_TRU,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -88,7 +131,7 @@ ActorInit En_Tru_InitVars = {
     /**/ EnTru_Draw,
 };
 
-#include "overlays/ovl_En_Tru/ovl_En_Tru.c"
+#include "assets/overlays/ovl_En_Tru/ovl_En_Tru.c"
 
 static Vec3f D_80A8B250 = { 0.0f, 0.02f, 0.0f };
 
@@ -111,7 +154,7 @@ static TexturePtr sDustTextures[] = {
 
 static ColliderSphereInit sSphereInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_NONE,
         OC1_ON | OC1_TYPE_ALL,
@@ -119,11 +162,11 @@ static ColliderSphereInit sSphereInit = {
         COLSHAPE_SPHERE,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0x00000000, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_NONE,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_NONE,
         OCELEM_ON,
     },
     { 0, { { 0, 0, 0 }, 32 }, 100 },
@@ -131,29 +174,44 @@ static ColliderSphereInit sSphereInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 1, 20, 0, 0, MASS_IMMOVABLE };
 
-static AnimationInfoS sAnimationInfo[] = {
-    { &gKoumeInjuredLyingDownAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gKoumeInjuredLyingDownAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gKoumeTryGetUpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &gKoumeInjuredRaiseHeadAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gKoumeInjuredTalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gKoumeInjuredHeadUpAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gKoumeInjuredHeadUpAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gKoumeTakeAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gKoumeShakeAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gKoumeDrinkAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &gKoumeFinishedDrinkingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gKoumeHealedAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &gKoumeHoverAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gKoumeTakeOffAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &gKoumeFlyAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gKoumeHoverAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-};
+typedef enum KoumeAnimation {
+    /* 0x00 */ KOUME_ANIM_INJURED_LYING_DOWN,
+    /* 0x01 */ KOUME_ANIM_INJURED_LYING_DOWN_MORPH,
+    /* 0x02 */ KOUME_ANIM_TRY_GET_UP,
+    /* 0x03 */ KOUME_ANIM_INJURED_RAISE_HEAD,
+    /* 0x04 */ KOUME_ANIM_INJURED_TALK,
+    /* 0x05 */ KOUME_ANIM_INJURED_HEAD_UP,
+    /* 0x06 */ KOUME_ANIM_INJURED_HEAD_UP_MORPH,
+    /* 0x07 */ KOUME_ANIM_TAKE,
+    /* 0x08 */ KOUME_ANIM_SHAKE, // Unused
+    /* 0x09 */ KOUME_ANIM_DRINK,
+    /* 0x0A */ KOUME_ANIM_FINISHED_DRINKING,
+    /* 0x0B */ KOUME_ANIM_HEALED,
+    /* 0x0C */ KOUME_ANIM_HOVER1,
+    /* 0x0D */ KOUME_ANIM_TAKE_OFF,
+    /* 0x0E */ KOUME_ANIM_FLY,
+    /* 0x0F */ KOUME_ANIM_HOVER2,
+    /* 0x10 */ KOUME_ANIM_MAX
+} KoumeAnimation;
 
-static Vec3f D_80A8B3D8 = { 0.0f, 24.0f, 16.0f };
-static Vec3f D_80A8B3E4 = { 0.0f, -3.0f, 3.0f };
-static Vec3f D_80A8B3F0 = { 0.0f, 0.5f, 0.0f };
-static Vec3f D_80A8B3FC = { 3000.0f, -800.0f, 0.0f };
+static AnimationInfoS sAnimationInfo[KOUME_ANIM_MAX] = {
+    { &gKoumeInjuredLyingDownAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // KOUME_ANIM_INJURED_LYING_DOWN
+    { &gKoumeInjuredLyingDownAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // KOUME_ANIM_INJURED_LYING_DOWN_MORPH
+    { &gKoumeTryGetUpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },         // KOUME_ANIM_TRY_GET_UP
+    { &gKoumeInjuredRaiseHeadAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  // KOUME_ANIM_INJURED_RAISE_HEAD
+    { &gKoumeInjuredTalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },      // KOUME_ANIM_INJURED_TALK
+    { &gKoumeInjuredHeadUpAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },     // KOUME_ANIM_INJURED_HEAD_UP
+    { &gKoumeInjuredHeadUpAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },    // KOUME_ANIM_INJURED_HEAD_UP_MORPH
+    { &gKoumeTakeAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },              // KOUME_ANIM_TAKE
+    { &gKoumeShakeAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },             // KOUME_ANIM_SHAKE
+    { &gKoumeDrinkAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },            // KOUME_ANIM_DRINK
+    { &gKoumeFinishedDrinkingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // KOUME_ANIM_FINISHED_DRINKING
+    { &gKoumeHealedAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },           // KOUME_ANIM_HEALED
+    { &gKoumeHoverAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },             // KOUME_ANIM_HOVER1
+    { &gKoumeTakeOffAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },          // KOUME_ANIM_TAKE_OFF
+    { &gKoumeFlyAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },               // KOUME_ANIM_FLY
+    { &gKoumeHoverAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },             // KOUME_ANIM_HOVER2
+};
 
 void func_80A85620(EnTruUnkStruct* arg0, Vec3f* arg1, f32 arg2, f32 arg3, f32 arg4) {
     s16 i;
@@ -207,7 +265,7 @@ void func_80A85788(EnTruUnkStruct* arg0, PlayState* play) {
         Matrix_Scale(arg0->unk_28, arg0->unk_28, 1.0f, MTXMODE_APPLY);
         Matrix_Translate(0.0f, 14.0f, 0.0f, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, D_80A890A8);
     }
 
@@ -263,7 +321,7 @@ void func_80A85BCC(EnTruUnkStruct* arg0, PlayState* play) {
         Matrix_ReplaceRotation(&play->billboardMtxF);
         Matrix_Scale(arg0->unk_28, arg0->unk_28, 1.0f, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, D_80A8A108);
     }
 
@@ -329,7 +387,7 @@ void func_80A85F84(EnTruUnkStruct* arg0, PlayState* play) {
         Matrix_Scale(arg0->unk_28, arg0->unk_28, 1.0f, MTXMODE_APPLY);
         Matrix_ReplaceRotation(&play->billboardMtxF);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         index = ((f32)arg0->unk_02 / arg0->unk_01) * 8.0f;
         gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sDustTextures[index]));
         gSPDisplayList(POLY_XLU_DISP++, gKoumeDustModelDL);
@@ -398,6 +456,9 @@ s32 func_80A86460(EnTru* this) {
 }
 
 s32 func_80A86674(EnTru* this) {
+    static Vec3f D_80A8B3D8 = { 0.0f, 24.0f, 16.0f };
+    static Vec3f D_80A8B3E4 = { 0.0f, -3.0f, 3.0f };
+    static Vec3f D_80A8B3F0 = { 0.0f, 0.5f, 0.0f };
     s32 pad;
     Vec3f sp40;
     Vec3f sp34;
@@ -433,20 +494,20 @@ s32 func_80A86770(EnTru* this) {
 }
 
 void EnTru_UpdateSkelAnime(EnTru* this) {
-    this->skelAnime.playSpeed = this->playSpeed;
+    this->skelAnime.playSpeed = this->animPlaySpeed;
     SkelAnime_Update(&this->skelAnime);
 }
 
 s32 EnTru_ChangeAnim(EnTru* this, s32 animIndex) {
-    s32 didChange = false;
+    s32 didAnimChange = false;
 
-    if (animIndex != this->animIndex) {
+    if (this->animIndex != animIndex) {
         this->animIndex = animIndex;
-        didChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
-        this->playSpeed = this->skelAnime.playSpeed;
+        didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
+        this->animPlaySpeed = this->skelAnime.playSpeed;
     }
 
-    return didChange;
+    return didAnimChange;
 }
 
 void func_80A8697C(EnTru* this, PlayState* play) {
@@ -514,7 +575,7 @@ s32 func_80A86BAC(EnTru* this, PlayState* play) {
 
         Matrix_RotateXS(-0x4000, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, gKoumePotionDL);
 
         Matrix_Pop();
@@ -532,7 +593,7 @@ s32 func_80A86BAC(EnTru* this, PlayState* play) {
 
         Matrix_RotateXS(-0x4000, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, gKoumeBottleDL);
 
         Matrix_Pop();
@@ -652,7 +713,7 @@ s32 func_80A86DB8(EnTru* this) {
     return false;
 }
 
-UNK_TYPE* func_80A871E0(EnTru* this, PlayState* play) {
+MsgScript* EnTru_GetMsgScript(EnTru* this, PlayState* play) {
     if (this->unk_34E & 0x2000) {
         if (this->unk_38C == 35) {
             this->unk_390 = 1;
@@ -700,10 +761,10 @@ s32 func_80A872AC(EnTru* this, PlayState* play) {
             this->unk_34E |= 0x4000;
         }
 
-        this->unk_378 = func_80A875AC;
+        this->msgScriptCallback = func_80A875AC;
         this->unk_390 = 0;
         this->unk_364 = 0;
-        this->unk_354 = func_80A871E0(this, play);
+        this->msgScript = EnTru_GetMsgScript(this, play);
         SubS_SetOfferMode(&this->unk_34E, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->actionFunc = func_80A881E0;
         ret = true;
@@ -777,7 +838,7 @@ s32 func_80A875AC(Actor* thisx, PlayState* play) {
                 this->unk_364++;
                 break;
             }
-
+            FALLTHROUGH;
         case 1:
             if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
                 CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
@@ -813,9 +874,9 @@ s32 func_80A875AC(Actor* thisx, PlayState* play) {
     if (ret == true) {
         if (this->unk_390 != 0) {
             this->unk_34E |= 8;
-            this->unk_378 = func_80A87880;
+            this->msgScriptCallback = func_80A87880;
         } else {
-            this->unk_378 = func_80A8777C;
+            this->msgScriptCallback = func_80A8777C;
         }
         this->unk_364 = 0;
     }
@@ -834,7 +895,7 @@ s32 func_80A8777C(Actor* thisx, PlayState* play) {
             if (!Message_ShouldAdvance(play)) {
                 break;
             }
-        // Fallthrough
+            FALLTHROUGH;
         case TEXT_STATE_PAUSE_MENU:
             itemAction = func_80123810(play);
 
@@ -845,7 +906,7 @@ s32 func_80A8777C(Actor* thisx, PlayState* play) {
                 } else {
                     this->unk_390 = 2;
                 }
-                this->unk_378 = func_80A87880;
+                this->msgScriptCallback = func_80A87880;
                 this->unk_364 = 0;
                 ret = 1;
             } else if (itemAction <= PLAYER_IA_MINUS1) {
@@ -869,7 +930,7 @@ s32 func_80A87880(Actor* thisx, PlayState* play) {
             CutsceneManager_Stop(this->csId);
             this->csId = CutsceneManager_GetAdditionalCsId(this->csId);
             this->unk_364++;
-
+            FALLTHROUGH;
         case 1:
             if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
                 CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
@@ -926,7 +987,7 @@ s32 func_80A87880(Actor* thisx, PlayState* play) {
     }
 
     if (ret == true) {
-        this->unk_378 = func_80A87B48;
+        this->msgScriptCallback = func_80A87B48;
         this->unk_364 = 0;
     }
 
@@ -955,7 +1016,7 @@ s32 func_80A87B48(Actor* thisx, PlayState* play) {
                 sp4C.z = 40.0f;
                 Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, sp3E, &sp4C, &sp40);
                 func_80A85620(this->unk_394, &sp40, 2.0f, 0.08f, 60.0f);
-                Play_FillScreen(&play->state, true, 160, 160, 160, 0);
+                Play_FillScreen(play, true, 160, 160, 160, 0);
                 this->unk_370 = 20;
                 this->unk_372 = 10;
                 this->unk_364++;
@@ -985,7 +1046,7 @@ s32 func_80A87B48(Actor* thisx, PlayState* play) {
     }
 
     if (ret == true) {
-        this->unk_378 = func_80A87DC0;
+        this->msgScriptCallback = func_80A87DC0;
         this->unk_364 = 0;
     }
 
@@ -1001,7 +1062,7 @@ s32 func_80A87DC0(Actor* thisx, PlayState* play) {
             CutsceneManager_Stop(this->csId);
             this->csId = CutsceneManager_GetAdditionalCsId(this->csId);
             this->unk_364++;
-
+            FALLTHROUGH;
         case 1:
             if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
                 CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
@@ -1028,15 +1089,15 @@ s32 func_80A87DC0(Actor* thisx, PlayState* play) {
 
         case 3:
             if (!Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-                AnimationContext_SetMoveActor(play, &this->actor, &this->skelAnime, 1.0f);
+                AnimTaskQueue_AddActorMove(play, &this->actor, &this->skelAnime, 1.0f);
                 break;
-            } else {
-                EnTru_ChangeAnim(this, KOUME_ANIM_FLY);
-                this->actor.shape.rot.y = this->actor.world.rot.y;
-                this->unk_362 = 20;
-                this->unk_364++;
             }
 
+            EnTru_ChangeAnim(this, KOUME_ANIM_FLY);
+            this->actor.shape.rot.y = this->actor.world.rot.y;
+            this->unk_362 = 20;
+            this->unk_364++;
+            FALLTHROUGH;
         case 4:
             if (func_80A87400(this, play) || (DECR(this->unk_362) == 0)) {
                 ret = true;
@@ -1046,9 +1107,9 @@ s32 func_80A87DC0(Actor* thisx, PlayState* play) {
     }
 
     if (ret == true) {
-        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         this->actor.draw = NULL;
-        this->unk_378 = NULL;
+        this->msgScriptCallback = NULL;
         this->unk_34E = 0;
         this->unk_364 = 0;
     }
@@ -1096,7 +1157,7 @@ void func_80A87FD0(EnTru* this, PlayState* play) {
 void func_80A881E0(EnTru* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (func_8010BF58(&this->actor, play, this->unk_354, this->unk_378, &this->unk_1E8)) {
+    if (MsgEvent_RunScript(&this->actor, play, this->msgScript, this->msgScriptCallback, &this->msgScriptPos)) {
         if (player->transformation != PLAYER_FORM_HUMAN) {
             this->unk_34E |= 0x80;
         }
@@ -1119,7 +1180,7 @@ void func_80A881E0(EnTru* this, PlayState* play) {
         this->unk_34E |= 0x10;
         this->actor.shape.rot.y = this->actor.world.rot.y;
         this->actor.flags &= ~ACTOR_FLAG_TALK;
-        this->unk_1E8 = 0;
+        this->msgScriptPos = 0;
         this->actionFunc = func_80A87FD0;
     }
 }
@@ -1144,7 +1205,7 @@ void EnTru_Init(Actor* thisx, PlayState* play) {
         this->unk_384 = 1;
     }
 
-    this->actor.targetMode = TARGET_MODE_0;
+    this->actor.attentionRangeType = ATTENTION_RANGE_0;
     Actor_SetScale(&this->actor, 0.008f);
     this->unk_34E = 0;
 
@@ -1185,6 +1246,7 @@ void EnTru_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnTru_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+    static Vec3f D_80A8B3FC = { 3000.0f, -800.0f, 0.0f };
     s32 pad;
     EnTru* this = THIS;
 

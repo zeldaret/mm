@@ -2,7 +2,7 @@
 #define Z_DM_STK_H
 
 #include "global.h"
-#include "objects/object_stk/object_stk.h"
+#include "assets/objects/object_stk/object_stk.h"
 
 struct DmStk;
 

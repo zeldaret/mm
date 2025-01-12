@@ -5,7 +5,7 @@
  */
 
 #include "z_item_b_heart.h"
-#include "objects/object_gi_hearts/object_gi_hearts.h"
+#include "assets/objects/object_gi_hearts/object_gi_hearts.h"
 
 #define FLAGS 0x00000000
 
@@ -18,7 +18,7 @@ void ItemBHeart_Draw(Actor* thisx, PlayState* play);
 
 void ItemBHeart_UpdateModel(ItemBHeart* this, PlayState* play);
 
-ActorInit Item_B_Heart_InitVars = {
+ActorProfile Item_B_Heart_Profile = {
     /**/ ACTOR_ITEM_B_HEART,
     /**/ ACTORCAT_BOSS,
     /**/ FLAGS,
@@ -106,12 +106,12 @@ void ItemBHeart_Draw(Actor* thisx, PlayState* play) {
 
     if (drawTranslucent || (this->actor.world.rot.y != 0)) {
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, &gGiHeartBorderDL);
         gSPDisplayList(POLY_XLU_DISP++, &gGiHeartContainerDL);
     } else {
         Gfx_SetupDL25_Opa(play->state.gfxCtx);
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, &gGiHeartBorderDL);
         gSPDisplayList(POLY_OPA_DISP++, &gGiHeartContainerDL);
     }

@@ -5,9 +5,9 @@
  */
 
 #include "z_en_minifrog.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnMinifrog*)thisx)
 
@@ -25,7 +25,7 @@ void EnMinifrog_UpdateMissingFrog(Actor* thisx, PlayState* play);
 void EnMinifrog_YellowFrogDialog(EnMinifrog* this, PlayState* play);
 void EnMinifrog_SetupYellowFrogDialog(EnMinifrog* this, PlayState* play);
 
-ActorInit En_Minifrog_InitVars = {
+ActorProfile En_Minifrog_Profile = {
     /**/ ACTOR_EN_MINIFROG,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -39,7 +39,7 @@ ActorInit En_Minifrog_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_NONE,
         OC1_ON | OC1_TYPE_ALL,
@@ -47,11 +47,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK1,
+        ELEM_MATERIAL_UNK1,
         { 0xF7CFFFFF, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_NONE,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_NONE,
         OCELEM_ON,
     },
     { 12, 14, 0, { 0, 0, 0 } },
@@ -126,14 +126,14 @@ void EnMinifrog_Init(Actor* thisx, PlayState* play) {
             this->actionFunc = EnMinifrog_SetupYellowFrogDialog;
 
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_34_01)) {
-                this->actor.flags |= ACTOR_FLAG_10000;
+                this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
             }
 
             this->actor.home.rot.x = this->actor.home.rot.z = 0;
             this->frog = NULL;
         } else {
             this->frog = EnMinifrog_GetFrog(play);
-            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+            this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
 
             // Frog has been returned
             if (CHECK_WEEKEVENTREG(sIsFrogReturnedFlags[this->frogIndex])) {
@@ -486,7 +486,7 @@ void EnMinifrog_GetFrogHP(EnMinifrog* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
         this->actionFunc = EnMinifrog_EndChoir;
-        this->actor.flags |= ACTOR_FLAG_10000;
+        this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_NONE);
     } else {
         Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 10000.0f, 50.0f);
@@ -523,7 +523,7 @@ void EnMinifrog_YellowFrogDialog(EnMinifrog* this, PlayState* play) {
                 switch (play->msgCtx.currentTextId) {
                     case 0xD76:
                         Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
-                        this->actor.flags &= ~ACTOR_FLAG_10000;
+                        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
                         SET_WEEKEVENTREG(WEEKEVENTREG_34_01);
                         break;
 
@@ -540,11 +540,11 @@ void EnMinifrog_YellowFrogDialog(EnMinifrog* this, PlayState* play) {
                         break;
 
                     case 0xD7C:
-                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_35_80)) { // Obtained Heart Piece
+                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_FROG_CHOIR_HEART_PIECE)) {
                             Message_ContinueTextbox(play, 0xD7E);
                         } else {
                             Message_ContinueTextbox(play, 0xD7D); // Get Heart Piece
-                            SET_WEEKEVENTREG(WEEKEVENTREG_35_80);
+                            SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_FROG_CHOIR_HEART_PIECE);
                         }
                         break;
 
@@ -559,7 +559,7 @@ void EnMinifrog_YellowFrogDialog(EnMinifrog* this, PlayState* play) {
                     default:
                         Message_CloseTextbox(play);
                         this->actionFunc = EnMinifrog_SetupYellowFrogDialog;
-                        this->actor.flags &= ~ACTOR_FLAG_10000;
+                        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
                         break;
                 }
             }
@@ -585,7 +585,7 @@ void EnMinifrog_SetupYellowFrogDialog(EnMinifrog* this, PlayState* play) {
         }
     } else if ((this->actor.xzDistToPlayer < 150.0f) &&
                (Player_IsFacingActor(&this->actor, 0x3000, play) ||
-                CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_10000)) &&
+                CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED)) &&
                Player_GetMask(play) == PLAYER_MASK_DON_GERO) {
         Actor_OfferTalk(&this->actor, play, 160.0f);
     }
@@ -634,7 +634,7 @@ void EnMinifrog_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s*
         OPEN_DISPS(play->state.gfxCtx);
 
         Matrix_ReplaceRotation(&play->billboardMtxF);
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, *dList);
 
         CLOSE_DISPS(play->state.gfxCtx);

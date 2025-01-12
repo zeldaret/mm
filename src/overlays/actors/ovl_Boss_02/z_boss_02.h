@@ -2,7 +2,7 @@
 #define Z_BOSS_02_H
 
 #include "global.h"
-#include "objects/object_boss02/object_boss02.h"
+#include "assets/objects/object_boss02/object_boss02.h"
 
 struct Boss02;
 
@@ -38,7 +38,7 @@ typedef enum {
     /*   0 */ TWINMOLD_TYPE_RED,
     /*  35 */ TWINMOLD_TYPE_BLUE = 35,
     /* 100 */ TWINMOLD_TYPE_TAIL = 100,
-    /* 200 */ TWINMOLD_TYPE_STATIC = 200
+    /* 200 */ TWINMOLD_TYPE_BATTLE_HANDLER = 200
 } TwinmoldType;
 
 typedef struct Boss02 {

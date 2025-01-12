@@ -3,6 +3,7 @@
 
 #include "PR/ultratypes.h"
 #include "PR/os_time.h"
+
 #include "unk.h"
 
 struct GameState;

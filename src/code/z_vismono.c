@@ -7,7 +7,10 @@
  * color palette that converts each color into the desaturated equivalent. More precise details can be found in inline
  * comments.
  */
+
 #include "z64vis.h"
+
+#include "gfxalloc.h"
 #include "global.h"
 #include "libc64/malloc.h"
 
@@ -144,14 +147,14 @@ void VisMono_Draw(VisMono* this, Gfx** gfxP) {
     if (this->tlut) {
         tlut = this->tlut;
     } else {
-        tlut = Graph_DlistAlloc(&gfx, 256 * G_IM_SIZ_16b_BYTES);
+        tlut = Gfx_Alloc(&gfx, 256 * G_IM_SIZ_16b_BYTES);
         VisMono_DesaturateTLUT(tlut);
     }
 
     if (this->dList) {
         dList = this->dList;
     } else {
-        dList = Graph_DlistAlloc(&gfx, VISMONO_DLSIZE * sizeof(Gfx));
+        dList = Gfx_Alloc(&gfx, VISMONO_DLSIZE * sizeof(Gfx));
         dListEnd = VisMono_DesaturateDList(dList);
     }
 

@@ -2,7 +2,7 @@
 #define Z_EN_HG_H
 
 #include "global.h"
-#include "objects/object_harfgibud/object_harfgibud.h"
+#include "assets/objects/object_harfgibud/object_harfgibud.h"
 
 
 struct EnHg;

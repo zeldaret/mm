@@ -6,7 +6,7 @@
 
 #include "z_en_sellnuts.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnSellnuts*)thisx)
 
@@ -48,7 +48,7 @@ static u16 D_80ADD938[] = { 0x0615, 0x060F, 0x060F };
 
 static u8 D_80ADD940 = 0;
 
-ActorInit En_Sellnuts_InitVars = {
+ActorProfile En_Sellnuts_Profile = {
     /**/ ACTOR_EN_SELLNUTS,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -62,18 +62,18 @@ ActorInit En_Sellnuts_InitVars = {
 
 static ColliderCylinderInitType1 sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 27, 32, 0, { 0, 0, 0 } },
@@ -134,8 +134,8 @@ static AnimationInfoS sAnimationInfo[ENSELLNUTS_ANIM_MAX] = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_U8(targetMode, TARGET_MODE_0, ICHAIN_CONTINUE),
-    ICHAIN_F32(targetArrowOffset, 30, ICHAIN_STOP),
+    ICHAIN_U8(attentionRangeType, ATTENTION_RANGE_0, ICHAIN_CONTINUE),
+    ICHAIN_F32(lockOnArrowOffset, 30, ICHAIN_STOP),
 };
 
 void func_80ADADD0(EnSellnuts* this, PlayState* play) {
@@ -517,7 +517,7 @@ void func_80ADBAB8(EnSellnuts* this, PlayState* play) {
 void func_80ADBBEC(EnSellnuts* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
-        SET_WEEKEVENTREG(WEEKEVENTREG_17_80);
+        SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_LAND_TITLE_DEED);
         this->actionFunc = func_80ADBCE4;
     } else {
         Actor_OfferGetItem(&this->actor, play, GI_DEED_LAND, 300.0f, 300.0f);
@@ -556,7 +556,7 @@ void func_80ADBD64(EnSellnuts* this, PlayState* play) {
         play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
         play->msgCtx.stateTimer = 4;
         this->unk_338 &= ~2;
-        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         this->animIndex = ENSELLNUTS_ANIM_8;
         SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, ENSELLNUTS_ANIM_8);
         this->actionFunc = func_80ADBE80;
@@ -735,8 +735,8 @@ void func_80ADC5A4(EnSellnuts* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
-        player->linearVelocity = 0.0f;
-        this->actor.flags &= ~ACTOR_FLAG_10000;
+        player->speedXZ = 0.0f;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         Message_StartTextbox(play, this->unk_340, &this->actor);
         if (this->unk_340 == 0x625) {
             this->unk_338 |= 1;
@@ -749,7 +749,7 @@ void func_80ADC5A4(EnSellnuts* this, PlayState* play) {
             this->actionFunc = func_80ADC6D0;
         }
     } else if (func_80ADB08C(play) < 80.0f) {
-        this->actor.flags |= ACTOR_FLAG_10000;
+        this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         Actor_OfferTalk(&this->actor, play, this->actor.xzDistToPlayer);
     }
 }
@@ -896,7 +896,7 @@ void func_80ADCC04(EnSellnuts* this, PlayState* play) {
         func_80ADAFC0(this);
         if (curFrame == 0) {
             if (func_80ADB08C(play) < 9999.0f) {
-                this->actor.flags |= ACTOR_FLAG_10000;
+                this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
                 Actor_OfferTalk(&this->actor, play, 9999.0f);
             }
             this->unk_340 = 0x626;
@@ -913,7 +913,7 @@ void func_80ADCD3C(EnSellnuts* this, PlayState* play) {
         this->unk_338 |= 2;
         this->unk_338 |= 1;
         this->unk_340 = 0x626;
-        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+        this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
         this->actor.gravity = -1.0f;
         this->actor.draw = EnSellnuts_Draw;
         this->unk_34A = 50;
@@ -954,7 +954,7 @@ s32 EnSellnuts_HasReachedPoint(EnSellnuts* this, Path* path, s32 pointIndex) {
         diffZ = points[index + 1].z - points[index - 1].z;
     }
 
-    func_8017B7F8(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
+    Math3D_RotateXZPlane(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
 
     if (((px * this->actor.world.pos.x) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
         reached = true;
@@ -987,7 +987,7 @@ void EnSellnuts_Init(Actor* thisx, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 pad2;
 
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_17_80) || CHECK_WEEKEVENTREG(WEEKEVENTREG_61_10)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_LAND_TITLE_DEED) || CHECK_WEEKEVENTREG(WEEKEVENTREG_61_10)) {
         Actor_Kill(&this->actor);
     }
 
@@ -1042,7 +1042,7 @@ void EnSellnuts_Init(Actor* thisx, PlayState* play) {
         this->actor.gravity = 0.0f;
         this->actor.draw = NULL;
         this->animIndex = ENSELLNUTS_ANIM_20;
-        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         this->unk_35C = 1.0f;
         this->unk_358 = 1.0f;
         this->unk_354 = 1.0f;
@@ -1052,7 +1052,7 @@ void EnSellnuts_Init(Actor* thisx, PlayState* play) {
     } else {
         this->unk_338 |= 2;
         this->unk_338 &= ~1;
-        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         this->actor.gravity = 0.0f;
         this->actor.draw = NULL;
         this->animIndex = ENSELLNUTS_ANIM_4;

@@ -7,7 +7,7 @@
 #include "z_en_bigokuta.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE)
 
 #define THIS ((EnBigokuta*)thisx)
 
@@ -31,7 +31,7 @@ void EnBigokuta_PlayDeathCutscene(EnBigokuta* this, PlayState* play);
 void EnBigokuta_SetupDeathEffects(EnBigokuta* this);
 void EnBigokuta_PlayDeathEffects(EnBigokuta* this, PlayState* play);
 
-ActorInit En_Bigokuta_InitVars = {
+ActorProfile En_Bigokuta_Profile = {
     /**/ ACTOR_EN_BIGOKUTA,
     /**/ ACTORCAT_BOSS,
     /**/ FLAGS,
@@ -45,7 +45,7 @@ ActorInit En_Bigokuta_InitVars = {
 
 static ColliderCylinderInit sShellCylinderInit = {
     {
-        COLTYPE_HARD,
+        COL_MATERIAL_HARD,
         AT_NONE,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -53,11 +53,11 @@ static ColliderCylinderInit sShellCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFC74F, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 75, 125, 0, { 0, 0, 0 } },
@@ -65,7 +65,7 @@ static ColliderCylinderInit sShellCylinderInit = {
 
 static ColliderCylinderInit sBodyCylinderInit = {
     {
-        COLTYPE_HIT0,
+        COL_MATERIAL_HIT0,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -73,11 +73,11 @@ static ColliderCylinderInit sBodyCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0x000038B0, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_NONE,
     },
     { 70, 125, 0, { 0, 0, 0 } },
@@ -86,8 +86,10 @@ static ColliderCylinderInit sBodyCylinderInit = {
 static CollisionCheckInfoInit sColChkInfoInit = { 4, 130, 120, MASS_HEAVY };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 2500, ICHAIN_CONTINUE),  ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_CONTINUE),
-    ICHAIN_U8(targetMode, TARGET_MODE_2, ICHAIN_CONTINUE), ICHAIN_S8(hintId, TATL_HINT_ID_BIG_OCTO, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneForward, 2500, ICHAIN_CONTINUE),
+    ICHAIN_F32(lockOnArrowOffset, 2000, ICHAIN_CONTINUE),
+    ICHAIN_U8(attentionRangeType, ATTENTION_RANGE_2, ICHAIN_CONTINUE),
+    ICHAIN_S8(hintId, TATL_HINT_ID_BIG_OCTO, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 33, ICHAIN_STOP),
 };
 
@@ -490,18 +492,18 @@ void EnBigokuta_CheckOneHitKill(EnBigokuta* this, PlayState* play) {
         Enemy_StartFinishingBlow(play, &this->picto.actor);
 
         if (this->bodyCollider.base.acFlags & AC_HIT) {
-            if (this->bodyCollider.info.acHitInfo->toucher.dmgFlags & 0x1000) { // Ice Arrow
+            if (this->bodyCollider.elem.acHitElem->atDmgInfo.dmgFlags & 0x1000) { // Ice Arrow
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
                 this->drawDmgEffScale = 1.2f;
                 this->drawDmgEffFrozenSteamScale = 1800.0f * 0.001f;
                 this->drawDmgEffAlpha = 1.0f;
-            } else if (this->bodyCollider.info.acHitInfo->toucher.dmgFlags & 0x2000) { // Light Arrow
+            } else if (this->bodyCollider.elem.acHitElem->atDmgInfo.dmgFlags & 0x2000) { // Light Arrow
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                 this->drawDmgEffScale = 1.2f;
                 this->drawDmgEffAlpha = 4.0f;
-                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->bodyCollider.info.bumper.hitPos.x,
-                            this->bodyCollider.info.bumper.hitPos.y, this->bodyCollider.info.bumper.hitPos.z, 0, 0, 0,
-                            CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
+                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->bodyCollider.elem.acDmgInfo.hitPos.x,
+                            this->bodyCollider.elem.acDmgInfo.hitPos.y, this->bodyCollider.elem.acDmgInfo.hitPos.z, 0,
+                            0, 0, CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
             }
         }
 
@@ -551,7 +553,7 @@ void EnBigokuta_Update(Actor* thisx, PlayState* play) {
             Math_StepToF(&this->drawDmgEffAlpha, 0.0f, 0.05f);
             this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.6f;
             this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 1.2f);
-        } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 1.2f, 0.030000001f)) {
+        } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 1.2f, 30.0f * 0.001f)) {
             Actor_PlaySfx_Flagged(&this->picto.actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
@@ -604,7 +606,7 @@ s32 EnBigokuta_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
                              MTXMODE_APPLY);
             }
         } else if (this->actionFunc == EnBigokuta_SuckInPlayer) {
-            f32 sin = Math_SinF(this->timer * (M_PI / 3.0f)) * 0.5f;
+            f32 sin = Math_SinF(this->timer * (M_PIf / 3)) * 0.5f;
 
             Matrix_Scale(((this->timer * (2 / 90.0f)) * (0.5f + sin)) + 1.0f,
                          ((this->timer * (2 / 90.0f)) * (0.5f - sin)) + 1.0f, 1.0f - ((this->timer * 0.3f) / 9.0f),
@@ -613,7 +615,7 @@ s32 EnBigokuta_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
             if (this->timer == 0) {
                 Matrix_Scale(0.9f, 0.9f, 1.15f, MTXMODE_APPLY);
             } else if (this->timer > 0) {
-                f32 sin = Math_SinF(this->timer * (M_PI / 3.0f)) * 0.5f;
+                f32 sin = Math_SinF(this->timer * (M_PIf / 3)) * 0.5f;
 
                 Matrix_Scale(((0.5f + sin) * 0.2f) + 1.0f, ((0.5f - sin) * 0.2f) + 1.0f, 0.7f, MTXMODE_APPLY);
             } else {

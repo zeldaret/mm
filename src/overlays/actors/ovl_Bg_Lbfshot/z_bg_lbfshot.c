@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_lbfshot.h"
-#include "objects/object_lbfshot/object_lbfshot.h"
+#include "assets/objects/object_lbfshot/object_lbfshot.h"
 
 #define FLAGS 0x00000000
 
@@ -15,7 +15,7 @@ void BgLbfshot_Init(Actor* thisx, PlayState* play);
 void BgLbfshot_Destroy(Actor* thisx, PlayState* play);
 void BgLbfshot_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Bg_Lbfshot_InitVars = {
+ActorProfile Bg_Lbfshot_Profile = {
     /**/ ACTOR_BG_LBFSHOT,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

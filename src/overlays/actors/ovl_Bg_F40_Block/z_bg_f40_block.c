@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_f40_block.h"
-#include "objects/object_f40_obj/object_f40_obj.h"
+#include "assets/objects/object_f40_obj/object_f40_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -26,7 +26,7 @@ void func_80BC44F4(BgF40Block* this, PlayState* play);
 void func_80BC4530(BgF40Block* this, PlayState* play);
 void func_80BC457C(BgF40Block* this, PlayState* play);
 
-ActorInit Bg_F40_Block_InitVars = {
+ActorProfile Bg_F40_Block_Profile = {
     /**/ ACTOR_BG_F40_BLOCK,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

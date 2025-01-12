@@ -8,7 +8,7 @@
 #include "z64horse.h"
 #include "z64voice.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnCow*)thisx)
 
@@ -29,7 +29,7 @@ void EnCow_DoTail(EnCow* this, PlayState* play);
 void EnCow_UpdateTail(Actor* thisx, PlayState* play);
 void EnCow_DrawTail(Actor* thisx, PlayState* play);
 
-ActorInit En_Cow_InitVars = {
+ActorProfile En_Cow_Profile = {
     /**/ ACTOR_EN_COW,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -43,7 +43,7 @@ ActorInit En_Cow_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_ENEMY,
         OC1_ON | OC1_TYPE_ALL,
@@ -51,11 +51,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 30, 40, 0, { 0, 0, 0 } },
@@ -118,7 +118,7 @@ void EnCow_Init(Actor* thisx, PlayState* play) {
 
             this->actionFunc = EnCow_Idle;
 
-            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM) && (CURRENT_DAY != 1) &&
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS) && (CURRENT_DAY != 1) &&
                 (EN_COW_TYPE(thisx) == EN_COW_TYPE_ABDUCTED)) {
                 Actor_Kill(&this->actor);
                 return;
@@ -130,7 +130,7 @@ void EnCow_Init(Actor* thisx, PlayState* play) {
 
             this->animTimer = Rand_ZeroFloat(1000.0f) + 40.0f;
             this->animCycle = 0;
-            this->actor.targetMode = TARGET_MODE_6;
+            this->actor.attentionRangeType = ATTENTION_RANGE_6;
 
             gHorsePlayedEponasSong = false;
             AudioVoice_InitWord(VOICE_WORD_ID_MILK);
@@ -147,7 +147,7 @@ void EnCow_Init(Actor* thisx, PlayState* play) {
 
             EnCow_SetTailPos(this);
 
-            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+            this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
             this->animTimer = Rand_ZeroFloat(1000.0f) + 40.0f;
             break;
 
@@ -207,7 +207,7 @@ void EnCow_UpdateAnimation(EnCow* this, PlayState* play) {
 
 void EnCow_TalkEnd(EnCow* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
-        this->actor.flags &= ~ACTOR_FLAG_10000;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         Message_CloseTextbox(play);
         this->actionFunc = EnCow_Idle;
     }
@@ -215,7 +215,7 @@ void EnCow_TalkEnd(EnCow* this, PlayState* play) {
 
 void EnCow_GiveMilkEnd(EnCow* this, PlayState* play) {
     if (Actor_TextboxIsClosing(&this->actor, play)) {
-        this->actor.flags &= ~ACTOR_FLAG_10000;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         this->actionFunc = EnCow_Idle;
     }
 }
@@ -231,7 +231,7 @@ void EnCow_GiveMilkWait(EnCow* this, PlayState* play) {
 
 void EnCow_GiveMilk(EnCow* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
-        this->actor.flags &= ~ACTOR_FLAG_10000;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         Message_CloseTextbox(play);
         this->actionFunc = EnCow_GiveMilkWait;
         Actor_OfferGetItem(&this->actor, play, GI_MILK, 10000.0f, 100.0f);
@@ -260,7 +260,7 @@ void EnCow_Talk(EnCow* this, PlayState* play) {
             this->actionFunc = EnCow_TalkEnd;
         }
     } else {
-        this->actor.flags |= ACTOR_FLAG_10000;
+        this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         Actor_OfferTalk(&this->actor, play, 170.0f);
         this->actor.textId = 0x32C8; //! @bug textId is reset to this no matter the intial value
     }
@@ -278,7 +278,7 @@ void EnCow_Idle(EnCow* this, PlayState* play) {
                        ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y)) < 25000) {
                 gHorsePlayedEponasSong = false;
                 this->actionFunc = EnCow_Talk;
-                this->actor.flags |= ACTOR_FLAG_10000;
+                this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
                 Actor_OfferTalk(&this->actor, play, 170.0f);
                 this->actor.textId = 0x32C8; // Text to give milk after playing Epona's Song.
 
@@ -302,7 +302,7 @@ void EnCow_Idle(EnCow* this, PlayState* play) {
                 } else {
                     this->actor.textId = 0x32CA; // Text if you don't have an empty bottle.
                 }
-                this->actor.flags |= ACTOR_FLAG_10000;
+                this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
                 Actor_OfferTalk(&this->actor, play, 170.0f);
                 this->actionFunc = EnCow_Talk;
             }

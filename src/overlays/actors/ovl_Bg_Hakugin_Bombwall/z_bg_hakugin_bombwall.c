@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_hakugin_bombwall.h"
-#include "objects/object_hakugin_obj/object_hakugin_obj.h"
+#include "assets/objects/object_hakugin_obj/object_hakugin_obj.h"
 
 #define FLAGS 0x00000000
 
@@ -26,7 +26,7 @@ void func_80ABCCE4(BgHakuginBombwall* this, PlayState* play);
 void func_80ABCD98(BgHakuginBombwall* this, PlayState* play);
 void func_80ABCE60(BgHakuginBombwall* this, PlayState* play);
 
-ActorInit Bg_Hakugin_Bombwall_InitVars = {
+ActorProfile Bg_Hakugin_Bombwall_Profile = {
     /**/ ACTOR_BG_HAKUGIN_BOMBWALL,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -40,7 +40,7 @@ ActorInit Bg_Hakugin_Bombwall_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -48,11 +48,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0x00000008, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_NONE,
     },
     { 80, 80, 0, { 0, 0, 0 } },
@@ -326,7 +326,7 @@ void BgHakuginBombwall_Init(Actor* thisx, PlayState* play) {
     Collider_SetCylinder(play, &this->collider, &this->dyna.actor, &sCylinderInit);
     this->collider.dim.radius = ptr->unk_14;
     this->collider.dim.height = ptr->unk_16;
-    this->collider.info.bumper.dmgFlags = ptr->unk_18;
+    this->collider.elem.acDmgInfo.dmgFlags = ptr->unk_18;
     Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
 
     Actor_SetFocus(&this->dyna.actor, ptr->unk_08);
@@ -359,7 +359,7 @@ s32 func_80ABCB5C(BgHakuginBombwall* this, PlayState* play) {
 
 s32 func_80ABCC00(BgHakuginBombwall* this, PlayState* play) {
     if (this->collider.base.acFlags & AC_HIT) {
-        if (this->collider.info.acHitInfo->toucher.dmgFlags & 8) {
+        if (this->collider.elem.acHitElem->atDmgInfo.dmgFlags & 8) {
             if (this->collider.base.ac != NULL) {
                 Actor* thisx = &this->dyna.actor;
 

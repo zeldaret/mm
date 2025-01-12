@@ -18,6 +18,7 @@
  * There are some additional provisions to ensure that audio DMA is particularly high-speed, the audio data is assumed
  * to be uncompressed and the request queue and address translation is skipped.
  */
+#include "prevent_bss_reordering.h"
 #include "z64dma.h"
 
 #include "carthandle.h"
@@ -25,7 +26,7 @@
 #include "macros.h"
 #include "segment_symbols.h"
 #include "stack.h"
-#include "stackcheck.h"
+#include "libu64/stackcheck.h"
 #include "yaz0.h"
 #include "z64thread.h"
 
@@ -114,8 +115,8 @@ s32 DmaMgr_AudioDmaHandler(OSPiHandle* pihandle, OSIoMesg* mb, s32 direction) {
 DmaEntry* DmaMgr_FindDmaEntry(uintptr_t vrom) {
     DmaEntry* entry;
 
-    for (entry = gDmaDataTable; entry->vromEnd != 0; entry++) {
-        if ((vrom >= entry->vromStart) && (vrom < entry->vromEnd)) {
+    for (entry = gDmaDataTable; entry->file.vromEnd != 0; entry++) {
+        if ((vrom >= entry->file.vromStart) && (vrom < entry->file.vromEnd)) {
             return entry;
         }
     }
@@ -128,10 +129,10 @@ s32 DmaMgr_TranslateVromToRom(uintptr_t vrom) {
 
     if (entry != NULL) {
         if (entry->romEnd == 0) {
-            return vrom + entry->romStart - entry->vromStart;
+            return vrom + entry->romStart - entry->file.vromStart;
         }
 
-        if (vrom == entry->vromStart) {
+        if (vrom == entry->file.vromStart) {
             return entry->romStart;
         }
 
@@ -169,23 +170,23 @@ void DmaMgr_ProcessRequest(DmaRequest* req) {
         if (entry->romEnd == 0) {
             // romEnd of 0 indicates that the file is uncompressed. Files that are stored uncompressed can have
             // only part of their content loaded into RAM, so DMA only the requested region.
-            if (entry->vromEnd < (vrom + size)) {
+            if (entry->file.vromEnd < (vrom + size)) {
                 // Error, vrom + size ends up in a different file than it started in
                 Fault_AddHungupAndCrash("../z_std_dma.c", 499);
             }
-            DmaMgr_DmaRomToRam((entry->romStart + vrom) - entry->vromStart, ram, size);
+            DmaMgr_DmaRomToRam((entry->romStart + vrom) - entry->file.vromStart, ram, size);
         } else {
             // File is compressed. Files that are stored compressed must be loaded into RAM all at once.
 
             romSize = entry->romEnd - entry->romStart;
             romStart = entry->romStart;
 
-            if (vrom != entry->vromStart) {
+            if (vrom != entry->file.vromStart) {
                 // Error, requested vrom is not the start of a file
                 Fault_AddHungupAndCrash("../z_std_dma.c", 518);
             }
 
-            if (size != (entry->vromEnd - entry->vromStart)) {
+            if (size != (entry->file.vromEnd - entry->file.vromStart)) {
                 // Error, only part of the file was requested
                 Fault_AddHungupAndCrash("../z_std_dma.c", 525);
             }
@@ -290,7 +291,7 @@ void DmaMgr_Init(void) {
         DmaEntry* entry = gDmaDataTable;
         s32 index = 0;
 
-        while (entry->vromEnd != 0) {
+        while (entry->file.vromEnd != 0) {
             entry++;
             index++;
         }

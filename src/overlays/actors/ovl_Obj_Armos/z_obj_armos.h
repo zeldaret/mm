@@ -2,7 +2,7 @@
 #define Z_OBJ_ARMOS_H
 
 #include "global.h"
-#include "objects/object_am/object_am.h"
+#include "assets/objects/object_am/object_am.h"
 
 struct ObjArmos;
 

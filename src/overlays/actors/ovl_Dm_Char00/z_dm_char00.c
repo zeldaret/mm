@@ -5,8 +5,8 @@
  */
 
 #include "z_dm_char00.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
-#include "objects/object_delf/object_delf.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_delf/object_delf.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -20,7 +20,7 @@ void DmChar00_Draw(Actor* thisx, PlayState* play2);
 void func_80AA67F8(DmChar00* this, PlayState* play);
 void func_80AA695C(DmChar00* this, PlayState* play);
 
-ActorInit Dm_Char00_InitVars = {
+ActorProfile Dm_Char00_Profile = {
     /**/ ACTOR_DM_CHAR00,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -673,7 +673,7 @@ void DmChar00_Init(Actor* thisx, PlayState* play) {
     this->unk_240 = D_80AA77A8[DMCHAR00_GET(thisx)];
     this->unk_250 = D_80AA77D8[DMCHAR00_GET(thisx)];
 
-    thisx->targetArrowOffset = 3000.0f;
+    thisx->lockOnArrowOffset = 3000.0f;
     this->cueId = 99;
     this->unk_262 = DMCHAR00_GET_F800(thisx);
 
@@ -1066,12 +1066,13 @@ void DmChar00_Draw(Actor* thisx, PlayState* play2) {
 
     Gfx_SetupDL27_Xlu(play->state.gfxCtx);
 
-    do {
-        phi_a0 = (this->unk_262 * 50) & 511;
-        if (phi_a0 >= 256) {
-            phi_a0 = 511 - phi_a0;
-        }
-    } while (0);
+    //! FAKE:
+    if (1) {}
+
+    phi_a0 = (this->unk_262 * 50) % 512U;
+    if (phi_a0 >= 256) {
+        phi_a0 = 511 - phi_a0;
+    }
 
     gSPSegment(POLY_XLU_DISP++, 0x08, &gfx[0]);
 
@@ -1083,7 +1084,7 @@ void DmChar00_Draw(Actor* thisx, PlayState* play2) {
 
     gDPSetEnvColor(POLY_XLU_DISP++, (u8)(s8)this->unk_250.r, (u8)(s8)this->unk_250.g, (u8)(s8)this->unk_250.b,
                    (u8)(s8)((f32)phi_a0 * 1));
-    gDPSetDither(POLY_XLU_DISP++, G_CD_BAYER);
+    gDPSetDither(POLY_XLU_DISP++, G_AD_PATTERN | G_CD_BAYER);
 
     POLY_XLU_DISP = SkelAnime_Draw(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                    DmChar00_OverrideLimbDraw, NULL, &this->actor, POLY_XLU_DISP);

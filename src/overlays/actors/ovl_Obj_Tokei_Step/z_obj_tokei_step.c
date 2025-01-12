@@ -7,7 +7,7 @@
 #include "z_obj_tokei_step.h"
 #include "z64quake.h"
 #include "z64rumble.h"
-#include "objects/object_tokei_step/object_tokei_step.h"
+#include "assets/objects/object_tokei_step/object_tokei_step.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_400000)
 
@@ -28,7 +28,7 @@ void ObjTokeiStep_SetupDoNothingOpen(ObjTokeiStep* this);
 void ObjTokeiStep_DoNothingOpen(ObjTokeiStep* this, PlayState* play);
 void ObjTokeiStep_DrawOpen(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Tokei_Step_InitVars = {
+ActorProfile Obj_Tokei_Step_Profile = {
     /**/ ACTOR_OBJ_TOKEI_STEP,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -53,7 +53,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-void ObjTokeiStep_SetSysMatrix(ObjTokeiStepPanel* panel) {
+void ObjTokeiStep_SetMatrixTranslation(ObjTokeiStepPanel* panel) {
     MtxF* mtx = Matrix_GetCurrent();
 
     mtx->xw = panel->pos.x;
@@ -285,8 +285,8 @@ void ObjTokeiStep_DrawOpen(Actor* thisx, PlayState* play) {
 
     for (i = 0; i < ARRAY_COUNT(this->panels); i++) {
         panel = &this->panels[i];
-        ObjTokeiStep_SetSysMatrix(panel);
-        gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        ObjTokeiStep_SetMatrixTranslation(panel);
+        MATRIX_FINALIZE_AND_LOAD(gfx++, play->state.gfxCtx);
         gSPDisplayList(gfx++, gClocktowerPanelDL);
     }
     POLY_OPA_DISP = gfx;

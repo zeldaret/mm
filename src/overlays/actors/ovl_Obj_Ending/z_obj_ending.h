@@ -6,8 +6,8 @@
 struct ObjEnding;
 
 typedef struct {
-    /* 0x0 */   Gfx* dLists[2];
-    /* 0x8 */   AnimatedMaterial *animMat;
+    /* 0x0 */ Gfx* dLists[2];
+    /* 0x8 */ AnimatedMaterial *animMat;
 } ObjEndingModelInfo; // size = 0xC
 
 typedef struct ObjEnding {

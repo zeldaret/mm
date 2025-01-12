@@ -24,6 +24,14 @@
     AudioSeq_ProcessSeqCmd((SEQCMD_OP_SET_SEQPLAYER_VOLUME << 28) | ((u8)(seqPlayerIndex) << 24) | \
                            ((u8)(duration) << 16) | ((u8)((volume)*127.0f)));
 
+SeqRequest sSeqRequests[5][5];
+u8 sNumSeqRequests[5];
+u32 sAudioSeqCmds[0x100];
+ActiveSequence gActiveSeqs[5];
+u8 sResetAudioHeapTimer;
+u16 sResetAudioHeapFadeReverbVolume;
+u16 sResetAudioHeapFadeReverbVolumeStep;
+
 u8 sSeqCmdWritePos = 0;
 u8 sSeqCmdReadPos = 0;
 u8 sStartSeqDisabled = 0;
@@ -547,6 +555,7 @@ void AudioSeq_UpdateActiveSequences(void) {
                     // Queue the same command that was stored previously, but without the 0x8000
                     AudioSeq_ProcessSeqCmd(gActiveSeqs[seqPlayerIndex].startAsyncSeqCmd);
                     break;
+
                 case 0xFF:
                     // There was an error in loading the fonts
                     gActiveSeqs[seqPlayerIndex].isWaitingForFonts = false;

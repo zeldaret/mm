@@ -6,7 +6,7 @@
 
 #include "z_en_bubble.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED)
 
 #define THIS ((EnBubble*)thisx)
 
@@ -19,7 +19,7 @@ void EnBubble_Wait(EnBubble* this, PlayState* play);
 void EnBubble_Pop(EnBubble* this, PlayState* play);
 void EnBubble_Regrow(EnBubble* this, PlayState* play);
 
-ActorInit En_Bubble_InitVars = {
+ActorProfile En_Bubble_Profile = {
     /**/ ACTOR_EN_BUBBLE,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -34,22 +34,22 @@ ActorInit En_Bubble_InitVars = {
 static ColliderJntSphElementInit sJntSphElementsInit[2] = {
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000000, 0x00, 0x04 },
             { 0xF7CFD757, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 0, { { 0, 0, 0 }, 16 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0x00002820, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON | BUMP_NO_AT_INFO | BUMP_NO_DAMAGE | BUMP_NO_SWORD_SFX | BUMP_NO_HITMARK,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON | ACELEM_NO_AT_INFO | ACELEM_NO_DAMAGE | ACELEM_NO_SWORD_SFX | ACELEM_NO_HITMARK,
             OCELEM_NONE,
         },
         { 0, { { 0, 0, 0 }, 16 }, 100 },
@@ -58,7 +58,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[2] = {
 
 static ColliderJntSphInit sJntSphInit = {
     {
-        COLTYPE_HIT6,
+        COL_MATERIAL_HIT6,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -77,7 +77,7 @@ void EnBubble_SetDimensions(EnBubble* this, f32 dim) {
     f32 z;
     f32 norm;
 
-    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+    this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
     Actor_SetScale(&this->actor, 1.0f);
     this->actor.shape.yOffset = 16.0f;
     this->modelRotSpeed = 16.0f;
@@ -96,12 +96,12 @@ void EnBubble_SetDimensions(EnBubble* this, f32 dim) {
 }
 
 s32 func_8089F59C(EnBubble* this) {
-    ColliderInfo* info = &this->colliderSphere.elements[0].info;
+    ColliderElement* elem = &this->colliderSphere.elements[0].base;
 
-    info->toucher.dmgFlags = DMG_EXPLOSIVES;
-    info->toucher.effect = 0;
-    info->toucher.damage = 4;
-    info->toucherFlags = TOUCH_ON;
+    elem->atDmgInfo.dmgFlags = DMG_EXPLOSIVES;
+    elem->atDmgInfo.effect = 0;
+    elem->atDmgInfo.damage = 4;
+    elem->atElemFlags = ATELEM_ON;
     this->actor.velocity.y = 0.0f;
     return 6;
 }
@@ -112,7 +112,7 @@ s32 func_8089F5D0(EnBubble* this) {
 }
 
 void EnBubble_DamagePlayer(EnBubble* this, PlayState* play) {
-    play->damagePlayer(play, -this->colliderSphere.elements[0].info.toucher.damage);
+    play->damagePlayer(play, -this->colliderSphere.elements[0].base.atDmgInfo.damage);
     func_800B8E1C(play, &this->actor, 6.0f, this->actor.yawTowardsPlayer, 6.0f);
 }
 
@@ -144,7 +144,7 @@ s32 EnBubble_Explosion(EnBubble* this, PlayState* play) {
                                           &sEffectEnvColor, Rand_S16Offset(100, 50), 25, 0);
     }
     Item_DropCollectibleRandom(play, NULL, &this->actor.world.pos, 0x50);
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     return Rand_S16Offset(90, 60);
 }
 
@@ -170,7 +170,7 @@ s32 func_8089F908(EnBubble* this) {
 void EnBubble_Vec3fNormalizedReflect(Vec3f* vec1, Vec3f* vec2, Vec3f* dest) {
     f32 norm;
 
-    func_80179F64(vec1, vec2, dest);
+    Math3D_Vec3fReflect(vec1, vec2, dest);
     norm = sqrtf(SQ(dest->x) + SQ(dest->y) + SQ(dest->z));
     if (norm != 0.0f) {
         dest->x /= norm;
@@ -205,7 +205,7 @@ void EnBubble_Fly(EnBubble* this, PlayState* play) {
     s32 bgId;
     u8 bounceCount;
 
-    if (this->colliderSphere.elements[1].info.bumperFlags & BUMP_HIT) {
+    if (this->colliderSphere.elements[1].base.acElemFlags & ACELEM_HIT) {
         bumpActor = this->colliderSphere.base.ac;
         this->normalizedBumpVelocity = bumpActor->velocity;
         EnBubble_Vec3fNormalize(&this->normalizedBumpVelocity);
@@ -283,7 +283,7 @@ s32 func_8089FF30(EnBubble* this) {
         return false;
     }
     this->colliderSphere.base.acFlags &= ~AC_HIT;
-    if (this->colliderSphere.elements[1].info.bumperFlags & BUMP_HIT) {
+    if (this->colliderSphere.elements[1].base.acElemFlags & ACELEM_HIT) {
         this->unk1F4.x = this->colliderSphere.base.ac->velocity.x / 10.0f;
         this->unk1F4.y = this->colliderSphere.base.ac->velocity.y / 10.0f;
         this->unk1F4.z = this->colliderSphere.base.ac->velocity.z / 10.0f;
@@ -414,7 +414,7 @@ void EnBubble_Draw(Actor* thisx, PlayState* play) {
         Matrix_RotateZF(DEG_TO_RAD((f32)play->state.frames) * this->modelRotSpeed, MTXMODE_APPLY);
         Matrix_Scale(this->modelEllipticity + 1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
         Matrix_RotateZF(DEG_TO_RAD(-(f32)play->state.frames) * this->modelRotSpeed, MTXMODE_APPLY);
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
 
         gSPDisplayList(POLY_XLU_DISP++, gBubbleDL);
     }

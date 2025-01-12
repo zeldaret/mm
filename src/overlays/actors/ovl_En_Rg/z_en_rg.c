@@ -5,7 +5,7 @@
  */
 #include "prevent_bss_reordering.h"
 #include "z_en_rg.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_80000000)
 
@@ -20,7 +20,7 @@ void func_80BF4FC4(EnRg* this, PlayState* play);
 
 s32 D_80BF5C10;
 
-ActorInit En_Rg_InitVars = {
+ActorProfile En_Rg_Profile = {
     /**/ ACTOR_EN_RG,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -34,7 +34,7 @@ ActorInit En_Rg_InitVars = {
 
 static ColliderSphereInit sSphereInit = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_ON | AT_TYPE_PLAYER | AT_TYPE_ENEMY,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -42,11 +42,11 @@ static ColliderSphereInit sSphereInit = {
         COLSHAPE_SPHERE,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0xF7CFFFFF, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 0, { { 0, 0, 0 }, 20 }, 100 },
@@ -54,7 +54,7 @@ static ColliderSphereInit sSphereInit = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_HIT1,
+        COL_MATERIAL_HIT1,
         AT_NONE,
         AC_NONE,
         OC1_ON | OC1_TYPE_ALL,
@@ -62,11 +62,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK1,
+        ELEM_MATERIAL_UNK1,
         { 0x00000000, 0x00, 0x00 },
         { 0x00000000, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_NONE,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_NONE,
         OCELEM_ON,
     },
     { 20, 62, 0, { 0, 0, 0 } },
@@ -178,7 +178,7 @@ void func_80BF3920(EnRgStruct* ptr, PlayState* play2) {
         Matrix_Scale(ptr->unk_34, ptr->unk_34, 1.0f, MTXMODE_APPLY);
         Matrix_ReplaceRotation(&play->billboardMtxF);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sDustTextures[(s32)(temp_f20 * 7.0f)]));
         gSPDisplayList(POLY_XLU_DISP++, gGoronDustModelDL);
 
@@ -318,12 +318,12 @@ s32 func_80BF416C(EnRg* this, PlayState* play) {
 
 s32 func_80BF4220(EnRg* this, PlayState* play, Actor* arg2) {
     CollisionPoly* sp44 = NULL;
-    s32 sp40;
+    s32 bgId;
     Vec3f sp34;
 
     if (Actor_ActorAIsFacingAndNearActorB(&this->actor, arg2, 400.0f, 0x2000) &&
         !BgCheck_EntityLineTest1(&play->colCtx, &this->actor.world.pos, &arg2->world.pos, &sp34, &sp44, true, false,
-                                 false, true, &sp40)) {
+                                 false, true, &bgId)) {
         return true;
     }
     return false;
@@ -370,8 +370,8 @@ s32 func_80BF43FC(EnRg* this) {
     do {
         SubS_CopyPointFromPathCheckBounds(this->path, phi_s0 - 1, &sp9C);
         SubS_CopyPointFromPathCheckBounds(this->path, phi_s0 + 1, &sp90);
-        if (Math3D_PointDistToLine2D(this->actor.world.pos.x, this->actor.world.pos.z, sp9C.x, sp9C.z, sp90.x, sp90.z,
-                                     &sp8C, &sp88, &sp84) &&
+        if (Math3D_PointDistSqToLine2DImpl(this->actor.world.pos.x, this->actor.world.pos.z, sp9C.x, sp9C.z, sp90.x,
+                                           sp90.z, &sp8C, &sp88, &sp84) &&
             (!phi_s6 || ((phi_s4 + 1) == phi_s0) || (sp84 < phi_f20))) {
             phi_s6 = 1;
             phi_f20 = sp84;
@@ -448,10 +448,10 @@ s32 func_80BF47AC(EnRg* this, PlayState* play) {
     f32 phi_f0;
     f32 phi_f2;
 
-    if (player->linearVelocity < 20.0f) {
+    if (player->speedXZ < 20.0f) {
         phi_f2 = 20.0f;
     } else {
-        phi_f2 = player->linearVelocity;
+        phi_f2 = player->speedXZ;
     }
 
     if ((this->unk_310 & 0x400) || (this->unk_310 & 0x1000)) {
@@ -574,13 +574,13 @@ void func_80BF4AB8(EnRg* this, PlayState* play) {
             } else if (this->collider2.base.at->id == ACTOR_PLAYER) {
                 this->unk_326 = 0x28;
                 if (player->stateFlags3 & PLAYER_STATE3_1000) {
-                    player->linearVelocity *= 0.5f;
-                    player->unk_B08 = player->linearVelocity;
-                    player->unk_B0C += player->linearVelocity * 0.05f;
-                    if (BINANG_SUB(this->actor.yawTowardsPlayer, player->currentYaw) > 0) {
-                        player->currentYaw += 0x2000;
+                    player->speedXZ *= 0.5f;
+                    player->unk_B08 = player->speedXZ;
+                    player->unk_B0C += player->speedXZ * 0.05f;
+                    if (BINANG_SUB(this->actor.yawTowardsPlayer, player->yaw) > 0) {
+                        player->yaw += 0x2000;
                     } else {
-                        player->currentYaw -= 0x2000;
+                        player->yaw -= 0x2000;
                     }
                     player->unk_B8C = 4;
                     player->invincibilityTimer = 20;
@@ -604,7 +604,7 @@ void func_80BF4AB8(EnRg* this, PlayState* play) {
  * The range extends a little bit beyond the finish line's in-game visual.
  */
 s32 EnRg_IsInFinishLine(Vec3f* pos) {
-    return Math3D_XZBoundCheck(-1261.0f, -901.0f, -1600.0f, -1520.0f, pos->x, pos->z);
+    return Math3D_PointInSquare2D(-1261.0f, -901.0f, -1600.0f, -1520.0f, pos->x, pos->z);
 }
 
 Vec3f D_80BF596C[] = {
@@ -750,7 +750,7 @@ void EnRg_Init(Actor* thisx, PlayState* play) {
             this->unk_33C = 1;
         }
 
-        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         this->unk_310 = 8;
         this->actor.gravity = -1.0f;
 
@@ -821,7 +821,7 @@ void func_80BF547C(EnRg* this, PlayState* play) {
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
     Matrix_RotateXS(this->actor.shape.rot.x, MTXMODE_APPLY);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, gGoronRolledUpDL);
 
     CLOSE_DISPS(play->state.gfxCtx);

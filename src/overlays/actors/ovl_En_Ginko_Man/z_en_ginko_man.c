@@ -5,8 +5,9 @@
  */
 
 #include "z_en_ginko_man.h"
+#include "attributes.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnGinkoMan*)thisx)
 
@@ -29,7 +30,7 @@ void EnGinkoMan_Stamp(EnGinkoMan* this, PlayState* play);
 void EnGinkoMan_Dialogue(EnGinkoMan* this, PlayState* play);
 void EnGinkoMan_SwitchAnimation(EnGinkoMan* this, PlayState* play);
 
-ActorInit En_Ginko_Man_InitVars = {
+ActorProfile En_Ginko_Man_Profile = {
     /**/ ACTOR_EN_GINKO_MAN,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -61,7 +62,7 @@ static AnimationInfo sAnimationInfo[GINKO_ANIM_MAX] = {
 void EnGinkoMan_Init(Actor* thisx, PlayState* play) {
     EnGinkoMan* this = THIS;
 
-    this->actor.targetMode = TARGET_MODE_1;
+    this->actor.attentionRangeType = ATTENTION_RANGE_1;
     this->actor.uncullZoneForward = 400.0f;
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.colChkInfo.cylRadius = 100;
@@ -79,7 +80,7 @@ void EnGinkoMan_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnGinkoMan_SetupIdle(EnGinkoMan* this) {
-    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+    this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, GINKO_ANIM_SITTING);
     this->actionFunc = EnGinkoMan_Idle;
 }
@@ -118,7 +119,7 @@ void EnGinkoMan_DepositDialogue(EnGinkoMan* this, PlayState* play) {
     switch (this->curTextId) {
         case 0x44C:
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, GINKO_ANIM_SITTING);
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_10_08)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BANK_WALLET_UPGRADE)) {
                 Message_StartTextbox(play, 0x44E, &this->actor);
                 this->curTextId = 0x44E;
             } else {
@@ -290,7 +291,7 @@ void EnGinkoMan_DepositDialogue(EnGinkoMan* this, PlayState* play) {
 
         case 0x476:
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, GINKO_ANIM_SITTING);
-            // fallthrough
+            FALLTHROUGH;
         case 0x475:
         case 0x47C:
         case 0x47D:
@@ -544,14 +545,14 @@ void EnGinkoMan_BankAward(EnGinkoMan* this, PlayState* play) {
         this->actor.parent = NULL;
         EnGinkoMan_SetupBankAward2(this);
     } else if (this->curTextId == 0x45B) {
-        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_10_08)) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BANK_WALLET_UPGRADE)) {
             Actor_OfferGetItem(&this->actor, play, GI_WALLET_ADULT + CUR_UPG_VALUE(UPG_WALLET), 500.0f, 100.0f);
         } else {
             Actor_OfferGetItem(&this->actor, play, GI_RUPEE_BLUE, 500.0f, 100.0f);
         }
     } else if (this->curTextId == 0x45C) {
         Actor_OfferGetItem(&this->actor, play, GI_RUPEE_BLUE, 500.0f, 100.0f);
-    } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_59_08)) {
+    } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BANK_HEART_PIECE)) {
         Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);
     } else {
         Actor_OfferGetItem(&this->actor, play, GI_RUPEE_BLUE, 500.0f, 100.0f);
@@ -566,8 +567,8 @@ void EnGinkoMan_SetupBankAward2(EnGinkoMan* this) {
 // separate function to handle bank rewards... called while the player is receiving the award
 void EnGinkoMan_BankAward2(EnGinkoMan* this, PlayState* play) {
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
-        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_10_08) && (this->curTextId == 0x45B)) {
-            SET_WEEKEVENTREG(WEEKEVENTREG_10_08);
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BANK_WALLET_UPGRADE) && (this->curTextId == 0x45B)) {
+            SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BANK_WALLET_UPGRADE);
             Message_StartTextbox(play, 0x47A, &this->actor);
             this->curTextId = 0x47A; // Message after receiving reward for depositing 200 rupees.
         } else {
@@ -579,8 +580,8 @@ void EnGinkoMan_BankAward2(EnGinkoMan* this, PlayState* play) {
         EnGinkoMan_SetupDialogue(this);
     } else if (this->curTextId == 0x45D) { // saved up 5000 rupees for HP
         if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
-            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_59_08)) {
-                SET_WEEKEVENTREG(WEEKEVENTREG_59_08);
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BANK_HEART_PIECE)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_BANK_HEART_PIECE);
             }
             EnGinkoMan_SetupIdle(this);
         }

@@ -49,14 +49,15 @@
  * - Seaweed
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_boss_03.h"
 #include "overlays/actors/ovl_Door_Warp1/z_door_warp1.h"
 #include "overlays/actors/ovl_En_Water_Effect/z_en_water_effect.h"
 #include "overlays/actors/ovl_Item_B_Heart/z_item_b_heart.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
-#include "objects/object_water_effect/object_water_effect.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_water_effect/object_water_effect.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((Boss03*)thisx)
 
@@ -161,7 +162,7 @@ void Boss03_SpawnEffectDroplet(PlayState* play, Vec3f* pos) {
             eff->accel.y = -2.0f;
             eff->unk_34.x = 0.1f;
             eff->unk_34.y = 0.0f;
-            eff->unk_34.z = Rand_ZeroFloat(2 * M_PI);
+            eff->unk_34.z = Rand_ZeroFloat(2 * M_PIf);
             eff->unk_02 = Rand_ZeroFloat(100.0f);
             eff->velocity.x = Rand_CenteredFloat(25.0f);
             eff->velocity.z = Rand_CenteredFloat(25.0f);
@@ -187,7 +188,7 @@ void Boss03_SpawnEffectSplash(PlayState* play, Vec3f* pos, Vec3f* velocity) {
             temp_f2 = Rand_ZeroFloat(0.02f) + 0.02f;
             eff->unk_34.y = temp_f2;
             eff->unk_34.x = temp_f2;
-            eff->unk_34.z = Rand_ZeroFloat(2 * M_PI);
+            eff->unk_34.z = Rand_ZeroFloat(2 * M_PIf);
             eff->unk_02 = Rand_ZeroFloat(100.0f);
             return;
         }
@@ -219,14 +220,14 @@ void Boss03_SpawnEffectBubble(PlayState* play, Vec3f* pos) {
 /* End of SpawnEffect section */
 
 void Boss03_UpdateSphereElement(s32 index, ColliderJntSph* collider, Vec3f* sphereCenter) {
-    ColliderJntSphElement* sphElement;
+    ColliderJntSphElement* jntSphElem;
 
     collider->elements[index].dim.worldSphere.center.x = sphereCenter->x;
     collider->elements[index].dim.worldSphere.center.y = sphereCenter->y;
     collider->elements[index].dim.worldSphere.center.z = sphereCenter->z;
 
-    sphElement = &collider->elements[index];
-    sphElement->dim.worldSphere.radius = sphElement->dim.scale * sphElement->dim.modelSphere.radius;
+    jntSphElem = &collider->elements[index];
+    jntSphElem->dim.worldSphere.radius = jntSphElem->dim.scale * jntSphElem->dim.modelSphere.radius;
 }
 
 /* Start of RNG section */
@@ -275,7 +276,7 @@ Actor* Boss03_FindActorDblueMovebg(PlayState* play) {
 
 /* Start of Gyorg's Init and actionFuncs section */
 
-ActorInit Boss_03_InitVars = {
+ActorProfile Boss_03_Profile = {
     /**/ ACTOR_BOSS_03,
     /**/ ACTORCAT_BOSS,
     /**/ FLAGS,
@@ -291,22 +292,22 @@ ActorInit Boss_03_InitVars = {
 static ColliderJntSphElementInit sHeadJntSphElementsInit[] = {
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { GYORG_LIMB_NONE, { { 0, 0, 0 }, 70 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { GYORG_LIMB_ROOT, { { 0, 0, 0 }, 50 }, 100 },
@@ -315,7 +316,7 @@ static ColliderJntSphElementInit sHeadJntSphElementsInit[] = {
 
 static ColliderJntSphInit sHeadJntSphInit = {
     {
-        COLTYPE_HIT3,
+        COL_MATERIAL_HIT3,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_PLAYER,
@@ -330,55 +331,55 @@ static ColliderJntSphInit sHeadJntSphInit = {
 static ColliderJntSphElementInit sBodyJntSphElementsInit[] = {
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { GYORG_LIMB_HEAD, { { 0, 0, 0 }, 20 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { GYORG_LIMB_LOWER_TRUNK, { { 0, 0, 0 }, 20 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { GYORG_LIMB_TAIL, { { 0, 0, 0 }, 70 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { GYORG_LIMB_RIGHT_FIN_ROOT, { { 0, 0, 0 }, 70 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK3,
+            ELEM_MATERIAL_UNK3,
             { 0xF7CFFFFF, 0x00, 0x08 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { GYORG_LIMB_UPPER_RIGHT_FIN, { { 0, 0, 0 }, 30 }, 100 },
@@ -387,7 +388,7 @@ static ColliderJntSphElementInit sBodyJntSphElementsInit[] = {
 
 static ColliderJntSphInit sBodyJntSphInit = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_PLAYER,
@@ -476,7 +477,7 @@ void Boss03_Init(Actor* thisx, PlayState* play2) {
             this->jointTable[i].z = Math_SinS(this->unk_240 * 0x10 + i * 19000) * 4000.0f;
         }
 
-        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         return;
     }
 
@@ -489,7 +490,7 @@ void Boss03_Init(Actor* thisx, PlayState* play2) {
         f32 rand;
 
         rand = Boss03_RandZeroOne();
-        Matrix_RotateYF((rand * M_PI * 0.2f) + ((2.0f * M_PI / 5.0f) * i), MTXMODE_NEW);
+        Matrix_RotateYF((rand * M_PIf * 0.2f) + ((2 * M_PIf / 5) * i), MTXMODE_NEW);
 
         rand = Boss03_RandZeroOne();
         Matrix_MultVecZ((rand * 800.0f) + 400.0f, &sp70);
@@ -507,7 +508,7 @@ void Boss03_Init(Actor* thisx, PlayState* play2) {
         sGyorgEffects[i].type = GYORG_EFFECT_NONE;
     }
 
-    this->actor.targetMode = TARGET_MODE_5;
+    this->actor.attentionRangeType = ATTENTION_RANGE_5;
     this->actor.colChkInfo.mass = MASS_HEAVY;
     this->actor.colChkInfo.health = 10;
 
@@ -544,7 +545,7 @@ void func_809E344C(Boss03* this, PlayState* play) {
         this->actionFunc = func_809E34B8;
         Animation_MorphToLoop(&this->skelAnime, &gGyorgFastSwimmingAnim, -15.0f);
         this->unk_274 = 0;
-        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+        this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
     }
 }
 
@@ -584,7 +585,7 @@ void func_809E34B8(Boss03* this, PlayState* play) {
 
     Math_ApproachS(&this->unk_274, this->unk_276, 1, 0x100);
     Math_ApproachF(&this->actor.speed, this->unk_278, 1.0f, this->unk_27C);
-    Math_ApproachF(&this->unk_260, sinf(this->skelAnime.curFrame * (M_PI / 5.0f)) * 10.0f * 0.01f, 0.5f, 1.0f);
+    Math_ApproachF(&this->unk_260, sinf(this->skelAnime.curFrame * (M_PIf / 5)) * 10.0f * 0.01f, 0.5f, 1.0f);
 
     if ((this->workTimer[WORK_TIMER_UNK2_A] == 0) && (this->actor.bgCheckFlags & BGCHECKFLAG_WALL)) {
         Matrix_MultVecZ(-500.0f, &this->unk_268);
@@ -672,7 +673,7 @@ void Boss03_ChasePlayer(Boss03* this, PlayState* play) {
 
     Math_ApproachS(&this->unk_274, this->unk_276, 1, 0x100);
     Math_ApproachF(&this->actor.speed, this->unk_278, 1.0f, this->unk_27C);
-    Math_ApproachF(&this->unk_260, sinf(this->skelAnime.curFrame * (M_PI / 5.0f)) * 10.0f * 0.01f, 0.5f, 1.0f);
+    Math_ApproachF(&this->unk_260, sinf(this->skelAnime.curFrame * (M_PIf / 5)) * 10.0f * 0.01f, 0.5f, 1.0f);
     Actor_MoveWithoutGravityReverse(&this->actor);
 
     Math_ApproachS(&this->actor.shape.rot.x, this->actor.world.rot.x, 2, this->unk_274 * 2);
@@ -754,7 +755,7 @@ void Boss03_CatchPlayer(Boss03* this, PlayState* play) {
     this->unk_276 = 0x1000;
     this->unk_2BD = true;
     this->unk_278 = 15.0f;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
 
     SkelAnime_Update(&this->skelAnime);
 
@@ -769,7 +770,7 @@ void Boss03_CatchPlayer(Boss03* this, PlayState* play) {
                    5, 0x100);
     Math_ApproachS(&this->unk_274, this->unk_276, 1, 0x100);
     Math_ApproachF(&this->actor.speed, this->unk_278, 1.0f, this->unk_27C);
-    Math_ApproachF(&this->unk_260, sinf(this->skelAnime.curFrame * (M_PI / 5.0f)) * 10.0f * 0.01f, 0.5f, 1.0f);
+    Math_ApproachF(&this->unk_260, sinf(this->skelAnime.curFrame * (M_PIf / 5)) * 10.0f * 0.01f, 0.5f, 1.0f);
     Actor_MoveWithoutGravityReverse(&this->actor);
     Math_ApproachS(&this->actor.shape.rot.x, this->actor.world.rot.x, 2, this->unk_274 * 2);
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, this->unk_274 * 2);
@@ -873,7 +874,7 @@ void Boss03_ChewPlayer(Boss03* this, PlayState* play) {
                        -0.5f,
                    5, 0x100);
     Math_ApproachS(&this->unk_274, this->unk_276, 1, 0x100);
-    Math_ApproachF(&this->unk_260, sinf(this->skelAnime.curFrame * (M_PI / 5.0f)) * 10.0f * 0.01f, 0.5f, 1.0f);
+    Math_ApproachF(&this->unk_260, sinf(this->skelAnime.curFrame * (M_PIf / 5)) * 10.0f * 0.01f, 0.5f, 1.0f);
 
     switch (this->unk_242) {
         case 0:
@@ -1037,7 +1038,7 @@ void Boss03_Charge(Boss03* this, PlayState* play) {
     this->actor.shape.rot = this->actor.world.rot;
 
     Math_ApproachF(&this->actor.speed, 25.0f, 1.0f, 3.0f);
-    Math_ApproachF(&this->unk_260, sinf(this->skelAnime.curFrame * (M_PI / 5.0f)) * 10.0f * 0.01f, 0.5f, 1.0f);
+    Math_ApproachF(&this->unk_260, sinf(this->skelAnime.curFrame * (M_PIf / 5)) * 10.0f * 0.01f, 0.5f, 1.0f);
     Actor_MoveWithoutGravityReverse(&this->actor);
 
     if (this->actor.speed >= 20.0f) {
@@ -1167,7 +1168,7 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
                 this->subCamAt.y = player->actor.world.pos.y + 30.0f;
                 this->csState = 1;
                 this->csTimer = 0;
-                this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+                this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
                 this->unk_2D5 = true;
 
                 this->subCamFov = KREG(14) + 60.0f;
@@ -1332,6 +1333,7 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
                     Math_ApproachZeroF(&this->actor.velocity.y, 1.0f, 1.0f);
                     Math_ApproachZeroF(&this->actor.speed, 1.0f, 0.5f);
                 } else {
+                    // FAKE:
                     if (1) {}
                     if (1) {}
                     if (1) {}
@@ -1421,7 +1423,7 @@ void Boss03_SetupDeathCutscene(Boss03* this, PlayState* play) {
     this->workTimer[WORK_TIMER_UNK0_C] = 0;
     this->unk_242 = 0;
     this->csState = 0;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
 }
 
 void Boss03_DeathCutscene(Boss03* this, PlayState* play) {
@@ -1827,7 +1829,7 @@ void Boss03_Damaged(Boss03* this, PlayState* play) {
 /* End of ActionFuncs section */
 
 void Boss03_UpdateCollision(Boss03* this, PlayState* play) {
-    ColliderInfo* hitbox;
+    ColliderElement* acHitElem;
     u8 sp4B = true;
     Player* player = GET_PLAYER(play);
     s32 i;
@@ -1842,16 +1844,16 @@ void Boss03_UpdateCollision(Boss03* this, PlayState* play) {
 
     if (this->waterHeight < player->actor.world.pos.y) {
         for (i = 0; i < ARRAY_COUNT(sHeadJntSphElementsInit); i++) {
-            if (this->headCollider.elements[i].info.toucherFlags & TOUCH_HIT) {
-                this->headCollider.elements[i].info.toucherFlags &= ~TOUCH_HIT;
+            if (this->headCollider.elements[i].base.atElemFlags & ATELEM_HIT) {
+                this->headCollider.elements[i].base.atElemFlags &= ~ATELEM_HIT;
                 player->pushedYaw = this->actor.shape.rot.y;
                 player->pushedSpeed = 20.0f;
             }
         }
 
         for (i = 0; i < ARRAY_COUNT(sBodyJntSphElementsInit); i++) {
-            if (this->bodyCollider.elements[i].info.toucherFlags & TOUCH_HIT) {
-                this->bodyCollider.elements[i].info.toucherFlags &= ~TOUCH_HIT;
+            if (this->bodyCollider.elements[i].base.atElemFlags & ATELEM_HIT) {
+                this->bodyCollider.elements[i].base.atElemFlags &= ~ATELEM_HIT;
                 player->pushedYaw = this->actor.shape.rot.y;
                 player->pushedSpeed = 20.0f;
             }
@@ -1861,16 +1863,16 @@ void Boss03_UpdateCollision(Boss03* this, PlayState* play) {
     if (this->unk_25C == 0) {
         if ((this->actionFunc == stunnedActionFunc) && sp4B) {
             for (i = 0; i < ARRAY_COUNT(sBodyJntSphElementsInit); i++) {
-                if (this->bodyCollider.elements[i].info.bumperFlags & BUMP_HIT) {
-                    hitbox = this->bodyCollider.elements[i].info.acHitInfo;
-                    this->bodyCollider.elements[i].info.bumperFlags &= ~BUMP_HIT;
+                if (this->bodyCollider.elements[i].base.acElemFlags & ACELEM_HIT) {
+                    acHitElem = this->bodyCollider.elements[i].base.acHitElem;
+                    this->bodyCollider.elements[i].base.acElemFlags &= ~ACELEM_HIT;
                     this->unk_25C = 15;
                     this->unk_25E = 15;
 
                     // (DMG_SWORD_BEAM | DMG_SPIN_ATTACK | DMG_ZORA_PUNCH | DMG_ZORA_BARRIER | DMG_DEKU_LAUNCH |
                     // DMG_DEKU_SPIN | DMG_GORON_SPIKES | DMG_SWORD | DMG_GORON_PUNCH | DMG_DEKU_STICK)
-                    phi_v0 = (hitbox->toucher.dmgFlags & 0x038AC302)
-                                 ? this->bodyCollider.elements[i].info.acHitInfo->toucher.damage
+                    phi_v0 = (acHitElem->atDmgInfo.dmgFlags & 0x038AC302)
+                                 ? this->bodyCollider.elements[i].base.acHitElem->atDmgInfo.damage
                                  : 0;
 
                     phi_v1 = phi_v0;
@@ -1894,9 +1896,9 @@ void Boss03_UpdateCollision(Boss03* this, PlayState* play) {
         }
 
         for (i = 0; i < ARRAY_COUNT(sHeadJntSphElementsInit); i++) {
-            if (this->headCollider.elements[i].info.bumperFlags & BUMP_HIT) {
-                hitbox = this->headCollider.elements[i].info.acHitInfo;
-                this->headCollider.elements[i].info.bumperFlags &= ~BUMP_HIT;
+            if (this->headCollider.elements[i].base.acElemFlags & ACELEM_HIT) {
+                acHitElem = this->headCollider.elements[i].base.acHitElem;
+                this->headCollider.elements[i].base.acElemFlags &= ~ACELEM_HIT;
                 this->unk_25C = 15;
 
                 if (this->actionFunc != stunnedActionFunc) {
@@ -1918,8 +1920,8 @@ void Boss03_UpdateCollision(Boss03* this, PlayState* play) {
 
                     // (DMG_SWORD_BEAM | DMG_SPIN_ATTACK | DMG_ZORA_PUNCH | DMG_ZORA_BARRIER | DMG_DEKU_LAUNCH |
                     // DMG_DEKU_SPIN | DMG_GORON_SPIKES | DMG_SWORD | DMG_GORON_PUNCH | DMG_DEKU_STICK)
-                    phi_v0 = (hitbox->toucher.dmgFlags & 0x038AC302)
-                                 ? (this->headCollider.elements[i].info.acHitInfo->toucher.damage)
+                    phi_v0 = (acHitElem->atDmgInfo.dmgFlags & 0x038AC302)
+                                 ? (this->headCollider.elements[i].base.acHitElem->atDmgInfo.damage)
                                  : 0;
 
                     phi_v1 = phi_v0;
@@ -2024,9 +2026,9 @@ void Boss03_Update(Actor* thisx, PlayState* play2) {
 
     if (this->actionFunc != Boss03_DeathCutscene) {
         if ((this->actionFunc == Boss03_Stunned) || (this->actionFunc == Boss03_Damaged)) {
-            this->bodyCollider.base.colType = COLTYPE_HIT3;
+            this->bodyCollider.base.colMaterial = COL_MATERIAL_HIT3;
         } else {
-            this->bodyCollider.base.colType = COLTYPE_METAL;
+            this->bodyCollider.base.colMaterial = COL_MATERIAL_METAL;
         }
 
         Boss03_UpdateCollision(this, play);
@@ -2130,7 +2132,7 @@ void Boss03_Update(Actor* thisx, PlayState* play2) {
 
         for (j = 0, i = 0; i < 20; j++) {
             Matrix_RotateYF(yRot, MTXMODE_NEW);
-            Matrix_MultVecZ(Rand_ZeroFloat(60.000004f) + 312.0f, &dropletPos);
+            Matrix_MultVecZ(Rand_ZeroFloat(60000.0f * 0.001f) + 312.0f, &dropletPos);
             dropletPos.x += this->unk_284 + Rand_CenteredFloat(40.0f);
             dropletPos.y = PLATFORM_HEIGHT;
             dropletPos.z += this->unk_28C + Rand_CenteredFloat(40.0f);
@@ -2140,7 +2142,7 @@ void Boss03_Update(Actor* thisx, PlayState* play2) {
                 i++;
             }
 
-            yRot += ((2.0f * M_PI) / 50.0f);
+            yRot += ((2.0f * M_PIf) / 50.0f);
             if (j >= 50) {
                 break;
             }
@@ -2360,7 +2362,7 @@ void Boss03_UpdateEffects(PlayState* play) {
                 eff->alphaDelta = Rand_ZeroFloat(4.0f) + 5.0f;
 
                 for (j = 0; j < 4; j++) {
-                    Matrix_RotateYF((2.0f * (j * M_PI)) / 6.0f, MTXMODE_NEW);
+                    Matrix_RotateYF((2.0f * (j * M_PIf)) / 6.0f, MTXMODE_NEW);
                     sp94.x = 0.0f;
                     sp94.y = Rand_ZeroFloat(4.0f) + 2.0f;
                     sp94.z = Rand_ZeroFloat(1.5f) + 1.5f;
@@ -2431,7 +2433,7 @@ void Boss03_DrawEffects(PlayState* play) {
             Matrix_Scale(eff->unk_34.x, eff->unk_34.x, 1.0f, MTXMODE_APPLY);
             Matrix_ReplaceRotation(&play->billboardMtxF);
 
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_OPA_DISP++, gGyorgBubbleModelDL);
         }
     }
@@ -2468,7 +2470,7 @@ void Boss03_DrawEffects(PlayState* play) {
             Matrix_Scale(eff->unk_34.x, eff->unk_34.y, 1.0f, MTXMODE_APPLY);
             Matrix_RotateZF(eff->unk_34.z, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, gfxCtx);
             gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_0042B0);
         }
     }
@@ -2497,7 +2499,7 @@ void Boss03_DrawEffects(PlayState* play) {
             Matrix_Scale(eff->unk_34.x, 1.0f, eff->unk_34.x, MTXMODE_APPLY);
             Matrix_RotateYF(eff->unk_34.z, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, gfxCtx);
             gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_0042F8);
         }
     }

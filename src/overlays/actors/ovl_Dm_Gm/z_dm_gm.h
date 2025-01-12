@@ -2,7 +2,7 @@
 #define Z_DM_GM_H
 
 #include "global.h"
-#include "objects/object_an1/object_an1.h"
+#include "assets/objects/object_an1/object_an1.h"
 
 struct DmGm;
 

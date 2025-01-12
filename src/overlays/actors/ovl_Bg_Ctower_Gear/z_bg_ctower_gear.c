@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_ctower_gear.h"
-#include "objects/object_ctower_rot/object_ctower_rot.h"
+#include "assets/objects/object_ctower_rot/object_ctower_rot.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -19,7 +19,7 @@ void BgCtowerGear_Draw(Actor* thisx, PlayState* play);
 void BgCtowerGear_UpdateOrgan(Actor* thisx, PlayState* play);
 void BgCtowerGear_DrawOrgan(Actor* thisx, PlayState* play);
 
-ActorInit Bg_Ctower_Gear_InitVars = {
+ActorProfile Bg_Ctower_Gear_Profile = {
     /**/ ACTOR_BG_CTOWER_GEAR,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -193,10 +193,10 @@ void BgCtowerGear_DrawOrgan(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, gClockTowerOrganDL);
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_XLU_DISP++, gClockTowerOrganPipesDL);
 
     CLOSE_DISPS(play->state.gfxCtx);

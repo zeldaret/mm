@@ -6,7 +6,7 @@
 
 #include "z_obj_chikuwa.h"
 #include "z64quake.h"
-#include "objects/object_d_lift/object_d_lift.h"
+#include "assets/objects/object_d_lift/object_d_lift.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -17,7 +17,7 @@ void ObjChikuwa_Destroy(Actor* thisx, PlayState* play);
 void ObjChikuwa_Update(Actor* thisx, PlayState* play);
 void ObjChikuwa_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Chikuwa_InitVars = {
+ActorProfile Obj_Chikuwa_Profile = {
     /**/ ACTOR_OBJ_CHIKUWA,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -209,8 +209,7 @@ void ObjChikuwa_Draw(Actor* thisx, PlayState* play) {
                                              &this->dyna.actor.shape.rot);
                 Matrix_Scale(0.15f, 0.2f, 0.05f, MTXMODE_APPLY);
 
-                gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                          G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
                 gSPDisplayList(POLY_OPA_DISP++, gDampeGraveBrownElevatorDL);
             }
         }
@@ -223,8 +222,7 @@ void ObjChikuwa_Draw(Actor* thisx, PlayState* play) {
                 Matrix_SetTranslateRotateYXZ(temp2->unk_0C.x, temp2->unk_0C.y, temp2->unk_0C.z, &temp2->unk_28);
                 Matrix_Scale(temp2->unk_00.x, temp2->unk_00.y, temp2->unk_00.z, MTXMODE_APPLY);
 
-                gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                          G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
                 gSPDisplayList(POLY_OPA_DISP++, gDampeGraveBrownElevatorDL);
             }
         }

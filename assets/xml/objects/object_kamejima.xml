@@ -13,7 +13,7 @@
 
         <!-- Turtle -->
         <Collision Name="gTurtleZoraCapeAsleepCol" Offset="0x2328" /> <!-- Original name is "kam_all_bgdatainfo" -->
-        <TextureAnimation Name="gTurtleEmptyTexAnim" Offset="0x2360"/>
+        <TextureAnimation Name="gTurtleEmpty1TexAnim" Offset="0x2360"/>
         <Collision Name="gTurtleZoraCapeAwakeCol" Offset="0x2470" /> <!-- Original name is "kam_kamebgbox_bgdatainfo" -->
         <Collision Name="gTurtleUnusedCol" Offset="0x2E04" /> <!-- Original name might be "kam_kamebg_bgdatainfo"? MM3D has this, but the collision vertices do not match at all. -->
         
@@ -26,6 +26,8 @@
         <Texture Name="gTurtleAsleepTLUT" OutName="turtle_asleep_tlut" Format="rgba16" Width="16" Height="16" Offset="0x5248" />
         <Texture Name="gTurtleAsleepGrassTex" OutName="turtle_asleep_grass" Format="ci8" Width="32" Height="32" Offset="0x5448" />
         <Texture Name="gTurtleAsleepGrassDirtTex" OutName="turtle_asleep_grass_dirt" Format="ci8" Width="64" Height="32" Offset="0x5848" />
+
+        <TextureAnimation Name="gTurtleEmpty2TexAnim" Offset="0x6050" />
 
         <Animation Name="gTurtleSwimAnim" Offset="0x6980" /> <!-- Original name is "kam_swim" -->
 

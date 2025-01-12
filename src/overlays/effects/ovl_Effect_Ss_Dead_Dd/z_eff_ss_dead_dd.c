@@ -5,7 +5,7 @@
  */
 
 #include "z_eff_ss_dead_dd.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define rScale regs[0]
 #define rPrimColorR regs[2]
@@ -25,7 +25,7 @@ u32 EffectSsDeadDd_Init(PlayState* play, u32 index, EffectSs* this, void* initPa
 void EffectSsDeadDd_Update(PlayState* play, u32 index, EffectSs* this);
 void EffectSsDeadDd_Draw(PlayState* play, u32 index, EffectSs* this);
 
-EffectSsInit Effect_Ss_Dead_Dd_InitVars = {
+EffectSsProfile Effect_Ss_Dead_Dd_Profile = {
     EFFECT_SS_DEAD_DD,
     EffectSsDeadDd_Init,
 };

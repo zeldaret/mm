@@ -6,7 +6,7 @@
 
 #include "z_dm_al.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((DmAl*)thisx)
 
@@ -15,7 +15,7 @@ void DmAl_Destroy(Actor* thisx, PlayState* play);
 void DmAl_Update(Actor* thisx, PlayState* play);
 void DmAl_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Dm_Al_InitVars = {
+ActorProfile Dm_Al_Profile = {
     /**/ ACTOR_EN_AL,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -84,7 +84,7 @@ void DmAl_Init(Actor* thisx, PlayState* play) {
                        MADAME_AROMA_LIMB_MAX);
     this->animIndex = MADAME_AROMA_ANIM_NONE;
     DmAl_ChangeAnim(this, MADAME_AROMA_ANIM_0);
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = DmAl_HandleCutscene;
 }
@@ -171,7 +171,7 @@ void DmAl_Draw(Actor* thisx, PlayState* play) {
                                    DmAl_TransformLimbDraw, &this->actor);
     for (i = 0; i < ARRAY_COUNT(this->shawlMatrices); i++) {
         Matrix_Put(&this->shawlMatrices[i]);
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, sDLists[i]);
     }
 

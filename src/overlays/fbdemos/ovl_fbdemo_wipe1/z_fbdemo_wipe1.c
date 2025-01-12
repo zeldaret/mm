@@ -21,7 +21,7 @@ s32 TransitionWipe1_IsDone(void* thisx);
 
 #include "assets/overlays/ovl_fbdemo_wipe1/ovl_fbdemo_wipe1.c"
 
-TransitionInit TransitionWipe1_InitVars = {
+TransitionProfile TransitionWipe1_Profile = {
     TransitionWipe1_Init,     TransitionWipe1_Destroy,     TransitionWipe1_Update,
     TransitionWipe1_Draw,     TransitionWipe1_Start,       TransitionWipe1_SetType,
     TransitionWipe1_SetColor, TransitionWipe1_SetEnvColor, TransitionWipe1_IsDone,
@@ -92,9 +92,9 @@ void TransitionWipe1_Draw(void* thisx, Gfx** gfxP) {
     texScroll = Gfx_BranchTexScroll(&gfx, this->texX, this->texY, 0, 0);
     gSPSegment(gfx++, 0x08, texScroll);
     gDPSetPrimColor(gfx++, 0, 0x80, this->primColor.r, this->primColor.g, this->primColor.b, 255);
-    gSPMatrix(gfx++, &this->projection, G_MTX_LOAD | G_MTX_PROJECTION);
+    gSPMatrix(gfx++, &this->projection, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
     gSPPerspNormalize(gfx++, this->normal);
-    gSPMatrix(gfx++, &this->lookAt, G_MTX_MUL | G_MTX_PROJECTION);
+    gSPMatrix(gfx++, &this->lookAt, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_PROJECTION);
     gSPMatrix(gfx++, &modelView[0], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPMatrix(gfx++, &modelView[1], G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
     gSPMatrix(gfx++, &modelView[2], G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);

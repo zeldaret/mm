@@ -5,7 +5,7 @@
 #include "z64.h"
 #include "functions.h"
 
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 LightsBuffer sLightsBuffer;
 
@@ -405,7 +405,7 @@ void Lights_GlowCheck(PlayState* play) {
             if ((projectedPos.z > 1) && (fabsf(projectedPos.x * invW) < 1) && (fabsf(projectedPos.y * invW) < 1)) {
                 s32 screenPosX = PROJECTED_TO_SCREEN_X(projectedPos, invW);
                 s32 screenPosY = PROJECTED_TO_SCREEN_Y(projectedPos, invW);
-                s32 wZ = (s32)((projectedPos.z * invW) * 16352.0f) + 16352;
+                s32 wZ = (s32)(projectedPos.z * invW * ((G_MAXZ / 2) * 32)) + ((G_MAXZ / 2) * 32);
                 s32 zBuf = SysCfb_GetZBufferInt(screenPosX, screenPosY);
 
                 if (wZ < zBuf) {
@@ -428,7 +428,7 @@ void Lights_DrawGlow(PlayState* play) {
 
         gfx = Gfx_SetupDL65_NoCD(POLY_XLU_DISP);
 
-        gDPSetDither(gfx++, G_CD_NOISE);
+        gDPSetDither(gfx++, G_AD_PATTERN | G_CD_NOISE);
 
         gDPSetCombineLERP(gfx++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE,
                           0);
@@ -446,7 +446,7 @@ void Lights_DrawGlow(PlayState* play) {
                     Matrix_Translate(params->x, params->y, params->z, MTXMODE_NEW);
                     Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
 
-                    gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    MATRIX_FINALIZE_AND_LOAD(gfx++, play->state.gfxCtx);
 
                     gSPDisplayList(gfx++, gameplay_keep_DL_029CF0);
                 }

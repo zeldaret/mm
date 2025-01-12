@@ -1,7 +1,11 @@
-#include "prevent_bss_reordering.h"
+#include "z64lifemeter.h"
+
 #include "global.h"
+#include "su_mtx.h"
+
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
-#include "interface/parameter_static/parameter_static.h"
+
+#include "assets/interface/parameter_static/parameter_static.h"
 
 s16 sHeartsPrimColors[3][3] = { { 255, 70, 50 }, { 255, 190, 0 }, { 100, 100, 255 } };
 s16 sHeartsEnvColors[3][3] = { { 50, 40, 60 }, { 255, 0, 0 }, { 0, 0, 255 } };
@@ -384,7 +388,7 @@ void LifeMeter_Draw(PlayState* play) {
             mtx = GRAPH_ALLOC(gfxCtx, sizeof(Mtx));
             Mtx_SetTranslateScaleMtx(mtx, 1.0f - (0.32f * lifesize), 1.0f - (0.32f * lifesize),
                                      1.0f - (0.32f * lifesize), -130.0f + offsetX, 94.5f - offsetY, 0.0f);
-            gSPMatrix(OVERLAY_DISP++, mtx, G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(OVERLAY_DISP++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPVertex(OVERLAY_DISP++, beatingHeartVtx, 4, 0);
             gSP1Quadrangle(OVERLAY_DISP++, 0, 2, 3, 1, 0);
         }
@@ -406,8 +410,8 @@ void LifeMeter_UpdateSizeAndBeep(PlayState* play) {
         if (interfaceCtx->lifeSizeChange <= 0) {
             interfaceCtx->lifeSizeChange = 0;
             interfaceCtx->lifeSizeChangeDirection = 0;
-            if (!Player_InCsMode(play) && (play->pauseCtx.state == PAUSE_STATE_OFF) &&
-                (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE) && LifeMeter_IsCritical() && !Play_InCsMode(play)) {
+            if (!Player_InCsMode(play) && !IS_PAUSED(&play->pauseCtx) && LifeMeter_IsCritical() &&
+                !Play_InCsMode(play)) {
                 Audio_PlaySfx(NA_SE_SY_HITPOINT_ALARM);
             }
         }

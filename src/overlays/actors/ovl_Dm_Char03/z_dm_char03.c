@@ -5,7 +5,7 @@
  */
 
 #include "z_dm_char03.h"
-#include "objects/object_osn/object_osn.h"
+#include "assets/objects/object_osn/object_osn.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -20,7 +20,7 @@ void func_80AAB644(DmChar03* this, PlayState* play);
 void DmChar03_DoNothing(DmChar03* this, PlayState* play);
 void func_80AABA84(PlayState* play, DmChar03* this);
 
-ActorInit Dm_Char03_InitVars = {
+ActorProfile Dm_Char03_Profile = {
     /**/ ACTOR_DM_CHAR03,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -59,7 +59,7 @@ void DmChar03_Init(Actor* thisx, PlayState* play) {
     DmChar03* this = THIS;
 
     this->animIndex = DMCHAR03_ANIM_FALL_OVER;
-    this->actor.targetArrowOffset = 3000.0f;
+    this->actor.lockOnArrowOffset = 3000.0f;
     this->unk_18E = false;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gDekuMaskSkel, NULL, NULL, NULL, 0);

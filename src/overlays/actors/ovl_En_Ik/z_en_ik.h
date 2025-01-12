@@ -2,7 +2,7 @@
 #define Z_EN_IK_H
 
 #include "global.h"
-#include "objects/object_ik/object_ik.h"
+#include "assets/objects/object_ik/object_ik.h"
 
 struct EnIk;
 

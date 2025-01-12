@@ -1,4 +1,9 @@
-#include "global.h"
+#include "z64font.h"
+
+#include "segment_symbols.h"
+#include "z64message.h"
+
+#include "z64.h"
 
 // stubbed in NTSC-U
 void Font_LoadChar(PlayState* play, u16 codePointIndex, s32 offset) {

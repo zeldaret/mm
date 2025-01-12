@@ -6,7 +6,7 @@
 
 #include "z_en_zo.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnZo*)thisx)
 
@@ -19,7 +19,7 @@ void EnZo_FollowPath(EnZo* this, PlayState* play);
 void EnZo_TreadWater(EnZo* this, PlayState* play);
 void EnZo_DoNothing(EnZo* this, PlayState* play);
 
-ActorInit En_Zo_InitVars = {
+ActorProfile En_Zo_Profile = {
     /**/ ACTOR_EN_ZO,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -33,7 +33,7 @@ ActorInit En_Zo_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_HIT0,
+        COL_MATERIAL_HIT0,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -41,11 +41,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK1,
+        ELEM_MATERIAL_UNK1,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 18, 64, 0, { 0, 0, 0 } },
@@ -88,14 +88,26 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(0, 0),
 };
 
-static AnimationInfoS sAnimationInfo[] = {
-    { &gZoraIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gZoraIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gZoraSurfacingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gZoraHandsOnHipsTappingFootAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gZoraArmsOpenAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gZoraThrowRupeeAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gZoraWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+typedef enum EnZoAnimation {
+    /* -1 */ ENZO_ANIM_NONE = -1,
+    /*  0 */ ENZO_ANIM_IDLE,
+    /*  1 */ ENZO_ANIM_MORPH,
+    /*  2 */ ENZO_ANIM_SURFACING,
+    /*  3 */ ENZO_ANIM_HANDS_ON_HIP_TAPPING_FOOT,
+    /*  4 */ ENZO_ANIM_ARMS_OPEN,
+    /*  5 */ ENZO_ANIM_THROW_RUPEE,
+    /*  6 */ ENZO_ANIM_WALK,
+    /*  7 */ ENZO_ANIM_MAX
+} EnZoAnimation;
+
+static AnimationInfoS sAnimationInfo[ENZO_ANIM_MAX] = {
+    { &gZoraIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },                    // ENZO_ANIM_IDLE
+    { &gZoraIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },                   // ENZO_ANIM_MORPH
+    { &gZoraSurfacingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },              // ENZO_ANIM_SURFACING
+    { &gZoraHandsOnHipsTappingFootAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // ENZO_ANIM_HANDS_ON_HIP_TAPPING_FOOT
+    { &gZoraArmsOpenAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },               // ENZO_ANIM_ARMS_OPEN
+    { &gZoraThrowRupeeAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },             // ENZO_ANIM_THROW_RUPEE
+    { &gZoraWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },                   // ENZO_ANIM_WALK
 };
 
 static s8 sLimbToBodyParts[ZORA_LIMB_MAX] = {
@@ -158,17 +170,17 @@ static u8 sShadowSizes[ZORA_BODYPART_MAX] = {
 };
 
 s32 EnZo_ChangeAnim(SkelAnime* skelAnime, s16 animIndex) {
-    s16 frameCount;
+    s16 endFrame;
     s32 didChange = false;
 
-    if ((animIndex >= 0) && (animIndex < ARRAY_COUNT(sAnimationInfo))) {
+    if ((animIndex > ENZO_ANIM_NONE) && (animIndex < ENZO_ANIM_MAX)) {
         didChange = true;
-        frameCount = sAnimationInfo[animIndex].frameCount;
-        if (frameCount < 0) {
-            frameCount = Animation_GetLastFrame(sAnimationInfo[animIndex].animation);
+        endFrame = sAnimationInfo[animIndex].frameCount;
+        if (endFrame < 0) {
+            endFrame = Animation_GetLastFrame(sAnimationInfo[animIndex].animation);
         }
         Animation_Change(skelAnime, sAnimationInfo[animIndex].animation, sAnimationInfo[animIndex].playSpeed,
-                         sAnimationInfo[animIndex].startFrame, frameCount, sAnimationInfo[animIndex].mode,
+                         sAnimationInfo[animIndex].startFrame, endFrame, sAnimationInfo[animIndex].mode,
                          sAnimationInfo[animIndex].morphFrames);
     }
     return didChange;
@@ -263,7 +275,7 @@ void EnZo_LookAtPlayer(EnZo* this, PlayState* play) {
 
 void EnZo_Walk(EnZo* this, PlayState* play) {
     if (ENZO_GET_PATH_INDEX(&this->actor) != ENZO_PATH_INDEX_NONE) {
-        EnZo_ChangeAnim(&this->skelAnime, 6);
+        EnZo_ChangeAnim(&this->skelAnime, ENZO_ANIM_WALK);
     }
 
     if (ENZO_GET_PATH_INDEX(&this->actor) != ENZO_PATH_INDEX_NONE) {
@@ -287,7 +299,7 @@ void EnZo_FollowPath(EnZo* this, PlayState* play) {
     }
 
     if (this->actor.depthInWater > 60.0f) {
-        EnZo_ChangeAnim(&this->skelAnime, 1);
+        EnZo_ChangeAnim(&this->skelAnime, ENZO_ANIM_MORPH);
         this->actionFunc = EnZo_TreadWater;
         this->actor.gravity = 0.0f;
         this->actor.speed = 0.0f;
@@ -314,7 +326,7 @@ void EnZo_Init(Actor* thisx, PlayState* play) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gZoraSkel, NULL, this->jointTable, this->morphTable, ZORA_LIMB_MAX);
-    EnZo_ChangeAnim(&this->skelAnime, 0);
+    EnZo_ChangeAnim(&this->skelAnime, ENZO_ANIM_IDLE);
 
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);

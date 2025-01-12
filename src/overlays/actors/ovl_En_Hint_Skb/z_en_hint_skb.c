@@ -5,10 +5,11 @@
  */
 
 #include "z_en_hint_skb.h"
+#include "attributes.h"
 #include "overlays/actors/ovl_En_Part/z_en_part.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnHintSkb*)thisx)
 
@@ -39,7 +40,7 @@ s32 func_80C21414(EnHintSkb* this);
 void func_80C21468(EnHintSkb* this, PlayState* play);
 void func_80C215E4(PlayState* play, EnHintSkb* this, Vec3f* arg2);
 
-ActorInit En_Hint_Skb_InitVars = {
+ActorProfile En_Hint_Skb_Profile = {
     /**/ ACTOR_EN_HINT_SKB,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -54,22 +55,22 @@ ActorInit En_Hint_Skb_InitVars = {
 static ColliderJntSphElementInit sJntSphElementsInit[2] = {
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x00, 0x04 },
             { 0x00000000, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_NONE,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_NONE,
             OCELEM_NONE,
         },
         { 15, { { 0, 0, 0 }, 10 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON | BUMP_HOOKABLE,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON | ACELEM_HOOKABLE,
             OCELEM_ON,
         },
         { 1, { { 0, 0, 0 }, 20 }, 100 },
@@ -78,7 +79,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[2] = {
 
 static ColliderJntSphInit sJntSphInit = {
     {
-        COLTYPE_HIT6,
+        COL_MATERIAL_HIT6,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -160,7 +161,7 @@ static AnimationInfo sAnimationInfo[STALCHILD_HINT_ANIM_MAX] = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_CONTINUE),
+    ICHAIN_F32(lockOnArrowOffset, 2000, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_STOP),
 };
 
@@ -607,8 +608,8 @@ void func_80C20D64(EnHintSkb* this, PlayState* play) {
         (this->actionFunc == func_80C1FE80)) {
         if (this->actionFunc != func_80C2077C) {
             if (Player_GetMask(play) == PLAYER_MASK_CAPTAIN) {
-                this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
-                this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+                this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE);
+                this->actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
                 this->actor.hintId = TATL_HINT_ID_NONE;
                 this->actor.textId = 0;
                 if (this->actionFunc == func_80C1FE80) {
@@ -617,8 +618,8 @@ void func_80C20D64(EnHintSkb* this, PlayState* play) {
                 func_80C2075C(this);
             }
         } else if (Player_GetMask(play) != PLAYER_MASK_CAPTAIN) {
-            this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
-            this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
+            this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
+            this->actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE);
             this->actor.hintId = TATL_HINT_ID_STALCHILD;
             this->actor.textId = 0;
             if (this->skelAnime.animation == &gStalchildSitLaughAnim) {
@@ -732,7 +733,7 @@ void func_80C20E90(EnHintSkb* this, PlayState* play) {
             case 12:
             case 14:
                 this->unk_3E8 |= 1;
-                // fallthrough
+                FALLTHROUGH;
             case 15:
                 if ((player->meleeWeaponAnimation == PLAYER_MWA_RIGHT_SLASH_1H) ||
                     (player->meleeWeaponAnimation == PLAYER_MWA_LEFT_COMBO_2H) ||
@@ -740,7 +741,7 @@ void func_80C20E90(EnHintSkb* this, PlayState* play) {
                     (player->meleeWeaponAnimation == PLAYER_MWA_BACKSLASH_LEFT)) {
                     this->unk_3E8 |= 1;
                 }
-                // fallthrough
+                FALLTHROUGH;
             case 13:
                 Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
                 Actor_PlaySfx(&this->actor, NA_SE_EN_STALKID_DAMAGE);

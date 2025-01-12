@@ -5,7 +5,7 @@
  */
 
 #include "z_en_hanabi.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -21,7 +21,7 @@ void func_80B23910(EnHanabi* this, PlayState* play);
 void func_80B23934(EnHanabi* this, PlayState* play);
 void EnHanabi_Draw(Actor* thisx, PlayState* play);
 
-ActorInit En_Hanabi_InitVars = {
+ActorProfile En_Hanabi_Profile = {
     /**/ ACTOR_EN_HANABI,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -165,7 +165,7 @@ void func_80B22FA8(EnHanabiStruct* arg0, PlayState* play2) {
         }
         Matrix_RotateZS(play->gameplayFrames * 4864, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
 
         if (sp53 != arg0->unk_02) {
             gDPPipeSync(POLY_XLU_DISP++);
@@ -328,7 +328,7 @@ void func_80B23934(EnHanabi* this, PlayState* play) {
     if ((gSaveContext.save.entrance == ENTRANCE(TERMINA_FIELD, 1)) && (gSaveContext.sceneLayer == 7)) {
         if (play->csCtx.curFrame > 1650) {
             func_80B236C8(this, play);
-            Actor_PlaySfx_FlaggedCentered3(&this->actor, NA_SE_EV_FIREWORKS_LAUNCH - SFX_FLAG);
+            Actor_PlaySfx_FlaggedCentered2(&this->actor, NA_SE_EV_FIREWORKS_LAUNCH - SFX_FLAG);
         }
     }
 

@@ -9,10 +9,11 @@
 #include "overlays/actors/ovl_En_Fu_Kago/z_en_fu_kago.h"
 #include "overlays/actors/ovl_Bg_Fu_Kaiten/z_bg_fu_kaiten.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS \
-    (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000 | ACTOR_FLAG_CANT_LOCK_ON)
+#define FLAGS                                                                                                \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_UPDATE_DURING_OCARINA | \
+     ACTOR_FLAG_LOCK_ON_DISABLED)
 
 #define THIS ((EnFu*)thisx)
 
@@ -55,7 +56,7 @@ void func_80964694(EnFu* this, EnFuUnkStruct* ptr, Vec3f* arg2, s32 len);
 void func_809647EC(PlayState* play, EnFuUnkStruct* ptr, s32 len);
 void func_80964950(PlayState* play, EnFuUnkStruct* ptr, s32 len);
 
-ActorInit En_Fu_InitVars = {
+ActorProfile En_Fu_Profile = {
     /**/ ACTOR_EN_FU,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -103,7 +104,7 @@ static AnimationInfo sAnimationInfo[HONEY_DARLING_ANIM_MAX] = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_HIT0,
+        COL_MATERIAL_HIT0,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -111,11 +112,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 20, 50, 0, { 0, 0, 0 } },
@@ -218,7 +219,7 @@ void EnFu_Init(Actor* thisx, PlayState* play) {
         Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
         this->actor.colChkInfo.mass = MASS_IMMOVABLE;
         Actor_SetScale(&this->actor, 0.01f);
-        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         this->actor.gravity = -0.2f;
         this->actor.shape.rot.y += 0x4000;
         this->actor.world.rot = this->actor.shape.rot;
@@ -231,7 +232,7 @@ void EnFu_Init(Actor* thisx, PlayState* play) {
         this->unk_54E = 0;
         this->unk_550 = 0;
         func_809622FC(this);
-        this->actor.targetMode = TARGET_MODE_6;
+        this->actor.attentionRangeType = ATTENTION_RANGE_6;
         func_809619D0(this, play);
         if (CURRENT_DAY == 2) {
             Vec3f sp40 = this->actor.child->home.pos;
@@ -397,7 +398,7 @@ void func_80962340(EnFu* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (this->unk_54A == 2) {
-        this->actor.flags |= ACTOR_FLAG_10000;
+        this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
     }
 
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
@@ -427,7 +428,7 @@ void func_80962340(EnFu* this, PlayState* play) {
                 Message_StartTextbox(play, 0x2889, &this->actor);
                 this->unk_552 = 0x2889;
             }
-            this->actor.flags &= ~ACTOR_FLAG_10000;
+            this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
             player->stateFlags1 &= ~PLAYER_STATE1_20;
             this->unk_54A = 1;
         } else {
@@ -758,7 +759,7 @@ void func_80962EBC(EnFu* this, PlayState* play) {
 
 void func_80962F10(EnFu* this) {
     this->unk_548 = 0;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     SET_WEEKEVENTREG(WEEKEVENTREG_08_01);
     this->actionFunc = func_80962F4C;
 }
@@ -857,7 +858,7 @@ void func_809632D0(EnFu* this) {
         mizu->unk_160 = 0;
     }
 
-    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+    this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
     this->actionFunc = func_80963350;
 }
 
@@ -903,7 +904,7 @@ void func_80963560(EnFu* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
         func_80963610(this);
-    } else if ((this->unk_552 == 0x2880) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_22_80)) {
+    } else if ((this->unk_552 == 0x2880) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_HONEY_AND_DARLING_HEART_PIECE)) {
         Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);
     } else {
         Actor_OfferGetItem(&this->actor, play, GI_RUPEE_PURPLE, 500.0f, 100.0f);
@@ -925,8 +926,8 @@ void func_80963630(EnFu* this, PlayState* play) {
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_40)) {
                 Message_StartTextbox(play, 0x2884, &this->actor);
                 this->unk_552 = 0x2884;
-            } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_22_80)) {
-                SET_WEEKEVENTREG(WEEKEVENTREG_22_80);
+            } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_HONEY_AND_DARLING_HEART_PIECE)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_HONEY_AND_DARLING_HEART_PIECE);
                 Message_StartTextbox(play, 0x2882, &this->actor);
                 this->unk_552 = 0x2882;
             } else {
@@ -938,7 +939,7 @@ void func_80963630(EnFu* this, PlayState* play) {
             this->unk_552 = 0x287F;
         }
 
-        this->actor.flags &= ~ACTOR_FLAG_10000;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         this->actor.child->freezeTimer = 0;
         func_809628BC(this);
 
@@ -1499,7 +1500,7 @@ void func_80964950(PlayState* play, EnFuUnkStruct* ptr, s32 len) {
             Matrix_Scale(ptr->unk_00, ptr->unk_00, ptr->unk_00, MTXMODE_APPLY);
 
             gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gDropRecoveryHeartTex));
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_OPA_DISP++, gHoneyAndDarlingHeartModelDL);
         }
     }

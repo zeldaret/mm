@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_toudai.h"
-#include "objects/object_f53_obj/object_f53_obj.h"
+#include "assets/objects/object_f53_obj/object_f53_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -16,7 +16,7 @@ void ObjToudai_Destroy(Actor* thisx, PlayState* play);
 void ObjToudai_Update(Actor* thisx, PlayState* play);
 void ObjToudai_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Toudai_InitVars = {
+ActorProfile Obj_Toudai_Profile = {
     /**/ ACTOR_OBJ_TOUDAI,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -38,7 +38,7 @@ void func_80A33B00(ObjToudai* this, PlayState* play) {
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, object_f53_obj_DL_0024E8);
 
     CLOSE_DISPS(play->state.gfxCtx);
@@ -72,7 +72,7 @@ void func_80A33BB4(ObjToudai* this, PlayState* play) {
         gSPSegment(POLY_XLU_DISP++, 0x08,
                    Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, sp57, 0x20, 0x80, 1, 0, sp56, 0x20, 0x20));
         gSPSegment(POLY_XLU_DISP++, 0x09, Lib_SegmentedToVirtual(this->unk_148));
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, object_f53_obj_DL_0023B0);
 
         CLOSE_DISPS(play->state.gfxCtx);

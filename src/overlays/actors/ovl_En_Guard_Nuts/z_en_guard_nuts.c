@@ -7,7 +7,7 @@
 #include "z_en_guard_nuts.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_100000 | ACTOR_FLAG_80000000)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_100000 | ACTOR_FLAG_80000000)
 
 #define THIS ((EnGuardNuts*)thisx)
 
@@ -25,7 +25,7 @@ void EnGuardNuts_Burrow(EnGuardNuts* this, PlayState* play);
 void EnGuardNuts_SetupUnburrow(EnGuardNuts* this, PlayState* play);
 void EnGuardNuts_Unburrow(EnGuardNuts* this, PlayState* play);
 
-ActorInit En_Guard_Nuts_InitVars = {
+ActorProfile En_Guard_Nuts_Profile = {
     /**/ ACTOR_EN_GUARD_NUTS,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -39,7 +39,7 @@ ActorInit En_Guard_Nuts_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_NONE,
         OC1_ON | OC1_TYPE_PLAYER,
@@ -47,11 +47,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0xF7CFFFFF, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_NONE,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_NONE,
         OCELEM_ON | OCELEM_UNK3,
     },
     { 50, 50, 0, { 0, 0, 0 } },
@@ -108,7 +108,7 @@ void EnGuardNuts_Init(Actor* thisx, PlayState* play) {
     SkelAnime_Init(play, &this->skelAnime, &gDekuPalaceGuardSkel, &gDekuPalaceGuardWaitAnim, this->jointTable,
                    this->morphTable, DEKU_PALACE_GUARD_LIMB_MAX);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->actor.targetMode = TARGET_MODE_1;
+    this->actor.attentionRangeType = ATTENTION_RANGE_1;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     Actor_SetScale(&this->actor, 0.015f);
     Math_Vec3f_Copy(&this->guardPos, &this->actor.world.pos);
@@ -283,7 +283,7 @@ void EnGuardNuts_Burrow(EnGuardNuts* this, PlayState* play) {
     digPos.y = this->actor.floorHeight;
     EffectSsHahen_SpawnBurst(play, &digPos, 4.0f, 0, 10, 3, 15, HAHEN_OBJECT_DEFAULT, 10, NULL);
     this->targetHeadPos.y = 0;
-    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+    this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
     this->targetHeadPos.x = this->targetHeadPos.y;
     Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_DOWN);
     Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_UP);
@@ -318,7 +318,7 @@ void EnGuardNuts_Unburrow(EnGuardNuts* this, PlayState* play) {
             if (this->guardTextIndex == 9) {
                 this->hasCompletedConversation = true;
             }
-            this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
+            this->actor.flags &= ~ACTOR_FLAG_LOCK_ON_DISABLED;
             EnGuardNuts_SetupWait(this);
         }
     }
@@ -387,7 +387,7 @@ void EnGuardNuts_Draw(Actor* thisx, PlayState* play) {
     Matrix_Translate(this->guardPos.x, this->actor.floorHeight, this->guardPos.z, MTXMODE_NEW);
     Matrix_Scale(0.015f, 0.015f, 0.015f, MTXMODE_APPLY);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
 
     gSPDisplayList(POLY_OPA_DISP++, gDekuPalaceGuardFlowerDL);
 

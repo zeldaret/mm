@@ -5,7 +5,7 @@
  */
 
 #include "z_eff_ss_bomb2.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define rScale regs[0]
 #define rTexIndex regs[1]
@@ -26,7 +26,7 @@ void EffectSsBomb2_DrawFade(PlayState* play, u32 index, EffectSs* this);
 void EffectSsBomb2_DrawLayered(PlayState* play, u32 index, EffectSs* this);
 void EffectSsBomb2_Update(PlayState* play, u32 index, EffectSs* this);
 
-EffectSsInit Effect_Ss_Bomb2_InitVars = {
+EffectSsProfile Effect_Ss_Bomb2_Profile = {
     EFFECT_SS_BOMB2,
     EffectSsBomb2_Init,
 };
@@ -150,8 +150,7 @@ void EffectSsBomb2_DrawLayered(PlayState* play, u32 index, EffectSs* this) {
                 Matrix_Translate(0.0f, 0.0f, depth, MTXMODE_APPLY);
                 Matrix_RotateZF((this->life * 0.02f) + 180.0f, MTXMODE_APPLY);
                 Matrix_Scale(layer2Scale, layer2Scale, layer2Scale, MTXMODE_APPLY);
-                gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                          G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
                 gSPDisplayList(POLY_XLU_DISP++, gEffBombExplosion3DL);
                 layer2Scale -= 0.15f;
             }

@@ -3,9 +3,8 @@
 
 #include "ultra64.h"
 
-#include "libc/stdarg.h"
-#include "libc/stdint.h"
-#include "PR/controller.h"
+#include "stdarg.h"
+#include "stdint.h"
 
 #include "padmgr.h"
 #include "stack.h"

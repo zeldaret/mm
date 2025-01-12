@@ -8,12 +8,13 @@
  */
 
 #include "z_en_syateki_man.h"
+#include "attributes.h"
 #include "overlays/actors/ovl_En_Syateki_Crow/z_en_syateki_crow.h"
 #include "overlays/actors/ovl_En_Syateki_Dekunuts/z_en_syateki_dekunuts.h"
 #include "overlays/actors/ovl_En_Syateki_Okuta/z_en_syateki_okuta.h"
 #include "overlays/actors/ovl_En_Syateki_Wf/z_en_syateki_wf.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_CANT_LOCK_ON)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_LOCK_ON_DISABLED)
 
 #define THIS ((EnSyatekiMan*)thisx)
 
@@ -86,7 +87,7 @@ void EnSyatekiMan_Town_EndGame(EnSyatekiMan* this, PlayState* play);
 // the Heart Piece, then this score will be used instead to determine if the player should get a Purple Rupee.
 #define SG_SWAMP_HEART_PIECE_SCORE (SG_SWAMP_PERFECT_SCORE_WITHOUT_BONUS + (6 * SG_BONUS_POINTS_PER_SECOND))
 
-ActorInit En_Syateki_Man_InitVars = {
+ActorProfile En_Syateki_Man_Profile = {
     /**/ ACTOR_EN_SYATEKI_MAN,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -206,7 +207,7 @@ void EnSyatekiMan_Init(Actor* thisx, PlayState* play) {
     Path* path = &play->setupPathList[SG_MAN_GET_PATH_INDEX(&this->actor)];
     s32 actorListLength = sSwampTargetActorListLengths[this->swampTargetActorListIndex];
 
-    this->actor.targetMode = TARGET_MODE_1;
+    this->actor.attentionRangeType = ATTENTION_RANGE_1;
     Actor_SetScale(&this->actor, 0.01f);
     if (play->sceneId == SCENE_SYATEKI_MORI) {
         SkelAnime_InitFlex(play, &this->skelAnime, &gBurlyGuySkel, &gBurlyGuyHeadScratchLoopAnim, this->jointTable,
@@ -422,7 +423,7 @@ void EnSyatekiMan_Swamp_HandleNormalMessage(EnSyatekiMan* this, PlayState* play)
                 player->actor.freezeTimer = 0;
                 Interface_InitMinigame(play);
                 play->interfaceCtx.minigameAmmo = 80;
-                func_80123F2C(play, 80);
+                Player_SetBButtonAmmo(play, 80);
                 this->shootingGameState = SG_GAME_STATE_RUNNING;
                 this->actionFunc = EnSyatekiMan_Swamp_StartGame;
                 Audio_PlaySubBgm(NA_BGM_TIMED_MINI_GAME);
@@ -784,7 +785,7 @@ void EnSyatekiMan_Town_HandleNormalMessage(EnSyatekiMan* this, PlayState* play) 
                 player->actor.freezeTimer = 0;
                 this->flagsIndex = 0;
                 Interface_InitMinigame(play);
-                func_80123F2C(play, 0x63);
+                Player_SetBButtonAmmo(play, 99);
                 this->shootingGameState = SG_GAME_STATE_RUNNING;
                 Audio_PlaySubBgm(NA_BGM_TIMED_MINI_GAME);
                 this->actionFunc = EnSyatekiMan_Town_StartGame;
@@ -929,7 +930,7 @@ void EnSyatekiMan_Swamp_GiveReward(EnSyatekiMan* this, PlayState* play) {
         }
 
         player->stateFlags1 &= ~PLAYER_STATE1_20;
-        this->actor.flags &= ~ACTOR_FLAG_10000;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         this->score = 0;
         this->shootingGameState = SG_GAME_STATE_NONE;
         this->actionFunc = EnSyatekiMan_Swamp_Talk;
@@ -994,7 +995,7 @@ void EnSyatekiMan_Town_GiveReward(EnSyatekiMan* this, PlayState* play) {
         Message_StartTextbox(play, 0x408, &this->actor);
         this->prevTextId = 0x408;
         player->stateFlags1 &= ~PLAYER_STATE1_20;
-        this->actor.flags &= ~ACTOR_FLAG_10000;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         this->score = 0;
         this->shootingGameState = SG_GAME_STATE_NONE;
         this->actionFunc = EnSyatekiMan_Town_Talk;
@@ -1182,7 +1183,7 @@ void EnSyatekiMan_Swamp_EndGame(EnSyatekiMan* this, PlayState* play) {
     }
 
     if (this->talkWaitTimer < 5) {
-        play->unk_1887C = -10;
+        play->bButtonAmmoPlusOne = -10;
     }
 }
 
@@ -1455,7 +1456,7 @@ void EnSyatekiMan_Town_EndGame(EnSyatekiMan* this, PlayState* play) {
     }
 
     if (this->talkWaitTimer < 5) {
-        play->unk_1887C = -10;
+        play->bButtonAmmoPlusOne = -10;
     }
 }
 
@@ -1471,7 +1472,7 @@ void EnSyatekiMan_Blink(EnSyatekiMan* this) {
 
         case 40:
             this->blinkTimer = 0;
-
+            FALLTHROUGH;
         default:
             this->eyeIndex = 0;
             break;

@@ -2,7 +2,7 @@
 #define Z_OBJ_ETCETERA_H
 
 #include "global.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define DEKU_FLOWER_TYPE(thisx) (((thisx)->params & 0xFF80) >> 7)
 #define DEKU_FLOWER_PARAMS(type) (((type) << 7) & 0xFF80)

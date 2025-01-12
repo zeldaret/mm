@@ -6,11 +6,11 @@
 
 #include "z_en_st.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS                                                                                          \
-    (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_4000 | \
-     ACTOR_FLAG_1000000)
+#define FLAGS                                                                            \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20 | \
+     ACTOR_FLAG_CAN_ATTACH_TO_ARROW | ACTOR_FLAG_SFX_FOR_PLAYER_BODY_HIT)
 
 #define THIS ((EnSt*)thisx)
 
@@ -25,7 +25,7 @@ void func_808A6E24(EnSt* this, PlayState* play);
 void func_808A701C(EnSt* this, PlayState* play);
 void func_808A7478(Actor* thisx, PlayState* play);
 
-ActorInit En_St_InitVars = {
+ActorProfile En_St_Profile = {
     /**/ ACTOR_EN_ST,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -39,7 +39,7 @@ ActorInit En_St_InitVars = {
 
 static ColliderCylinderInit sCylinderInit1 = {
     {
-        COLTYPE_HIT2,
+        COL_MATERIAL_HIT2,
         AT_ON | AT_TYPE_ENEMY,
         AC_NONE,
         OC1_ON | OC1_TYPE_ALL,
@@ -47,11 +47,11 @@ static ColliderCylinderInit sCylinderInit1 = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0xF7CFFFFF, 0x00, 0x00 },
         { 0x800C3829, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
-        BUMP_NONE,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
+        ACELEM_NONE,
         OCELEM_ON,
     },
     { 18, 48, -20, { 0, 0, 0 } },
@@ -59,7 +59,7 @@ static ColliderCylinderInit sCylinderInit1 = {
 
 static ColliderCylinderInit sCylinderInit2 = {
     {
-        COLTYPE_HIT2,
+        COL_MATERIAL_HIT2,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -67,11 +67,11 @@ static ColliderCylinderInit sCylinderInit2 = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0x77C3C7D6, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_NONE,
     },
     { 18, 48, -20, { 0, 0, 0 } },
@@ -79,7 +79,7 @@ static ColliderCylinderInit sCylinderInit2 = {
 
 static ColliderCylinderInit sCylinderInit3 = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_NONE,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -87,11 +87,11 @@ static ColliderCylinderInit sCylinderInit3 = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK2,
+        ELEM_MATERIAL_UNK2,
         { 0x00000000, 0x00, 0x00 },
         { 0x77C3C7D6, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_NONE,
     },
     { 18, 48, -20, { 0, 0, 0 } },
@@ -99,7 +99,7 @@ static ColliderCylinderInit sCylinderInit3 = {
 
 static ColliderCylinderInit sCylinderInit4 = {
     {
-        COLTYPE_HIT2,
+        COL_MATERIAL_HIT2,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -107,11 +107,11 @@ static ColliderCylinderInit sCylinderInit4 = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0x800C3829, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_NONE,
     },
     { 18, 48, -20, { 0, 0, 0 } },
@@ -266,7 +266,7 @@ void func_808A54B0(EnSt* this, PlayState* play) {
         Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
         Matrix_Scale(0.06f, 0.12f, 0.06f, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPSegment(POLY_XLU_DISP++, 0x08, Gfx_TwoTexScroll(play->state.gfxCtx, 0, 195, 0, 0x40, 0x20, 1, 215, 0, 8, 8));
 
         temp_f0 = (f32)this->unk_310 / 8;
@@ -635,7 +635,7 @@ s32 func_808A6580(EnSt* this, PlayState* play) {
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EN_STALTU_DEAD);
             Enemy_StartFinishingBlow(play, &this->actor);
 
-            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+            this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
 
             switch (this->actor.colChkInfo.damageEffect) {
                 case 4:
@@ -877,7 +877,7 @@ void EnSt_Destroy(Actor* thisx, PlayState* play) {
 void EnSt_Update(Actor* thisx, PlayState* play) {
     EnSt* this = THIS;
 
-    if (this->actor.flags & ACTOR_FLAG_8000) {
+    if (this->actor.flags & ACTOR_FLAG_ATTACHED_TO_ARROW) {
         SkelAnime_Update(&this->skelAnime);
         this->unk_18C |= 0x80;
         return;

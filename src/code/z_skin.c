@@ -1,6 +1,6 @@
 #include "z64skin.h"
 
-#include "libc/stdbool.h"
+#include "stdbool.h"
 
 #include "global.h"
 #include "gfx.h"

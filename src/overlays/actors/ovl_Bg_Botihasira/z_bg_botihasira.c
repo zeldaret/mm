@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_botihasira.h"
-#include "objects/object_botihasira/object_botihasira.h"
+#include "assets/objects/object_botihasira/object_botihasira.h"
 
 #define FLAGS 0x00000000
 
@@ -18,7 +18,7 @@ void BgBotihasira_Draw(Actor* thisx, PlayState* play);
 
 void BgBotihasira_DoNothing(BgBotihasira* this, PlayState* play);
 
-ActorInit Bg_Botihasira_InitVars = {
+ActorProfile Bg_Botihasira_Profile = {
     /**/ ACTOR_BG_BOTIHASIRA,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -32,7 +32,7 @@ ActorInit Bg_Botihasira_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -40,11 +40,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK2,
+        ELEM_MATERIAL_UNK2,
         { 0xF7CFFFFF, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 27, 80, 0, { 0, 0, 0 } },
@@ -96,7 +96,7 @@ void BgBotihasira_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, object_botihasira_DL_000638);
 
     CLOSE_DISPS(play->state.gfxCtx);

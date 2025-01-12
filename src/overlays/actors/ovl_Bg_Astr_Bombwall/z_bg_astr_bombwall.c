@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_astr_bombwall.h"
-#include "objects/object_astr_obj/object_astr_obj.h"
+#include "assets/objects/object_astr_obj/object_astr_obj.h"
 
 #define FLAGS 0x00000000
 
@@ -23,7 +23,7 @@ void func_80C0A418(BgAstrBombwall* this, PlayState* play);
 void func_80C0A458(BgAstrBombwall* this, PlayState* play);
 void func_80C0A4BC(BgAstrBombwall* this, PlayState* play);
 
-ActorInit Bg_Astr_Bombwall_InitVars = {
+ActorProfile Bg_Astr_Bombwall_Profile = {
     /**/ ACTOR_BG_ASTR_BOMBWALL,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -38,22 +38,22 @@ ActorInit Bg_Astr_Bombwall_InitVars = {
 static ColliderTrisElementInit sTrisElementsInit[2] = {
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0x00000008, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { { { -70.0f, 0.0f, 3.0f }, { 70.0f, 0.0f, 3.0f }, { -70.0f, 200.0f, 3.0f } } },
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00000000, 0x00, 0x00 },
             { 0x00000008, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { { { 70.0f, 0.0f, 3.0f }, { 70.0f, 200.0f, 3.0f }, { -70.0f, 200.0f, 3.0f } } },
@@ -62,7 +62,7 @@ static ColliderTrisElementInit sTrisElementsInit[2] = {
 
 static ColliderTrisInit sTrisInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -207,7 +207,7 @@ void BgAstrBombwall_Draw(Actor* thixs, PlayState* play) {
 
         opa = POLY_OPA_DISP;
         gSPDisplayList(&opa[0], gSetupDLs[SETUPDL_25]);
-        gSPMatrix(&opa[1], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(&opa[1], play->state.gfxCtx);
         gSPSetGeometryMode(&opa[2], G_LIGHTING_POSITIONAL);
         gSPDisplayList(&opa[3], object_astr_obj_DL_002380);
         POLY_OPA_DISP = &opa[4];
@@ -221,7 +221,7 @@ void BgAstrBombwall_Draw(Actor* thixs, PlayState* play) {
 
         xlu = POLY_XLU_DISP;
         gSPDisplayList(&xlu[0], gSetupDLs[SETUPDL_25]);
-        gSPMatrix(&xlu[1], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(&xlu[1], play->state.gfxCtx);
         gSPSetGeometryMode(&xlu[2], G_LIGHTING_POSITIONAL);
         gSPDisplayList(&xlu[3], object_astr_obj_DL_0022E0);
         POLY_XLU_DISP = &xlu[4];

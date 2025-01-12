@@ -6,7 +6,7 @@
 
 #include "z_en_bee.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE)
 
 #define THIS ((EnBee*)thisx)
 
@@ -22,7 +22,7 @@ void EnBee_Attack(EnBee* this, PlayState* play);
 
 s32 sNumLoadedBees = 0;
 
-ActorInit En_Bee_InitVars = {
+ActorProfile En_Bee_Profile = {
     /**/ ACTOR_EN_BEE,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -71,7 +71,7 @@ static DamageTable sDamageTable = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_ON,
@@ -79,11 +79,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0xF7CFFFFF, 0x08, 0x02 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 6, 13, -4, { 0, 0, 0 } },
@@ -98,7 +98,7 @@ void EnBee_Init(Actor* thisx, PlayState* play) {
                    OBJECT_BEE_LIMB_MAX);
     this->actor.colChkInfo.health = 1;
     this->actor.colChkInfo.damageTable = &sDamageTable;
-    this->actor.targetMode = TARGET_MODE_6;
+    this->actor.attentionRangeType = ATTENTION_RANGE_6;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->instanceId = sNumLoadedBees;
     sNumLoadedBees++;

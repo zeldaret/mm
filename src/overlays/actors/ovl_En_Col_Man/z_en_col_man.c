@@ -7,7 +7,7 @@
 #include "z_en_col_man.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_100000)
 
@@ -30,7 +30,7 @@ void func_80AFE650(Actor* thisx, PlayState* play);
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_NONE,
         OC1_ON,
@@ -38,17 +38,17 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0xF7CFFFFF, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_NONE,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_NONE,
         OCELEM_ON,
     },
     { 10, 11, 1, { 0, 0, 0 } },
 };
 
-ActorInit En_Col_Man_InitVars = {
+ActorProfile En_Col_Man_Profile = {
     /**/ ACTOR_EN_COL_MAN,
     /**/ ACTORCAT_MISC,
     /**/ FLAGS,
@@ -64,7 +64,7 @@ void EnColMan_Init(Actor* thisx, PlayState* play) {
     EnColMan* this = THIS;
 
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
-    this->actor.targetMode = TARGET_MODE_1;
+    this->actor.attentionRangeType = ATTENTION_RANGE_1;
     this->scale = (BREG(55) / 1000.0f) + 0.01f;
 
     switch (this->actor.params) {
@@ -94,7 +94,7 @@ void EnColMan_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80AFDD60(EnColMan* this) {
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_56_02)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MARINE_RESEARCH_LAB_FISH_HEART_PIECE)) {
         this->actor.draw = func_80AFE414;
         this->actor.shape.yOffset = 700.0f;
         if (this->actor.params == EN_COL_MAN_HEART_PIECE) {
@@ -123,14 +123,14 @@ void func_80AFDE00(EnColMan* this, PlayState* play) {
             this->actor.speed = 0.0f;
         }
     }
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_56_02)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MARINE_RESEARCH_LAB_FISH_HEART_PIECE)) {
         this->actor.shape.rot.y += 0x3E8;
     }
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
         this->actor.draw = NULL;
         this->actionFunc = EnColMan_SetHeartPieceCollectedAndKill;
-    } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_56_02)) {
+    } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MARINE_RESEARCH_LAB_FISH_HEART_PIECE)) {
         Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 40.0f, 40.0f);
     } else {
         Actor_OfferGetItem(&this->actor, play, GI_RECOVERY_HEART, 40.0f, 40.0f);
@@ -139,7 +139,7 @@ void func_80AFDE00(EnColMan* this, PlayState* play) {
 
 void EnColMan_SetHeartPieceCollectedAndKill(EnColMan* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
-        SET_WEEKEVENTREG(WEEKEVENTREG_56_02);
+        SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MARINE_RESEARCH_LAB_FISH_HEART_PIECE);
         Actor_Kill(&this->actor);
     }
 }
@@ -239,7 +239,7 @@ void func_80AFE414(Actor* thisx, PlayState* play) {
 
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     func_800B8118(&this->actor, play, 0);
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_XLU_DISP++, gHeartPieceInteriorDL);
 
     CLOSE_DISPS(play->state.gfxCtx);
@@ -256,7 +256,7 @@ void func_80AFE4AC(Actor* thisx, PlayState* play) {
     POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
     POLY_OPA_DISP = Gfx_SetupDL66(POLY_OPA_DISP);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gDropRecoveryHeartTex));
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, gItemDropDL);
 
     CLOSE_DISPS(play->state.gfxCtx);
@@ -268,7 +268,7 @@ void func_80AFE584(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, 255, 255, 255, 255);
     gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, 255);
     gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_06AB30);
@@ -284,7 +284,7 @@ void func_80AFE650(Actor* thisx, PlayState* play) {
     POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
     POLY_OPA_DISP = Gfx_SetupDL66(POLY_OPA_DISP);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gDropBombTex));
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, gItemDropDL);
 
     CLOSE_DISPS(play->state.gfxCtx);

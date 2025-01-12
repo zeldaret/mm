@@ -6,7 +6,7 @@
 
 #include "z_oceff_wipe.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
 #define THIS ((OceffWipe*)thisx)
 
@@ -15,7 +15,7 @@ void OceffWipe_Destroy(Actor* thisx, PlayState* play);
 void OceffWipe_Update(Actor* thisx, PlayState* play);
 void OceffWipe_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Oceff_Wipe_InitVars = {
+ActorProfile Oceff_Wipe_Profile = {
     /**/ ACTOR_OCEFF_WIPE,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -105,7 +105,7 @@ void OceffWipe_Draw(Actor* thisx, PlayState* play) {
     Matrix_RotateXS(0x708, MTXMODE_APPLY);
     Matrix_Translate(0.0f, 0.0f, -z, MTXMODE_APPLY);
 
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
 
     if (this->actor.params != OCEFF_WIPE_ZL) {
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 170, 255, 255, 255);

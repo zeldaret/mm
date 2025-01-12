@@ -2,7 +2,7 @@
 #define Z_EN_WIZ_H
 
 #include "global.h"
-#include "objects/object_wiz/object_wiz.h"
+#include "assets/objects/object_wiz/object_wiz.h"
 
 #define EN_WIZ_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
 #define EN_WIZ_GET_TYPE(thisx) (((thisx)->params >> 8) & 0xFF)
@@ -60,7 +60,7 @@ typedef struct EnWiz {
     /* 0x3CA */ u8 shouldStartTimer;
     /* 0x3CB */ u8 introCutsceneState;
     /* 0x3CC */ s32 musicStartTimer;
-    /* 0x3D0 */ f32 endFrame;
+    /* 0x3D0 */ f32 animEndFrame;
     /* 0x3D4 */ f32 scale;
     /* 0x3D8 */ Vec3f staffFlamePos;
     /* 0x3E4 */ Vec3f staffFlameScale;

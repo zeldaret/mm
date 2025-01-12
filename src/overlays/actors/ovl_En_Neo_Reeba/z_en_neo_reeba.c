@@ -5,9 +5,10 @@
  */
 
 #include "z_en_neo_reeba.h"
-#include "objects/object_rb/object_rb.h"
+#include "attributes.h"
+#include "assets/objects/object_rb/object_rb.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_200)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_200)
 
 #define THIS ((EnNeoReeba*)thisx)
 
@@ -36,7 +37,7 @@ void EnNeoReeba_SetupDeathEffects(EnNeoReeba* this);
 void EnNeoReeba_PlayDeathEffects(EnNeoReeba* this, PlayState* play);
 void EnNeoReeba_SpawnIce(EnNeoReeba* this, PlayState* play);
 
-ActorInit En_Neo_Reeba_InitVars = {
+ActorProfile En_Neo_Reeba_Profile = {
     /**/ ACTOR_EN_NEO_REEBA,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -97,7 +98,7 @@ static DamageTable sDamageTable = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_HIT5,
+        COL_MATERIAL_HIT5,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -105,11 +106,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0xF7CFFFFF, 0x08, 0x04 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
-        BUMP_ON | BUMP_HOOKABLE,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
+        ACELEM_ON | ACELEM_HOOKABLE,
         OCELEM_ON,
     },
     { 18, 30, 0, { 0, 0, 0 } },
@@ -133,7 +134,7 @@ void EnNeoReeba_Init(Actor* thisx, PlayState* play) {
     }
 
     this->actor.colChkInfo.damageTable = &sDamageTable;
-    this->actor.targetMode = TARGET_MODE_2;
+    this->actor.attentionRangeType = ATTENTION_RANGE_2;
     this->actor.hintId = TATL_HINT_ID_LEEVER;
     this->actor.gravity = -0.5f;
 
@@ -160,7 +161,7 @@ void EnNeoReeba_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnNeoReeba_SetupWaitUnderground(EnNeoReeba* this) {
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->actor.draw = NULL;
     this->actionTimer = 10;
     this->actionFunc = EnNeoReeba_WaitUnderground;
@@ -246,7 +247,7 @@ void EnNeoReeba_SetupRise(EnNeoReeba* this) {
     this->sinkRiseRate = 300.0f;
     this->skelAnime.playSpeed = 2.0f;
     Actor_PlaySfx(&this->actor, NA_SE_EN_STALKID_APPEAR);
-    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+    this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
     this->actionFunc = EnNeoReeba_RiseOutOfGround;
 }
 
@@ -282,7 +283,7 @@ void EnNeoReeba_Move(EnNeoReeba* this, PlayState* play) {
 
     if (remainingDist < 2.0f) {
         EnNeoReeba_SetupChooseAction(this);
-    } else if (remainingDist < 40.0f && this->actor.speed > 3.0f) {
+    } else if ((remainingDist < 40.0f) && (this->actor.speed > 3.0f)) {
         this->actor.speed -= 2.0f;
     }
 
@@ -312,12 +313,12 @@ void EnNeoReeba_ReturnHome(EnNeoReeba* this, PlayState* play) {
 
     if (remainingDist < 2.0f) {
         EnNeoReeba_SetupChooseAction(this);
-    } else if (remainingDist < 40.0f && this->actor.speed > 3.0f) {
+    } else if ((remainingDist < 40.0f) && (this->actor.speed > 3.0f)) {
         this->actor.speed -= 1.0f;
     }
 
-    if (Actor_WorldDistXZToPoint(&player->actor, &this->actor.home.pos) > 200.0f ||
-        fabsf(this->actor.playerHeightRel) > 100.0f) {
+    if ((Actor_WorldDistXZToPoint(&player->actor, &this->actor.home.pos) > 200.0f) ||
+        (fabsf(this->actor.playerHeightRel) > 100.0f)) {
         EnNeoReeba_SetupSink(this);
     }
 }
@@ -410,7 +411,9 @@ void EnNeoReeba_SetupDamageAnim(EnNeoReeba* this) {
     this->actionFunc = EnNeoReeba_DamageAnim;
 }
 
-static f32 sDamageAnimXZScales[] = { 0.04, 0.04, 0.039, 0.042, 0.045, 0.043, 0.04, 0.035, 0.03, 0.033, 0.04 };
+static f32 sDamageAnimXZScales[] = {
+    0.04f, 0.04f, 0.039f, 0.042f, 0.045f, 0.043f, 0.04f, 0.035f, 0.03f, 0.033f, 0.04f
+};
 static f32 sDamageAnimYScales[] = { 0.04f, 0.04f, 0.041f, 0.038f, 0.035f, 0.037f, 0.04f, 0.045f, 0.05f, 0.047f, 0.04f };
 
 void EnNeoReeba_DamageAnim(EnNeoReeba* this, PlayState* play) {
@@ -443,8 +446,8 @@ void EnNeoReeba_SetupDeathEffects(EnNeoReeba* this) {
 
     this->rotationSpeed = 3640.0f;
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 25);
-    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
 
     Actor_PlaySfx(&this->actor, NA_SE_EN_RIVA_DEAD);
     this->actionFunc = EnNeoReeba_PlayDeathEffects;
@@ -520,6 +523,7 @@ void EnNeoReeba_HandleHit(EnNeoReeba* this, PlayState* play) {
                         EnNeoReeba_SpawnIce(this, play);
                     }
                     this->stunTimer = 0;
+                    break;
             }
         }
 
@@ -541,7 +545,7 @@ void EnNeoReeba_HandleHit(EnNeoReeba* this, PlayState* play) {
                 }
                 this->drawEffectAlpha = 1.0f;
                 this->drawEffectScale = 0.0f;
-                // fallthrough
+                FALLTHROUGH;
             case EN_NEO_REEBA_DMGEFF_NONE:
             case EN_NEO_REEBA_DMGEFF_SHATTER:
                 if ((this->actor.colChkInfo.damageEffect == EN_NEO_REEBA_DMGEFF_SHATTER) ||

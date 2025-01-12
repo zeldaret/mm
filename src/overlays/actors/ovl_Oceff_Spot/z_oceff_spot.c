@@ -6,7 +6,7 @@
 
 #include "z_oceff_spot.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
 #define THIS ((OceffSpot*)thisx)
 
@@ -21,7 +21,7 @@ void OceffSpot_End(OceffSpot* this, PlayState* play);
 
 void OceffSpot_SetupAction(OceffSpot* this, OceffSpotActionFunc actionFunc);
 
-ActorInit Oceff_Spot_InitVars = {
+ActorProfile Oceff_Spot_Profile = {
     /**/ ACTOR_OCEFF_SPOT,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -115,7 +115,7 @@ void OceffSpot_Update(Actor* thisx, PlayState* play) {
     f32 temp;
     OceffSpot* this = THIS;
 
-    temp = (1.0f - cosf(this->unk16C * M_PI)) * 0.5f;
+    temp = (1.0f - cosf(this->unk16C * M_PIf)) * 0.5f;
     this->actionFunc(this, play);
 
     switch (GET_PLAYER_FORM) {
@@ -163,7 +163,7 @@ void OceffSpot_Draw(Actor* thisx, PlayState* play) {
 
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_XLU_DISP++, &sSunSongEffectCylinderMaterialDL);
     gSPDisplayList(POLY_XLU_DISP++, Gfx_TwoTexScroll(play->state.gfxCtx, 0, scroll * 2, scroll * -2, 0x20, 0x20, 1, 0,
                                                      scroll * -8, 0x20, 0x20));

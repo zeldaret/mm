@@ -24,7 +24,7 @@ void BgIkanaDharma_StartCutscene(BgIkanaDharma* this, PlayState* play);
 void BgIkanaDharma_SetupWaitForCutsceneToEnd(BgIkanaDharma* this);
 void BgIkanaDharma_WaitForCutsceneToEnd(BgIkanaDharma* this, PlayState* play);
 
-ActorInit Bg_Ikana_Dharma_InitVars = {
+ActorProfile Bg_Ikana_Dharma_Profile = {
     /**/ ACTOR_BG_IKANA_DHARMA,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -38,7 +38,7 @@ ActorInit Bg_Ikana_Dharma_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -46,11 +46,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0x00000100, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_NONE,
     },
     { 98, 10, 25, { 0, 0, 0 } },

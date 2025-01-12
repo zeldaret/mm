@@ -7,11 +7,12 @@
 #include "prevent_bss_reordering.h"
 #include "z_boss_06.h"
 #include "z64shrink_window.h"
+#include "attributes.h"
 #include "overlays/actors/ovl_En_Knight/z_en_knight.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
-#include "objects/object_knight/object_knight.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_knight/object_knight.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((Boss06*)thisx)
 
@@ -20,57 +21,65 @@ void Boss06_Destroy(Actor* thisx, PlayState* play);
 void Boss06_Update(Actor* thisx, PlayState* play);
 void Boss06_Draw(Actor* thisx, PlayState* play2);
 
-void func_809F24A8(Boss06* this);
-void func_809F24C8(Boss06* this, PlayState* play);
-void func_809F2B64(Boss06* this, PlayState* play);
-void func_809F2C44(Boss06* this, PlayState* play);
-void func_809F2E14(Boss06* this, PlayState* play);
-void func_809F2E34(Boss06* this, PlayState* play);
-void func_809F2ED0(Boss06* this, PlayState* play);
-void func_809F2EE8(Boss06* this, PlayState* play);
+void Boss06_SetupCurtainBurningCutscene(Boss06* this);
+void Boss06_CurtainBurningCutscene(Boss06* this, PlayState* play);
+void Boss06_SetupCloseCurtain(Boss06* this, PlayState* play);
+void Boss06_CloseCurtain(Boss06* this, PlayState* play);
+void Boss06_SetupCurtainClosed(Boss06* this, PlayState* play);
+void Boss06_CurtainClosed(Boss06* this, PlayState* play);
+void Boss06_SetupCurtainDestroyed(Boss06* this, PlayState* play);
+void Boss06_CurtainDestroyed(Boss06* this, PlayState* play);
 
-Vec3f D_809F4370[128];
-EnKnight* D_809F4970;
-s32 D_809F4974;
-s32 D_809F4978;
-s32 D_809F497C;
+Vec3f sCurtainFireEffectPositions[128];
+static EnKnight* sIgosInstance;
+s32 sBoss06Seed1;
+s32 sBoss06Seed2;
+s32 sBoss06Seed3;
+
+typedef enum {
+    /*  0 */ BOSS06_DMGEFF_0 = 0,
+    /*  2 */ BOSS06_DMGEFF_FIRE_ARROW = 2,
+    /*  3 */ BOSS06_DMGEFF_ICE_ARROW,
+    /*  4 */ BOSS06_DMGEFF_LIGHT_ARROW,
+    /* 15 */ BOSS06_DMGEFF_F = 15
+} Boss06DamageEffect;
 
 static DamageTable sDamageTable = {
-    /* Deku Nut       */ DMG_ENTRY(0, 0xF),
-    /* Deku Stick     */ DMG_ENTRY(0, 0xF),
-    /* Horse trample  */ DMG_ENTRY(0, 0x0),
-    /* Explosives     */ DMG_ENTRY(1, 0xF),
-    /* Zora boomerang */ DMG_ENTRY(0, 0xF),
-    /* Normal arrow   */ DMG_ENTRY(0, 0xF),
-    /* UNK_DMG_0x06   */ DMG_ENTRY(0, 0x0),
-    /* Hookshot       */ DMG_ENTRY(0, 0xF),
-    /* Goron punch    */ DMG_ENTRY(0, 0xF),
-    /* Sword          */ DMG_ENTRY(0, 0xF),
-    /* Goron pound    */ DMG_ENTRY(0, 0xF),
-    /* Fire arrow     */ DMG_ENTRY(1, 0x2),
-    /* Ice arrow      */ DMG_ENTRY(0, 0x3),
-    /* Light arrow    */ DMG_ENTRY(0, 0x4),
-    /* Goron spikes   */ DMG_ENTRY(0, 0xF),
-    /* Deku spin      */ DMG_ENTRY(0, 0xF),
-    /* Deku bubble    */ DMG_ENTRY(0, 0xF),
-    /* Deku launch    */ DMG_ENTRY(0, 0xF),
-    /* UNK_DMG_0x12   */ DMG_ENTRY(0, 0xF),
-    /* Zora barrier   */ DMG_ENTRY(0, 0x0),
-    /* Normal shield  */ DMG_ENTRY(0, 0xF),
-    /* Light ray      */ DMG_ENTRY(0, 0xF),
-    /* Thrown object  */ DMG_ENTRY(0, 0xF),
-    /* Zora punch     */ DMG_ENTRY(0, 0xF),
-    /* Spin attack    */ DMG_ENTRY(0, 0xF),
-    /* Sword beam     */ DMG_ENTRY(0, 0x0),
-    /* Normal Roll    */ DMG_ENTRY(0, 0xF),
-    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, 0x0),
-    /* Unblockable    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, 0x0),
-    /* Powder Keg     */ DMG_ENTRY(0, 0xF),
+    /* Deku Nut       */ DMG_ENTRY(0, BOSS06_DMGEFF_F),
+    /* Deku Stick     */ DMG_ENTRY(0, BOSS06_DMGEFF_F),
+    /* Horse trample  */ DMG_ENTRY(0, BOSS06_DMGEFF_0),
+    /* Explosives     */ DMG_ENTRY(1, BOSS06_DMGEFF_F),
+    /* Zora boomerang */ DMG_ENTRY(0, BOSS06_DMGEFF_F),
+    /* Normal arrow   */ DMG_ENTRY(0, BOSS06_DMGEFF_F),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, BOSS06_DMGEFF_0),
+    /* Hookshot       */ DMG_ENTRY(0, BOSS06_DMGEFF_F),
+    /* Goron punch    */ DMG_ENTRY(0, BOSS06_DMGEFF_F),
+    /* Sword          */ DMG_ENTRY(0, BOSS06_DMGEFF_F),
+    /* Goron pound    */ DMG_ENTRY(0, BOSS06_DMGEFF_F),
+    /* Fire arrow     */ DMG_ENTRY(1, BOSS06_DMGEFF_FIRE_ARROW),
+    /* Ice arrow      */ DMG_ENTRY(0, BOSS06_DMGEFF_ICE_ARROW),
+    /* Light arrow    */ DMG_ENTRY(0, BOSS06_DMGEFF_LIGHT_ARROW),
+    /* Goron spikes   */ DMG_ENTRY(0, BOSS06_DMGEFF_F),
+    /* Deku spin      */ DMG_ENTRY(0, BOSS06_DMGEFF_F),
+    /* Deku bubble    */ DMG_ENTRY(0, BOSS06_DMGEFF_F),
+    /* Deku launch    */ DMG_ENTRY(0, BOSS06_DMGEFF_F),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, BOSS06_DMGEFF_F),
+    /* Zora barrier   */ DMG_ENTRY(0, BOSS06_DMGEFF_0),
+    /* Normal shield  */ DMG_ENTRY(0, BOSS06_DMGEFF_F),
+    /* Light ray      */ DMG_ENTRY(0, BOSS06_DMGEFF_F),
+    /* Thrown object  */ DMG_ENTRY(0, BOSS06_DMGEFF_F),
+    /* Zora punch     */ DMG_ENTRY(0, BOSS06_DMGEFF_F),
+    /* Spin attack    */ DMG_ENTRY(0, BOSS06_DMGEFF_F),
+    /* Sword beam     */ DMG_ENTRY(0, BOSS06_DMGEFF_0),
+    /* Normal Roll    */ DMG_ENTRY(0, BOSS06_DMGEFF_F),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, BOSS06_DMGEFF_0),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, BOSS06_DMGEFF_0),
+    /* Unblockable    */ DMG_ENTRY(0, BOSS06_DMGEFF_0),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, BOSS06_DMGEFF_0),
+    /* Powder Keg     */ DMG_ENTRY(0, BOSS06_DMGEFF_F),
 };
 
-ActorInit Boss_06_InitVars = {
+ActorProfile Boss_06_Profile = {
     /**/ ACTOR_BOSS_06,
     /**/ ACTORCAT_BOSS,
     /**/ FLAGS,
@@ -84,7 +93,7 @@ ActorInit Boss_06_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_HIT3,
+        COL_MATERIAL_HIT3,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -92,107 +101,117 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK3,
+        ELEM_MATERIAL_UNK3,
         { 0xF7CFFFFF, 0x00, 0x04 },
         { 0xF7FFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
-        BUMP_ON | BUMP_HOOKABLE,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
+        ACELEM_ON | ACELEM_HOOKABLE,
         OCELEM_ON,
     },
     { 90, 140, 10, { 0, 0, 0 } },
 };
 
-Vec3f D_809F40EC[] = {
+static Vec3f sCurtainLocations[] = {
     { 1081.0f, 235.0f, 3224.0f },
     { 676.0f, 235.0f, 3224.0f },
 };
 
-void func_809F2120(s32 arg0, s32 arg1, s32 arg2) {
-    D_809F4974 = arg0;
-    D_809F4978 = arg1;
-    D_809F497C = arg2;
+#define BOSS06_DRAWFLAG_CURTAIN (1 << 0)
+#define BOSS06_DRAWFLAG_LIGHT_RAY (1 << 1)
+
+typedef enum {
+    /* 0 */ BOSS06_CS_STATE_BEGIN,
+    /* 1 */ BOSS06_CS_STATE_SHOW_BURNING_AND_REACTIONS,
+    /* 2 */ BOSS06_CS_STATE_PAN_OVER_LIGHT_RAY
+} Boss06CutsceneState;
+
+void Boss06_InitRand(s32 seedInit1, s32 seedInit2, s32 seedInit3) {
+    sBoss06Seed1 = seedInit1;
+    sBoss06Seed2 = seedInit2;
+    sBoss06Seed3 = seedInit3;
 }
 
-f32 func_809F2140(void) {
-    f32 temp_f2;
+f32 Boss06_RandZeroOne(void) {
+    // Wichmann-Hill algorithm
+    f32 randFloat;
 
-    D_809F4974 = (D_809F4974 * 171) % 30269;
-    D_809F4978 = (D_809F4978 * 172) % 30307;
-    D_809F497C = (D_809F497C * 170) % 30323;
-    temp_f2 = (D_809F4974 / 30269.0f) + (D_809F4978 / 30307.0f) + (D_809F497C / 30323.0f);
+    sBoss06Seed1 = (sBoss06Seed1 * 171) % 30269;
+    sBoss06Seed2 = (sBoss06Seed2 * 172) % 30307;
+    sBoss06Seed3 = (sBoss06Seed3 * 170) % 30323;
 
-    while (temp_f2 >= 1.0f) {
-        temp_f2 -= 1.0f;
+    randFloat = (sBoss06Seed1 / 30269.0f) + (sBoss06Seed2 / 30307.0f) + (sBoss06Seed3 / 30323.0f);
+    while (randFloat >= 1.0f) {
+        randFloat -= 1.0f;
     }
-
-    return fabsf(temp_f2);
+    return fabsf(randFloat);
 }
 
 void Boss06_Init(Actor* thisx, PlayState* play) {
     Boss06* this = THIS;
-    u8* temp_v0;
+    u8* curtainTexture;
     s32 i;
 
-    D_809F4970 = (EnKnight*)this->actor.parent;
+    sIgosInstance = (EnKnight*)this->actor.parent;
     this->actor.colChkInfo.damageTable = &sDamageTable;
 
     if ((KREG(64) != 0) || CHECK_EVENTINF(EVENTINF_INTRO_CS_WATCHED_IGOS_DU_IKANA)) {
-        this->actionFunc = func_809F2E14;
+        this->actionFunc = Boss06_SetupCurtainClosed;
     } else {
-        this->actionFunc = func_809F2B64;
+        this->actionFunc = Boss06_SetupCloseCurtain;
     }
 
     Actor_SetScale(&this->actor, 0.1f);
-    Math_Vec3f_Copy(&this->actor.world.pos, &D_809F40EC[ENBOSS06_GET_PARAMS(&this->actor)]);
+    Math_Vec3f_Copy(&this->actor.world.pos, &sCurtainLocations[ENBOSS06_GET_PARAMS(&this->actor)]);
     this->actor.shape.rot.y = -0x8000;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
 
-    temp_v0 = SEGMENTED_TO_K0(&object_knight_Tex_019490);
-    for (i = 0; i < ARRAY_COUNT(this->unk_200); i++) {
-        this->unk_200[i] = temp_v0[i];
+    curtainTexture = SEGMENTED_TO_K0(&gIkanaThroneRoomCurtainTex);
+    for (i = 0; i < ARRAY_COUNT(this->curtainTexture); i++) {
+        this->curtainTexture[i] = curtainTexture[i];
     }
 
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
 }
 
 void Boss06_Destroy(Actor* thisx, PlayState* play) {
 }
 
-void func_809F23CC(Boss06* this) {
+void Boss06_UpdateDamage(Boss06* this) {
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
-        if ((this->unk_1C9 == 0) && (D_809F4970->unk_68A == 0)) {
-            if (this->actor.colChkInfo.damageEffect == 2) {
-                func_809F24A8(this);
+
+        if ((this->csState == BOSS06_CS_STATE_BEGIN) && (sIgosInstance->subCamId == CAM_ID_MAIN)) {
+            if (this->actor.colChkInfo.damageEffect == BOSS06_DMGEFF_FIRE_ARROW) {
+                Boss06_SetupCurtainBurningCutscene(this);
                 Audio_PlaySfx(NA_SE_SY_TRE_BOX_APPEAR);
 
-                this->unk_1B0 = -(this->actor.world.pos.x - this->collider.info.bumper.hitPos.x);
-                this->unk_1BC = this->unk_1B0 * 0.35f;
+                this->arrowHitPos.x = -(this->actor.world.pos.x - this->collider.elem.acDmgInfo.hitPos.x);
+                this->arrowHitPosScaled.x = this->arrowHitPos.x * 0.35f;
 
-                this->unk_1B4 = -((this->actor.world.pos.y + 80.0f) - this->collider.info.bumper.hitPos.y);
-                this->unk_1C0 = this->unk_1B4 * -0.35f;
+                this->arrowHitPos.y = -((this->actor.world.pos.y + 80.0f) - this->collider.elem.acDmgInfo.hitPos.y);
+                this->arrowHitPosScaled.y = this->arrowHitPos.y * -0.35f;
             }
         }
     }
 }
 
-void func_809F24A8(Boss06* this) {
-    this->actionFunc = func_809F24C8;
-    this->unk_A28 = 0.0f;
-    this->unk_1AC = 0.0f;
+void Boss06_SetupCurtainBurningCutscene(Boss06* this) {
+    this->actionFunc = Boss06_CurtainBurningCutscene;
+    this->maxStepScale = 0.0f;
+    this->lensFlareYOffset = 0.0f;
 }
 
-void func_809F24C8(Boss06* this, PlayState* play) {
-    s16 sp4E = 0;
+void Boss06_CurtainBurningCutscene(Boss06* this, PlayState* play) {
+    s16 frameTarget = 0;
     Player* player = GET_PLAYER(play);
-    Actor* temp_s0;
-    Actor* temp_v0_2;
+    Actor* searchArrow;
+    Actor* searchKnight;
     Actor* child;
 
-    this->unk_1CA++;
+    this->csFrameCount++;
 
-    switch (this->unk_1C9) {
-        case 0:
+    switch (this->csState) {
+        case BOSS06_CS_STATE_BEGIN:
             if (CutsceneManager_GetCurrentCsId() != CS_ID_NONE) {
                 break;
             }
@@ -202,42 +221,41 @@ void func_809F24C8(Boss06* this, PlayState* play) {
             this->subCamId = Play_CreateSubCamera(play);
             Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
             Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
-            D_809F4970->unk_151 = 1;
-            this->unk_1C9 = 1;
-            this->unk_1C8 = 1;
-            this->unk_1E0 = 255.0f;
-            this->unk_1DC = 0.0f;
+            sIgosInstance->inCurtainCutscene = true;
+            this->csState = BOSS06_CS_STATE_SHOW_BURNING_AND_REACTIONS;
+            this->updateFireEffects = true;
+            this->lightOrbAlphaFactor = 255.0f;
+            this->lightOrbScale = 0.0f;
 
-            temp_s0 = play->actorCtx.actorLists[ACTORCAT_ITEMACTION].first;
-            while (temp_s0 != NULL) {
-                if (temp_s0->id == ACTOR_EN_ARROW) {
-                    Actor_Kill(temp_s0);
+            // Kill all arrow actors
+            for (searchArrow = play->actorCtx.actorLists[ACTORCAT_ITEMACTION].first; searchArrow != NULL;
+                 searchArrow = searchArrow->next) {
+                if (searchArrow->id == ACTOR_EN_ARROW) {
+                    Actor_Kill(searchArrow);
                 }
-                temp_s0 = temp_s0->next;
             }
-
-        case 1:
-            if (this->unk_1CA >= 10) {
-                Math_ApproachF(&this->unk_1E4, 30.0f, 0.2f, 1.0f);
+            FALLTHROUGH;
+        case BOSS06_CS_STATE_SHOW_BURNING_AND_REACTIONS:
+            if (this->csFrameCount >= 10) {
+                Math_ApproachF(&this->lensFlareScale, 30.0f, 0.2f, 1.0f);
                 play->envCtx.fillScreen = true;
-                play->envCtx.screenFillColor[2] = 0;
-                play->envCtx.screenFillColor[1] = 0;
-                play->envCtx.screenFillColor[0] = 0;
-                play->envCtx.screenFillColor[3] = this->unk_A2C;
-                Math_ApproachF(&this->unk_A2C, 75.0f, 1.0f, 3.0f);
+                play->envCtx.screenFillColor[0] = play->envCtx.screenFillColor[1] = play->envCtx.screenFillColor[2] = 0;
+                play->envCtx.screenFillColor[3] = this->screenFillAlpha;
+                Math_ApproachF(&this->screenFillAlpha, 75.0f, 1.0f, 3.0f);
             }
 
-            if (this->unk_1CA >= 30) {
+            if (this->csFrameCount >= 30) {
                 Audio_PlaySfx(NA_SE_EV_S_STONE_FLASH);
             }
 
-            if (this->unk_1CA >= 60) {
+            if (this->csFrameCount >= 60) {
                 play->envCtx.fillScreen = false;
-                this->unk_1C8 = 0;
-                this->unk_1DC = 0.0f;
-                this->unk_1D8 = 0.0f;
-                if (this->unk_1CA == 60) {
-                    D_809F4970->unk_154++;
+                this->updateFireEffects = false;
+                this->lightOrbScale = 0.0f;
+                this->fireEffectScale = 0.0f;
+
+                if (this->csFrameCount == 60) {
+                    sIgosInstance->roomLightingState++;
                     Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_132);
                     player->actor.shape.rot.y = 0;
                     player->actor.world.rot.y = player->actor.shape.rot.y;
@@ -251,11 +269,11 @@ void func_809F24C8(Boss06* this, PlayState* play) {
                 this->subCamAt.y = player->actor.world.pos.y + 26.0f;
                 this->subCamAt.z = player->actor.world.pos.z;
 
-                if (this->unk_1CA >= 75) {
-                    temp_v0_2 = play->actorCtx.actorLists[ACTORCAT_BOSS].first;
-                    while (temp_v0_2 != NULL) {
-                        if ((temp_v0_2->id == ACTOR_EN_KNIGHT) && (&D_809F4970->actor == temp_v0_2) &&
-                            (D_809F4970->unk_680 != 0)) {
+                if (this->csFrameCount >= 75) {
+                    for (searchKnight = play->actorCtx.actorLists[ACTORCAT_BOSS].first; searchKnight != NULL;
+                         searchKnight = searchKnight->next) {
+                        if ((searchKnight->id == ACTOR_EN_KNIGHT) && (&sIgosInstance->actor == searchKnight) &&
+                            sIgosInstance->inCurtainReaction) {
                             this->subCamEye.x = 1307.0f;
                             this->subCamEye.y = 142.0f;
                             this->subCamEye.z = 2897.0f;
@@ -264,27 +282,26 @@ void func_809F24C8(Boss06* this, PlayState* play) {
                             this->subCamAt.y = 132.0f;
                             this->subCamAt.z = 2860.0f;
 
-                            if (this->unk_1CA == 75) {
-                                D_809F4970->unk_148 = 1;
+                            if (this->csFrameCount == 75) {
+                                sIgosInstance->subAction = KNIGHT_SUB_ACTION_CURTAIN_REACT_BEGIN;
                             }
-                            sp4E = 17;
+                            frameTarget = 17;
                             break;
                         }
-                        temp_v0_2 = temp_v0_2->next;
                     }
                 }
 
-                if ((s16)(sp4E + 80) < this->unk_1CA) {
-                    this->unk_1C9 = 2;
-                    this->unk_1CA = 0;
-                    this->unk_1B4 = 0.0f;
-                    this->unk_1B0 = 0.0f;
-                    this->unk_144 = 2;
-                    this->unk_1A4 = 0.0f;
-                    this->unk_1A0 = 0.0f;
-                    this->unk_1DC = 18.0f;
-                    this->unk_1E0 = 255.0f;
-                    this->unk_19C = 1.0f;
+                if (this->csFrameCount > (s16)(frameTarget + 80)) {
+                    this->csState = BOSS06_CS_STATE_PAN_OVER_LIGHT_RAY;
+                    this->csFrameCount = 0;
+                    this->arrowHitPos.y = 0.0f;
+                    this->arrowHitPos.x = 0.0f;
+                    this->drawFlags = BOSS06_DRAWFLAG_LIGHT_RAY;
+                    this->lightRayBaseOffsetZ = 0.0f;
+                    this->lightRayTopVerticesOffset = 0.0f;
+                    this->lightOrbScale = 18.0f;
+                    this->lightOrbAlphaFactor = 255.0f;
+                    this->lightRayBrightness = 1.0f;
 
                     Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_MIR_RAY2, this->actor.world.pos.x,
                                        this->actor.world.pos.y - 200.0f, this->actor.world.pos.z - 170.0f, 15, 0, 0, 1);
@@ -312,27 +329,27 @@ void func_809F24C8(Boss06* this, PlayState* play) {
             }
             break;
 
-        case 2:
+        case BOSS06_CS_STATE_PAN_OVER_LIGHT_RAY:
             child = this->actor.child;
 
-            if (this->unk_1CA == 1) {
-                this->unk_A1C.x = fabsf(this->subCamAt.x - child->world.pos.x);
-                this->unk_A1C.y = fabsf(this->subCamAt.y - child->world.pos.y);
-                this->unk_A1C.z = fabsf(this->subCamAt.z - child->world.pos.z);
+            if (this->csFrameCount == 1) {
+                this->subCamMaxStep.x = fabsf(this->subCamAt.x - child->world.pos.x);
+                this->subCamMaxStep.y = fabsf(this->subCamAt.y - child->world.pos.y);
+                this->subCamMaxStep.z = fabsf(this->subCamAt.z - child->world.pos.z);
             }
 
-            Math_ApproachF(&this->subCamAt.x, child->world.pos.x, 0.15f, this->unk_A1C.x * this->unk_A28);
-            Math_ApproachF(&this->subCamAt.y, child->world.pos.y, 0.15f, this->unk_A1C.y * this->unk_A28);
-            Math_ApproachF(&this->subCamAt.z, child->world.pos.z, 0.15f, this->unk_A1C.z * this->unk_A28);
-            Math_ApproachF(&this->unk_A28, 1.0f, 1.0f, 0.001f);
+            Math_ApproachF(&this->subCamAt.x, child->world.pos.x, 0.15f, this->subCamMaxStep.x * this->maxStepScale);
+            Math_ApproachF(&this->subCamAt.y, child->world.pos.y, 0.15f, this->subCamMaxStep.y * this->maxStepScale);
+            Math_ApproachF(&this->subCamAt.z, child->world.pos.z, 0.15f, this->subCamMaxStep.z * this->maxStepScale);
+            Math_ApproachF(&this->maxStepScale, 1.0f, 1.0f, 0.001f);
 
-            if (this->unk_1CA > 80) {
-                func_809F2ED0(this, play);
+            if (this->csFrameCount > 80) {
+                Boss06_SetupCurtainDestroyed(this, play);
                 func_80169AFC(play, this->subCamId, 0);
                 this->subCamId = SUB_CAM_ID_DONE;
                 Cutscene_StopManual(play, &play->csCtx);
                 Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_END);
-                D_809F4970->unk_151 = 0;
+                sIgosInstance->inCurtainCutscene = false;
             }
             break;
     }
@@ -343,151 +360,158 @@ void func_809F24C8(Boss06* this, PlayState* play) {
     }
 }
 
-void func_809F2B64(Boss06* this, PlayState* play) {
-    this->actionFunc = func_809F2C44;
-    this->unk_144 = 3;
-    this->unk_1A8 = 110.0f;
-    this->unk_1E0 = 200;
-    this->unk_1DC = 15.0f;
-    this->unk_1E4 = 30.0f;
-    this->unk_1AC = 0.0f;
-    this->unk_19C = 1.0f;
+void Boss06_SetupCloseCurtain(Boss06* this, PlayState* play) {
+    this->actionFunc = Boss06_CloseCurtain;
+    this->drawFlags = BOSS06_DRAWFLAG_LIGHT_RAY | BOSS06_DRAWFLAG_CURTAIN;
+    this->curtainHeight = 110.0f;
+    this->lightOrbAlphaFactor = 200;
+    this->lightOrbScale = 15.0f;
+    this->lensFlareScale = 30.0f;
+    this->lensFlareYOffset = 0.0f;
+    this->lightRayBrightness = 1.0f;
     Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_MIR_RAY2, this->actor.world.pos.x,
                        this->actor.world.pos.y - 200.0f, this->actor.world.pos.z - 170.0f, 15, 0, 0, 1);
-    D_809F4970->unk_154++;
+    sIgosInstance->roomLightingState++;
 }
 
-void func_809F2C44(Boss06* this, PlayState* play) {
-    if (D_809F4970->unk_153 != 0) {
-        this->unk_A28 = 0.008f;
-        Math_ApproachF(&this->unk_1E4, 0.0f, 0.2f, this->unk_A28 * 30.0f);
-        Math_ApproachF(&this->unk_1AC, -70.0f, 0.2f, this->unk_A28 * 70.0f);
-        Math_ApproachF(&this->unk_1A8, 0.0f, 0.2f, this->unk_A28 * 110.0f);
-        Math_ApproachF(&this->unk_1A0, -900.0f, 0.2f, this->unk_A28 * 900.0f);
-        Math_ApproachF(&this->unk_1A4, 1350.0f, 0.2f, this->unk_A28 * 1350.0f);
-        Math_ApproachF(&this->unk_1E0, 100.0f, 0.2f, this->unk_A28 * 100.0f);
+void Boss06_CloseCurtain(Boss06* this, PlayState* play) {
+    if (sIgosInstance->closeCurtainAction != KNIGHT_CLOSE_CURTAIN_ACTION_0) {
+        this->maxStepScale = 0.008f;
+        Math_ApproachF(&this->lensFlareScale, 0.0f, 0.2f, this->maxStepScale * 30.0f);
+        Math_ApproachF(&this->lensFlareYOffset, -70.0f, 0.2f, this->maxStepScale * 70.0f);
+        Math_ApproachF(&this->curtainHeight, 0.0f, 0.2f, this->maxStepScale * 110.0f);
+        Math_ApproachF(&this->lightRayTopVerticesOffset, -900.0f, 0.2f, this->maxStepScale * 900.0f);
+        Math_ApproachF(&this->lightRayBaseOffsetZ, 1350.0f, 0.2f, this->maxStepScale * 1350.0f);
+        Math_ApproachF(&this->lightOrbAlphaFactor, 100.0f, 0.2f, this->maxStepScale * 100.0f);
 
-        if (this->unk_1E4 < 5.0f) {
-            Math_ApproachF(&this->unk_19C, 0.0f, 1.0f, 0.03f);
+        if (this->lensFlareScale < 5.0f) {
+            Math_ApproachF(&this->lightRayBrightness, 0.0f, 1.0f, 0.03f);
         }
 
-        if ((this->unk_1E4 > 0.1f) && ENBOSS06_GET_PARAMS(&this->actor) == 0) {
+        if ((this->lensFlareScale > 0.1f) && ENBOSS06_GET_PARAMS(&this->actor) == 0) {
+            // Plays the sfx for just one of the curtains
             Audio_PlaySfx(NA_SE_EV_CURTAIN_DOWN - SFX_FLAG);
         }
     }
 
-    if (D_809F4970->unk_153 == 2) {
+    if (sIgosInstance->closeCurtainAction == KNIGHT_CLOSE_CURTAIN_ACTION_2) {
         Actor_Kill(this->actor.child);
         this->actor.child = NULL;
-        func_809F2E14(this, play);
+        Boss06_SetupCurtainClosed(this, play);
     }
 }
 
-void func_809F2E14(Boss06* this, PlayState* play) {
-    this->actionFunc = func_809F2E34;
-    this->unk_144 = 1;
+void Boss06_SetupCurtainClosed(Boss06* this, PlayState* play) {
+    this->actionFunc = Boss06_CurtainClosed;
+    this->drawFlags = BOSS06_DRAWFLAG_CURTAIN;
 }
 
-void func_809F2E34(Boss06* this, PlayState* play) {
-    this->unk_1E0 = 200.0f;
-    this->unk_1DC = 15.0f;
-    func_809F23CC(this);
+void Boss06_CurtainClosed(Boss06* this, PlayState* play) {
+    this->lightOrbAlphaFactor = 200.0f;
+    this->lightOrbScale = 15.0f;
+    Boss06_UpdateDamage(this);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     this->collider.dim.pos.z = (this->actor.world.pos.z - 50.0f) + 100.0f;
     CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
 }
 
-void func_809F2ED0(Boss06* this, PlayState* play) {
-    this->actionFunc = func_809F2EE8;
+void Boss06_SetupCurtainDestroyed(Boss06* this, PlayState* play) {
+    this->actionFunc = Boss06_CurtainDestroyed;
 }
 
-void func_809F2EE8(Boss06* this, PlayState* play) {
-    this->unk_1E0 = 100.0f;
-    this->unk_1DC = 13.0f;
+void Boss06_CurtainDestroyed(Boss06* this, PlayState* play) {
+    this->lightOrbAlphaFactor = 100.0f;
+    this->lightOrbScale = 13.0f;
 }
 
 void Boss06_Update(Actor* thisx, PlayState* play) {
     Boss06* this = THIS;
-    s32 i;
-    Vec3f sp7C;
-    f32 temp_f22;
-    f32 phi_f26;
-    f32 phi_f24;
 
     this->actionFunc(this, play);
 
-    if (this->unk_146 != 0) {
-        this->unk_146--;
+    if (this->unusedTimer1 != 0) {
+        this->unusedTimer1--;
     }
 
-    if (this->unk_148 != 0) {
-        this->unk_148--;
+    if (this->unusedTimer2 != 0) {
+        this->unusedTimer2--;
     }
 
-    if (this->unk_1E4 > 0.0f) {
+    if (this->lensFlareScale > 0.0f) {
         if (ENBOSS06_GET_PARAMS(&this->actor) == 0) {
             gCustomLensFlare1On = true;
-            gCustomLensFlare1Pos.x = this->actor.world.pos.x + this->unk_1B0;
-            gCustomLensFlare1Pos.y = this->actor.world.pos.y + 80.0f + this->unk_1B4 + this->unk_1AC;
+            gCustomLensFlare1Pos.x = this->actor.world.pos.x + this->arrowHitPos.x;
+            gCustomLensFlare1Pos.y = this->actor.world.pos.y + 80.0f + this->arrowHitPos.y + this->lensFlareYOffset;
             gCustomLensFlare1Pos.z = this->actor.world.pos.z;
-            D_801F4E44 = this->unk_1E4;
+            D_801F4E44 = this->lensFlareScale;
             D_801F4E48 = 10.0f;
             D_801F4E4C = 0;
         } else {
             gCustomLensFlare2On = true;
-            gCustomLensFlare2Pos.x = this->actor.world.pos.x + this->unk_1B0;
-            gCustomLensFlare2Pos.y = this->actor.world.pos.y + 80.0f + this->unk_1B4 + this->unk_1AC;
+            gCustomLensFlare2Pos.x = this->actor.world.pos.x + this->arrowHitPos.x;
+            gCustomLensFlare2Pos.y = this->actor.world.pos.y + 80.0f + this->arrowHitPos.y + this->lensFlareYOffset;
             gCustomLensFlare2Pos.z = this->actor.world.pos.z;
-            D_801F4E5C = this->unk_1E4;
+            D_801F4E5C = this->lensFlareScale;
             D_801F4E60 = 10.0f;
             D_801F4E64 = 0;
         }
-    } else if (ENBOSS06_GET_PARAMS(&this->actor) == 0) {
-        gCustomLensFlare1On = false;
     } else {
-        gCustomLensFlare2On = false;
+        if (ENBOSS06_GET_PARAMS(&this->actor) == 0) {
+            gCustomLensFlare1On = false;
+        } else {
+            gCustomLensFlare2On = false;
+        }
     }
 
-    if ((this->unk_1C8 != 0) && (this->unk_1C8 != 0)) {
+    if (this->updateFireEffects && this->updateFireEffects) {
+        s32 i;
+        Vec3f texCoords;
+        f32 distFromHitPos;
+        f32 angle0;
+        f32 angle1;
+
         Audio_PlaySfx(NA_SE_EV_FIRE_PLATE - SFX_FLAG);
-        this->unk_1CC += 0.6f;
-        this->unk_1D0 += 0.1f;
-        this->unk_1D4 += 0.0200000014156f;
-        this->unk_1D8 += 0.00016f;
-        this->unk_1DC += 0.4f;
-        Math_ApproachZeroF(&this->unk_1B0, 1.0f, 0.7f);
-        Math_ApproachZeroF(&this->unk_1B4, 1.0f, 0.7f);
+        this->fireEffectDistanceAdd += 0.6f;
+        this->fireEffectDistanceScale2 += 0.1f;
+        this->fireEffectDistanceScale1 += 20.0f * 0.001f;
+        this->fireEffectScale += 0.00016f;
+        this->lightOrbScale += 0.4f;
+        Math_ApproachZeroF(&this->arrowHitPos.x, 1.0f, 0.7f);
+        Math_ApproachZeroF(&this->arrowHitPos.y, 1.0f, 0.7f);
 
-        phi_f26 = 0.0f;
-        phi_f24 = 0.0f;
+        angle0 = 0.0f;
+        angle1 = 0.0f;
 
-        for (i = 0; i < 1024; i++) {
-            temp_f22 = (((sinf(phi_f24) * this->unk_1D4) + 1.0f) * ((sinf(phi_f26) * this->unk_1D0) + this->unk_1D0)) +
-                       this->unk_1CC;
+        for (i = 0; i < 8 * ARRAY_COUNT(sCurtainFireEffectPositions); i++) {
+            distFromHitPos = (sinf(angle1) * this->fireEffectDistanceScale1 + 1.0f) *
+                                 (sinf(angle0) * this->fireEffectDistanceScale2 + this->fireEffectDistanceScale2) +
+                             this->fireEffectDistanceAdd;
 
-            phi_f26 += (M_PI / 64);
-            phi_f24 += 0.030679617f;
+            angle0 += M_PIf / 64;
+            angle1 += 5 * M_PIf / 512;
 
-            Matrix_RotateZF(i * (M_PI / 512), MTXMODE_NEW);
-            Matrix_MultVecY(temp_f22, &sp7C);
+            Matrix_RotateZF(i * (M_PIf / 512), MTXMODE_NEW);
+            Matrix_MultVecY(distFromHitPos, &texCoords);
 
-            sp7C.x += 32.0f + this->unk_1BC;
-            sp7C.y += 32.0f + this->unk_1C0;
+            texCoords.x += (BOSS06_CURTAIN_TEX_WIDTH / 2) + this->arrowHitPosScaled.x;
+            texCoords.y += (BOSS06_CURTAIN_TEX_HEIGHT / 2) + this->arrowHitPosScaled.y;
 
             if ((i % 8) == 0) {
-                Math_Vec3f_Copy(&D_809F4370[i / 8], &sp7C);
+                Math_Vec3f_Copy(&sCurtainFireEffectPositions[i / 8], &texCoords);
             }
 
-            if ((sp7C.x >= 0.0f) && (sp7C.y >= 0.0f) && (sp7C.x < 64.0f) && (sp7C.y < 64.0f)) {
-                s32 x = sp7C.x;
-                s32 idx = ((s32)sp7C.y << 5);
+            if ((texCoords.x >= 0.0f) && (texCoords.y >= 0.0f) && (texCoords.x < BOSS06_CURTAIN_TEX_WIDTH) &&
+                (texCoords.y < BOSS06_CURTAIN_TEX_HEIGHT)) {
+                s32 x = texCoords.x;
+                s32 idx = ((s32)texCoords.y * (BOSS06_CURTAIN_TEX_WIDTH / 2));
 
                 idx += (x / 2);
 
+                // The texture format is CI4, only zero one pixel
                 if ((x % 2) != 0) {
-                    this->unk_200[idx] &= 0xF0;
+                    this->curtainTexture[idx] &= 0xF0;
                 } else {
-                    this->unk_200[idx] &= 0xF;
+                    this->curtainTexture[idx] &= 0xF;
                 }
             }
         }
@@ -498,154 +522,231 @@ void Boss06_Draw(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     Boss06* this = THIS;
     s32 i;
-    f32 spE0 = 0.0f;
-    s16 temp_s0;
-    s16 temp_f10;
-    Vtx* temp_v0_2;
-    u16 temp_v0;
+    f32 lightOrbOffsetZ = 0.0f;
+    s16 lightRayBaseX;
+    s16 lightRayBaseZ;
+    Vtx* vertices;
+    u16 time;
     u16 pad;
-    u8 spD3;
-    u8 spD2;
-    s32 maxColor = 255; //! FAKE:
-    f32 sp68;
+    u8 lightRayAlpha;
+    u8 floorLightAlpha;
+    s32 lightRayGreenFactor = 255;
+    f32 lightRayBlueFactor;
 
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
-    temp_v0 = CURRENT_TIME;
-    if (temp_v0 > CLOCK_TIME(12, 0)) {
-        temp_v0 = (DAY_LENGTH - 1) - temp_v0;
+    time = CURRENT_TIME;
+    if (time > CLOCK_TIME(12, 0)) {
+        time = (DAY_LENGTH - 1) - time;
     }
-    sp68 = (f32)temp_v0 / 0x8000;
-    spD3 = ((10.0f * sp68) + 105.0f) * this->unk_19C;
-    spD2 = ((40.0f * sp68) + 55.0f) * this->unk_19C;
+    lightRayBlueFactor = (f32)time / 0x8000;
+    lightRayAlpha = (10.0f * lightRayBlueFactor + 105.0f) * this->lightRayBrightness;
+    floorLightAlpha = (40.0f * lightRayBlueFactor + 55.0f) * this->lightRayBrightness;
 
-    if (this->unk_144 & 2) {
-        temp_s0 = Math_SinS(D_809F4970->unk_144) * 1000.0f;
-        temp_f10 = (Math_CosS(D_809F4970->unk_144) * -2000.0f) - 2000.0f;
-        temp_v0_2 = SEGMENTED_TO_K0(&object_knight_Vtx_018BD0);
+    if (this->drawFlags & BOSS06_DRAWFLAG_LIGHT_RAY) {
+        lightRayBaseX = Math_SinS(sIgosInstance->curtainsLightRayAngle) * 1000.0f;
+        lightRayBaseZ = Math_CosS(sIgosInstance->curtainsLightRayAngle) * -2000.0f - 2000.0f;
+        vertices = SEGMENTED_TO_K0(&gIkanaThroneRoomLightRayVtx);
 
-        temp_v0_2[0].v.ob[1] = TRUNCF_BINANG(this->unk_1A0) + 0xE92;
-        temp_v0_2[3].v.ob[1] = TRUNCF_BINANG(this->unk_1A0) + 0xE92;
-        temp_v0_2[4].v.ob[1] = TRUNCF_BINANG(this->unk_1A0) + 0xE92;
-        temp_v0_2[7].v.ob[1] = TRUNCF_BINANG(this->unk_1A0) + 0xE92;
+        /*
+         * Vertices:
+         *  [ 0]    ( 300, 3730,  1112)
+         *  [ 1]    ( 300, 2830,  1112)
+         *  [ 2]    (-300, 2830,  1112)
+         *  [ 3]    (-300, 3730,  1112)
+         * Triangles:
+         *          ( 0,  1,  2), ( 2,  3,  0)
+         * Diagrams:
+         *    -300         300
+         *     (3)---------(0) 3730
+         *      |        .  |
+         *      |     .     |
+         *  y   |  .        |
+         *  ^  (2)---------(1) 2830
+         *  |
+         *  o--> x
+         *
+         *
+         * Vertices:
+         *  [ 4]    ( 300, 3730,  1112)     Shared with above
+         *  [ 5]    ( 675,    0, -1800)
+         *  [ 6]    (-675,    0, -1800)
+         *  [ 7]    (-300, 3730,  1112)     Shared with above
+         *  [ 8]    ( 300, 2830,  1112)     Shared with above
+         *  [ 9]    ( 675,    0, - 450)
+         *  [10]    (-300, 2830,  1112)     Shared with above
+         *  [11]    (-675,    0, - 450)
+         *  [12]    ( 675,    0, - 450)
+         *  [13]    ( 300, 2830,  1112)     Shared with above
+         * Triangles:
+         *          ( 4,  5,  6), ( 4,  6,  7)
+         *          ( 8,  9,  5), ( 8,  5,  4)
+         *          (10, 11, 12), (10, 12, 13)
+         *          ( 7,  6, 11), ( 7, 11, 10)
+         * Diagrams:
+         *    -675         675
+         *    (11)---------(12) -450
+         *      |           |
+         *      |           |
+         *  z   |           |
+         *  ^  (6)---------(5) -1800
+         *  |
+         *  o--> x
+         *    -300         300
+         *     (7)---------(4) 3730
+         *      |           |
+         *      |           |
+         *  y   |           |
+         *  ^ (10)---------(13) 2830
+         *  |
+         *  o--> x
+         *
+         *
+         * Vertices:
+         *  [14]    (-825,    0, -1950)
+         *  [15]    (-825,    0,     0)
+         *  [16]    ( 825,    0,     0)
+         *  [17]    ( 825,    0, -1950)
+         * Triangles:
+         *          (14, 15, 16), (14, 16, 17)
+         * Diagram:
+         *    -825         825
+         *    (15)---------(16) 0
+         *      |        .  |
+         *      |     .     |
+         *  z   |  .        |
+         *  ^ (14)---------(17) -1950
+         *  |
+         *  o--> x
+         */
 
-        temp_v0_2[5].v.ob[0] = temp_s0 + 0x2A3;
-        temp_v0_2[5].v.ob[2] = (temp_f10 + TRUNCF_BINANG(this->unk_1A4)) - 0x708;
+        // Vertices 0-3 form a rectangle on the wall.
+        // Vertices 4-13 are the 4 faces of the ray.
+        // Vertices 14-17 form a rectangle on the floor.
 
-        temp_v0_2[6].v.ob[0] = temp_s0 - 0x2A3;
-        temp_v0_2[6].v.ob[2] = (temp_f10 + TRUNCF_BINANG(this->unk_1A4)) - 0x708;
+        // Vertices 1,2,8,10,13 don't need to move, these are the vertices at the lower part of the [0,1,2,3] rectangle
 
-        temp_v0_2[9].v.ob[0] = temp_s0 + 0x2A3;
-        temp_v0_2[9].v.ob[2] = temp_f10 - 0x1C2;
+        // These vertices are the 4 highest vertices, move these up and down based on the curtain height.
+        vertices[0].v.ob[1] = 3730 + (s16)(s32)this->lightRayTopVerticesOffset;
+        vertices[3].v.ob[1] = 3730 + (s16)(s32)this->lightRayTopVerticesOffset;
+        vertices[4].v.ob[1] = 3730 + (s16)(s32)this->lightRayTopVerticesOffset;
+        vertices[7].v.ob[1] = 3730 + (s16)(s32)this->lightRayTopVerticesOffset;
 
-        temp_v0_2[11].v.ob[0] = temp_s0 - 0x2A3;
-        temp_v0_2[11].v.ob[2] = temp_f10 - 0x1C2;
+        // Move the ray based on the angle
+        vertices[5].v.ob[0] = lightRayBaseX + 675;
+        vertices[5].v.ob[2] = lightRayBaseZ + (s16)(s32)this->lightRayBaseOffsetZ - 1800;
+        vertices[6].v.ob[0] = lightRayBaseX - 675;
+        vertices[6].v.ob[2] = lightRayBaseZ + (s16)(s32)this->lightRayBaseOffsetZ - 1800;
+        vertices[9].v.ob[0] = lightRayBaseX + 675;
+        vertices[9].v.ob[2] = lightRayBaseZ - 450;
+        vertices[11].v.ob[0] = lightRayBaseX - 675;
+        vertices[11].v.ob[2] = lightRayBaseZ - 450;
+        vertices[12].v.ob[0] = lightRayBaseX + 675;
+        vertices[12].v.ob[2] = lightRayBaseZ - 450;
 
-        temp_v0_2[12].v.ob[0] = temp_s0 + 0x2A3;
-        temp_v0_2[12].v.ob[2] = temp_f10 - 0x1C2;
-
-        temp_v0_2[14].v.ob[0] = temp_s0 - 0x339;
-        temp_v0_2[14].v.ob[2] = temp_f10 - 0x79E;
-
-        temp_v0_2[15].v.ob[0] = temp_s0 - 0x339;
-        temp_v0_2[15].v.ob[2] = temp_f10;
-
-        temp_v0_2[16].v.ob[0] = temp_s0 + 0x339;
-        temp_v0_2[16].v.ob[2] = temp_f10;
-
-        temp_v0_2[17].v.ob[0] = temp_s0 + 0x339;
-        temp_v0_2[17].v.ob[2] = temp_f10 - 0x79E;
+        // Move the rectangle cast on the floor based on the ray angle
+        vertices[14].v.ob[0] = lightRayBaseX - 825;
+        vertices[14].v.ob[2] = lightRayBaseZ - 1950;
+        vertices[15].v.ob[0] = lightRayBaseX - 825;
+        vertices[15].v.ob[2] = lightRayBaseZ;
+        vertices[16].v.ob[0] = lightRayBaseX + 825;
+        vertices[16].v.ob[2] = lightRayBaseZ;
+        vertices[17].v.ob[0] = lightRayBaseX + 825;
+        vertices[17].v.ob[2] = lightRayBaseZ - 1950;
 
         if (this->actor.child != NULL) {
             Actor* child = this->actor.child;
 
-            child->world.pos.x = this->actor.world.pos.x + (temp_s0 * 0.1f);
-            child->world.pos.z = (this->actor.world.pos.z - 170.0f) + (temp_f10 * 0.1f);
+            child->world.pos.x = this->actor.world.pos.x + (lightRayBaseX * 0.1f);
+            child->world.pos.z = (this->actor.world.pos.z - 170.0f) + (lightRayBaseZ * 0.1f);
         }
 
-        AnimatedMat_Draw(play, Lib_SegmentedToVirtual(&object_knight_Matanimheader_019360));
+        AnimatedMat_Draw(play, Lib_SegmentedToVirtual(&gIkanaThroneRoomLightRayTexAnim));
         Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y - 234.0f, this->actor.world.pos.z + 30.0f,
                          MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         Matrix_Translate(0.0f, 0.0f, -1112.0f, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gDPSetPrimColor(POLY_XLU_DISP++, 0, 155, 255, maxColor, (u8)((140.0f * sp68) + 115.0f), spD3);
-        gSPDisplayList(POLY_XLU_DISP++, object_knight_DL_018CF0);
-        gDPSetPrimColor(POLY_XLU_DISP++, 0, 255, 255, maxColor, (u8)((100.0f * sp68) + 65.0f), spD2);
-        gSPDisplayList(POLY_XLU_DISP++, object_knight_DL_018DE0);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 155, 255, lightRayGreenFactor, (u8)(140.0f * lightRayBlueFactor + 115.0f),
+                        lightRayAlpha);
+        gSPDisplayList(POLY_XLU_DISP++, gIkanaThroneRoomLightRayDL);
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 255, 255, lightRayGreenFactor, (u8)(100.0f * lightRayBlueFactor + 65.0f),
+                        floorLightAlpha);
+        gSPDisplayList(POLY_XLU_DISP++, gIkanaThroneRoomLightOnFloorDL);
 
         //! FAKE:
         if (1) {}
     }
 
-    if (this->unk_144 & 1) {
-        gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(&this->unk_200));
+    if (this->drawFlags & BOSS06_DRAWFLAG_CURTAIN) {
+        gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(&this->curtainTexture));
 
-        Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y + this->unk_1A8, this->actor.world.pos.z,
-                         MTXMODE_NEW);
+        Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y + this->curtainHeight,
+                         this->actor.world.pos.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, 0.0f, MTXMODE_APPLY);
         Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, object_knight_DL_0193B0);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
+        gSPDisplayList(POLY_OPA_DISP++, gIkanaThroneRoomCurtainDL);
 
-        if (this->unk_1D8 > 0.0f) {
+        if (this->fireEffectScale > 0.0f) {
             Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y + 84.0f, this->actor.world.pos.z - 2.0f,
                              MTXMODE_NEW);
             Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
-            func_809F2120(1, 0x71A5, 0x263A);
+            Boss06_InitRand(1, 29093, 9786);
 
             gDPSetEnvColor(POLY_XLU_DISP++, 255, 10, 0, 0);
             gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 128, 255, 255, 0, 230);
 
-            for (i = 0; i < ARRAY_COUNT(D_809F4370); i++) {
-                if ((fabsf(D_809F4370[i].x - 32.0f) < 30.0f) && (fabsf(D_809F4370[i].y - 32.0f) < 30.0f)) {
+            for (i = 0; i < ARRAY_COUNT(sCurtainFireEffectPositions); i++) {
+                if ((fabsf(sCurtainFireEffectPositions[i].x - 32.0f) < 30.0f) &&
+                    (fabsf(sCurtainFireEffectPositions[i].y - 32.0f) < 30.0f)) {
                     Matrix_Push();
 
                     gSPSegment(POLY_XLU_DISP++, 0x08,
-                               Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0,
-                                                ((play->gameplayFrames + (i * 10)) * -20) % 512, 0x20, 0x80));
+                               Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0,
+                                                ((play->gameplayFrames + (i * 10)) * -20) % 512, 32, 128));
 
-                    Matrix_Translate((D_809F4370[i].x - 32.0f) * -2.4f, (D_809F4370[i].y - 32.0f) * -2.4f, 0.0f,
-                                     MTXMODE_APPLY);
-                    Matrix_RotateZF(i * (M_PI / 64), MTXMODE_APPLY);
+                    Matrix_Translate((sCurtainFireEffectPositions[i].x - 32.0f) * -2.4f,
+                                     (sCurtainFireEffectPositions[i].y - 32.0f) * -2.4f, 0.0f, MTXMODE_APPLY);
+                    Matrix_RotateZF(i * (M_PIf / 64), MTXMODE_APPLY);
 
-                    if (func_809F2140() < 0.5f) {
-                        Matrix_RotateYF(M_PI, MTXMODE_APPLY);
+                    if (Boss06_RandZeroOne() < 0.5f) {
+                        Matrix_RotateYF(M_PIf, MTXMODE_APPLY);
                     }
 
-                    Matrix_Scale(-0.02f / 10.0f, -this->unk_1D8, 1.0f, MTXMODE_APPLY);
+                    Matrix_Scale(-0.02f / 10.0f, -this->fireEffectScale, 1.0f, MTXMODE_APPLY);
 
-                    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
                     gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
 
                     Matrix_Pop();
                 }
             }
         } else {
-            spE0 = 7.0f;
+            lightOrbOffsetZ = 7.0f;
         }
     }
 
-    if (this->unk_1DC > 0.0f) {
-        u8 temp_s2 = (this->unk_1E0 - 50.0f) + (50.0f * sp68);
+    if (this->lightOrbScale > 0.0f) {
+        u8 lightOrbAlpha = (this->lightOrbAlphaFactor - 50.0f) + (50.0f * lightRayBlueFactor);
 
-        Matrix_Translate(this->actor.world.pos.x + this->unk_1B0, this->actor.world.pos.y + 84.0f + this->unk_1B4,
-                         (this->actor.world.pos.z - 2.0f) + spE0, MTXMODE_NEW);
+        Matrix_Translate(this->actor.world.pos.x + this->arrowHitPos.x,
+                         this->actor.world.pos.y + 84.0f + this->arrowHitPos.y,
+                         (this->actor.world.pos.z - 2.0f) + lightOrbOffsetZ, MTXMODE_NEW);
 
         gSPDisplayList(POLY_XLU_DISP++, gLightOrbMaterial1DL);
-        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, (u8)((140.0f * sp68) + 115.0f), temp_s2);
-        gDPSetEnvColor(POLY_XLU_DISP++, 255, 205, (u8)((100.0f * sp68) + 65.0f), 128);
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, (u8)(140.0f * lightRayBlueFactor + 115.0f), lightOrbAlpha);
+        gDPSetEnvColor(POLY_XLU_DISP++, 255, 205, (u8)(100.0f * lightRayBlueFactor + 65.0f), 128);
 
-        Matrix_Scale(this->unk_1DC, this->unk_1DC, 1.0f, MTXMODE_APPLY);
+        Matrix_Scale(this->lightOrbScale, this->lightOrbScale, 1.0f, MTXMODE_APPLY);
         Matrix_RotateZS(play->gameplayFrames * 64, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, gLightOrbModelDL);
     }
 

@@ -5,12 +5,12 @@
  */
 
 #include "z_en_kusa.h"
-#include "objects/object_kusa/object_kusa.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
-#include "objects/gameplay_field_keep/gameplay_field_keep.h"
+#include "assets/objects/object_kusa/object_kusa.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_field_keep/gameplay_field_keep.h"
 #include "overlays/actors/ovl_En_Insect/z_en_insect.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_800000)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_THROW_ONLY)
 
 #define THIS ((EnKusa*)thisx)
 
@@ -23,7 +23,7 @@ void EnKusa_DropCollectible(EnKusa* this, PlayState* play);
 void EnKusa_UpdateVelY(EnKusa* this);
 void EnKusa_RandScaleVecToZero(Vec3f* vec, f32 scaleFactor);
 void EnKusa_SetScaleSmall(EnKusa* this);
-s32 EnKusa_GetWaterBox(EnKusa* this, PlayState* play);
+s32 EnKusa_IsUnderwater(EnKusa* this, PlayState* play);
 void EnKusa_SetupWaitObject(EnKusa* this);
 void EnKusa_WaitObject(EnKusa* this, PlayState* play);
 void EnKusa_WaitForInteract(EnKusa* this, PlayState* play);
@@ -58,7 +58,7 @@ s16 D_80936CDC;
 s16 D_80936CDE;
 s16 D_80936CE0;
 
-ActorInit En_Kusa_InitVars = {
+ActorProfile En_Kusa_Profile = {
     /**/ ACTOR_EN_KUSA,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -74,7 +74,7 @@ static s16 sObjectIds[] = { GAMEPLAY_FIELD_KEEP, OBJECT_KUSA, OBJECT_KUSA, OBJEC
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_PLAYER,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_PLAYER | OC1_TYPE_2,
@@ -82,11 +82,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00400000, 0x00, 0x02 },
         { 0x0580C71C, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NONE,
-        BUMP_ON,
+        ATELEM_ON | ATELEM_SFX_NONE,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 6, 44, 0, { 0, 0, 0 } },
@@ -337,15 +337,15 @@ void EnKusa_SpawnBugs(EnKusa* this, PlayState* play) {
     }
 }
 
-s32 EnKusa_GetWaterBox(EnKusa* this, PlayState* play) {
+s32 EnKusa_IsUnderwater(EnKusa* this, PlayState* play) {
     s32 pad;
     WaterBox* waterBox;
-    f32 ySurface;
+    f32 waterSurface;
     s32 bgId;
 
-    if (WaterBox_GetSurfaceImpl(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &ySurface,
+    if (WaterBox_GetSurfaceImpl(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &waterSurface,
                                 &waterBox, &bgId) &&
-        (this->actor.world.pos.y < ySurface)) {
+        (this->actor.world.pos.y < waterSurface)) {
         return true;
     }
     return false;
@@ -389,7 +389,7 @@ void EnKusa_Init(Actor* thisx, PlayState* play) {
         Actor_Kill(&this->actor);
         return;
     }
-    if (EnKusa_GetWaterBox(this, play)) {
+    if (EnKusa_IsUnderwater(this, play)) {
         this->isInWater |= 1;
     }
 
@@ -724,7 +724,7 @@ void EnKusa_DrawBush(Actor* thisx, PlayState* play2) {
         alpha = (1300.0f - this->actor.projectedPos.z) * 2.55f;
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, alpha);
         gSPDisplayList(POLY_XLU_DISP++, gKusaBushType2DL);
 

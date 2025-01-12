@@ -5,7 +5,7 @@
  */
 
 #include "z_eff_ss_blast.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define rPrimColorR regs[0]
 #define rPrimColorG regs[1]
@@ -26,7 +26,7 @@ u32 EffectSsBlast_Init(PlayState* play, u32 index, EffectSs* this, void* initPar
 void EffectSsBlast_Update(PlayState* play, u32 index, EffectSs* this);
 void EffectSsBlast_Draw(PlayState* play, u32 index, EffectSs* this);
 
-EffectSsInit Effect_Ss_Blast_InitVars = {
+EffectSsProfile Effect_Ss_Blast_Profile = {
     EFFECT_SS_BLAST,
     EffectSsBlast_Init,
 };
@@ -74,7 +74,7 @@ void EffectSsBlast_Draw(PlayState* play, u32 index, EffectSs* this) {
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, this->rPrimColorR, this->rPrimColorG, this->rPrimColorB, this->rPrimColorA);
     Matrix_Put(&mf);
     Matrix_Scale(radius, radius, radius, MTXMODE_APPLY);
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, gfxCtx);
     gSPDisplayList(POLY_XLU_DISP++, this->gfx);
 
     CLOSE_DISPS(gfxCtx);

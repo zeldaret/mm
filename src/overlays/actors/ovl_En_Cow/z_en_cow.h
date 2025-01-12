@@ -2,7 +2,7 @@
 #define Z_EN_COW_H
 
 #include "global.h"
-#include "objects/object_cow/object_cow.h"
+#include "assets/objects/object_cow/object_cow.h"
 
 #define EN_COW_TYPE(thisx) ((thisx)->params & 0xF)
 

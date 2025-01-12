@@ -7,11 +7,11 @@
 #include "z_en_geg.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
-#include "objects/object_taisou/object_taisou.h"
-#include "objects/object_hakugin_demo/object_hakugin_demo.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_taisou/object_taisou.h"
+#include "assets/objects/object_hakugin_demo/object_hakugin_demo.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnGeg*)thisx)
 
@@ -36,7 +36,7 @@ void func_80BB32AC(EnGeg* this, PlayState* play);
 void func_80BB3318(EnGeg* this, PlayState* play);
 void func_80BB347C(EnGeg* this, PlayState* play);
 
-ActorInit En_Geg_InitVars = {
+ActorProfile En_Geg_Profile = {
     /**/ ACTOR_EN_GEG,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -50,7 +50,7 @@ ActorInit En_Geg_InitVars = {
 
 static ColliderSphereInit sSphereInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -58,11 +58,11 @@ static ColliderSphereInit sSphereInit = {
         COLSHAPE_SPHERE,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x20000000, 0x00, 0x04 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 0, { { 0, 0, 0 }, 0 }, 100 },
@@ -70,7 +70,7 @@ static ColliderSphereInit sSphereInit = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_HIT1,
+        COL_MATERIAL_HIT1,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -78,11 +78,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK1,
+        ELEM_MATERIAL_UNK1,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 0, 0, 0, { 0, 0, 0 } },
@@ -460,7 +460,7 @@ void func_80BB217C(EnGeg* this, PlayState* play) {
         this->actor.gravity = -1.0f;
         func_80BB1C1C(this);
         this->actionFunc = func_80BB221C;
-        this->actor.targetMode = TARGET_MODE_3;
+        this->actor.attentionRangeType = ATTENTION_RANGE_3;
     }
 }
 
@@ -485,10 +485,10 @@ void func_80BB221C(EnGeg* this, PlayState* play) {
             }
             Message_StartTextbox(play, this->unk_496, &this->actor);
             this->actionFunc = func_80BB2520;
-            this->actor.flags &= ~ACTOR_FLAG_10000;
+            this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         } else if (this->actor.xzDistToPlayer < 300.0f) {
             this->unk_230 |= 4;
-            this->actor.flags |= ACTOR_FLAG_10000;
+            this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
             Actor_OfferTalk(&this->actor, play, 300.0f);
         }
     } else {
@@ -510,9 +510,9 @@ void func_80BB221C(EnGeg* this, PlayState* play) {
             Message_StartTextbox(play, this->unk_496, &this->actor);
             this->actionFunc = func_80BB2520;
             this->unk_230 &= ~8;
-            this->actor.flags &= ~ACTOR_FLAG_10000;
+            this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         } else if (this->actor.xzDistToPlayer < 300.0f) {
-            this->actor.flags |= ACTOR_FLAG_10000;
+            this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
             Actor_OfferTalk(&this->actor, play, 300.0f);
             this->unk_230 |= 8;
         }
@@ -820,9 +820,9 @@ void func_80BB30B4(EnGeg* this, PlayState* play) {
         }
         Message_StartTextbox(play, this->unk_496, &this->actor);
         this->actionFunc = func_80BB27D4;
-        this->actor.flags &= ~ACTOR_FLAG_10000;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
     } else if (this->actor.xzDistToPlayer < 150.0f) {
-        this->actor.flags |= ACTOR_FLAG_10000;
+        this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         Actor_OfferTalk(&this->actor, play, 150.0f);
     }
 }
@@ -1121,7 +1121,7 @@ void func_80BB3CB4(EnGeg* this, PlayState* play) {
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
     Matrix_RotateXS(sp24, MTXMODE_APPLY);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, gGoronRolledUpDL);
 
     CLOSE_DISPS(play->state.gfxCtx);

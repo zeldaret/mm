@@ -5,7 +5,8 @@
  */
 
 #include "z_obj_hunsui.h"
-#include "objects/object_hunsui/object_hunsui.h"
+#include "attributes.h"
+#include "assets/objects/object_hunsui/object_hunsui.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -46,7 +47,7 @@ ObjHansuiStruct D_80B9DC70[] = {
     { 3, 3 }, { 3, 5 }, { 3, 1 }, { 3, 6 }, { 3, 2 }, { 3, 4 }, { 3, 0 },
 };
 
-ActorInit Obj_Hunsui_InitVars = {
+ActorProfile Obj_Hunsui_Profile = {
     /**/ ACTOR_OBJ_HUNSUI,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -172,7 +173,7 @@ void func_80B9C5E8(ObjHunsui* this, PlayState* play) {
                     sp38 = sp34;
                 }
 
-                player->linearVelocity *= sp38;
+                player->speedXZ *= sp38;
 
                 if ((this->unk_160 == OBJHUNSUI_F000_5) || (this->unk_160 == OBJHUNSUI_F000_6)) {
                     Math_ApproachF(&this->unk_1A0, 4.5f, 2.0f, 1.0f);
@@ -183,7 +184,7 @@ void func_80B9C5E8(ObjHunsui* this, PlayState* play) {
                 }
             } else {
                 this->unk_1A4 = player->actor.world.rot.y;
-                player->linearVelocity *= 0.5f;
+                player->speedXZ *= 0.5f;
                 Math_ApproachF(&this->unk_1A0, 3.0f, 1.0f, 1.0f);
                 Math_ApproachF(&this->unk_19C, this->unk_1A0, 1.0f, 0.1f);
             }
@@ -192,8 +193,8 @@ void func_80B9C5E8(ObjHunsui* this, PlayState* play) {
         }
     } else {
         if (this->unk_172 & 8) {
-            player->linearVelocity = this->unk_19C + player->linearVelocity;
-            player->currentYaw = this->unk_1A4;
+            player->speedXZ = this->unk_19C + player->speedXZ;
+            player->yaw = this->unk_1A4;
         }
         this->unk_1A0 = 0.0f;
         this->unk_19C = 0.0f;
@@ -279,7 +280,7 @@ void ObjHunsui_Init(Actor* thisx, PlayState* play) {
 
         case OBJHUNSUI_F000_2:
             this->unk_172 |= 1;
-
+            FALLTHROUGH;
         case OBJHUNSUI_F000_1:
             this->dyna.actor.draw = func_80B9DA60;
             if ((this->unk_172 & 1) && func_80B9C450(play, this->switchFlag, this->unk_164)) {
@@ -298,7 +299,7 @@ void ObjHunsui_Init(Actor* thisx, PlayState* play) {
 
         case OBJHUNSUI_F000_4:
             this->unk_172 |= 1;
-
+            FALLTHROUGH;
         case OBJHUNSUI_F000_3:
         case OBJHUNSUI_F000_5:
         case OBJHUNSUI_F000_6:
@@ -585,9 +586,9 @@ void func_80B9D714(ObjHunsui* this, PlayState* play) {
             csId = this->dyna.actor.csId;
 
             if (this->unk_16E == 0) {
-                if ((csId >= 0) && !CutsceneManager_IsNext(csId)) {
+                if ((csId > CS_ID_NONE) && !CutsceneManager_IsNext(csId)) {
                     CutsceneManager_Queue(csId);
-                } else if (csId >= 0) {
+                } else if (csId > CS_ID_NONE) {
                     CutsceneManager_StartWithPlayerCs(csId, &this->dyna.actor);
                     this->unk_16E = -1;
                 } else {

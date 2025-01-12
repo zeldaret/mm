@@ -8,7 +8,7 @@
  */
 
 #include "z_eff_ss_sbn.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define rScrollStep regs[0]
 #define rScroll regs[1]
@@ -27,7 +27,7 @@ void EffectSsSbn_Update(PlayState* play, u32 index, EffectSs* this);
 void EffectSsSbn_DrawSliding(PlayState* play, u32 index, EffectSs* this);
 void EffectSsSbn_Draw(PlayState* play, u32 index, EffectSs* this);
 
-EffectSsInit Effect_Ss_Sbn_InitVars = {
+EffectSsProfile Effect_Ss_Sbn_Profile = {
     EFFECT_SS_SBN,
     EffectSsSbn_Init,
 };
@@ -107,7 +107,7 @@ u32 EffectSsSbn_Init(PlayState* play, u32 index, EffectSs* this, void* initParam
         bubbleVec.x = -mtx.mf[2][0] * 10.0f;
         bubbleVec.y = -mtx.mf[2][1] * 10.0f;
         bubbleVec.z = -mtx.mf[2][2] * 10.0f;
-        Math3D_AngleBetweenVectors(&colPolyVec, &bubbleVec, &angle);
+        Math3D_CosOut(&colPolyVec, &bubbleVec, &angle);
 
         opposite = (SQ(angle) >= 1.0f) ? 0.0f : sqrtf(1.0f - SQ(angle));
         if (((mtx.mf[0][0] * colPolyVec.x) + (mtx.mf[0][1] * colPolyVec.y) + (mtx.mf[0][2] * colPolyVec.z)) < 0.0f) {
@@ -134,7 +134,7 @@ void EffectSsSbn_DrawSliding(PlayState* play, u32 index, EffectSs* this) {
 
     OPEN_DISPS(gfxCtx);
 
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, gfxCtx);
     Gfx_SetupDL25_Xlu(gfxCtx);
     gDPSetRenderMode(POLY_XLU_DISP++, G_RM_FOG_SHADE_A, G_RM_ZB_XLU_DECAL2);
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, this->rAlpha);
@@ -174,7 +174,7 @@ void EffectSsSbn_Draw(PlayState* play, u32 index, EffectSs* this) {
 
     OPEN_DISPS(gfxCtx);
 
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, gfxCtx);
     Gfx_SetupDL25_Xlu(gfxCtx);
     gDPSetRenderMode(POLY_XLU_DISP++, G_RM_FOG_SHADE_A, G_RM_ZB_XLU_DECAL2);
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, this->rAlpha);

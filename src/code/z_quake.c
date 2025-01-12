@@ -1,8 +1,9 @@
 #include "z64quake.h"
 
-#include "libc/string.h"
+#include "string.h"
 
 #include "global.h"
+#include "z64olib.h"
 #include "z64view.h"
 
 typedef struct {

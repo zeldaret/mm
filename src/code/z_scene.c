@@ -108,7 +108,7 @@ s32 Object_GetSlot(ObjectContext* objectCtx, s16 objectId) {
         }
     }
 
-    return -1;
+    return OBJECT_SLOT_NONE;
 }
 
 s32 Object_IsLoaded(ObjectContext* objectCtx, s32 slot) {
@@ -175,7 +175,7 @@ void Scene_CommandSpawnList(PlayState* play, SceneCmd* cmd) {
     play->objectCtx.numEntries = loadedCount;
     play->objectCtx.numPersistentEntries = loadedCount;
     playerObjectId = gPlayerFormObjectIds[GET_PLAYER_FORM];
-    gActorOverlayTable[0].initInfo->objectId = playerObjectId;
+    gActorOverlayTable[ACTOR_PLAYER].profile->objectId = playerObjectId;
     Object_SpawnPersistent(&play->objectCtx, playerObjectId);
 
     play->objectCtx.slots[play->objectCtx.numEntries].segment = objectPtr;
@@ -220,8 +220,8 @@ void Scene_CommandCollisionHeader(PlayState* play, SceneCmd* cmd) {
 
 // SceneTableEntry Header Command 0x04: Room List
 void Scene_CommandRoomList(PlayState* play, SceneCmd* cmd) {
-    play->numRooms = cmd->roomList.num;
-    play->roomList = Lib_SegmentedToVirtual(cmd->roomList.segment);
+    play->roomList.count = cmd->roomList.num;
+    play->roomList.romFiles = Lib_SegmentedToVirtual(cmd->roomList.segment);
 }
 
 // SceneTableEntry Header Command 0x06: Entrance List
@@ -233,9 +233,9 @@ void Scene_CommandEntranceList(PlayState* play, SceneCmd* cmd) {
 void Scene_CommandSpecialFiles(PlayState* play, SceneCmd* cmd) {
     // @note These quest hint files are identical to OoT's.
     // They are not relevant in this game and the system to process these scripts has been removed.
-    static RomFile naviQuestHintFiles[2] = {
-        { SEGMENT_ROM_START(elf_message_field), SEGMENT_ROM_END(elf_message_field) },
-        { SEGMENT_ROM_START(elf_message_ydan), SEGMENT_ROM_END(elf_message_ydan) },
+    static RomFile sNaviQuestHintFiles[2] = {
+        ROM_FILE(elf_message_field),
+        ROM_FILE(elf_message_ydan),
     };
 
     if (cmd->specialFiles.subKeepId != 0) {
@@ -245,7 +245,7 @@ void Scene_CommandSpecialFiles(PlayState* play, SceneCmd* cmd) {
     }
 
     if (cmd->specialFiles.naviQuestHintFileId != NAVI_QUEST_HINTS_NONE) {
-        play->naviQuestHints = Play_LoadFile(play, &naviQuestHintFiles[cmd->specialFiles.naviQuestHintFileId - 1]);
+        play->naviQuestHints = Play_LoadFile(play, &sNaviQuestHintFiles[cmd->specialFiles.naviQuestHintFileId - 1]);
     }
 }
 
@@ -334,15 +334,15 @@ void Scene_CommandPathList(PlayState* play, SceneCmd* cmd) {
 }
 
 // SceneTableEntry Header Command 0x0E: Transition Actor List
-void Scene_CommandTransiActorList(PlayState* play, SceneCmd* cmd) {
-    play->doorCtx.numTransitionActors = cmd->transiActorList.num;
-    play->doorCtx.transitionActorList = Lib_SegmentedToVirtual(cmd->transiActorList.segment);
-    func_80105818(play, play->doorCtx.numTransitionActors, play->doorCtx.transitionActorList);
+void Scene_CommandTransitionActorList(PlayState* play, SceneCmd* cmd) {
+    play->transitionActors.count = cmd->transitionActorList.num;
+    play->transitionActors.list = Lib_SegmentedToVirtual(cmd->transitionActorList.segment);
+    MapDisp_InitTransitionActorData(play, play->transitionActors.count, play->transitionActors.list);
 }
 
 // Init function for the transition system.
-void Door_InitContext(GameState* state, DoorContext* doorCtx) {
-    doorCtx->numTransitionActors = 0;
+void Scene_ResetTransitionActorList(GameState* state, TransitionActorList* transitionActors) {
+    transitionActors->count = 0;
 }
 
 // SceneTableEntry Header Command 0x0F: Environment Light Settings List
@@ -356,19 +356,19 @@ void Scene_CommandEnvLightSettings(PlayState* play, SceneCmd* cmd) {
  * These later are stored in segment 0x06, and used in maps.
  */
 void Scene_LoadAreaTextures(PlayState* play, s32 fileIndex) {
-    static RomFile sceneTextureFiles[9] = {
-        { 0, 0 }, // Default
-        { SEGMENT_ROM_START(scene_texture_01), SEGMENT_ROM_END(scene_texture_01) },
-        { SEGMENT_ROM_START(scene_texture_02), SEGMENT_ROM_END(scene_texture_02) },
-        { SEGMENT_ROM_START(scene_texture_03), SEGMENT_ROM_END(scene_texture_03) },
-        { SEGMENT_ROM_START(scene_texture_04), SEGMENT_ROM_END(scene_texture_04) },
-        { SEGMENT_ROM_START(scene_texture_05), SEGMENT_ROM_END(scene_texture_05) },
-        { SEGMENT_ROM_START(scene_texture_06), SEGMENT_ROM_END(scene_texture_06) },
-        { SEGMENT_ROM_START(scene_texture_07), SEGMENT_ROM_END(scene_texture_07) },
-        { SEGMENT_ROM_START(scene_texture_08), SEGMENT_ROM_END(scene_texture_08) },
+    static RomFile sSceneTextureFiles[9] = {
+        ROM_FILE_UNSET, // Default
+        ROM_FILE(scene_texture_01),
+        ROM_FILE(scene_texture_02),
+        ROM_FILE(scene_texture_03),
+        ROM_FILE(scene_texture_04),
+        ROM_FILE(scene_texture_05),
+        ROM_FILE(scene_texture_06),
+        ROM_FILE(scene_texture_07),
+        ROM_FILE(scene_texture_08),
     };
-    uintptr_t vromStart = sceneTextureFiles[fileIndex].vromStart;
-    size_t size = sceneTextureFiles[fileIndex].vromEnd - vromStart;
+    uintptr_t vromStart = sSceneTextureFiles[fileIndex].vromStart;
+    size_t size = sSceneTextureFiles[fileIndex].vromEnd - vromStart;
 
     if (size != 0) {
         play->roomCtx.unk74 = THA_AllocTailAlign16(&play->state.tha, size);
@@ -454,8 +454,8 @@ void Scene_Command09(PlayState* play, SceneCmd* cmd) {
 
 // SceneTableEntry Header Command 0x15: Sound Settings
 void Scene_CommandSoundSettings(PlayState* play, SceneCmd* cmd) {
-    play->sequenceCtx.seqId = cmd->soundSettings.seqId;
-    play->sequenceCtx.ambienceId = cmd->soundSettings.ambienceId;
+    play->sceneSequences.seqId = cmd->soundSettings.seqId;
+    play->sceneSequences.ambienceId = cmd->soundSettings.ambienceId;
 
     if (gSaveContext.seqId == (u8)NA_BGM_DISABLED ||
         AudioSeq_GetActiveSeqId(SEQ_PLAYER_BGM_MAIN) == NA_BGM_FINAL_HOURS) {
@@ -495,19 +495,19 @@ void Scene_CommandCutsceneList(PlayState* play, SceneCmd* cmd) {
     CutsceneManager_Init(play, Lib_SegmentedToVirtual(cmd->cutsceneList.segment), cmd->cutsceneList.num);
 }
 
-// SceneTableEntry Header Command 0x1C: Mini Maps
-void Scene_CommandMiniMap(PlayState* play, SceneCmd* cmd) {
-    func_80104CF4(play);
-    func_8010549C(play, cmd->minimapSettings.segment);
+// SceneTableEntry Header Command 0x1C: Map Data
+void Scene_CommandMapData(PlayState* play, SceneCmd* cmd) {
+    MapDisp_Init(play);
+    MapDisp_InitMapData(play, cmd->mapData.segment);
 }
 
 // SceneTableEntry Header Command 0x1D: Undefined
 void Scene_Command1D(PlayState* play, SceneCmd* cmd) {
 }
 
-// SceneTableEntry Header Command 0x1E: Minimap Compass Icon Info
-void Scene_CommandMiniMapCompassInfo(PlayState* play, SceneCmd* cmd) {
-    func_8010565C(play, cmd->minimapChests.num, cmd->minimapChests.segment);
+// SceneTableEntry Header Command 0x1E: Map Data Chests
+void Scene_CommandMapDataChests(PlayState* play, SceneCmd* cmd) {
+    MapDisp_InitChestData(play, cmd->mapDataChests.num, cmd->mapDataChests.segment);
 }
 
 // SceneTableEntry Header Command 0x19: Sets Region Visited Flag
@@ -565,7 +565,7 @@ void (*sSceneCmdHandlers[SCENE_CMD_MAX])(PlayState*, SceneCmd*) = {
     Scene_CommandObjectList,           // SCENE_CMD_ID_OBJECT_LIST
     Scene_CommandLightList,            // SCENE_CMD_ID_LIGHT_LIST
     Scene_CommandPathList,             // SCENE_CMD_ID_PATH_LIST
-    Scene_CommandTransiActorList,      // SCENE_CMD_ID_TRANSI_ACTOR_LIST
+    Scene_CommandTransitionActorList,  // SCENE_CMD_ID_TRANSI_ACTOR_LIST
     Scene_CommandEnvLightSettings,     // SCENE_CMD_ID_ENV_LIGHT_SETTINGS
     Scene_CommandTimeSettings,         // SCENE_CMD_ID_TIME_SETTINGS
     Scene_CommandSkyboxSettings,       // SCENE_CMD_ID_SKYBOX_SETTINGS
@@ -579,9 +579,9 @@ void (*sSceneCmdHandlers[SCENE_CMD_MAX])(PlayState*, SceneCmd*) = {
     Scene_CommandSetRegionVisitedFlag, // SCENE_CMD_ID_SET_REGION_VISITED
     Scene_CommandAnimatedMaterials,    // SCENE_CMD_ID_ANIMATED_MATERIAL_LIST
     Scene_CommandCutsceneList,         // SCENE_CMD_ID_ACTOR_CUTSCENE_LIST
-    Scene_CommandMiniMap,              // SCENE_CMD_ID_MINIMAP_INFO
+    Scene_CommandMapData,              // SCENE_CMD_ID_MAP_DATA
     Scene_Command1D,                   // SCENE_CMD_ID_UNUSED_1D
-    Scene_CommandMiniMapCompassInfo,   // SCENE_CMD_ID_MINIMAP_COMPASS_ICON_INFO
+    Scene_CommandMapDataChests,        // SCENE_CMD_ID_MAP_DATA_CHESTS
 };
 
 /**

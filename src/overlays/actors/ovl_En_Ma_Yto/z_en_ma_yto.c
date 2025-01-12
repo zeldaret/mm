@@ -5,9 +5,11 @@
  */
 
 #include "z_en_ma_yto.h"
+#include "attributes.h"
 #include "overlays/actors/ovl_En_Ma_Yts/z_en_ma_yts.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_100000 | ACTOR_FLAG_2000000)
+#define FLAGS \
+    (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_100000 | ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
 #define THIS ((EnMaYto*)thisx)
 
@@ -69,7 +71,7 @@ s32 EnMaYto_HasSpokenToPlayerToday(void);
 s32 EnMaYto_HasSpokenToPlayer(void);
 void EnMaYto_SetTalkedFlag(void);
 
-ActorInit En_Ma_Yto_InitVars = {
+ActorProfile En_Ma_Yto_Profile = {
     /**/ ACTOR_EN_MA_YTO,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -83,7 +85,7 @@ ActorInit En_Ma_Yto_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_NONE,
         OC1_ON | OC1_TYPE_ALL,
@@ -91,11 +93,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0x00000000, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_NONE,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_NONE,
         OCELEM_ON,
     },
     { 18, 46, 0, { 0, 0, 0 } },
@@ -176,13 +178,13 @@ void EnMaYto_Init(Actor* thisx, PlayState* play) {
     EnMaYto* this = THIS;
     s32 pad;
 
-    this->actor.targetMode = TARGET_MODE_0;
+    this->actor.attentionRangeType = ATTENTION_RANGE_0;
     this->unk200 = 0;
     this->unk310 = 0;
     this->unk320 = 0;
     this->eyeTexIndex = 0;
 
-    if ((CURRENT_DAY == 1) || CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
+    if ((CURRENT_DAY == 1) || CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS)) {
         EnMaYto_SetFaceExpression(this, 0, 1);
     } else {
         EnMaYto_SetFaceExpression(this, 5, 2);
@@ -215,19 +217,19 @@ void EnMaYto_Init(Actor* thisx, PlayState* play) {
 s32 EnMaYto_CheckValidSpawn(EnMaYto* this, PlayState* play) {
     switch (this->type) {
         case MA_YTO_TYPE_DEFAULT:
-            if ((CURRENT_DAY == 3) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
+            if ((CURRENT_DAY == 3) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS)) {
                 return false;
             }
             break;
 
         case MA_YTO_TYPE_DINNER:
-            if ((CURRENT_DAY != 1) && CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
+            if ((CURRENT_DAY != 1) && CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS)) {
                 return false;
             }
             break;
 
         case MA_YTO_TYPE_BARN:
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS)) {
                 if (((this->actor.params & 0x0F00) >> 8) != 0) {
                     return false;
                 }
@@ -269,7 +271,7 @@ void EnMaYto_InitAnimation(EnMaYto* this, PlayState* play) {
             break;
 
         case MA_YTO_TYPE_BARN:
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS)) {
                 EnMaYto_ChangeAnim(this, CREMIA_ANIM_12);
             } else {
                 EnMaYto_ChangeAnim(this, CREMIA_ANIM_8);
@@ -297,7 +299,7 @@ void EnMaYto_ChooseAction(EnMaYto* this, PlayState* play) {
             break;
 
         case MA_YTO_TYPE_DINNER:
-            this->actor.targetMode = TARGET_MODE_6;
+            this->actor.attentionRangeType = ATTENTION_RANGE_6;
             EnMaYto_SetupDinnerWait(this);
             break;
 
@@ -362,7 +364,7 @@ s32 EnMaYto_TryFindRomani(EnMaYto* this, PlayState* play) {
             return 0;
 
         case MA_YTO_TYPE_DINNER:
-            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM) && (CURRENT_DAY == 2)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS) && (CURRENT_DAY == 2)) {
                 return 0;
             }
             if (EnMaYto_SearchRomani(this, play)) {
@@ -371,7 +373,7 @@ s32 EnMaYto_TryFindRomani(EnMaYto* this, PlayState* play) {
             return 1;
 
         case MA_YTO_TYPE_BARN:
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS)) {
                 if (EnMaYto_SearchRomani(this, play)) {
                     return 2;
                 }
@@ -528,7 +530,7 @@ void EnMaYto_DefaultChooseNextDialogue(EnMaYto* this, PlayState* play) {
 }
 
 void EnMaYto_SetupDinnerWait(EnMaYto* this) {
-    if ((CURRENT_DAY == 1) || CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
+    if ((CURRENT_DAY == 1) || CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS)) {
         func_80B90E50(this, 0);
         this->unk31E = 0;
     } else {
@@ -569,7 +571,7 @@ void EnMaYto_DinnerWait(EnMaYto* this, PlayState* play) {
 }
 
 void EnMaYto_SetupDinnerDialogueHandler(EnMaYto* this) {
-    if ((CURRENT_DAY == 1) || CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
+    if ((CURRENT_DAY == 1) || CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS)) {
         func_80B90E50(this, 1);
     } else {
         func_80B90E50(this, 2);
@@ -722,7 +724,7 @@ void EnMaYto_DinnerChooseNextDialogue(EnMaYto* this, PlayState* play) {
 }
 
 void EnMaYto_SetupBarnWait(EnMaYto* this) {
-    if ((CURRENT_DAY == 1) || CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
+    if ((CURRENT_DAY == 1) || CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS)) {
         EnMaYto_ChangeAnim(this, CREMIA_ANIM_13);
         func_80B90E50(this, 0);
         this->unk31E = 0;
@@ -750,7 +752,7 @@ void EnMaYto_BarnWait(EnMaYto* this, PlayState* play) {
             Actor_ChangeFocus(&this->actor, play, &this->actor);
             EnMaYto_BarnStartDialogue(this, play);
             EnMaYto_SetupBarnDialogueHandler(this);
-        } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM) || (ABS_ALT(direction) < 0x2000)) {
+        } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS) || (ABS_ALT(direction) < 0x2000)) {
             Actor_OfferTalk(&this->actor, play, 100.0f);
 
             child = this->actor.child;
@@ -762,7 +764,7 @@ void EnMaYto_BarnWait(EnMaYto* this, PlayState* play) {
 }
 
 void EnMaYto_SetupBarnDialogueHandler(EnMaYto* this) {
-    if ((CURRENT_DAY == 1) || CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
+    if ((CURRENT_DAY == 1) || CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS)) {
         func_80B90E50(this, 1);
     } else {
         func_80B90E50(this, 2);
@@ -920,10 +922,10 @@ void EnMaYto_SetupAfterMilkRunInit(EnMaYto* this) {
 }
 
 void EnMaYto_AfterMilkRunInit(EnMaYto* this, PlayState* play) {
-    this->actor.flags |= ACTOR_FLAG_10000;
+    this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
 
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
-        this->actor.flags &= ~ACTOR_FLAG_10000;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
 
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_ESCORTED_CREMIA)) {
             Message_StartTextbox(play, 0x33C1, &this->actor);
@@ -1268,7 +1270,7 @@ void EnMaYto_DinnerStartDialogue(EnMaYto* this, PlayState* play) {
 }
 
 void EnMaYto_BarnStartDialogue(EnMaYto* this, PlayState* play) {
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS)) {
         if (CURRENT_DAY == 2) {
             if (this->unk310 == 1) {
                 Message_StartTextbox(play, 0x33AE, &this->actor);
@@ -1391,7 +1393,7 @@ void EnMaYto_SetFaceExpression(EnMaYto* this, s16 overrideEyeTexIndex, s16 mouth
 }
 
 void EnMaYto_InitFaceExpression(EnMaYto* this) {
-    if ((CURRENT_DAY == 1) || CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
+    if ((CURRENT_DAY == 1) || CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS)) {
         EnMaYto_SetFaceExpression(this, 0, 1);
         EnMaYto_SetRomaniFaceExpression(this, 0, 0);
     } else {
@@ -1432,12 +1434,12 @@ s32 EnMaYto_HasSpokenToPlayer(void) {
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_13_10)) {
                 return true;
             }
-            // fallthrough
+            FALLTHROUGH;
         case 2:
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_13_08)) {
                 return true;
             }
-            // fallthrough
+            FALLTHROUGH;
         case 1:
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_13_04)) {
                 return true;
@@ -1515,8 +1517,8 @@ void EnMaYto_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    if ((this->type == MA_YTO_TYPE_BARN) && CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    if ((this->type == MA_YTO_TYPE_BARN) && CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_ALIENS)) {
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, gCremiaWoodenBoxDL);
     }
     Gfx_SetupDL25_Opa(play->state.gfxCtx);

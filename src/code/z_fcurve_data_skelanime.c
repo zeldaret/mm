@@ -27,11 +27,11 @@
 
 #include "z64curve.h"
 
-#include "libc/stdbool.h"
+#include "stdbool.h"
 #include "z64actor.h"
 #include "z64animation.h"
 #include "z64curve.h"
-#include "z64malloc.h"
+#include "zelda_arena.h"
 #include "z64.h"
 
 void SkelCurve_Clear(SkelCurve* skelCurve) {
@@ -197,8 +197,7 @@ void SkelCurve_DrawLimb(PlayState* play, s32 limbIndex, SkelCurve* skelCurve, Ov
 
             dList = limb->dList[0];
             if (dList != NULL) {
-                gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                          G_MTX_LOAD | G_MTX_NOPUSH | G_MTX_MODELVIEW);
+                MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
                 gSPDisplayList(POLY_OPA_DISP++, dList);
             }
         } else if (lod == 1) {
@@ -206,14 +205,12 @@ void SkelCurve_DrawLimb(PlayState* play, s32 limbIndex, SkelCurve* skelCurve, Ov
 
             dList = limb->dList[0];
             if (dList != NULL) {
-                gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                          G_MTX_LOAD | G_MTX_NOPUSH | G_MTX_MODELVIEW);
+                MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
                 gSPDisplayList(POLY_OPA_DISP++, dList);
             }
             dList = limb->dList[1];
             if (dList != NULL) {
-                gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                          G_MTX_LOAD | G_MTX_NOPUSH | G_MTX_MODELVIEW);
+                MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
                 gSPDisplayList(POLY_XLU_DISP++, dList);
             }
         }

@@ -43,7 +43,7 @@ DebugDispObject* DebugDisplay_AddObject(f32 posX, f32 posY, f32 posZ, s16 rotX, 
     return sDebugObjectListHead;
 }
 
-#include "code/debug_display/debug_display.c"
+#include "assets/code/debug_display/debug_display.c"
 
 DebugDispObjectDrawFunc sDebugObjectDrawFuncTable[] = { DebugDisplay_DrawSpriteI8, DebugDisplay_DrawPolygon };
 
@@ -78,7 +78,7 @@ void DebugDisplay_DrawSpriteI8(DebugDispObject* dispObj, void* texture, PlayStat
     gDPLoadTextureBlock(POLY_XLU_DISP++, texture, G_IM_FMT_I, G_IM_SIZ_8b, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                         G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
 
     gSPDisplayList(POLY_XLU_DISP++, sDebugDisplaySpriteDL);
 
@@ -98,7 +98,7 @@ void DebugDisplay_DrawPolygon(DebugDispObject* dispObj, void* dList, PlayState* 
 
     Matrix_SetTranslateRotateYXZ(dispObj->pos.x, dispObj->pos.y, dispObj->pos.z, &dispObj->rot);
     Matrix_Scale(dispObj->scale.x, dispObj->scale.y, dispObj->scale.z, MTXMODE_APPLY);
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
 
     gSPDisplayList(POLY_XLU_DISP++, dList);
     CLOSE_DISPS(play->state.gfxCtx);

@@ -5,10 +5,10 @@
  */
 
 #include "z_en_rat.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_200)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_200)
 
 #define THIS ((EnRat*)thisx)
 
@@ -35,7 +35,7 @@ typedef enum {
     /* -1 */ EN_RAT_HOOKED
 } EnRatHookedState;
 
-ActorInit En_Rat_InitVars = {
+ActorProfile En_Rat_Profile = {
     /**/ ACTOR_EN_RAT,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -49,7 +49,7 @@ ActorInit En_Rat_InitVars = {
 
 static ColliderSphereInit sSphereInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -57,11 +57,11 @@ static ColliderSphereInit sSphereInit = {
         COLSHAPE_SPHERE,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0xF7CFFFFF, 0x00, 0x08 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_HARD,
-        BUMP_ON | BUMP_HOOKABLE,
+        ATELEM_ON | ATELEM_SFX_HARD,
+        ACELEM_ON | ACELEM_HOOKABLE,
         OCELEM_ON,
     },
     { 1, { { 0, 0, 0 }, 23 }, 100 },
@@ -120,7 +120,7 @@ static TexturePtr sSparkTextures[] = {
 static InitChainEntry sInitChain[] = {
     ICHAIN_S8(hintId, TATL_HINT_ID_REAL_BOMBCHU, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 15, ICHAIN_CONTINUE),
-    ICHAIN_F32(targetArrowOffset, 5000, ICHAIN_STOP),
+    ICHAIN_F32(lockOnArrowOffset, 5000, ICHAIN_STOP),
 };
 
 static EffectBlureInit2 sBlureInit = {
@@ -246,7 +246,7 @@ s32 EnRat_UpdateFloorPoly(EnRat* this, CollisionPoly* floorPoly, PlayState* play
         return false;
     }
 
-    Math3D_CrossProduct(&this->axisUp, &normal, &vec);
+    Math3D_Vec3f_Cross(&this->axisUp, &normal, &vec);
 
     magnitude = Math3D_Vec3fMagnitude(&vec);
     if (magnitude < 0.001f) {
@@ -258,7 +258,7 @@ s32 EnRat_UpdateFloorPoly(EnRat* this, CollisionPoly* floorPoly, PlayState* play
     Matrix_RotateAxisF(angle, &vec, MTXMODE_NEW);
     Matrix_MultVec3f(&this->axisLeft, &vec);
     Math_Vec3f_Copy(&this->axisLeft, &vec);
-    Math3D_CrossProduct(&this->axisLeft, &normal, &this->axisForwards);
+    Math3D_Vec3f_Cross(&this->axisLeft, &normal, &this->axisForwards);
 
     magnitude = Math3D_Vec3fMagnitude(&this->axisForwards);
     if (magnitude < 0.001f) {
@@ -345,7 +345,7 @@ void EnRat_ChooseDirection(EnRat* this) {
     Matrix_RotateAxisF(BINANG_TO_RAD(angle), &this->axisUp, MTXMODE_NEW);
     Matrix_MultVec3f(&this->axisForwards, &newAxisForwards);
     Math_Vec3f_Copy(&this->axisForwards, &newAxisForwards);
-    Math3D_CrossProduct(&this->axisUp, &this->axisForwards, &this->axisLeft);
+    Math3D_Vec3f_Cross(&this->axisUp, &this->axisForwards, &this->axisLeft);
     this->shouldRotateOntoSurfaces = true;
 }
 
@@ -546,7 +546,7 @@ void EnRat_SetupRevive(EnRat* this) {
     this->actor.shape.rot.z = this->actor.home.rot.z;
     EnRat_InitializeAxes(this);
     EnRat_UpdateRotation(this);
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->actor.speed = 0.0f;
     Animation_PlayLoopSetSpeed(&this->skelAnime, &gRealBombchuSpotAnim, 0.0f);
     this->revivePosY = 2666.6667f;
@@ -563,7 +563,7 @@ void EnRat_Revive(EnRat* this, PlayState* play) {
     if (this->timer > 0) {
         this->timer--;
         if (this->timer == 0) {
-            this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+            this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
             this->actor.draw = EnRat_Draw;
             this->skelAnime.playSpeed = 1.0f;
         }
@@ -933,8 +933,7 @@ void EnRat_PostLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3s* rot
                 currentMatrixState->mf[3][0] = this->smokePos.x + ptr->x;
                 currentMatrixState->mf[3][1] = this->smokePos.y + ptr->y;
                 currentMatrixState->mf[3][2] = this->smokePos.z + ptr->z;
-                gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                          G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
                 gSPSegment(POLY_XLU_DISP++, 0x08, sSparkTextures[(play->gameplayFrames + i) & 3]);
                 gSPDisplayList(POLY_XLU_DISP++, gEffSparkDL);
             }
@@ -945,24 +944,24 @@ void EnRat_PostLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3s* rot
             currentMatrixState->mf[3][2] = this->smokePos.z;
         }
 
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, gBombCapDL);
         if (EN_RAT_GET_TYPE(&this->actor) == EN_RAT_TYPE_DUNGEON) {
-            redModifier = fabsf(Math_CosF(this->timer * (M_PI / 30.f)));
+            redModifier = fabsf(Math_CosF(this->timer * (M_PIf / 30)));
         } else {
             if (this->timer >= 120) {
-                redModifier = fabsf(Math_CosF((this->timer % 30) * (M_PI / 30.0f)));
+                redModifier = fabsf(Math_CosF((this->timer % 30) * (M_PIf / 30)));
             } else if (this->timer >= 30) {
-                redModifier = fabsf(Math_CosF((this->timer % 6) * (M_PI / 6.0f)));
+                redModifier = fabsf(Math_CosF((this->timer % 6) * (M_PIf / 6)));
             } else {
-                redModifier = fabsf(Math_CosF((this->timer % 3) * (M_PI / 3.0f)));
+                redModifier = fabsf(Math_CosF((this->timer % 3) * (M_PIf / 3)));
             }
         }
 
         gDPSetEnvColor(POLY_OPA_DISP++, (s32)((1.0f - redModifier) * 255.0f), 0, 40, 255);
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, (s32)((1.0f - redModifier) * 255.0f), 0, 40, 255);
         Matrix_RotateZYX(0x4000, 0, 0, MTXMODE_APPLY);
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, gBombBodyDL);
 
         CLOSE_DISPS(play->state.gfxCtx);

@@ -9,7 +9,7 @@
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/actors/ovl_Obj_Ice_Poly/z_obj_ice_poly.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_400)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_10 | ACTOR_FLAG_400)
 
 #define THIS ((EnWf*)thisx)
 
@@ -56,7 +56,7 @@ void func_80993524(EnWf* this);
 void func_8099357C(EnWf* this, PlayState* play);
 s32 func_8099408C(PlayState* play, EnWf* this);
 
-ActorInit En_Wf_InitVars = {
+ActorProfile En_Wf_Profile = {
     /**/ ACTOR_EN_WF,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -71,44 +71,44 @@ ActorInit En_Wf_InitVars = {
 static ColliderJntSphElementInit sJntSphElementsInit[4] = {
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x00, 0x10 },
             { 0x00000000, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_NONE,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_NONE,
             OCELEM_NONE,
         },
         { 15, { { 0, 0, 0 }, 15 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x00, 0x10 },
             { 0x00000000, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_NONE,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_NONE,
             OCELEM_NONE,
         },
         { 21, { { 0, 0, 0 }, 15 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK1,
+            ELEM_MATERIAL_UNK1,
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON | BUMP_HOOKABLE,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON | ACELEM_HOOKABLE,
             OCELEM_ON,
         },
         { 17, { { 800, 0, 0 }, 25 }, 100 },
     },
     {
         {
-            ELEMTYPE_UNK1,
+            ELEM_MATERIAL_UNK1,
             { 0x00000000, 0x00, 0x00 },
             { 0xF7CFFFFF, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON | BUMP_HOOKABLE,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON | ACELEM_HOOKABLE,
             OCELEM_ON,
         },
         { 12, { { 0, 0, 0 }, 30 }, 100 },
@@ -117,7 +117,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[4] = {
 
 static ColliderJntSphInit sJntSphInit = {
     {
-        COLTYPE_METAL,
+        COL_MATERIAL_METAL,
         AT_NONE | AT_TYPE_ENEMY,
         AC_ON | AC_HARD | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -130,7 +130,7 @@ static ColliderJntSphInit sJntSphInit = {
 
 static ColliderCylinderInit sCylinderInit1 = {
     {
-        COLTYPE_HIT5,
+        COL_MATERIAL_HIT5,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -138,11 +138,11 @@ static ColliderCylinderInit sCylinderInit1 = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK1,
+        ELEM_MATERIAL_UNK1,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_NONE,
     },
     { 20, 50, 0, { 0, 0, 0 } },
@@ -150,7 +150,7 @@ static ColliderCylinderInit sCylinderInit1 = {
 
 static ColliderCylinderInit sCylinderInit2 = {
     {
-        COLTYPE_HIT5,
+        COL_MATERIAL_HIT5,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -158,11 +158,11 @@ static ColliderCylinderInit sCylinderInit2 = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK1,
+        ELEM_MATERIAL_UNK1,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_NONE,
     },
     { 15, 20, -15, { 0, 0, 0 } },
@@ -255,13 +255,12 @@ static TexturePtr sWhiteEyeTextures[] = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_CONTINUE),
+    ICHAIN_F32(lockOnArrowOffset, 2000, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_STOP),
 };
 
-static s32 sTexturesDesegmented = false;
-
 void EnWf_Init(Actor* thisx, PlayState* play) {
+    static s32 sTexturesDesegmented = false;
     EnWf* this = THIS;
     s32 i;
     s32 temp_s0;
@@ -322,8 +321,8 @@ void EnWf_Init(Actor* thisx, PlayState* play) {
                            this->morphTable, WOLFOS_NORMAL_LIMB_MAX);
         this->actor.hintId = TATL_HINT_ID_WOLFOS;
         CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable2, &sColChkInfoInit);
-        this->collider1.elements[0].info.toucher.damage = 8;
-        this->collider1.elements[1].info.toucher.damage = 8;
+        this->collider1.elements[0].base.atDmgInfo.damage = 8;
+        this->collider1.elements[1].base.atDmgInfo.damage = 8;
         this->actor.colChkInfo.health = 6;
     } else {
         SkelAnime_InitFlex(play, &this->skelAnime, &gWolfosWhiteSkel, &gWolfosWaitAnim, this->jointTable,
@@ -364,8 +363,8 @@ void func_809907D4(EnWf* this) {
     this->drawDmgEffFrozenSteamScale = 1.125f;
     this->drawDmgEffAlpha = 1.0f;
     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
-    this->collider2.base.colType = COLTYPE_HIT3;
-    this->collider3.base.colType = COLTYPE_HIT3;
+    this->collider2.base.colMaterial = COL_MATERIAL_HIT3;
+    this->collider3.base.colMaterial = COL_MATERIAL_HIT3;
     this->unk_2A0 = 80;
     this->actor.flags &= ~ACTOR_FLAG_400;
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 80);
@@ -374,8 +373,8 @@ void func_809907D4(EnWf* this) {
 void func_80990854(EnWf* this, PlayState* play) {
     if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
-        this->collider2.base.colType = COLTYPE_HIT5;
-        this->collider3.base.colType = COLTYPE_HIT5;
+        this->collider2.base.colMaterial = COL_MATERIAL_HIT5;
+        this->collider3.base.colMaterial = COL_MATERIAL_HIT5;
         this->drawDmgEffAlpha = 0.0f;
         Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, WOLFOS_BODYPART_MAX, 2, 0.3f, 0.2f);
         this->actor.flags |= ACTOR_FLAG_400;
@@ -395,16 +394,13 @@ void EnWf_Blink(EnWf* this) {
 
 s32 func_80990948(PlayState* play, EnWf* this, s16 arg2) {
     Player* player = GET_PLAYER(play);
-    s32 sp38;
-    s32 pad;
-    s32 pad2;
+    s32 sp38 = ABS_ALT(BINANG_SUB(this->actor.wallYaw, this->actor.shape.rot.y));
+    s32 pad[2];
     s16 sp2E;
     Actor* actor;
 
-    sp38 = ABS_ALT(BINANG_SUB(this->actor.wallYaw, this->actor.shape.rot.y));
-
-    if (((this->unk_295 == 0) ||
-         ((this->unk_295 == 1) && (this->actor.child != NULL) && (this->actor.child->update != NULL))) &&
+    if ((!this->unk_295 ||
+         ((this->unk_295 == true) && (this->actor.child != NULL) && (this->actor.child->update != NULL))) &&
         (this->actor.xzDistToPlayer > 160.0f) &&
         (this->unk_2A8 < Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos))) {
         func_80993524(this);
@@ -467,11 +463,11 @@ s32 func_80990948(PlayState* play, EnWf* this, s16 arg2) {
 }
 
 void func_80990C6C(EnWf* this, PlayState* play, s32 arg2) {
-    static Vec3f D_809942DC = { 0.0f, 0.1f, 0.0f };
+    static Vec3f sAccel = { 0.0f, 0.1f, 0.0f };
     static Color_RGBA8 D_809942E8 = { 185, 140, 70, 255 };
     static Color_RGBA8 D_809942EC = { 255, 255, 255, 255 };
     s32 i;
-    Vec3f sp88;
+    Vec3f pos;
     FloorType floorType;
     Color_RGBA8* phi_s1;
     s16 phi_s6;
@@ -490,10 +486,10 @@ void func_80990C6C(EnWf* this, PlayState* play, s32 arg2) {
             }
 
             for (i = 0; i < arg2; i++) {
-                sp88.x = Rand_CenteredFloat(50.0f) + this->actor.world.pos.x;
-                sp88.y = Rand_ZeroFloat(5.0f) + this->actor.world.pos.y;
-                sp88.z = Rand_CenteredFloat(50.0f) + this->actor.world.pos.z;
-                func_800B0F18(play, &sp88, &gZeroVec3f, &D_809942DC, phi_s1, phi_s1, phi_s6, 5,
+                pos.x = Rand_CenteredFloat(50.0f) + this->actor.world.pos.x;
+                pos.y = Rand_ZeroFloat(5.0f) + this->actor.world.pos.y;
+                pos.z = Rand_CenteredFloat(50.0f) + this->actor.world.pos.z;
+                func_800B0F18(play, &pos, &gZeroVec3f, &sAccel, phi_s1, phi_s1, phi_s6, 5,
                               Rand_ZeroFloat(5.0f) + 14.0f);
             }
         }
@@ -527,7 +523,7 @@ void func_80990F0C(EnWf* this) {
     this->collider2.base.acFlags &= ~AC_ON;
     this->actor.shape.shadowScale = 0.0f;
     this->actor.scale.y = 0.0f;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->unk_2A0 = 60;
     this->actionFunc = func_80990F50;
 }
@@ -553,7 +549,7 @@ void func_80990F50(EnWf* this, PlayState* play) {
 void func_80990FC8(EnWf* this) {
     Animation_Change(&this->skelAnime, &gWolfosRearUpFallOverAnim, 0.5f, 0.0f, 7.0f, ANIMMODE_ONCE_INTERP, 0.0f);
     this->unk_2A0 = 5;
-    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+    this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
     this->actionFunc = func_80991040;
 }
 
@@ -744,6 +740,7 @@ void func_8099177C(EnWf* this, PlayState* play) {
 
         this->skelAnime.playSpeed = -phi_f2;
         SkelAnime_Update(&this->skelAnime);
+
         if (Actor_IsFacingPlayer(&this->actor, 0x1555)) {
             if (Rand_ZeroOne() > 0.8f) {
                 func_80991948(this);
@@ -826,13 +823,14 @@ void func_80991C04(EnWf* this) {
 void func_80991C80(EnWf* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 sp30;
-    s32 sp2C;
+    s32 onAnim15thFrame;
     s16 sp2A;
 
     sp2A = BINANG_SUB(player->actor.shape.rot.y, this->actor.shape.rot.y);
     sp30 = ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y));
 
     this->actor.speed = 0.0f;
+
     if (((this->skelAnime.curFrame >= 9.0f) && (this->skelAnime.curFrame < 13.0f)) ||
         ((this->skelAnime.curFrame >= 17.0f) && (this->skelAnime.curFrame < 20.0f))) {
         if (!(this->collider1.base.atFlags & AT_ON)) {
@@ -843,15 +841,16 @@ void func_80991C80(EnWf* this, PlayState* play) {
         this->collider1.base.atFlags &= ~AT_ON;
     }
 
-    sp2C = Animation_OnFrame(&this->skelAnime, 15.0f);
-    if (((sp2C != 0) && !Actor_IsTargeted(play, &this->actor) &&
+    onAnim15thFrame = Animation_OnFrame(&this->skelAnime, 15.0f);
+
+    if ((onAnim15thFrame && !Actor_IsTargeted(play, &this->actor) &&
          (!Actor_IsFacingPlayer(&this->actor, 0x2000) || (this->actor.xzDistToPlayer >= 100.0f))) ||
         SkelAnime_Update(&this->skelAnime)) {
-        if ((sp2C == 0) && (this->unk_2A0 != 0)) {
+        if (!onAnim15thFrame && (this->unk_2A0 != 0)) {
             this->actor.shape.rot.y += TRUNCF_BINANG(0xCCC * (1.5f + ((this->unk_2A0 - 4) * 0.4f)));
             func_80990C6C(this, play, 1);
             this->unk_2A0--;
-        } else if (!Actor_IsFacingPlayer(&this->actor, 0x1554) && (sp2C == 0)) {
+        } else if (!Actor_IsFacingPlayer(&this->actor, 0x1554) && !onAnim15thFrame) {
             func_80991200(this);
             this->unk_2A0 = (s32)Rand_ZeroFloat(5.0f) + 5;
             if (sp30 >= 0x32C9) {
@@ -1000,6 +999,7 @@ void func_809924EC(EnWf* this, PlayState* play) {
     }
 
     Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xBB8);
+
     if (SkelAnime_Update(&this->skelAnime)) {
         sp26 = this->actor.wallYaw - this->actor.shape.rot.y;
 
@@ -1101,15 +1101,17 @@ void func_80992A74(EnWf* this, PlayState* play) {
     Animation_MorphToLoop(&this->skelAnime, &gWolfosRunAnim, -4.0f);
     player = GET_PLAYER(play);
     temp_f0 = Math_SinS((player->actor.shape.rot.y + this->unk_29A) - this->actor.yawTowardsPlayer);
+
     if (temp_f0 > 0.0f) {
-        this->unk_29A = 16000;
+        this->unk_29A = 0x3E80;
     } else if (temp_f0 < 0.0f) {
-        this->unk_29A = -16000;
+        this->unk_29A = -0x3E80;
     } else if (Rand_ZeroOne() > 0.5f) {
-        this->unk_29A = 16000;
+        this->unk_29A = 0x3E80;
     } else {
-        this->unk_29A = -16000;
+        this->unk_29A = -0x3E80;
     }
+
     this->actor.speed = 6.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->unk_2A0 = (s32)Rand_ZeroFloat(10.0f) + 5;
@@ -1165,7 +1167,7 @@ void func_80992D6C(EnWf* this) {
     if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         this->actor.speed = -6.0f;
     }
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->unk_2A0 = 25;
     Actor_PlaySfx(&this->actor, NA_SE_EN_WOLFOS_DEAD);
     this->actionFunc = func_80992E0C;
@@ -1183,7 +1185,7 @@ void func_80992E0C(EnWf* this, PlayState* play) {
     }
 
     if (SkelAnime_Update(&this->skelAnime)) {
-        if (this->unk_295 != 0) {
+        if (this->unk_295) {
             Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0x70);
         } else {
             Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0x60);
@@ -1251,28 +1253,26 @@ void func_80993194(EnWf* this, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
     func_80990E4C(this, play);
+
     if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
         if (func_80990EAC(this)) {
             func_80990ED4(this);
+        } else if (this->actor.child->xzDistToPlayer < (80.0f + this->unk_2A4)) {
+            func_80993350(this);
         } else {
-            if (this->actor.child->xzDistToPlayer < (80.0f + this->unk_2A4)) {
-                func_80993350(this);
+            sp36 = Actor_WorldYawTowardActor(this->actor.child, &this->actor);
+            sp34 = Math_SmoothStepToS(&sp36, BINANG_ROT180(this->actor.child->yawTowardsPlayer), 10, this->unk_29C, 16);
+            this->actor.world.pos.x = (Math_SinS(sp36) * this->unk_2A4) + this->actor.child->world.pos.x;
+            this->actor.world.pos.z = (Math_CosS(sp36) * this->unk_2A4) + this->actor.child->world.pos.z;
+            if (sp34 < -0x800) {
+                sp32 = sp36 - 0x4000;
+            } else if (sp34 > 0x800) {
+                sp32 = sp36 + 0x4000;
             } else {
-                sp36 = Actor_WorldYawTowardActor(this->actor.child, &this->actor);
-                sp34 = Math_SmoothStepToS(&sp36, BINANG_ROT180(this->actor.child->yawTowardsPlayer), 10, this->unk_29C,
-                                          16);
-                this->actor.world.pos.x = (Math_SinS(sp36) * this->unk_2A4) + this->actor.child->world.pos.x;
-                this->actor.world.pos.z = (Math_CosS(sp36) * this->unk_2A4) + this->actor.child->world.pos.z;
-                if (sp34 < -0x800) {
-                    sp32 = sp36 - 0x4000;
-                } else if (sp34 > 0x800) {
-                    sp32 = sp36 + 0x4000;
-                } else {
-                    sp32 = sp36 + 0x8000;
-                    func_80992FD4(this);
-                }
-                Math_ScaledStepToS(&this->actor.shape.rot.y, sp32, 0x800);
+                sp32 = sp36 + 0x8000;
+                func_80992FD4(this);
             }
+            Math_ScaledStepToS(&this->actor.shape.rot.y, sp32, 0x800);
         }
     } else {
         func_80990ED4(this);
@@ -1296,6 +1296,7 @@ void func_809933A0(EnWf* this, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
     func_80990E4C(this, play);
+
     if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
         if (func_80990EAC(this)) {
             func_80990ED4(this);
@@ -1318,6 +1319,7 @@ void func_809933A0(EnWf* this, PlayState* play) {
     } else {
         func_80990ED4(this);
     }
+
     if (this->unk_2A2 == 0) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_WOLFOS_CRY);
     }
@@ -1335,7 +1337,8 @@ void func_8099357C(EnWf* this, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
     func_80990E4C(this, play);
-    if (this->unk_295 != 0) {
+
+    if (this->unk_295) {
         if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
             sp2E = Actor_WorldYawTowardActor(&this->actor, this->actor.child);
             if (func_80990EAC(this)) {
@@ -1406,10 +1409,10 @@ void func_8099386C(EnWf* this, PlayState* play) {
         }
 
         if (this->collider2.base.acFlags & AC_HIT) {
-            Actor_SetDropFlag(&this->actor, &this->collider2.info);
+            Actor_SetDropFlag(&this->actor, &this->collider2.elem);
             collider = &this->collider2;
         } else {
-            Actor_SetDropFlag(&this->actor, &this->collider3.info);
+            Actor_SetDropFlag(&this->actor, &this->collider3.elem);
             collider = &this->collider3;
         }
 
@@ -1418,7 +1421,7 @@ void func_8099386C(EnWf* this, PlayState* play) {
         this->collider1.base.atFlags &= ~AT_ON;
 
         if (((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
-             !(collider->info.acHitInfo->toucher.dmgFlags &
+             !(collider->elem.acHitElem->atDmgInfo.dmgFlags &
                (0x80000 | 0x40000 | 0x10000 | 0x8000 | 0x2000 | 0x1000 | 0x80 | 0x20 | 0x10 | 0x2 | 0x1))) &&
             (this->actor.colChkInfo.damageEffect != 0xF)) {
             if (!Actor_ApplyDamage(&this->actor)) {
@@ -1456,12 +1459,13 @@ void func_8099386C(EnWf* this, PlayState* play) {
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                     this->drawDmgEffScale = 0.75f;
                     this->drawDmgEffAlpha = 4.0f;
-                    Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, collider->info.bumper.hitPos.x,
-                                collider->info.bumper.hitPos.y, collider->info.bumper.hitPos.z, 0, 0, 0,
+                    Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, collider->elem.acDmgInfo.hitPos.x,
+                                collider->elem.acDmgInfo.hitPos.y, collider->elem.acDmgInfo.hitPos.z, 0, 0, 0,
                                 CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
                 }
 
                 Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
+
                 if (this->actor.colChkInfo.health == 0) {
                     func_80992D6C(this);
                 } else {

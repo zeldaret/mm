@@ -5,9 +5,9 @@
  */
 
 #include "z_dm_statue.h"
-#include "objects/object_smtower/object_smtower.h"
+#include "assets/objects/object_smtower/object_smtower.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_CAN_PRESS_SWITCH)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_CAN_PRESS_SWITCHES)
 
 #define THIS ((DmStatue*)thisx)
 
@@ -16,7 +16,7 @@ void DmStatue_Destroy(Actor* thisx, PlayState* play);
 void DmStatue_Update(Actor* thisx, PlayState* play);
 void DmStatue_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Dm_Statue_InitVars = {
+ActorProfile Dm_Statue_Profile = {
     /**/ ACTOR_DM_STATUE,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,

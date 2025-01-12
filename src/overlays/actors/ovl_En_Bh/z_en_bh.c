@@ -17,7 +17,7 @@ void EnBh_Draw(Actor* thisx, PlayState* play);
 
 void func_80C22DEC(EnBh* this, PlayState* play);
 
-ActorInit En_Bh_InitVars = {
+ActorProfile En_Bh_Profile = {
     /**/ ACTOR_EN_BH,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -32,7 +32,7 @@ ActorInit En_Bh_InitVars = {
 void EnBh_Init(Actor* thisx, PlayState* play) {
     EnBh* this = THIS;
 
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     Actor_SetScale(&this->actor, 0.01f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gBhSkel, &gBhFlyingAnim, this->jointTable, this->morphTable,
                        OBJECT_BH_LIMB_MAX);

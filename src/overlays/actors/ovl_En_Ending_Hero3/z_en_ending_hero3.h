@@ -2,7 +2,7 @@
 #define Z_EN_ENDING_HERO3_H
 
 #include "global.h"
-#include "objects/object_toryo/object_toryo.h"
+#include "assets/objects/object_toryo/object_toryo.h"
 
 struct EnEndingHero3;
 

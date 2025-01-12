@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_aqua.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -24,7 +24,7 @@ void func_80ACBDFC(ObjAqua* this, PlayState* play);
 
 void func_80ACBD34(ObjAqua* this);
 
-ActorInit Obj_Aqua_InitVars = {
+ActorProfile Obj_Aqua_Profile = {
     /**/ ACTOR_OBJ_AQUA,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -38,7 +38,7 @@ ActorInit Obj_Aqua_InitVars = {
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_OTHER,
         AC_NONE,
         OC1_NONE,
@@ -46,11 +46,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0xF7CFFFFF, 0x00, 0x00 },
         { 0x00000000, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NONE,
-        BUMP_NONE,
+        ATELEM_ON | ATELEM_SFX_NONE,
+        ACELEM_NONE,
         OCELEM_NONE,
     },
     { 6, 10, 0, { 0, 0, 0 } },
@@ -126,15 +126,15 @@ void func_80ACBA10(ObjAqua* this) {
     Matrix_MtxFToYXZRot(&sp2C, &this->actor.shape.rot, false);
 }
 
-s32 func_80ACBA60(ObjAqua* this, PlayState* play) {
+s32 ObjAqua_IsUnderwater(ObjAqua* this, PlayState* play) {
     s32 pad;
     WaterBox* waterBox;
-    f32 ySurface;
+    f32 waterSurface;
     s32 bgId;
 
-    if (WaterBox_GetSurfaceImpl(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &ySurface,
+    if (WaterBox_GetSurfaceImpl(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &waterSurface,
                                 &waterBox, &bgId) &&
-        (this->actor.world.pos.y < ySurface)) {
+        (this->actor.world.pos.y < waterSurface)) {
         return true;
     }
     return false;
@@ -157,7 +157,7 @@ void ObjAqua_Init(Actor* thisx, PlayState* play) {
 
     this->actor.shape.shadowAlpha = 140;
     this->alpha = 255;
-    if (func_80ACBA60(this, play)) {
+    if (ObjAqua_IsUnderwater(this, play)) {
         for (i = 0; i < 8; i++) {
             EffectSsBubble_Spawn(play, &this->actor.world.pos, -4.0f, 4.0f, 4.0f, (Rand_ZeroOne() * 0.09f) + 0.03f);
         }
@@ -294,7 +294,7 @@ void ObjAqua_Draw(Actor* thisx, PlayState* play) {
     }
 
     Matrix_RotateYS(yaw, MTXMODE_APPLY);
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
 
     CLOSE_DISPS(play->state.gfxCtx);

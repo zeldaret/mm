@@ -5,8 +5,8 @@
  */
 
 #include "z_obj_purify.h"
-#include "objects/object_numa_obj/object_numa_obj.h"
-#include "objects/object_dekucity_obj/object_dekucity_obj.h"
+#include "assets/objects/object_numa_obj/object_numa_obj.h"
+#include "assets/objects/object_dekucity_obj/object_dekucity_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -41,7 +41,7 @@ typedef struct ObjPurifyInfo {
     /* 0x24 */ s32 isDekuCity;
 } ObjPurifyInfo; // size = 0x28
 
-ActorInit Obj_Purify_InitVars = {
+ActorProfile Obj_Purify_Profile = {
     /**/ ACTOR_OBJ_PURIFY,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -256,12 +256,12 @@ void func_80A851C8(Actor* thisx, PlayState* play) {
     }
     if (opaDList != NULL) {
         Gfx_SetupDL25_Opa(play->state.gfxCtx);
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_OPA_DISP++, opaDList);
     }
     if (xluDList != NULL) {
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, xluDList);
     }
 
@@ -291,7 +291,7 @@ void func_80A85304(Actor* thisx, PlayState* play) {
         index = sp6C[i];
         AnimatedMat_Draw(play, Lib_SegmentedToVirtual(info->animMat[index]));
         ObjPurify_SetSysMatrix(this->unk168[index]);
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, info->xluDLists[index]);
     };
 

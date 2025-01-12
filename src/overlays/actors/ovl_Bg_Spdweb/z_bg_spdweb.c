@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_spdweb.h"
-#include "objects/object_spdweb/object_spdweb.h"
+#include "assets/objects/object_spdweb/object_spdweb.h"
 
 #define FLAGS 0x00000000
 
@@ -24,7 +24,7 @@ void func_809CEBC0(BgSpdweb* this, PlayState* play);
 void func_809CEE74(BgSpdweb* this);
 void func_809CEEAC(BgSpdweb* this, PlayState* play);
 
-ActorInit Bg_Spdweb_InitVars = {
+ActorProfile Bg_Spdweb_Profile = {
     /**/ ACTOR_BG_SPDWEB,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -39,22 +39,22 @@ ActorInit Bg_Spdweb_InitVars = {
 static ColliderTrisElementInit sTrisElementsInit1[2] = {
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0x00000C00, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { { { 75.0f, -8.0f, 75.0f }, { 75.0f, -8.0f, -75.0f }, { -75.0f, -8.0f, -75.0f } } },
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0x00000C00, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { { { 75.0f, -8.0f, 75.0f }, { -75.0f, -8.0f, -75.0f }, { -75.0f, -8.0f, 75.0f } } },
@@ -63,7 +63,7 @@ static ColliderTrisElementInit sTrisElementsInit1[2] = {
 
 static ColliderTrisInit sTrisInit1 = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -77,44 +77,44 @@ static ColliderTrisInit sTrisInit1 = {
 static ColliderTrisElementInit sTrisElementsInit2[4] = {
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0x00000800, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { { { 70.0f, 160.0f, 15.0f }, { -70.0f, 160.0f, 15.0f }, { -70.0f, 20.0f, 15.0f } } },
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0x00000800, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { { { 70.0f, 160.0f, 15.0f }, { -70.0f, 20.0f, 15.0f }, { 70.0f, 20.0f, 15.0f } } },
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0x00000800, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { { { -70.0f, 160.0f, -15.0f }, { 70.0f, 160.0f, -15.0f }, { 70.0f, 20.0f, -15.0f } } },
     },
     {
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0xF7CFFFFF, 0x00, 0x00 },
             { 0x00000800, 0x00, 0x00 },
-            TOUCH_NONE | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_NONE | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_NONE,
         },
         { { { -70.0f, 160.0f, -15.0f }, { 70.0f, 20.0f, -15.0f }, { -70.0f, 20.0f, -15.0f } } },
@@ -123,7 +123,7 @@ static ColliderTrisElementInit sTrisElementsInit2[4] = {
 
 static ColliderTrisInit sTrisInit2 = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_PLAYER,
         OC1_NONE,
@@ -270,7 +270,7 @@ void func_809CE234(BgSpdweb* this, PlayState* play) {
 void func_809CE4C8(BgSpdweb* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     Vec3f sp40;
-    ColliderTrisElement* element;
+    ColliderTrisElement* trisElem;
     s16 sp3A;
     s32 i;
     f32 temp_f12;
@@ -289,10 +289,10 @@ void func_809CE4C8(BgSpdweb* this, PlayState* play) {
 
     if (this->collider.base.acFlags & AC_HIT) {
         for (i = 0; i < 2; i++) {
-            element = &this->collider.elements[i];
-            if (element->info.bumperFlags & BUMP_HIT) {
-                if (this->collider.elements[i].info.acHitInfo->toucher.dmgFlags & 0x800) {
-                    Math_Vec3s_ToVec3f(&this->dyna.actor.home.pos, &element->info.bumper.hitPos);
+            trisElem = &this->collider.elements[i];
+            if (trisElem->base.acElemFlags & ACELEM_HIT) {
+                if (this->collider.elements[i].base.acHitElem->atDmgInfo.dmgFlags & 0x800) {
+                    Math_Vec3s_ToVec3f(&this->dyna.actor.home.pos, &trisElem->base.acDmgInfo.hitPos);
                     func_809CEE74(this);
                     return;
                 }
@@ -324,7 +324,7 @@ void func_809CE4C8(BgSpdweb* this, PlayState* play) {
     }
 
     this->dyna.actor.world.pos.y =
-        (Math_SinF(this->unk_162 * (M_PI / 6)) * this->unk_164) + this->dyna.actor.home.pos.y;
+        (Math_SinF(this->unk_162 * (M_PIf / 6)) * this->unk_164) + this->dyna.actor.home.pos.y;
     Math_ApproachZeroF(&this->unk_164, 1.0f, 0.8f);
 
     if (this->unk_162 == 4) {
@@ -422,7 +422,7 @@ void func_809CEBC0(BgSpdweb* this, PlayState* play) {
     f32 sp58;
     f32 temp_f10;
     f32 temp_f18;
-    ColliderTrisElement* ptr;
+    ColliderTrisElement* trisElem;
     s32 i;
     Vec3f sp3C;
     f32 sp38;
@@ -432,9 +432,9 @@ void func_809CEBC0(BgSpdweb* this, PlayState* play) {
 
     if (this->collider.base.acFlags & AC_HIT) {
         for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++) {
-            ptr = &this->collider.elements[i];
-            if (ptr->info.bumperFlags & BUMP_HIT) {
-                Math_Vec3s_ToVec3f(&this->dyna.actor.home.pos, &ptr->info.bumper.hitPos);
+            trisElem = &this->collider.elements[i];
+            if (trisElem->base.acElemFlags & ACELEM_HIT) {
+                Math_Vec3s_ToVec3f(&this->dyna.actor.home.pos, &trisElem->base.acDmgInfo.hitPos);
                 break;
             }
         }
@@ -500,13 +500,13 @@ void BgSpdweb_Draw(Actor* thisx, PlayState* play) {
     gSPDisplayList(&gfx[0], gSetupDLs[SETUPDL_25]);
 
     if (thisx->params == BGSPDWEB_FF_1) {
-        gSPMatrix(&gfx[1], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(&gfx[1], play->state.gfxCtx);
         gSPDisplayList(&gfx[2], object_spdweb_DL_000060);
     } else {
         Matrix_Translate(0.0f, (thisx->home.pos.y - thisx->world.pos.y) * 10.0f, 0.0f, MTXMODE_APPLY);
         Matrix_Scale(1.0f, ((thisx->home.pos.y - thisx->world.pos.y) + 10.0f) * 0.1f, 1.0f, MTXMODE_APPLY);
 
-        gSPMatrix(&gfx[1], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(&gfx[1], play->state.gfxCtx);
         gSPDisplayList(&gfx[2], object_spdweb_DL_0012F0);
     }
 

@@ -5,9 +5,10 @@
  */
 
 #include "z_en_dg.h"
+#include "attributes.h"
 #include "overlays/actors/ovl_En_Aob_01/z_en_aob_01.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_800000)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_THROW_ONLY)
 
 #define THIS ((EnDg*)thisx)
 
@@ -37,7 +38,7 @@ void EnDg_Thrown(EnDg* this, PlayState* play);
 void EnDg_SetupTalk(EnDg* this, PlayState* play);
 void EnDg_Talk(EnDg* this, PlayState* play);
 
-ActorInit En_Dg_InitVars = {
+ActorProfile En_Dg_Profile = {
     /**/ ACTOR_EN_DG,
     /**/ ACTORCAT_ENEMY,
     /**/ FLAGS,
@@ -110,7 +111,7 @@ static RacetrackDogInfo sSelectedRacetrackDogInfo = { DOG_COLOR_DEFAULT, -1, 0x3
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_ON | AT_TYPE_ENEMY,
         AC_ON | AC_TYPE_PLAYER,
         OC1_ON | OC1_TYPE_ALL,
@@ -118,11 +119,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK1,
+        ELEM_MATERIAL_UNK1,
         { 0xF7CFFFFF, 0x04, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_ON | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_ON | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 13, 19, 0, { 0, 0, 0 } },
@@ -289,7 +290,7 @@ s32 EnDg_HasReachedPoint(EnDg* this, Path* path, s32 pointIndex) {
         diffZ = points[index + 1].z - points[index - 1].z;
     }
 
-    func_8017B7F8(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
+    Math3D_RotateXZPlane(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
 
     if (((px * this->actor.world.pos.x) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
         reached = true;
@@ -474,10 +475,10 @@ void EnDg_StartTextBox(EnDg* this, PlayState* play) {
  */
 void EnDg_TryPickUp(EnDg* this, PlayState* play) {
     if (sIsAnyDogHeld && !(this->dogFlags & DOG_FLAG_HELD)) {
-        this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+        this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
         this->dogFlags |= DOG_FLAG_HELD;
     } else if (!sIsAnyDogHeld && (this->dogFlags & DOG_FLAG_HELD)) {
-        this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
+        this->actor.flags &= ~ACTOR_FLAG_LOCK_ON_DISABLED;
         this->dogFlags &= ~DOG_FLAG_HELD;
     }
 
@@ -486,16 +487,16 @@ void EnDg_TryPickUp(EnDg* this, PlayState* play) {
         this->grabState = DOG_GRAB_STATE_HELD;
         sSelectedRacetrackDogInfo = sRacetrackDogInfo[this->index];
         if (!sIsAnyDogHeld) {
-            this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+            this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
             sIsAnyDogHeld = true;
             this->dogFlags |= DOG_FLAG_HELD;
         }
 
         EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_SIT_DOWN);
-        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         this->actor.speed = 0.0f;
         if (Player_GetMask(play) == PLAYER_MASK_TRUTH) {
-            this->actor.flags |= ACTOR_FLAG_10000;
+            this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
             Actor_OfferTalk(&this->actor, play, 100.0f);
             this->actionFunc = EnDg_SetupTalk;
         } else {
@@ -588,7 +589,7 @@ s32 EnDg_ShouldReactToNonHumanPlayer(EnDg* this, PlayState* play) {
             if (this->actor.xzDistToPlayer < 300.0f) {
                 return true;
             }
-            // fallthrough
+            FALLTHROUGH;
         case PLAYER_FORM_DEKU:
             if (this->actor.xzDistToPlayer < 250.0f) {
                 return true;
@@ -996,7 +997,7 @@ void EnDg_ApproachPlayer(EnDg* this, PlayState* play) {
         EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_SIT_DOWN);
         this->actionFunc = EnDg_SitNextToPlayer;
     } else if (player->stateFlags3 & PLAYER_STATE3_20000000) {
-        if ((this->actor.xzDistToPlayer > 40.0f) && (player->linearVelocity == 0.0f)) {
+        if ((this->actor.xzDistToPlayer > 40.0f) && (player->speedXZ == 0.0f)) {
             Math_ApproachF(&this->actor.speed, 1.5f, 0.2f, 1.0f);
         } else {
             Math_ApproachF(&this->actor.speed, player->actor.speed, 0.2f, 1.0f);
@@ -1242,9 +1243,9 @@ void EnDg_JumpOutOfWater(EnDg* this, PlayState* play) {
 void EnDg_Held(EnDg* this, PlayState* play) {
     if (Actor_HasNoParent(&this->actor, play)) {
         this->grabState = DOG_GRAB_STATE_THROWN_OR_SITTING_AFTER_THROW;
-        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+        this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
         if (sIsAnyDogHeld) {
-            this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
+            this->actor.flags &= ~ACTOR_FLAG_LOCK_ON_DISABLED;
             sIsAnyDogHeld = false;
             this->dogFlags &= ~DOG_FLAG_HELD;
         }
@@ -1285,7 +1286,7 @@ void EnDg_Thrown(EnDg* this, PlayState* play) {
 
 void EnDg_SetupTalk(EnDg* this, PlayState* play) {
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
-        this->actor.flags &= ~ACTOR_FLAG_10000;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         EnDg_StartTextBox(this, play);
         this->actionFunc = EnDg_Talk;
     } else {
@@ -1313,7 +1314,7 @@ void EnDg_Init(Actor* thisx, PlayState* play) {
 
     this->path = SubS_GetPathByIndex(play, ENDG_GET_PATH_INDEX(&this->actor), ENDG_PATH_INDEX_NONE);
     Actor_SetScale(&this->actor, 0.0075f);
-    this->actor.targetMode = TARGET_MODE_1;
+    this->actor.attentionRangeType = ATTENTION_RANGE_1;
     this->actor.gravity = -3.0f;
     this->timer = Rand_S16Offset(60, 60);
     this->dogFlags = DOG_FLAG_NONE;

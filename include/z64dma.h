@@ -2,6 +2,10 @@
 #define Z64DMA_H
 
 #include "ultra64.h"
+
+#include "stdint.h"
+
+#include "romfile.h"
 #include "unk.h"
 
 typedef struct {
@@ -16,8 +20,7 @@ typedef struct {
 } DmaRequest; // size = 0x20
 
 typedef struct {
-    /* 0x0 */ uintptr_t vromStart;
-    /* 0x4 */ uintptr_t vromEnd;
+    /* 0x0 */ RomFile file;
     /* 0x8 */ uintptr_t romStart;
     /* 0xC */ uintptr_t romEnd;
 } DmaEntry; // size = 0x10

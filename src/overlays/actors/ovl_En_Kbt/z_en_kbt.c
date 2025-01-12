@@ -6,7 +6,7 @@
 
 #include "z_en_kbt.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnKbt*)thisx)
 
@@ -39,7 +39,7 @@ typedef enum EnKbtAnimation {
     /* 13 */ ENKBT_ANIM_MAX
 } EnKbtAnimation;
 
-ActorInit En_Kbt_InitVars = {
+ActorProfile En_Kbt_Profile = {
     /**/ ACTOR_EN_KBT,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -81,7 +81,7 @@ void EnKbt_Init(Actor* thisx, PlayState* play) {
         this->unk_282 = 0;
         this->actionFunc = func_80B34598;
     }
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
 }
 
 void EnKbt_Destroy(Actor* thisx, PlayState* play) {

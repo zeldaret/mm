@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_y2lift.h"
-#include "objects/object_kaizoku_obj/object_kaizoku_obj.h"
+#include "assets/objects/object_kaizoku_obj/object_kaizoku_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -16,7 +16,7 @@ void ObjY2lift_Destroy(Actor* thisx, PlayState* play);
 void ObjY2lift_Update(Actor* thisx, PlayState* play);
 void ObjY2lift_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Obj_Y2lift_InitVars = {
+ActorProfile Obj_Y2lift_Profile = {
     /**/ ACTOR_OBJ_Y2LIFT,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,

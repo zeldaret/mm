@@ -5,7 +5,7 @@
  */
 
 #include "z_bg_ladder.h"
-#include "objects/object_ladder/object_ladder.h"
+#include "assets/objects/object_ladder/object_ladder.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -20,7 +20,7 @@ void BgLadder_StartCutscene(BgLadder* this, PlayState* play);
 void BgLadder_FadeIn(BgLadder* this, PlayState* play);
 void BgLadder_DoNothing(BgLadder* this, PlayState* play);
 
-ActorInit Bg_Ladder_InitVars = {
+ActorProfile Bg_Ladder_Profile = {
     /**/ ACTOR_BG_LADDER,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -145,7 +145,7 @@ void BgLadder_Draw(Actor* thisx, PlayState* play) {
 
     gSPDisplayList(&gfx[0], gSetupDLs[SETUPDL_25]);
     gDPSetEnvColor(&gfx[1], 255, 255, 255, this->alpha);
-    gSPMatrix(&gfx[2], Matrix_NewMtx(play->state.gfxCtx), G_MTX_LOAD);
+    MATRIX_FINALIZE_AND_LOAD(&gfx[2], play->state.gfxCtx);
     gSPDisplayList(&gfx[3], sLadderDLists[this->dyna.actor.params]);
 
     if (this->alpha == 255) {

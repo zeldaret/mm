@@ -5,7 +5,7 @@
  * into a Deku Scrub.
  */
 #include "z_bg_open_spot.h"
-#include "objects/object_open_obj/object_open_obj.h"
+#include "assets/objects/object_open_obj/object_open_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -16,7 +16,7 @@ void BgOpenSpot_Destroy(Actor* thisx, PlayState* play);
 void BgOpenSpot_Update(Actor* thisx, PlayState* play);
 void BgOpenSpot_Draw(Actor* thisx, PlayState* play);
 
-ActorInit Bg_Open_Spot_InitVars = {
+ActorProfile Bg_Open_Spot_Profile = {
     /**/ ACTOR_BG_OPEN_SPOT,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -68,7 +68,7 @@ void BgOpenSpot_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
     gDPSetColorDither(POLY_XLU_DISP++, G_CD_BAYER);
     gSPDisplayList(POLY_XLU_DISP++, gSpotlightLeftDL);
     gSPDisplayList(POLY_XLU_DISP++, gSpotlightRightDL);

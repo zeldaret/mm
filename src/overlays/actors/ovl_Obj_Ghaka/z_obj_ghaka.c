@@ -5,9 +5,9 @@
  */
 
 #include "z_obj_ghaka.h"
-#include "objects/object_ghaka/object_ghaka.h"
+#include "assets/objects/object_ghaka/object_ghaka.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_20)
 
 #define THIS ((ObjGhaka*)thisx)
 
@@ -24,7 +24,7 @@ void func_80B3C39C(ObjGhaka* this, PlayState* play);
 void func_80B3C4E0(ObjGhaka* this, PlayState* play);
 void func_80B3C624(ObjGhaka* this, PlayState* play);
 
-ActorInit Obj_Ghaka_InitVars = {
+ActorProfile Obj_Ghaka_Profile = {
     /**/ ACTOR_OBJ_GHAKA,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -39,8 +39,8 @@ ActorInit Obj_Ghaka_InitVars = {
 static Vec3f D_80B3C960 = { 0.0f, 0.0f, 0.0f };
 
 static InitChainEntry D_80B3C96C[] = {
-    ICHAIN_U8(targetMode, TARGET_MODE_0, ICHAIN_CONTINUE),
-    ICHAIN_F32(targetArrowOffset, 30, ICHAIN_STOP),
+    ICHAIN_U8(attentionRangeType, ATTENTION_RANGE_0, ICHAIN_CONTINUE),
+    ICHAIN_F32(lockOnArrowOffset, 30, ICHAIN_STOP),
 };
 
 void func_80B3C260(ObjGhaka* this) {
@@ -186,10 +186,10 @@ void ObjGhaka_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, object_ghaka_DL_001A20);
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
     gSPDisplayList(POLY_XLU_DISP++, object_ghaka_DL_001980);
 
     CLOSE_DISPS(play->state.gfxCtx);

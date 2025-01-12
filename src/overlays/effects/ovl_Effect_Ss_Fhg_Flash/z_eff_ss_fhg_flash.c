@@ -19,7 +19,7 @@ u32 EffectSsFhgFlash_Init(PlayState* play, u32 index, EffectSs* this, void* init
 void EffectSsFhgFlash_Update(PlayState* play, u32 index, EffectSs* this);
 void EffectSsFhgFlash_Draw(PlayState* play, u32 index, EffectSs* this);
 
-EffectSsInit Effect_Ss_Fhg_Flash_InitVars = {
+EffectSsProfile Effect_Ss_Fhg_Flash_Profile = {
     EFFECT_SS_FHG_FLASH,
     EffectSsFhgFlash_Init,
 };
@@ -50,7 +50,7 @@ u32 EffectSsFhgFlash_Init(PlayState* play, u32 index, EffectSs* this, void* init
     return 1;
 }
 
-#include "overlays/ovl_Effect_Ss_Fhg_Flash/ovl_Effect_Ss_Fhg_Flash.c"
+#include "assets/overlays/ovl_Effect_Ss_Fhg_Flash/ovl_Effect_Ss_Fhg_Flash.c"
 
 void EffectSsFhgFlash_Draw(PlayState* play, u32 index, EffectSs* this) {
     s32 pad;
@@ -74,7 +74,7 @@ void EffectSsFhgFlash_Draw(PlayState* play, u32 index, EffectSs* this) {
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, this->rAlpha);
     gDPSetEnvColor(POLY_XLU_DISP++, 0, 255, 155, 0);
     Matrix_RotateZS(this->rXZRot, MTXMODE_APPLY);
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, gfxCtx);
 
     gSPDisplayList(POLY_XLU_DISP++, this->gfx);
 

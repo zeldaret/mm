@@ -22,7 +22,7 @@ void EnTest4_Update(Actor* thisx, PlayState* play);
 void EnTest4_HandleEvents(EnTest4* this, PlayState* play);
 void EnTest4_HandleCutscene(EnTest4* this, PlayState* play);
 
-ActorInit En_Test4_InitVars = {
+ActorProfile En_Test4_Profile = {
     /**/ ACTOR_EN_TEST4,
     /**/ ACTORCAT_SWITCH,
     /**/ FLAGS,
@@ -429,7 +429,7 @@ void EnTest4_HandleEvents(EnTest4* this, PlayState* play) {
         // `prevTimeUntilTransition` will be slightly negative (behind transition time)
         // Only when the signs are different will this condition pass
         if ((curTimeUntilTransition * prevTimeUntilTransition) <= 0) {
-            // day-night transition is occuring
+            // day-night transition is occurring
             gSaveContext.unk_3CA7 = 1;
             if (play->actorCtx.flags & ACTORCTX_FLAG_PICTO_BOX_ON) {
                 play->actorCtx.flags &= ~ACTORCTX_FLAG_PICTO_BOX_ON;
@@ -453,9 +453,9 @@ void EnTest4_HandleEvents(EnTest4* this, PlayState* play) {
                 } else {
                     // Turn day with DayTelop cutscene
                     gSaveContext.screenScale = 0.0f;
-                    Play_SetRespawnData(&play->state, RESPAWN_MODE_DOWN, Entrance_CreateFromSpawn(0), player->unk_3CE,
+                    Play_SetRespawnData(play, RESPAWN_MODE_DOWN, Entrance_CreateFromSpawn(0), player->unk_3CE,
                                         PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B), &player->unk_3C0, player->unk_3CC);
-                    func_80169EFC(&play->state);
+                    func_80169EFC(play);
                     if (player->stateFlags1 & PLAYER_STATE1_800000) {
                         EnHorse* rideActor = (EnHorse*)player->rideActor;
 
@@ -512,7 +512,7 @@ void EnTest4_HandleEvents(EnTest4* this, PlayState* play) {
                         playerParams = PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B);
                     }
 
-                    Play_SetRespawnData(&play->state, RESPAWN_MODE_RETURN, entrance, player->unk_3CE, playerParams,
+                    Play_SetRespawnData(play, RESPAWN_MODE_RETURN, entrance, player->unk_3CE, playerParams,
                                         &player->unk_3C0, player->unk_3CC);
 
                     if ((play->sceneId == SCENE_TENMON_DAI) || (play->sceneId == SCENE_00KEIKOKU)) {

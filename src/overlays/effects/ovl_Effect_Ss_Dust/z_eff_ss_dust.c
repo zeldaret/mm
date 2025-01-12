@@ -5,7 +5,7 @@
  */
 
 #include "z_eff_ss_dust.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define rPrimColorR regs[0]
 #define rPrimColorG regs[1]
@@ -28,7 +28,7 @@ void EffectSsDust_Update(PlayState* play, u32 index, EffectSs* this);
 void EffectSsDust_UpdateFire(PlayState* play, u32 index, EffectSs* this);
 void EffectSsDust_Draw(PlayState* play, u32 index, EffectSs* this);
 
-EffectSsInit Effect_Ss_Dust_InitVars = {
+EffectSsProfile Effect_Ss_Dust_Profile = {
     EFFECT_SS_DUST,
     EffectSsDust_Init,
 };
@@ -162,6 +162,7 @@ void EffectSsDust_UpdateFire(PlayState* play, u32 index, EffectSs* this) {
             this->rEnvColorG = 50;
             this->rEnvColorB = 0;
             break;
+
         case 1:
             this->rPrimColorR = 200;
             this->rPrimColorG = 50;
@@ -170,6 +171,7 @@ void EffectSsDust_UpdateFire(PlayState* play, u32 index, EffectSs* this) {
             this->rEnvColorG = 0;
             this->rEnvColorB = 0;
             break;
+
         case 2:
             this->rPrimColorR = 50;
             this->rPrimColorG = 0;
@@ -178,6 +180,7 @@ void EffectSsDust_UpdateFire(PlayState* play, u32 index, EffectSs* this) {
             this->rEnvColorG = 0;
             this->rEnvColorB = 0;
             break;
+
         case 3:
             this->rPrimColorR = 50;
             this->rEnvColorR = this->rPrimColorG = this->rEnvColorG = this->rPrimColorB = this->rEnvColorB = 0;

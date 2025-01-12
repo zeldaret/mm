@@ -8,8 +8,9 @@
  */
 
 #include "z_en_sth.h"
+#include "attributes.h"
 
-#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
+#define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnSth*)thisx)
 
@@ -27,7 +28,7 @@ void EnSth_SwampSpiderHouseIdle(EnSth* this, PlayState* play);
 void EnSth_Update(Actor* thisx, PlayState* play);
 void EnSth_Draw(Actor* thisx, PlayState* play);
 
-ActorInit En_Sth_InitVars = {
+ActorProfile En_Sth_Profile = {
     /**/ ACTOR_EN_STH,
     /**/ ACTORCAT_NPC,
     /**/ FLAGS,
@@ -39,11 +40,11 @@ ActorInit En_Sth_InitVars = {
     /**/ NULL,
 };
 
-#include "overlays/ovl_En_Sth/ovl_En_Sth.c"
+#include "assets/overlays/ovl_En_Sth/ovl_En_Sth.c"
 
 static ColliderCylinderInit sCylinderInit = {
     {
-        COLTYPE_NONE,
+        COL_MATERIAL_NONE,
         AT_NONE,
         AC_ON | AC_TYPE_ENEMY,
         OC1_ON | OC1_TYPE_ALL,
@@ -51,11 +52,11 @@ static ColliderCylinderInit sCylinderInit = {
         COLSHAPE_CYLINDER,
     },
     {
-        ELEMTYPE_UNK0,
+        ELEM_MATERIAL_UNK0,
         { 0x00000000, 0x00, 0x00 },
         { 0xF7CFFFFF, 0x00, 0x00 },
-        TOUCH_NONE | TOUCH_SFX_NORMAL,
-        BUMP_ON,
+        ATELEM_NONE | ATELEM_SFX_NORMAL,
+        ACELEM_ON,
         OCELEM_ON,
     },
     { 30, 40, 0, { 0, 0, 0 } },
@@ -168,7 +169,7 @@ void EnSth_Init(Actor* thisx, PlayState* play) {
 
             this->actionFunc = EnSth_MoonLookingIdle;
             this->sthFlags |= STH_FLAG_DISABLE_HEAD_TRACK;
-            this->actor.targetMode = TARGET_MODE_3;
+            this->actor.attentionRangeType = ATTENTION_RANGE_3;
             this->actor.uncullZoneForward = 800.0f;
             break;
 
@@ -285,7 +286,7 @@ void EnSth_PostOceanspiderhouseReward(EnSth* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
-        this->actor.flags &= ~ACTOR_FLAG_10000;
+        this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         this->actionFunc = EnSth_HandleOceansideSpiderHouseConversation;
 
         switch (STH_GI_ID(&this->actor)) {
@@ -327,7 +328,7 @@ void EnSth_GiveOceansideSpiderHouseReward(EnSth* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
         this->actionFunc = EnSth_PostOceanspiderhouseReward;
-        this->actor.flags |= ACTOR_FLAG_10000;
+        this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
         if (CURRENT_DAY == 3) {
             EnSth_ChangeAnim(this, STH_ANIM_PLEAD);
@@ -527,7 +528,7 @@ void EnSth_SwampSpiderHouseGiveMask(EnSth* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
         this->actionFunc = EnSth_TalkAfterSwampSpiderHouseGiveMask;
-        this->actor.flags |= ACTOR_FLAG_10000;
+        this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     } else {
         this->sthFlags &= ~STH_FLAG_DRAW_MASK_OF_TRUTH;
@@ -574,7 +575,7 @@ void EnSth_HandleSwampSpiderHouseConversation(EnSth* this, PlayState* play) {
             case 0x91A: // Someone gave me this mask and said it would make me rich, getting rid of it
                 SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MASK_OF_TRUTH);
                 CLEAR_WEEKEVENTREG(WEEKEVENTREG_TALKED_SWAMP_SPIDER_HOUSE_MAN);
-
+                FALLTHROUGH;
             case 0x902: // (does not exist)
             case 0x903: // (does not exist)
             case 0x90E: // (does not exist)
@@ -582,9 +583,9 @@ void EnSth_HandleSwampSpiderHouseConversation(EnSth* this, PlayState* play) {
             case 0x918: // I have had enough, going home
             case 0x91B: // As soon as I calm down, getting rid of it
                 EnSth_ChangeAnim(this, STH_ANIM_WAIT);
-
+                FALLTHROUGH;
             default:
-                this->actor.flags &= ~ACTOR_FLAG_10000;
+                this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
                 Message_CloseTextbox(play);
                 this->actionFunc = EnSth_SwampSpiderHouseIdle;
                 break;
@@ -614,7 +615,7 @@ void EnSth_UpdateOceansideSpiderHouseWaitForTokens(Actor* thisx, PlayState* play
     if (Inventory_GetSkullTokenCount(play->sceneId) >= SPIDER_HOUSE_TOKENS_REQUIRED) {
         this->actor.update = EnSth_Update;
         this->actor.draw = EnSth_Draw;
-        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+        this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
     }
 }
 
@@ -672,7 +673,7 @@ void EnSth_UpdateWaitForObject(Actor* thisx, PlayState* play) {
             (Inventory_GetSkullTokenCount(play->sceneId) < SPIDER_HOUSE_TOKENS_REQUIRED)) {
             this->actor.update = EnSth_UpdateOceansideSpiderHouseWaitForTokens;
             this->actor.draw = NULL;
-            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+            this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
         }
     }
 }
@@ -745,8 +746,7 @@ void EnSth_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
                     Matrix_RotateZS(0x3A98, MTXMODE_APPLY);
                     Matrix_Translate(0.0f, 190.0f, 0.0f, MTXMODE_APPLY);
 
-                    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
                     gSPSegment(POLY_OPA_DISP++, 0x0A, play->objectCtx.slots[this->maskOfTruthObjectSlot].segment);
                     gSPDisplayList(POLY_OPA_DISP++, object_mask_truth_DL_0001A0);
 

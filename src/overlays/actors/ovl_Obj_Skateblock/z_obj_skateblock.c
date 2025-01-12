@@ -5,7 +5,7 @@
  */
 
 #include "z_obj_skateblock.h"
-#include "objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
+#include "assets/objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -27,7 +27,7 @@ void func_80A2273C(ObjSkateblock* this, PlayState* play);
 void func_80A227A4(ObjSkateblock* this);
 void func_80A227C0(ObjSkateblock* this, PlayState* play);
 
-ActorInit Obj_Skateblock_InitVars = {
+ActorProfile Obj_Skateblock_Profile = {
     /**/ ACTOR_OBJ_SKATEBLOCK,
     /**/ ACTORCAT_BG,
     /**/ FLAGS,
@@ -221,7 +221,7 @@ s32 func_80A216D4(ObjSkateblock* this, PlayState* play, f32 arg2, Vec3f* arg3) {
     Vec3f spB0;
     f32 temp_f20;
     f32 temp_f24;
-    s32 spA4;
+    s32 bgId;
     CollisionPoly* spA0;
     s32 ret;
     f32 temp_f26;
@@ -234,7 +234,7 @@ s32 func_80A216D4(ObjSkateblock* this, PlayState* play, f32 arg2, Vec3f* arg3) {
     spE8 = Math_SinS(sp96);
     spE4 = Math_CosS(sp96);
 
-    temp_f2 = Math3D_Distance(&this->dyna.actor.world.pos, &this->dyna.actor.prevPos) +
+    temp_f2 = Math3D_Vec3f_DistXYZ(&this->dyna.actor.world.pos, &this->dyna.actor.prevPos) +
               (300.0f * this->dyna.actor.scale.z) + arg2;
     temp_f24 = temp_f2 * spE8;
     temp_f26 = temp_f2 * spE4;
@@ -257,7 +257,7 @@ s32 func_80A216D4(ObjSkateblock* this, PlayState* play, f32 arg2, Vec3f* arg3) {
         spC8.y = spD4.y;
         spC8.z = temp_f26 + spD4.z;
 
-        if (BgCheck_EntityLineTest3(&play->colCtx, &spD4, &spC8, &spB0, &spA0, true, false, false, true, &spA4,
+        if (BgCheck_EntityLineTest3(&play->colCtx, &spD4, &spC8, &spB0, &spA0, true, false, false, true, &bgId,
                                     &this->dyna.actor, 0.0f)) {
             temp_f2 = Math3D_Vec3fDistSq(&spD4, &spB0);
             if (temp_f2 < temp_f20) {
@@ -292,7 +292,7 @@ s32 func_80A21990(ObjSkateblock* this, PlayState* play, Vec3f* arg2) {
     Vec3f spC8;
     f32 temp_f0;
     f32 temp_f12;
-    s32 spBC;
+    s32 bgId;
     CollisionPoly* spB8;
     s32 ret;
     f32 temp_f26;
@@ -306,9 +306,9 @@ s32 func_80A21990(ObjSkateblock* this, PlayState* play, Vec3f* arg2) {
     sp100 = Math_SinS(phi_s6);
     temp_f26 = Math_CosS(phi_s6);
 
-    temp_f12 =
-        (300.0f * this->dyna.actor.scale.z + Math3D_Distance(&this->dyna.actor.world.pos, &this->dyna.actor.prevPos)) +
-        2.0f;
+    temp_f12 = (300.0f * this->dyna.actor.scale.z +
+                Math3D_Vec3f_DistXYZ(&this->dyna.actor.world.pos, &this->dyna.actor.prevPos)) +
+               2.0f;
     temp_f28 = -temp_f12 * sp100;
     temp_f30 = -temp_f12 * temp_f26;
 
@@ -330,7 +330,7 @@ s32 func_80A21990(ObjSkateblock* this, PlayState* play, Vec3f* arg2) {
         spE0.y = spEC.y;
         spE0.z = temp_f30 + spEC.z;
 
-        if (BgCheck_EntityLineTest3(&play->colCtx, &spEC, &spE0, &spC8, &spB8, true, false, false, true, &spBC,
+        if (BgCheck_EntityLineTest3(&play->colCtx, &spEC, &spE0, &spC8, &spB8, true, false, false, true, &bgId,
                                     &this->dyna.actor, 0.0f)) {
             temp_f0 = Math3D_Vec3fDistSq(&spEC, &spC8);
             if (temp_f0 < phi_f22) {
@@ -687,7 +687,7 @@ void ObjSkateblock_Draw(Actor* thisx, PlayState* play) {
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     AnimatedMat_DrawStep(play, D_80A22A18, 0);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
     gDPSetPrimColor(POLY_OPA_DISP++, 0xFF, 0xFF, sp2C->r, sp2C->g, sp2C->b, 255);
     gSPDisplayList(POLY_OPA_DISP++, gameplay_dangeon_keep_DL_0182A8);
 

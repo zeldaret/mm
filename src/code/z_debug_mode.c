@@ -1,5 +1,10 @@
 #include "z64debug_text.h"
-#include "global.h"
+
+#include "color.h"
+#include "gfx.h"
+#include "gfxalloc.h"
+#include "libu64/gfxprint.h"
+#include "macros.h"
 
 typedef struct {
     /* 0x0 */ u8 colorIndex;
@@ -134,7 +139,7 @@ void Debug_DrawText(GraphicsContext* gfxCtx) {
         OPEN_DISPS(gfxCtx);
 
         gfxHead = POLY_OPA_DISP;
-        gfx = Graph_GfxPlusOne(gfxHead);
+        gfx = Gfx_Open(gfxHead);
         gSPDisplayList(DEBUG_DISP++, gfx);
 
         GfxPrint_Open(&printer, gfx);
@@ -150,7 +155,7 @@ void Debug_DrawText(GraphicsContext* gfxCtx) {
 
         gfx = GfxPrint_Close(&printer);
         gSPEndDisplayList(gfx++);
-        Graph_BranchDlist(gfxHead, gfx);
+        Gfx_Close(gfxHead, gfx);
         POLY_OPA_DISP = gfx;
 
         CLOSE_DISPS(gfxCtx);

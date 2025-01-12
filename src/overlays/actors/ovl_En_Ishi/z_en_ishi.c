@@ -7,12 +7,12 @@
 #include "z_en_ishi.h"
 #include "z64quake.h"
 #include "z64rumble.h"
-#include "objects/gameplay_field_keep/gameplay_field_keep.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
-#include "objects/object_ishi/object_ishi.h"
+#include "assets/objects/gameplay_field_keep/gameplay_field_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_ishi/object_ishi.h"
 #include "overlays/actors/ovl_En_Insect/z_en_insect.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_800000)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_THROW_ONLY)
 
 #define THIS ((EnIshi*)thisx)
 
@@ -45,7 +45,7 @@ static s16 D_8095F690 = 0;
 
 static s16 D_8095F694 = 0;
 
-ActorInit En_Ishi_InitVars = {
+ActorProfile En_Ishi_Profile = {
     /**/ ACTOR_EN_ISHI,
     /**/ ACTORCAT_PROP,
     /**/ FLAGS,
@@ -76,7 +76,7 @@ static s16 sObjectIds[] = { GAMEPLAY_FIELD_KEEP, OBJECT_ISHI };
 static ColliderCylinderInit sCylinderInit[] = {
     {
         {
-            COLTYPE_HARD,
+            COL_MATERIAL_HARD,
             AT_ON | AT_TYPE_PLAYER,
             AC_ON | AC_HARD | AC_TYPE_PLAYER,
             OC1_ON | OC1_TYPE_ALL,
@@ -84,18 +84,18 @@ static ColliderCylinderInit sCylinderInit[] = {
             COLSHAPE_CYLINDER,
         },
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00400000, 0x00, 0x02 },
             { 0x01C37FBE, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 10, 18, -2, { 0, 0, 0 } },
     },
     {
         {
-            COLTYPE_HARD,
+            COL_MATERIAL_HARD,
             AT_ON | AT_TYPE_PLAYER,
             AC_ON | AC_HARD | AC_TYPE_PLAYER,
             OC1_ON | OC1_TYPE_ALL,
@@ -103,11 +103,11 @@ static ColliderCylinderInit sCylinderInit[] = {
             COLSHAPE_CYLINDER,
         },
         {
-            ELEMTYPE_UNK0,
+            ELEM_MATERIAL_UNK0,
             { 0x00400000, 0x00, 0x02 },
             { 0x01C37BB6, 0x00, 0x00 },
-            TOUCH_ON | TOUCH_SFX_NORMAL,
-            BUMP_ON,
+            ATELEM_ON | ATELEM_SFX_NORMAL,
+            ACELEM_ON,
             OCELEM_ON,
         },
         { 55, 70, 0, { 0, 0, 0 } },
@@ -155,13 +155,13 @@ void func_8095D6E0(Actor* thisx, PlayState* play) {
 
 s32 func_8095D758(EnIshi* this, PlayState* play, f32 arg2) {
     Vec3f sp24;
-    s32 sp20;
+    s32 bgId;
 
     sp24.x = this->actor.world.pos.x;
     sp24.y = this->actor.world.pos.y + 30.0f;
     sp24.z = this->actor.world.pos.z;
     this->actor.floorHeight =
-        BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &sp20, &this->actor, &sp24);
+        BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &bgId, &this->actor, &sp24);
     if (this->actor.floorHeight > BGCHECK_Y_MIN) {
         this->actor.world.pos.y = this->actor.floorHeight + arg2;
         Math_Vec3f_Copy(&this->actor.home.pos, &this->actor.world.pos);
@@ -317,7 +317,7 @@ void func_8095DFF0(EnIshi* this, PlayState* play) {
             Matrix_RotateXS(this->actor.shape.rot.x, MTXMODE_APPLY);
             Matrix_RotateZS(this->actor.shape.rot.z, MTXMODE_APPLY);
             Matrix_MultVecY(1.0f, &sp30);
-            sp2C = Math3D_Parallel(&sp30, &D_8095F778);
+            sp2C = Math3D_Cos(&sp30, &D_8095F778);
             if (sp2C < 0.707f) {
                 temp_v1_2 = Math_Atan2S_XY(sp30.z, sp30.x) - sp3C->world.rot.y;
                 if (ABS_ALT(temp_v1_2) > 0x4000) {
@@ -362,15 +362,15 @@ void func_8095E204(EnIshi* this, PlayState* play) {
     }
 }
 
-s32 func_8095E2B0(EnIshi* this, PlayState* play) {
+s32 EnIshi_IsUnderwater(EnIshi* this, PlayState* play) {
     s32 pad;
     WaterBox* waterBox;
-    f32 sp2C;
-    s32 sp28;
+    f32 waterSurface;
+    s32 bgId;
 
-    if (WaterBox_GetSurfaceImpl(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp2C, &waterBox,
-                                &sp28) &&
-        (this->actor.world.pos.y < sp2C)) {
+    if (WaterBox_GetSurfaceImpl(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &waterSurface,
+                                &waterBox, &bgId) &&
+        (this->actor.world.pos.y < waterSurface)) {
         return true;
     }
     return false;
@@ -421,7 +421,7 @@ void EnIshi_Init(Actor* thisx, PlayState* play) {
         return;
     }
 
-    if (func_8095E2B0(this, play)) {
+    if (EnIshi_IsUnderwater(this, play)) {
         this->unk_197 |= 1;
     }
 
@@ -482,7 +482,7 @@ void func_8095E660(EnIshi* this, PlayState* play) {
         return;
     }
 
-    if (sp34 && (sp38 == 0) && (this->collider.info.acHitInfo->toucher.dmgFlags & 0x508)) {
+    if (sp34 && (sp38 == 0) && (this->collider.elem.acHitElem->atDmgInfo.dmgFlags & 0x508)) {
         if (sp30 != 0) {
             func_8095DFF0(this, play);
             func_8095F060(this);
@@ -504,9 +504,9 @@ void func_8095E660(EnIshi* this, PlayState* play) {
         if (this->unk_195 > 0) {
             this->unk_195--;
             if (this->unk_195 == 0) {
-                this->collider.base.colType = sCylinderInit[sp38].base.colType;
+                this->collider.base.colMaterial = sCylinderInit[sp38].base.colMaterial;
             } else {
-                this->collider.base.colType = COLTYPE_NONE;
+                this->collider.base.colMaterial = COL_MATERIAL_NONE;
             }
         }
 
@@ -532,7 +532,7 @@ void func_8095E934(EnIshi* this) {
 void func_8095E95C(EnIshi* this, PlayState* play) {
     s32 pad;
     Vec3f sp30;
-    s32 sp2C;
+    s32 bgId;
 
     if (Actor_HasNoParent(&this->actor, play)) {
         this->actor.room = play->roomCtx.curRoom.num;
@@ -551,7 +551,7 @@ void func_8095E95C(EnIshi* this, PlayState* play) {
         sp30.y = this->actor.world.pos.y + 20.0f;
         sp30.z = this->actor.world.pos.z;
         this->actor.floorHeight =
-            BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &sp2C, &this->actor, &sp30);
+            BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &bgId, &this->actor, &sp30);
     }
 }
 
@@ -716,7 +716,7 @@ void func_8095F210(EnIshi* this, PlayState* play) {
 
         sp28 = (1300.0f - this->actor.projectedPos.z) * 2.55f;
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (s32)sp28);
         gSPDisplayList(POLY_XLU_DISP++, gameplay_field_keep_DL_006760);
 
@@ -735,7 +735,7 @@ void func_8095F36C(EnIshi* this, PlayState* play) {
         Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         gSPSegment(POLY_OPA_DISP++, 0x08, D_801AEFA0);
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
         gSPDisplayList(POLY_OPA_DISP++, gameplay_field_keep_DL_0061E8);
     } else if (this->actor.projectedPos.z < 2250.0f) {
@@ -746,7 +746,7 @@ void func_8095F36C(EnIshi* this, PlayState* play) {
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
         gSPSegment(POLY_XLU_DISP++, 0x08, D_801AEF88);
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (s32)sp20);
         gSPDisplayList(POLY_XLU_DISP++, gameplay_field_keep_DL_0061E8);
     } else {

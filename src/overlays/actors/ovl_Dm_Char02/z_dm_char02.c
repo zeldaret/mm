@@ -5,7 +5,7 @@
  */
 
 #include "z_dm_char02.h"
-#include "objects/object_stk2/object_stk2.h"
+#include "assets/objects/object_stk2/object_stk2.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -18,7 +18,7 @@ void DmChar02_Draw(Actor* thisx, PlayState* play);
 
 void DmChar02_HandleCutscene(DmChar02* this, PlayState* play);
 
-ActorInit Dm_Char02_InitVars = {
+ActorProfile Dm_Char02_Profile = {
     /**/ ACTOR_DM_CHAR02,
     /**/ ACTORCAT_ITEMACTION,
     /**/ FLAGS,
@@ -86,7 +86,7 @@ void DmChar02_Init(Actor* thisx, PlayState* play) {
 
     if (gSaveContext.save.saveInfo.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
         this->animIndex = DMCHAR02_ANIM_HIT_GROUND;
-        this->actor.targetArrowOffset = 3000.0f;
+        this->actor.lockOnArrowOffset = 3000.0f;
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
         SkelAnime_InitFlex(play, &this->skelAnime, &gClockTowerOcarinaOfTimeSkel, NULL, NULL, NULL, 0);
         DmChar02_ChangeAnim(&this->skelAnime, &sAnimationInfo[DMCHAR02_ANIM_HIT_GROUND], 0);

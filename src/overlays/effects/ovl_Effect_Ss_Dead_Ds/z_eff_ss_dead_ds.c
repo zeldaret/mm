@@ -5,7 +5,7 @@
  */
 
 #include "z_eff_ss_dead_ds.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define rScale regs[0]
 #define rTimer regs[1]
@@ -23,7 +23,7 @@ u32 EffectSsDeadDs_Init(PlayState* play, u32 index, EffectSs* this, void* initPa
 void EffectSsDeadDs_Update(PlayState* play, u32 index, EffectSs* this);
 void EffectSsDeadDs_Draw(PlayState* play, u32 index, EffectSs* this);
 
-EffectSsInit Effect_Ss_Dead_Ds_InitVars = {
+EffectSsProfile Effect_Ss_Dead_Ds_Profile = {
     EFFECT_SS_DEAD_DS,
     EffectSsDeadDs_Init,
 };
@@ -98,9 +98,9 @@ void EffectSsDeadDs_Draw(PlayState* play, u32 index, EffectSs* this) {
 
     Matrix_Translate(this->pos.x, this->pos.y, this->pos.z, MTXMODE_NEW);
     Matrix_RotateZYX(this->rRoll, this->rPitch, this->rYaw, MTXMODE_APPLY);
-    Matrix_RotateXFApply(1.57f); // (M_PI / 2)
+    Matrix_RotateXFApply(1.57f); // (M_PIf / 2)
     Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
     gDPSetCombineLERP(POLY_XLU_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0,
                       PRIMITIVE, 0);
     gSPDisplayList(POLY_XLU_DISP++, gLensFlareCircleDL);

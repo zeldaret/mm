@@ -7,6 +7,7 @@
 #include "global.h"
 #include "PR/gs2dex.h"
 #include "sys_cfb.h"
+#include "sys_ucode.h"
 #include "z_fbdemo_wipe5.h"
 
 #define THIS ((TransitionWipe5*)thisx)
@@ -21,7 +22,7 @@ void TransitionWipe5_SetColor(void* thisx, u32 color);
 void TransitionWipe5_SetEnvColor(void* thisx, u32 color);
 s32 TransitionWipe5_IsDone(void* thisx);
 
-TransitionInit TransitionWipe5_InitVars = {
+TransitionProfile TransitionWipe5_Profile = {
     TransitionWipe5_Init,     TransitionWipe5_Destroy,     TransitionWipe5_Update,
     TransitionWipe5_Draw,     TransitionWipe5_Start,       TransitionWipe5_SetType,
     TransitionWipe5_SetColor, TransitionWipe5_SetEnvColor, TransitionWipe5_IsDone,
@@ -35,20 +36,25 @@ void TransitionWipe5_Start(void* thisx) {
         case 0:
             this->unk_08 = 0.02f;
             break;
+
         case 1:
             this->unk_08 = 0.05f;
             break;
+
         default:
             this->unk_08 = 0.2f;
             break;
     }
+
     switch (this->unk_11) {
         case 0:
             this->primColor.rgba = RGBA8(0, 0, 0, 255);
             break;
+
         case 1:
             this->primColor.rgba = RGBA8(160, 160, 160, 255);
             break;
+
         default:
             this->primColor.rgba = RGBA8(160, 160, 160, 255);
             break;
