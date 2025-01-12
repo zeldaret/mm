@@ -32,18 +32,18 @@ void EnKaizoku_Block(EnKaizoku* this, PlayState* play);
 void EnKaizoku_SetupFlip(EnKaizoku* this);
 void EnKaizoku_SpawnFootDust(PlayState* play, Vec3f* pos);
 void EnKaizoku_Flip(EnKaizoku* this, PlayState* play);
-void func_80B87E28(EnKaizoku* this);
-void func_80B87E9C(EnKaizoku* this, PlayState* play);
+void EnKaizoku_SetupRollBack(EnKaizoku* this);
+void EnKaizoku_RollBack(EnKaizoku* this, PlayState* play);
 void EnKaizoku_SetupSlash(EnKaizoku* this);
 void EnKaizoku_Slash(EnKaizoku* this, PlayState* play2);
-void func_80B88214(EnKaizoku* this);
-void func_80B88278(EnKaizoku* this, PlayState* play);
-void func_80B8833C(EnKaizoku* this);
-void func_80B88378(EnKaizoku* this, PlayState* play);
-void func_80B88770(EnKaizoku* this);
-void func_80B887AC(EnKaizoku* this, PlayState* play);
-void func_80B88910(EnKaizoku* this);
-void func_80B88964(EnKaizoku* this, PlayState* play);
+void EnKaizoku_SetupRollForward(EnKaizoku* this);
+void EnKaizoku_RollForward(EnKaizoku* this, PlayState* play);
+void EnKaizoku_SetupAdvance(EnKaizoku* this);
+void EnKaizoku_Advance(EnKaizoku* this, PlayState* play);
+void EnKaizoku_SetupPivot(EnKaizoku* this);
+void EnKaizoku_Pivot(EnKaizoku* this, PlayState* play);
+void EnKaizoku_SetupSpinAttack(EnKaizoku* this);
+void EnKaizoku_SpinAttack(EnKaizoku* this, PlayState* play);
 void EnKaizoku_SetupCircle(EnKaizoku* this);
 void EnKaizoku_Circle(EnKaizoku* this, PlayState* play);
 void EnKaizoku_Stunned(EnKaizoku* this, PlayState* play);
@@ -51,18 +51,18 @@ void EnKaizoku_Damaged(EnKaizoku* this, PlayState* play);
 void func_80B8971C(EnKaizoku* this, PlayState* play);
 
 typedef enum EnKaizokuAction {
-    /*  0 */ KAIZOKU_ACTION_0,
+    /*  0 */ KAIZOKU_ACTION_HIDDEN,
     /*  1 */ KAIZOKU_ACTION_READY,
     /*  2 */ KAIZOKU_ACTION_SPIN_DODGE,
     /*  3 */ KAIZOKU_ACTION_SIDESTEP,
-    /*  4 */ KAIZOKU_ACTION_4,
-    /*  5 */ KAIZOKU_ACTION_5,
+    /*  4 */ KAIZOKU_ACTION_ADVANCE,
+    /*  5 */ KAIZOKU_ACTION_ROLL_FORWARD,
     /*  6 */ KAIZOKU_ACTION_6,
     /*  7 */ KAIZOKU_ACTION_7,
     /*  8 */ KAIZOKU_ACTION_8,
     /*  9 */ KAIZOKU_ACTION_9,
     /* 10 */ KAIZOKU_ACTION_10,
-    /* 11 */ KAIZOKU_ACTION_11,
+    /* 11 */ KAIZOKU_ACTION_SPIN_ATTACK,
     /* 12 */ KAIZOKU_ACTION_12,
     /* 13 */ KAIZOKU_ACTION_13,
     /* 14 */ KAIZOKU_ACTION_14,
@@ -352,11 +352,11 @@ s32 EnKaizoku_DodgeRanged(EnKaizoku* this, PlayState* play) {
     }
 }
 
-void func_80B85900(EnKaizoku* this) {
+void EnKaizoku_TurnHead(EnKaizoku* this) {
     if (this->action == KAIZOKU_ACTION_READY) {
         this->headRot.y = Math_SinS(this->lookTimer * 0x1068) * 0x22D8;
     } else if (this->action != KAIZOKU_ACTION_13) {
-        if ((this->action == KAIZOKU_ACTION_9) || (this->action == KAIZOKU_ACTION_11)) {
+        if ((this->action == KAIZOKU_ACTION_9) || (this->action == KAIZOKU_ACTION_SPIN_ATTACK)) {
             Math_SmoothStepToS(&this->headRot.y, this->picto.actor.yawTowardsPlayer - this->picto.actor.shape.rot.y, 1,
                                500, 0);
             this->headRot.y = CLAMP(this->headRot.y, -0x256F, 0x256F);
@@ -366,9 +366,7 @@ void func_80B85900(EnKaizoku* this) {
     }
 }
 
-
-// react to player from oot?
-s32 func_80B85A00(EnKaizoku* this, PlayState* play, s16 arg2) {
+s32 EnKaizoku_ReactToPlayer(EnKaizoku* this, PlayState* play, s16 arg2) {
     Player* player = GET_PLAYER(play);
     s16 angleToWall = ABS_ALT(this->picto.actor.wallYaw - this->picto.actor.shape.rot.y);
     s16 angleToLink = ABS_ALT(this->picto.actor.yawTowardsPlayer - this->picto.actor.shape.rot.y);
@@ -399,7 +397,7 @@ s32 func_80B85A00(EnKaizoku* this, PlayState* play, s16 arg2) {
         } else if (this->picto.actor.xzDistToPlayer < BREG(11) + 180.0f) {
             EnKaizoku_SetupBlock(this);
         } else if (this->action != KAIZOKU_ACTION_7) {
-            func_80B87E28(this);
+            EnKaizoku_SetupRollBack(this);
         }
         return true;
     }
@@ -424,7 +422,7 @@ s32 func_80B85A00(EnKaizoku* this, PlayState* play, s16 arg2) {
         }
 
         if (this->action != KAIZOKU_ACTION_7) {
-            func_80B87E28(this);
+            EnKaizoku_SetupRollBack(this);
         }
         return true;
     }
@@ -475,7 +473,7 @@ void EnKaizoku_SetupWaitForApproach(EnKaizoku* this) {
     Math_Vec3f_Copy(&this->swordScaleRight, &gZeroVec3f);
     Math_Vec3f_Copy(&this->swordScaleLeft, &gZeroVec3f);
     this->dontUpdateSkel = true;
-    this->action = KAIZOKU_ACTION_0;
+    this->action = KAIZOKU_ACTION_HIDDEN;
     this->actionFunc = EnKaizoku_WaitForApproach;
 }
 
@@ -698,7 +696,7 @@ void EnKaizoku_SetupLoss(EnKaizoku* this, PlayState* play) {
     this->cutsceneTimer = 0;
     this->cutsceneState = 0;
     this->dontUpdateSkel = false;
-    this->action = KAIZOKU_ACTION_0;
+    this->action = KAIZOKU_ACTION_HIDDEN;
     this->actionFunc = EnKaizoku_Loss;
     this->picto.actor.speed = 0.0f;
 }
@@ -769,7 +767,7 @@ void EnKaizoku_Loss(EnKaizoku* this, PlayState* play) {
 // Player has won the fight
 void EnKaizoku_SetupWin(EnKaizoku* this) {
     this->dontUpdateSkel = false;
-    this->action = KAIZOKU_ACTION_0;
+    this->action = KAIZOKU_ACTION_HIDDEN;
     this->actionFunc = EnKaizoku_Win;
 }
 
@@ -928,28 +926,28 @@ void EnKaizoku_SetupReady(EnKaizoku* this) {
 void EnKaizoku_Ready(EnKaizoku* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if ((this->lookTimer == 0) && !EnKaizoku_DodgeRanged(this, play) && !func_80B85A00(this, play, false)) {
-        s16 yawDiff = this->picto.actor.yawTowardsPlayer - this->picto.actor.shape.rot.y;
+    if ((this->lookTimer == 0) && !EnKaizoku_DodgeRanged(this, play) && !EnKaizoku_ReactToPlayer(this, play, false)) {
+        s16 angleToLink = this->picto.actor.yawTowardsPlayer - this->picto.actor.shape.rot.y;
 
         if ((this->picto.actor.xzDistToPlayer < 100.0f) && (player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) &&
-            (yawDiff >= 0x1F40)) {
+            (angleToLink >= 0x1F40)) {
             this->picto.actor.shape.rot.y = this->picto.actor.world.rot.y = this->picto.actor.yawTowardsPlayer;
             EnKaizoku_SetupCircle(this);
         } else if (Actor_IsFacingPlayer(&this->picto.actor, 0xBB8)) {
             if ((this->picto.actor.xzDistToPlayer < 400.0f && this->picto.actor.xzDistToPlayer > 150.0f) &&
                 (Rand_ZeroOne() < 0.7f)) {
-                if ((Rand_ZeroOne() > 0.5f) || (ABS_ALT(yawDiff) < 0x3000)) {
-                    func_80B88214(this);
+                if ((Rand_ZeroOne() > 0.5f) || (ABS_ALT(angleToLink) < 0x3000)) {
+                    EnKaizoku_SetupRollForward(this);
                 } else {
-                    func_80B88910(this);
+                    EnKaizoku_SetupSpinAttack(this);
                 }
             } else if (Rand_ZeroOne() > 0.1f) {
-                func_80B8833C(this);
+                EnKaizoku_SetupAdvance(this);
             } else {
                 EnKaizoku_SetupCircle(this);
             }
         } else {
-            func_80B88770(this);
+            EnKaizoku_SetupPivot(this);
         }
     }
 }
@@ -1034,7 +1032,7 @@ void EnKaizoku_SpinDodge(EnKaizoku* this, PlayState* play) {
             if (this->picto.actor.xzDistToPlayer <= 70.0f) {
                 EnKaizoku_SetupSlash(this);
             } else {
-                func_80B87E28(this);
+                EnKaizoku_SetupRollBack(this);
             }
         }
     } else if (this->picto.actor.speed >= 0.0f) {
@@ -1080,7 +1078,7 @@ void EnKaizoku_Block(EnKaizoku* this, PlayState* play) {
                     EnKaizoku_SetupBlock(this);
                 } else {
                     this->bodyCollider.base.acFlags &= ~AC_HARD;
-                    func_80B87E28(this);
+                    EnKaizoku_SetupRollBack(this);
                 }
             } else {
                 temp_v0 = player->actor.shape.rot.y - this->picto.actor.shape.rot.y;
@@ -1108,7 +1106,7 @@ void EnKaizoku_Block(EnKaizoku* this, PlayState* play) {
                     EnKaizoku_SetupFlip(this);
                 } else {
                     this->bodyCollider.base.acFlags &= ~AC_HARD;
-                    func_80B87E28(this);
+                    EnKaizoku_SetupRollBack(this);
                 }
             } else {
                 EnKaizoku_SetupBlock(this);
@@ -1166,7 +1164,7 @@ void EnKaizoku_Flip(EnKaizoku* this, PlayState* play) {
     }
 }
 
-void func_80B87E28(EnKaizoku* this) {
+void EnKaizoku_SetupRollBack(EnKaizoku* this) {
     EnKaizoku_ChangeAnim(this, KAIZOKU_ANIM_FLIP);
     this->picto.actor.speed = -8.0f;
     Actor_PlaySfx(&this->picto.actor, NA_SE_EN_TEKU_JUMP);
@@ -1174,18 +1172,18 @@ void func_80B87E28(EnKaizoku* this) {
     this->bodyCollider.base.colType = COLTYPE_NONE;
     this->swordCollider.info.elemType = ELEMTYPE_UNK4;
     this->action = KAIZOKU_ACTION_7;
-    this->actionFunc = func_80B87E9C;
+    this->actionFunc = EnKaizoku_RollBack;
     this->picto.actor.shape.rot.y = this->picto.actor.world.rot.y = this->picto.actor.yawTowardsPlayer;
 }
 
-void func_80B87E9C(EnKaizoku* this, PlayState* play) {
+void EnKaizoku_RollBack(EnKaizoku* this, PlayState* play) {
     f32 curFrame = this->skelAnime.curFrame;
 
     this->dontUpdateSkel = false;
     if (curFrame >= this->animEndFrame) {
         if ((this->picto.actor.xzDistToPlayer < 170.0f) && (this->picto.actor.xzDistToPlayer > 140.0f) &&
             (Rand_ZeroOne() < 0.2f)) {
-            func_80B88910(this);
+            EnKaizoku_SetupSpinAttack(this);
         } else {
             EnKaizoku_SetupBlock(this);
         }
@@ -1228,7 +1226,7 @@ void EnKaizoku_Slash(EnKaizoku* this, PlayState* play2) {
     if (this->swordCollider.base.atFlags & AT_BOUNCED) {
         this->swordState = -1;
         this->swordCollider.base.atFlags &= ~(AT_BOUNCED | AT_HIT);
-        func_80B87E28(this);
+        EnKaizoku_SetupRollBack(this);
         return;
     }
 
@@ -1255,7 +1253,7 @@ void EnKaizoku_Slash(EnKaizoku* this, PlayState* play2) {
                     this->picto.actor.world.rot.y = this->picto.actor.yawTowardsPlayer;
                     EnKaizoku_SetupCircle(this);
                 } else {
-                    func_80B85A00(this, play, true);
+                    EnKaizoku_ReactToPlayer(this, play, true);
                 }
             } else {
                 EnKaizoku_SetupCircle(this);
@@ -1264,17 +1262,17 @@ void EnKaizoku_Slash(EnKaizoku* this, PlayState* play2) {
     }
 }
 
-void func_80B88214(EnKaizoku* this) {
+void EnKaizoku_SetupRollForward(EnKaizoku* this) {
     EnKaizoku_ChangeAnim(this, KAIZOKU_ANIM_FLIP);
     this->combatTimer = 0;
     this->picto.actor.speed = 10.0f;
     this->picto.actor.world.rot.y = this->picto.actor.shape.rot.y = this->picto.actor.yawTowardsPlayer;
     Actor_PlaySfx(&this->picto.actor, NA_SE_EN_TEKU_JUMP);
-    this->action = KAIZOKU_ACTION_5;
-    this->actionFunc = func_80B88278;
+    this->action = KAIZOKU_ACTION_ROLL_FORWARD;
+    this->actionFunc = EnKaizoku_RollForward;
 }
 
-void func_80B88278(EnKaizoku* this, PlayState* play) {
+void EnKaizoku_RollForward(EnKaizoku* this, PlayState* play) {
     f32 curFrame = this->skelAnime.curFrame;
 
     this->dontUpdateSkel = false;
@@ -1292,17 +1290,17 @@ void func_80B88278(EnKaizoku* this, PlayState* play) {
     }
 }
 
-void func_80B8833C(EnKaizoku* this) {
+void EnKaizoku_SetupAdvance(EnKaizoku* this) {
     EnKaizoku_ChangeAnim(this, KAIZOKU_ANIM_WALK);
-    this->action = KAIZOKU_ACTION_4;
-    this->actionFunc = func_80B88378;
+    this->action = KAIZOKU_ACTION_ADVANCE;
+    this->actionFunc = EnKaizoku_Advance;
 }
 
-void func_80B88378(EnKaizoku* this, PlayState* play) {
+void EnKaizoku_Advance(EnKaizoku* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s32 sp30;
-    s32 sp2C;
-    s16 sp2A;
+    s32 beforeCurFrame;
+    s32 afterCurFrame;
+    s16 facingAngleToLink;
 
     if (!EnKaizoku_DodgeRanged(this, play)) {
         Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.yawTowardsPlayer, 1, 0x2EE, 0);
@@ -1316,9 +1314,9 @@ void func_80B88378(EnKaizoku* this, PlayState* play) {
         }
 
         this->skelAnime.playSpeed = 1.0f;
-        sp2A = ABS_ALT(player->actor.shape.rot.y - this->picto.actor.shape.rot.y);
+        facingAngleToLink = ABS_ALT(player->actor.shape.rot.y - this->picto.actor.shape.rot.y);
         if ((this->picto.actor.xzDistToPlayer < 150.0f) && (player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) &&
-            (sp2A >= 0x2000)) {
+            (facingAngleToLink >= 0x2000)) {
             this->picto.actor.shape.rot.y = this->picto.actor.world.rot.y = this->picto.actor.yawTowardsPlayer;
             if (Rand_ZeroOne() > 0.7f) {
                 EnKaizoku_SetupCircle(this);
@@ -1326,8 +1324,8 @@ void func_80B88378(EnKaizoku* this, PlayState* play) {
             }
         }
 
-        sp30 = this->skelAnime.curFrame - this->skelAnime.playSpeed;
-        sp2C = this->skelAnime.curFrame + this->skelAnime.playSpeed;
+        beforeCurFrame = this->skelAnime.curFrame - this->skelAnime.playSpeed;
+        afterCurFrame = this->skelAnime.curFrame + this->skelAnime.playSpeed;
         if (!Actor_IsFacingPlayer(&this->picto.actor, 0x11C7)) {
             if (Rand_ZeroOne() > 0.5f) {
                 EnKaizoku_SetupCircle(this);
@@ -1335,23 +1333,23 @@ void func_80B88378(EnKaizoku* this, PlayState* play) {
                 EnKaizoku_SetupReady(this);
             }
         } else if (this->picto.actor.xzDistToPlayer < 90.0f) {
-            if ((Rand_ZeroOne() > 0.03f) || ((this->picto.actor.xzDistToPlayer <= 65.0f) && (sp2A < 0x4000))) {
+            if ((Rand_ZeroOne() > 0.03f) || ((this->picto.actor.xzDistToPlayer <= 65.0f) && (facingAngleToLink < 0x4000))) {
                 EnKaizoku_SetupSlash(this);
             } else if (Actor_OtherIsTargeted(play, &this->picto.actor) && (Rand_ZeroOne() > 0.5f)) {
-                func_80B87E28(this);
+                EnKaizoku_SetupRollBack(this);
             } else {
                 EnKaizoku_SetupCircle(this);
             }
         }
 
-        if (!func_80B85A00(this, play, false)) {
+        if (!EnKaizoku_ReactToPlayer(this, play, false)) {
             if ((this->picto.actor.xzDistToPlayer < 210.0f) && (this->picto.actor.xzDistToPlayer > 150.0f) &&
                 Actor_IsFacingPlayer(&this->picto.actor, 0x1388)) {
                 if (Actor_IsTargeted(play, &this->picto.actor)) {
                     if (Rand_ZeroOne() > 0.5f) {
-                        func_80B88214(this);
+                        EnKaizoku_SetupRollForward(this);
                     } else {
-                        func_80B88910(this);
+                        EnKaizoku_SetupSpinAttack(this);
                     }
                 } else {
                     EnKaizoku_SetupCircle(this);
@@ -1363,32 +1361,31 @@ void func_80B88378(EnKaizoku* this, PlayState* play) {
                 Actor_PlaySfx(&this->picto.actor, NA_SE_EN_PIRATE_BREATH);
             }
 
-            if ((this->skelAnime.curFrame != 0.0f) && (((sp30 < 0) && (sp2C > 0)) || ((sp30 < 4) && (sp2C >= 5)))) {
+            if ((this->skelAnime.curFrame != 0.0f) && (((beforeCurFrame < 0) && (afterCurFrame > 0)) || ((beforeCurFrame < 4) && (afterCurFrame >= 5)))) {
                 Actor_PlaySfx(&this->picto.actor, NA_SE_EN_GERUDOFT_WALK);
             }
         }
     }
 }
  
-// wait there are multiple side steps??
-void func_80B88770(EnKaizoku* this) {
+void EnKaizoku_SetupPivot(EnKaizoku* this) {
     EnKaizoku_ChangeAnim(this, KAIZOKU_ANIM_SIDESTEP);
     this->action = KAIZOKU_ACTION_10;
-    this->actionFunc = func_80B887AC;
+    this->actionFunc = EnKaizoku_Pivot;
 }
 
-void func_80B887AC(EnKaizoku* this, PlayState* play) {
-    s16 yawDiff;
-    s16 yawAdjustment;
+void EnKaizoku_Pivot(EnKaizoku* this, PlayState* play) {
+    s16 angleToLink;
+    s16 turnRate;
 
-    if (!EnKaizoku_DodgeRanged(this, play) && !func_80B85A00(this, play, false)) {
-        yawDiff = this->picto.actor.yawTowardsPlayer - this->picto.actor.shape.rot.y;
-        if (yawDiff > 0) {
-            yawAdjustment = TRUNCF_BINANG(yawDiff * 0.25f) + 0x7D0;
+    if (!EnKaizoku_DodgeRanged(this, play) && !EnKaizoku_ReactToPlayer(this, play, false)) {
+        angleToLink = this->picto.actor.yawTowardsPlayer - this->picto.actor.shape.rot.y;
+        if (angleToLink > 0) {
+            turnRate = TRUNCF_BINANG(angleToLink * 0.25f) + 0x7D0;
         } else {
-            yawAdjustment = TRUNCF_BINANG(yawDiff * 0.25f) - 0x7D0;
+            turnRate = TRUNCF_BINANG(angleToLink * 0.25f) - 0x7D0;
         }
-        this->picto.actor.shape.rot.y += yawAdjustment;
+        this->picto.actor.shape.rot.y += turnRate;
         this->picto.actor.world.rot.y = this->picto.actor.shape.rot.y;
         this->skelAnime.playSpeed = 1.0f;
 
@@ -1396,7 +1393,7 @@ void func_80B887AC(EnKaizoku* this, PlayState* play) {
             if (Rand_ZeroOne() > 0.8f) {
                 EnKaizoku_SetupCircle(this);
             } else {
-                func_80B8833C(this);
+                EnKaizoku_SetupAdvance(this);
             }
         }
         if (!(play->gameplayFrames & 0x5F)) {
@@ -1405,21 +1402,20 @@ void func_80B887AC(EnKaizoku* this, PlayState* play) {
     }
 }
 
-// long roundhouse jump attack
-void func_80B88910(EnKaizoku* this) {
+void EnKaizoku_SetupSpinAttack(EnKaizoku* this) {
     EnKaizoku_ChangeAnim(this, KAIZOKU_ANIM_SPIN_ATTACK);
     this->swordCollider.base.atFlags &= ~(AT_BOUNCED | AT_HIT);
     this->spinAttackState = 0;
-    this->action = KAIZOKU_ACTION_11;
-    this->actionFunc = func_80B88964;
+    this->action = KAIZOKU_ACTION_SPIN_ATTACK;
+    this->actionFunc = EnKaizoku_SpinAttack;
     this->picto.actor.speed = 0.0f;
 }
 
-void func_80B88964(EnKaizoku* this, PlayState* play) {
+void EnKaizoku_SpinAttack(EnKaizoku* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     f32 curFrame = this->skelAnime.curFrame;
-    s16 v1;
-    s16 a0;
+    s16 angleFacingLink;
+    s16 angleToLink;
     s32 pad;
 
     if (this->spinAttackState < 2) {
@@ -1428,6 +1424,7 @@ void func_80B88964(EnKaizoku* this, PlayState* play) {
             this->spinAttackState = 1;
             this->skelAnime.playSpeed = 1.0f;
         }
+        // in OOT, player-getting-caught, laughing, cutscene code was here
     }
 
     if (this->skelAnime.curFrame <= 8.0f) {
@@ -1454,7 +1451,7 @@ void func_80B88964(EnKaizoku* this, PlayState* play) {
         }
 
         if (this->spinAttackState != 0) {
-            func_80B87E28(this);
+            EnKaizoku_SetupRollBack(this);
             return;
         }
 
@@ -1466,19 +1463,19 @@ void func_80B88964(EnKaizoku* this, PlayState* play) {
 
         this->picto.actor.world.rot.y = this->picto.actor.yawTowardsPlayer;
         if (BREG(12) * 0.1f + 0.01f * 40.0f < Rand_ZeroOne()) {
-            EnKaizoku_SetupBlock(this);
+            // dev seemed unsatisfied with randomized behavior
+            EnKaizoku_SetupBlock(this); // in OOT this was sidestep
             return;
         }
 
-        v1 = ABS_ALT(player->actor.shape.rot.y - this->picto.actor.shape.rot.y);
-        if (v1 <= 0x2710) {
-
-            a0 = ABS_ALT(this->picto.actor.yawTowardsPlayer - this->picto.actor.shape.rot.y);
-            if (a0 > 0x4000) {
+        angleFacingLink = ABS_ALT(player->actor.shape.rot.y - this->picto.actor.shape.rot.y);
+        if (angleFacingLink <= 0x2710) {
+            angleToLink = ABS_ALT(this->picto.actor.yawTowardsPlayer - this->picto.actor.shape.rot.y);
+            if (angleToLink > 0x4000) {
                 this->picto.actor.world.rot.y = this->picto.actor.yawTowardsPlayer;
                 EnKaizoku_SetupCircle(this);
             } else {
-                func_80B85A00(this, play, true);
+                EnKaizoku_ReactToPlayer(this, play, true);
             }
         } else {
             EnKaizoku_SetupCircle(this);
@@ -1505,7 +1502,7 @@ void EnKaizoku_Circle(EnKaizoku* this, PlayState* play) {
     s16 yaw;
 
     Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.yawTowardsPlayer, 1, 0xFA0, 1);
-    if (!EnKaizoku_DodgeRanged(this, play) && !func_80B85A00(this, play, false)) {
+    if (!EnKaizoku_DodgeRanged(this, play) && !EnKaizoku_ReactToPlayer(this, play, false)) {
         this->picto.actor.world.rot.y = this->picto.actor.shape.rot.y + 0x4000;
         angleBehindLink = player->actor.shape.rot.y + 0x8000;
         if (Math_SinS(angleBehindLink - this->picto.actor.shape.rot.y) >= 0.0f) {
@@ -1575,7 +1572,7 @@ void EnKaizoku_Circle(EnKaizoku* this, PlayState* play) {
             EnKaizoku_SetupSlash(this);
         } else if (this->combatTimer == 0) {
             if (Actor_OtherIsTargeted(play, &this->picto.actor) && (Rand_ZeroOne() > 0.5f)) {
-                func_80B87E28(this);
+                EnKaizoku_SetupRollBack(this);
             } else {
                 EnKaizoku_SetupReady(this);
             }
@@ -1589,7 +1586,7 @@ void EnKaizoku_SetupStunned(EnKaizoku* this) {
         this->picto.actor.speed = 0.0f;
     }
 
-    if (this->action == KAIZOKU_ACTION_11) {
+    if (this->action == KAIZOKU_ACTION_SPIN_ATTACK) {
         EnKaizoku_ChangeAnim(this, KAIZOKU_ANIM_DAMAGE);
     }
 
@@ -1631,8 +1628,8 @@ void EnKaizoku_Stunned(EnKaizoku* this, PlayState* play) {
 
     if ((this->iceTimer == 0) && (this->colorFilterTimer == 0) && !CHECK_FLAG_ALL(this->picto.actor.flags, ACTOR_FLAG_2000) &&
         (this->picto.actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
-        this->dontUpdateSkel = 0;
-        func_80B85A00(this, play, true);
+        this->dontUpdateSkel = false;
+        EnKaizoku_ReactToPlayer(this, play, true);
 
         if ((this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_SFX) ||
             (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX)) {
@@ -1651,7 +1648,7 @@ void EnKaizoku_SetupDamaged(EnKaizoku* this, PlayState* play) {
     Matrix_MultVecZ(-10.0f, &sp34);
     Math_Vec3f_Copy(&this->unk_3C4, &sp34);
     this->lookTimer = 0;
-    this->dontUpdateSkel = 0;
+    this->dontUpdateSkel = false;
     this->picto.actor.speed = 0.0f;
     EnKaizoku_ChangeAnim(this, KAIZOKU_ANIM_DAMAGE);
 
@@ -1673,7 +1670,7 @@ void EnKaizoku_Damaged(EnKaizoku* this, PlayState* play) {
     s16 temp_v0;
 
     Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.yawTowardsPlayer, 1, 0x1194, 0);
-    if (!EnKaizoku_DodgeRanged(this, play) && !func_80B85A00(this, play, false) && (this->unk_3C4.x < 1.0f) &&
+    if (!EnKaizoku_DodgeRanged(this, play) && !EnKaizoku_ReactToPlayer(this, play, false) && (this->unk_3C4.x < 1.0f) &&
         (this->unk_3C4.z < 1.0f)) {
         temp_v0 = this->picto.actor.wallYaw - this->picto.actor.shape.rot.y;
         if (this->picto.actor.bgCheckFlags & BGCHECKFLAG_WALL) {
@@ -1687,7 +1684,7 @@ void EnKaizoku_Damaged(EnKaizoku* this, PlayState* play) {
             this->swordCollider.info.elemType = ELEMTYPE_UNK2;
             EnKaizoku_SetupSlash(this);
         } else {
-            func_80B87E28(this);
+            EnKaizoku_SetupRollBack(this);
         }
     }
 }
@@ -1709,7 +1706,7 @@ void func_80B8960C(EnKaizoku* this, PlayState* play) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
     }
     this->picto.actor.speed = 0.0f;
-    this->dontUpdateSkel = 1;
+    this->dontUpdateSkel = true;
     Player_SetCsActionWithHaltedActors(play, &this->picto.actor, PLAYER_CSACTION_123);
     Enemy_StartFinishingBlow(play, &this->picto.actor);
     Actor_PlaySfx(&this->picto.actor, NA_SE_EN_PIRATE_DEAD);
@@ -1783,7 +1780,7 @@ void func_80B8971C(EnKaizoku* this, PlayState* play) {
     Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.yawTowardsPlayer, 1, 0xFA0, 1);
     SkelAnime_Update(&this->skelAnime);
     if (curFrame >= this->animEndFrame) {
-        this->dontUpdateSkel = 0;
+        this->dontUpdateSkel = false;
         EnKaizoku_SetupWin(this);
     } else if (Animation_OnFrame(&this->skelAnime, 10.0f)) {
         Actor_PlaySfx(&this->picto.actor, NA_SE_EN_GERUDOFT_DOWN);
@@ -1816,7 +1813,7 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
                 this->actionFunc = EnKaizoku_SetupLoss;
             }
             return;
-        } else if ((this->action == KAIZOKU_ACTION_11) && (this->swordCollider.base.at == &GET_PLAYER(play)->actor)) {
+        } else if ((this->action == KAIZOKU_ACTION_SPIN_ATTACK) && (this->swordCollider.base.at == &GET_PLAYER(play)->actor)) {
             func_800B8D98(play, &this->picto.actor, 3.0f, this->picto.actor.yawTowardsPlayer, 1.0f);
             Health_ChangeBy(play, -0xC);
             if ((gSaveContext.save.saveInfo.playerData.health <= 0x10) && (this->action != KAIZOKU_ACTION_16)) {
@@ -1837,7 +1834,8 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
             }
         }
 
-        // HUH? they are never in a room with a barrel? did they plan a special fight mechanic?
+        // HUH? they are never in a room with a barrel or plank?
+        //   did they plan a special fight mechanic?
         if (this->swordCollider.base.at->id == ACTOR_OBJ_TARU) {
             this->swordCollider.base.at->home.rot.z = 1;
         }
@@ -1845,11 +1843,11 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
 
     if ((this->picto.actor.bgCheckFlags & BGCHECKFLAG_WALL) && (this->picto.actor.wallBgId != BG_ACTOR_MAX) &&
         ((this->action == KAIZOKU_ACTION_SPIN_DODGE) || (this->action == KAIZOKU_ACTION_SIDESTEP) ||
-         (this->action == KAIZOKU_ACTION_4) || (this->action == KAIZOKU_ACTION_READY))) {
+         (this->action == KAIZOKU_ACTION_ADVANCE) || (this->action == KAIZOKU_ACTION_READY))) {
         EnKaizoku_SetupSlash(this);
     }
 
-    if ((this->bodyCollider.base.acFlags & AC_HIT) && (this->action > KAIZOKU_ACTION_0) && (this->spinAttackState < 2) &&
+    if ((this->bodyCollider.base.acFlags & AC_HIT) && (this->action > KAIZOKU_ACTION_HIDDEN) && (this->spinAttackState < 2) &&
         (this->action != KAIZOKU_ACTION_6) && (this->action != KAIZOKU_ACTION_12) &&
         (this->action != KAIZOKU_ACTION_14) && (this->action != KAIZOKU_ACTION_15)) {
         Actor_SetDropFlag(&this->picto.actor, &this->bodyCollider.info);
@@ -1878,7 +1876,7 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
                 break;
 
             case KAIZOKU_DMGEFF_F:
-                if ((this->action != KAIZOKU_ACTION_5) && (this->action != KAIZOKU_ACTION_7) &&
+                if ((this->action != KAIZOKU_ACTION_ROLL_FORWARD) && (this->action != KAIZOKU_ACTION_7) &&
                     (this->action < KAIZOKU_ACTION_14)) {
                     wasHit = true;
                 }
@@ -1897,7 +1895,7 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
                 break;
 
             case KAIZOKU_DMGEFF_2:
-                if ((this->action != KAIZOKU_ACTION_5) && (this->action != KAIZOKU_ACTION_7) &&
+                if ((this->action != KAIZOKU_ACTION_ROLL_FORWARD) && (this->action != KAIZOKU_ACTION_7) &&
                     (this->action < KAIZOKU_ACTION_14)) {
                     this->colorFilterTimer = 40;
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
@@ -2013,8 +2011,8 @@ void EnKaizoku_Update(Actor* thisx, PlayState* play2) {
         SkelAnime_Update(&this->skelAnime);
     }
 
-    if (this->action != KAIZOKU_ACTION_0) {
-        func_80B85900(this);
+    if (this->action != KAIZOKU_ACTION_HIDDEN) {
+        EnKaizoku_TurnHead(this);
     }
 
     DECR (this->blinkTimer);
@@ -2026,10 +2024,10 @@ void EnKaizoku_Update(Actor* thisx, PlayState* play2) {
 
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->picto.actor);
-    if (this->action != KAIZOKU_ACTION_0) {
+    if (this->action != KAIZOKU_ACTION_HIDDEN) {
         func_80B89A08(this, play);
     }
-    if (this->action != KAIZOKU_ACTION_0) {
+    if (this->action != KAIZOKU_ACTION_HIDDEN) {
         Actor_SetFocus(&this->picto.actor, 60.0f);
     }
 
@@ -2060,7 +2058,7 @@ void EnKaizoku_Update(Actor* thisx, PlayState* play2) {
                                 UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10);
     Collider_UpdateCylinder(&this->picto.actor, &this->bodyCollider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->bodyCollider.base);
-    if ((this->spinAttackState < 2) && (this->action != KAIZOKU_ACTION_0)) {
+    if ((this->spinAttackState < 2) && (this->action != KAIZOKU_ACTION_HIDDEN)) {
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->bodyCollider.base);
     }
     if (this->swordState > 0) {
@@ -2113,7 +2111,7 @@ void EnKaizoku_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
         Matrix_MultVec3f(&sSwordTipOffset, &swordTip);
         Matrix_MultVec3f(&sSwordHiltOffset, &swordHilt);
 
-        if ((this->swordState == 1) && ((this->action == KAIZOKU_ACTION_9) || (this->action == KAIZOKU_ACTION_11))) {
+        if ((this->swordState == 1) && ((this->action == KAIZOKU_ACTION_9) || (this->action == KAIZOKU_ACTION_SPIN_ATTACK))) {
             EffectBlure_AddVertex(Effect_GetByIndex(this->blureIndex), &swordTip, &swordHilt);
         } else if (this->swordState != 0) {
             EffectBlure_AddSpace(Effect_GetByIndex(this->blureIndex));
