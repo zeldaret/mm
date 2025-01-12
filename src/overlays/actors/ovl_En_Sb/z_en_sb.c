@@ -341,7 +341,12 @@ void EnSb_UpdateDamage(EnSb* this, PlayState* play) {
             }
             this->isDead = true;
             Enemy_StartFinishingBlow(play, &this->actor);
-            SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 0x28, NA_SE_EN_BEE_FLY);
+            //! @bug Incorrect sfx:
+            //! In OoT, NA_SE_EN_SHELL_DEAD is the value 0x384A
+            //! But in MM, certain sfxIds got reordered this was not updated:
+            //! In MM, NA_SE_EN_BEE_FLY is the old value 0x384A
+            //! In MM, NA_SE_EN_SHELL_DEAD does not exist
+            SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EN_BEE_FLY);
             return;
         }
         hitPoint.x = this->collider.elem.acDmgInfo.hitPos.x;
