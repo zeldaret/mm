@@ -105,701 +105,701 @@
         </Array>
 
         <!-- Player Animations -->
-        <PlayerAnimation Name="gPlayerAnim_al_elf_tobidasi" Offset="0xCF40" />
-        <PlayerAnimation Name="gPlayerAnim_al_fuwafuwa" Offset="0xCF48" />
-        <PlayerAnimation Name="gPlayerAnim_al_fuwafuwa_loop" Offset="0xCF50" />
-        <PlayerAnimation Name="gPlayerAnim_al_fuwafuwa_modori" Offset="0xCF58" />
-        <PlayerAnimation Name="gPlayerAnim_al_gaku" Offset="0xCF60" />
-        <PlayerAnimation Name="gPlayerAnim_al_hensin" Offset="0xCF68" />
-        <PlayerAnimation Name="gPlayerAnim_al_hensin_loop" Offset="0xCF70" />
-        <PlayerAnimation Name="gPlayerAnim_al_no" Offset="0xCF78" />
-        <PlayerAnimation Name="gPlayerAnim_al_unun" Offset="0xCF80" />
-        <PlayerAnimation Name="gPlayerAnim_al_yareyare" Offset="0xCF88" />
-        <PlayerAnimation Name="gPlayerAnim_al_yes" Offset="0xCF90" />
-        <PlayerAnimation Name="gPlayerAnim_alink_dance_loop" Offset="0xCF98" />
-        <PlayerAnimation Name="gPlayerAnim_alink_ee" Offset="0xCFA0" />
-        <PlayerAnimation Name="gPlayerAnim_alink_ee_loop" Offset="0xCFA8" />
-        <PlayerAnimation Name="gPlayerAnim_alink_fukitobu" Offset="0xCFB0" />
+        <PlayerAnimation Name="gPlayerAnim_al_elf_tobidasi" Offset="0xCF40" /> <!-- Original name might be "al_elf_tobidasi" -->
+        <PlayerAnimation Name="gPlayerAnim_al_fuwafuwa" Offset="0xCF48" /> <!-- Original name might be "al_fuwafuwa" -->
+        <PlayerAnimation Name="gPlayerAnim_al_fuwafuwa_loop" Offset="0xCF50" /> <!-- Original name might be "al_fuwafuwa_loop" -->
+        <PlayerAnimation Name="gPlayerAnim_al_fuwafuwa_modori" Offset="0xCF58" /> <!-- Original name might be "al_fuwafuwa_modori" -->
+        <PlayerAnimation Name="gPlayerAnim_al_gaku" Offset="0xCF60" /> <!-- Original name might be "al_gaku" -->
+        <PlayerAnimation Name="gPlayerAnim_al_hensin" Offset="0xCF68" /> <!-- Original name might be "al_hensin" -->
+        <PlayerAnimation Name="gPlayerAnim_al_hensin_loop" Offset="0xCF70" /> <!-- Original name might be "al_hensin_loop" -->
+        <PlayerAnimation Name="gPlayerAnim_al_no" Offset="0xCF78" /> <!-- Original name might be "al_no" -->
+        <PlayerAnimation Name="gPlayerAnim_al_unun" Offset="0xCF80" /> <!-- Original name might be "al_unun" -->
+        <PlayerAnimation Name="gPlayerAnim_al_yareyare" Offset="0xCF88" /> <!-- Original name might be "al_yareyare" -->
+        <PlayerAnimation Name="gPlayerAnim_al_yes" Offset="0xCF90" /> <!-- Original name might be "al_yes" -->
+        <PlayerAnimation Name="gPlayerAnim_alink_dance_loop" Offset="0xCF98" /> <!-- Original name might be "alink_dance_loop" -->
+        <PlayerAnimation Name="gPlayerAnim_alink_ee" Offset="0xCFA0" /> <!-- Original name might be "alink_ee" -->
+        <PlayerAnimation Name="gPlayerAnim_alink_ee_loop" Offset="0xCFA8" /> <!-- Original name might be "alink_ee_loop" -->
+        <PlayerAnimation Name="gPlayerAnim_alink_fukitobu" Offset="0xCFB0" /> <!-- Original name might be "alink_fukitobu" -->
         <PlayerAnimation Name="gameplay_keep_Linkanim_00CFB8" Offset="0xCFB8" />
         <PlayerAnimation Name="gameplay_keep_Linkanim_00CFC0" Offset="0xCFC0" />
         <PlayerAnimation Name="gameplay_keep_Linkanim_00CFC8" Offset="0xCFC8" />
         <PlayerAnimation Name="gameplay_keep_Linkanim_00CFD0" Offset="0xCFD0" />
-        <PlayerAnimation Name="gPlayerAnim_alink_kaitenmiss" Offset="0xCFD8" />
-        <PlayerAnimation Name="gPlayerAnim_alink_kyoro" Offset="0xCFE0" />
-        <PlayerAnimation Name="gPlayerAnim_alink_kyoro_loop" Offset="0xCFE8" />
+        <PlayerAnimation Name="gPlayerAnim_alink_kaitenmiss" Offset="0xCFD8" /> <!-- Original name might be "alink_kaitenmiss" -->
+        <PlayerAnimation Name="gPlayerAnim_alink_kyoro" Offset="0xCFE0" /> <!-- Original name might be "alink_kyoro" -->
+        <PlayerAnimation Name="gPlayerAnim_alink_kyoro_loop" Offset="0xCFE8" /> <!-- Original name might be "alink_kyoro_loop" -->
         <PlayerAnimation Name="gameplay_keep_Linkanim_00CFF0" Offset="0xCFF0" />
         <PlayerAnimation Name="gameplay_keep_Linkanim_00CFF8" Offset="0xCFF8" />
-        <PlayerAnimation Name="gPlayerAnim_alink_ozigi" Offset="0xD000" />
-        <PlayerAnimation Name="gPlayerAnim_alink_ozigi_loop" Offset="0xD008" />
-        <PlayerAnimation Name="gPlayerAnim_alink_ozigi_modori" Offset="0xD010" />
-        <PlayerAnimation Name="gPlayerAnim_alink_powerup" Offset="0xD018" />
-        <PlayerAnimation Name="gPlayerAnim_alink_powerup_loop" Offset="0xD020" />
-        <PlayerAnimation Name="gPlayerAnim_alink_rakkatyu" Offset="0xD028" />
-        <PlayerAnimation Name="gPlayerAnim_alink_somukeru" Offset="0xD030" />
-        <PlayerAnimation Name="gPlayerAnim_alink_somukeru_loop" Offset="0xD038" />
-        <PlayerAnimation Name="gPlayerAnim_alink_tereru" Offset="0xD040" />
+        <PlayerAnimation Name="gPlayerAnim_alink_ozigi" Offset="0xD000" /> <!-- Original name might be "alink_ozigi" -->
+        <PlayerAnimation Name="gPlayerAnim_alink_ozigi_loop" Offset="0xD008" /> <!-- Original name might be "alink_ozigi_loop" -->
+        <PlayerAnimation Name="gPlayerAnim_alink_ozigi_modori" Offset="0xD010" /> <!-- Original name might be "alink_ozigi_modori" -->
+        <PlayerAnimation Name="gPlayerAnim_alink_powerup" Offset="0xD018" /> <!-- Original name might be "alink_powerup" -->
+        <PlayerAnimation Name="gPlayerAnim_alink_powerup_loop" Offset="0xD020" /> <!-- Original name might be "alink_powerup_loop" -->
+        <PlayerAnimation Name="gPlayerAnim_alink_rakkatyu" Offset="0xD028" /> <!-- Original name might be "alink_rakkatyu" -->
+        <PlayerAnimation Name="gPlayerAnim_alink_somukeru" Offset="0xD030" /> <!-- Original name might be "alink_somukeru" -->
+        <PlayerAnimation Name="gPlayerAnim_alink_somukeru_loop" Offset="0xD038" /> <!-- Original name might be "alink_somukeru_loop" -->
+        <PlayerAnimation Name="gPlayerAnim_alink_tereru" Offset="0xD040" /> <!-- Original name might be "alink_tereru" -->
         <PlayerAnimation Name="gameplay_keep_Linkanim_00D048" Offset="0xD048" />
         <PlayerAnimation Name="gameplay_keep_Linkanim_00D050" Offset="0xD050" />
-        <PlayerAnimation Name="gPlayerAnim_alink_yurayura" Offset="0xD058" />
-        <PlayerAnimation Name="gPlayerAnim_bajyo_furikaeru" Offset="0xD060" />
-        <PlayerAnimation Name="gPlayerAnim_bajyo_walk" Offset="0xD068" />
-        <PlayerAnimation Name="gPlayerAnim_cl_dakisime" Offset="0xD070" />
-        <PlayerAnimation Name="gPlayerAnim_cl_dakisime_loop" Offset="0xD078" />
-        <PlayerAnimation Name="gPlayerAnim_cl_furafura" Offset="0xD080" />
-        <PlayerAnimation Name="gPlayerAnim_cl_hoo" Offset="0xD088" />
-        <PlayerAnimation Name="gPlayerAnim_cl_jibun_miru" Offset="0xD090" />
-        <PlayerAnimation Name="gPlayerAnim_cl_kubisime" Offset="0xD098" />
+        <PlayerAnimation Name="gPlayerAnim_alink_yurayura" Offset="0xD058" /> <!-- Original name might be "alink_yurayura" -->
+        <PlayerAnimation Name="gPlayerAnim_bajyo_furikaeru" Offset="0xD060" /> <!-- Original name might be "bajyo_furikaeru" -->
+        <PlayerAnimation Name="gPlayerAnim_bajyo_walk" Offset="0xD068" /> <!-- Original name might be "bajyo_walk" -->
+        <PlayerAnimation Name="gPlayerAnim_cl_dakisime" Offset="0xD070" /> <!-- Original name might be "cl_dakisime" -->
+        <PlayerAnimation Name="gPlayerAnim_cl_dakisime_loop" Offset="0xD078" /> <!-- Original name might be "cl_dakisime_loop" -->
+        <PlayerAnimation Name="gPlayerAnim_cl_furafura" Offset="0xD080" /> <!-- Original name might be "cl_furafura" -->
+        <PlayerAnimation Name="gPlayerAnim_cl_hoo" Offset="0xD088" /> <!-- Original name might be "cl_hoo" -->
+        <PlayerAnimation Name="gPlayerAnim_cl_jibun_miru" Offset="0xD090" /> <!-- Original name might be "cl_jibun_miru" -->
+        <PlayerAnimation Name="gPlayerAnim_cl_kubisime" Offset="0xD098" /> <!-- Original name might be "cl_kubisime" -->
         <PlayerAnimation Name="gameplay_keep_Linkanim_00D0A0" Offset="0xD0A0" />
-        <PlayerAnimation Name="gPlayerAnim_cl_maskoff" Offset="0xD0A8" />
-        <PlayerAnimation Name="gPlayerAnim_cl_msbowait" Offset="0xD0B0" />
-        <PlayerAnimation Name="gPlayerAnim_cl_nigeru" Offset="0xD0B8" />
-        <PlayerAnimation Name="gPlayerAnim_cl_ononoki" Offset="0xD0C0" />
-        <PlayerAnimation Name="gPlayerAnim_cl_setmask" Offset="0xD0C8" />
-        <PlayerAnimation Name="gPlayerAnim_cl_setmaskend" Offset="0xD0D0" />
-        <PlayerAnimation Name="gPlayerAnim_cl_tewofuru" Offset="0xD0D8" />
-        <PlayerAnimation Name="gPlayerAnim_cl_tobikakaru" Offset="0xD0E0" />
-        <PlayerAnimation Name="gPlayerAnim_cl_uma_leftup" Offset="0xD0E8" />
-        <PlayerAnimation Name="gPlayerAnim_cl_uma_rightup" Offset="0xD0F0" />
-        <PlayerAnimation Name="gPlayerAnim_cl_umamiage" Offset="0xD0F8" />
-        <PlayerAnimation Name="gPlayerAnim_cl_umamiage_loop" Offset="0xD100" />
-        <PlayerAnimation Name="gPlayerAnim_cl_umanoru" Offset="0xD108" />
-        <PlayerAnimation Name="gPlayerAnim_cl_umanoru_loop" Offset="0xD110" />
-        <PlayerAnimation Name="gPlayerAnim_cl_wakare" Offset="0xD118" />
-        <PlayerAnimation Name="gPlayerAnim_cl_wakare_loop" Offset="0xD120" />
-        <PlayerAnimation Name="gPlayerAnim_clink_demo_Tbox_open" Offset="0xD128" />
-        <PlayerAnimation Name="gPlayerAnim_clink_demo_atozusari" Offset="0xD130" />
-        <PlayerAnimation Name="gPlayerAnim_clink_demo_bashi" Offset="0xD138" />
-        <PlayerAnimation Name="gPlayerAnim_clink_demo_doorA_link" Offset="0xD140" />
-        <PlayerAnimation Name="gPlayerAnim_clink_demo_doorB_link" Offset="0xD148" />
-        <PlayerAnimation Name="gPlayerAnim_clink_demo_futtobi" Offset="0xD150" />
-        <PlayerAnimation Name="gPlayerAnim_clink_demo_get1" Offset="0xD158" />
-        <PlayerAnimation Name="gPlayerAnim_clink_demo_get2" Offset="0xD160" />
-        <PlayerAnimation Name="gPlayerAnim_clink_demo_get3" Offset="0xD168" />
-        <PlayerAnimation Name="gPlayerAnim_clink_demo_goto_future" Offset="0xD170" />
-        <PlayerAnimation Name="gPlayerAnim_clink_demo_koutai" Offset="0xD178" />
-        <PlayerAnimation Name="gPlayerAnim_clink_demo_koutai_kennuki" Offset="0xD180" />
-        <PlayerAnimation Name="gPlayerAnim_clink_demo_koutai_wait" Offset="0xD188" />
-        <PlayerAnimation Name="gPlayerAnim_clink_demo_mimawasi" Offset="0xD190" />
-        <PlayerAnimation Name="gPlayerAnim_clink_demo_mimawasi_wait" Offset="0xD198" />
-        <PlayerAnimation Name="gPlayerAnim_clink_demo_miokuri" Offset="0xD1A0" />
-        <PlayerAnimation Name="gPlayerAnim_clink_demo_miokuri_wait" Offset="0xD1A8" />
-        <PlayerAnimation Name="gPlayerAnim_clink_demo_nozoki" Offset="0xD1B0" />
-        <PlayerAnimation Name="gPlayerAnim_clink_demo_return_to_future" Offset="0xD1B8" />
-        <PlayerAnimation Name="gPlayerAnim_clink_demo_standup" Offset="0xD1C0" />
-        <PlayerAnimation Name="gPlayerAnim_clink_demo_standup_wait" Offset="0xD1C8" />
+        <PlayerAnimation Name="gPlayerAnim_cl_maskoff" Offset="0xD0A8" /> <!-- Original name might be "cl_maskoff" -->
+        <PlayerAnimation Name="gPlayerAnim_cl_msbowait" Offset="0xD0B0" /> <!-- Original name might be "cl_msbowait" -->
+        <PlayerAnimation Name="gPlayerAnim_cl_nigeru" Offset="0xD0B8" /> <!-- Original name might be "cl_nigeru" -->
+        <PlayerAnimation Name="gPlayerAnim_cl_ononoki" Offset="0xD0C0" /> <!-- Original name might be "cl_ononoki" -->
+        <PlayerAnimation Name="gPlayerAnim_cl_setmask" Offset="0xD0C8" /> <!-- Original name might be "cl_setmask" -->
+        <PlayerAnimation Name="gPlayerAnim_cl_setmaskend" Offset="0xD0D0" /> <!-- Original name might be "cl_setmaskend" -->
+        <PlayerAnimation Name="gPlayerAnim_cl_tewofuru" Offset="0xD0D8" /> <!-- Original name might be "cl_tewofuru" -->
+        <PlayerAnimation Name="gPlayerAnim_cl_tobikakaru" Offset="0xD0E0" /> <!-- Original name might be "cl_tobikakaru" -->
+        <PlayerAnimation Name="gPlayerAnim_cl_uma_leftup" Offset="0xD0E8" /> <!-- Original name might be "cl_uma_leftup" -->
+        <PlayerAnimation Name="gPlayerAnim_cl_uma_rightup" Offset="0xD0F0" /> <!-- Original name might be "cl_uma_rightup" -->
+        <PlayerAnimation Name="gPlayerAnim_cl_umamiage" Offset="0xD0F8" /> <!-- Original name might be "cl_umamiage" -->
+        <PlayerAnimation Name="gPlayerAnim_cl_umamiage_loop" Offset="0xD100" /> <!-- Original name might be "cl_umamiage_loop" -->
+        <PlayerAnimation Name="gPlayerAnim_cl_umanoru" Offset="0xD108" /> <!-- Original name might be "cl_umanoru" -->
+        <PlayerAnimation Name="gPlayerAnim_cl_umanoru_loop" Offset="0xD110" /> <!-- Original name might be "cl_umanoru_loop" -->
+        <PlayerAnimation Name="gPlayerAnim_cl_wakare" Offset="0xD118" /> <!-- Original name might be "cl_wakare" -->
+        <PlayerAnimation Name="gPlayerAnim_cl_wakare_loop" Offset="0xD120" /> <!-- Original name might be "cl_wakare_loop" -->
+        <PlayerAnimation Name="gPlayerAnim_clink_demo_Tbox_open" Offset="0xD128" /> <!-- Original name is "clink_demo_Tbox_open" -->
+        <PlayerAnimation Name="gPlayerAnim_clink_demo_atozusari" Offset="0xD130" /> <!-- Original name is "clink_demo_atozusari" -->
+        <PlayerAnimation Name="gPlayerAnim_clink_demo_bashi" Offset="0xD138" /> <!-- Original name is "clink_demo_bashi" -->
+        <PlayerAnimation Name="gPlayerAnim_clink_demo_doorA_link" Offset="0xD140" /> <!-- Original name is "clink_demo_doorA_link" -->
+        <PlayerAnimation Name="gPlayerAnim_clink_demo_doorB_link" Offset="0xD148" /> <!-- Original name is "clink_demo_doorB_link" -->
+        <PlayerAnimation Name="gPlayerAnim_clink_demo_futtobi" Offset="0xD150" /> <!-- Original name is "clink_demo_futtobi" -->
+        <PlayerAnimation Name="gPlayerAnim_clink_demo_get1" Offset="0xD158" /> <!-- Original name is "clink_demo_get1" -->
+        <PlayerAnimation Name="gPlayerAnim_clink_demo_get2" Offset="0xD160" /> <!-- Original name is "clink_demo_get2" -->
+        <PlayerAnimation Name="gPlayerAnim_clink_demo_get3" Offset="0xD168" /> <!-- Original name is "clink_demo_get3" -->
+        <PlayerAnimation Name="gPlayerAnim_clink_demo_goto_future" Offset="0xD170" /> <!-- Original name is "clink_demo_goto_future" -->
+        <PlayerAnimation Name="gPlayerAnim_clink_demo_koutai" Offset="0xD178" /> <!-- Original name is "clink_demo_koutai" -->
+        <PlayerAnimation Name="gPlayerAnim_clink_demo_koutai_kennuki" Offset="0xD180" /> <!-- Original name is "clink_demo_koutai_kennuki" -->
+        <PlayerAnimation Name="gPlayerAnim_clink_demo_koutai_wait" Offset="0xD188" /> <!-- Original name is "clink_demo_koutai_wait" -->
+        <PlayerAnimation Name="gPlayerAnim_clink_demo_mimawasi" Offset="0xD190" /> <!-- Original name is "clink_demo_mimawasi" -->
+        <PlayerAnimation Name="gPlayerAnim_clink_demo_mimawasi_wait" Offset="0xD198" /> <!-- Original name is "clink_demo_mimawasi_wait" -->
+        <PlayerAnimation Name="gPlayerAnim_clink_demo_miokuri" Offset="0xD1A0" /> <!-- Original name is "clink_demo_miokuri" -->
+        <PlayerAnimation Name="gPlayerAnim_clink_demo_miokuri_wait" Offset="0xD1A8" /> <!-- Original name is "clink_demo_miokuri_wait" -->
+        <PlayerAnimation Name="gPlayerAnim_clink_demo_nozoki" Offset="0xD1B0" /> <!-- Original name is "clink_demo_nozoki" -->
+        <PlayerAnimation Name="gPlayerAnim_clink_demo_return_to_future" Offset="0xD1B8" /> <!-- Original name is "clink_demo_return_to_future" -->
+        <PlayerAnimation Name="gPlayerAnim_clink_demo_standup" Offset="0xD1C0" /> <!-- Original name is "clink_demo_standup" -->
+        <PlayerAnimation Name="gPlayerAnim_clink_demo_standup_wait" Offset="0xD1C8" /> <!-- Original name is "clink_demo_standup_wait" -->
         <PlayerAnimation Name="gameplay_keep_Linkanim_00D1D0" Offset="0xD1D0" />
-        <PlayerAnimation Name="gPlayerAnim_clink_normal_climb_endAL" Offset="0xD1D8" />
-        <PlayerAnimation Name="gPlayerAnim_clink_normal_climb_endAR" Offset="0xD1E0" />
-        <PlayerAnimation Name="gPlayerAnim_clink_normal_climb_endBL" Offset="0xD1E8" />
-        <PlayerAnimation Name="gPlayerAnim_clink_normal_climb_endBR" Offset="0xD1F0" />
-        <PlayerAnimation Name="gPlayerAnim_clink_normal_climb_startA" Offset="0xD1F8" />
-        <PlayerAnimation Name="gPlayerAnim_clink_normal_climb_startB" Offset="0xD200" />
-        <PlayerAnimation Name="gPlayerAnim_clink_normal_climb_upL" Offset="0xD208" />
-        <PlayerAnimation Name="gPlayerAnim_clink_normal_climb_upR" Offset="0xD210" />
-        <PlayerAnimation Name="gPlayerAnim_clink_normal_defense_ALL" Offset="0xD218" />
-        <PlayerAnimation Name="gPlayerAnim_clink_normal_okarina_walkB" Offset="0xD220" />
-        <PlayerAnimation Name="gPlayerAnim_clink_normal_okarina_walk" Offset="0xD228" />
-        <PlayerAnimation Name="gPlayerAnim_clink_op3_negaeri" Offset="0xD230" />
-        <PlayerAnimation Name="gPlayerAnim_clink_op3_okiagari" Offset="0xD238" />
-        <PlayerAnimation Name="gPlayerAnim_clink_op3_tatiagari" Offset="0xD240" />
-        <PlayerAnimation Name="gPlayerAnim_clink_op3_wait1" Offset="0xD248" />
-        <PlayerAnimation Name="gPlayerAnim_clink_op3_wait2" Offset="0xD250" />
-        <PlayerAnimation Name="gPlayerAnim_clink_op3_wait3" Offset="0xD258" />
-        <PlayerAnimation Name="gPlayerAnim_d_link_imanodare" Offset="0xD260" />
-        <PlayerAnimation Name="gPlayerAnim_d_link_orooro" Offset="0xD268" />
-        <PlayerAnimation Name="gPlayerAnim_d_link_orowait" Offset="0xD270" />
+        <PlayerAnimation Name="gPlayerAnim_clink_normal_climb_endAL" Offset="0xD1D8" /> <!-- Original name is "clink_normal_climb_endAL" -->
+        <PlayerAnimation Name="gPlayerAnim_clink_normal_climb_endAR" Offset="0xD1E0" /> <!-- Original name is "clink_normal_climb_endAR" -->
+        <PlayerAnimation Name="gPlayerAnim_clink_normal_climb_endBL" Offset="0xD1E8" /> <!-- Original name is "clink_normal_climb_endBL" -->
+        <PlayerAnimation Name="gPlayerAnim_clink_normal_climb_endBR" Offset="0xD1F0" /> <!-- Original name is "clink_normal_climb_endBR" -->
+        <PlayerAnimation Name="gPlayerAnim_clink_normal_climb_startA" Offset="0xD1F8" /> <!-- Original name is "clink_normal_climb_startA" -->
+        <PlayerAnimation Name="gPlayerAnim_clink_normal_climb_startB" Offset="0xD200" /> <!-- Original name is "clink_normal_climb_startB" -->
+        <PlayerAnimation Name="gPlayerAnim_clink_normal_climb_upL" Offset="0xD208" /> <!-- Original name is "clink_normal_climb_upL" -->
+        <PlayerAnimation Name="gPlayerAnim_clink_normal_climb_upR" Offset="0xD210" /> <!-- Original name is "clink_normal_climb_upR" -->
+        <PlayerAnimation Name="gPlayerAnim_clink_normal_defense_ALL" Offset="0xD218" /> <!-- Original name is "clink_normal_defense_ALL" -->
+        <PlayerAnimation Name="gPlayerAnim_clink_normal_okarina_walkB" Offset="0xD220" /> <!-- Original name might be "clink_normal_okarina_walkB" -->
+        <PlayerAnimation Name="gPlayerAnim_clink_normal_okarina_walk" Offset="0xD228" /> <!-- Original name might be "clink_normal_okarina_walk" -->
+        <PlayerAnimation Name="gPlayerAnim_clink_op3_negaeri" Offset="0xD230" /> <!-- Original name is "clink_op3_negaeri" -->
+        <PlayerAnimation Name="gPlayerAnim_clink_op3_okiagari" Offset="0xD238" /> <!-- Original name is "clink_op3_okiagari" -->
+        <PlayerAnimation Name="gPlayerAnim_clink_op3_tatiagari" Offset="0xD240" /> <!-- Original name is "clink_op3_tatiagari" -->
+        <PlayerAnimation Name="gPlayerAnim_clink_op3_wait1" Offset="0xD248" /> <!-- Original name is "clink_op3_wait1" -->
+        <PlayerAnimation Name="gPlayerAnim_clink_op3_wait2" Offset="0xD250" /> <!-- Original name is "clink_op3_wait2" -->
+        <PlayerAnimation Name="gPlayerAnim_clink_op3_wait3" Offset="0xD258" /> <!-- Original name is "clink_op3_wait3" -->
+        <PlayerAnimation Name="gPlayerAnim_d_link_imanodare" Offset="0xD260" /> <!-- Original name is "d_link_imanodare" -->
+        <PlayerAnimation Name="gPlayerAnim_d_link_orooro" Offset="0xD268" /> <!-- Original name is "d_link_orooro" -->
+        <PlayerAnimation Name="gPlayerAnim_d_link_orowait" Offset="0xD270" /> <!-- Original name is "d_link_orowait" -->
         <PlayerAnimation Name="gameplay_keep_Linkanim_00D278" Offset="0xD278" />
         <PlayerAnimation Name="gameplay_keep_Linkanim_00D280" Offset="0xD280" />
         <PlayerAnimation Name="gameplay_keep_Linkanim_00D288" Offset="0xD288" />
         <PlayerAnimation Name="gameplay_keep_Linkanim_00D290" Offset="0xD290" />
-        <PlayerAnimation Name="gPlayerAnim_demo_link_nwait" Offset="0xD298" />
-        <PlayerAnimation Name="gPlayerAnim_demo_link_orosuu" Offset="0xD2A0" />
-        <PlayerAnimation Name="gPlayerAnim_demo_link_tewatashi" Offset="0xD2A8" />
-        <PlayerAnimation Name="gPlayerAnim_demo_link_twait" Offset="0xD2B0" />
+        <PlayerAnimation Name="gPlayerAnim_demo_link_nwait" Offset="0xD298" /> <!-- Original name is "demo_link_nwait" -->
+        <PlayerAnimation Name="gPlayerAnim_demo_link_orosuu" Offset="0xD2A0" /> <!-- Original name is "demo_link_orosuu" -->
+        <PlayerAnimation Name="gPlayerAnim_demo_link_tewatashi" Offset="0xD2A8" /> <!-- Original name is "demo_link_tewatashi" -->
+        <PlayerAnimation Name="gPlayerAnim_demo_link_twait" Offset="0xD2B0" /> <!-- Original name is "demo_link_twait" -->
         <PlayerAnimation Name="gameplay_keep_Linkanim_00D2B8" Offset="0xD2B8" />
         <PlayerAnimation Name="gameplay_keep_Linkanim_00D2C0" Offset="0xD2C0" />
-        <PlayerAnimation Name="gPlayerAnim_demo_pikupiku" Offset="0xD2C8" />
-        <PlayerAnimation Name="gPlayerAnim_demo_rakka" Offset="0xD2D0" />
-        <PlayerAnimation Name="gPlayerAnim_demo_suwari1" Offset="0xD2D8" />
-        <PlayerAnimation Name="gPlayerAnim_demo_suwari2" Offset="0xD2E0" />
-        <PlayerAnimation Name="gPlayerAnim_demo_suwari3" Offset="0xD2E8" />
-        <PlayerAnimation Name="gPlayerAnim_dl_jibunmiru" Offset="0xD2F0" />
-        <PlayerAnimation Name="gPlayerAnim_dl_jibunmiru_wait" Offset="0xD2F8" />
-        <PlayerAnimation Name="gPlayerAnim_dl_kokeru" Offset="0xD300" />
-        <PlayerAnimation Name="gPlayerAnim_dl_yusaburu" Offset="0xD308" />
+        <PlayerAnimation Name="gPlayerAnim_demo_pikupiku" Offset="0xD2C8" /> <!-- Original name might be "demo_pikupiku" -->
+        <PlayerAnimation Name="gPlayerAnim_demo_rakka" Offset="0xD2D0" /> <!-- Original name might be "demo_rakka" -->
+        <PlayerAnimation Name="gPlayerAnim_demo_suwari1" Offset="0xD2D8" /> <!-- Original name might be "demo_suwari1" -->
+        <PlayerAnimation Name="gPlayerAnim_demo_suwari2" Offset="0xD2E0" /> <!-- Original name might be "demo_suwari2" -->
+        <PlayerAnimation Name="gPlayerAnim_demo_suwari3" Offset="0xD2E8" /> <!-- Original name might be "demo_suwari3" -->
+        <PlayerAnimation Name="gPlayerAnim_dl_jibunmiru" Offset="0xD2F0" /> <!-- Original name might be "dl_jibunmiru" -->
+        <PlayerAnimation Name="gPlayerAnim_dl_jibunmiru_wait" Offset="0xD2F8" /> <!-- Original name might be "dl_jibunmiru_wait" -->
+        <PlayerAnimation Name="gPlayerAnim_dl_kokeru" Offset="0xD300" /> <!-- Original name might be "dl_kokeru" -->
+        <PlayerAnimation Name="gPlayerAnim_dl_yusaburu" Offset="0xD308" /> <!-- Original name might be "dl_yusaburu" -->
         <PlayerAnimation Name="gameplay_keep_Linkanim_00D310" Offset="0xD310" />
         <PlayerAnimation Name="gameplay_keep_Linkanim_00D318" Offset="0xD318" />
         <PlayerAnimation Name="gameplay_keep_Linkanim_00D320" Offset="0xD320" />
-        <PlayerAnimation Name="gPlayerAnim_kf_awase" Offset="0xD328" />
-        <PlayerAnimation Name="gPlayerAnim_kf_dakiau" Offset="0xD330" />
-        <PlayerAnimation Name="gPlayerAnim_kf_dakiau_loop" Offset="0xD338" />
-        <PlayerAnimation Name="gPlayerAnim_kf_hanare" Offset="0xD340" />
-        <PlayerAnimation Name="gPlayerAnim_kf_hanare_loop" Offset="0xD348" />
-        <PlayerAnimation Name="gPlayerAnim_kf_miseau" Offset="0xD350" />
-        <PlayerAnimation Name="gPlayerAnim_kf_omen" Offset="0xD358" />
-        <PlayerAnimation Name="gPlayerAnim_kf_omen_loop" Offset="0xD360" />
-        <PlayerAnimation Name="gPlayerAnim_kf_tetunagu_loop" Offset="0xD368" />
-        <PlayerAnimation Name="gPlayerAnim_kolink_odoroki_demo" Offset="0xD370" />
-        <PlayerAnimation Name="gPlayerAnim_link_anchor_LLside_kiru_endL" Offset="0xD378" />
-        <PlayerAnimation Name="gPlayerAnim_link_anchor_LLside_kiru_finsh_endR" Offset="0xD380" />
-        <PlayerAnimation Name="gPlayerAnim_link_anchor_LRside_kiru_endR" Offset="0xD388" />
-        <PlayerAnimation Name="gPlayerAnim_link_anchor_LRside_kiru_finsh_endL" Offset="0xD390" />
-        <PlayerAnimation Name="gPlayerAnim_link_anchor_Lnormal_kiru_endR" Offset="0xD398" />
-        <PlayerAnimation Name="gPlayerAnim_link_anchor_Lnormal_kiru_finsh_endR" Offset="0xD3A0" />
-        <PlayerAnimation Name="gPlayerAnim_link_anchor_Lpierce_kiru_endL" Offset="0xD3A8" />
-        <PlayerAnimation Name="gPlayerAnim_link_anchor_Lpierce_kiru_finsh_endR" Offset="0xD3B0" />
-        <PlayerAnimation Name="gPlayerAnim_link_anchor_Lrolling_kiru_endR" Offset="0xD3B8" />
-        <PlayerAnimation Name="gPlayerAnim_link_anchor_Lside_kiru_endR" Offset="0xD3C0" />
-        <PlayerAnimation Name="gPlayerAnim_link_anchor_Lside_kiru_finsh_endR" Offset="0xD3C8" />
-        <PlayerAnimation Name="gPlayerAnim_link_anchor_Rside_kiru_endR" Offset="0xD3D0" />
-        <PlayerAnimation Name="gPlayerAnim_link_anchor_Rside_kiru_finsh_endR" Offset="0xD3D8" />
-        <PlayerAnimation Name="gPlayerAnim_link_anchor_anchor2fighter" Offset="0xD3E0" />
-        <PlayerAnimation Name="gPlayerAnim_link_anchor_back_brake" Offset="0xD3E8" />
-        <PlayerAnimation Name="gPlayerAnim_link_anchor_back_hitR" Offset="0xD3F0" />
-        <PlayerAnimation Name="gPlayerAnim_link_anchor_back_walk" Offset="0xD3F8" />
-        <PlayerAnimation Name="gPlayerAnim_link_anchor_defense_hit" Offset="0xD400" />
-        <PlayerAnimation Name="gPlayerAnim_link_anchor_defense_long_hitL" Offset="0xD408" />
-        <PlayerAnimation Name="gPlayerAnim_link_anchor_defense_long_hitR" Offset="0xD410" />
-        <PlayerAnimation Name="gPlayerAnim_link_anchor_front_hitR" Offset="0xD418" />
-        <PlayerAnimation Name="gPlayerAnim_link_anchor_landingR" Offset="0xD420" />
-        <PlayerAnimation Name="gPlayerAnim_link_anchor_normal_kiru_finsh_endR" Offset="0xD428" />
-        <PlayerAnimation Name="gPlayerAnim_link_anchor_pierce_kiru_endR" Offset="0xD430" />
-        <PlayerAnimation Name="gPlayerAnim_link_anchor_pierce_kiru_finsh_endR" Offset="0xD438" />
-        <PlayerAnimation Name="gPlayerAnim_link_anchor_rolling_kiru_endR" Offset="0xD440" />
-        <PlayerAnimation Name="gPlayerAnim_link_anchor_side_walkL" Offset="0xD448" />
-        <PlayerAnimation Name="gPlayerAnim_link_anchor_side_walkR" Offset="0xD450" />
-        <PlayerAnimation Name="gPlayerAnim_link_anchor_waitL2defense" Offset="0xD458" />
-        <PlayerAnimation Name="gPlayerAnim_link_anchor_waitL2defense_long" Offset="0xD460" />
-        <PlayerAnimation Name="gPlayerAnim_link_anchor_waitL" Offset="0xD468" />
-        <PlayerAnimation Name="gPlayerAnim_link_anchor_waitR2defense" Offset="0xD470" />
-        <PlayerAnimation Name="gPlayerAnim_link_anchor_waitR2defense_long" Offset="0xD478" />
-        <PlayerAnimation Name="gPlayerAnim_link_anchor_waitR" Offset="0xD480" />
-        <PlayerAnimation Name="gPlayerAnim_link_boom_throw_waitL" Offset="0xD488" />
-        <PlayerAnimation Name="gPlayerAnim_link_boom_throw_waitR" Offset="0xD490" />
-        <PlayerAnimation Name="gPlayerAnim_link_bottle_bug_in" Offset="0xD498" />
-        <PlayerAnimation Name="gPlayerAnim_link_bottle_bug_miss" Offset="0xD4A0" />
-        <PlayerAnimation Name="gPlayerAnim_link_bottle_bug_out" Offset="0xD4A8" />
-        <PlayerAnimation Name="gPlayerAnim_link_bottle_drink_demo_end" Offset="0xD4B0" />
-        <PlayerAnimation Name="gPlayerAnim_link_bottle_drink_demo_start" Offset="0xD4B8" />
-        <PlayerAnimation Name="gPlayerAnim_link_bottle_drink_demo_wait" Offset="0xD4C0" />
-        <PlayerAnimation Name="gPlayerAnim_link_bottle_fish_in" Offset="0xD4C8" />
-        <PlayerAnimation Name="gPlayerAnim_link_bottle_fish_miss" Offset="0xD4D0" />
-        <PlayerAnimation Name="gPlayerAnim_link_bottle_fish_out" Offset="0xD4D8" />
-        <PlayerAnimation Name="gPlayerAnim_link_bottle_read" Offset="0xD4E0" />
-        <PlayerAnimation Name="gPlayerAnim_link_bottle_read_end" Offset="0xD4E8" />
-        <PlayerAnimation Name="gPlayerAnim_link_bow_bow_ready" Offset="0xD4F0" />
-        <PlayerAnimation Name="gPlayerAnim_link_bow_bow_shoot_end" Offset="0xD4F8" />
-        <PlayerAnimation Name="gPlayerAnim_link_bow_bow_shoot_next" Offset="0xD500" />
-        <PlayerAnimation Name="gPlayerAnim_link_bow_bow_wait" Offset="0xD508" />
-        <PlayerAnimation Name="gPlayerAnim_link_bow_defense" Offset="0xD510" />
-        <PlayerAnimation Name="gPlayerAnim_link_bow_defense_wait" Offset="0xD518" />
-        <PlayerAnimation Name="gPlayerAnim_link_bow_side_walk" Offset="0xD520" />
-        <PlayerAnimation Name="gPlayerAnim_link_bow_walk2ready" Offset="0xD528" />
-        <PlayerAnimation Name="gPlayerAnim_link_child_tunnel_end" Offset="0xD530" />
-        <PlayerAnimation Name="gPlayerAnim_link_child_tunnel_start" Offset="0xD538" />
-        <PlayerAnimation Name="gPlayerAnim_link_demo_Tbox_open" Offset="0xD540" />
-        <PlayerAnimation Name="gPlayerAnim_link_demo_back_to_past" Offset="0xD548" />
-        <PlayerAnimation Name="gPlayerAnim_link_demo_baru_op1" Offset="0xD550" />
-        <PlayerAnimation Name="gPlayerAnim_link_demo_baru_op2" Offset="0xD558" />
-        <PlayerAnimation Name="gPlayerAnim_link_demo_baru_op3" Offset="0xD560" />
-        <PlayerAnimation Name="gPlayerAnim_link_demo_bikkuri" Offset="0xD568" />
-        <PlayerAnimation Name="gPlayerAnim_link_demo_doorA_link" Offset="0xD570" />
-        <PlayerAnimation Name="gPlayerAnim_link_demo_doorA_link_free" Offset="0xD578" />
-        <PlayerAnimation Name="gPlayerAnim_link_demo_doorB_link" Offset="0xD580" />
-        <PlayerAnimation Name="gPlayerAnim_link_demo_doorB_link_free" Offset="0xD588" />
-        <PlayerAnimation Name="gPlayerAnim_link_demo_furimuki2" Offset="0xD590" />
-        <PlayerAnimation Name="gPlayerAnim_link_demo_furimuki2_wait" Offset="0xD598" />
-        <PlayerAnimation Name="gPlayerAnim_link_demo_furimuki" Offset="0xD5A0" />
-        <PlayerAnimation Name="gPlayerAnim_link_demo_get_itemA" Offset="0xD5A8" />
-        <PlayerAnimation Name="gPlayerAnim_link_demo_get_itemB" Offset="0xD5B0" />
-        <PlayerAnimation Name="gPlayerAnim_link_demo_goma_furimuki" Offset="0xD5B8" />
-        <PlayerAnimation Name="gPlayerAnim_link_demo_gurad" Offset="0xD5C0" />
-        <PlayerAnimation Name="gPlayerAnim_link_demo_gurad_wait" Offset="0xD5C8" />
-        <PlayerAnimation Name="gPlayerAnim_link_demo_jibunmiru" Offset="0xD5D0" />
-        <PlayerAnimation Name="gPlayerAnim_link_demo_kakeyori" Offset="0xD5D8" />
-        <PlayerAnimation Name="gPlayerAnim_link_demo_kakeyori_mimawasi" Offset="0xD5E0" />
-        <PlayerAnimation Name="gPlayerAnim_link_demo_kakeyori_miokuri" Offset="0xD5E8" />
-        <PlayerAnimation Name="gPlayerAnim_link_demo_kakeyori_miokuri_wait" Offset="0xD5F0" />
-        <PlayerAnimation Name="gPlayerAnim_link_demo_kakeyori_wait" Offset="0xD5F8" />
-        <PlayerAnimation Name="gPlayerAnim_link_demo_kaoage" Offset="0xD600" />
-        <PlayerAnimation Name="gPlayerAnim_link_demo_kaoage_wait" Offset="0xD608" />
-        <PlayerAnimation Name="gPlayerAnim_link_demo_kenmiru1" Offset="0xD610" />
-        <PlayerAnimation Name="gPlayerAnim_link_demo_kenmiru1_wait" Offset="0xD618" />
-        <PlayerAnimation Name="gPlayerAnim_link_demo_kenmiru2" Offset="0xD620" />
-        <PlayerAnimation Name="gPlayerAnim_link_demo_kenmiru2_modori" Offset="0xD628" />
-        <PlayerAnimation Name="gPlayerAnim_link_demo_kenmiru2_wait" Offset="0xD630" />
-        <PlayerAnimation Name="gPlayerAnim_link_demo_kousan" Offset="0xD638" />
-        <PlayerAnimation Name="gPlayerAnim_link_demo_look_hand" Offset="0xD640" />
-        <PlayerAnimation Name="gPlayerAnim_link_demo_look_hand_wait" Offset="0xD648" />
-        <PlayerAnimation Name="gPlayerAnim_link_demo_nozokikomi" Offset="0xD650" />
-        <PlayerAnimation Name="gPlayerAnim_link_demo_nozokikomi_wait" Offset="0xD658" />
-        <PlayerAnimation Name="gPlayerAnim_link_demo_return_to_past" Offset="0xD660" />
-        <PlayerAnimation Name="gPlayerAnim_link_demo_sita_wait" Offset="0xD668" />
-        <PlayerAnimation Name="gPlayerAnim_link_demo_ue" Offset="0xD670" />
-        <PlayerAnimation Name="gPlayerAnim_link_demo_ue_wait" Offset="0xD678" />
-        <PlayerAnimation Name="gPlayerAnim_link_demo_warp" Offset="0xD680" />
-        <PlayerAnimation Name="gPlayerAnim_link_demo_zeldamiru" Offset="0xD688" />
-        <PlayerAnimation Name="gPlayerAnim_link_demo_zeldamiru_wait" Offset="0xD690" />
-        <PlayerAnimation Name="gPlayerAnim_link_derth_rebirth" Offset="0xD698" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_LLside_kiru" Offset="0xD6A0" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_LLside_kiru_end" Offset="0xD6A8" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_LLside_kiru_finsh" Offset="0xD6B0" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_LLside_kiru_finsh_end" Offset="0xD6B8" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_LRside_kiru" Offset="0xD6C0" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_LRside_kiru_end" Offset="0xD6C8" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_LRside_kiru_finsh" Offset="0xD6D0" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_LRside_kiru_finsh_end" Offset="0xD6D8" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_Lnormal_kiru" Offset="0xD6E0" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_Lnormal_kiru_end" Offset="0xD6E8" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_Lnormal_kiru_finsh" Offset="0xD6F0" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_Lnormal_kiru_finsh_end" Offset="0xD6F8" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_Lpierce_kiru" Offset="0xD700" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_Lpierce_kiru_end" Offset="0xD708" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_Lpierce_kiru_finsh" Offset="0xD710" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_Lpierce_kiru_finsh_end" Offset="0xD718" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_Lpower_jump_kiru" Offset="0xD720" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_Lpower_jump_kiru_end" Offset="0xD728" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_Lpower_jump_kiru_hit" Offset="0xD730" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_Lpower_kiru_side_walk" Offset="0xD738" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_Lpower_kiru_start" Offset="0xD740" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_Lpower_kiru_wait" Offset="0xD748" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_Lpower_kiru_wait_end" Offset="0xD750" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_Lpower_kiru_walk" Offset="0xD758" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_Lrolling_kiru" Offset="0xD760" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_Lrolling_kiru_end" Offset="0xD768" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_Lside_jump" Offset="0xD770" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_Lside_jump_endL" Offset="0xD778" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_Lside_jump_end" Offset="0xD780" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_Lside_kiru" Offset="0xD788" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_Lside_kiru_end" Offset="0xD790" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_Lside_kiru_finsh" Offset="0xD798" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_Lside_kiru_finsh_end" Offset="0xD7A0" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_Rside_jump" Offset="0xD7A8" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_Rside_jump_endR" Offset="0xD7B0" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_Rside_jump_end" Offset="0xD7B8" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_Rside_kiru" Offset="0xD7C0" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_Rside_kiru_end" Offset="0xD7C8" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_Rside_kiru_finsh" Offset="0xD7D0" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_Rside_kiru_finsh_end" Offset="0xD7D8" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_Wrolling_kiru" Offset="0xD7E0" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_Wrolling_kiru_end" Offset="0xD7E8" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_backturn_jump" Offset="0xD7F0" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_backturn_jump_endR" Offset="0xD7F8" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_backturn_jump_end" Offset="0xD800" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_damage_run" Offset="0xD808" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_damage_run_long" Offset="0xD810" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_defense_long_hit" Offset="0xD818" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_fighter2long" Offset="0xD820" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_front_jump" Offset="0xD828" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_front_jump_endR" Offset="0xD830" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_front_jump_end" Offset="0xD838" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_jump_kiru_finsh" Offset="0xD840" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_jump_kiru_finsh_end" Offset="0xD848" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_jump_rollkiru" Offset="0xD850" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_landing_roll_long" Offset="0xD858" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_normal2fighter" Offset="0xD860" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_normal_kiru" Offset="0xD868" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_normal_kiru_endR" Offset="0xD870" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_normal_kiru_end" Offset="0xD878" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_normal_kiru_finsh" Offset="0xD880" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_normal_kiru_finsh_end" Offset="0xD888" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_pierce_kiru" Offset="0xD890" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_pierce_kiru_end" Offset="0xD898" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_pierce_kiru_finsh" Offset="0xD8A0" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_pierce_kiru_finsh_end" Offset="0xD8A8" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_power_jump_kiru_end" Offset="0xD8B0" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_power_kiru_side_walk" Offset="0xD8B8" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_power_kiru_startL" Offset="0xD8C0" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_power_kiru_start" Offset="0xD8C8" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_power_kiru_wait" Offset="0xD8D0" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_power_kiru_wait_end" Offset="0xD8D8" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_power_kiru_walk" Offset="0xD8E0" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_reboundR" Offset="0xD8E8" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_rebound" Offset="0xD8F0" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_rebound_longR" Offset="0xD8F8" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_rebound_long" Offset="0xD900" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_rolling_kiru" Offset="0xD908" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_rolling_kiru_end" Offset="0xD910" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_run" Offset="0xD918" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_run_long" Offset="0xD920" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_side_walkL_long" Offset="0xD928" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_side_walkR_long" Offset="0xD930" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_side_walk_long" Offset="0xD938" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_turn_kiruL" Offset="0xD940" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_turn_kiruL_end" Offset="0xD948" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_turn_kiruR" Offset="0xD950" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_turn_kiruR_end" Offset="0xD958" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_wait2waitR_long" Offset="0xD960" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_waitL2wait_long" Offset="0xD968" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_waitL_long" Offset="0xD970" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_waitR2wait_long" Offset="0xD978" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_waitR_long" Offset="0xD980" />
+        <PlayerAnimation Name="gPlayerAnim_kf_awase" Offset="0xD328" /> <!-- Original name might be "kf_awase" -->
+        <PlayerAnimation Name="gPlayerAnim_kf_dakiau" Offset="0xD330" /> <!-- Original name might be "kf_dakiau" -->
+        <PlayerAnimation Name="gPlayerAnim_kf_dakiau_loop" Offset="0xD338" /> <!-- Original name might be "kf_dakiau_loop" -->
+        <PlayerAnimation Name="gPlayerAnim_kf_hanare" Offset="0xD340" /> <!-- Original name might be "kf_hanare" -->
+        <PlayerAnimation Name="gPlayerAnim_kf_hanare_loop" Offset="0xD348" /> <!-- Original name might be "kf_hanare_loop" -->
+        <PlayerAnimation Name="gPlayerAnim_kf_miseau" Offset="0xD350" /> <!-- Original name might be "kf_miseau" -->
+        <PlayerAnimation Name="gPlayerAnim_kf_omen" Offset="0xD358" /> <!-- Original name might be "kf_omen" -->
+        <PlayerAnimation Name="gPlayerAnim_kf_omen_loop" Offset="0xD360" /> <!-- Original name might be "kf_omen_loop" -->
+        <PlayerAnimation Name="gPlayerAnim_kf_tetunagu_loop" Offset="0xD368" /> <!-- Original name might be "kf_tetunagu_loop" -->
+        <PlayerAnimation Name="gPlayerAnim_kolink_odoroki_demo" Offset="0xD370" /> <!-- Original name is "kolink_odoroki_demo" -->
+        <PlayerAnimation Name="gPlayerAnim_link_anchor_LLside_kiru_endL" Offset="0xD378" /> <!-- Original name is "link_anchor_LLside_kiru_endL" -->
+        <PlayerAnimation Name="gPlayerAnim_link_anchor_LLside_kiru_finsh_endR" Offset="0xD380" /> <!-- Original name is "link_anchor_LLside_kiru_finsh_endR" -->
+        <PlayerAnimation Name="gPlayerAnim_link_anchor_LRside_kiru_endR" Offset="0xD388" /> <!-- Original name is "link_anchor_LRside_kiru_endR" -->
+        <PlayerAnimation Name="gPlayerAnim_link_anchor_LRside_kiru_finsh_endL" Offset="0xD390" /> <!-- Original name is "link_anchor_LRside_kiru_finsh_endL" -->
+        <PlayerAnimation Name="gPlayerAnim_link_anchor_Lnormal_kiru_endR" Offset="0xD398" /> <!-- Original name is "link_anchor_Lnormal_kiru_endR" -->
+        <PlayerAnimation Name="gPlayerAnim_link_anchor_Lnormal_kiru_finsh_endR" Offset="0xD3A0" /> <!-- Original name is "link_anchor_Lnormal_kiru_finsh_endR" -->
+        <PlayerAnimation Name="gPlayerAnim_link_anchor_Lpierce_kiru_endL" Offset="0xD3A8" /> <!-- Original name is "link_anchor_Lpierce_kiru_endL" -->
+        <PlayerAnimation Name="gPlayerAnim_link_anchor_Lpierce_kiru_finsh_endR" Offset="0xD3B0" /> <!-- Original name is "link_anchor_Lpierce_kiru_finsh_endR" -->
+        <PlayerAnimation Name="gPlayerAnim_link_anchor_Lrolling_kiru_endR" Offset="0xD3B8" /> <!-- Original name is "link_anchor_Lrolling_kiru_endR" -->
+        <PlayerAnimation Name="gPlayerAnim_link_anchor_Lside_kiru_endR" Offset="0xD3C0" /> <!-- Original name is "link_anchor_Lside_kiru_endR" -->
+        <PlayerAnimation Name="gPlayerAnim_link_anchor_Lside_kiru_finsh_endR" Offset="0xD3C8" /> <!-- Original name is "link_anchor_Lside_kiru_finsh_endR" -->
+        <PlayerAnimation Name="gPlayerAnim_link_anchor_Rside_kiru_endR" Offset="0xD3D0" /> <!-- Original name is "link_anchor_Rside_kiru_endR" -->
+        <PlayerAnimation Name="gPlayerAnim_link_anchor_Rside_kiru_finsh_endR" Offset="0xD3D8" /> <!-- Original name is "link_anchor_Rside_kiru_finsh_endR" -->
+        <PlayerAnimation Name="gPlayerAnim_link_anchor_anchor2fighter" Offset="0xD3E0" /> <!-- Original name is "link_anchor_anchor2fighter" -->
+        <PlayerAnimation Name="gPlayerAnim_link_anchor_back_brake" Offset="0xD3E8" /> <!-- Original name is "link_anchor_back_brake" -->
+        <PlayerAnimation Name="gPlayerAnim_link_anchor_back_hitR" Offset="0xD3F0" /> <!-- Original name is "link_anchor_back_hitR" -->
+        <PlayerAnimation Name="gPlayerAnim_link_anchor_back_walk" Offset="0xD3F8" /> <!-- Original name is "link_anchor_back_walk" -->
+        <PlayerAnimation Name="gPlayerAnim_link_anchor_defense_hit" Offset="0xD400" /> <!-- Original name is "link_anchor_defense_hit" -->
+        <PlayerAnimation Name="gPlayerAnim_link_anchor_defense_long_hitL" Offset="0xD408" /> <!-- Original name is "link_anchor_defense_long_hitL" -->
+        <PlayerAnimation Name="gPlayerAnim_link_anchor_defense_long_hitR" Offset="0xD410" /> <!-- Original name is "link_anchor_defense_long_hitR" -->
+        <PlayerAnimation Name="gPlayerAnim_link_anchor_front_hitR" Offset="0xD418" /> <!-- Original name is "link_anchor_front_hitR" -->
+        <PlayerAnimation Name="gPlayerAnim_link_anchor_landingR" Offset="0xD420" /> <!-- Original name is "link_anchor_landingR" -->
+        <PlayerAnimation Name="gPlayerAnim_link_anchor_normal_kiru_finsh_endR" Offset="0xD428" /> <!-- Original name is "link_anchor_normal_kiru_finsh_endR" -->
+        <PlayerAnimation Name="gPlayerAnim_link_anchor_pierce_kiru_endR" Offset="0xD430" /> <!-- Original name is "link_anchor_pierce_kiru_endR" -->
+        <PlayerAnimation Name="gPlayerAnim_link_anchor_pierce_kiru_finsh_endR" Offset="0xD438" /> <!-- Original name is "link_anchor_pierce_kiru_finsh_endR" -->
+        <PlayerAnimation Name="gPlayerAnim_link_anchor_rolling_kiru_endR" Offset="0xD440" /> <!-- Original name is "link_anchor_rolling_kiru_endR" -->
+        <PlayerAnimation Name="gPlayerAnim_link_anchor_side_walkL" Offset="0xD448" /> <!-- Original name is "link_anchor_side_walkL" -->
+        <PlayerAnimation Name="gPlayerAnim_link_anchor_side_walkR" Offset="0xD450" /> <!-- Original name is "link_anchor_side_walkR" -->
+        <PlayerAnimation Name="gPlayerAnim_link_anchor_waitL2defense" Offset="0xD458" /> <!-- Original name is "link_anchor_waitL2defense" -->
+        <PlayerAnimation Name="gPlayerAnim_link_anchor_waitL2defense_long" Offset="0xD460" /> <!-- Original name is "link_anchor_waitL2defense_long" -->
+        <PlayerAnimation Name="gPlayerAnim_link_anchor_waitL" Offset="0xD468" /> <!-- Original name is "link_anchor_waitL" -->
+        <PlayerAnimation Name="gPlayerAnim_link_anchor_waitR2defense" Offset="0xD470" /> <!-- Original name is "link_anchor_waitR2defense" -->
+        <PlayerAnimation Name="gPlayerAnim_link_anchor_waitR2defense_long" Offset="0xD478" /> <!-- Original name is "link_anchor_waitR2defense_long" -->
+        <PlayerAnimation Name="gPlayerAnim_link_anchor_waitR" Offset="0xD480" /> <!-- Original name is "link_anchor_waitR" -->
+        <PlayerAnimation Name="gPlayerAnim_link_boom_throw_waitL" Offset="0xD488" /> <!-- Original name is "link_boom_throw_waitL" -->
+        <PlayerAnimation Name="gPlayerAnim_link_boom_throw_waitR" Offset="0xD490" /> <!-- Original name is "link_boom_throw_waitR" -->
+        <PlayerAnimation Name="gPlayerAnim_link_bottle_bug_in" Offset="0xD498" /> <!-- Original name might be "link_bottle_bug_in" -->
+        <PlayerAnimation Name="gPlayerAnim_link_bottle_bug_miss" Offset="0xD4A0" /> <!-- Original name is "link_bottle_bug_miss" -->
+        <PlayerAnimation Name="gPlayerAnim_link_bottle_bug_out" Offset="0xD4A8" /> <!-- Original name is "link_bottle_bug_out" -->
+        <PlayerAnimation Name="gPlayerAnim_link_bottle_drink_demo_end" Offset="0xD4B0" /> <!-- Original name is "link_bottle_drink_demo_end" -->
+        <PlayerAnimation Name="gPlayerAnim_link_bottle_drink_demo_start" Offset="0xD4B8" /> <!-- Original name is "link_bottle_drink_demo_start" -->
+        <PlayerAnimation Name="gPlayerAnim_link_bottle_drink_demo_wait" Offset="0xD4C0" /> <!-- Original name is "link_bottle_drink_demo_wait" -->
+        <PlayerAnimation Name="gPlayerAnim_link_bottle_fish_in" Offset="0xD4C8" /> <!-- Original name might be "link_bottle_fish_in" -->
+        <PlayerAnimation Name="gPlayerAnim_link_bottle_fish_miss" Offset="0xD4D0" /> <!-- Original name is "link_bottle_fish_miss" -->
+        <PlayerAnimation Name="gPlayerAnim_link_bottle_fish_out" Offset="0xD4D8" /> <!-- Original name is "link_bottle_fish_out" -->
+        <PlayerAnimation Name="gPlayerAnim_link_bottle_read" Offset="0xD4E0" /> <!-- Original name is "link_bottle_read" -->
+        <PlayerAnimation Name="gPlayerAnim_link_bottle_read_end" Offset="0xD4E8" /> <!-- Original name is "link_bottle_read_end" -->
+        <PlayerAnimation Name="gPlayerAnim_link_bow_bow_ready" Offset="0xD4F0" /> <!-- Original name is "link_bow_bow_ready" -->
+        <PlayerAnimation Name="gPlayerAnim_link_bow_bow_shoot_end" Offset="0xD4F8" /> <!-- Original name is "link_bow_bow_shoot_end" -->
+        <PlayerAnimation Name="gPlayerAnim_link_bow_bow_shoot_next" Offset="0xD500" /> <!-- Original name is "link_bow_bow_shoot_next" -->
+        <PlayerAnimation Name="gPlayerAnim_link_bow_bow_wait" Offset="0xD508" /> <!-- Original name is "link_bow_bow_wait" -->
+        <PlayerAnimation Name="gPlayerAnim_link_bow_defense" Offset="0xD510" /> <!-- Original name is "link_bow_defense" -->
+        <PlayerAnimation Name="gPlayerAnim_link_bow_defense_wait" Offset="0xD518" /> <!-- Original name is "link_bow_defense_wait" -->
+        <PlayerAnimation Name="gPlayerAnim_link_bow_side_walk" Offset="0xD520" /> <!-- Original name is "link_bow_side_walk" -->
+        <PlayerAnimation Name="gPlayerAnim_link_bow_walk2ready" Offset="0xD528" /> <!-- Original name is "link_bow_walk2ready" -->
+        <PlayerAnimation Name="gPlayerAnim_link_child_tunnel_end" Offset="0xD530" /> <!-- Original name is "link_child_tunnel_end" -->
+        <PlayerAnimation Name="gPlayerAnim_link_child_tunnel_start" Offset="0xD538" /> <!-- Original name is "link_child_tunnel_start" -->
+        <PlayerAnimation Name="gPlayerAnim_link_demo_Tbox_open" Offset="0xD540" /> <!-- Original name is "link_demo_Tbox_open" -->
+        <PlayerAnimation Name="gPlayerAnim_link_demo_back_to_past" Offset="0xD548" /> <!-- Original name is "link_demo_back_to_past" -->
+        <PlayerAnimation Name="gPlayerAnim_link_demo_baru_op1" Offset="0xD550" /> <!-- Original name is "link_demo_baru_op1" -->
+        <PlayerAnimation Name="gPlayerAnim_link_demo_baru_op2" Offset="0xD558" /> <!-- Original name is "link_demo_baru_op2" -->
+        <PlayerAnimation Name="gPlayerAnim_link_demo_baru_op3" Offset="0xD560" /> <!-- Original name is "link_demo_baru_op3" -->
+        <PlayerAnimation Name="gPlayerAnim_link_demo_bikkuri" Offset="0xD568" /> <!-- Original name is "link_demo_bikkuri" -->
+        <PlayerAnimation Name="gPlayerAnim_link_demo_doorA_link" Offset="0xD570" /> <!-- Original name is "link_demo_doorA_link" -->
+        <PlayerAnimation Name="gPlayerAnim_link_demo_doorA_link_free" Offset="0xD578" /> <!-- Original name is "link_demo_doorA_link_free" -->
+        <PlayerAnimation Name="gPlayerAnim_link_demo_doorB_link" Offset="0xD580" /> <!-- Original name is "link_demo_doorB_link" -->
+        <PlayerAnimation Name="gPlayerAnim_link_demo_doorB_link_free" Offset="0xD588" /> <!-- Original name is "link_demo_doorB_link_free" -->
+        <PlayerAnimation Name="gPlayerAnim_link_demo_furimuki2" Offset="0xD590" /> <!-- Original name is "link_demo_furimuki2" -->
+        <PlayerAnimation Name="gPlayerAnim_link_demo_furimuki2_wait" Offset="0xD598" /> <!-- Original name is "link_demo_furimuki2_wait" -->
+        <PlayerAnimation Name="gPlayerAnim_link_demo_furimuki" Offset="0xD5A0" /> <!-- Original name is "link_demo_furimuki" -->
+        <PlayerAnimation Name="gPlayerAnim_link_demo_get_itemA" Offset="0xD5A8" /> <!-- Original name is "link_demo_get_itemA" -->
+        <PlayerAnimation Name="gPlayerAnim_link_demo_get_itemB" Offset="0xD5B0" /> <!-- Original name is "link_demo_get_itemB" -->
+        <PlayerAnimation Name="gPlayerAnim_link_demo_goma_furimuki" Offset="0xD5B8" /> <!-- Original name is "link_demo_goma_furimuki" -->
+        <PlayerAnimation Name="gPlayerAnim_link_demo_gurad" Offset="0xD5C0" /> <!-- Original name is "link_demo_gurad" -->
+        <PlayerAnimation Name="gPlayerAnim_link_demo_gurad_wait" Offset="0xD5C8" /> <!-- Original name is "link_demo_gurad_wait" -->
+        <PlayerAnimation Name="gPlayerAnim_link_demo_jibunmiru" Offset="0xD5D0" /> <!-- Original name is "link_demo_jibunmiru" -->
+        <PlayerAnimation Name="gPlayerAnim_link_demo_kakeyori" Offset="0xD5D8" /> <!-- Original name is "link_demo_kakeyori" -->
+        <PlayerAnimation Name="gPlayerAnim_link_demo_kakeyori_mimawasi" Offset="0xD5E0" /> <!-- Original name is "link_demo_kakeyori_mimawasi" -->
+        <PlayerAnimation Name="gPlayerAnim_link_demo_kakeyori_miokuri" Offset="0xD5E8" /> <!-- Original name is "link_demo_kakeyori_miokuri" -->
+        <PlayerAnimation Name="gPlayerAnim_link_demo_kakeyori_miokuri_wait" Offset="0xD5F0" /> <!-- Original name is "link_demo_kakeyori_miokuri_wait" -->
+        <PlayerAnimation Name="gPlayerAnim_link_demo_kakeyori_wait" Offset="0xD5F8" /> <!-- Original name is "link_demo_kakeyori_wait" -->
+        <PlayerAnimation Name="gPlayerAnim_link_demo_kaoage" Offset="0xD600" /> <!-- Original name is "link_demo_kaoage" -->
+        <PlayerAnimation Name="gPlayerAnim_link_demo_kaoage_wait" Offset="0xD608" /> <!-- Original name is "link_demo_kaoage_wait" -->
+        <PlayerAnimation Name="gPlayerAnim_link_demo_kenmiru1" Offset="0xD610" /> <!-- Original name is "link_demo_kenmiru1" -->
+        <PlayerAnimation Name="gPlayerAnim_link_demo_kenmiru1_wait" Offset="0xD618" /> <!-- Original name is "link_demo_kenmiru1_wait" -->
+        <PlayerAnimation Name="gPlayerAnim_link_demo_kenmiru2" Offset="0xD620" /> <!-- Original name is "link_demo_kenmiru2" -->
+        <PlayerAnimation Name="gPlayerAnim_link_demo_kenmiru2_modori" Offset="0xD628" /> <!-- Original name is "link_demo_kenmiru2_modori" -->
+        <PlayerAnimation Name="gPlayerAnim_link_demo_kenmiru2_wait" Offset="0xD630" /> <!-- Original name is "link_demo_kenmiru2_wait" -->
+        <PlayerAnimation Name="gPlayerAnim_link_demo_kousan" Offset="0xD638" /> <!-- Original name is "link_demo_kousan" -->
+        <PlayerAnimation Name="gPlayerAnim_link_demo_look_hand" Offset="0xD640" /> <!-- Original name is "link_demo_look_hand" -->
+        <PlayerAnimation Name="gPlayerAnim_link_demo_look_hand_wait" Offset="0xD648" /> <!-- Original name is "link_demo_look_hand_wait" -->
+        <PlayerAnimation Name="gPlayerAnim_link_demo_nozokikomi" Offset="0xD650" /> <!-- Original name is "link_demo_nozokikomi" -->
+        <PlayerAnimation Name="gPlayerAnim_link_demo_nozokikomi_wait" Offset="0xD658" /> <!-- Original name is "link_demo_nozokikomi_wait" -->
+        <PlayerAnimation Name="gPlayerAnim_link_demo_return_to_past" Offset="0xD660" /> <!-- Original name is "link_demo_return_to_past" -->
+        <PlayerAnimation Name="gPlayerAnim_link_demo_sita_wait" Offset="0xD668" /> <!-- Original name is "link_demo_sita_wait" -->
+        <PlayerAnimation Name="gPlayerAnim_link_demo_ue" Offset="0xD670" /> <!-- Original name is "link_demo_ue" -->
+        <PlayerAnimation Name="gPlayerAnim_link_demo_ue_wait" Offset="0xD678" /> <!-- Original name is "link_demo_ue_wait" -->
+        <PlayerAnimation Name="gPlayerAnim_link_demo_warp" Offset="0xD680" /> <!-- Original name is "link_demo_warp" -->
+        <PlayerAnimation Name="gPlayerAnim_link_demo_zeldamiru" Offset="0xD688" /> <!-- Original name is "link_demo_zeldamiru" -->
+        <PlayerAnimation Name="gPlayerAnim_link_demo_zeldamiru_wait" Offset="0xD690" /> <!-- Original name is "link_demo_zeldamiru_wait" -->
+        <PlayerAnimation Name="gPlayerAnim_link_derth_rebirth" Offset="0xD698" /> <!-- Original name is "link_derth_rebirth" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_LLside_kiru" Offset="0xD6A0" /> <!-- Original name is "link_fighter_LLside_kiru" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_LLside_kiru_end" Offset="0xD6A8" /> <!-- Original name is "link_fighter_LLside_kiru_end" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_LLside_kiru_finsh" Offset="0xD6B0" /> <!-- Original name is "link_fighter_LLside_kiru_finsh" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_LLside_kiru_finsh_end" Offset="0xD6B8" /> <!-- Original name is "link_fighter_LLside_kiru_finsh_end" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_LRside_kiru" Offset="0xD6C0" /> <!-- Original name is "link_fighter_LRside_kiru" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_LRside_kiru_end" Offset="0xD6C8" /> <!-- Original name is "link_fighter_LRside_kiru_end" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_LRside_kiru_finsh" Offset="0xD6D0" /> <!-- Original name is "link_fighter_LRside_kiru_finsh" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_LRside_kiru_finsh_end" Offset="0xD6D8" /> <!-- Original name is "link_fighter_LRside_kiru_finsh_end" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_Lnormal_kiru" Offset="0xD6E0" /> <!-- Original name is "link_fighter_Lnormal_kiru" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_Lnormal_kiru_end" Offset="0xD6E8" /> <!-- Original name is "link_fighter_Lnormal_kiru_end" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_Lnormal_kiru_finsh" Offset="0xD6F0" /> <!-- Original name is "link_fighter_Lnormal_kiru_finsh" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_Lnormal_kiru_finsh_end" Offset="0xD6F8" /> <!-- Original name is "link_fighter_Lnormal_kiru_finsh_end" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_Lpierce_kiru" Offset="0xD700" /> <!-- Original name is "link_fighter_Lpierce_kiru" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_Lpierce_kiru_end" Offset="0xD708" /> <!-- Original name is "link_fighter_Lpierce_kiru_end" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_Lpierce_kiru_finsh" Offset="0xD710" /> <!-- Original name is "link_fighter_Lpierce_kiru_finsh" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_Lpierce_kiru_finsh_end" Offset="0xD718" /> <!-- Original name is "link_fighter_Lpierce_kiru_finsh_end" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_Lpower_jump_kiru" Offset="0xD720" /> <!-- Original name is "link_fighter_Lpower_jump_kiru" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_Lpower_jump_kiru_end" Offset="0xD728" /> <!-- Original name is "link_fighter_Lpower_jump_kiru_end" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_Lpower_jump_kiru_hit" Offset="0xD730" /> <!-- Original name is "link_fighter_Lpower_jump_kiru_hit" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_Lpower_kiru_side_walk" Offset="0xD738" /> <!-- Original name is "link_fighter_Lpower_kiru_side_walk" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_Lpower_kiru_start" Offset="0xD740" /> <!-- Original name is "link_fighter_Lpower_kiru_start" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_Lpower_kiru_wait" Offset="0xD748" /> <!-- Original name is "link_fighter_Lpower_kiru_wait" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_Lpower_kiru_wait_end" Offset="0xD750" /> <!-- Original name is "link_fighter_Lpower_kiru_wait_end" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_Lpower_kiru_walk" Offset="0xD758" /> <!-- Original name is "link_fighter_Lpower_kiru_walk" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_Lrolling_kiru" Offset="0xD760" /> <!-- Original name is "link_fighter_Lrolling_kiru" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_Lrolling_kiru_end" Offset="0xD768" /> <!-- Original name is "link_fighter_Lrolling_kiru_end" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_Lside_jump" Offset="0xD770" /> <!-- Original name is "link_fighter_Lside_jump" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_Lside_jump_endL" Offset="0xD778" /> <!-- Original name is "link_fighter_Lside_jump_endL" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_Lside_jump_end" Offset="0xD780" /> <!-- Original name is "link_fighter_Lside_jump_end" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_Lside_kiru" Offset="0xD788" /> <!-- Original name is "link_fighter_Lside_kiru" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_Lside_kiru_end" Offset="0xD790" /> <!-- Original name is "link_fighter_Lside_kiru_end" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_Lside_kiru_finsh" Offset="0xD798" /> <!-- Original name is "link_fighter_Lside_kiru_finsh" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_Lside_kiru_finsh_end" Offset="0xD7A0" /> <!-- Original name is "link_fighter_Lside_kiru_finsh_end" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_Rside_jump" Offset="0xD7A8" /> <!-- Original name is "link_fighter_Rside_jump" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_Rside_jump_endR" Offset="0xD7B0" /> <!-- Original name is "link_fighter_Rside_jump_endR" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_Rside_jump_end" Offset="0xD7B8" /> <!-- Original name is "link_fighter_Rside_jump_end" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_Rside_kiru" Offset="0xD7C0" /> <!-- Original name is "link_fighter_Rside_kiru" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_Rside_kiru_end" Offset="0xD7C8" /> <!-- Original name is "link_fighter_Rside_kiru_end" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_Rside_kiru_finsh" Offset="0xD7D0" /> <!-- Original name is "link_fighter_Rside_kiru_finsh" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_Rside_kiru_finsh_end" Offset="0xD7D8" /> <!-- Original name is "link_fighter_Rside_kiru_finsh_end" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_Wrolling_kiru" Offset="0xD7E0" /> <!-- Original name is "link_fighter_Wrolling_kiru" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_Wrolling_kiru_end" Offset="0xD7E8" /> <!-- Original name is "link_fighter_Wrolling_kiru_end" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_backturn_jump" Offset="0xD7F0" /> <!-- Original name is "link_fighter_backturn_jump" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_backturn_jump_endR" Offset="0xD7F8" /> <!-- Original name is "link_fighter_backturn_jump_endR" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_backturn_jump_end" Offset="0xD800" /> <!-- Original name is "link_fighter_backturn_jump_end" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_damage_run" Offset="0xD808" /> <!-- Original name is "link_fighter_damage_run" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_damage_run_long" Offset="0xD810" /> <!-- Original name is "link_fighter_damage_run_long" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_defense_long_hit" Offset="0xD818" /> <!-- Original name is "link_fighter_defense_long_hit" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_fighter2long" Offset="0xD820" /> <!-- Original name is "link_fighter_fighter2long" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_front_jump" Offset="0xD828" /> <!-- Original name is "link_fighter_front_jump" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_front_jump_endR" Offset="0xD830" /> <!-- Original name is "link_fighter_front_jump_endR" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_front_jump_end" Offset="0xD838" /> <!-- Original name is "link_fighter_front_jump_end" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_jump_kiru_finsh" Offset="0xD840" /> <!-- Original name is "link_fighter_jump_kiru_finsh" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_jump_kiru_finsh_end" Offset="0xD848" /> <!-- Original name is "link_fighter_jump_kiru_finsh_end" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_jump_rollkiru" Offset="0xD850" /> <!-- Original name is "link_fighter_jump_rollkiru" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_landing_roll_long" Offset="0xD858" /> <!-- Original name is "link_fighter_landing_roll_long" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_normal2fighter" Offset="0xD860" /> <!-- Original name is "link_fighter_normal2fighter" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_normal_kiru" Offset="0xD868" /> <!-- Original name is "link_fighter_normal_kiru" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_normal_kiru_endR" Offset="0xD870" /> <!-- Original name is "link_fighter_normal_kiru_endR" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_normal_kiru_end" Offset="0xD878" /> <!-- Original name is "link_fighter_normal_kiru_end" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_normal_kiru_finsh" Offset="0xD880" /> <!-- Original name is "link_fighter_normal_kiru_finsh" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_normal_kiru_finsh_end" Offset="0xD888" /> <!-- Original name is "link_fighter_normal_kiru_finsh_end" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_pierce_kiru" Offset="0xD890" /> <!-- Original name is "link_fighter_pierce_kiru" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_pierce_kiru_end" Offset="0xD898" /> <!-- Original name is "link_fighter_pierce_kiru_end" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_pierce_kiru_finsh" Offset="0xD8A0" /> <!-- Original name is "link_fighter_pierce_kiru_finsh" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_pierce_kiru_finsh_end" Offset="0xD8A8" /> <!-- Original name is "link_fighter_pierce_kiru_finsh_end" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_power_jump_kiru_end" Offset="0xD8B0" /> <!-- Original name is "link_fighter_power_jump_kiru_end" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_power_kiru_side_walk" Offset="0xD8B8" /> <!-- Original name is "link_fighter_power_kiru_side_walk" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_power_kiru_startL" Offset="0xD8C0" /> <!-- Original name is "link_fighter_power_kiru_startL" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_power_kiru_start" Offset="0xD8C8" /> <!-- Original name is "link_fighter_power_kiru_start" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_power_kiru_wait" Offset="0xD8D0" /> <!-- Original name is "link_fighter_power_kiru_wait" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_power_kiru_wait_end" Offset="0xD8D8" /> <!-- Original name is "link_fighter_power_kiru_wait_end" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_power_kiru_walk" Offset="0xD8E0" /> <!-- Original name is "link_fighter_power_kiru_walk" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_reboundR" Offset="0xD8E8" /> <!-- Original name is "link_fighter_reboundR" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_rebound" Offset="0xD8F0" /> <!-- Original name is "link_fighter_rebound" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_rebound_longR" Offset="0xD8F8" /> <!-- Original name is "link_fighter_rebound_longR" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_rebound_long" Offset="0xD900" /> <!-- Original name is "link_fighter_rebound_long" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_rolling_kiru" Offset="0xD908" /> <!-- Original name is "link_fighter_rolling_kiru" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_rolling_kiru_end" Offset="0xD910" /> <!-- Original name is "link_fighter_rolling_kiru_end" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_run" Offset="0xD918" /> <!-- Original name is "link_fighter_run" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_run_long" Offset="0xD920" /> <!-- Original name is "link_fighter_run_long" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_side_walkL_long" Offset="0xD928" /> <!-- Original name is "link_fighter_side_walkL_long" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_side_walkR_long" Offset="0xD930" /> <!-- Original name is "link_fighter_side_walkR_long" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_side_walk_long" Offset="0xD938" /> <!-- Original name is "link_fighter_side_walk_long" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_turn_kiruL" Offset="0xD940" /> <!-- Original name is "link_fighter_turn_kiruL" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_turn_kiruL_end" Offset="0xD948" /> <!-- Original name is "link_fighter_turn_kiruL_end" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_turn_kiruR" Offset="0xD950" /> <!-- Original name is "link_fighter_turn_kiruR" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_turn_kiruR_end" Offset="0xD958" /> <!-- Original name is "link_fighter_turn_kiruR_end" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_wait2waitR_long" Offset="0xD960" /> <!-- Original name is "link_fighter_wait2waitR_long" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_waitL2wait_long" Offset="0xD968" /> <!-- Original name is "link_fighter_waitL2wait_long" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_waitL_long" Offset="0xD970" /> <!-- Original name is "link_fighter_waitL_long" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_waitR2wait_long" Offset="0xD978" /> <!-- Original name is "link_fighter_waitR2wait_long" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_waitR_long" Offset="0xD980" /> <!-- Original name is "link_fighter_waitR_long" -->
         <PlayerAnimation Name="gPlayerAnim_link_fighter_wait_long" Offset="0xD988" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_walk_endL_long" Offset="0xD990" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_walk_endR_long" Offset="0xD998" />
-        <PlayerAnimation Name="gPlayerAnim_link_fighter_walk_long" Offset="0xD9A0" />
-        <PlayerAnimation Name="gPlayerAnim_link_hammer_long2free" Offset="0xD9A8" />
-        <PlayerAnimation Name="gPlayerAnim_link_hammer_long2long" Offset="0xD9B0" />
-        <PlayerAnimation Name="gPlayerAnim_link_hammer_normal2long" Offset="0xD9B8" />
-        <PlayerAnimation Name="gPlayerAnim_link_hatto_demo" Offset="0xD9C0" />
-        <PlayerAnimation Name="gPlayerAnim_link_hook_fly_start" Offset="0xD9C8" />
-        <PlayerAnimation Name="gPlayerAnim_link_hook_fly_wait" Offset="0xD9D0" />
-        <PlayerAnimation Name="gPlayerAnim_link_hook_shot_ready" Offset="0xD9D8" />
-        <PlayerAnimation Name="gPlayerAnim_link_hook_wait" Offset="0xD9E0" />
-        <PlayerAnimation Name="gPlayerAnim_link_hook_walk2ready" Offset="0xD9E8" />
-        <PlayerAnimation Name="gPlayerAnim_link_kei_wait" Offset="0xD9F0" />
-        <PlayerAnimation Name="gPlayerAnim_link_keirei" Offset="0xD9F8" />
-        <PlayerAnimation Name="gPlayerAnim_link_last_hit_motion1" Offset="0xDA00" />
-        <PlayerAnimation Name="gPlayerAnim_link_last_hit_motion2" Offset="0xDA08" />
-        <PlayerAnimation Name="gPlayerAnim_link_magic_honoo1" Offset="0xDA10" />
-        <PlayerAnimation Name="gPlayerAnim_link_magic_honoo2" Offset="0xDA18" />
-        <PlayerAnimation Name="gPlayerAnim_link_magic_honoo3" Offset="0xDA20" />
-        <PlayerAnimation Name="gPlayerAnim_link_magic_kaze1" Offset="0xDA28" />
-        <PlayerAnimation Name="gPlayerAnim_link_magic_kaze2" Offset="0xDA30" />
-        <PlayerAnimation Name="gPlayerAnim_link_magic_kaze3" Offset="0xDA38" />
-        <PlayerAnimation Name="gPlayerAnim_link_magic_tamashii1" Offset="0xDA40" />
-        <PlayerAnimation Name="gPlayerAnim_link_magic_tamashii2" Offset="0xDA48" />
-        <PlayerAnimation Name="gPlayerAnim_link_magic_tamashii3" Offset="0xDA50" />
-        <PlayerAnimation Name="gPlayerAnim_link_magic_tame" Offset="0xDA58" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_100step_up" Offset="0xDA60" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_150step_up" Offset="0xDA68" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_250jump_start" Offset="0xDA70" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_45_turn" Offset="0xDA78" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_45_turn_free" Offset="0xDA80" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_Fclimb_hold2upL" Offset="0xDA88" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_Fclimb_sideL" Offset="0xDA90" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_Fclimb_sideR" Offset="0xDA98" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_Fclimb_startA" Offset="0xDAA0" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_Fclimb_startB" Offset="0xDAA8" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_Fclimb_upL" Offset="0xDAB0" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_Fclimb_upR" Offset="0xDAB8" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_back_brake" Offset="0xDAC0" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_back_brake_end" Offset="0xDAC8" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_back_downA" Offset="0xDAD0" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_back_downB" Offset="0xDAD8" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_back_down_wake" Offset="0xDAE0" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_back_hit" Offset="0xDAE8" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_back_run" Offset="0xDAF0" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_back_shitR" Offset="0xDAF8" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_back_shit" Offset="0xDB00" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_back_walk" Offset="0xDB08" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_backspace" Offset="0xDB10" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_box_kick" Offset="0xDB18" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_carryB" Offset="0xDB20" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_carryB_free" Offset="0xDB28" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_carryB_wait" Offset="0xDB30" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_check" Offset="0xDB38" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_check_end" Offset="0xDB40" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_check_end_free" Offset="0xDB48" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_check_free" Offset="0xDB50" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_check_wait" Offset="0xDB58" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_check_wait_free" Offset="0xDB60" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_climb_down" Offset="0xDB68" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_climb_endAL" Offset="0xDB70" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_climb_endAR" Offset="0xDB78" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_climb_endBL" Offset="0xDB80" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_climb_endBR" Offset="0xDB88" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_climb_startA" Offset="0xDB90" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_climb_startB" Offset="0xDB98" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_climb_upL" Offset="0xDBA0" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_climb_upR" Offset="0xDBA8" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_climb_up" Offset="0xDBB0" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_damage_run_free" Offset="0xDBB8" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_defense" Offset="0xDBC0" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_defense_end" Offset="0xDBC8" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_defense_end_free" Offset="0xDBD0" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_defense_free" Offset="0xDBD8" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_defense_hit" Offset="0xDBE0" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_defense_kiru" Offset="0xDBE8" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_defense_wait" Offset="0xDBF0" />
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_walk_endL_long" Offset="0xD990" /> <!-- Original name is "link_fighter_walk_endL_long" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_walk_endR_long" Offset="0xD998" /> <!-- Original name is "link_fighter_walk_endR_long" -->
+        <PlayerAnimation Name="gPlayerAnim_link_fighter_walk_long" Offset="0xD9A0" /> <!-- Original name is "link_fighter_walk_long" -->
+        <PlayerAnimation Name="gPlayerAnim_link_hammer_long2free" Offset="0xD9A8" /> <!-- Original name is "link_hammer_long2free" -->
+        <PlayerAnimation Name="gPlayerAnim_link_hammer_long2long" Offset="0xD9B0" /> <!-- Original name is "link_hammer_long2long" -->
+        <PlayerAnimation Name="gPlayerAnim_link_hammer_normal2long" Offset="0xD9B8" /> <!-- Original name is "link_hammer_normal2long" -->
+        <PlayerAnimation Name="gPlayerAnim_link_hatto_demo" Offset="0xD9C0" /> <!-- Original name is "link_hatto_demo" -->
+        <PlayerAnimation Name="gPlayerAnim_link_hook_fly_start" Offset="0xD9C8" /> <!-- Original name is "link_hook_fly_start" -->
+        <PlayerAnimation Name="gPlayerAnim_link_hook_fly_wait" Offset="0xD9D0" /> <!-- Original name is "link_hook_fly_wait" -->
+        <PlayerAnimation Name="gPlayerAnim_link_hook_shot_ready" Offset="0xD9D8" /> <!-- Original name is "link_hook_shot_ready" -->
+        <PlayerAnimation Name="gPlayerAnim_link_hook_wait" Offset="0xD9E0" /> <!-- Original name is "link_hook_wait" -->
+        <PlayerAnimation Name="gPlayerAnim_link_hook_walk2ready" Offset="0xD9E8" /> <!-- Original name is "link_hook_walk2ready" -->
+        <PlayerAnimation Name="gPlayerAnim_link_kei_wait" Offset="0xD9F0" /> <!-- Original name might be "link_kei_wait" -->
+        <PlayerAnimation Name="gPlayerAnim_link_keirei" Offset="0xD9F8" /> <!-- Original name might be "link_keirei" -->
+        <PlayerAnimation Name="gPlayerAnim_link_last_hit_motion1" Offset="0xDA00" /> <!-- Original name is "link_last_hit_motion1" -->
+        <PlayerAnimation Name="gPlayerAnim_link_last_hit_motion2" Offset="0xDA08" /> <!-- Original name is "link_last_hit_motion2" -->
+        <PlayerAnimation Name="gPlayerAnim_link_magic_honoo1" Offset="0xDA10" /> <!-- Original name is "link_magic_honoo1" -->
+        <PlayerAnimation Name="gPlayerAnim_link_magic_honoo2" Offset="0xDA18" /> <!-- Original name is "link_magic_honoo2" -->
+        <PlayerAnimation Name="gPlayerAnim_link_magic_honoo3" Offset="0xDA20" /> <!-- Original name is "link_magic_honoo3" -->
+        <PlayerAnimation Name="gPlayerAnim_link_magic_kaze1" Offset="0xDA28" /> <!-- Original name is "link_magic_kaze1" -->
+        <PlayerAnimation Name="gPlayerAnim_link_magic_kaze2" Offset="0xDA30" /> <!-- Original name is "link_magic_kaze2" -->
+        <PlayerAnimation Name="gPlayerAnim_link_magic_kaze3" Offset="0xDA38" /> <!-- Original name is "link_magic_kaze3" -->
+        <PlayerAnimation Name="gPlayerAnim_link_magic_tamashii1" Offset="0xDA40" /> <!-- Original name is "link_magic_tamashii1" -->
+        <PlayerAnimation Name="gPlayerAnim_link_magic_tamashii2" Offset="0xDA48" /> <!-- Original name is "link_magic_tamashii2" -->
+        <PlayerAnimation Name="gPlayerAnim_link_magic_tamashii3" Offset="0xDA50" /> <!-- Original name is "link_magic_tamashii3" -->
+        <PlayerAnimation Name="gPlayerAnim_link_magic_tame" Offset="0xDA58" /> <!-- Original name is "link_magic_tame" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_100step_up" Offset="0xDA60" /> <!-- Original name is "link_normal_100step_up" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_150step_up" Offset="0xDA68" /> <!-- Original name is "link_normal_150step_up" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_250jump_start" Offset="0xDA70" /> <!-- Original name is "link_normal_250jump_start" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_45_turn" Offset="0xDA78" /> <!-- Original name is "link_normal_45_turn" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_45_turn_free" Offset="0xDA80" /> <!-- Original name is "link_normal_45_turn_free" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_Fclimb_hold2upL" Offset="0xDA88" /> <!-- Original name is "link_normal_Fclimb_hold2upL" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_Fclimb_sideL" Offset="0xDA90" /> <!-- Original name is "link_normal_Fclimb_sideL" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_Fclimb_sideR" Offset="0xDA98" /> <!-- Original name is "link_normal_Fclimb_sideR" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_Fclimb_startA" Offset="0xDAA0" /> <!-- Original name is "link_normal_Fclimb_startA" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_Fclimb_startB" Offset="0xDAA8" /> <!-- Original name is "link_normal_Fclimb_startB" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_Fclimb_upL" Offset="0xDAB0" /> <!-- Original name is "link_normal_Fclimb_upL" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_Fclimb_upR" Offset="0xDAB8" /> <!-- Original name is "link_normal_Fclimb_upR" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_back_brake" Offset="0xDAC0" /> <!-- Original name is "link_normal_back_brake" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_back_brake_end" Offset="0xDAC8" /> <!-- Original name is "link_normal_back_brake_end" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_back_downA" Offset="0xDAD0" /> <!-- Original name is "link_normal_back_downA" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_back_downB" Offset="0xDAD8" /> <!-- Original name is "link_normal_back_downB" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_back_down_wake" Offset="0xDAE0" /> <!-- Original name is "link_normal_back_down_wake" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_back_hit" Offset="0xDAE8" /> <!-- Original name is "link_normal_back_hit" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_back_run" Offset="0xDAF0" /> <!-- Original name is "link_normal_back_run" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_back_shitR" Offset="0xDAF8" /> <!-- Original name is "link_normal_back_shitR" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_back_shit" Offset="0xDB00" /> <!-- Original name is "link_normal_back_shit" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_back_walk" Offset="0xDB08" /> <!-- Original name is "link_normal_back_walk" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_backspace" Offset="0xDB10" /> <!-- Original name is "link_normal_backspace" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_box_kick" Offset="0xDB18" /> <!-- Original name is "link_normal_box_kick" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_carryB" Offset="0xDB20" /> <!-- Original name is "link_normal_carryB" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_carryB_free" Offset="0xDB28" /> <!-- Original name is "link_normal_carryB_free" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_carryB_wait" Offset="0xDB30" /> <!-- Original name is "link_normal_carryB_wait" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_check" Offset="0xDB38" /> <!-- Original name is "link_normal_check" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_check_end" Offset="0xDB40" /> <!-- Original name is "link_normal_check_end" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_check_end_free" Offset="0xDB48" /> <!-- Original name is "link_normal_check_end_free" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_check_free" Offset="0xDB50" /> <!-- Original name is "link_normal_check_free" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_check_wait" Offset="0xDB58" /> <!-- Original name is "link_normal_check_wait" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_check_wait_free" Offset="0xDB60" /> <!-- Original name is "link_normal_check_wait_free" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_climb_down" Offset="0xDB68" /> <!-- Original name is "link_normal_climb_down" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_climb_endAL" Offset="0xDB70" /> <!-- Original name is "link_normal_climb_endAL" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_climb_endAR" Offset="0xDB78" /> <!-- Original name is "link_normal_climb_endAR" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_climb_endBL" Offset="0xDB80" /> <!-- Original name is "link_normal_climb_endBL" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_climb_endBR" Offset="0xDB88" /> <!-- Original name is "link_normal_climb_endBR" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_climb_startA" Offset="0xDB90" /> <!-- Original name is "link_normal_climb_startA" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_climb_startB" Offset="0xDB98" /> <!-- Original name is "link_normal_climb_startB" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_climb_upL" Offset="0xDBA0" /> <!-- Original name is "link_normal_climb_upL" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_climb_upR" Offset="0xDBA8" /> <!-- Original name is "link_normal_climb_upR" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_climb_up" Offset="0xDBB0" /> <!-- Original name is "link_normal_climb_up" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_damage_run_free" Offset="0xDBB8" /> <!-- Original name is "link_normal_damage_run_free" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_defense" Offset="0xDBC0" /> <!-- Original name is "link_normal_defense" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_defense_end" Offset="0xDBC8" /> <!-- Original name is "link_normal_defense_end" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_defense_end_free" Offset="0xDBD0" /> <!-- Original name is "link_normal_defense_end_free" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_defense_free" Offset="0xDBD8" /> <!-- Original name is "link_normal_defense_free" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_defense_hit" Offset="0xDBE0" /> <!-- Original name is "link_normal_defense_hit" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_defense_kiru" Offset="0xDBE8" /> <!-- Original name is "link_normal_defense_kiru" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_defense_wait" Offset="0xDBF0" /> <!-- Original name is "link_normal_defense_wait" -->
         <PlayerAnimation Name="gPlayerAnim_link_normal_defense_wait_free" Offset="0xDBF8" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_down_slope_slip" Offset="0xDC00" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_down_slope_slip_end" Offset="0xDC08" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_down_slope_slip_end_free" Offset="0xDC10" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_down_slope_slip_end_long" Offset="0xDC18" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_electric_shock" Offset="0xDC20" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_electric_shock_end" Offset="0xDC28" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_fall" Offset="0xDC30" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_fall_up" Offset="0xDC38" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_fall_up_free" Offset="0xDC40" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_fall_wait" Offset="0xDC48" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_fighter2free" Offset="0xDC50" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_free2bom" Offset="0xDC58" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_free2fighter_free" Offset="0xDC60" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_free2freeB" Offset="0xDC68" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_free2free" Offset="0xDC70" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_front_downA" Offset="0xDC78" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_front_downB" Offset="0xDC80" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_front_down_wake" Offset="0xDC88" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_front_hit" Offset="0xDC90" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_front_shitR" Offset="0xDC98" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_front_shit" Offset="0xDCA0" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_give_other" Offset="0xDCA8" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_hang_up_down" Offset="0xDCB0" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_hip_down" Offset="0xDCB8" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_hip_down_free" Offset="0xDCC0" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_hip_down_long" Offset="0xDCC8" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_ice_down" Offset="0xDCD0" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_jump" Offset="0xDCD8" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_jump_climb_hold" Offset="0xDCE0" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_jump_climb_hold_free" Offset="0xDCE8" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_jump_climb_up" Offset="0xDCF0" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_jump_climb_up_free" Offset="0xDCF8" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_jump_climb_wait" Offset="0xDD00" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_jump_climb_wait_free" Offset="0xDD08" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_landing" Offset="0xDD10" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_landing_free" Offset="0xDD18" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_landing_roll" Offset="0xDD20" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_landing_roll_free" Offset="0xDD28" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_landing_wait" Offset="0xDD30" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_light_bom" Offset="0xDD38" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_light_bom_end" Offset="0xDD40" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_long2bom" Offset="0xDD48" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_newroll_jump_20f" Offset="0xDD50" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_newroll_jump_end_20f" Offset="0xDD58" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_newside_jump_20f" Offset="0xDD60" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_newside_jump_end_20f" Offset="0xDD68" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_nocarry_free" Offset="0xDD70" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_nocarry_free_end" Offset="0xDD78" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_nocarry_free_wait" Offset="0xDD80" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_normal2bom" Offset="0xDD88" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_normal2fighter" Offset="0xDD90" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_normal2fighter_free" Offset="0xDD98" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_normal2free" Offset="0xDDA0" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_okarina_end" Offset="0xDDA8" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_okarina_start" Offset="0xDDB0" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_okarina_swing" Offset="0xDDB8" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_pull_end" Offset="0xDDC0" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_pull_end_free" Offset="0xDDC8" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_pull_start" Offset="0xDDD0" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_pull_start_free" Offset="0xDDD8" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_pulling" Offset="0xDDE0" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_pulling_free" Offset="0xDDE8" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_push_end" Offset="0xDDF0" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_push_start" Offset="0xDDF8" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_push_wait" Offset="0xDE00" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_push_wait_end" Offset="0xDE08" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_pushing" Offset="0xDE10" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_put" Offset="0xDE18" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_put_free" Offset="0xDE20" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_re_dead_attack" Offset="0xDE28" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_re_dead_attack_wait" Offset="0xDE30" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_run" Offset="0xDE38" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_run_free" Offset="0xDE40" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_run_jump" Offset="0xDE48" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_run_jump_end" Offset="0xDE50" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_run_jump_water_fall" Offset="0xDE58" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_run_jump_water_fall_wait" Offset="0xDE60" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_short_landing" Offset="0xDE68" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_short_landing_free" Offset="0xDE70" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_side_walkL_free" Offset="0xDE78" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_side_walkR_free" Offset="0xDE80" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_side_walk" Offset="0xDE88" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_side_walk_free" Offset="0xDE90" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_take_out" Offset="0xDE98" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_talk_free" Offset="0xDEA0" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_talk_free_wait" Offset="0xDEA8" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_throw" Offset="0xDEB0" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_throw_free" Offset="0xDEB8" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_up_slope_slip" Offset="0xDEC0" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_up_slope_slip_end" Offset="0xDEC8" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_up_slope_slip_end_free" Offset="0xDED0" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_up_slope_slip_end_long" Offset="0xDED8" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_wait2waitR" Offset="0xDEE0" />
+        <PlayerAnimation Name="gPlayerAnim_link_normal_down_slope_slip" Offset="0xDC00" /> <!-- Original name is "link_normal_down_slope_slip" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_down_slope_slip_end" Offset="0xDC08" /> <!-- Original name is "link_normal_down_slope_slip_end" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_down_slope_slip_end_free" Offset="0xDC10" /> <!-- Original name is "link_normal_down_slope_slip_end_free" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_down_slope_slip_end_long" Offset="0xDC18" /> <!-- Original name is "link_normal_down_slope_slip_end_long" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_electric_shock" Offset="0xDC20" /> <!-- Original name is "link_normal_electric_shock" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_electric_shock_end" Offset="0xDC28" /> <!-- Original name is "link_normal_electric_shock_end" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_fall" Offset="0xDC30" /> <!-- Original name is "link_normal_fall" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_fall_up" Offset="0xDC38" /> <!-- Original name is "link_normal_fall_up" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_fall_up_free" Offset="0xDC40" /> <!-- Original name is "link_normal_fall_up_free" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_fall_wait" Offset="0xDC48" /> <!-- Original name is "link_normal_fall_wait" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_fighter2free" Offset="0xDC50" /> <!-- Original name is "link_normal_fighter2free" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_free2bom" Offset="0xDC58" /> <!-- Original name is "link_normal_free2bom" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_free2fighter_free" Offset="0xDC60" /> <!-- Original name is "link_normal_free2fighter_free" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_free2freeB" Offset="0xDC68" /> <!-- Original name is "link_normal_free2freeB" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_free2free" Offset="0xDC70" /> <!-- Original name is "link_normal_free2free" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_front_downA" Offset="0xDC78" /> <!-- Original name is "link_normal_front_downA" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_front_downB" Offset="0xDC80" /> <!-- Original name is "link_normal_front_downB" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_front_down_wake" Offset="0xDC88" /> <!-- Original name is "link_normal_front_down_wake" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_front_hit" Offset="0xDC90" /> <!-- Original name is "link_normal_front_hit" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_front_shitR" Offset="0xDC98" /> <!-- Original name is "link_normal_front_shitR" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_front_shit" Offset="0xDCA0" /> <!-- Original name is "link_normal_front_shit" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_give_other" Offset="0xDCA8" /> <!-- Original name is "link_normal_give_other" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_hang_up_down" Offset="0xDCB0" /> <!-- Original name is "link_normal_hang_up_down" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_hip_down" Offset="0xDCB8" /> <!-- Original name is "link_normal_hip_down" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_hip_down_free" Offset="0xDCC0" /> <!-- Original name is "link_normal_hip_down_free" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_hip_down_long" Offset="0xDCC8" /> <!-- Original name is "link_normal_hip_down_long" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_ice_down" Offset="0xDCD0" /> <!-- Original name is "link_normal_ice_down" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_jump" Offset="0xDCD8" /> <!-- Original name is "link_normal_jump" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_jump_climb_hold" Offset="0xDCE0" /> <!-- Original name is "link_normal_jump_climb_hold" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_jump_climb_hold_free" Offset="0xDCE8" /> <!-- Original name is "link_normal_jump_climb_hold_free" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_jump_climb_up" Offset="0xDCF0" /> <!-- Original name is "link_normal_jump_climb_up" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_jump_climb_up_free" Offset="0xDCF8" /> <!-- Original name is "link_normal_jump_climb_up_free" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_jump_climb_wait" Offset="0xDD00" /> <!-- Original name is "link_normal_jump_climb_wait" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_jump_climb_wait_free" Offset="0xDD08" /> <!-- Original name is "link_normal_jump_climb_wait_free" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_landing" Offset="0xDD10" /> <!-- Original name is "link_normal_landing" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_landing_free" Offset="0xDD18" /> <!-- Original name is "link_normal_landing_free" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_landing_roll" Offset="0xDD20" /> <!-- Original name is "link_normal_landing_roll" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_landing_roll_free" Offset="0xDD28" /> <!-- Original name is "link_normal_landing_roll_free" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_landing_wait" Offset="0xDD30" /> <!-- Original name is "link_normal_landing_wait" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_light_bom" Offset="0xDD38" /> <!-- Original name is "link_normal_light_bom" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_light_bom_end" Offset="0xDD40" /> <!-- Original name is "link_normal_light_bom_end" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_long2bom" Offset="0xDD48" /> <!-- Original name is "link_normal_long2bom" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_newroll_jump_20f" Offset="0xDD50" /> <!-- Original name might be "link_normal_newroll_jump_20f" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_newroll_jump_end_20f" Offset="0xDD58" /> <!-- Original name might be "link_normal_newroll_jump_end_20f" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_newside_jump_20f" Offset="0xDD60" /> <!-- Original name might be "link_normal_newside_jump_20f" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_newside_jump_end_20f" Offset="0xDD68" /> <!-- Original name might be "link_normal_newside_jump_end_20f" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_nocarry_free" Offset="0xDD70" /> <!-- Original name is "link_normal_nocarry_free" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_nocarry_free_end" Offset="0xDD78" /> <!-- Original name is "link_normal_nocarry_free_end" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_nocarry_free_wait" Offset="0xDD80" /> <!-- Original name is "link_normal_nocarry_free_wait" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_normal2bom" Offset="0xDD88" /> <!-- Original name is "link_normal_normal2bom" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_normal2fighter" Offset="0xDD90" /> <!-- Original name is "link_normal_normal2fighter" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_normal2fighter_free" Offset="0xDD98" /> <!-- Original name is "link_normal_normal2fighter_free" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_normal2free" Offset="0xDDA0" /> <!-- Original name is "link_normal_normal2free" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_okarina_end" Offset="0xDDA8" /> <!-- Original name is "link_normal_okarina_end" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_okarina_start" Offset="0xDDB0" /> <!-- Original name is "link_normal_okarina_start" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_okarina_swing" Offset="0xDDB8" /> <!-- Original name is "link_normal_okarina_swing" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_pull_end" Offset="0xDDC0" /> <!-- Original name is "link_normal_pull_end" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_pull_end_free" Offset="0xDDC8" /> <!-- Original name is "link_normal_pull_end_free" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_pull_start" Offset="0xDDD0" /> <!-- Original name is "link_normal_pull_start" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_pull_start_free" Offset="0xDDD8" /> <!-- Original name is "link_normal_pull_start_free" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_pulling" Offset="0xDDE0" /> <!-- Original name is "link_normal_pulling" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_pulling_free" Offset="0xDDE8" /> <!-- Original name is "link_normal_pulling_free" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_push_end" Offset="0xDDF0" /> <!-- Original name is "link_normal_push_end" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_push_start" Offset="0xDDF8" /> <!-- Original name is "link_normal_push_start" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_push_wait" Offset="0xDE00" /> <!-- Original name is "link_normal_push_wait" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_push_wait_end" Offset="0xDE08" /> <!-- Original name is "link_normal_push_wait_end" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_pushing" Offset="0xDE10" /> <!-- Original name is "link_normal_pushing" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_put" Offset="0xDE18" /> <!-- Original name is "link_normal_put" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_put_free" Offset="0xDE20" /> <!-- Original name is "link_normal_put_free" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_re_dead_attack" Offset="0xDE28" /> <!-- Original name is "link_normal_re_dead_attack" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_re_dead_attack_wait" Offset="0xDE30" /> <!-- Original name is "link_normal_re_dead_attack_wait" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_run" Offset="0xDE38" /> <!-- Original name is "link_normal_run" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_run_free" Offset="0xDE40" /> <!-- Original name is "link_normal_run_free" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_run_jump" Offset="0xDE48" /> <!-- Original name is "link_normal_run_jump" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_run_jump_end" Offset="0xDE50" /> <!-- Original name is "link_normal_run_jump_end" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_run_jump_water_fall" Offset="0xDE58" /> <!-- Original name is "link_normal_run_jump_water_fall" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_run_jump_water_fall_wait" Offset="0xDE60" /> <!-- Original name is "link_normal_run_jump_water_fall_wait" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_short_landing" Offset="0xDE68" /> <!-- Original name is "link_normal_short_landing" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_short_landing_free" Offset="0xDE70" /> <!-- Original name is "link_normal_short_landing_free" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_side_walkL_free" Offset="0xDE78" /> <!-- Original name is "link_normal_side_walkL_free" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_side_walkR_free" Offset="0xDE80" /> <!-- Original name is "link_normal_side_walkR_free" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_side_walk" Offset="0xDE88" /> <!-- Original name is "link_normal_side_walk" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_side_walk_free" Offset="0xDE90" /> <!-- Original name is "link_normal_side_walk_free" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_take_out" Offset="0xDE98" /> <!-- Original name might be "link_normal_take_out" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_talk_free" Offset="0xDEA0" /> <!-- Original name is "link_normal_talk_free" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_talk_free_wait" Offset="0xDEA8" /> <!-- Original name is "link_normal_talk_free_wait" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_throw" Offset="0xDEB0" /> <!-- Original name is "link_normal_throw" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_throw_free" Offset="0xDEB8" /> <!-- Original name is "link_normal_throw_free" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_up_slope_slip" Offset="0xDEC0" /> <!-- Original name is "link_normal_up_slope_slip" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_up_slope_slip_end" Offset="0xDEC8" /> <!-- Original name is "link_normal_up_slope_slip_end" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_up_slope_slip_end_free" Offset="0xDED0" /> <!-- Original name is "link_normal_up_slope_slip_end_free" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_up_slope_slip_end_long" Offset="0xDED8" /> <!-- Original name is "link_normal_up_slope_slip_end_long" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_wait2waitR" Offset="0xDEE0" /> <!-- Original name is "link_normal_wait2waitR" -->
         <PlayerAnimation Name="gPlayerAnim_link_normal_waitF_typeA_20f" Offset="0xDEE8" />
         <PlayerAnimation Name="gPlayerAnim_link_normal_waitF_typeB_20f" Offset="0xDEF0" />
         <PlayerAnimation Name="gPlayerAnim_link_normal_waitF_typeC_20f" Offset="0xDEF8" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_waitL2wait" Offset="0xDF00" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_waitL_free" Offset="0xDF08" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_waitR2wait" Offset="0xDF10" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_waitR_free" Offset="0xDF18" />
+        <PlayerAnimation Name="gPlayerAnim_link_normal_waitL2wait" Offset="0xDF00" /> <!-- Original name is "link_normal_waitL2wait" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_waitL_free" Offset="0xDF08" /> <!-- Original name is "link_normal_waitL_free" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_waitR2wait" Offset="0xDF10" /> <!-- Original name is "link_normal_waitR2wait" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_waitR_free" Offset="0xDF18" /> <!-- Original name is "link_normal_waitR_free" -->
         <PlayerAnimation Name="gPlayerAnim_link_normal_wait" Offset="0xDF20" />
         <PlayerAnimation Name="gPlayerAnim_link_normal_wait_free" Offset="0xDF28" />
         <PlayerAnimation Name="gPlayerAnim_link_normal_wait_typeA_20f" Offset="0xDF30" />
         <PlayerAnimation Name="gPlayerAnim_link_normal_wait_typeB_20f" Offset="0xDF38" />
         <PlayerAnimation Name="gPlayerAnim_link_normal_wait_typeC_20f" Offset="0xDF40" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_walk" Offset="0xDF48" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_walk_endL" Offset="0xDF50" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_walk_endL_free" Offset="0xDF58" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_walk_endR" Offset="0xDF60" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_walk_endR_free" Offset="0xDF68" />
-        <PlayerAnimation Name="gPlayerAnim_link_normal_walk_free" Offset="0xDF70" />
-        <PlayerAnimation Name="gPlayerAnim_link_okarina_warp_goal" Offset="0xDF78" />
-        <PlayerAnimation Name="gPlayerAnim_link_okiru_demo" Offset="0xDF80" />
-        <PlayerAnimation Name="gPlayerAnim_link_shagamu_demo" Offset="0xDF88" />
-        <PlayerAnimation Name="gPlayerAnim_link_silver_carry" Offset="0xDF90" />
-        <PlayerAnimation Name="gPlayerAnim_link_silver_throw" Offset="0xDF98" />
-        <PlayerAnimation Name="gPlayerAnim_link_silver_wait" Offset="0xDFA0" />
-        <PlayerAnimation Name="gPlayerAnim_link_swimer_Lside_swim" Offset="0xDFA8" />
-        <PlayerAnimation Name="gPlayerAnim_link_swimer_Rside_swim" Offset="0xDFB0" />
-        <PlayerAnimation Name="gPlayerAnim_link_swimer_back_swim" Offset="0xDFB8" />
-        <PlayerAnimation Name="gPlayerAnim_link_swimer_land2swim_wait" Offset="0xDFC0" />
-        <PlayerAnimation Name="gPlayerAnim_link_swimer_swim_15step_up" Offset="0xDFC8" />
-        <PlayerAnimation Name="gPlayerAnim_link_swimer_swim" Offset="0xDFD0" />
-        <PlayerAnimation Name="gPlayerAnim_link_swimer_swim_deep_end" Offset="0xDFD8" />
-        <PlayerAnimation Name="gPlayerAnim_link_swimer_swim_deep_start" Offset="0xDFE0" />
-        <PlayerAnimation Name="gPlayerAnim_link_swimer_swim_down" Offset="0xDFE8" />
-        <PlayerAnimation Name="gPlayerAnim_link_swimer_swim_get" Offset="0xDFF0" />
-        <PlayerAnimation Name="gPlayerAnim_link_swimer_swim_hit" Offset="0xDFF8" />
-        <PlayerAnimation Name="gPlayerAnim_link_swimer_swim_wait" Offset="0xE000" />
-        <PlayerAnimation Name="gPlayerAnim_link_swimer_wait2swim_wait" Offset="0xE008" />
-        <PlayerAnimation Name="gPlayerAnim_link_uma_anim_fastrun" Offset="0xE010" />
-        <PlayerAnimation Name="gPlayerAnim_link_uma_anim_fastrun_muti" Offset="0xE018" />
-        <PlayerAnimation Name="gPlayerAnim_link_uma_anim_jump100" Offset="0xE020" />
-        <PlayerAnimation Name="gPlayerAnim_link_uma_anim_jump200" Offset="0xE028" />
-        <PlayerAnimation Name="gPlayerAnim_link_uma_anim_slowrun" Offset="0xE030" />
-        <PlayerAnimation Name="gPlayerAnim_link_uma_anim_slowrun_muti" Offset="0xE038" />
-        <PlayerAnimation Name="gPlayerAnim_link_uma_anim_stand" Offset="0xE040" />
-        <PlayerAnimation Name="gPlayerAnim_link_uma_anim_stop" Offset="0xE048" />
-        <PlayerAnimation Name="gPlayerAnim_link_uma_anim_walk" Offset="0xE050" />
-        <PlayerAnimation Name="gPlayerAnim_link_uma_anim_walk_muti" Offset="0xE058" />
-        <PlayerAnimation Name="gPlayerAnim_link_uma_left_down" Offset="0xE060" />
-        <PlayerAnimation Name="gPlayerAnim_link_uma_left_up" Offset="0xE068" />
-        <PlayerAnimation Name="gPlayerAnim_link_uma_right_down" Offset="0xE070" />
-        <PlayerAnimation Name="gPlayerAnim_link_uma_right_up" Offset="0xE078" />
-        <PlayerAnimation Name="gPlayerAnim_link_uma_stop_muti" Offset="0xE080" />
-        <PlayerAnimation Name="gPlayerAnim_link_uma_wait_1" Offset="0xE088" />
-        <PlayerAnimation Name="gPlayerAnim_link_uma_wait_2" Offset="0xE090" />
-        <PlayerAnimation Name="gPlayerAnim_link_uma_wait_3" Offset="0xE098" />
-        <PlayerAnimation Name="gPlayerAnim_link_waitF_heat1_20f" Offset="0xE0A0" />
-        <PlayerAnimation Name="gPlayerAnim_link_waitF_heat2_20f" Offset="0xE0A8" />
+        <PlayerAnimation Name="gPlayerAnim_link_normal_walk" Offset="0xDF48" /> <!-- Original name is "link_normal_walk" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_walk_endL" Offset="0xDF50" /> <!-- Original name is "link_normal_walk_endL" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_walk_endL_free" Offset="0xDF58" /> <!-- Original name is "link_normal_walk_endL_free" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_walk_endR" Offset="0xDF60" /> <!-- Original name is "link_normal_walk_endR" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_walk_endR_free" Offset="0xDF68" /> <!-- Original name is "link_normal_walk_endR_free" -->
+        <PlayerAnimation Name="gPlayerAnim_link_normal_walk_free" Offset="0xDF70" /> <!-- Original name is "link_normal_walk_free" -->
+        <PlayerAnimation Name="gPlayerAnim_link_okarina_warp_goal" Offset="0xDF78" /> <!-- Original name is "link_okarina_warp_goal" -->
+        <PlayerAnimation Name="gPlayerAnim_link_okiru_demo" Offset="0xDF80" /> <!-- Original name is "link_okiru_demo" -->
+        <PlayerAnimation Name="gPlayerAnim_link_shagamu_demo" Offset="0xDF88" /> <!-- Original name is "link_shagamu_demo" -->
+        <PlayerAnimation Name="gPlayerAnim_link_silver_carry" Offset="0xDF90" /> <!-- Original name is "link_silver_carry" -->
+        <PlayerAnimation Name="gPlayerAnim_link_silver_throw" Offset="0xDF98" /> <!-- Original name is "link_silver_throw" -->
+        <PlayerAnimation Name="gPlayerAnim_link_silver_wait" Offset="0xDFA0" /> <!-- Original name is "link_silver_wait" -->
+        <PlayerAnimation Name="gPlayerAnim_link_swimer_Lside_swim" Offset="0xDFA8" /> <!-- Original name is "link_swimer_Lside_swim" -->
+        <PlayerAnimation Name="gPlayerAnim_link_swimer_Rside_swim" Offset="0xDFB0" /> <!-- Original name is "link_swimer_Rside_swim" -->
+        <PlayerAnimation Name="gPlayerAnim_link_swimer_back_swim" Offset="0xDFB8" /> <!-- Original name is "link_swimer_back_swim" -->
+        <PlayerAnimation Name="gPlayerAnim_link_swimer_land2swim_wait" Offset="0xDFC0" /> <!-- Original name is "link_swimer_land2swim_wait" -->
+        <PlayerAnimation Name="gPlayerAnim_link_swimer_swim_15step_up" Offset="0xDFC8" /> <!-- Original name is "link_swimer_swim_15step_up" -->
+        <PlayerAnimation Name="gPlayerAnim_link_swimer_swim" Offset="0xDFD0" /> <!-- Original name is "link_swimer_swim" -->
+        <PlayerAnimation Name="gPlayerAnim_link_swimer_swim_deep_end" Offset="0xDFD8" /> <!-- Original name is "link_swimer_swim_deep_end" -->
+        <PlayerAnimation Name="gPlayerAnim_link_swimer_swim_deep_start" Offset="0xDFE0" /> <!-- Original name is "link_swimer_swim_deep_start" -->
+        <PlayerAnimation Name="gPlayerAnim_link_swimer_swim_down" Offset="0xDFE8" /> <!-- Original name is "link_swimer_swim_down" -->
+        <PlayerAnimation Name="gPlayerAnim_link_swimer_swim_get" Offset="0xDFF0" /> <!-- Original name is "link_swimer_swim_get" -->
+        <PlayerAnimation Name="gPlayerAnim_link_swimer_swim_hit" Offset="0xDFF8" /> <!-- Original name is "link_swimer_swim_hit" -->
+        <PlayerAnimation Name="gPlayerAnim_link_swimer_swim_wait" Offset="0xE000" /> <!-- Original name is "link_swimer_swim_wait" -->
+        <PlayerAnimation Name="gPlayerAnim_link_swimer_wait2swim_wait" Offset="0xE008" /> <!-- Original name is "link_swimer_wait2swim_wait" -->
+        <PlayerAnimation Name="gPlayerAnim_link_uma_anim_fastrun" Offset="0xE010" /> <!-- Original name is "link_uma_anim_fastrun" -->
+        <PlayerAnimation Name="gPlayerAnim_link_uma_anim_fastrun_muti" Offset="0xE018" /> <!-- Original name is "link_uma_anim_fastrun_muti" -->
+        <PlayerAnimation Name="gPlayerAnim_link_uma_anim_jump100" Offset="0xE020" /> <!-- Original name is "link_uma_anim_jump100" -->
+        <PlayerAnimation Name="gPlayerAnim_link_uma_anim_jump200" Offset="0xE028" /> <!-- Original name is "link_uma_anim_jump200" -->
+        <PlayerAnimation Name="gPlayerAnim_link_uma_anim_slowrun" Offset="0xE030" /> <!-- Original name is "link_uma_anim_slowrun" -->
+        <PlayerAnimation Name="gPlayerAnim_link_uma_anim_slowrun_muti" Offset="0xE038" /> <!-- Original name is "link_uma_anim_slowrun_muti" -->
+        <PlayerAnimation Name="gPlayerAnim_link_uma_anim_stand" Offset="0xE040" /> <!-- Original name is "link_uma_anim_stand" -->
+        <PlayerAnimation Name="gPlayerAnim_link_uma_anim_stop" Offset="0xE048" /> <!-- Original name is "link_uma_anim_stop" -->
+        <PlayerAnimation Name="gPlayerAnim_link_uma_anim_walk" Offset="0xE050" /> <!-- Original name is "link_uma_anim_walk" -->
+        <PlayerAnimation Name="gPlayerAnim_link_uma_anim_walk_muti" Offset="0xE058" /> <!-- Original name is "link_uma_anim_walk_muti" -->
+        <PlayerAnimation Name="gPlayerAnim_link_uma_left_down" Offset="0xE060" /> <!-- Original name is "link_uma_left_down" -->
+        <PlayerAnimation Name="gPlayerAnim_link_uma_left_up" Offset="0xE068" /> <!-- Original name is "link_uma_left_up" -->
+        <PlayerAnimation Name="gPlayerAnim_link_uma_right_down" Offset="0xE070" /> <!-- Original name is "link_uma_right_down" -->
+        <PlayerAnimation Name="gPlayerAnim_link_uma_right_up" Offset="0xE078" /> <!-- Original name is "link_uma_right_up" -->
+        <PlayerAnimation Name="gPlayerAnim_link_uma_stop_muti" Offset="0xE080" /> <!-- Original name is "link_uma_stop_muti" -->
+        <PlayerAnimation Name="gPlayerAnim_link_uma_wait_1" Offset="0xE088" /> <!-- Original name is "link_uma_wait_1" -->
+        <PlayerAnimation Name="gPlayerAnim_link_uma_wait_2" Offset="0xE090" /> <!-- Original name is "link_uma_wait_2" -->
+        <PlayerAnimation Name="gPlayerAnim_link_uma_wait_3" Offset="0xE098" /> <!-- Original name is "link_uma_wait_3" -->
+        <PlayerAnimation Name="gPlayerAnim_link_waitF_heat1_20f" Offset="0xE0A0" /> <!-- Original name is "link_waitF_heat1_20f" -->
+        <PlayerAnimation Name="gPlayerAnim_link_waitF_heat2_20f" Offset="0xE0A8" /> <!-- Original name is "link_waitF_heat2_20f" -->
         <PlayerAnimation Name="gPlayerAnim_link_waitF_itemA_20f" Offset="0xE0B0" />
         <PlayerAnimation Name="gPlayerAnim_link_waitF_itemB_20f" Offset="0xE0B8" />
         <PlayerAnimation Name="gPlayerAnim_link_waitF_typeD_20f" Offset="0xE0C0" />
-        <PlayerAnimation Name="gPlayerAnim_link_wait_heat1_20f" Offset="0xE0C8" />
-        <PlayerAnimation Name="gPlayerAnim_link_wait_heat2_20f" Offset="0xE0D0" />
+        <PlayerAnimation Name="gPlayerAnim_link_wait_heat1_20f" Offset="0xE0C8" /> <!-- Original name is "link_wait_heat1_20f" -->
+        <PlayerAnimation Name="gPlayerAnim_link_wait_heat2_20f" Offset="0xE0D0" /> <!-- Original name is "link_wait_heat2_20f" -->
         <PlayerAnimation Name="gPlayerAnim_link_wait_itemA_20f" Offset="0xE0D8" />
         <PlayerAnimation Name="gPlayerAnim_link_wait_itemB_20f" Offset="0xE0E0" />
         <PlayerAnimation Name="gPlayerAnim_link_wait_itemC_20f" Offset="0xE0E8" />
         <PlayerAnimation Name="gPlayerAnim_link_wait_itemD1_20f" Offset="0xE0F0" />
         <PlayerAnimation Name="gPlayerAnim_link_wait_itemD2_20f" Offset="0xE0F8" />
         <PlayerAnimation Name="gPlayerAnim_link_wait_typeD_20f" Offset="0xE100" />
-        <PlayerAnimation Name="gPlayerAnim_lkt_nwait" Offset="0xE108" />
-        <PlayerAnimation Name="gPlayerAnim_lost_horse2" Offset="0xE110" />
-        <PlayerAnimation Name="gPlayerAnim_lost_horse" Offset="0xE118" />
-        <PlayerAnimation Name="gPlayerAnim_lost_horse_wait" Offset="0xE120" />
-        <PlayerAnimation Name="gPlayerAnim_nw_modoru" Offset="0xE128" />
-        <PlayerAnimation Name="gPlayerAnim_o_get_ato" Offset="0xE130" />
-        <PlayerAnimation Name="gPlayerAnim_o_get_mae" Offset="0xE138" />
-        <PlayerAnimation Name="gPlayerAnim_okarinatori" Offset="0xE140" />
-        <PlayerAnimation Name="gPlayerAnim_okiagaru" Offset="0xE148" />
-        <PlayerAnimation Name="gPlayerAnim_okiagaru_tatu" Offset="0xE150" />
-        <PlayerAnimation Name="gPlayerAnim_okiagaru_wait" Offset="0xE158" />
-        <PlayerAnimation Name="gPlayerAnim_om_get" Offset="0xE160" />
-        <PlayerAnimation Name="gPlayerAnim_om_get_mae" Offset="0xE168" />
-        <PlayerAnimation Name="gPlayerAnim_pg_Tbox_open" Offset="0xE170" />
-        <PlayerAnimation Name="gPlayerAnim_pg_climb_endAL" Offset="0xE178" />
-        <PlayerAnimation Name="gPlayerAnim_pg_climb_endAR" Offset="0xE180" />
-        <PlayerAnimation Name="gPlayerAnim_pg_climb_endBL" Offset="0xE188" />
-        <PlayerAnimation Name="gPlayerAnim_pg_climb_endBR" Offset="0xE190" />
-        <PlayerAnimation Name="gPlayerAnim_pg_climb_startA" Offset="0xE198" />
-        <PlayerAnimation Name="gPlayerAnim_pg_climb_startB" Offset="0xE1A0" />
-        <PlayerAnimation Name="gPlayerAnim_pg_climb_upL" Offset="0xE1A8" />
-        <PlayerAnimation Name="gPlayerAnim_pg_climb_upR" Offset="0xE1B0" />
-        <PlayerAnimation Name="gPlayerAnim_pg_doorA_open" Offset="0xE1B8" />
-        <PlayerAnimation Name="gPlayerAnim_pg_doorB_open" Offset="0xE1C0" />
-        <PlayerAnimation Name="gPlayerAnim_pg_gakkiplayA" Offset="0xE1C8" />
-        <PlayerAnimation Name="gPlayerAnim_pg_gakkiplayD" Offset="0xE1D0" />
-        <PlayerAnimation Name="gPlayerAnim_pg_gakkiplayL" Offset="0xE1D8" />
-        <PlayerAnimation Name="gPlayerAnim_pg_gakkiplayR" Offset="0xE1E0" />
-        <PlayerAnimation Name="gPlayerAnim_pg_gakkiplayU" Offset="0xE1E8" />
-        <PlayerAnimation Name="gPlayerAnim_pg_gakkiplay" Offset="0xE1F0" />
-        <PlayerAnimation Name="gPlayerAnim_pg_gakkistart" Offset="0xE1F8" />
-        <PlayerAnimation Name="gPlayerAnim_pg_gakkiwait" Offset="0xE200" />
-        <PlayerAnimation Name="gPlayerAnim_pg_maru_change" Offset="0xE208" />
-        <PlayerAnimation Name="gPlayerAnim_pg_maskoffstart" Offset="0xE210" />
-        <PlayerAnimation Name="gPlayerAnim_pg_punchA" Offset="0xE218" />
-        <PlayerAnimation Name="gPlayerAnim_pg_punchAendR" Offset="0xE220" />
-        <PlayerAnimation Name="gPlayerAnim_pg_punchAend" Offset="0xE228" />
-        <PlayerAnimation Name="gPlayerAnim_pg_punchB" Offset="0xE230" />
-        <PlayerAnimation Name="gPlayerAnim_pg_punchBendR" Offset="0xE238" />
-        <PlayerAnimation Name="gPlayerAnim_pg_punchBend" Offset="0xE240" />
-        <PlayerAnimation Name="gPlayerAnim_pg_punchC" Offset="0xE248" />
-        <PlayerAnimation Name="gPlayerAnim_pg_punchCendR" Offset="0xE250" />
-        <PlayerAnimation Name="gPlayerAnim_pg_punchCend" Offset="0xE258" />
-        <PlayerAnimation Name="gPlayerAnim_pg_wait" Offset="0xE260" />
-        <PlayerAnimation Name="gPlayerAnim_pn_Tbox_open" Offset="0xE268" />
-        <PlayerAnimation Name="gPlayerAnim_pn_attack" Offset="0xE270" />
-        <PlayerAnimation Name="gPlayerAnim_pn_batabata" Offset="0xE278" />
-        <PlayerAnimation Name="gPlayerAnim_pn_doorA_open" Offset="0xE280" />
-        <PlayerAnimation Name="gPlayerAnim_pn_doorB_open" Offset="0xE288" />
-        <PlayerAnimation Name="gPlayerAnim_pn_drink" Offset="0xE290" />
-        <PlayerAnimation Name="gPlayerAnim_pn_drinkend" Offset="0xE298" />
-        <PlayerAnimation Name="gPlayerAnim_pn_drinkstart" Offset="0xE2A0" />
-        <PlayerAnimation Name="gPlayerAnim_pn_gakkiplay" Offset="0xE2A8" />
-        <PlayerAnimation Name="gPlayerAnim_pn_gakkistart" Offset="0xE2B0" />
-        <PlayerAnimation Name="gPlayerAnim_pn_getA" Offset="0xE2B8" />
-        <PlayerAnimation Name="gPlayerAnim_pn_getB" Offset="0xE2C0" />
-        <PlayerAnimation Name="gPlayerAnim_pn_gurd" Offset="0xE2C8" />
-        <PlayerAnimation Name="gPlayerAnim_pn_kakku" Offset="0xE2D0" />
-        <PlayerAnimation Name="gPlayerAnim_pn_kakkufinish" Offset="0xE2D8" />
-        <PlayerAnimation Name="gPlayerAnim_pn_maskoffstart" Offset="0xE2E0" />
-        <PlayerAnimation Name="gPlayerAnim_pn_rakkafinish" Offset="0xE2E8" />
-        <PlayerAnimation Name="gPlayerAnim_pn_tamahaki" Offset="0xE2F0" />
-        <PlayerAnimation Name="gPlayerAnim_pn_tamahakidf" Offset="0xE2F8" />
-        <PlayerAnimation Name="gPlayerAnim_pz_Tbox_open" Offset="0xE300" />
-        <PlayerAnimation Name="gPlayerAnim_pz_attackA" Offset="0xE308" />
-        <PlayerAnimation Name="gPlayerAnim_pz_attackAendR" Offset="0xE310" />
-        <PlayerAnimation Name="gPlayerAnim_pz_attackAend" Offset="0xE318" />
-        <PlayerAnimation Name="gPlayerAnim_pz_attackB" Offset="0xE320" />
-        <PlayerAnimation Name="gPlayerAnim_pz_attackBendR" Offset="0xE328" />
-        <PlayerAnimation Name="gPlayerAnim_pz_attackBend" Offset="0xE330" />
-        <PlayerAnimation Name="gPlayerAnim_pz_attackC" Offset="0xE338" />
-        <PlayerAnimation Name="gPlayerAnim_pz_attackCendR" Offset="0xE340" />
-        <PlayerAnimation Name="gPlayerAnim_pz_attackCend" Offset="0xE348" />
-        <PlayerAnimation Name="gPlayerAnim_pz_bladeon" Offset="0xE350" />
-        <PlayerAnimation Name="gPlayerAnim_pz_climb_endAL" Offset="0xE358" />
-        <PlayerAnimation Name="gPlayerAnim_pz_climb_endAR" Offset="0xE360" />
-        <PlayerAnimation Name="gPlayerAnim_pz_climb_endBL" Offset="0xE368" />
-        <PlayerAnimation Name="gPlayerAnim_pz_climb_endBR" Offset="0xE370" />
-        <PlayerAnimation Name="gPlayerAnim_pz_climb_startA" Offset="0xE378" />
-        <PlayerAnimation Name="gPlayerAnim_pz_climb_startB" Offset="0xE380" />
-        <PlayerAnimation Name="gPlayerAnim_pz_climb_upL" Offset="0xE388" />
-        <PlayerAnimation Name="gPlayerAnim_pz_climb_upR" Offset="0xE390" />
-        <PlayerAnimation Name="gPlayerAnim_pz_cutterattack" Offset="0xE398" />
-        <PlayerAnimation Name="gPlayerAnim_pz_cuttercatch" Offset="0xE3A0" />
-        <PlayerAnimation Name="gPlayerAnim_pz_cutterwaitA" Offset="0xE3A8" />
-        <PlayerAnimation Name="gPlayerAnim_pz_cutterwaitB" Offset="0xE3B0" />
-        <PlayerAnimation Name="gPlayerAnim_pz_cutterwaitC" Offset="0xE3B8" />
-        <PlayerAnimation Name="gPlayerAnim_pz_cutterwaitanim" Offset="0xE3C0" />
-        <PlayerAnimation Name="gPlayerAnim_pz_doorA_open" Offset="0xE3C8" />
-        <PlayerAnimation Name="gPlayerAnim_pz_doorB_open" Offset="0xE3D0" />
-        <PlayerAnimation Name="gPlayerAnim_pz_fishswim" Offset="0xE3D8" />
-        <PlayerAnimation Name="gPlayerAnim_pz_gakkiplay" Offset="0xE3E0" />
-        <PlayerAnimation Name="gPlayerAnim_pz_gakkistart" Offset="0xE3E8" />
-        <PlayerAnimation Name="gPlayerAnim_pz_jumpAT" Offset="0xE3F0" />
-        <PlayerAnimation Name="gPlayerAnim_pz_jumpATend" Offset="0xE3F8" />
-        <PlayerAnimation Name="gPlayerAnim_pz_maskoffstart" Offset="0xE400" />
-        <PlayerAnimation Name="gPlayerAnim_pz_swimtowait" Offset="0xE408" />
-        <PlayerAnimation Name="gPlayerAnim_pz_wait" Offset="0xE410" />
-        <PlayerAnimation Name="gPlayerAnim_pz_waterroll" Offset="0xE418" />
-        <PlayerAnimation Name="gPlayerAnim_rakka" Offset="0xE420" />
-        <PlayerAnimation Name="gPlayerAnim_rakuba" Offset="0xE428" />
-        <PlayerAnimation Name="gPlayerAnim_sirimochi" Offset="0xE430" />
-        <PlayerAnimation Name="gPlayerAnim_sirimochi_wait" Offset="0xE438" />
-        <PlayerAnimation Name="gPlayerAnim_spotlight" Offset="0xE440" />
-        <PlayerAnimation Name="gPlayerAnim_spotlight_wait" Offset="0xE448" />
-        <PlayerAnimation Name="gPlayerAnim_sude_nwait" Offset="0xE450" />
+        <PlayerAnimation Name="gPlayerAnim_lkt_nwait" Offset="0xE108" /> <!-- Original name is "lkt_nwait" -->
+        <PlayerAnimation Name="gPlayerAnim_lost_horse2" Offset="0xE110" /> <!-- Original name might be "lost_horse2" -->
+        <PlayerAnimation Name="gPlayerAnim_lost_horse" Offset="0xE118" /> <!-- Original name might be "lost_horse" -->
+        <PlayerAnimation Name="gPlayerAnim_lost_horse_wait" Offset="0xE120" /> <!-- Original name might be "lost_horse_wait" -->
+        <PlayerAnimation Name="gPlayerAnim_nw_modoru" Offset="0xE128" /> <!-- Original name is "nw_modoru" -->
+        <PlayerAnimation Name="gPlayerAnim_o_get_ato" Offset="0xE130" /> <!-- Original name is "o_get_ato" -->
+        <PlayerAnimation Name="gPlayerAnim_o_get_mae" Offset="0xE138" /> <!-- Original name is "o_get_mae" -->
+        <PlayerAnimation Name="gPlayerAnim_okarinatori" Offset="0xE140" /> <!-- Original name might be "okarinatori" -->
+        <PlayerAnimation Name="gPlayerAnim_okiagaru" Offset="0xE148" /> <!-- Original name might be "okiagaru" -->
+        <PlayerAnimation Name="gPlayerAnim_okiagaru_tatu" Offset="0xE150" /> <!-- Original name might be "okiagaru_tatu" -->
+        <PlayerAnimation Name="gPlayerAnim_okiagaru_wait" Offset="0xE158" /> <!-- Original name might be "okiagaru_wait" -->
+        <PlayerAnimation Name="gPlayerAnim_om_get" Offset="0xE160" /> <!-- Original name is "om_get" -->
+        <PlayerAnimation Name="gPlayerAnim_om_get_mae" Offset="0xE168" /> <!-- Original name is "om_get_mae" -->
+        <PlayerAnimation Name="gPlayerAnim_pg_Tbox_open" Offset="0xE170" /> <!-- Original name might be "pg_Tbox_open" -->
+        <PlayerAnimation Name="gPlayerAnim_pg_climb_endAL" Offset="0xE178" /> <!-- Original name might be "pg_climb_endAL" -->
+        <PlayerAnimation Name="gPlayerAnim_pg_climb_endAR" Offset="0xE180" /> <!-- Original name might be "pg_climb_endAR" -->
+        <PlayerAnimation Name="gPlayerAnim_pg_climb_endBL" Offset="0xE188" /> <!-- Original name might be "pg_climb_endBL" -->
+        <PlayerAnimation Name="gPlayerAnim_pg_climb_endBR" Offset="0xE190" /> <!-- Original name might be "pg_climb_endBR" -->
+        <PlayerAnimation Name="gPlayerAnim_pg_climb_startA" Offset="0xE198" /> <!-- Original name might be "pg_climb_startA" -->
+        <PlayerAnimation Name="gPlayerAnim_pg_climb_startB" Offset="0xE1A0" /> <!-- Original name might be "pg_climb_startB" -->
+        <PlayerAnimation Name="gPlayerAnim_pg_climb_upL" Offset="0xE1A8" /> <!-- Original name might be "pg_climb_upL" -->
+        <PlayerAnimation Name="gPlayerAnim_pg_climb_upR" Offset="0xE1B0" /> <!-- Original name might be "pg_climb_upR" -->
+        <PlayerAnimation Name="gPlayerAnim_pg_doorA_open" Offset="0xE1B8" /> <!-- Original name might be "pg_doorA_open" -->
+        <PlayerAnimation Name="gPlayerAnim_pg_doorB_open" Offset="0xE1C0" /> <!-- Original name might be "pg_doorB_open" -->
+        <PlayerAnimation Name="gPlayerAnim_pg_gakkiplayA" Offset="0xE1C8" /> <!-- Original name might be "pg_gakkiplayA" -->
+        <PlayerAnimation Name="gPlayerAnim_pg_gakkiplayD" Offset="0xE1D0" /> <!-- Original name might be "pg_gakkiplayD" -->
+        <PlayerAnimation Name="gPlayerAnim_pg_gakkiplayL" Offset="0xE1D8" /> <!-- Original name might be "pg_gakkiplayL" -->
+        <PlayerAnimation Name="gPlayerAnim_pg_gakkiplayR" Offset="0xE1E0" /> <!-- Original name might be "pg_gakkiplayR" -->
+        <PlayerAnimation Name="gPlayerAnim_pg_gakkiplayU" Offset="0xE1E8" /> <!-- Original name might be "pg_gakkiplayU" -->
+        <PlayerAnimation Name="gPlayerAnim_pg_gakkiplay" Offset="0xE1F0" /> <!-- Original name might be "pg_gakkiplay" -->
+        <PlayerAnimation Name="gPlayerAnim_pg_gakkistart" Offset="0xE1F8" /> <!-- Original name might be "pg_gakkistart" -->
+        <PlayerAnimation Name="gPlayerAnim_pg_gakkiwait" Offset="0xE200" /> <!-- Original name might be "pg_gakkiwait" -->
+        <PlayerAnimation Name="gPlayerAnim_pg_maru_change" Offset="0xE208" /> <!-- Original name might be "pg_maru_change" -->
+        <PlayerAnimation Name="gPlayerAnim_pg_maskoffstart" Offset="0xE210" /> <!-- Original name might be "pg_maskoffstart" -->
+        <PlayerAnimation Name="gPlayerAnim_pg_punchA" Offset="0xE218" /> <!-- Original name might be "pg_punchA" -->
+        <PlayerAnimation Name="gPlayerAnim_pg_punchAendR" Offset="0xE220" /> <!-- Original name might be "pg_punchAendR" -->
+        <PlayerAnimation Name="gPlayerAnim_pg_punchAend" Offset="0xE228" /> <!-- Original name might be "pg_punchAend" -->
+        <PlayerAnimation Name="gPlayerAnim_pg_punchB" Offset="0xE230" /> <!-- Original name might be "pg_punchB" -->
+        <PlayerAnimation Name="gPlayerAnim_pg_punchBendR" Offset="0xE238" /> <!-- Original name might be "pg_punchBendR" -->
+        <PlayerAnimation Name="gPlayerAnim_pg_punchBend" Offset="0xE240" /> <!-- Original name might be "pg_punchBend" -->
+        <PlayerAnimation Name="gPlayerAnim_pg_punchC" Offset="0xE248" /> <!-- Original name might be "pg_punchC" -->
+        <PlayerAnimation Name="gPlayerAnim_pg_punchCendR" Offset="0xE250" /> <!-- Original name might be "pg_punchCendR" -->
+        <PlayerAnimation Name="gPlayerAnim_pg_punchCend" Offset="0xE258" /> <!-- Original name might be "pg_punchCend" -->
+        <PlayerAnimation Name="gPlayerAnim_pg_wait" Offset="0xE260" /> <!-- Original name might be "pg_wait" -->
+        <PlayerAnimation Name="gPlayerAnim_pn_Tbox_open" Offset="0xE268" /> <!-- Original name might be "pn_Tbox_open" -->
+        <PlayerAnimation Name="gPlayerAnim_pn_attack" Offset="0xE270" /> <!-- Original name might be "pn_attack" -->
+        <PlayerAnimation Name="gPlayerAnim_pn_batabata" Offset="0xE278" /> <!-- Original name might be "pn_batabata" -->
+        <PlayerAnimation Name="gPlayerAnim_pn_doorA_open" Offset="0xE280" /> <!-- Original name might be "pn_doorA_open" -->
+        <PlayerAnimation Name="gPlayerAnim_pn_doorB_open" Offset="0xE288" /> <!-- Original name might be "pn_doorB_open" -->
+        <PlayerAnimation Name="gPlayerAnim_pn_drink" Offset="0xE290" /> <!-- Original name might be "pn_drink" -->
+        <PlayerAnimation Name="gPlayerAnim_pn_drinkend" Offset="0xE298" /> <!-- Original name might be "pn_drinkend" -->
+        <PlayerAnimation Name="gPlayerAnim_pn_drinkstart" Offset="0xE2A0" /> <!-- Original name might be "pn_drinkstart" -->
+        <PlayerAnimation Name="gPlayerAnim_pn_gakkiplay" Offset="0xE2A8" /> <!-- Original name might be "pn_gakkiplay" -->
+        <PlayerAnimation Name="gPlayerAnim_pn_gakkistart" Offset="0xE2B0" /> <!-- Original name might be "pn_gakkistart" -->
+        <PlayerAnimation Name="gPlayerAnim_pn_getA" Offset="0xE2B8" /> <!-- Original name might be "pn_getA" -->
+        <PlayerAnimation Name="gPlayerAnim_pn_getB" Offset="0xE2C0" /> <!-- Original name might be "pn_getB" -->
+        <PlayerAnimation Name="gPlayerAnim_pn_gurd" Offset="0xE2C8" /> <!-- Original name might be "pn_gurd" -->
+        <PlayerAnimation Name="gPlayerAnim_pn_kakku" Offset="0xE2D0" /> <!-- Original name might be "pn_kakku" -->
+        <PlayerAnimation Name="gPlayerAnim_pn_kakkufinish" Offset="0xE2D8" /> <!-- Original name might be "pn_kakkufinish" -->
+        <PlayerAnimation Name="gPlayerAnim_pn_maskoffstart" Offset="0xE2E0" /> <!-- Original name might be "pn_maskoffstart" -->
+        <PlayerAnimation Name="gPlayerAnim_pn_rakkafinish" Offset="0xE2E8" /> <!-- Original name might be "pn_rakkafinish" -->
+        <PlayerAnimation Name="gPlayerAnim_pn_tamahaki" Offset="0xE2F0" /> <!-- Original name might be "pn_tamahaki" -->
+        <PlayerAnimation Name="gPlayerAnim_pn_tamahakidf" Offset="0xE2F8" /> <!-- Original name might be "pn_tamahakidf" -->
+        <PlayerAnimation Name="gPlayerAnim_pz_Tbox_open" Offset="0xE300" /> <!-- Original name might be "pz_Tbox_open" -->
+        <PlayerAnimation Name="gPlayerAnim_pz_attackA" Offset="0xE308" /> <!-- Original name might be "pz_attackA" -->
+        <PlayerAnimation Name="gPlayerAnim_pz_attackAendR" Offset="0xE310" /> <!-- Original name might be "pz_attackAendR" -->
+        <PlayerAnimation Name="gPlayerAnim_pz_attackAend" Offset="0xE318" /> <!-- Original name might be "pz_attackAend" -->
+        <PlayerAnimation Name="gPlayerAnim_pz_attackB" Offset="0xE320" /> <!-- Original name might be "pz_attackB" -->
+        <PlayerAnimation Name="gPlayerAnim_pz_attackBendR" Offset="0xE328" /> <!-- Original name might be "pz_attackBendR" -->
+        <PlayerAnimation Name="gPlayerAnim_pz_attackBend" Offset="0xE330" /> <!-- Original name might be "pz_attackBend" -->
+        <PlayerAnimation Name="gPlayerAnim_pz_attackC" Offset="0xE338" /> <!-- Original name might be "pz_attackC" -->
+        <PlayerAnimation Name="gPlayerAnim_pz_attackCendR" Offset="0xE340" /> <!-- Original name might be "pz_attackCendR" -->
+        <PlayerAnimation Name="gPlayerAnim_pz_attackCend" Offset="0xE348" /> <!-- Original name might be "pz_attackCend" -->
+        <PlayerAnimation Name="gPlayerAnim_pz_bladeon" Offset="0xE350" /> <!-- Original name might be "pz_bladeon" -->
+        <PlayerAnimation Name="gPlayerAnim_pz_climb_endAL" Offset="0xE358" /> <!-- Original name might be "pz_climb_endAL" -->
+        <PlayerAnimation Name="gPlayerAnim_pz_climb_endAR" Offset="0xE360" /> <!-- Original name might be "pz_climb_endAR" -->
+        <PlayerAnimation Name="gPlayerAnim_pz_climb_endBL" Offset="0xE368" /> <!-- Original name might be "pz_climb_endBL" -->
+        <PlayerAnimation Name="gPlayerAnim_pz_climb_endBR" Offset="0xE370" /> <!-- Original name might be "pz_climb_endBR" -->
+        <PlayerAnimation Name="gPlayerAnim_pz_climb_startA" Offset="0xE378" /> <!-- Original name might be "pz_climb_startA" -->
+        <PlayerAnimation Name="gPlayerAnim_pz_climb_startB" Offset="0xE380" /> <!-- Original name might be "pz_climb_startB" -->
+        <PlayerAnimation Name="gPlayerAnim_pz_climb_upL" Offset="0xE388" /> <!-- Original name might be "pz_climb_upL" -->
+        <PlayerAnimation Name="gPlayerAnim_pz_climb_upR" Offset="0xE390" /> <!-- Original name might be "pz_climb_upR" -->
+        <PlayerAnimation Name="gPlayerAnim_pz_cutterattack" Offset="0xE398" /> <!-- Original name might be "pz_cutterattack" -->
+        <PlayerAnimation Name="gPlayerAnim_pz_cuttercatch" Offset="0xE3A0" /> <!-- Original name might be "pz_cuttercatch" -->
+        <PlayerAnimation Name="gPlayerAnim_pz_cutterwaitA" Offset="0xE3A8" /> <!-- Original name might be "pz_cutterwaitA" -->
+        <PlayerAnimation Name="gPlayerAnim_pz_cutterwaitB" Offset="0xE3B0" /> <!-- Original name might be "pz_cutterwaitB" -->
+        <PlayerAnimation Name="gPlayerAnim_pz_cutterwaitC" Offset="0xE3B8" /> <!-- Original name might be "pz_cutterwaitC" -->
+        <PlayerAnimation Name="gPlayerAnim_pz_cutterwaitanim" Offset="0xE3C0" /> <!-- Original name might be "pz_cutterwaitanim" -->
+        <PlayerAnimation Name="gPlayerAnim_pz_doorA_open" Offset="0xE3C8" /> <!-- Original name might be "pz_doorA_open" -->
+        <PlayerAnimation Name="gPlayerAnim_pz_doorB_open" Offset="0xE3D0" /> <!-- Original name might be "pz_doorB_open" -->
+        <PlayerAnimation Name="gPlayerAnim_pz_fishswim" Offset="0xE3D8" /> <!-- Original name might be "pz_fishswim" -->
+        <PlayerAnimation Name="gPlayerAnim_pz_gakkiplay" Offset="0xE3E0" /> <!-- Original name might be "pz_gakkiplay" -->
+        <PlayerAnimation Name="gPlayerAnim_pz_gakkistart" Offset="0xE3E8" /> <!-- Original name might be "pz_gakkistart" -->
+        <PlayerAnimation Name="gPlayerAnim_pz_jumpAT" Offset="0xE3F0" /> <!-- Original name might be "pz_jumpAT" -->
+        <PlayerAnimation Name="gPlayerAnim_pz_jumpATend" Offset="0xE3F8" /> <!-- Original name might be "pz_jumpATend" -->
+        <PlayerAnimation Name="gPlayerAnim_pz_maskoffstart" Offset="0xE400" /> <!-- Original name might be "pz_maskoffstart" -->
+        <PlayerAnimation Name="gPlayerAnim_pz_swimtowait" Offset="0xE408" /> <!-- Original name might be "pz_swimtowait" -->
+        <PlayerAnimation Name="gPlayerAnim_pz_wait" Offset="0xE410" /> <!-- Original name might be "pz_wait" -->
+        <PlayerAnimation Name="gPlayerAnim_pz_waterroll" Offset="0xE418" /> <!-- Original name might be "pz_waterroll" -->
+        <PlayerAnimation Name="gPlayerAnim_rakka" Offset="0xE420" /> <!-- Original name might be "rakka" -->
+        <PlayerAnimation Name="gPlayerAnim_rakuba" Offset="0xE428" /> <!-- Original name might be "rakuba" -->
+        <PlayerAnimation Name="gPlayerAnim_sirimochi" Offset="0xE430" /> <!-- Original name might be "sirimochi" -->
+        <PlayerAnimation Name="gPlayerAnim_sirimochi_wait" Offset="0xE438" /> <!-- Original name might be "sirimochi_wait" -->
+        <PlayerAnimation Name="gPlayerAnim_spotlight" Offset="0xE440" /> <!-- Original name might be "spotlight" -->
+        <PlayerAnimation Name="gPlayerAnim_spotlight_wait" Offset="0xE448" /> <!-- Original name might be "spotlight_wait" -->
+        <PlayerAnimation Name="gPlayerAnim_sude_nwait" Offset="0xE450" /> <!-- Original name is "sude_nwait" -->
         <PlayerAnimation Name="gameplay_keep_Linkanim_00E458" Offset="0xE458" />
-        <PlayerAnimation Name="gPlayerAnim_urusai" Offset="0xE460" />
-        <PlayerAnimation Name="gPlayerAnim_vs_yousei" Offset="0xE468" />
-        <PlayerAnimation Name="gPlayerAnim_L_1kyoro" Offset="0xE470" />
-        <PlayerAnimation Name="gPlayerAnim_L_2kyoro" Offset="0xE478" />
-        <PlayerAnimation Name="gPlayerAnim_L_bouzen" Offset="0xE480" />
-        <PlayerAnimation Name="gPlayerAnim_L_hajikareru" Offset="0xE488" />
-        <PlayerAnimation Name="gPlayerAnim_L_kamaeru" Offset="0xE490" />
-        <PlayerAnimation Name="gPlayerAnim_L_ken_miru" Offset="0xE498" />
-        <PlayerAnimation Name="gPlayerAnim_L_kennasi_w" Offset="0xE4A0" />
-        <PlayerAnimation Name="gPlayerAnim_L_kw" Offset="0xE4A8" />
-        <PlayerAnimation Name="gPlayerAnim_L_mukinaoru" Offset="0xE4B0" />
-        <PlayerAnimation Name="gPlayerAnim_L_okarina_get" Offset="0xE4B8" />
-        <PlayerAnimation Name="gPlayerAnim_L_sagaru" Offset="0xE4C0" />
-        <PlayerAnimation Name="gPlayerAnim_Link_ha" Offset="0xE4C8" />
-        <PlayerAnimation Name="gPlayerAnim_Link_m_wait" Offset="0xE4D0" />
-        <PlayerAnimation Name="gPlayerAnim_Link_miageru" Offset="0xE4D8" />
-        <PlayerAnimation Name="gPlayerAnim_Link_muku" Offset="0xE4E0" />
-        <PlayerAnimation Name="gPlayerAnim_Link_otituku_w" Offset="0xE4E8" />
-        <PlayerAnimation Name="gPlayerAnim_Link_ue_wait" Offset="0xE4F0" />
+        <PlayerAnimation Name="gPlayerAnim_urusai" Offset="0xE460" /> <!-- Original name might be "urusai" -->
+        <PlayerAnimation Name="gPlayerAnim_vs_yousei" Offset="0xE468" /> <!-- Original name might be "vs_yousei" -->
+        <PlayerAnimation Name="gPlayerAnim_L_1kyoro" Offset="0xE470" /> <!-- Original name is "L_1kyoro" -->
+        <PlayerAnimation Name="gPlayerAnim_L_2kyoro" Offset="0xE478" /> <!-- Original name is "L_2kyoro" -->
+        <PlayerAnimation Name="gPlayerAnim_L_bouzen" Offset="0xE480" /> <!-- Original name is "L_bouzen" -->
+        <PlayerAnimation Name="gPlayerAnim_L_hajikareru" Offset="0xE488" /> <!-- Original name is "L_hajikareru" -->
+        <PlayerAnimation Name="gPlayerAnim_L_kamaeru" Offset="0xE490" /> <!-- Original name is "L_kamaeru" -->
+        <PlayerAnimation Name="gPlayerAnim_L_ken_miru" Offset="0xE498" /> <!-- Original name is "L_ken_miru" -->
+        <PlayerAnimation Name="gPlayerAnim_L_kennasi_w" Offset="0xE4A0" /> <!-- Original name is "L_kennasi_w" -->
+        <PlayerAnimation Name="gPlayerAnim_L_kw" Offset="0xE4A8" /> <!-- Original name is "L_kw" -->
+        <PlayerAnimation Name="gPlayerAnim_L_mukinaoru" Offset="0xE4B0" /> <!-- Original name is "L_mukinaoru" -->
+        <PlayerAnimation Name="gPlayerAnim_L_okarina_get" Offset="0xE4B8" /> <!-- Original name is "L_okarina_get" -->
+        <PlayerAnimation Name="gPlayerAnim_L_sagaru" Offset="0xE4C0" /> <!-- Original name is "L_sagaru" -->
+        <PlayerAnimation Name="gPlayerAnim_Link_ha" Offset="0xE4C8" /> <!-- Original name is "Link_ha" -->
+        <PlayerAnimation Name="gPlayerAnim_Link_m_wait" Offset="0xE4D0" /> <!-- Original name is "Link_m_wait" -->
+        <PlayerAnimation Name="gPlayerAnim_Link_miageru" Offset="0xE4D8" /> <!-- Original name is "Link_miageru" -->
+        <PlayerAnimation Name="gPlayerAnim_Link_muku" Offset="0xE4E0" /> <!-- Original name is "Link_muku" -->
+        <PlayerAnimation Name="gPlayerAnim_Link_otituku_w" Offset="0xE4E8" /> <!-- Original name is "Link_otituku_w" -->
+        <PlayerAnimation Name="gPlayerAnim_Link_ue_wait" Offset="0xE4F0" /> <!-- Original name is "Link_ue_wait" -->
 
         <DList Name="gameplay_keep_DL_00E5C0" Offset="0xE5C0" />
 
