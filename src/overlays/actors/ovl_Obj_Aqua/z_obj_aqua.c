@@ -145,22 +145,19 @@ void ObjAqua_Init(Actor* thisx, PlayState* play) {
     ObjAqua* this = (ObjAqua*)thisx;
     s32 i;
 
-    Actor_ProcessInitChain(&this->actor, sInitChain);
+    Actor_ProcessInitChain(thisx, sInitChain);
     this->actor.scale.x = 0.0009f;
     this->actor.scale.y = 0.0005f;
     this->actor.scale.z = 0.0009f;
     Collider_InitCylinder(play, &this->collider);
-    Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
-    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 60.0f);
+    Collider_SetCylinder(play, &this->collider, thisx, &sCylinderInit);
+    ActorShape_Init(&thisx->shape, 0.0f, ActorShadow_DrawCircle, 60.0f);
 
-    //! FAKE:
-    if (1) {}
-
-    this->actor.shape.shadowAlpha = 140;
+    thisx->shape.shadowAlpha = 140;
     this->alpha = 255;
     if (ObjAqua_IsUnderwater(this, play)) {
         for (i = 0; i < 8; i++) {
-            EffectSsBubble_Spawn(play, &this->actor.world.pos, -4.0f, 4.0f, 4.0f, (Rand_ZeroOne() * 0.09f) + 0.03f);
+            EffectSsBubble_Spawn(play, &thisx->world.pos, -4.0f, 4.0f, 4.0f, (Rand_ZeroOne() * 0.09f) + 0.03f);
         }
         func_80ACBDCC(this);
     } else {

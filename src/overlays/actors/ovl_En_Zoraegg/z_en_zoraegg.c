@@ -665,10 +665,10 @@ void func_80B32F04(Actor* thisx, PlayState* play) {
     f32 sp78;
     f32 sp74;
     EnZoraegg* this = (EnZoraegg*)thisx;
-    s32 pad[3];
+    Vec3f pos;
     s16 sp62;
     s16 sp60;
-    f32 temp_f2;
+    s32 pad;
     Gfx* gfx;
     Vec3f sp4C;
     s32 pad2;
@@ -684,9 +684,11 @@ void func_80B32F04(Actor* thisx, PlayState* play) {
     sp78 = -(15.0f * Math_SinS(sp60));
     sp7C = -((15.0f * Math_CosS(sp62)) * Math_CosS(sp60));
 
-    //! FAKE: temp_f2 =
-    Matrix_Translate(this->actor.world.pos.x + sp74, this->actor.world.pos.y + sp78 + 6.0f,
-                     temp_f2 = this->actor.world.pos.z + sp7C, MTXMODE_NEW);
+    pos.x = this->actor.world.pos.x + sp74;
+    pos.y = this->actor.world.pos.y + sp78 + 6.0f;
+    pos.z = this->actor.world.pos.z + sp7C;
+
+    Matrix_Translate(pos.x, pos.y, pos.z, MTXMODE_NEW);
 
     sp7C = Math_SinS(play->gameplayFrames * 0x4000);
 

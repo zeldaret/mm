@@ -203,8 +203,8 @@ static Gfx* sEyeSwitchDL[] = { gEyeSwitchGoldDL, gEyeSwitchSilverDL };
 
 static AnimatedMaterial* sCrystalSwitchAnimatedMat;
 
-void ObjSwitch_InitJntSphCollider(ObjSwitch* this, PlayState* play, ColliderJntSphInit* init) {
-    s32 pad;
+void ObjSwitch_InitJntSphCollider(Actor* thisx, PlayState* play, ColliderJntSphInit* init) {
+    ObjSwitch* this = (ObjSwitch*)thisx;
 
     Collider_InitJntSph(play, &this->colliderJntSph);
     Collider_SetJntSph(play, &this->colliderJntSph, &this->dyna.actor, init, this->colliderJntSphElements);
@@ -216,8 +216,8 @@ void ObjSwitch_InitJntSphCollider(ObjSwitch* this, PlayState* play, ColliderJntS
     Collider_UpdateSpheres(0, &this->colliderJntSph);
 }
 
-void ObjSwitch_InitTrisCollider(ObjSwitch* this, PlayState* play, ColliderTrisInit* init) {
-    s32 pad;
+void ObjSwitch_InitTrisCollider(Actor* thisx, PlayState* play, ColliderTrisInit* init) {
+    ObjSwitch* this = (ObjSwitch*)thisx;
     s32 i;
     s32 j;
     Vec3f vtx[3];
@@ -231,9 +231,6 @@ void ObjSwitch_InitTrisCollider(ObjSwitch* this, PlayState* play, ColliderTrisIn
                                  this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
 
     for (i = 0; i < ARRAY_COUNT(this->colliderTrisElements); i++) {
-        //! FAKE:
-        if (this) {}
-
         for (j = 0; j < ARRAY_COUNT(vtx); j++) {
             Matrix_MultVec3f(&init->elements[i].dim.vtx[j], &vtx[j]);
         }
@@ -375,11 +372,11 @@ void ObjSwitch_Init(Actor* thisx, PlayState* play) {
     Actor_SetFocus(&this->dyna.actor, sHeights[type]);
 
     if (type == OBJSWITCH_TYPE_FLOOR_RUSTY) {
-        ObjSwitch_InitTrisCollider(this, play, &sRustyFloorTrisInit);
+        ObjSwitch_InitTrisCollider(&this->dyna.actor, play, &sRustyFloorTrisInit);
     } else if (type == OBJSWITCH_TYPE_EYE) {
-        ObjSwitch_InitTrisCollider(this, play, &sEyeSwitchTrisInit);
+        ObjSwitch_InitTrisCollider(&this->dyna.actor, play, &sEyeSwitchTrisInit);
     } else if (type == OBJSWITCH_TYPE_CRYSTAL || type == OBJSWITCH_TYPE_CRYSTAL_TARGETABLE) {
-        ObjSwitch_InitJntSphCollider(this, play, &sJntSphInit);
+        ObjSwitch_InitJntSphCollider(&this->dyna.actor, play, &sJntSphInit);
     }
     if (type == OBJSWITCH_TYPE_CRYSTAL_TARGETABLE) {
         this->dyna.actor.attentionRangeType = ATTENTION_RANGE_4;
@@ -936,10 +933,8 @@ void ObjSwitch_Update(Actor* thisx, PlayState* play) {
     }
     this->actionFunc(this, play);
     if (this->floorSwitchPlayerSnapState != 0) {
-        s32 pad;
+        s32 requiredScopeTemp;
 
-    //! FAKE:
-    dummy:
         ObjSwitch_FloorSwitchSnapPlayerToSwitchEdge(this, play);
         if (this->floorSwitchPlayerSnapState == 2) {
             this->floorSwitchPlayerSnapState = 0;
