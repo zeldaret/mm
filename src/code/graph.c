@@ -147,7 +147,7 @@ void Graph_TaskSet00(GraphicsContext* gfxCtx, GameState* gameState) {
     OSScTask* scTask = &gfxCtx->task;
     OSTimer timer;
     OSMesg msg;
-    CfbInfo* cfb;
+    s32 pad;
 
 retry:
     osSetTimer(&timer, OS_USEC_TO_CYCLES(3 * 1000 * 1000), 0, &gfxCtx->queue, (OSMesg)666);
@@ -180,13 +180,13 @@ retry:
     task->ucode_data = SysUcode_GetUCodeData();
     task->ucode_size = SP_UCODE_SIZE;
     task->ucode_data_size = SP_UCODE_DATA_SIZE;
-    task->dram_stack = (u64*)gGfxSPTaskStack;
+    task->dram_stack = gGfxSPTaskStack;
     task->dram_stack_size = sizeof(gGfxSPTaskStack);
     task->output_buff = gGfxSPTaskOutputBufferPtr;
-    task->output_buff_size = (void*)gGfxSPTaskOutputBufferEnd;
+    task->output_buff_size = gGfxSPTaskOutputBufferEnd;
     task->data_ptr = (u64*)gGfxMasterDL;
     task->data_size = 0;
-    task->yield_data_ptr = (u64*)gGfxSPTaskYieldBuffer;
+    task->yield_data_ptr = gGfxSPTaskYieldBuffer;
     task->yield_data_size = sizeof(gGfxSPTaskYieldBuffer);
 
     scTask->next = NULL;
@@ -201,27 +201,28 @@ retry:
     scTask->msgQ = &gfxCtx->queue;
     scTask->msg = NULL;
 
-    { s32 pad; }
+    {
+        CfbInfo* cfb = &sGraphCfbInfos[sCfbIndex];
 
-    cfb = &sGraphCfbInfos[sCfbIndex];
-    sCfbIndex = (sCfbIndex + 1) % ARRAY_COUNT(sGraphCfbInfos);
+        sCfbIndex = (sCfbIndex + 1) % ARRAY_COUNT(sGraphCfbInfos);
 
-    cfb->framebuffer = gfxCtx->curFrameBuffer;
-    cfb->swapBuffer = gfxCtx->curFrameBuffer;
+        cfb->framebuffer = gfxCtx->curFrameBuffer;
+        cfb->swapBuffer = gfxCtx->curFrameBuffer;
 
-    if (gfxCtx->updateViMode) {
-        gfxCtx->updateViMode = false;
-        cfb->viMode = gfxCtx->viMode;
-        cfb->viFeatures = gfxCtx->viConfigFeatures;
-        cfb->xScale = gfxCtx->xScale;
-        cfb->yScale = gfxCtx->yScale;
-    } else {
-        cfb->viMode = NULL;
+        if (gfxCtx->updateViMode) {
+            gfxCtx->updateViMode = false;
+            cfb->viMode = gfxCtx->viMode;
+            cfb->viFeatures = gfxCtx->viConfigFeatures;
+            cfb->xScale = gfxCtx->xScale;
+            cfb->yScale = gfxCtx->yScale;
+        } else {
+            cfb->viMode = NULL;
+        }
+        cfb->unk_10 = 0;
+        cfb->updateRate = gameState->framerateDivisor;
+
+        scTask->framebuffer = cfb;
     }
-    cfb->unk_10 = 0;
-    cfb->updateRate = gameState->framerateDivisor;
-
-    scTask->framebuffer = cfb;
 
     while (gfxCtx->queue.validCount != 0) {
         osRecvMesg(&gfxCtx->queue, NULL, OS_MESG_NOBLOCK);
@@ -341,11 +342,11 @@ void Graph_ThreadEntry(void* arg) {
     GameStateOverlay* nextOvl = &gGameStateOverlayTable[0];
     GameStateOverlay* ovl;
     GameState* gameState;
-    u32 size;
+    size_t size;
     s32 pad[2];
 
     gZBufferLoRes = malloc(sizeof(*gZBufferLoRes) + sizeof(*gWorkBufferLoRes) + 64 - 1);
-    gZBufferLoRes = (void*)ALIGN64((u32)gZBufferLoRes);
+    gZBufferLoRes = (void*)ALIGN64((uintptr_t)gZBufferLoRes);
 
     gWorkBufferLoRes = (void*)((u8*)gZBufferLoRes + sizeof(*gZBufferLoRes));
 
