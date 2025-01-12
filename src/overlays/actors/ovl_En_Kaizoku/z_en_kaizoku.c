@@ -74,16 +74,16 @@ typedef enum EnKaizokuAction {
 
 // text Ids, grouped into two batches of 4, and two mask values
 static u16 sKaizokuTextIds[] = {
-  0x11A4, // (intro.1) halt
-  0x11A5, // (intro.2) you must have courage, going to love doing this to you
-  0x11A6, // (win) ouch, dont think this is the end
-  0x11A7, // (loss) you're nothing to talk about  
-  0x11A8, // (intro.1) go no further
-  0x11A9, // (intro.2) you wont get past here
-  0x11AA, // (win) not bad, but this isnt the end
-  0x11AB, // (loss) hmph, we're not fools
-  0x11AC, // (stone mask) we aren't fooled by that mask
-  0x11AD, // (stone mask) did you think that mask would work?
+    0x11A4, // (intro.1) halt
+    0x11A5, // (intro.2) you must have courage, going to love doing this to you
+    0x11A6, // (win) ouch, dont think this is the end
+    0x11A7, // (loss) you're nothing to talk about
+    0x11A8, // (intro.1) go no further
+    0x11A9, // (intro.2) you wont get past here
+    0x11AA, // (win) not bad, but this isnt the end
+    0x11AB, // (loss) hmph, we're not fools
+    0x11AC, // (stone mask) we aren't fooled by that mask
+    0x11AD, // (stone mask) did you think that mask would work?
 };
 
 static Vec3f sCutsceneCameraPositions[] = {
@@ -217,25 +217,25 @@ static ColliderQuadInit sQuadInit = {
 };
 
 static AnimationHeader* sAnimations[KAIZOKU_ANIM_MAX] = {
-    &gKaizokuFightingIdleAnim, // KAIZOKU_ANIM_FIGHTING_IDLE
-    &gKaizokuOOTConversationAnim, // KAIZOKU_ANIM_OOT_CONVERSATION
-    &gKaizokuOOTJumpAnim, // KAIZOKU_ANIM_OOT_JUMP
-    &gKaizokuSidestepAnim, // KAIZOKU_ANIM_SIDESTEP
-    &gKaizokuWalkAnim, // KAIZOKU_ANIM_WALK
-    &gKaizokuDamageAnim, // KAIZOKU_ANIM_DAMAGE
-    &gKaizokuOOTDefeatAnim, // KAIZOKU_ANIM_OOT_DEFEAT
-    &gKaizokuBlockAnim, // KAIZOKU_ANIM_BLOCK
-    &gKaizokuFlipAnim, // KAIZOKU_ANIM_FLIP
-    &gKaizokuSlashAnim, // KAIZOKU_ANIM_SLASH_ATTCK
-    &gKaizokuSpinAttackAnim, // KAIZOKU_ANIM_SPIN_ATTACK
-    &gKaizokuLandAnim, // KAIZOKU_ANIM_LAND
-    &gKaizokuChallengeTalkAnim, // KAIZOKU_ANIM_CHALLENGE
-    &gKaizokuUnsheatheAnim, // KAIZOKU_ANIM_UNSHEATHE
-    &gKaizokuLowerWeaponsAnim, // KAIZOKU_ANIM_LOWER_WEAPONS
+    &gKaizokuFightingIdleAnim,            // KAIZOKU_ANIM_FIGHTING_IDLE
+    &gKaizokuOOTConversationAnim,         // KAIZOKU_ANIM_OOT_CONVERSATION
+    &gKaizokuOOTJumpAnim,                 // KAIZOKU_ANIM_OOT_JUMP
+    &gKaizokuSidestepAnim,                // KAIZOKU_ANIM_SIDESTEP
+    &gKaizokuWalkAnim,                    // KAIZOKU_ANIM_WALK
+    &gKaizokuDamageAnim,                  // KAIZOKU_ANIM_DAMAGE
+    &gKaizokuOOTDefeatAnim,               // KAIZOKU_ANIM_OOT_DEFEAT
+    &gKaizokuBlockAnim,                   // KAIZOKU_ANIM_BLOCK
+    &gKaizokuFlipAnim,                    // KAIZOKU_ANIM_FLIP
+    &gKaizokuSlashAnim,                   // KAIZOKU_ANIM_SLASH_ATTCK
+    &gKaizokuSpinAttackAnim,              // KAIZOKU_ANIM_SPIN_ATTACK
+    &gKaizokuLandAnim,                    // KAIZOKU_ANIM_LAND
+    &gKaizokuChallengeTalkAnim,           // KAIZOKU_ANIM_CHALLENGE
+    &gKaizokuUnsheatheAnim,               // KAIZOKU_ANIM_UNSHEATHE
+    &gKaizokuLowerWeaponsAnim,            // KAIZOKU_ANIM_LOWER_WEAPONS
     &gKaizokuDemonstrativeSwordSwingAnim, // KAIZOKU_ANIM_DEMONSTRATIVE_SWORD_SWING
-    &gKaizokuDefeatAnim, // KAIZOKU_ANIM_DEFEAT
-    &gKaizokuDefeatIdleAnim, // KAIZOKU_ANIM_DEFEAT_IDLE
-    &gKaizokuThrowFlashAnim, // KAIZOKU_ANIM_THROW_FLASH
+    &gKaizokuDefeatAnim,                  // KAIZOKU_ANIM_DEFEAT
+    &gKaizokuDefeatIdleAnim,              // KAIZOKU_ANIM_DEFEAT_IDLE
+    &gKaizokuThrowFlashAnim,              // KAIZOKU_ANIM_THROW_FLASH
 };
 
 static u8 sAnimationModes[KAIZOKU_ANIM_MAX] = {
@@ -284,8 +284,8 @@ void EnKaizoku_Init(Actor* thisx, PlayState* play) {
     this->colorType = KAIZOKU_GET_TYPE(this);
     KAIZOKU_GET_TYPE(this) = 0;
     this->picto.actor.colChkInfo.damageTable = &sDamageTable;
-    SkelAnime_InitFlex(play, &this->skelAnime, &gKaizokuSkel, &gKaizokuWalkAnim, this->jointTable,
-                       this->morphTable, KAIZOKU_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gKaizokuSkel, &gKaizokuWalkAnim, this->jointTable, this->morphTable,
+                       KAIZOKU_LIMB_MAX);
     Collider_InitAndSetCylinder(play, &this->bodyCollider, &this->picto.actor, &sCylinderInit);
     Collider_InitAndSetQuad(play, &this->swordCollider, &this->picto.actor, &sQuadInit);
     blureInit.p1StartColor[0] = blureInit.p1StartColor[1] = blureInit.p1StartColor[2] = blureInit.p1StartColor[3] =
@@ -845,11 +845,11 @@ void EnKaizoku_WinCutscene(EnKaizoku* this, PlayState* play) {
                 Actor_PlaySfx(&this->picto.actor, NA_SE_EN_PIRATE_SHOUT);
                 // oddly, instead of just playing the sfx and spawning an effect
                 //  they spawn a real nut
-                dekuNut = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ARROW,  
-                      this->picto.actor.world.pos.x, this->picto.actor.world.pos.y + 10.0f, this->picto.actor.world.pos.z,
-                      this->picto.actor.shape.rot.x, this->picto.actor.shape.rot.y, this->picto.actor.shape.rot.z, 
-                     -ARROW_TYPE_DEKU_NUT);
-  
+                dekuNut = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ARROW, this->picto.actor.world.pos.x,
+                                      this->picto.actor.world.pos.y + 10.0f, this->picto.actor.world.pos.z,
+                                      this->picto.actor.shape.rot.x, this->picto.actor.shape.rot.y,
+                                      this->picto.actor.shape.rot.z, -ARROW_TYPE_DEKU_NUT);
+
                 if (dekuNut != NULL) {
                     dekuNut->gravity = -10.0f;
                     play->envCtx.fillScreen = true;
@@ -1095,7 +1095,8 @@ void EnKaizoku_Block(EnKaizoku* this, PlayState* play) {
             this->bodyCollider.base.acFlags &= ~AC_HARD;
             EnKaizoku_SetupCircle(this);
         }
-    } else if ((this->combatTimer == 0) && func_800BE184(play, &this->picto.actor, 100.0f, 10000, 0x4000, this->picto.actor.shape.rot.y)) {
+    } else if ((this->combatTimer == 0) &&
+               func_800BE184(play, &this->picto.actor, 100.0f, 10000, 0x4000, this->picto.actor.shape.rot.y)) {
         if (player->meleeWeaponAnimation == PLAYER_MWA_JUMPSLASH_START) {
             this->bodyCollider.base.acFlags &= ~AC_HARD;
             EnKaizoku_SetupSpinDodge(this, play);
@@ -1130,14 +1131,15 @@ void EnKaizoku_SetupJump(EnKaizoku* this) {
 }
 
 static Color_RGBA8 sKaizokuDustPrimColor = { 200, 160, 120, 255 }; // light brown
-static Color_RGBA8 sKaizokuDustEnvColor = { 130, 90, 50, 255 };   // darker brown
+static Color_RGBA8 sKaizokuDustEnvColor = { 130, 90, 50, 255 };    // darker brown
 
 static Vec3f sKaizokuDustVelocity = { 0.0f, -1.5f, 0.0f };
 static Vec3f sKaizokuDustAccel = { 0.0f, -0.2f, 0.0f };
 
 void EnKaizoku_SpawnFootDust(PlayState* play, Vec3f* pos) {
     // reusing sparkles instead of the actual dust effect? is this left over from OOT?
-    EffectSsKirakira_SpawnSmall(play, pos, &sKaizokuDustVelocity, &sKaizokuDustAccel, &sKaizokuDustPrimColor, &sKaizokuDustEnvColor);
+    EffectSsKirakira_SpawnSmall(play, pos, &sKaizokuDustVelocity, &sKaizokuDustAccel, &sKaizokuDustPrimColor,
+                                &sKaizokuDustEnvColor);
 }
 
 void EnKaizoku_Jump(EnKaizoku* this, PlayState* play) {
@@ -1333,7 +1335,8 @@ void EnKaizoku_Advance(EnKaizoku* this, PlayState* play) {
                 EnKaizoku_SetupReady(this);
             }
         } else if (this->picto.actor.xzDistToPlayer < 90.0f) {
-            if ((Rand_ZeroOne() > 0.03f) || ((this->picto.actor.xzDistToPlayer <= 65.0f) && (facingAngleToLink < 0x4000))) {
+            if ((Rand_ZeroOne() > 0.03f) ||
+                ((this->picto.actor.xzDistToPlayer <= 65.0f) && (facingAngleToLink < 0x4000))) {
                 EnKaizoku_SetupSlash(this);
             } else if (Actor_OtherIsTargeted(play, &this->picto.actor) && (Rand_ZeroOne() > 0.5f)) {
                 EnKaizoku_SetupRollBack(this);
@@ -1361,13 +1364,14 @@ void EnKaizoku_Advance(EnKaizoku* this, PlayState* play) {
                 Actor_PlaySfx(&this->picto.actor, NA_SE_EN_PIRATE_BREATH);
             }
 
-            if ((this->skelAnime.curFrame != 0.0f) && (((beforeCurFrame < 0) && (afterCurFrame > 0)) || ((beforeCurFrame < 4) && (afterCurFrame >= 5)))) {
+            if ((this->skelAnime.curFrame != 0.0f) &&
+                (((beforeCurFrame < 0) && (afterCurFrame > 0)) || ((beforeCurFrame < 4) && (afterCurFrame >= 5)))) {
                 Actor_PlaySfx(&this->picto.actor, NA_SE_EN_GERUDOFT_WALK);
             }
         }
     }
 }
- 
+
 void EnKaizoku_SetupPivot(EnKaizoku* this) {
     EnKaizoku_ChangeAnim(this, KAIZOKU_ANIM_SIDESTEP);
     this->action = KAIZOKU_ACTION_PIVOT;
@@ -1625,7 +1629,8 @@ void EnKaizoku_Stunned(EnKaizoku* this, PlayState* play) {
         }
     }
 
-    if ((this->iceTimer == 0) && (this->colorFilterTimer == 0) && !CHECK_FLAG_ALL(this->picto.actor.flags, ACTOR_FLAG_2000) &&
+    if ((this->iceTimer == 0) && (this->colorFilterTimer == 0) &&
+        !CHECK_FLAG_ALL(this->picto.actor.flags, ACTOR_FLAG_2000) &&
         (this->picto.actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         this->dontUpdateSkel = false;
         EnKaizoku_ReactToPlayer(this, play, true);
@@ -1669,8 +1674,8 @@ void EnKaizoku_Damaged(EnKaizoku* this, PlayState* play) {
     s16 angleToWall;
 
     Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.yawTowardsPlayer, 1, 0x1194, 0);
-    if (!EnKaizoku_DodgeRanged(this, play) && !EnKaizoku_ReactToPlayer(this, play, false) && (this->velocity.x < 1.0f) &&
-        (this->velocity.z < 1.0f)) {
+    if (!EnKaizoku_DodgeRanged(this, play) && !EnKaizoku_ReactToPlayer(this, play, false) &&
+        (this->velocity.x < 1.0f) && (this->velocity.z < 1.0f)) {
         angleToWall = this->picto.actor.wallYaw - this->picto.actor.shape.rot.y;
         if (this->picto.actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             if (ABS_ALT(angleToWall) < 0x3000 && (this->picto.actor.xzDistToPlayer < 90.0f)) {
@@ -1809,7 +1814,8 @@ void EnKaizoku_UpdateDamage(EnKaizoku* this, PlayState* play) {
                 this->actionFunc = EnKaizoku_SetupLoss;
             }
             return;
-        } else if ((this->action == KAIZOKU_ACTION_SPIN_ATTACK) && (this->swordCollider.base.at == &GET_PLAYER(play)->actor)) {
+        } else if ((this->action == KAIZOKU_ACTION_SPIN_ATTACK) &&
+                   (this->swordCollider.base.at == &GET_PLAYER(play)->actor)) {
             func_800B8D98(play, &this->picto.actor, 3.0f, this->picto.actor.yawTowardsPlayer, 1.0f);
             Health_ChangeBy(play, -0xC);
             if ((gSaveContext.save.saveInfo.playerData.health <= 0x10) && (this->action != KAIZOKU_ACTION_SCENE_FADE)) {
@@ -1844,9 +1850,10 @@ void EnKaizoku_UpdateDamage(EnKaizoku* this, PlayState* play) {
         EnKaizoku_SetupSlash(this);
     }
 
-    if ((this->bodyCollider.base.acFlags & AC_HIT) && (this->action > KAIZOKU_ACTION_HIDDEN) && (this->spinAttackState < 2) &&
-        (this->action != KAIZOKU_ACTION_JUMP) && (this->action != KAIZOKU_ACTION_BLOCK) &&
-        (this->action != KAIZOKU_ACTION_DAMAGED) && (this->action != KAIZOKU_ACTION_KNOCK_DOWN)) {
+    if ((this->bodyCollider.base.acFlags & AC_HIT) && (this->action > KAIZOKU_ACTION_HIDDEN) &&
+        (this->spinAttackState < 2) && (this->action != KAIZOKU_ACTION_JUMP) &&
+        (this->action != KAIZOKU_ACTION_BLOCK) && (this->action != KAIZOKU_ACTION_DAMAGED) &&
+        (this->action != KAIZOKU_ACTION_KNOCK_DOWN)) {
         Actor_SetDropFlag(&this->picto.actor, &this->bodyCollider.elem);
         AudioSfx_StopByPosAndId(&this->picto.actor.projectedPos, NA_SE_EN_PIRATE_BREATH);
 
@@ -2004,7 +2011,7 @@ void EnKaizoku_Update(Actor* thisx, PlayState* play2) {
     EnKaizoku* this = THIS;
     PlayState* play = play2;
 
-    if (! this->dontUpdateSkel) {
+    if (!this->dontUpdateSkel) {
         SkelAnime_Update(&this->skelAnime);
     }
 
@@ -2012,12 +2019,12 @@ void EnKaizoku_Update(Actor* thisx, PlayState* play2) {
         EnKaizoku_TurnHead(this);
     }
 
-    DECR (this->blinkTimer);
-    DECR (this->combatTimer);
-    DECR (this->lookTimer);
-    DECR (this->iceTimer);
-    DECR (this->cutsceneTimer);
-    DECR (this->colorFilterTimer);
+    DECR(this->blinkTimer);
+    DECR(this->combatTimer);
+    DECR(this->lookTimer);
+    DECR(this->iceTimer);
+    DECR(this->cutsceneTimer);
+    DECR(this->colorFilterTimer);
 
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->picto.actor);
@@ -2079,12 +2086,12 @@ s32 EnKaizoku_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
         rot->y += this->headRot.z;
     } else if (limbIndex == KAIZOKU_LIMB_HEAD) {
         gDPPipeSync(POLY_OPA_DISP++);
-        gDPSetEnvColor(POLY_OPA_DISP++, sKaizokuLipstickColors[this->colorType].r, sKaizokuLipstickColors[this->colorType].g,
-                       sKaizokuLipstickColors[this->colorType].b, 255);
+        gDPSetEnvColor(POLY_OPA_DISP++, sKaizokuLipstickColors[this->colorType].r,
+                       sKaizokuLipstickColors[this->colorType].g, sKaizokuLipstickColors[this->colorType].b, 255);
     } else {
         gDPPipeSync(POLY_OPA_DISP++);
-        gDPSetEnvColor(POLY_OPA_DISP++, sKaizokuOutfitColors[this->colorType].r, sKaizokuOutfitColors[this->colorType].g,
-                       sKaizokuOutfitColors[this->colorType].b, 255);
+        gDPSetEnvColor(POLY_OPA_DISP++, sKaizokuOutfitColors[this->colorType].r,
+                       sKaizokuOutfitColors[this->colorType].g, sKaizokuOutfitColors[this->colorType].b, 255);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);
@@ -2108,7 +2115,8 @@ void EnKaizoku_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
         Matrix_MultVec3f(&sSwordTipOffset, &swordTip);
         Matrix_MultVec3f(&sSwordHiltOffset, &swordHilt);
 
-        if ((this->swordState == 1) && ((this->action == KAIZOKU_ACTION_SLASH) || (this->action == KAIZOKU_ACTION_SPIN_ATTACK))) {
+        if ((this->swordState == 1) &&
+            ((this->action == KAIZOKU_ACTION_SLASH) || (this->action == KAIZOKU_ACTION_SPIN_ATTACK))) {
             EffectBlure_AddVertex(Effect_GetByIndex(this->blureIndex), &swordTip, &swordHilt);
         } else if (this->swordState != 0) {
             EffectBlure_AddSpace(Effect_GetByIndex(this->blureIndex));
@@ -2125,10 +2133,12 @@ void EnKaizoku_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
         Matrix_MultVec3f(&sFootOffset, &this->rightFootPos);
     }
 
-    if ((limbIndex == KAIZOKU_LIMB_TORSO) || (limbIndex == KAIZOKU_LIMB_HEAD) || (limbIndex == KAIZOKU_LIMB_R_UPPER_ARM) ||
-        (limbIndex == KAIZOKU_LIMB_R_FOREARM) || (limbIndex == KAIZOKU_LIMB_R_HAND) || (limbIndex == KAIZOKU_LIMB_L_UPPER_ARM) ||
-        (limbIndex == KAIZOKU_LIMB_L_FOREARM) || (limbIndex == KAIZOKU_LIMB_L_HAND) || (limbIndex == KAIZOKU_LIMB_L_THIGH) ||
-        (limbIndex == KAIZOKU_LIMB_L_SHIN) || (limbIndex == KAIZOKU_LIMB_L_FOOT) || (limbIndex == KAIZOKU_LIMB_R_THIGH) ||
+    if ((limbIndex == KAIZOKU_LIMB_TORSO) || (limbIndex == KAIZOKU_LIMB_HEAD) ||
+        (limbIndex == KAIZOKU_LIMB_R_UPPER_ARM) || (limbIndex == KAIZOKU_LIMB_R_FOREARM) ||
+        (limbIndex == KAIZOKU_LIMB_R_HAND) || (limbIndex == KAIZOKU_LIMB_L_UPPER_ARM) ||
+        (limbIndex == KAIZOKU_LIMB_L_FOREARM) || (limbIndex == KAIZOKU_LIMB_L_HAND) ||
+        (limbIndex == KAIZOKU_LIMB_L_THIGH) || (limbIndex == KAIZOKU_LIMB_L_SHIN) ||
+        (limbIndex == KAIZOKU_LIMB_L_FOOT) || (limbIndex == KAIZOKU_LIMB_R_THIGH) ||
         (limbIndex == KAIZOKU_LIMB_R_SHIN) || (limbIndex == KAIZOKU_LIMB_R_FOOT) || (limbIndex == KAIZOKU_LIMB_WAIST)) {
 
         Matrix_MultZero(&this->bodyPartsPos[this->bodyPartIndex]);
