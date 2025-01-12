@@ -105,7 +105,7 @@ typedef struct EnKaizoku {
     /* 0x2F8 */ Vec3f swordScaleRight;
     /* 0x304 */ Vec3f swordScaleLeft;
     /* 0x310 */ Vec3f bodyPartsPos[KAIZOKU_BODYPART_MAX];
-    /* 0x3C4 */ Vec3f unk_3C4; // momentum?
+    /* 0x3C4 */ Vec3f velocity;
     /* 0x3D0 */ s32 blureIndex;
     /* 0x3D4 */ ColliderCylinder bodyCollider;
     /* 0x420 */ ColliderQuad swordCollider;
