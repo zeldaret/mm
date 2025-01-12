@@ -4,7 +4,6 @@
  * Description: Igos du Ikana window - curtains and ray effects
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_boss_06.h"
 #include "z64shrink_window.h"
 #include "attributes.h"

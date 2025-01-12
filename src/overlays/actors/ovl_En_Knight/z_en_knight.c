@@ -4,7 +4,6 @@
  * Description: Igos du Ikana and his lackeys
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_en_knight.h"
 #include "z64shrink_window.h"
 #include "attributes.h"
