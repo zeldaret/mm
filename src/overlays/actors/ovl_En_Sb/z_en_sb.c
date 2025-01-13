@@ -153,6 +153,11 @@ void EnSb_SetupOpen(EnSb* this) {
                      ANIMMODE_ONCE, 0.0f);
     this->state = SHELLBLADE_OPEN;
     this->actionFunc = EnSb_Open;
+    //! @bug Incorrect sfx
+    //! In OoT, NA_SE_EN_SHELL_MOUTH is the value 0x3849
+    //! But in MM, certain sfxIds got reordered this was not updated:
+    //! In MM, NA_SE_EN_KUSAMUSHI_VIBE is the old value 0x3849
+    //! In MM, NA_SE_EN_SHELL_MOUTH does not exist
     Actor_PlaySfx(&this->actor, NA_SE_EN_KUSAMUSHI_VIBE);
 }
 
@@ -170,6 +175,11 @@ void EnSb_SetupLunge(EnSb* this) {
     Animation_Change(&this->skelAnime, &object_sb_Anim_000124, playbackSpeed, 0.0f, endFrame, ANIMMODE_ONCE, 0);
     this->state = SHELLBLADE_LUNGE;
     this->actionFunc = EnSb_Lunge;
+    //! @bug Incorrect sfx
+    //! In OoT, NA_SE_EN_SHELL_MOUTH is the value 0x3849
+    //! But in MM, certain sfxIds got reordered this was not updated:
+    //! In MM, NA_SE_EN_KUSAMUSHI_VIBE is the old value 0x3849
+    //! In MM, NA_SE_EN_SHELL_MOUTH does not exist
     Actor_PlaySfx(&this->actor, NA_SE_EN_KUSAMUSHI_VIBE);
 }
 
