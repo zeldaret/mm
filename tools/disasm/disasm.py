@@ -57,7 +57,7 @@ DATA_OUT = "data/"
 def discard_decomped_files(files_spec, include_files):
     root_path = Path(__file__).parent.parent.parent
 
-    with open(root_path / "spec", "r") as f:
+    with open(root_path / "spec/spec", "r") as f:
         spec = f.read()
     # No need to check anything beyond here
     spec = spec[: spec.find('name "gameplay_keep"')].splitlines()[:-2]
