@@ -17,7 +17,6 @@ typedef void (*EnKaizokuActionFunc)(struct EnKaizoku*, PlayState*);
 
 #define KAIZOKU_SWITCH_FLAG_NONE 0x7F
 
-// todo name these
 typedef enum EnKaizokuAnimation {
     /*  0 */ KAIZOKU_ANIM_FIGHTING_IDLE,
     /*  1 */ KAIZOKU_ANIM_OOT_CONVERSATION, // giving player membership card?
@@ -41,7 +40,6 @@ typedef enum EnKaizokuAnimation {
     /* 19 */ KAIZOKU_ANIM_MAX
 } EnKaizokuAnimation;
 
-// this is a different size than limb enum in object..?
 typedef enum EnKaizokuBodyPart {
     /*  0 */ KAIZOKU_BODYPART_0,
     /*  1 */ KAIZOKU_BODYPART_1,
@@ -81,7 +79,6 @@ typedef struct EnKaizoku {
     /* 0x2B8 */ s16 colorFilterTimer; // name taken from oot, damaged flashing red
     /* 0x2BA */ s16 drawDmgEffType;
     /* 0x2BC */ s16 switchFlag;
-    /* 0x2BE */ s16 unused2BE;
     /* 0x2C0 */ f32 drawDmgEffScale;
     /* 0x2C4 */ f32 drawDmgEffFrozenSteamScale;
     /* 0x2C8 */ s16 textidOffset; // which of the 4 text states during interaction 
@@ -99,8 +96,8 @@ typedef struct EnKaizoku {
     /* 0x2E4 */ EnKaizokuAnimation animIndex;
     /* 0x2E8 */ s32 bodyPartIndex;
     /* 0x2EC */ s32 colorType;
-    /* 0x2F0 */ f32 unk_2F0; // modfified in Update, but not read/used?
-    /* 0x2F4 */ s16 unk_2F4; // read but never set?
+    /* 0x2F0 */ f32 boyoBounceVelocity;
+    /* 0x2F4 */ s16 boyoBounceAngle;
     /* 0x2F8 */ Vec3f swordScaleRight;
     /* 0x304 */ Vec3f swordScaleLeft;
     /* 0x310 */ Vec3f bodyPartsPos[KAIZOKU_BODYPART_MAX];
@@ -117,7 +114,6 @@ typedef struct EnKaizoku {
     /* 0x59C */ s16 cutsceneState; 
     /* 0x59E */ s16 subCamId;
     /* 0x5A0 */ s16 flashTimer;
-    /* 0x5A2 */ s16 unused5A2;
     /* 0x5A4 */ Vec3f subCamEye;
     /* 0x5B0 */ Vec3f subCamAt;
     /* 0x5BC */ Vec3f subCamUp;

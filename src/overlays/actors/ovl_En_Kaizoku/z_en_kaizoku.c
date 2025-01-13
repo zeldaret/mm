@@ -357,7 +357,7 @@ s32 EnKaizoku_DodgeRanged(EnKaizoku* this, PlayState* play) {
 
 void EnKaizoku_TurnHead(EnKaizoku* this) {
     if (this->action == KAIZOKU_ACTION_READY) {
-        this->headRot.y = Math_SinS(this->lookTimer * 0x1068) * 0x22D8;
+        this->headRot.y = Math_SinS(this->lookTimer * 4200) * 8920;
     } else if (this->action != KAIZOKU_ACTION_STUNNED) {
         if ((this->action == KAIZOKU_ACTION_SLASH) || (this->action == KAIZOKU_ACTION_SPIN_ATTACK)) {
             Math_SmoothStepToS(&this->headRot.y, this->picto.actor.yawTowardsPlayer - this->picto.actor.shape.rot.y, 1,
@@ -444,7 +444,7 @@ s32 EnKaizoku_ReactToPlayer(EnKaizoku* this, PlayState* play, s16 arg2) {
                 (ABS_ALT(angleToFacingLink) < 0x5000)) {
                 if (this->action != KAIZOKU_ACTION_SLASH) {
                     EnKaizoku_SetupSlash(this);
-                    return 1;
+                    return true;
                 }
             } else if (this->action != KAIZOKU_ACTION_SIDESTEP) {
                 EnKaizoku_SetupCircle(this);
@@ -840,7 +840,7 @@ void EnKaizoku_WinCutscene(EnKaizoku* this, PlayState* play) {
                 this->swordScaleRight.z = this->swordScaleRight.y = this->swordScaleRight.x;
                 this->swordScaleLeft.z = this->swordScaleLeft.y = this->swordScaleLeft.x;
             }
-            if (this->flashTimer == 0x12) {
+            if (this->flashTimer == 18) {
                 Actor* dekuNut;
 
                 Actor_PlaySfx(&this->picto.actor, NA_SE_EN_PIRATE_SHOUT);
@@ -857,7 +857,7 @@ void EnKaizoku_WinCutscene(EnKaizoku* this, PlayState* play) {
                 }
             }
 
-            if (this->flashTimer >= 0x12) {
+            if (this->flashTimer >= 18) {
                 Math_ApproachF(&this->flashScreenAlphaTarget, 60.0f, 1.0f, 20.0f);
                 this->flashScreenAlpha = this->flashScreenAlphaTarget / 60.0f;
                 play->envCtx.screenFillColor[3] = this->flashScreenAlpha * 255.0f;
@@ -865,7 +865,7 @@ void EnKaizoku_WinCutscene(EnKaizoku* this, PlayState* play) {
                     255;
             }
 
-            if ((curFrame >= this->animEndFrame) && (this->flashTimer >= 0x28)) {
+            if ((curFrame >= this->animEndFrame) && (this->flashTimer >= 40)) {
                 this->picto.actor.draw = NULL;
                 this->cutsceneTimer = 10;
                 Math_Vec3f_Copy(&this->swordScaleRight, &gZeroVec3f);
@@ -1076,7 +1076,7 @@ void EnKaizoku_Block(EnKaizoku* this, PlayState* play) {
                 if (player->meleeWeaponAnimation == PLAYER_MWA_JUMPSLASH_START) {
                     this->bodyCollider.base.acFlags &= ~AC_HARD;
                     EnKaizoku_SetupSpinDodge(this, play);
-                } else if (!(play->gameplayFrames & 1)) {
+                } else if (!(play->gameplayFrames % 2)) {
                     EnKaizoku_SetupBlock(this);
                 } else {
                     this->bodyCollider.base.acFlags &= ~AC_HARD;
@@ -2045,16 +2045,16 @@ void EnKaizoku_Update(Actor* thisx, PlayState* play2) {
     }
 
     if (this->picto.actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
-        Vec3f sp34;
+        Vec3f bounceVelocity;
         s32 pad;
 
-        Matrix_RotateYS(this->picto.actor.shape.rot.y + this->unk_2F4, MTXMODE_NEW);
-        Matrix_MultVecZ(this->unk_2F0, &sp34);
-        this->picto.actor.world.pos.x += this->velocity.x + sp34.x;
-        this->picto.actor.world.pos.z += this->velocity.z + sp34.z;
+        Matrix_RotateYS(this->picto.actor.shape.rot.y + this->boyoBounceAngle, MTXMODE_NEW);
+        Matrix_MultVecZ(this->boyoBounceVelocity, &bounceVelocity);
+        this->picto.actor.world.pos.x += this->velocity.x + bounceVelocity.x;
+        this->picto.actor.world.pos.z += this->velocity.z + bounceVelocity.z;
         Math_ApproachZeroF(&this->velocity.x, 1.0f, 2.0f);
         Math_ApproachZeroF(&this->velocity.z, 1.0f, 2.0f);
-        Math_ApproachZeroF(&this->unk_2F0, 1.0f, 5.0f);
+        Math_ApproachZeroF(&this->boyoBounceVelocity, 1.0f, 5.0f);
     }
 
     Actor_UpdateBgCheckInfo(play, &this->picto.actor, 35.0f, 40.0f, 35.0f,

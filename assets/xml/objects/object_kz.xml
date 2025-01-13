@@ -14,7 +14,7 @@
         <Animation Name="gKaizokuUnsheatheAnim" Offset="0x5644" /> <!-- Original name is "kz_kime" -->
         <Animation Name="gKaizokuWalkAnim" Offset="0x58B8" /> <!-- Original name is "kz_run" -->
 
-        <Texture Name="gKaizokuTLUT1" OutName="tlut1_0058D0" Format="rgba16" Width="16" Height="16" Offset="0x58D0" />
+        <Texture Name="gKaizoku1TLUT" OutName="kaizoku_tlut1" Format="rgba16" Width="16" Height="16" Offset="0x58D0" />
         <!-- This is the same skin texture as below, but this one is her arms and back -->
         <Texture Name="gKaizokuSkinGradient1Tex" OutName="skin1" Format="ci8" Width="8" Height="8" Offset="0x5AD0" TlutOffset="0x58D0" />
         <Texture Name="gKaizokuShirtTopRedGradientTex" OutName="shirt_burgundy" Format="ci8" Width="8" Height="8" Offset="0x5B10" />
@@ -26,18 +26,18 @@
         <!-- This is the texture at the back of her boots and pants belt center.  -->
         <Texture Name="gKaizokuZipper1Tex" OutName="zipper1" Format="i8" Width="8" Height="16" Offset="0x5F50" />
 
-        <DList Name="gKaizokuTorsoDl" Offset="0x7CB0" />
-        <DList Name="gKaizokuRightUpperArmDl" Offset="0x8130" />
-        <DList Name="gKaizokuRightForarmDl" Offset="0x8268" />
-        <DList Name="gKaizokuLeftUpperArmDl" Offset="0x8490" />
-        <DList Name="gKaizokuLeftForarmDl" Offset="0x85C8" />
-        <DList Name="gKaizokuWaistDl" Offset="0x87F0" />
-        <DList Name="gKaizokuRightThighDl" Offset="0x8A10" />
-        <DList Name="gKaizokuRightShinDl" Offset="0x8B10" />
-        <DList Name="gKaizokuLeftThighDl" Offset="0x8D80" />
-        <DList Name="gKaizokuLeftShinDl" Offset="0x8E80" />
+        <DList Name="gKaizokuTorsoDL" Offset="0x7CB0" />
+        <DList Name="gKaizokuRightUpperArmDL" Offset="0x8130" />
+        <DList Name="gKaizokuRightForarmDL" Offset="0x8268" />
+        <DList Name="gKaizokuLeftUpperArmDL" Offset="0x8490" />
+        <DList Name="gKaizokuLeftForarmDL" Offset="0x85C8" />
+        <DList Name="gKaizokuWaistDL" Offset="0x87F0" />
+        <DList Name="gKaizokuRightThighDL" Offset="0x8A10" />
+        <DList Name="gKaizokuRightShinDL" Offset="0x8B10" />
+        <DList Name="gKaizokuLeftThighDL" Offset="0x8D80" />
+        <DList Name="gKaizokuLeftShinDL" Offset="0x8E80" />
 
-        <Texture Name="gKaizokuTLUT2" OutName="tlut2_009100" Format="rgba16" Width="4" Height="63" Offset="0x9100" /> 
+        <Texture Name="gKaizoku2TLUT" OutName="kaizoku_tlut2" Format="rgba16" Width="4" Height="63" Offset="0x9100" /> 
         <!-- This is the same skin texture as above, but this one is for her head and feet -->
         <Texture Name="gKaizokuSkinGradient2Tex" OutName="skin2" Format="ci8" Width="8" Height="8" Offset="0x92F8"  TlutOffset="0x9100"/>
         <Texture Name="gKaizokuEarTex" OutName="ear" Format="ci8" Width="8" Height="16" Offset="0x9338" />
@@ -54,15 +54,15 @@
         <Texture Name="gKaizokuYellowSwordGuardAndEmblemTex" OutName="emblem" Format="ci8" Width="16" Height="16" Offset="0x9FF8" />
         <Texture Name="gKaizokuEyeClosedTex" OutName="kaizoku_eye_closed" Format="ci8" Width="32" Height="32" Offset="0xA0F8" TlutOffset="0x9100" />
 
-        <DList Name="gKaizokuLeftFootDl" Offset="0xC318" />
-        <DList Name="gKaizokuRightFootDl" Offset="0xC4D8" />
-        <DList Name="gKaizokuLeftHandDl" Offset="0xC698" />
-        <DList Name="gKaizokuLeftSwordDl" Offset="0xC830" />
-        <DList Name="gKaizokuRightHandDl" Offset="0xCA08" />
-        <DList Name="gKaizokuRightSwordDl" Offset="0xCBA0" />
-        <DList Name="gKaizokuVeilDl" Offset="0xCD78" />
-        <DList Name="gKaizokuPonytailDl" Offset="0xCE30" />
-        <DList Name="gKaizokuHeadDl" Offset="0xCF20" />
+        <DList Name="gKaizokuLeftFootDL" Offset="0xC318" />
+        <DList Name="gKaizokuRightFootDL" Offset="0xC4D8" />
+        <DList Name="gKaizokuLeftHandDL" Offset="0xC698" />
+        <DList Name="gKaizokuLeftSwordDL" Offset="0xC830" />
+        <DList Name="gKaizokuRightHandDL" Offset="0xCA08" />
+        <DList Name="gKaizokuRightSwordDL" Offset="0xCBA0" />
+        <DList Name="gKaizokuVeilDL" Offset="0xCD78" />
+        <DList Name="gKaizokuPonytailDL" Offset="0xCE30" />
+        <DList Name="gKaizokuHeadDL" Offset="0xCF20" />
 
         <Limb Name="gKaizokuRootLimb" Type="Standard" EnumName="KAIZOKU_LIMB_ROOT" Offset="0xD6B8" />
         <Limb Name="gKaizokuTorsoLimb" Type="Standard" EnumName="KAIZOKU_LIMB_TORSO" Offset="0xD6C4" />
