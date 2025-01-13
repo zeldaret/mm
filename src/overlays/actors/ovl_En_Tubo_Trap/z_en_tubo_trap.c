@@ -269,11 +269,12 @@ void EnTuboTrap_FlyAtPlayer(EnTuboTrap* this, PlayState* play) {
     f32 dY = this->originPos.y - this->actor.world.pos.y;
     f32 dZ = this->originPos.z - this->actor.world.pos.z;
 
-    //! @bug should be NA_SE_EN_TUBOOCK_FLY - SFX_FLAG
-    // In OoT, NA_SE_EN_TUBOOCK_FLY is the value 0x3837
-    // But in MM, certain sfxIds got reordered and devs forgot to update:
-    // In MM, NA_SE_EN_MIZUBABA2_ATTACK is the old value 0x3837
-    // In MM, NA_SE_EN_TUBOOCK_FLY is the new value 0x3AE0
+    //! @bug Incorrect sfx
+    //! This should be NA_SE_EN_TUBOOCK_FLY - SFX_FLAG
+    //! In OoT, NA_SE_EN_TUBOOCK_FLY is the value 0x3837
+    //! But in MM, certain sfxIds got reordered this was not updated:
+    //! In MM, NA_SE_EN_MIZUBABA2_ATTACK is the old value 0x3837
+    //! In MM, NA_SE_EN_TUBOOCK_FLY is the new value 0x3AE0
     Actor_PlaySfx(&this->actor, NA_SE_EN_MIZUBABA2_ATTACK - SFX_FLAG);
 
     if ((SQ(dX) + SQ(dY) + SQ(dZ) > SQ(240.0f))) {

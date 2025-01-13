@@ -362,6 +362,8 @@ static MsgScript sMsgScriptGoronMedigoron[] = {
     /* 0x0014 0x01 */ MSCRIPT_CMD_DONE(),
 
     /* 0x0015 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_18_40, 0x0037 - 0x001A),
+    //! @bug Incorrect sfx
+    //! The text associated with 0x0C80 makes use of an incorrect pop sound (`NA_SE_EN_SLIME_BREAK`)
     /* 0x001A 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x0C80),
     /* 0x001D 0x01 */ MSCRIPT_CMD_AWAIT_TEXT(),
     /* 0x001E 0x03 */ MSCRIPT_CMD_SET_WEEK_EVENT_REG(WEEKEVENTREG_18_40),
