@@ -19,12 +19,12 @@ typedef void (*EnKaizokuActionFunc)(struct EnKaizoku*, PlayState*);
 
 typedef enum EnKaizokuAnimation {
     /*  0 */ KAIZOKU_ANIM_FIGHTING_IDLE,
-    /*  1 */ KAIZOKU_ANIM_OOT_CONVERSATION, // giving player membership card?
-    /*  2 */ KAIZOKU_ANIM_OOT_JUMP, // replaced with _LAND
+    /*  1 */ KAIZOKU_ANIM_UNUSED_CONVERSATION, // from OOT: giving player membership card?
+    /*  2 */ KAIZOKU_ANIM_UNUSED_JUMP, // from OOT: replaced with _LAND
     /*  3 */ KAIZOKU_ANIM_SIDESTEP,
     /*  4 */ KAIZOKU_ANIM_WALK,
     /*  5 */ KAIZOKU_ANIM_DAMAGE,
-    /*  6 */ KAIZOKU_ANIM_OOT_DEFEAT, // replaced with _DEFEAT
+    /*  6 */ KAIZOKU_ANIM_UNUSED_DEFEAT, // from OOT: replaced with _DEFEAT
     /*  7 */ KAIZOKU_ANIM_BLOCK,
     /*  8 */ KAIZOKU_ANIM_FLIP,
     /*  9 */ KAIZOKU_ANIM_SLASH_ATTCK,

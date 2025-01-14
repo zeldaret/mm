@@ -123,7 +123,7 @@ typedef enum EnKaizokuDamageEffect {
     /* 0x3 */ KAIZOKU_DMGEFF_FREEZE,
     /* 0x4 */ KAIZOKU_DMGEFF_LIGHT_ARROW,
     /* 0x5 */ KAIZOKU_DMGEFF_ZORA_SHIELD,
-    /* 0xD */ KAIZOKU_DMGEFF_D = 0xD, // smashed? it checks stun first?
+    /* 0xD */ KAIZOKU_DMGEFF_STUNNED_ONLY = 0xD, // smashed? it checks stun first?
     /* 0xE */ KAIZOKU_DMGEFF_ALWAYS_HIT,
     /* 0xF */ KAIZOKU_DMGEFF_IFRAME_PROTECTED // can only hit while kaizoku has no iframe from rolling
 } EnKaizokuDamageEffect;
@@ -139,7 +139,7 @@ static DamageTable sDamageTable = {
     /* Hookshot       */ DMG_ENTRY(0, KAIZOKU_DMGEFF_STUNNED),
     /* Goron punch    */ DMG_ENTRY(1, KAIZOKU_DMGEFF_ALWAYS_HIT),
     /* Sword          */ DMG_ENTRY(1, KAIZOKU_DMGEFF_ALWAYS_HIT),
-    /* Goron pound    */ DMG_ENTRY(0, KAIZOKU_DMGEFF_D),
+    /* Goron pound    */ DMG_ENTRY(0, KAIZOKU_DMGEFF_STUNNED_ONLY),
     /* Fire arrow     */ DMG_ENTRY(2, KAIZOKU_DMGEFF_FIRE_ARROW),
     /* Ice arrow      */ DMG_ENTRY(2, KAIZOKU_DMGEFF_FREEZE),
     /* Light arrow    */ DMG_ENTRY(2, KAIZOKU_DMGEFF_LIGHT_ARROW),
@@ -153,7 +153,7 @@ static DamageTable sDamageTable = {
     /* Light ray      */ DMG_ENTRY(0, KAIZOKU_DMGEFF_NONE),
     /* Thrown object  */ DMG_ENTRY(1, KAIZOKU_DMGEFF_ALWAYS_HIT),
     /* Zora punch     */ DMG_ENTRY(1, KAIZOKU_DMGEFF_ALWAYS_HIT),
-    /* Spin attack    */ DMG_ENTRY(1, KAIZOKU_DMGEFF_D),
+    /* Spin attack    */ DMG_ENTRY(1, KAIZOKU_DMGEFF_STUNNED_ONLY),
     /* Sword beam     */ DMG_ENTRY(0, KAIZOKU_DMGEFF_NONE),
     /* Normal Roll    */ DMG_ENTRY(0, KAIZOKU_DMGEFF_NONE),
     /* UNK_DMG_0x1B   */ DMG_ENTRY(0, KAIZOKU_DMGEFF_NONE),
@@ -217,12 +217,12 @@ static ColliderQuadInit sQuadInit = {
 
 static AnimationHeader* sAnimations[KAIZOKU_ANIM_MAX] = {
     &gKaizokuFightingIdleAnim,            // KAIZOKU_ANIM_FIGHTING_IDLE
-    &gKaizokuOOTConversationAnim,         // KAIZOKU_ANIM_OOT_CONVERSATION
-    &gKaizokuOOTJumpAnim,                 // KAIZOKU_ANIM_OOT_JUMP
+    &gKaizokuUnusedConversationAnim,      // KAIZOKU_ANIM_UNUSED_CONVERSATION
+    &gKaizokuUnusedJumpAnim,              // KAIZOKU_ANIM_UNUSED_JUMP
     &gKaizokuSidestepAnim,                // KAIZOKU_ANIM_SIDESTEP
     &gKaizokuWalkAnim,                    // KAIZOKU_ANIM_WALK
     &gKaizokuDamageAnim,                  // KAIZOKU_ANIM_DAMAGE
-    &gKaizokuOOTDefeatAnim,               // KAIZOKU_ANIM_OOT_DEFEAT
+    &gKaizokuUnusedDefeatAnim,            // KAIZOKU_ANIM_UNUSED_DEFEAT
     &gKaizokuBlockAnim,                   // KAIZOKU_ANIM_BLOCK
     &gKaizokuFlipAnim,                    // KAIZOKU_ANIM_FLIP
     &gKaizokuSlashAnim,                   // KAIZOKU_ANIM_SLASH_ATTCK
@@ -239,12 +239,12 @@ static AnimationHeader* sAnimations[KAIZOKU_ANIM_MAX] = {
 
 static u8 sAnimationModes[KAIZOKU_ANIM_MAX] = {
     ANIMMODE_LOOP, // KAIZOKU_ANIM_FIGHTING_IDLE
-    ANIMMODE_LOOP, // KAIZOKU_ANIM_OOT_CONVERSATION
-    ANIMMODE_ONCE, // KAIZOKU_ANIM_OOT_JUMP
+    ANIMMODE_LOOP, // KAIZOKU_ANIM_UNUSED_CONVERSATION
+    ANIMMODE_ONCE, // KAIZOKU_ANIM_UNUSED_JUMP
     ANIMMODE_LOOP, // KAIZOKU_ANIM_SIDESTEP
     ANIMMODE_LOOP, // KAIZOKU_ANIM_WALK
     ANIMMODE_ONCE, // KAIZOKU_ANIM_DAMAGE
-    ANIMMODE_ONCE, // KAIZOKU_ANIM_OOT_DEFEAT
+    ANIMMODE_ONCE, // KAIZOKU_ANIM_UNUSED_DEFEAT
     ANIMMODE_ONCE, // KAIZOKU_ANIM_BLOCK
     ANIMMODE_ONCE, // KAIZOKU_ANIM_FLIP
     ANIMMODE_ONCE, // KAIZOKU_ANIM_SLASH_ATTCK
@@ -1890,7 +1890,7 @@ void EnKaizoku_UpdateDamage(EnKaizoku* this, PlayState* play) {
                 wasHit = true;
                 break;
 
-            case KAIZOKU_DMGEFF_D:
+            case KAIZOKU_DMGEFF_STUNNED_ONLY:
                 if (this->action == KAIZOKU_ACTION_STUNNED) {
                     wasHit = true;
                 } else if (this->action != KAIZOKU_ACTION_JUMP) {

@@ -5,7 +5,8 @@
         <Animation Name="gKaizokuFlipAnim" Offset="0x1390" /> <!-- Original name is "kz_back_ten" -->
         <Animation Name="gKaizokuBlockAnim" Offset="0x1578" /> <!-- Original name is "kz_defense" -->
         <Animation Name="gKaizokuThrowFlashAnim" Offset="0x1E9C" /> <!-- Original name is "kz_doron" -->
-        <Animation Name="gKaizokuOOTDefeatAnim" Offset="0x2730" /> <!-- Original name is "kz_down" -->
+        <!-- This is the old version from OOT, back when she would jump to escape instead of talking and flashing to escape -->
+        <Animation Name="gKaizokuUnusedDefeatAnim" Offset="0x2730" /> <!-- Original name is "kz_down" -->
         <Animation Name="gKaizokuDefeatIdleAnim" Offset="0x2BA0" /> <!-- Original name is "kz_downwait" -->
         <Animation Name="gKaizokuDefeatAnim" Offset="0x3A3C" /> <!-- Original name is "kz_downwake" -->
         <!-- This is used in a threatening stance if the player loses the fight, while she talks to you -->
@@ -92,11 +93,11 @@
         <Skeleton Name="gKaizokuSkel" Type="Flex" LimbType="Standard" LimbNone="KAIZOKU_LIMB_NONE" LimbMax="KAIZOKU_LIMB_MAX" EnumName="KaizokuLimb" Offset="0xD828" />
 
         <Animation Name="gKaizokuSidestepAnim" Offset="0xDBE4" /> <!-- Original name is "kz_side_walk" -->
-        <!-- Called "JumpAnim" in oot because its used for both, but in this game she never jumps -->
-        <Animation Name="gKaizokuOOTJumpAnim" Offset="0xE1C8" /> <!-- Original name is "kz_start" -->
+        <!-- This is the old version from OOT, back when she would jump to escape instead of talking and flashing to escape -->
+        <Animation Name="gKaizokuUnusedJumpAnim" Offset="0xE1C8" /> <!-- Original name is "kz_start" -->
         <Animation Name="gKaizokuLandAnim" Offset="0xE8BC" /> <!-- Original name is "kz_syuta" -->
         <Animation Name="gKaizokuChallengeTalkAnim" Offset="0xED1C" /> <!-- Original name is "kz_syutawait" -->
-        <Animation Name="gKaizokuOOTConversationAnim" Offset="0xEF9C" /> <!-- Original name is "kz_talk" -->
+        <Animation Name="gKaizokuUnusedConversationAnim" Offset="0xEF9C" /> <!-- Original name is "kz_talk" -->
         <!-- not sure this one gets used -->
         <Animation Name="gKaizokuLowerWeaponsAnim" Offset="0xF288" /> <!-- Original name is "kz_togetout" -->
         <!-- Called "Neutral" in OOT -->
