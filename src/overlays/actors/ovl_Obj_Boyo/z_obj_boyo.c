@@ -100,8 +100,8 @@ void ObjBoyo_PushPlayer(ObjBoyo* this, Actor* actor) {
 void ObjBoyo_PushPirate(ObjBoyo* this, Actor* actor) {
     EnKaizoku* kaizoku = (EnKaizoku*)actor;
 
-    kaizoku->unk_2F0 = 30.0f;
-    kaizoku->unk_2F4 = Actor_WorldYawTowardActor(&this->actor, &kaizoku->picto.actor);
+    kaizoku->boyoBounceVelocity = 30.0f;
+    kaizoku->boyoBounceAngle = Actor_WorldYawTowardActor(&this->actor, &kaizoku->picto.actor);
 }
 
 void ObjBoyo_ExplodeBomb(ObjBoyo* this, Actor* actor) {
