@@ -283,7 +283,7 @@ void EnKaizoku_Init(Actor* thisx, PlayState* play) {
     }
 
     this->colorType = KAIZOKU_GET_TYPE(this);
-    this->picto.actor.rot.z = 0; // clear TYPE param, which was rot.z, as we dont want skew
+    this->picto.actor.world.rot.z = 0; // clear TYPE param, which was rot.z, as we dont want skew
     this->picto.actor.colChkInfo.damageTable = &sDamageTable;
     SkelAnime_InitFlex(play, &this->skelAnime, &gKaizokuSkel, &gKaizokuWalkAnim, this->jointTable, this->morphTable,
                        KAIZOKU_LIMB_MAX);
