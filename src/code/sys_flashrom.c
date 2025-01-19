@@ -18,7 +18,6 @@ STACK(sSysFlashromStack, 0x1000);
 StackEntry sSysFlashromStackInfo;
 OSThread sSysFlashromThread;
 FlashromRequest sFlashromRequest;
-OSMesg sSysFlashromMsgBuf[1];
 
 s32 SysFlashrom_IsInit(void) {
     return sFlashromIsInit;
@@ -113,7 +112,7 @@ s32 SysFlashrom_ExecWrite(void* addr, u32 pageNum, u32 pageCount) {
     for (i = 0; i < pageCount; i++) {
         osFlashWriteBuffer(&msg, OS_MESG_PRI_NORMAL, (u8*)addr + i * FLASH_BLOCK_SIZE, &sFlashromMesgQueue);
         osRecvMesg(&sFlashromMesgQueue, NULL, OS_MESG_BLOCK);
-        result = osFlashWriteArray(i + pageNum);
+        result = osFlashWriteArray(pageNum + i);
         if (result != 0) {
             return result;
         }
@@ -204,27 +203,28 @@ s32 SysFlashrom_WriteData(void* addr, u32 pageNum, u32 pageCount) {
 void SysFlashrom_ThreadEntry(void* arg) {
     FlashromRequest* req = (FlashromRequest*)arg;
 
-    switch (req->requestType) {
+    switch (req->type) {
         case FLASHROM_REQUEST_WRITE:
             req->response = SysFlashrom_WriteData(req->addr, req->pageNum, req->pageCount);
-            osSendMesg(&req->messageQueue, (OSMesg)req->response, OS_MESG_BLOCK);
+            osSendMesg(&req->queue, (OSMesg)req->response, OS_MESG_BLOCK);
             break;
 
         case FLASHROM_REQUEST_READ:
             req->response = SysFlashrom_ReadData(req->addr, req->pageNum, req->pageCount);
-            osSendMesg(&req->messageQueue, (OSMesg)req->response, OS_MESG_BLOCK);
+            osSendMesg(&req->queue, (OSMesg)req->response, OS_MESG_BLOCK);
             break;
     }
 }
 
-void SysFlashrom_WriteDataAsync(u8* addr, u32 pageNum, u32 pageCount) {
+void SysFlashrom_WriteDataAsync(void* addr, u32 pageNum, u32 pageCount) {
     FlashromRequest* req = &sFlashromRequest;
+
     if (SysFlashrom_IsInit()) {
-        req->requestType = FLASHROM_REQUEST_WRITE;
+        req->type = FLASHROM_REQUEST_WRITE;
         req->addr = addr;
         req->pageNum = pageNum;
         req->pageCount = pageCount;
-        osCreateMesgQueue(&req->messageQueue, sSysFlashromMsgBuf, ARRAY_COUNT(sSysFlashromMsgBuf));
+        osCreateMesgQueue(&req->queue, req->msgBuf, ARRAY_COUNT(req->msgBuf));
         StackCheck_Init(&sSysFlashromStackInfo, sSysFlashromStack, STACK_TOP(sSysFlashromStack), 0, 0x100,
                         "sys_flashrom");
         osCreateThread(&sSysFlashromThread, Z_THREAD_ID_FLASHROM, SysFlashrom_ThreadEntry, req,
@@ -234,22 +234,24 @@ void SysFlashrom_WriteDataAsync(u8* addr, u32 pageNum, u32 pageCount) {
 }
 
 s32 SysFlashrom_IsBusy(void) {
-    OSMesgQueue* queue = &sFlashromRequest.messageQueue;
+    FlashromRequest* req = &sFlashromRequest;
 
     if (!SysFlashrom_IsInit()) {
         return -1;
     }
-    return MQ_IS_FULL(queue);
+    return MQ_IS_FULL(&req->queue);
 }
 
 s32 SysFlashrom_AwaitResult(void) {
+    FlashromRequest* req = &sFlashromRequest;
+
     if (!SysFlashrom_IsInit()) {
         return -1;
     }
-    osRecvMesg(&sFlashromRequest.messageQueue, NULL, OS_MESG_BLOCK);
+    osRecvMesg(&req->queue, NULL, OS_MESG_BLOCK);
     osDestroyThread(&sSysFlashromThread);
     StackCheck_Cleanup(&sSysFlashromStackInfo);
-    return sFlashromRequest.response;
+    return req->response;
 }
 
 void SysFlashrom_WriteDataSync(void* addr, u32 pageNum, u32 pageCount) {
