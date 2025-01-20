@@ -456,9 +456,21 @@ void func_80A52FB8(EnDnq* this, PlayState* play) {
 
 void EnDnq_HandleCutscene(EnDnq* this, PlayState* play) {
     static s32 sCsAnimIndex[] = {
-        DEKU_KING_ANIM_IDLE,          DEKU_KING_ANIM_IDLE_MORPH,
-        DEKU_KING_ANIM_SURPRISE,      DEKU_KING_ANIM_JUMPED_ON_START,
-        DEKU_KING_ANIM_JUMPED_ON_END, DEKU_KING_ANIM_JUMPED_ON_END_MORPH,
+        DEKU_KING_ANIM_IDLE,
+        DEKU_KING_ANIM_IDLE_MORPH,
+        DEKU_KING_ANIM_SURPRISE,
+        DEKU_KING_ANIM_JUMPED_ON_START,
+        DEKU_KING_ANIM_JUMPED_ON_END,
+        DEKU_KING_ANIM_JUMPED_ON_END_MORPH,
+#ifdef AVOID_UB
+        //! @bug Z2_DEKU_KINGCutsceneData_008258 provides a cue id of 6, reading out-of-bounds
+        //! of this array that happens to be 0 padding.
+        //! Note that adding another idle anim entry still matches, since what follows this array is
+        //! section padding full of 0s. However in MM3D the data in this file is ordered differently,
+        //! proving that the array was originally missing an entry.
+        // Avoid UB: Add an explicit array member rather than relying on 0 padding.
+        DEKU_KING_ANIM_IDLE,
+#endif
     };
     s32 cueChannel;
     u32 cueId;
