@@ -18,10 +18,11 @@
 // With IDO, the padding of sections to an aligned size makes the section start at aligned addresses out of the box,
 // so the explicit alignment has no further effect.
 
-struct Segment* g_segments;
+struct Segment *g_segments;
 int g_segmentsCount;
 
-static void write_ld_script(FILE* fout) {
+static void write_ld_script(FILE *fout)
+{
     int i;
     int j;
 
@@ -31,8 +32,9 @@ static void write_ld_script(FILE* fout) {
           "    _RomStart = _RomSize;\n\n",
           fout);
 
-    for (i = 0; i < g_segmentsCount; i++) {
-        const struct Segment* seg = &g_segments[i];
+    for (i = 0; i < g_segmentsCount; i++)
+    {
+        const struct Segment *seg = &g_segments[i];
 
         // align start of ROM segment
         if (seg->fields & (1 << STMT_romalign))
@@ -42,11 +44,9 @@ static void write_ld_script(FILE* fout) {
 
         // initialized data (.text, .data, .rodata, .sdata)
 
-        fprintf(fout,
-                "    _%sSegmentRomStartTemp = _RomSize;\n"
-                "    _%sSegmentRomStart = _%sSegmentRomStartTemp;\n"
-                "    ..%s ",
-                seg->name, seg->name, seg->name, seg->name);
+        fprintf(fout, "    _%sSegmentRomStartTemp = _RomSize;\n"
+                  "    _%sSegmentRomStart = _%sSegmentRomStartTemp;\n"
+                  "    ..%s ", seg->name, seg->name, seg->name, seg->name);
 
         if (seg->fields & (1 << STMT_after))
             fprintf(fout, "(_%sSegmentEnd + %i) & ~ %i ", seg->after, seg->align - 1, seg->align - 1);
@@ -58,14 +58,14 @@ static void write_ld_script(FILE* fout) {
             fprintf(fout, "ALIGN(0x%X) ", seg->align);
 
         // (AT(_RomSize) isn't necessary, but adds useful "load address" lines to the map file)
-        fprintf(fout,
-                ": AT(_RomSize)\n    {\n"
-                "        _%sSegmentStart = .;\n"
-                "        . = ALIGN(0x10);\n"
-                "        _%sSegmentTextStart = .;\n",
-                seg->name, seg->name);
+        fprintf(fout, ": AT(_RomSize)\n    {\n"
+                  "        _%sSegmentStart = .;\n"
+                  "        . = ALIGN(0x10);\n"
+                  "        _%sSegmentTextStart = .;\n",
+                  seg->name, seg->name);
 
-        for (j = 0; j < seg->includesCount; j++) {
+        for (j = 0; j < seg->includesCount; j++)
+        {
             fprintf(fout, "            %s (.text)\n", seg->includes[j].fpath);
             if (seg->includes[j].linkerPadding != 0)
                 fprintf(fout, "            . += 0x%X;\n", seg->includes[j].linkerPadding);
@@ -74,26 +74,24 @@ static void write_ld_script(FILE* fout) {
 
         fprintf(fout, "        _%sSegmentTextEnd = .;\n", seg->name);
 
-        fprintf(fout, "    _%sSegmentTextSize = ABSOLUTE( _%sSegmentTextEnd - _%sSegmentTextStart );\n", seg->name,
-                seg->name, seg->name);
+        fprintf(fout, "    _%sSegmentTextSize = ABSOLUTE( _%sSegmentTextEnd - _%sSegmentTextStart );\n", seg->name, seg->name, seg->name);
 
         fprintf(fout, "        _%sSegmentDataStart = .;\n", seg->name);
 
-        for (j = 0; j < seg->includesCount; j++) {
-            fprintf(fout,
-                    "            %s (.data)\n"
-                    "        . = ALIGN(0x10);\n",
-                    seg->includes[j].fpath);
+        for (j = 0; j < seg->includesCount; j++)
+        {
+            fprintf(fout, "            %s (.data)\n"
+                            "        . = ALIGN(0x10);\n", seg->includes[j].fpath);
         }
 
         fprintf(fout, "        _%sSegmentDataEnd = .;\n", seg->name);
 
-        fprintf(fout, "    _%sSegmentDataSize = ABSOLUTE( _%sSegmentDataEnd - _%sSegmentDataStart );\n", seg->name,
-                seg->name, seg->name);
+        fprintf(fout, "    _%sSegmentDataSize = ABSOLUTE( _%sSegmentDataEnd - _%sSegmentDataStart );\n", seg->name, seg->name, seg->name);
 
         fprintf(fout, "        _%sSegmentRoDataStart = .;\n", seg->name);
 
-        for (j = 0; j < seg->includesCount; j++) {
+        for (j = 0; j < seg->includesCount; j++)
+        {
             // Compilers other than IDO, such as GCC, produce different sections such as
             // the ones named directly below. These sections do not contain values that
             // need relocating, but we need to ensure that the base .rodata section
@@ -103,24 +101,21 @@ static void write_ld_script(FILE* fout) {
             // Inconsistencies will lead to various .rodata reloc crashes as a result of
             // either missing relocs or wrong relocs.
             fprintf(fout, "            %s (.rodata)\n"
-                          "            %s (.rodata.str*)\n"
-                          "            %s (.rodata.cst*)\n"
-                          "        . = ALIGN(0x10);\n",
+                        "            %s (.rodata.str*)\n"
+                        "            %s (.rodata.cst*)\n"
+                        "        . = ALIGN(0x10);\n",
                     seg->includes[j].fpath, seg->includes[j].fpath, seg->includes[j].fpath);
         }
 
         fprintf(fout, "        _%sSegmentRoDataEnd = .;\n", seg->name);
 
-        fprintf(fout, "    _%sSegmentRoDataSize = ABSOLUTE( _%sSegmentRoDataEnd - _%sSegmentRoDataStart );\n",
-                seg->name, seg->name, seg->name);
+        fprintf(fout, "    _%sSegmentRoDataSize = ABSOLUTE( _%sSegmentRoDataEnd - _%sSegmentRoDataStart );\n", seg->name, seg->name, seg->name);
 
         fprintf(fout, "        _%sSegmentSDataStart = .;\n", seg->name);
 
         for (j = 0; j < seg->includesCount; j++)
-            fprintf(fout,
-                    "            %s (.sdata)\n"
-                    "        . = ALIGN(0x10);\n",
-                    seg->includes[j].fpath);
+            fprintf(fout, "            %s (.sdata)\n"
+                        "        . = ALIGN(0x10);\n", seg->includes[j].fpath);
 
         fprintf(fout, "        _%sSegmentSDataEnd = .;\n", seg->name);
 
@@ -138,58 +133,44 @@ static void write_ld_script(FILE* fout) {
 
         fprintf(fout, "    _RomSize += ( _%sSegmentOvlEnd - _%sSegmentTextStart );\n", seg->name, seg->name);
 
-        fprintf(fout,
-                "    _%sSegmentRomEndTemp = _RomSize;\n"
-                "_%sSegmentRomEnd = _%sSegmentRomEndTemp;\n\n",
-                seg->name, seg->name, seg->name);
+        fprintf(fout, "    _%sSegmentRomEndTemp = _RomSize;\n"
+                  "_%sSegmentRomEnd = _%sSegmentRomEndTemp;\n\n",
+                  seg->name, seg->name, seg->name);
 
         // align end of ROM segment
         if (seg->fields & (1 << STMT_romalign))
             fprintf(fout, "    _RomSize = (_RomSize + %i) & ~ %i;\n", seg->romalign - 1, seg->romalign - 1);
 
         // uninitialized data (.sbss, .scommon, .bss, COMMON)
-        fprintf(fout,
-                "    ..%s.bss ADDR(..%s) + SIZEOF(..%s) (NOLOAD) :\n"
-                /*"    ..%s.bss :\n"*/
-                "    {\n"
-                "        . = ALIGN(0x10);\n"
-                "        _%sSegmentBssStart = .;\n",
-                seg->name, seg->name, seg->name, seg->name);
-
-        if (seg->fields & (1 << STMT_align))
-            fprintf(fout, "        . = ALIGN(0x%X);\n", seg->align);
+        fprintf(fout, "    ..%s.bss ADDR(..%s) + SIZEOF(..%s) (NOLOAD) :\n"
+                      /*"    ..%s.bss :\n"*/
+                      "    {\n"
+                      "        . = ALIGN(0x10);\n"
+                      "        _%sSegmentBssStart = .;\n",
+                      seg->name, seg->name, seg->name, seg->name);
 
         for (j = 0; j < seg->includesCount; j++)
-            fprintf(fout,
-                    "            %s (.sbss)\n"
-                    "        . = ALIGN(0x10);\n",
-                    seg->includes[j].fpath);
+            fprintf(fout, "            %s (.sbss)\n"
+                        "        . = ALIGN(0x10);\n", seg->includes[j].fpath);
 
         for (j = 0; j < seg->includesCount; j++)
-            fprintf(fout,
-                    "            %s (.scommon)\n"
-                    "        . = ALIGN(0x10);\n",
-                    seg->includes[j].fpath);
+            fprintf(fout, "            %s (.scommon)\n"
+                        "        . = ALIGN(0x10);\n", seg->includes[j].fpath);
 
         for (j = 0; j < seg->includesCount; j++)
-            fprintf(fout,
-                    "            %s (.bss)\n"
-                    "        . = ALIGN(0x10);\n",
-                    seg->includes[j].fpath);
+            fprintf(fout, "            %s (.bss)\n"
+                        "        . = ALIGN(0x10);\n", seg->includes[j].fpath);
 
         for (j = 0; j < seg->includesCount; j++)
-            fprintf(fout,
-                    "            %s (COMMON)\n"
-                    "        . = ALIGN(0x10);\n",
-                    seg->includes[j].fpath);
+            fprintf(fout, "            %s (COMMON)\n"
+                        "        . = ALIGN(0x10);\n", seg->includes[j].fpath);
 
-        fprintf(fout,
-                "        . = ALIGN(0x10);\n"
-                "        _%sSegmentBssEnd = .;\n"
-                "        _%sSegmentEnd = .;\n"
-                "    }\n"
-                "    _%sSegmentBssSize = ABSOLUTE( _%sSegmentBssEnd - _%sSegmentBssStart );\n\n",
-                seg->name, seg->name, seg->name, seg->name, seg->name);
+        fprintf(fout, "        . = ALIGN(0x10);\n"
+                      "        _%sSegmentBssEnd = .;\n"
+                      "        _%sSegmentEnd = .;\n"
+                      "    }\n"
+                      "    _%sSegmentBssSize = ABSOLUTE( _%sSegmentBssEnd - _%sSegmentBssStart );\n\n",
+                      seg->name, seg->name, seg->name, seg->name, seg->name);
     }
 
     fputs("    _RomEnd = _RomSize;\n\n", fout);
@@ -237,33 +218,33 @@ static void write_ld_script(FILE* fout) {
           "    .debug_str_offsets 0 : { *(.debug_str_offsets) }"                            "\n"
           "    .debug_sup      0 : { *(.debug_sup) }\n"
         // gnu attributes
-          "    .gnu.attributes 0 : { KEEP (*(.gnu.attributes)) }"                           "\n",
-          fout);
+          "    .gnu.attributes 0 : { KEEP (*(.gnu.attributes)) }"                           "\n", fout);
 
     // Discard all other sections not mentioned above
     fputs("    /DISCARD/ :"                                                                 "\n"
           "    {"                                                                           "\n"
           "       *(*);"                                                                    "\n"
-          "    }"                                                                           "\n"
-          "}\n",
-          fout);
+          "    }"                                                                           "\n", fout);
+    fputs("}\n", fout);
 }
 
-static void usage(const char* execname) {
-    fprintf(stderr,
-            "Nintendo 64 linker script generation tool v0.03\n"
-            "usage: %s SPEC_FILE LD_SCRIPT\n"
-            "SPEC_FILE  file describing the organization of object files into segments\n"
-            "LD_SCRIPT  filename of output linker script\n",
-            execname);
+static void usage(const char *execname)
+{
+    fprintf(stderr, "Nintendo 64 linker script generation tool v0.03\n"
+                    "usage: %s SPEC_FILE LD_SCRIPT\n"
+                    "SPEC_FILE  file describing the organization of object files into segments\n"
+                    "LD_SCRIPT  filename of output linker script\n",
+                    execname);
 }
 
-int main(int argc, char** argv) {
-    FILE* ldout;
-    void* spec;
+int main(int argc, char **argv)
+{
+    FILE *ldout;
+    void *spec;
     size_t size;
 
-    if (argc != 3) {
+    if (argc != 3)
+    {
         usage(argv[0]);
         return 1;
     }
