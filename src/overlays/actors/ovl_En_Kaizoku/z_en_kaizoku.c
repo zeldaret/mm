@@ -52,7 +52,7 @@ void EnKaizoku_Stunned(EnKaizoku* this, PlayState* play);
 void EnKaizoku_Damaged(EnKaizoku* this, PlayState* play);
 void EnKaizoku_DefeatKnockdown(EnKaizoku* this, PlayState* play);
 
-typedef enum EnKaizokuAction {
+typedef enum KaizokuAction {
     /*  0 */ KAIZOKU_ACTION_HIDDEN,
     /*  1 */ KAIZOKU_ACTION_READY,
     /*  2 */ KAIZOKU_ACTION_SPIN_DODGE,
@@ -70,7 +70,7 @@ typedef enum EnKaizokuAction {
     /* 14 */ KAIZOKU_ACTION_DAMAGED,
     /* 15 */ KAIZOKU_ACTION_KNOCK_DOWN,
     /* 16 */ KAIZOKU_ACTION_SCENE_FADE
-} EnKaizokuAction;
+} KaizokuAction;
 
 // text Ids, grouped into two batches of 4, and two mask values
 static u16 sKaizokuTextIds[] = {
@@ -104,19 +104,31 @@ Vec3f sCutsceneCameraTargetPositions[] = {
     { 470.0f, 30.0f, 140.0f },   { 410.0f, 80.0f, 130.0f },   { 410.0f, 80.0f, 130.0f },   { 0.0f, 0.0f, 0.0f },
 };
 
+typedef enum KaizokuLipstickColors {
+    /* 0x0 */ KAIZOKU_LIPSTICK_YELLOW,
+    /* 0x1 */ KAIZOKU_LIPSTICK_PURPLE,
+    /* 0x2 */ KAIZOKU_LIPSTICK_SEAGREEN, // (between aqua and green)
+} KaizokuLipstickColors;
+
 Color_RGBA8 sKaizokuLipstickColors[] = {
-    { 255, 255, 90, 255 }, // yellow
-    { 55, 25, 80, 255 },   // dark purple
-    { 5, 195, 110, 255 },  // seagreen (between aqua and green)
+    { 255, 255, 90, 255 }, // KAIZOKU_LIPSTICK_YELLOW
+    { 55, 25, 80, 255 },   // KAIZOKU_LIPSTICK_PURPLE
+    { 5, 195, 110, 255 },  // KAIZOKU_LIPSTICK_SEAGREEN
 };
+
+typedef enum KaizokuOutfitColors {
+    /* 0x0 */ KAIZOKU_OUTFIT_ORANGE,
+    /* 0x1 */ KAIZOKU_OUTFIT_LAVENDER,
+    /* 0x2 */ KAIZOKU_OUTFIT_GREEN,
+} KaizokuOutfitColors;
 
 static Color_RGBA8 sKaizokuOutfitColors[] = {
-    { 255, 130, 10, 255 },  // orange
-    { 185, 130, 210, 255 }, // lavender
-    { 135, 195, 80, 255 },  // pale green
+    { 255, 130, 10, 255 },  // KAIZOKU_OUTFIT_ORANGE
+    { 185, 130, 210, 255 }, // KAIZOKU_OUTFIT_LAVENDER
+    { 135, 195, 80, 255 },  // KAIZOKU_OUTFIT_GREEN
 };
 
-typedef enum EnKaizokuDamageEffect {
+typedef enum KaizokuDamageEffect {
     /* 0x0 */ KAIZOKU_DMGEFF_NONE,
     /* 0x1 */ KAIZOKU_DMGEFF_STUNNED,
     /* 0x2 */ KAIZOKU_DMGEFF_FIRE_ARROW,
@@ -126,7 +138,7 @@ typedef enum EnKaizokuDamageEffect {
     /* 0xD */ KAIZOKU_DMGEFF_STUNNED_ONLY = 0xD, // smashed? it checks stun first?
     /* 0xE */ KAIZOKU_DMGEFF_ALWAYS_HIT,
     /* 0xF */ KAIZOKU_DMGEFF_IFRAME_PROTECTED // can only hit while kaizoku has no iframe from rolling
-} EnKaizokuDamageEffect;
+} KaizokuDamageEffect;
 
 static DamageTable sDamageTable = {
     /* Deku Nut       */ DMG_ENTRY(0, KAIZOKU_DMGEFF_STUNNED),
