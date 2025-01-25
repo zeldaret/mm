@@ -435,7 +435,7 @@ s32 EnKaizoku_ReactToPlayer(EnKaizoku* this, PlayState* play, s16 arg2) {
 
         //! FAKE:
     label:;
-        if (angleToLink >= 10000) {
+        if (angleToPlayer >= 10000) {
             // in OOT this was sidestep instead of block
             EnKaizoku_SetupBlock(this);
         } else {
@@ -501,7 +501,7 @@ void EnKaizoku_WaitForApproach(EnKaizoku* this, PlayState* play) {
             this->subCamId = CutsceneManager_GetCurrentSubCamId(this->picto.actor.csId);
             this->picto.actor.shape.rot.y = this->picto.actor.world.rot.y = this->picto.actor.yawTowardsPlayer;
 
-            nextTextId = (this->textType * 4) + this->textidOffset;
+            nextTextId = (this->textType * 4) + this->textIdOffset;
             if (this->colorType != 2) {
                 player->actor.world.pos.x = this->picto.actor.home.pos.x + 90.0f;
                 player->actor.world.pos.z = this->picto.actor.home.pos.z + 30.0f;
@@ -514,7 +514,7 @@ void EnKaizoku_WaitForApproach(EnKaizoku* this, PlayState* play) {
             this->picto.actor.world.pos.x = this->picto.actor.home.pos.x;
             this->picto.actor.world.pos.z = this->picto.actor.home.pos.z;
             Message_StartTextbox(play, sKaizokuTextIds[nextTextId], &this->picto.actor);
-            this->textidOffset++; // KAIZOKU_COVERSATION_INTRO_2
+            this->textIdOffset++; // KAIZOKU_COVERSATION_INTRO_2
             this->picto.actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
             player->actor.shape.rot.y = player->actor.world.rot.y =
                 Math_Vec3f_Yaw(&player->actor.world.pos, &this->picto.actor.world.pos);
@@ -570,7 +570,7 @@ void EnKaizoku_WaitForApproach(EnKaizoku* this, PlayState* play) {
 
         case 3: // talking after landing
             if (curFrame >= this->animEndFrame) {
-                nextTextId = this->textType * 4 + this->textidOffset;
+                nextTextId = this->textType * 4 + this->textIdOffset;
                 if (Player_GetMask(play) == PLAYER_MASK_STONE) {
                     // adjust textIds to mention the mask
                     if (sKaizokuTextIds[nextTextId] == 0x11A5) {
@@ -582,7 +582,7 @@ void EnKaizoku_WaitForApproach(EnKaizoku* this, PlayState* play) {
 
                 Message_StartTextbox(play, sKaizokuTextIds[nextTextId], &this->picto.actor);
                 EnKaizoku_ChangeAnim(this, KAIZOKU_ANIM_CHALLENGE);
-                this->textidOffset++; // KAIZOKU_COVERSATION_INTRO_WIN, although that gets set directly later
+                this->textIdOffset++; // KAIZOKU_COVERSATION_INTRO_WIN, although that gets set directly later
                 this->cutsceneTimer = 0;
                 this->cutsceneState++;
             }
@@ -720,7 +720,7 @@ void EnKaizoku_Loss(EnKaizoku* this, PlayState* play) {
         case 0: // waiting for animation to change
             if (curFrame >= this->animEndFrame) {
                 EnKaizoku_ChangeAnim(this, KAIZOKU_ANIM_LOWER_WEAPONS);
-                this->textidOffset = KAIZOKU_COVERSATION_LOSS;
+                this->textIdOffset = KAIZOKU_COVERSATION_LOSS;
                 this->cutsceneTimer = 0;
                 this->cutsceneState++;
             }
@@ -731,7 +731,7 @@ void EnKaizoku_Loss(EnKaizoku* this, PlayState* play) {
                 s32 textId;
 
                 EnKaizoku_ChangeAnim(this, KAIZOKU_ANIM_DEMONSTRATIVE_SWORD_SWING);
-                textId = this->textType * 4 + this->textidOffset;
+                textId = this->textType * 4 + this->textIdOffset;
                 Message_StartTextbox(play, sKaizokuTextIds[textId], &this->picto.actor);
                 Actor_PlaySfx(&this->picto.actor, NA_SE_EN_LAST2_SHOUT);
                 this->cutsceneTimer = 0;
@@ -797,8 +797,8 @@ void EnKaizoku_WinCutscene(EnKaizoku* this, PlayState* play) {
     switch (this->cutsceneState) {
         case 0: // start: change animation and start talking
             EnKaizoku_ChangeAnim(this, KAIZOKU_ANIM_DEFEAT_IDLE);
-            this->textidOffset = KAIZOKU_COVERSATION_WIN;
-            textId = this->textType * 4 + this->textidOffset;
+            this->textIdOffset = KAIZOKU_COVERSATION_WIN;
+            textId = this->textType * 4 + this->textIdOffset;
             Message_StartTextbox(play, sKaizokuTextIds[textId], &this->picto.actor);
             this->defeatBreathingStarted = false;
             this->cutsceneTimer = 0;
@@ -929,16 +929,16 @@ void EnKaizoku_Ready(EnKaizoku* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if ((this->lookTimer == 0) && !EnKaizoku_DodgeRanged(this, play) && !EnKaizoku_ReactToPlayer(this, play, false)) {
-        s16 angleToLink = this->picto.actor.yawTowardsPlayer - this->picto.actor.shape.rot.y;
+        s16 angleToPlayer = this->picto.actor.yawTowardsPlayer - this->picto.actor.shape.rot.y;
 
         if ((this->picto.actor.xzDistToPlayer < 100.0f) && (player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) &&
-            (angleToLink >= 0x1F40)) {
+            (angleToPlayer >= 0x1F40)) {
             this->picto.actor.shape.rot.y = this->picto.actor.world.rot.y = this->picto.actor.yawTowardsPlayer;
             EnKaizoku_SetupCircle(this);
         } else if (Actor_IsFacingPlayer(&this->picto.actor, 0xBB8)) {
             if ((this->picto.actor.xzDistToPlayer < 400.0f) && (this->picto.actor.xzDistToPlayer > 150.0f) &&
                 (Rand_ZeroOne() < 0.7f)) {
-                if ((Rand_ZeroOne() > 0.5f) || (ABS_ALT(angleToLink) < 0x3000)) {
+                if ((Rand_ZeroOne() > 0.5f) || (ABS_ALT(angleToPlayer) < 0x3000)) {
                     EnKaizoku_SetupRollForward(this);
                 } else {
                     EnKaizoku_SetupSpinAttack(this);
@@ -1061,7 +1061,7 @@ void EnKaizoku_SetupBlock(EnKaizoku* this) {
 
 void EnKaizoku_Block(EnKaizoku* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s16 angleToLink;
+    s16 angleToPlayer;
 
     this->dontUpdateSkel = true;
     if (this->combatTimer == 0) {
@@ -1069,8 +1069,8 @@ void EnKaizoku_Block(EnKaizoku* this, PlayState* play) {
     }
     if (this->lookTimer == 0) {
         this->dontUpdateSkel = false;
-        angleToLink = this->picto.actor.yawTowardsPlayer - this->picto.actor.shape.rot.y;
-        if ((ABS_ALT(angleToLink) <= 0x4000) && (this->picto.actor.xzDistToPlayer < 40.0f) &&
+        angleToPlayer = this->picto.actor.yawTowardsPlayer - this->picto.actor.shape.rot.y;
+        if ((ABS_ALT(angleToPlayer) <= 0x4000) && (this->picto.actor.xzDistToPlayer < 40.0f) &&
             (fabsf(this->picto.actor.playerHeightRel) < 50.0f)) {
             if (func_800BE184(play, &this->picto.actor, 100.0f, 10000, 0x4000, this->picto.actor.shape.rot.y)) {
                 if (player->meleeWeaponAnimation == PLAYER_MWA_JUMPSLASH_START) {
@@ -1083,8 +1083,8 @@ void EnKaizoku_Block(EnKaizoku* this, PlayState* play) {
                     EnKaizoku_SetupRollBack(this);
                 }
             } else {
-                angleToLink = player->actor.shape.rot.y - this->picto.actor.shape.rot.y;
-                if (ABS_ALT(angleToLink) < 0x4000) {
+                angleToPlayer = player->actor.shape.rot.y - this->picto.actor.shape.rot.y;
+                if (ABS_ALT(angleToPlayer) < 0x4000) {
                     this->bodyCollider.base.acFlags &= ~AC_HARD;
                     EnKaizoku_SetupSlash(this);
                 } else {
@@ -1379,15 +1379,15 @@ void EnKaizoku_SetupPivot(EnKaizoku* this) {
 }
 
 void EnKaizoku_Pivot(EnKaizoku* this, PlayState* play) {
-    s16 angleToLink;
+    s16 angleToPlayer;
     s16 turnRate;
 
     if (!EnKaizoku_DodgeRanged(this, play) && !EnKaizoku_ReactToPlayer(this, play, false)) {
-        angleToLink = this->picto.actor.yawTowardsPlayer - this->picto.actor.shape.rot.y;
-        if (angleToLink > 0) {
-            turnRate = TRUNCF_BINANG(angleToLink * 0.25f) + 0x7D0;
+        angleToPlayer = this->picto.actor.yawTowardsPlayer - this->picto.actor.shape.rot.y;
+        if (angleToPlayer > 0) {
+            turnRate = TRUNCF_BINANG(angleToPlayer * 0.25f) + 0x7D0;
         } else {
-            turnRate = TRUNCF_BINANG(angleToLink * 0.25f) - 0x7D0;
+            turnRate = TRUNCF_BINANG(angleToPlayer * 0.25f) - 0x7D0;
         }
         this->picto.actor.shape.rot.y += turnRate;
         this->picto.actor.world.rot.y = this->picto.actor.shape.rot.y;
@@ -1419,7 +1419,7 @@ void EnKaizoku_SpinAttack(EnKaizoku* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     f32 curFrame = this->skelAnime.curFrame;
     s16 angleFacingLink;
-    s16 angleToLink;
+    s16 angleToPlayer;
     s32 pad;
 
     if (this->spinAttackState < 2) {
@@ -1474,8 +1474,8 @@ void EnKaizoku_SpinAttack(EnKaizoku* this, PlayState* play) {
 
         angleFacingLink = ABS_ALT(player->actor.shape.rot.y - this->picto.actor.shape.rot.y);
         if (angleFacingLink <= 0x2710) {
-            angleToLink = ABS_ALT(this->picto.actor.yawTowardsPlayer - this->picto.actor.shape.rot.y);
-            if (angleToLink > 0x4000) {
+            angleToPlayer = ABS_ALT(this->picto.actor.yawTowardsPlayer - this->picto.actor.shape.rot.y);
+            if (angleToPlayer > 0x4000) {
                 this->picto.actor.world.rot.y = this->picto.actor.yawTowardsPlayer;
                 EnKaizoku_SetupCircle(this);
             } else {
