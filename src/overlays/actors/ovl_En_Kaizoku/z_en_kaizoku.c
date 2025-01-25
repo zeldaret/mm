@@ -278,7 +278,7 @@ void EnKaizoku_Init(Actor* thisx, PlayState* play) {
     // they decided to re-align 2 into 0 instead of making a third text combination
     if (this->textType >= 2) {
         this->textType = 0;
-    } else if (this->textType == 2) { // @Bug: '== 2' also matches '>= 2'
+    } else if (this->textType == 2) { //! @Bug: '== 2' also matches '>= 2'
         this->textType = 0;
     }
 
@@ -372,7 +372,7 @@ void EnKaizoku_TurnHead(EnKaizoku* this) {
 s32 EnKaizoku_ReactToPlayer(EnKaizoku* this, PlayState* play, s16 arg2) {
     Player* player = GET_PLAYER(play);
     s16 angleToWall = ABS_ALT(this->picto.actor.wallYaw - this->picto.actor.shape.rot.y);
-    s16 angleToLink = ABS_ALT(this->picto.actor.yawTowardsPlayer - this->picto.actor.shape.rot.y);
+    s16 angleToPlayer = ABS_ALT(this->picto.actor.yawTowardsPlayer - this->picto.actor.shape.rot.y);
     Actor* explosiveActor;
 
     if (func_800BE184(play, &this->picto.actor, 100.0f, 0x2710, 0x4000, this->picto.actor.shape.rot.y)) {
@@ -550,7 +550,7 @@ void EnKaizoku_WaitForApproach(EnKaizoku* this, PlayState* play) {
 
         case 2: // waiting for fall to land
             if (this->picto.actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
-                if (this->dontUpdateSkel != false) {
+                if (this->dontUpdateSkel) {
                     this->dontUpdateSkel = false;
                     this->picto.actor.world.pos.y = this->picto.actor.floorHeight;
                     this->picto.actor.velocity.y = 0.0f;
@@ -1076,7 +1076,7 @@ void EnKaizoku_Block(EnKaizoku* this, PlayState* play) {
                 if (player->meleeWeaponAnimation == PLAYER_MWA_JUMPSLASH_START) {
                     this->bodyCollider.base.acFlags &= ~AC_HARD;
                     EnKaizoku_SetupSpinDodge(this, play);
-                } else if (!(play->gameplayFrames % 2)) {
+                } else if ((play->gameplayFrames % 2) == 0) {
                     EnKaizoku_SetupBlock(this);
                 } else {
                     this->bodyCollider.base.acFlags &= ~AC_HARD;

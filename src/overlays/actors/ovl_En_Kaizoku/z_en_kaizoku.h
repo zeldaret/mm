@@ -59,7 +59,7 @@ typedef enum EnKaizokuBodyPart {
     /* 15 */ KAIZOKU_BODYPART_MAX
 } EnKaizokuBodyPart;
 
-typedef enum KaizokuTextOffset{
+typedef enum KaizokuTextOffset {
     /*  0 */ KAIZOKU_COVERSATION_INTRO_1, // shout before landing
     /*  1 */ KAIZOKU_COVERSATION_INTRO_2, // after landing
     /*  2 */ KAIZOKU_COVERSATION_WIN,  // after losing to player
@@ -81,7 +81,7 @@ typedef struct EnKaizoku {
     /* 0x2BC */ s16 switchFlag;
     /* 0x2C0 */ f32 drawDmgEffScale;
     /* 0x2C4 */ f32 drawDmgEffFrozenSteamScale;
-    /* 0x2C8 */ s16 textidOffset; // which of the 4 text states during interaction 
+    /* 0x2C8 */ s16 textIdOffset; // which of the 4 text states during interaction 
     /* 0x2CA */ s16 textType;
     /* 0x2CC */ s16 eyeIndex;
     /* 0x2CE */ s16 blinkTimer;
