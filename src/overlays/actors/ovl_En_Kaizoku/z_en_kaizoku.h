@@ -110,7 +110,7 @@ typedef struct EnKaizoku {
     /* 0x578 */ Vec3s headRot;
     /* 0x580 */ Vec3f rightFootPos;
     /* 0x58C */ Vec3f leftFootPos;
-    /* 0x598 */ s32 cutsceneTimer; // why is it double len?
+    /* 0x598 */ s32 cutsceneTimer;
     /* 0x59C */ s16 cutsceneState; 
     /* 0x59E */ s16 subCamId;
     /* 0x5A0 */ s16 flashTimer;

@@ -22,9 +22,9 @@ void EnKaizoku_Draw(Actor* thisx, PlayState* play);
 s32 EnKaizoku_ValidatePictograph(PlayState* play, Actor* actor);
 void EnKaizoku_SetupWaitForApproach(EnKaizoku* this);
 void EnKaizoku_WaitForApproach(EnKaizoku* this, PlayState* play);
-void EnKaizoku_Loss(EnKaizoku* this, PlayState* play);
-void EnKaizoku_SetupWinCutscene(EnKaizoku* this);
-void EnKaizoku_WinCutscene(EnKaizoku* this, PlayState* play);
+void EnKaizoku_PlayerLoss(EnKaizoku* this, PlayState* play);
+void EnKaizoku_SetupPlayerWinCutscene(EnKaizoku* this);
+void EnKaizoku_PlayerWinCutscene(EnKaizoku* this, PlayState* play);
 void EnKaizoku_SetupReady(EnKaizoku* this);
 void EnKaizoku_Ready(EnKaizoku* this, PlayState* play);
 void EnKaizoku_SetupSpinDodge(EnKaizoku* this, PlayState* play);
@@ -683,7 +683,7 @@ void EnKaizoku_WaitForApproach(EnKaizoku* this, PlayState* play) {
 }
 
 // Player has lost the fight
-void EnKaizoku_SetupLoss(EnKaizoku* this, PlayState* play) {
+void EnKaizoku_SetupPlayerLoss(EnKaizoku* this, PlayState* play) {
     if (this->subCamId == SUB_CAM_ID_DONE) {
         if (!CutsceneManager_IsNext(this->csId)) {
             CutsceneManager_Queue(this->csId);
@@ -700,11 +700,11 @@ void EnKaizoku_SetupLoss(EnKaizoku* this, PlayState* play) {
     this->cutsceneState = 0;
     this->dontUpdateSkel = false;
     this->action = KAIZOKU_ACTION_HIDDEN;
-    this->actionFunc = EnKaizoku_Loss;
+    this->actionFunc = EnKaizoku_PlayerLoss;
     this->picto.actor.speed = 0.0f;
 }
 
-void EnKaizoku_Loss(EnKaizoku* this, PlayState* play) {
+void EnKaizoku_PlayerLoss(EnKaizoku* this, PlayState* play) {
     f32 curFrame = this->skelAnime.curFrame;
 
     Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.yawTowardsPlayer, 1, 0xFA0, 1);
@@ -767,13 +767,13 @@ void EnKaizoku_Loss(EnKaizoku* this, PlayState* play) {
 }
 
 // Player has won the fight
-void EnKaizoku_SetupWinCutscene(EnKaizoku* this) {
+void EnKaizoku_SetupPlayerWinCutscene(EnKaizoku* this) {
     this->dontUpdateSkel = false;
     this->action = KAIZOKU_ACTION_HIDDEN;
-    this->actionFunc = EnKaizoku_WinCutscene;
+    this->actionFunc = EnKaizoku_PlayerWinCutscene;
 }
 
-void EnKaizoku_WinCutscene(EnKaizoku* this, PlayState* play) {
+void EnKaizoku_PlayerWinCutscene(EnKaizoku* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 textId;
     f32 curFrame = this->skelAnime.curFrame;
@@ -1783,7 +1783,7 @@ void EnKaizoku_DefeatKnockdown(EnKaizoku* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     if (curFrame >= this->animEndFrame) {
         this->dontUpdateSkel = false;
-        EnKaizoku_SetupWinCutscene(this);
+        EnKaizoku_SetupPlayerWinCutscene(this);
     } else if (Animation_OnFrame(&this->skelAnime, 10.0f)) {
         Actor_PlaySfx(&this->picto.actor, NA_SE_EN_GERUDOFT_DOWN);
     }
@@ -1807,11 +1807,11 @@ void EnKaizoku_UpdateDamage(EnKaizoku* this, PlayState* play) {
 
             if (!CutsceneManager_IsNext(this->csId)) {
                 CutsceneManager_Queue(this->csId);
-                this->actionFunc = EnKaizoku_SetupLoss;
+                this->actionFunc = EnKaizoku_SetupPlayerLoss;
             } else {
                 CutsceneManager_StartWithPlayerCs(this->csId, &this->picto.actor);
                 this->subCamId = CutsceneManager_GetCurrentSubCamId(this->picto.actor.csId);
-                this->actionFunc = EnKaizoku_SetupLoss;
+                this->actionFunc = EnKaizoku_SetupPlayerLoss;
             }
             return;
         } else if ((this->action == KAIZOKU_ACTION_SPIN_ATTACK) &&
@@ -1826,11 +1826,11 @@ void EnKaizoku_UpdateDamage(EnKaizoku* this, PlayState* play) {
 
                 if (!CutsceneManager_IsNext(this->csId)) {
                     CutsceneManager_Queue(this->csId);
-                    this->actionFunc = EnKaizoku_SetupLoss;
+                    this->actionFunc = EnKaizoku_SetupPlayerLoss;
                 } else {
                     CutsceneManager_StartWithPlayerCs(this->csId, &this->picto.actor);
                     this->subCamId = CutsceneManager_GetCurrentSubCamId(this->picto.actor.csId);
-                    this->actionFunc = EnKaizoku_SetupLoss;
+                    this->actionFunc = EnKaizoku_SetupPlayerLoss;
                 }
                 return;
             }
