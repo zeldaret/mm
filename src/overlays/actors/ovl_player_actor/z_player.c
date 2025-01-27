@@ -12530,12 +12530,12 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
         }
 
         if ((this->transformation >= PLAYER_FORM_GORON) && (this->transformation <= PLAYER_FORM_DEKU)) {
-            func_800BBB74(&this->blinkInfo, 20, 80, 3);
+            FaceChange_UpdateBlinkingAlt(&this->faceChange, 20, 80, 3);
         } else {
-            func_800BBAC0(&this->blinkInfo, 20, 80, 6);
+            FaceChange_UpdateBlinking(&this->faceChange, 20, 80, 6);
         }
 
-        this->actor.shape.face = ((play->gameplayFrames & 0x20) ? 0 : 3) + this->blinkInfo.eyeTexIndex;
+        this->actor.shape.face = ((play->gameplayFrames & 0x20) ? 0 : 3) + this->faceChange.face;
 
         if (this->currentMask == PLAYER_MASK_BUNNY) {
             Player_UpdateBunnyEars(this);
@@ -17328,7 +17328,7 @@ void func_80852290(PlayState* play, Player* this) {
         this->unk_B8A = 8;
     } else {
         f32 sp3C;
-        s16 var_a1_3;
+        s16 upperLimbRotX;
         s16 sp38;
 
         if ((play->msgCtx.ocarinaMode == OCARINA_MODE_ACTIVE) &&
@@ -17359,20 +17359,20 @@ void func_80852290(PlayState* play, Player* this) {
             sp38 = 0x2EE0;
         }
 
-        var_a1_3 = (sp3C * -100.0f);
-        var_a1_3 = CLAMP_MAX(var_a1_3, 0xFA0);
-        Math_SmoothStepToS(&this->upperLimbRot.x, var_a1_3, 4, 0x7D0, 0);
+        upperLimbRotX = (sp3C * -100.0f);
+        upperLimbRotX = CLAMP_MAX(upperLimbRotX, 0xFA0);
+        Math_SmoothStepToS(&this->upperLimbRot.x, upperLimbRotX, 4, 0x7D0, 0);
         Math_SmoothStepToS(&this->upperLimbRot.y, sp38, 4, 0x7D0, 0);
         this->headLimbRot.x = -this->upperLimbRot.x;
         this->unk_AA6_rotFlags |= UNKAA6_ROT_HEAD_X | UNKAA6_ROT_UPPER_X | UNKAA6_ROT_UPPER_Y;
 
-        var_a1_3 = ABS_ALT(this->upperLimbRot.x);
-        if (var_a1_3 < 0x7D0) {
-            this->actor.shape.face = 0;
-        } else if (var_a1_3 < 0xFA0) {
-            this->actor.shape.face = 13;
+        upperLimbRotX = ABS_ALT(this->upperLimbRot.x);
+        if (upperLimbRotX < 0x7D0) {
+            this->actor.shape.face = PLAYER_FACE_NEUTRAL;
+        } else if (upperLimbRotX < 0xFA0) {
+            this->actor.shape.face = PLAYER_FACE_OPENING;
         } else {
-            this->actor.shape.face = 8;
+            this->actor.shape.face = PLAYER_FACE_HURT;
         }
     }
 
@@ -20525,7 +20525,7 @@ void Player_CsAction_11(PlayState* play, Player* this, CsCmdActorCue* cue) {
 }
 
 void Player_CsAction_12(PlayState* play, Player* this, CsCmdActorCue* cue) {
-    this->actor.shape.face = 0xF;
+    this->actor.shape.face = PLAYER_FACE_SMILE;
     func_80840F90(play, this, cue, 0.0f, 0, 0);
 }
 
