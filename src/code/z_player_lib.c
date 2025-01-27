@@ -1782,6 +1782,7 @@ void Player_UpdateBunnyEars(Player* player) {
 }
 
 void func_80124618(struct_80124618 arg0[], f32 curFrame, Vec3f* arg2) {
+    struct_80124618* prev;
     s32 currentFrame = curFrame;
     f32 temp_f0;
     f32 temp_f14;
@@ -1793,16 +1794,18 @@ void func_80124618(struct_80124618 arg0[], f32 curFrame, Vec3f* arg2) {
         arg0++;
     } while (temp_v1 < currentFrame);
 
-    temp_f0 = arg0[-1].unk_0;
+    prev = arg0 - 1;
+
+    temp_f0 = prev->unk_0;
     progress = (curFrame - temp_f0) / (temp_v1 - temp_f0);
 
-    temp_f14 = arg0[-1].unk_2.x;
+    temp_f14 = prev->unk_2.x;
     arg2->x = LERPIMP(temp_f14, arg0->unk_2.x, progress) * 0.01f;
 
-    temp_f14 = arg0[-1].unk_2.y;
+    temp_f14 = prev->unk_2.y;
     arg2->y = LERPIMP(temp_f14, arg0->unk_2.y, progress) * 0.01f;
 
-    temp_f14 = arg0[-1].unk_2.z;
+    temp_f14 = prev->unk_2.z;
     arg2->z = LERPIMP(temp_f14, arg0->unk_2.z, progress) * 0.01f;
 }
 
