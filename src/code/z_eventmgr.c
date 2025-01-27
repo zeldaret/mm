@@ -518,12 +518,14 @@ s16 CutsceneManager_FindEntranceCsId(void) {
     s32 csId;
 
     for (csId = 0; csId < sSceneCutsceneCount; csId++) {
-        //! FAKE:
-        if ((sSceneCutsceneList[csId].scriptIndex != CS_SCRIPT_ID_NONE) &&
-            (sSceneCutsceneList[csId].scriptIndex < (play = sCutsceneMgr.play)->csCtx.scriptListCount) &&
-            (sCutsceneMgr.play->curSpawn ==
-             sCutsceneMgr.play->csCtx.scriptList[sSceneCutsceneList[csId].scriptIndex].spawn)) {
-            return csId;
+        if (sSceneCutsceneList[csId].scriptIndex != CS_SCRIPT_ID_NONE) {
+            PlayState* play = sCutsceneMgr.play;
+
+            if ((sSceneCutsceneList[csId].scriptIndex < play->csCtx.scriptListCount) &&
+                (sCutsceneMgr.play->curSpawn ==
+                 sCutsceneMgr.play->csCtx.scriptList[sSceneCutsceneList[csId].scriptIndex].spawn)) {
+                return csId;
+            }
         }
     }
 

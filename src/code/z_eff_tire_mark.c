@@ -74,6 +74,10 @@ void func_800AE930(CollisionContext* colCtx, EffectTireMark* this, Vec3f* pos, f
             spA8->p2.y = sp78.y;
             spA8->p2.z = sp78.z;
             spA8->life = this->elemDuration;
+
+            //! FAKE:
+            if (1) {}
+
             spA8->colPoly = NULL;
             this->numElements++;
 
@@ -81,9 +85,6 @@ void func_800AE930(CollisionContext* colCtx, EffectTireMark* this, Vec3f* pos, f
             if (!(spAC->flags & EFFECT_TIRE_MARK_ELEMENT_FLAG_2)) {
                 spAC->flags |= EFFECT_TIRE_MARK_ELEMENT_FLAG_1;
             }
-
-            //! FAKE:
-            if (spA8) {}
 
             spA8 = &this->elements[this->numElements];
             spA8->flags = 0;

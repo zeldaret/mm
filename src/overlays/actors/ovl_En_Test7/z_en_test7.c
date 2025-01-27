@@ -646,7 +646,7 @@ void EnTest7_WarpCsWarp(EnTest7* this, PlayState* play) {
     Vec3f featherPos;
 
     //! FAKE:
-    if (this) {}
+    if (1) {}
 
     Math_Vec3f_Copy(&featherPos, &this->actor.world.pos);
 
