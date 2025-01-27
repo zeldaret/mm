@@ -803,6 +803,8 @@ void EnRr_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     if (this->actor.params == LIKE_LIKE_PARAM_2) {
+        //! @bug: Actor will constantly play an SFX every frame when player is close enough.
+        //! In `func_808FAF94` the check is if the actor has zero speed.
         this->actor.speed = 0.0f;
     } else {
         Math_StepToF(&this->actor.speed, 0.0f, 0.1f);
