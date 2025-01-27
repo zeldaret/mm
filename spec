@@ -21,7 +21,7 @@ beginseg
     name "boot"
     address 0x80080060
     include "$(BUILD_DIR)/src/boot/boot_main.o"
-    include "$(BUILD_DIR)/data/boot/rspboot.data.o"
+    include "$(BUILD_DIR)/src/boot/rspboot.o"
     include "$(BUILD_DIR)/src/boot/idle.o"
     include "$(BUILD_DIR)/src/boot/viconfig.o"
     include "$(BUILD_DIR)/src/boot/carthandle.o"
@@ -606,9 +606,7 @@ beginseg
     name "code"
     compress
     after "dmadata"
-    include "$(BUILD_DIR)/data/code/aspMain.data.o"
-    include "$(BUILD_DIR)/data/code/gspS2DEX2.fifo.data.o"
-    include "$(BUILD_DIR)/data/code/njpgdspMain.data.o"
+    include "$(BUILD_DIR)/src/code/rsptext.o"
     include "$(BUILD_DIR)/src/code/z_en_a_keep.o"
     include "$(BUILD_DIR)/src/code/z_en_item00.o"
     include "$(BUILD_DIR)/src/code/z_eff_blure.o"
@@ -758,7 +756,7 @@ beginseg
     include "$(BUILD_DIR)/src/audio/lib/playback.o"
     include "$(BUILD_DIR)/src/audio/lib/effects.o"
     include "$(BUILD_DIR)/src/audio/lib/seqplayer.o"
-    include "$(BUILD_DIR)/data/code/audio_dramStack.data.o"
+    include "$(BUILD_DIR)/src/audio/lib/stack.o"
     include "$(BUILD_DIR)/asm/code/code_8019AE40.text.o" // handwritten
     pad_text
     include "$(BUILD_DIR)/asm/code/code_8019AEC0.text.o" // handwritten
@@ -779,10 +777,7 @@ beginseg
     include "$(BUILD_DIR)/assets/audio/sequence_font_table.o"
     include "$(BUILD_DIR)/src/audio/tables/sequence_table.o"
     include "$(BUILD_DIR)/src/audio/tables/samplebank_table.o"
-    include "$(BUILD_DIR)/data/code/aspMain.rodata.o"
-    include "$(BUILD_DIR)/data/code/gspF3DZEX2.NoN.PosLight.fifo.rodata.o"
-    include "$(BUILD_DIR)/data/code/gspS2DEX2.fifo.rodata.o"
-    include "$(BUILD_DIR)/data/code/njpgdspMain.rodata.o"
+    include "$(BUILD_DIR)/src/code/rspdata.o"
 endseg
 
 // The game expects all the segments after the `code` segment and before the first overlay to be `NOLOAD` ones
