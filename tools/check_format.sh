@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 STATUSOLD=`git status --porcelain`
 ./tools/format.py -j

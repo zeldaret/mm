@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # This script checks for overlay's relocs to be correctly used on the spec file depending on the overlay's NON_MATCHING/NON_EQUIVALENT
 # and minimize possible broken NON_MATCHING builds.
