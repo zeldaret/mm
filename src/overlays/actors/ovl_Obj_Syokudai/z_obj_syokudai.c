@@ -218,7 +218,7 @@ void ObjSyokudai_Update(Actor* thisx, PlayState* play2) {
 
                         if ((flameColliderACActor->update != NULL) && (flameColliderACActor->id == ACTOR_EN_ARROW)) {
 
-                            flameColliderACActor->params = 0;
+                            flameColliderACActor->params = ARROW_TYPE_NORMAL_LIT;
                             ((EnArrow*)flameColliderACActor)->collider.elem.atDmgInfo.dmgFlags = 0x800;
                         }
                     }

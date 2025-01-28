@@ -493,6 +493,7 @@ setup:
 	$(MAKE) -C tools
 	$(PYTHON) tools/decompress_baserom.py -v $(VERSION)
 	$(PYTHON) tools/extract_baserom.py $(BASEROM_DIR)/baserom-decompressed.z64 $(EXTRACTED_DIR)/baserom -v $(VERSION)
+	$(PYTHON) tools/extract_incbins.py $(EXTRACTED_DIR)/baserom $(EXTRACTED_DIR)/incbin -v $(VERSION)
 	$(PYTHON) tools/extract_yars.py $(EXTRACTED_DIR)/baserom -v $(VERSION)
 
 assets:
@@ -683,6 +684,9 @@ ifeq ($(AUDIO_BUILD_DEBUG),1)
 endif
 
 # then assemble the samplebanks...
+
+$(BUILD_DIR)/assets/audio/samples/%.bin: assets/audio/samples/%.bin
+	cp $< $@
 
 $(BUILD_DIR)/assets/audio/samples/%.bin: $(EXTRACTED_DIR)/assets/audio/samples/%.bin
 	cp $< $@
