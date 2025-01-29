@@ -228,25 +228,25 @@ static ColliderQuadInit sQuadInit = {
 };
 
 static AnimationHeader* sAnimations[KAIZOKU_ANIM_MAX] = {
-    &gKaizokuFightingIdleAnim,            // KAIZOKU_ANIM_FIGHTING_IDLE
-    &gKaizokuUnusedConversationAnim,      // KAIZOKU_ANIM_UNUSED_CONVERSATION
-    &gKaizokuUnusedJumpAnim,              // KAIZOKU_ANIM_UNUSED_JUMP
-    &gKaizokuSidestepAnim,                // KAIZOKU_ANIM_SIDESTEP
-    &gKaizokuWalkAnim,                    // KAIZOKU_ANIM_WALK
-    &gKaizokuDamageAnim,                  // KAIZOKU_ANIM_DAMAGE
-    &gKaizokuUnusedDefeatAnim,            // KAIZOKU_ANIM_UNUSED_DEFEAT
-    &gKaizokuBlockAnim,                   // KAIZOKU_ANIM_BLOCK
-    &gKaizokuFlipAnim,                    // KAIZOKU_ANIM_FLIP
-    &gKaizokuSlashAnim,                   // KAIZOKU_ANIM_SLASH_ATTCK
-    &gKaizokuSpinAttackAnim,              // KAIZOKU_ANIM_SPIN_ATTACK
-    &gKaizokuLandAnim,                    // KAIZOKU_ANIM_LAND
-    &gKaizokuChallengeTalkAnim,           // KAIZOKU_ANIM_CHALLENGE
-    &gKaizokuUnsheatheAnim,               // KAIZOKU_ANIM_UNSHEATHE
-    &gKaizokuLowerWeaponsAnim,            // KAIZOKU_ANIM_LOWER_WEAPONS
-    &gKaizokuDemonstrativeSwordSwingAnim, // KAIZOKU_ANIM_DEMONSTRATIVE_SWORD_SWING
-    &gKaizokuDefeatAnim,                  // KAIZOKU_ANIM_DEFEAT
-    &gKaizokuDefeatIdleAnim,              // KAIZOKU_ANIM_DEFEAT_IDLE
-    &gKaizokuThrowFlashAnim,              // KAIZOKU_ANIM_THROW_FLASH
+    &gFighterPirateFightingIdleAnim,            // KAIZOKU_ANIM_FIGHTING_IDLE
+    &gFighterPirateUnusedConversationAnim,      // KAIZOKU_ANIM_UNUSED_CONVERSATION
+    &gFighterPirateUnusedJumpAnim,              // KAIZOKU_ANIM_UNUSED_JUMP
+    &gFighterPirateSidestepAnim,                // KAIZOKU_ANIM_SIDESTEP
+    &gFighterPirateWalkAnim,                    // KAIZOKU_ANIM_WALK
+    &gFighterPirateDamageAnim,                  // KAIZOKU_ANIM_DAMAGE
+    &gFighterPirateUnusedDefeatAnim,            // KAIZOKU_ANIM_UNUSED_DEFEAT
+    &gFighterPirateBlockAnim,                   // KAIZOKU_ANIM_BLOCK
+    &gFighterPirateFlipAnim,                    // KAIZOKU_ANIM_FLIP
+    &gFighterPirateSlashAnim,                   // KAIZOKU_ANIM_SLASH_ATTCK
+    &gFighterPirateSpinAttackAnim,              // KAIZOKU_ANIM_SPIN_ATTACK
+    &gFighterPirateLandAnim,                    // KAIZOKU_ANIM_LAND
+    &gFighterPirateChallengeTalkAnim,           // KAIZOKU_ANIM_CHALLENGE
+    &gFighterPirateUnsheatheAnim,               // KAIZOKU_ANIM_UNSHEATHE
+    &gFighterPirateLowerWeaponsAnim,            // KAIZOKU_ANIM_LOWER_WEAPONS
+    &gFighterPirateDemonstrativeSwordSwingAnim, // KAIZOKU_ANIM_DEMONSTRATIVE_SWORD_SWING
+    &gFighterPirateDefeatAnim,                  // KAIZOKU_ANIM_DEFEAT
+    &gFighterPirateDefeatIdleAnim,              // KAIZOKU_ANIM_DEFEAT_IDLE
+    &gFighterPirateThrowFlashAnim,              // KAIZOKU_ANIM_THROW_FLASH
 };
 
 static u8 sAnimationModes[KAIZOKU_ANIM_MAX] = {
@@ -297,8 +297,8 @@ void EnKaizoku_Init(Actor* thisx, PlayState* play) {
     this->colorType = KAIZOKU_GET_TYPE(this);
     this->picto.actor.world.rot.z = 0; // clear TYPE param, which was rot.z, as we dont want skew
     this->picto.actor.colChkInfo.damageTable = &sDamageTable;
-    SkelAnime_InitFlex(play, &this->skelAnime, &gKaizokuSkel, &gKaizokuWalkAnim, this->jointTable, this->morphTable,
-                       KAIZOKU_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gFighterPirateSkel, &gFighterPirateWalkAnim, this->jointTable,
+                       this->morphTable, KAIZOKU_LIMB_MAX);
     Collider_InitAndSetCylinder(play, &this->bodyCollider, &this->picto.actor, &sCylinderInit);
     Collider_InitAndSetQuad(play, &this->swordCollider, &this->picto.actor, &sQuadInit);
     blureInit.p1StartColor[0] = blureInit.p1StartColor[1] = blureInit.p1StartColor[2] = blureInit.p1StartColor[3] =
@@ -2013,10 +2013,10 @@ static Vec3f sSwordQuadOffset3 = { -3000.0f, -2000.0f, -1300.0f };
 static Vec3f sSwordQuadOffset2 = { 1000.0f, 1000.0f, 0.0f };
 
 static TexturePtr sEyeTextures[] = {
-    gKaizokuEyeOpenTex,
-    gKaizokuEyeHalfTex,
-    gKaizokuEyeClosedTex,
-    gKaizokuEyeHalfTex,
+    gFighterPirateEyeOpenTex,
+    gFighterPirateEyeHalfTex,
+    gFighterPirateEyeClosedTex,
+    gFighterPirateEyeHalfTex,
 };
 
 void EnKaizoku_Update(Actor* thisx, PlayState* play2) {

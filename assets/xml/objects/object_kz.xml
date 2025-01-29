@@ -1,106 +1,106 @@
 ﻿<Root>
     <File Name="object_kz" Segment="6">
-        <Animation Name="gKaizokuSlashAnim" Offset="0x3CC" /> <!-- Original name is "kz_attackA" -->
-        <Animation Name="gKaizokuSpinAttackAnim" Offset="0xF5C" /> <!-- Original name is "kz_attackB" -->
-        <Animation Name="gKaizokuFlipAnim" Offset="0x1390" /> <!-- Original name is "kz_back_ten" -->
-        <Animation Name="gKaizokuBlockAnim" Offset="0x1578" /> <!-- Original name is "kz_defense" -->
-        <Animation Name="gKaizokuThrowFlashAnim" Offset="0x1E9C" /> <!-- Original name is "kz_doron" -->
+        <Animation Name="gFighterPirateSlashAnim" Offset="0x3CC" /> <!-- Original name is "kz_attackA" -->
+        <Animation Name="gFighterPirateSpinAttackAnim" Offset="0xF5C" /> <!-- Original name is "kz_attackB" -->
+        <Animation Name="gFighterPirateFlipAnim" Offset="0x1390" /> <!-- Original name is "kz_back_ten" -->
+        <Animation Name="gFighterPirateBlockAnim" Offset="0x1578" /> <!-- Original name is "kz_defense" -->
+        <Animation Name="gFighterPirateThrowFlashAnim" Offset="0x1E9C" /> <!-- Original name is "kz_doron" -->
         <!-- This is the old version from OOT, back when she would jump to escape instead of talking and flashing to escape -->
-        <Animation Name="gKaizokuUnusedDefeatAnim" Offset="0x2730" /> <!-- Original name is "kz_down" -->
-        <Animation Name="gKaizokuDefeatIdleAnim" Offset="0x2BA0" /> <!-- Original name is "kz_downwait" -->
-        <Animation Name="gKaizokuDefeatAnim" Offset="0x3A3C" /> <!-- Original name is "kz_downwake" -->
+        <Animation Name="gFighterPirateUnusedDefeatAnim" Offset="0x2730" /> <!-- Original name is "kz_down" -->
+        <Animation Name="gFighterPirateDefeatIdleAnim" Offset="0x2BA0" /> <!-- Original name is "kz_downwait" -->
+        <Animation Name="gFighterPirateDefeatAnim" Offset="0x3A3C" /> <!-- Original name is "kz_downwake" -->
         <!-- This is used in a threatening stance if the player loses the fight, while she talks to you -->
-        <Animation Name="gKaizokuDemonstrativeSwordSwingAnim" Offset="0x43E4" /> <!-- Original name is "kz_getout" -->
-        <Animation Name="gKaizokuDamageAnim" Offset="0x4860" /> <!-- Original name is "kz_hit" -->
-        <Animation Name="gKaizokuUnsheatheAnim" Offset="0x5644" /> <!-- Original name is "kz_kime" -->
-        <Animation Name="gKaizokuWalkAnim" Offset="0x58B8" /> <!-- Original name is "kz_run" -->
+        <Animation Name="gFighterPirateDemonstrativeSwordSwingAnim" Offset="0x43E4" /> <!-- Original name is "kz_getout" -->
+        <Animation Name="gFighterPirateDamageAnim" Offset="0x4860" /> <!-- Original name is "kz_hit" -->
+        <Animation Name="gFighterPirateUnsheatheAnim" Offset="0x5644" /> <!-- Original name is "kz_kime" -->
+        <Animation Name="gFighterPirateWalkAnim" Offset="0x58B8" /> <!-- Original name is "kz_run" -->
 
-        <Texture Name="gKaizoku1TLUT" OutName="tlut1" Format="rgba16" Width="16" Height="16" Offset="0x58D0" />
+        <Texture Name="gFighterPirate1TLUT" OutName="tlut1" Format="rgba16" Width="16" Height="16" Offset="0x58D0" />
         <!-- This is the same skin texture as below, but this one is her arms and back -->
-        <Texture Name="gKaizokuSkin1Tex" OutName="skin1" Format="ci8" Width="8" Height="8" Offset="0x5AD0" TlutOffset="0x58D0" />
-        <Texture Name="gKaizokuShirtTopRedGradientTex" OutName="shirt_red" Format="ci8" Width="8" Height="8" Offset="0x5B10" />
+        <Texture Name="gFighterPirateSkin1Tex" OutName="skin1" Format="ci8" Width="8" Height="8" Offset="0x5AD0" TlutOffset="0x58D0" />
+        <Texture Name="gFighterPirateShirtTopRedGradientTex" OutName="shirt_red" Format="ci8" Width="8" Height="8" Offset="0x5B10" />
         <!-- Gold armor plates on her shin, forearms, belt. Similar texture as Emblem, but slightly darker. -->
-        <Texture Name="gKaizokuArmor1Tex" OutName="armor" Format="ci8" Width="16" Height="16" Offset="0x5B50" />
-        <Texture Name="gKaizokuShirtBottomPatternAndVeilTex" OutName="shirt_pattern1" Format="i8" Width="16" Height="16" Offset="0x5C50" />
-        <Texture Name="gKaizokuBellyButtonTex" OutName="navel" Format="ci8" Width="16" Height="16" Offset="0x5D50" />
-        <Texture Name="gKaizokuPantsTex" OutName="pants" Format="i8" Width="16" Height="16" Offset="0x5E50" />
+        <Texture Name="gFighterPirateArmor1Tex" OutName="armor" Format="ci8" Width="16" Height="16" Offset="0x5B50" />
+        <Texture Name="gFighterPirateShirtBottomPatternAndVeilTex" OutName="shirt_pattern1" Format="i8" Width="16" Height="16" Offset="0x5C50" />
+        <Texture Name="gFighterPirateBellyButtonTex" OutName="navel" Format="ci8" Width="16" Height="16" Offset="0x5D50" />
+        <Texture Name="gFighterPiratePantsTex" OutName="pants" Format="i8" Width="16" Height="16" Offset="0x5E50" />
         <!-- This is the texture at the back of her boots and pants belt center.  -->
-        <Texture Name="gKaizokuZipper1Tex" OutName="zipper1" Format="i8" Width="8" Height="16" Offset="0x5F50" />
+        <Texture Name="gFighterPirateZipper1Tex" OutName="zipper1" Format="i8" Width="8" Height="16" Offset="0x5F50" />
 
-        <DList Name="gKaizokuTorsoDL" Offset="0x7CB0" />
-        <DList Name="gKaizokuRightUpperArmDL" Offset="0x8130" />
-        <DList Name="gKaizokuRightForarmDL" Offset="0x8268" />
-        <DList Name="gKaizokuLeftUpperArmDL" Offset="0x8490" />
-        <DList Name="gKaizokuLeftForarmDL" Offset="0x85C8" />
-        <DList Name="gKaizokuWaistDL" Offset="0x87F0" />
-        <DList Name="gKaizokuRightThighDL" Offset="0x8A10" />
-        <DList Name="gKaizokuRightShinDL" Offset="0x8B10" />
-        <DList Name="gKaizokuLeftThighDL" Offset="0x8D80" />
-        <DList Name="gKaizokuLeftShinDL" Offset="0x8E80" />
+        <DList Name="gFighterPirateTorsoDL" Offset="0x7CB0" />
+        <DList Name="gFighterPirateRightUpperArmDL" Offset="0x8130" />
+        <DList Name="gFighterPirateRightForarmDL" Offset="0x8268" />
+        <DList Name="gFighterPirateLeftUpperArmDL" Offset="0x8490" />
+        <DList Name="gFighterPirateLeftForarmDL" Offset="0x85C8" />
+        <DList Name="gFighterPirateWaistDL" Offset="0x87F0" />
+        <DList Name="gFighterPirateRightThighDL" Offset="0x8A10" />
+        <DList Name="gFighterPirateRightShinDL" Offset="0x8B10" />
+        <DList Name="gFighterPirateLeftThighDL" Offset="0x8D80" />
+        <DList Name="gFighterPirateLeftShinDL" Offset="0x8E80" />
 
-        <Texture Name="gKaizoku2TLUT" OutName="tlut2" Format="rgba16" Width="4" Height="63" Offset="0x9100" /> 
+        <Texture Name="gFighterPirate2TLUT" OutName="tlut2" Format="rgba16" Width="4" Height="63" Offset="0x9100" /> 
         <!-- This is the same skin texture as above, but this one is for her head and feet -->
-        <Texture Name="gKaizokuSkin2Tex" OutName="skin2" Format="ci8" Width="8" Height="8" Offset="0x92F8"  TlutOffset="0x9100"/>
-        <Texture Name="gKaizokuEarTex" OutName="ear" Format="ci8" Width="8" Height="16" Offset="0x9338" />
-        <Texture Name="gKaizokuEyeOpenTex" OutName="eye_open" Format="ci8" Width="32" Height="32" Offset="0x93B8" TlutOffset="0x9100" />
-        <Texture Name="gKaizokuShirtBottomPatternAndVeil2Tex" OutName="shirt_pattern2" Format="i8" Width="16" Height="16" Offset="0x97B8" />
-        <Texture Name="gKaizokuShoesTex" OutName="shoe_sides" Format="ci8" Width="8" Height="16" Offset="0x98B8" TlutOffset="0x9100"/>
-        <Texture Name="gKaizokuShoeBottomTex" OutName="shoe_bottom" Format="ci8" Width="8" Height="8" Offset="0x9938" TlutOffset="0x9100" />
-        <Texture Name="gKaizokuEyeHalfTex" OutName="eye_half" Format="ci8" Width="32" Height="32" Offset="0x9978" TlutOffset="0x9100" />
+        <Texture Name="gFighterPirateSkin2Tex" OutName="skin2" Format="ci8" Width="8" Height="8" Offset="0x92F8"  TlutOffset="0x9100"/>
+        <Texture Name="gFighterPirateEarTex" OutName="ear" Format="ci8" Width="8" Height="16" Offset="0x9338" />
+        <Texture Name="gFighterPirateEyeOpenTex" OutName="eye_open" Format="ci8" Width="32" Height="32" Offset="0x93B8" TlutOffset="0x9100" />
+        <Texture Name="gFighterPirateShirtBottomPatternAndVeil2Tex" OutName="shirt_pattern2" Format="i8" Width="16" Height="16" Offset="0x97B8" />
+        <Texture Name="gFighterPirateShoesTex" OutName="shoe_sides" Format="ci8" Width="8" Height="16" Offset="0x98B8" TlutOffset="0x9100"/>
+        <Texture Name="gFighterPirateShoeBottomTex" OutName="shoe_bottom" Format="ci8" Width="8" Height="8" Offset="0x9938" TlutOffset="0x9100" />
+        <Texture Name="gFighterPirateEyeHalfTex" OutName="eye_half" Format="ci8" Width="32" Height="32" Offset="0x9978" TlutOffset="0x9100" />
         <!-- This is the same zipper texture above, but used in different places. hair emblem, back of hands  -->
-        <Texture Name="gKaizokuZipper2Tex" OutName="zipper2" Format="i8" Width="8" Height="16" Offset="0x9D78"/>
-        <Texture Name="gKaizokuHairTex" OutName="hair" Format="ci8" Width="16" Height="16" Offset="0x9DF8" TlutOffset="0x9100" />
-        <Texture Name="gKaizokuFingersTex" OutName="fingers" Format="ci8" Width="16" Height="16" Offset="0x9EF8" TlutOffset="0x9100" />
+        <Texture Name="gFighterPirateZipper2Tex" OutName="zipper2" Format="i8" Width="8" Height="16" Offset="0x9D78"/>
+        <Texture Name="gFighterPirateHairTex" OutName="hair" Format="ci8" Width="16" Height="16" Offset="0x9DF8" TlutOffset="0x9100" />
+        <Texture Name="gFighterPirateFingersTex" OutName="fingers" Format="ci8" Width="16" Height="16" Offset="0x9EF8" TlutOffset="0x9100" />
         <!-- Similar to Armor above, but slightly brighter and used in different spots: used for sword guard and her forhead emblem  -->
-        <Texture Name="gKaizokuYellowSwordGuardAndEmblemTex" OutName="emblem" Format="ci8" Width="16" Height="16" Offset="0x9FF8" />
-        <Texture Name="gKaizokuEyeClosedTex" OutName="eye_closed" Format="ci8" Width="32" Height="32" Offset="0xA0F8" TlutOffset="0x9100" />
+        <Texture Name="gFighterPirateYellowSwordGuardAndEmblemTex" OutName="emblem" Format="ci8" Width="16" Height="16" Offset="0x9FF8" />
+        <Texture Name="gFighterPirateEyeClosedTex" OutName="eye_closed" Format="ci8" Width="32" Height="32" Offset="0xA0F8" TlutOffset="0x9100" />
 
-        <DList Name="gKaizokuLeftFootDL" Offset="0xC318" />
-        <DList Name="gKaizokuRightFootDL" Offset="0xC4D8" />
-        <DList Name="gKaizokuLeftHandDL" Offset="0xC698" />
-        <DList Name="gKaizokuLeftSwordDL" Offset="0xC830" />
-        <DList Name="gKaizokuRightHandDL" Offset="0xCA08" />
-        <DList Name="gKaizokuRightSwordDL" Offset="0xCBA0" />
-        <DList Name="gKaizokuVeilDL" Offset="0xCD78" />
-        <DList Name="gKaizokuPonytailDL" Offset="0xCE30" />
-        <DList Name="gKaizokuHeadDL" Offset="0xCF20" />
+        <DList Name="gFighterPirateLeftFootDL" Offset="0xC318" />
+        <DList Name="gFighterPirateRightFootDL" Offset="0xC4D8" />
+        <DList Name="gFighterPirateLeftHandDL" Offset="0xC698" />
+        <DList Name="gFighterPirateLeftSwordDL" Offset="0xC830" />
+        <DList Name="gFighterPirateRightHandDL" Offset="0xCA08" />
+        <DList Name="gFighterPirateRightSwordDL" Offset="0xCBA0" />
+        <DList Name="gFighterPirateVeilDL" Offset="0xCD78" />
+        <DList Name="gFighterPiratePonytailDL" Offset="0xCE30" />
+        <DList Name="gFighterPirateHeadDL" Offset="0xCF20" />
 
-        <Limb Name="gKaizokuRootLimb" Type="Standard" EnumName="KAIZOKU_LIMB_ROOT" Offset="0xD6B8" />
-        <Limb Name="gKaizokuTorsoLimb" Type="Standard" EnumName="KAIZOKU_LIMB_TORSO" Offset="0xD6C4" />
-        <Limb Name="gKaizokuNeckLimb" Type="Standard" EnumName="KAIZOKU_LIMB_NECK" Offset="0xD6D0" />
-        <Limb Name="gKaizokuPonytailLimb" Type="Standard" EnumName="KAIZOKU_LIMB_PONYTAIL" Offset="0xD6DC" />
-        <Limb Name="gKaizokuVeilLimb" Type="Standard" EnumName="KAIZOKU_LIMB_VEIL" Offset="0xD6E8" />
-        <Limb Name="gKaizokuHeadLimb" Type="Standard" EnumName="KAIZOKU_LIMB_HEAD" Offset="0xD6F4" />
-        <Limb Name="gKaizokuRightUpperArmLimb" Type="Standard" EnumName="KAIZOKU_LIMB_R_UPPER_ARM" Offset="0xD700" />
-        <Limb Name="gKaizokuRightForearmLimb" Type="Standard" EnumName="KAIZOKU_LIMB_R_FOREARM" Offset="0xD70C" />
-        <Limb Name="gKaizokuRightWristLimb" Type="Standard" EnumName="KAIZOKU_LIMB_R_WRIST" Offset="0xD718" />
-        <Limb Name="gKaizokuRightHandLimb" Type="Standard" EnumName="KAIZOKU_LIMB_R_HAND" Offset="0xD724" />
-        <Limb Name="gKaizokuRightSwordLimb" Type="Standard" EnumName="KAIZOKU_LIMB_R_SWORD" Offset="0xD730" />
-        <Limb Name="gKaizokuLeftUpperArmLimb" Type="Standard" EnumName="KAIZOKU_LIMB_L_UPPER_ARM" Offset="0xD73C" />
-        <Limb Name="gKaizokuLeftForearmLimb" Type="Standard" EnumName="KAIZOKU_LIMB_L_FOREARM" Offset="0xD748" />
-        <Limb Name="gKaizokuLeftWristLimb" Type="Standard" EnumName="KAIZOKU_LIMB_L_WRIST" Offset="0xD754" />
-        <Limb Name="gKaizokuLeftHandLimb" Type="Standard" EnumName="KAIZOKU_LIMB_L_HAND" Offset="0xD760" />
-        <Limb Name="gKaizokuLeftSwordLimb" Type="Standard" EnumName="KAIZOKU_LIMB_L_SWORD" Offset="0xD76C" />
-        <Limb Name="gKaizokuLeftThighLimb" Type="Standard" EnumName="KAIZOKU_LIMB_L_THIGH" Offset="0xD778" />
-        <Limb Name="gKaizokuLeftShinLimb" Type="Standard" EnumName="KAIZOKU_LIMB_L_SHIN" Offset="0xD784" />
-        <Limb Name="gKaizokuLeftFootLimb" Type="Standard" EnumName="KAIZOKU_LIMB_L_FOOT" Offset="0xD790" />
-        <Limb Name="gKaizokuRightThighLimb" Type="Standard" EnumName="KAIZOKU_LIMB_R_THIGH" Offset="0xD79C" />
-        <Limb Name="gKaizokuRightShinLimb" Type="Standard" EnumName="KAIZOKU_LIMB_R_SHIN" Offset="0xD7A8" />
-        <Limb Name="gKaizokuRightFootLimb" Type="Standard" EnumName="KAIZOKU_LIMB_R_FOOT" Offset="0xD7B4" />
-        <Limb Name="gKaizokuWaistLimb" Type="Standard" EnumName="KAIZOKU_LIMB_WAIST" Offset="0xD7C0" />
+        <Limb Name="gFighterPirateRootLimb" Type="Standard" EnumName="KAIZOKU_LIMB_ROOT" Offset="0xD6B8" />
+        <Limb Name="gFighterPirateTorsoLimb" Type="Standard" EnumName="KAIZOKU_LIMB_TORSO" Offset="0xD6C4" />
+        <Limb Name="gFighterPirateNeckLimb" Type="Standard" EnumName="KAIZOKU_LIMB_NECK" Offset="0xD6D0" />
+        <Limb Name="gFighterPiratePonytailLimb" Type="Standard" EnumName="KAIZOKU_LIMB_PONYTAIL" Offset="0xD6DC" />
+        <Limb Name="gFighterPirateVeilLimb" Type="Standard" EnumName="KAIZOKU_LIMB_VEIL" Offset="0xD6E8" />
+        <Limb Name="gFighterPirateHeadLimb" Type="Standard" EnumName="KAIZOKU_LIMB_HEAD" Offset="0xD6F4" />
+        <Limb Name="gFighterPirateRightUpperArmLimb" Type="Standard" EnumName="KAIZOKU_LIMB_R_UPPER_ARM" Offset="0xD700" />
+        <Limb Name="gFighterPirateRightForearmLimb" Type="Standard" EnumName="KAIZOKU_LIMB_R_FOREARM" Offset="0xD70C" />
+        <Limb Name="gFighterPirateRightWristLimb" Type="Standard" EnumName="KAIZOKU_LIMB_R_WRIST" Offset="0xD718" />
+        <Limb Name="gFighterPirateRightHandLimb" Type="Standard" EnumName="KAIZOKU_LIMB_R_HAND" Offset="0xD724" />
+        <Limb Name="gFighterPirateRightSwordLimb" Type="Standard" EnumName="KAIZOKU_LIMB_R_SWORD" Offset="0xD730" />
+        <Limb Name="gFighterPirateLeftUpperArmLimb" Type="Standard" EnumName="KAIZOKU_LIMB_L_UPPER_ARM" Offset="0xD73C" />
+        <Limb Name="gFighterPirateLeftForearmLimb" Type="Standard" EnumName="KAIZOKU_LIMB_L_FOREARM" Offset="0xD748" />
+        <Limb Name="gFighterPirateLeftWristLimb" Type="Standard" EnumName="KAIZOKU_LIMB_L_WRIST" Offset="0xD754" />
+        <Limb Name="gFighterPirateLeftHandLimb" Type="Standard" EnumName="KAIZOKU_LIMB_L_HAND" Offset="0xD760" />
+        <Limb Name="gFighterPirateLeftSwordLimb" Type="Standard" EnumName="KAIZOKU_LIMB_L_SWORD" Offset="0xD76C" />
+        <Limb Name="gFighterPirateLeftThighLimb" Type="Standard" EnumName="KAIZOKU_LIMB_L_THIGH" Offset="0xD778" />
+        <Limb Name="gFighterPirateLeftShinLimb" Type="Standard" EnumName="KAIZOKU_LIMB_L_SHIN" Offset="0xD784" />
+        <Limb Name="gFighterPirateLeftFootLimb" Type="Standard" EnumName="KAIZOKU_LIMB_L_FOOT" Offset="0xD790" />
+        <Limb Name="gFighterPirateRightThighLimb" Type="Standard" EnumName="KAIZOKU_LIMB_R_THIGH" Offset="0xD79C" />
+        <Limb Name="gFighterPirateRightShinLimb" Type="Standard" EnumName="KAIZOKU_LIMB_R_SHIN" Offset="0xD7A8" />
+        <Limb Name="gFighterPirateRightFootLimb" Type="Standard" EnumName="KAIZOKU_LIMB_R_FOOT" Offset="0xD7B4" />
+        <Limb Name="gFighterPirateWaistLimb" Type="Standard" EnumName="KAIZOKU_LIMB_WAIST" Offset="0xD7C0" />
 
 
-        <Skeleton Name="gKaizokuSkel" Type="Flex" LimbType="Standard" LimbNone="KAIZOKU_LIMB_NONE" LimbMax="KAIZOKU_LIMB_MAX" EnumName="KaizokuLimb" Offset="0xD828" />
+        <Skeleton Name="gFighterPirateSkel" Type="Flex" LimbType="Standard" LimbNone="KAIZOKU_LIMB_NONE" LimbMax="KAIZOKU_LIMB_MAX" EnumName="KaizokuLimb" Offset="0xD828" />
 
-        <Animation Name="gKaizokuSidestepAnim" Offset="0xDBE4" /> <!-- Original name is "kz_side_walk" -->
+        <Animation Name="gFighterPirateSidestepAnim" Offset="0xDBE4" /> <!-- Original name is "kz_side_walk" -->
         <!-- This is the old version from OOT, back when she would jump to escape instead of talking and flashing to escape -->
-        <Animation Name="gKaizokuUnusedJumpAnim" Offset="0xE1C8" /> <!-- Original name is "kz_start" -->
-        <Animation Name="gKaizokuLandAnim" Offset="0xE8BC" /> <!-- Original name is "kz_syuta" -->
-        <Animation Name="gKaizokuChallengeTalkAnim" Offset="0xED1C" /> <!-- Original name is "kz_syutawait" -->
-        <Animation Name="gKaizokuUnusedConversationAnim" Offset="0xEF9C" /> <!-- Original name is "kz_talk" -->
+        <Animation Name="gFighterPirateUnusedJumpAnim" Offset="0xE1C8" /> <!-- Original name is "kz_start" -->
+        <Animation Name="gFighterPirateLandAnim" Offset="0xE8BC" /> <!-- Original name is "kz_syuta" -->
+        <Animation Name="gFighterPirateChallengeTalkAnim" Offset="0xED1C" /> <!-- Original name is "kz_syutawait" -->
+        <Animation Name="gFighterPirateUnusedConversationAnim" Offset="0xEF9C" /> <!-- Original name is "kz_talk" -->
         <!-- not sure this one gets used -->
-        <Animation Name="gKaizokuLowerWeaponsAnim" Offset="0xF288" /> <!-- Original name is "kz_togetout" -->
+        <Animation Name="gFighterPirateLowerWeaponsAnim" Offset="0xF288" /> <!-- Original name is "kz_togetout" -->
         <!-- Called "Neutral" in OOT -->
-        <Animation Name="gKaizokuFightingIdleAnim" Offset="0xF8E4" /> <!-- Original name is "kz_wait" -->
+        <Animation Name="gFighterPirateFightingIdleAnim" Offset="0xF8E4" /> <!-- Original name is "kz_wait" -->
     </File>
 </Root>
