@@ -20,7 +20,7 @@ typedef void (*EnKaizokuActionFunc)(struct EnKaizoku*, PlayState*);
 typedef enum EnKaizokuAnimation {
     /*  0 */ KAIZOKU_ANIM_FIGHTING_IDLE,
     /*  1 */ KAIZOKU_ANIM_UNUSED_CONVERSATION, // from OOT: giving player membership card
-    /*  2 */ KAIZOKU_ANIM_UNUSED_JUMP, // from OOT: replaced with KAIZOKU_ANIM_LAND
+    /*  2 */ KAIZOKU_ANIM_UNUSED_JUMP, // from OOT: when the enemy would escape by jumping up
     /*  3 */ KAIZOKU_ANIM_SIDESTEP,
     /*  4 */ KAIZOKU_ANIM_WALK,
     /*  5 */ KAIZOKU_ANIM_DAMAGE,
@@ -60,10 +60,10 @@ typedef enum EnKaizokuBodyPart {
 } EnKaizokuBodyPart;
 
 typedef enum KaizokuTextOffset {
-    /*  0 */ KAIZOKU_COVERSATION_INTRO_1, // shout before landing
-    /*  1 */ KAIZOKU_COVERSATION_INTRO_2, // after landing
-    /*  2 */ KAIZOKU_COVERSATION_WIN,  // after losing to player
-    /*  3 */ KAIZOKU_COVERSATION_LOSS  // after defeating player 
+    /*  0 */ KAIZOKU_TALK_SHOUT_FROM_ABOVE,  // shout before landing
+    /*  1 */ KAIZOKU_TALK_INTRO,            // after landing
+    /*  2 */ KAIZOKU_TALK_PLAYER_VICTORY,  // after losing to player
+    /*  3 */ KAIZOKU_TALK_PLAYER_DEFEAT   // after defeating player
 } KaizokuTextOffset;
 
 typedef struct EnKaizoku {

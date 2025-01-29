@@ -99,7 +99,6 @@
         <Animation Name="gFighterPirateLandTalkAnim" Offset="0xED1C" /> <!-- Original name is "kz_syutawait" -->
         <Animation Name="gFighterPirateUnusedTalkAnim" Offset="0xEF9C" /> <!-- Original name is "kz_talk" -->
         <Animation Name="gFighterPirateLowerWeaponsAnim" Offset="0xF288" /> <!-- Original name is "kz_togetout" -->
-        <!-- Called "Neutral" in OOT -->
         <Animation Name="gFighterPirateFightingIdleAnim" Offset="0xF8E4" /> <!-- Original name is "kz_wait" -->
     </File>
 </Root>

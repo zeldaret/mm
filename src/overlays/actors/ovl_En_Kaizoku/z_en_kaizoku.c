@@ -526,7 +526,7 @@ void EnKaizoku_WaitForApproach(EnKaizoku* this, PlayState* play) {
             this->picto.actor.world.pos.x = this->picto.actor.home.pos.x;
             this->picto.actor.world.pos.z = this->picto.actor.home.pos.z;
             Message_StartTextbox(play, sKaizokuTextIds[nextTextId], &this->picto.actor);
-            this->textIdOffset++; // KAIZOKU_COVERSATION_INTRO_2
+            this->textIdOffset++; // KAIZOKU_TALK_INTRO, after landing
             this->picto.actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
             player->actor.shape.rot.y = player->actor.world.rot.y =
                 Math_Vec3f_Yaw(&player->actor.world.pos, &this->picto.actor.world.pos);
@@ -594,7 +594,7 @@ void EnKaizoku_WaitForApproach(EnKaizoku* this, PlayState* play) {
 
                 Message_StartTextbox(play, sKaizokuTextIds[nextTextId], &this->picto.actor);
                 EnKaizoku_ChangeAnim(this, KAIZOKU_ANIM_CHALLENGE);
-                this->textIdOffset++; // KAIZOKU_COVERSATION_INTRO_WIN, although that gets set directly later
+                this->textIdOffset++; // KAIZOKU_TALK_PLAYER_VICTORY, although that gets set directly later
                 this->cutsceneTimer = 0;
                 this->cutsceneState++;
             }
@@ -732,7 +732,7 @@ void EnKaizoku_PlayerLoss(EnKaizoku* this, PlayState* play) {
         case 0: // waiting for animation to change
             if (curFrame >= this->animEndFrame) {
                 EnKaizoku_ChangeAnim(this, KAIZOKU_ANIM_LOWER_WEAPONS);
-                this->textIdOffset = KAIZOKU_COVERSATION_LOSS;
+                this->textIdOffset = KAIZOKU_TALK_PLAYER_DEFEAT;
                 this->cutsceneTimer = 0;
                 this->cutsceneState++;
             }
@@ -809,7 +809,7 @@ void EnKaizoku_PlayerWinCutscene(EnKaizoku* this, PlayState* play) {
     switch (this->cutsceneState) {
         case 0: // start: change animation and start talking
             EnKaizoku_ChangeAnim(this, KAIZOKU_ANIM_DEFEAT_IDLE);
-            this->textIdOffset = KAIZOKU_COVERSATION_WIN;
+            this->textIdOffset = KAIZOKU_TALK_PLAYER_VICTORY;
             textId = this->textType * 4 + this->textIdOffset;
             Message_StartTextbox(play, sKaizokuTextIds[textId], &this->picto.actor);
             this->defeatBreathingStarted = false;
