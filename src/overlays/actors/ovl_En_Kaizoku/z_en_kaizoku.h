@@ -19,12 +19,12 @@ typedef void (*EnKaizokuActionFunc)(struct EnKaizoku*, PlayState*);
 
 typedef enum EnKaizokuAnimation {
     /*  0 */ KAIZOKU_ANIM_FIGHTING_IDLE,
-    /*  1 */ KAIZOKU_ANIM_UNUSED_CONVERSATION, // from OOT: giving player membership card?
-    /*  2 */ KAIZOKU_ANIM_UNUSED_JUMP, // from OOT: replaced with _LAND
+    /*  1 */ KAIZOKU_ANIM_UNUSED_CONVERSATION, // from OOT: giving player membership card
+    /*  2 */ KAIZOKU_ANIM_UNUSED_JUMP, // from OOT: replaced with KAIZOKU_ANIM_LAND
     /*  3 */ KAIZOKU_ANIM_SIDESTEP,
     /*  4 */ KAIZOKU_ANIM_WALK,
     /*  5 */ KAIZOKU_ANIM_DAMAGE,
-    /*  6 */ KAIZOKU_ANIM_UNUSED_DEFEAT, // from OOT: replaced with _DEFEAT
+    /*  6 */ KAIZOKU_ANIM_UNUSED_DEFEAT, // from OOT: replaced with KAIZOKU_ANIM_DEFEAT
     /*  7 */ KAIZOKU_ANIM_BLOCK,
     /*  8 */ KAIZOKU_ANIM_FLIP,
     /*  9 */ KAIZOKU_ANIM_SLASH_ATTCK,
@@ -76,7 +76,7 @@ typedef struct EnKaizoku {
     /* 0x2B2 */ s16 combatTimer;
     /* 0x2B4 */ s16 lookTimer;
     /* 0x2B6 */ s16 iceTimer;
-    /* 0x2B8 */ s16 colorFilterTimer; // name taken from oot, damaged flashing red
+    /* 0x2B8 */ s16 drawDmgEffTimer;
     /* 0x2BA */ s16 drawDmgEffType;
     /* 0x2BC */ s16 switchFlag;
     /* 0x2C0 */ f32 drawDmgEffScale;
@@ -92,7 +92,7 @@ typedef struct EnKaizoku {
     /* 0x2D8 */ u8 dontUpdateSkel;
     /* 0x2D9 */ u8 defeatBreathingStarted;
     /* 0x2DC */ f32 animEndFrame;
-    /* 0x2E0 */ f32 approachRate;
+    /* 0x2E0 */ f32 circlingRate;
     /* 0x2E4 */ EnKaizokuAnimation animIndex;
     /* 0x2E8 */ s32 bodyPartIndex;
     /* 0x2EC */ s32 colorType;
@@ -120,7 +120,7 @@ typedef struct EnKaizoku {
     /* 0x5C8 */ Vec3f subCamEyeTarget;
     /* 0x5D4 */ Vec3f subCamAtTarget;
     /* 0x5E0 */ f32 subCamVelocity;
-    /* 0x5E4 */ f32 unused5E4;
+    /* 0x5E4 */ f32 unk_5E4; // unused
     /* 0x5E8 */ f32 flashScreenAlpha;
     /* 0x5EC */ f32 flashScreenAlphaTarget;
 } EnKaizoku; // size = 0x5F0

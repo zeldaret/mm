@@ -93,12 +93,11 @@
         <Skeleton Name="gFighterPirateSkel" Type="Flex" LimbType="Standard" LimbNone="KAIZOKU_LIMB_NONE" LimbMax="KAIZOKU_LIMB_MAX" EnumName="KaizokuLimb" Offset="0xD828" />
 
         <Animation Name="gFighterPirateSidestepAnim" Offset="0xDBE4" /> <!-- Original name is "kz_side_walk" -->
-        <!-- This is the old version from OOT, back when she would jump to escape instead of talking and flashing to escape -->
+        <!-- This is the old version from OOT, when they would escape at the end of the fight by jumping away -->
         <Animation Name="gFighterPirateUnusedJumpAnim" Offset="0xE1C8" /> <!-- Original name is "kz_start" -->
         <Animation Name="gFighterPirateLandAnim" Offset="0xE8BC" /> <!-- Original name is "kz_syuta" -->
-        <Animation Name="gFighterPirateChallengeTalkAnim" Offset="0xED1C" /> <!-- Original name is "kz_syutawait" -->
-        <Animation Name="gFighterPirateUnusedConversationAnim" Offset="0xEF9C" /> <!-- Original name is "kz_talk" -->
-        <!-- not sure this one gets used -->
+        <Animation Name="gFighterPirateLandTalkAnim" Offset="0xED1C" /> <!-- Original name is "kz_syutawait" -->
+        <Animation Name="gFighterPirateUnusedTalkAnim" Offset="0xEF9C" /> <!-- Original name is "kz_talk" -->
         <Animation Name="gFighterPirateLowerWeaponsAnim" Offset="0xF288" /> <!-- Original name is "kz_togetout" -->
         <!-- Called "Neutral" in OOT -->
         <Animation Name="gFighterPirateFightingIdleAnim" Offset="0xF8E4" /> <!-- Original name is "kz_wait" -->
