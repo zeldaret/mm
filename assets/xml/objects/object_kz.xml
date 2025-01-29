@@ -29,9 +29,9 @@
 
         <DList Name="gFighterPirateTorsoDL" Offset="0x7CB0" />
         <DList Name="gFighterPirateRightUpperArmDL" Offset="0x8130" />
-        <DList Name="gFighterPirateRightForarmDL" Offset="0x8268" />
+        <DList Name="gFighterPirateRightForearmDL" Offset="0x8268" />
         <DList Name="gFighterPirateLeftUpperArmDL" Offset="0x8490" />
-        <DList Name="gFighterPirateLeftForarmDL" Offset="0x85C8" />
+        <DList Name="gFighterPirateLeftForearmDL" Offset="0x85C8" />
         <DList Name="gFighterPirateWaistDL" Offset="0x87F0" />
         <DList Name="gFighterPirateRightThighDL" Offset="0x8A10" />
         <DList Name="gFighterPirateRightShinDL" Offset="0x8B10" />
@@ -65,28 +65,28 @@
         <DList Name="gFighterPiratePonytailDL" Offset="0xCE30" />
         <DList Name="gFighterPirateHeadDL" Offset="0xCF20" />
 
-        <Limb Name="gFighterPirateRootLimb" Type="Standard" EnumName="KAIZOKU_LIMB_ROOT" Offset="0xD6B8" />
+        <Limb Name="gFighterPirateRootLimb" Type="Standard" EnumName="KAIZOKU_LIMB_RIGHTOOT" Offset="0xD6B8" />
         <Limb Name="gFighterPirateTorsoLimb" Type="Standard" EnumName="KAIZOKU_LIMB_TORSO" Offset="0xD6C4" />
         <Limb Name="gFighterPirateNeckLimb" Type="Standard" EnumName="KAIZOKU_LIMB_NECK" Offset="0xD6D0" />
         <Limb Name="gFighterPiratePonytailLimb" Type="Standard" EnumName="KAIZOKU_LIMB_PONYTAIL" Offset="0xD6DC" />
         <Limb Name="gFighterPirateVeilLimb" Type="Standard" EnumName="KAIZOKU_LIMB_VEIL" Offset="0xD6E8" />
         <Limb Name="gFighterPirateHeadLimb" Type="Standard" EnumName="KAIZOKU_LIMB_HEAD" Offset="0xD6F4" />
-        <Limb Name="gFighterPirateRightUpperArmLimb" Type="Standard" EnumName="KAIZOKU_LIMB_R_UPPER_ARM" Offset="0xD700" />
-        <Limb Name="gFighterPirateRightForearmLimb" Type="Standard" EnumName="KAIZOKU_LIMB_R_FOREARM" Offset="0xD70C" />
-        <Limb Name="gFighterPirateRightWristLimb" Type="Standard" EnumName="KAIZOKU_LIMB_R_WRIST" Offset="0xD718" />
-        <Limb Name="gFighterPirateRightHandLimb" Type="Standard" EnumName="KAIZOKU_LIMB_R_HAND" Offset="0xD724" />
-        <Limb Name="gFighterPirateRightSwordLimb" Type="Standard" EnumName="KAIZOKU_LIMB_R_SWORD" Offset="0xD730" />
-        <Limb Name="gFighterPirateLeftUpperArmLimb" Type="Standard" EnumName="KAIZOKU_LIMB_L_UPPER_ARM" Offset="0xD73C" />
-        <Limb Name="gFighterPirateLeftForearmLimb" Type="Standard" EnumName="KAIZOKU_LIMB_L_FOREARM" Offset="0xD748" />
-        <Limb Name="gFighterPirateLeftWristLimb" Type="Standard" EnumName="KAIZOKU_LIMB_L_WRIST" Offset="0xD754" />
-        <Limb Name="gFighterPirateLeftHandLimb" Type="Standard" EnumName="KAIZOKU_LIMB_L_HAND" Offset="0xD760" />
-        <Limb Name="gFighterPirateLeftSwordLimb" Type="Standard" EnumName="KAIZOKU_LIMB_L_SWORD" Offset="0xD76C" />
-        <Limb Name="gFighterPirateLeftThighLimb" Type="Standard" EnumName="KAIZOKU_LIMB_L_THIGH" Offset="0xD778" />
-        <Limb Name="gFighterPirateLeftShinLimb" Type="Standard" EnumName="KAIZOKU_LIMB_L_SHIN" Offset="0xD784" />
-        <Limb Name="gFighterPirateLeftFootLimb" Type="Standard" EnumName="KAIZOKU_LIMB_L_FOOT" Offset="0xD790" />
-        <Limb Name="gFighterPirateRightThighLimb" Type="Standard" EnumName="KAIZOKU_LIMB_R_THIGH" Offset="0xD79C" />
-        <Limb Name="gFighterPirateRightShinLimb" Type="Standard" EnumName="KAIZOKU_LIMB_R_SHIN" Offset="0xD7A8" />
-        <Limb Name="gFighterPirateRightFootLimb" Type="Standard" EnumName="KAIZOKU_LIMB_R_FOOT" Offset="0xD7B4" />
+        <Limb Name="gFighterPirateRightUpperArmLimb" Type="Standard" EnumName="KAIZOKU_LIMB_RIGHT_UPPER_ARM" Offset="0xD700" />
+        <Limb Name="gFighterPirateRightForearmLimb" Type="Standard" EnumName="KAIZOKU_LIMB_RIGHT_FOREARM" Offset="0xD70C" />
+        <Limb Name="gFighterPirateRightWristLimb" Type="Standard" EnumName="KAIZOKU_LIMB_RIGHT_WRIST" Offset="0xD718" />
+        <Limb Name="gFighterPirateRightHandLimb" Type="Standard" EnumName="KAIZOKU_LIMB_RIGHT_HAND" Offset="0xD724" />
+        <Limb Name="gFighterPirateRightSwordLimb" Type="Standard" EnumName="KAIZOKU_LIMB_RIGHT_SWORD" Offset="0xD730" />
+        <Limb Name="gFighterPirateLeftUpperArmLimb" Type="Standard" EnumName="KAIZOKU_LIMB_LEFT_UPPER_ARM" Offset="0xD73C" />
+        <Limb Name="gFighterPirateLeftForearmLimb" Type="Standard" EnumName="KAIZOKU_LIMB_LEFT_FOREARM" Offset="0xD748" />
+        <Limb Name="gFighterPirateLeftWristLimb" Type="Standard" EnumName="KAIZOKU_LIMB_LEFT_WRIST" Offset="0xD754" />
+        <Limb Name="gFighterPirateLeftHandLimb" Type="Standard" EnumName="KAIZOKU_LIMB_LEFT_HAND" Offset="0xD760" />
+        <Limb Name="gFighterPirateLeftSwordLimb" Type="Standard" EnumName="KAIZOKU_LIMB_LEFT_SWORD" Offset="0xD76C" />
+        <Limb Name="gFighterPirateLeftThighLimb" Type="Standard" EnumName="KAIZOKU_LIMB_LEFT_THIGH" Offset="0xD778" />
+        <Limb Name="gFighterPirateLeftShinLimb" Type="Standard" EnumName="KAIZOKU_LIMB_LEFT_SHIN" Offset="0xD784" />
+        <Limb Name="gFighterPirateLeftFootLimb" Type="Standard" EnumName="KAIZOKU_LIMB_LEFT_FOOT" Offset="0xD790" />
+        <Limb Name="gFighterPirateRightThighLimb" Type="Standard" EnumName="KAIZOKU_LIMB_RIGHT_THIGH" Offset="0xD79C" />
+        <Limb Name="gFighterPirateRightShinLimb" Type="Standard" EnumName="KAIZOKU_LIMB_RIGHT_SHIN" Offset="0xD7A8" />
+        <Limb Name="gFighterPirateRightFootLimb" Type="Standard" EnumName="KAIZOKU_LIMB_RIGHT_FOOT" Offset="0xD7B4" />
         <Limb Name="gFighterPirateWaistLimb" Type="Standard" EnumName="KAIZOKU_LIMB_WAIST" Offset="0xD7C0" />
 
 

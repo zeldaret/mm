@@ -2116,7 +2116,7 @@ void EnKaizoku_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
     Vec3f swordHilt;
     EnKaizoku* this = (EnKaizoku*)thisx;
 
-    if (limbIndex == KAIZOKU_LIMB_R_SWORD) {
+    if (limbIndex == KAIZOKU_LIMB_RIGHT_SWORD) {
         Matrix_MultVec3f(&sSwordQuadOffset1, &this->swordCollider.dim.quad[1]);
         Matrix_MultVec3f(&sSwordQuadOffset0, &this->swordCollider.dim.quad[0]);
         Matrix_MultVec3f(&sSwordQuadOffset3, &this->swordCollider.dim.quad[3]);
@@ -2135,23 +2135,23 @@ void EnKaizoku_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
             this->swordState = 0;
         }
     } else {
-        Actor_SetFeetPos(&this->picto.actor, limbIndex, KAIZOKU_LIMB_L_FOOT, &sFootOffset, KAIZOKU_LIMB_R_FOOT,
+        Actor_SetFeetPos(&this->picto.actor, limbIndex, KAIZOKU_LIMB_LEFT_FOOT, &sFootOffset, KAIZOKU_LIMB_RIGHT_FOOT,
                          &sFootOffset);
     }
 
-    if (limbIndex == KAIZOKU_LIMB_L_FOOT) {
+    if (limbIndex == KAIZOKU_LIMB_LEFT_FOOT) {
         Matrix_MultVec3f(&sFootOffset, &this->leftFootPos);
-    } else if (limbIndex == KAIZOKU_LIMB_R_FOOT) {
+    } else if (limbIndex == KAIZOKU_LIMB_RIGHT_FOOT) {
         Matrix_MultVec3f(&sFootOffset, &this->rightFootPos);
     }
 
     if ((limbIndex == KAIZOKU_LIMB_TORSO) || (limbIndex == KAIZOKU_LIMB_HEAD) ||
-        (limbIndex == KAIZOKU_LIMB_R_UPPER_ARM) || (limbIndex == KAIZOKU_LIMB_R_FOREARM) ||
-        (limbIndex == KAIZOKU_LIMB_R_HAND) || (limbIndex == KAIZOKU_LIMB_L_UPPER_ARM) ||
-        (limbIndex == KAIZOKU_LIMB_L_FOREARM) || (limbIndex == KAIZOKU_LIMB_L_HAND) ||
-        (limbIndex == KAIZOKU_LIMB_L_THIGH) || (limbIndex == KAIZOKU_LIMB_L_SHIN) ||
-        (limbIndex == KAIZOKU_LIMB_L_FOOT) || (limbIndex == KAIZOKU_LIMB_R_THIGH) ||
-        (limbIndex == KAIZOKU_LIMB_R_SHIN) || (limbIndex == KAIZOKU_LIMB_R_FOOT) || (limbIndex == KAIZOKU_LIMB_WAIST)) {
+        (limbIndex == KAIZOKU_LIMB_RIGHT_UPPER_ARM) || (limbIndex == KAIZOKU_LIMB_RIGHT_FOREARM) ||
+        (limbIndex == KAIZOKU_LIMB_RIGHT_HAND) || (limbIndex == KAIZOKU_LIMB_LEFT_UPPER_ARM) ||
+        (limbIndex == KAIZOKU_LIMB_LEFT_FOREARM) || (limbIndex == KAIZOKU_LIMB_LEFT_HAND) ||
+        (limbIndex == KAIZOKU_LIMB_LEFT_THIGH) || (limbIndex == KAIZOKU_LIMB_LEFT_SHIN) ||
+        (limbIndex == KAIZOKU_LIMB_LEFT_FOOT) || (limbIndex == KAIZOKU_LIMB_RIGHT_THIGH) ||
+        (limbIndex == KAIZOKU_LIMB_RIGHT_SHIN) || (limbIndex == KAIZOKU_LIMB_RIGHT_FOOT) || (limbIndex == KAIZOKU_LIMB_WAIST)) {
 
         Matrix_MultZero(&this->bodyPartsPos[this->bodyPartIndex]);
         this->bodyPartIndex++;
@@ -2164,10 +2164,10 @@ void EnKaizoku_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
 void EnKaizoku_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
     EnKaizoku* this = (EnKaizoku*)thisx;
 
-    if (limbIndex == KAIZOKU_LIMB_R_SWORD) {
+    if (limbIndex == KAIZOKU_LIMB_RIGHT_SWORD) {
         Matrix_Scale(this->swordScaleRight.x, this->swordScaleRight.y, this->swordScaleRight.z, MTXMODE_APPLY);
     }
-    if (limbIndex == KAIZOKU_LIMB_L_SWORD) {
+    if (limbIndex == KAIZOKU_LIMB_LEFT_SWORD) {
         Matrix_Scale(this->swordScaleLeft.x, this->swordScaleLeft.y, this->swordScaleLeft.z, MTXMODE_APPLY);
     }
 }
