@@ -659,17 +659,14 @@ void MapDisp_InitBossRoomStorey(PlayState* play) {
     s32 i;
 
     for (i = 0; i < transitionActors->count; i++) {
-        if (MapDisp_IsBossDoor(sTransitionActors[i].params)) {
-            if (ABS_ALT(sTransitionActors[i].id) != ACTOR_EN_HOLL) {
-                for (storey = 0; storey < sMapDisp.numStoreys; storey++) {
-                    //! FAKE: needed for matching
-                    s32 temp = (sMapDisp.storeyYList[storey] - 5);
+        TransitionActorEntry* entry = &sTransitionActors[i];
 
-                    if (((storey == sMapDisp.numStoreys - 1) &&
-                         (sTransitionActors[i].pos.y >= (sMapDisp.storeyYList[storey] - 5))) ||
-                        ((storey != sMapDisp.numStoreys - 1) &&
-                         (sTransitionActors[i].pos.y >= (sMapDisp.storeyYList[storey] - 5)) &&
-                         (sTransitionActors[i].pos.y < (sMapDisp.storeyYList[storey + 1] - 5)))) {
+        if (MapDisp_IsBossDoor(entry->params)) {
+            if (ABS_ALT(entry->id) != ACTOR_EN_HOLL) {
+                for (storey = 0; storey < sMapDisp.numStoreys; storey++) {
+                    if (((storey == sMapDisp.numStoreys - 1) && (entry->pos.y >= (sMapDisp.storeyYList[storey] - 5))) ||
+                        ((storey != sMapDisp.numStoreys - 1) && (entry->pos.y >= (sMapDisp.storeyYList[storey] - 5)) &&
+                         (entry->pos.y < (sMapDisp.storeyYList[storey + 1] - 5)))) {
                         sMapDisp.bossRoomStorey = storey;
                         return;
                     }
