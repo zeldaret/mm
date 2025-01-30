@@ -3,16 +3,16 @@
         <Texture Name="gLinkZoraEyesOpenTex" OutName="eyes_open" Format="ci8" Width="64" Height="32" Offset="0x0" TlutOffset="0x5200" />
         <Texture Name="gLinkZoraEyesHalfTex" OutName="eyes_half" Format="ci8" Width="64" Height="32" Offset="0x800" TlutOffset="0x5200" />
         <Texture Name="gLinkZoraEyesClosedTex" OutName="eyes_closed" Format="ci8" Width="64" Height="32" Offset="0x1000" TlutOffset="0x5200" />
-        <Texture Name="gLinkZoraEyesRollRightTex" OutName="eyes_roll_right" Format="ci8" Width="64" Height="32" Offset="0x1800" TlutOffset="0x5200" />
-        <Texture Name="gLinkZoraEyesRollLeftTex" OutName="eyes_roll_left" Format="ci8" Width="64" Height="32" Offset="0x2000" TlutOffset="0x5200" />
-        <Texture Name="gLinkZoraEyesRollUpTex" OutName="eyes_roll_up" Format="ci8" Width="64" Height="32" Offset="0x2800" TlutOffset="0x5200" />
-        <Texture Name="gLinkZoraEyesRollDownTex" OutName="eyes_roll_down" Format="ci8" Width="64" Height="32" Offset="0x3000" TlutOffset="0x5200" />
-        <Texture Name="object_link_zora_Tex_003800" OutName="tex_003800" Format="ci8" Width="64" Height="32" Offset="0x3800" TlutOffset="0x5200" />
+        <Texture Name="gLinkZoraEyesRightTex" OutName="eyes_right" Format="ci8" Width="64" Height="32" Offset="0x1800" TlutOffset="0x5200" />
+        <Texture Name="gLinkZoraEyesLeftTex" OutName="eyes_left" Format="ci8" Width="64" Height="32" Offset="0x2000" TlutOffset="0x5200" />
+        <Texture Name="gLinkZoraEyesUpTex" OutName="eyes_up" Format="ci8" Width="64" Height="32" Offset="0x2800" TlutOffset="0x5200" />
+        <Texture Name="gLinkZoraEyesDownTex" OutName="eyes_down" Format="ci8" Width="64" Height="32" Offset="0x3000" TlutOffset="0x5200" />
+        <Texture Name="gLinkZoraEyesWincingTex" OutName="eyes_wincing" Format="ci8" Width="64" Height="32" Offset="0x3800" TlutOffset="0x5200" />
 
         <Texture Name="gLinkZoraMouthClosedTex" OutName="mouth_closed" Format="ci8" Width="32" Height="32" Offset="0x4000" TlutOffset="0x5200" />
-        <Texture Name="object_link_zora_Tex_004400" OutName="tex_004400" Format="ci8" Width="32" Height="32" Offset="0x4400" TlutOffset="0x5200" />
-        <Texture Name="gLinkZoraMouthAngryTex" OutName="mouth_angry" Format="ci8" Width="32" Height="32" Offset="0x4800" TlutOffset="0x5200" />
-        <Texture Name="gLinkZoraMouthHappyTex" OutName="mouth_happy" Format="ci8" Width="32" Height="32" Offset="0x4C00" TlutOffset="0x5200" />
+        <Texture Name="gLinkZoraMouthHalfTex" OutName="mouth_half" Format="ci8" Width="32" Height="32" Offset="0x4400" TlutOffset="0x5200" />
+        <Texture Name="gLinkZoraMouthOpenTex" OutName="mouth_open" Format="ci8" Width="32" Height="32" Offset="0x4800" TlutOffset="0x5200" />
+        <Texture Name="gLinkZoraMouthSmileTex" OutName="mouth_smile" Format="ci8" Width="32" Height="32" Offset="0x4C00" TlutOffset="0x5200" />
 
         <Texture Name="object_link_zora_TLUT_005000" OutName="tlut_005000" Format="rgba16" Width="16" Height="16" Offset="0x5000" />
         <Texture Name="gLinkZoraSkinTLUT" OutName="skin_tlut" Format="rgba16" Width="16" Height="16" Offset="0x5200" />
