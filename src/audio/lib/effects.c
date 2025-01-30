@@ -271,8 +271,8 @@ f32 AudioEffects_UpdateAdsr(AdsrState* adsr) {
         case ADSR_STATUS_START_LOOP:
             adsr->envelopeIndex = 0;
             adsr->action.s.status = ADSR_STATUS_LOOP;
+        retry:;
             FALLTHROUGH;
-        retry:
         case ADSR_STATUS_LOOP:
             adsr->delay = adsr->envelope[adsr->envelopeIndex].delay;
             switch (adsr->delay) {
