@@ -29,7 +29,7 @@ and look for `mm` under the "REPOSITORY" column.
 To start the container, you can mount your local filesystem into the Docker container and run an interactive bash session.
 
 ```bash
-docker run -it --rm --mount type=bind,source="$(pwd)",destination=/mm mm /bin/bash
+docker run -it --rm --mount type=bind,source="$(pwd)",destination=/mm mm "/usr/bin/env bash"
 ```
 
 - The `-it` flags Keep STDIN open even if not attached to the container and allocates a pseudo-tty terminal.
