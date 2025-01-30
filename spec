@@ -244,6 +244,9 @@ beginseg
     include "$(BUILD_DIR)/src/boot/libc/strcpy.o"
     include "$(BUILD_DIR)/src/boot/libc/memmove.o"
     include "$(BUILD_DIR)/src/boot/build.o"
+#ifdef COMPILER_GCC
+    include "$(BUILD_DIR)/src/gcc_fix/missing_gcc_functions.o"
+#endif
 endseg
 
 beginseg
