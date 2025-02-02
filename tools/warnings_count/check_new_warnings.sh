@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -e
 
 # This script can be used when you want to test locally the amount of warnings produced by your changes before doing a PR.
