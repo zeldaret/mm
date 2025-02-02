@@ -1876,10 +1876,10 @@ void ObjUm_SpawnFragments(PlayState* play, Vec3f* potPos) {
     }
 }
 
-void ObjUm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void ObjUm_PostLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    PlayState* play = play2;
     ObjUm* this = (ObjUm*)thisx;
-    GraphicsContext* gfxCtx = play->state.gfxCtx;
-    Mtx* mtx;
+    GraphicsContext* gfxCtx = play2->state.gfxCtx;
     Gfx* spFC[] = {
         NULL, gUmBrokenMinigamePotDL, gUmMinigamePotDL, gUmMinigamePotDL, gUmMinigamePotDL, object_um_DL_0067C0
     };
@@ -1905,15 +1905,11 @@ void ObjUm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
     }
 
     if (limbIndex == UM_LIMB_WAGON_CART_BED) {
-        Vec3f* potPos;
+        Mtx* mtx;
         Vec3f sp88;
         Vec3s sp80;
         s32 i;
         f32 sp70[] = { 2000.0f, 0.0f, -2000.0f };
-        s32 pad;
-
-        //! FAKE:
-        if (i) {}
 
         sp80.x = 0;
         sp80.z = 0;
@@ -1934,9 +1930,8 @@ void ObjUm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
             Matrix_Push();
             Matrix_TranslateRotateZYX(&sp88, &sp80);
             mtx = Matrix_Finalize(gfxCtx);
-            potPos = &this->potPos[i];
             Matrix_MultVec3f(&spC0, &calcPotPos);
-            SkinMatrix_Vec3fMtxFMultXYZW(&play->viewProjectionMtxF, &calcPotPos, potPos, &spB0);
+            SkinMatrix_Vec3fMtxFMultXYZW(&play->viewProjectionMtxF, &calcPotPos, &this->potPos[i], &spB0);
 
             if (this->wasPotHit[i]) {
                 this->wasPotHit[i] = false;
@@ -1952,9 +1947,6 @@ void ObjUm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
                 //! @bug skips CLOSE_DISPS
                 return;
             }
-
-            //! FAKE:
-            if (play) {}
 
             gSPMatrix(POLY_OPA_DISP++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 

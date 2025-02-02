@@ -15,6 +15,7 @@ struct DynaPolyActor;
 #define COLPOLY_GET_NORMAL(n) ((n) * (1.0f / SHRT_MAX))
 #define COLPOLY_VIA_FLAG_TEST(vIA, flags) ((vIA) & (((flags)&7) << 13))
 #define COLPOLY_VTX_INDEX(vI) ((vI)&0x1FFF)
+#define COLPOLY_VTX(vtxId, flags) ((((flags) & 7) << 13) | ((vtxId) & 0x1FFF))
 
 #define DYNAPOLY_INVALIDATE_LOOKUP (1 << 0)
 
@@ -28,7 +29,16 @@ struct DynaPolyActor;
 #define BGCHECK_SUBDIV_OVERLAP 50
 #define BGCHECK_SUBDIV_MIN 150.0f
 
+// Macros for `WaterBox.properties`
+#define WATERBOX_LIGHT_INDEX_NONE 0x1F // warns and defaults to 0
 #define WATERBOX_ROOM(p) ((((s32)p) >> 13) & 0x3F)
+#define WATERBOX_ROOM_ALL 0x3F // value for "room index" indicating "all rooms"
+#define WATERBOX_FLAG_19 (1 << 19)
+#define WATERBOX_PROPERTIES(bgCamIndex, lightIndex, room, setFlag19) \
+    ((((bgCamIndex) & 0xFF) <<  0) | \
+     (((lightIndex) & 0x1F) <<  8) | \
+     (((room)       & 0x3F) << 13) | \
+     (((setFlag19)  &    1) << 19))
 
 // bccFlags (bgcheck check flags)
 #define BGCHECK_CHECK_WALL (1 << 0)
@@ -53,6 +63,27 @@ struct DynaPolyActor;
 
 // CollisionContext flags
 #define BGCHECK_FLAG_REVERSE_CONVEYOR_FLOW 1
+
+// Macros for `SurfaceType`
+#define SURFACETYPE0(bgCamIndex, exitIndex, floorType, unk18, wallType, floorProperty, isSoft, isHorseBlocked) \
+    ((((bgCamIndex)     & 0xFF) <<  0) | \
+     (((exitIndex)      & 0x1F) <<  8) | \
+     (((floorType)      & 0x1F) << 13) | \
+     (((unk18)          & 0x07) << 18) | \
+     (((wallType)       & 0x1F) << 21) | \
+     (((floorProperty)  & 0x0F) << 26) | \
+     (((isSoft)         &    1) << 30) | \
+     (((isHorseBlocked) &    1) << 31))
+
+#define SURFACETYPE1(material, floorEffect, lightSetting, echo, canHookshot, conveyorSpeed, conveyorDirection, unk27) \
+    ((((material)          & 0x0F) <<  0) | \
+     (((floorEffect)       & 0x03) <<  4) | \
+     (((lightSetting)      & 0x1F) <<  6) | \
+     (((echo)              & 0x3F) << 11) | \
+     (((canHookshot)       &    1) << 17) | \
+     (((conveyorSpeed)     & 0x07) << 18) | \
+     (((conveyorDirection) & 0x3F) << 21) | \
+     (((unk27)             &    1) << 27))
 
 typedef struct {
     /* 0x0 */ Vec3s pos;
@@ -230,12 +261,12 @@ typedef struct {
     /* 0x0 */ u32 data[2];
 
     // Word 0
-    // 0x8000_0000 = horse blocked
-    // 0x4000_0000 = floor surface recessed by 1 unit
-    // 0x3C00_0000 = ? (floor property?)
-    // 0x03E0_0000 = ? (wall property?)
+    // 0x8000_0000 = is horse blocked
+    // 0x4000_0000 = is soft
+    // 0x3C00_0000 = floor property
+    // 0x03E0_0000 = wall type
     // 0x001C_0000 = ?
-    // 0x0003_E000 = ?
+    // 0x0003_E000 = floor type
     // 0x0000_1F00 = scene exit index
     // 0x0000_00FF = bgCam index
     // Word 1
@@ -245,8 +276,8 @@ typedef struct {
     // 0x0002_0000 = is hookable surface
     // 0x0001_F800 = echo/reverb
     // 0x0000_07C0 = lighting setting index
-    // 0x0000_0030 = surface slope
-    // 0x0000_000F = type
+    // 0x0000_0030 = floor effect
+    // 0x0000_000F = material
 
 } SurfaceType; // size = 0x8
 

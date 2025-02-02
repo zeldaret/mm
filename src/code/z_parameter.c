@@ -2161,7 +2161,7 @@ void Interface_UpdateButtonsPart2(PlayState* play) {
                               (GET_CUR_FORM_BTN_ITEM(i) <= ITEM_MASK_GIANT)) &&
                             (GET_CUR_FORM_BTN_ITEM(i) != ITEM_PICTOGRAPH_BOX)) {
 
-                            if ((gSaveContext.buttonStatus[i] == BTN_ENABLED)) {
+                            if (gSaveContext.buttonStatus[i] == BTN_ENABLED) {
                                 restoreHudVisibility = true;
                                 gSaveContext.buttonStatus[i] = BTN_DISABLED;
                             }
@@ -2176,7 +2176,7 @@ void Interface_UpdateButtonsPart2(PlayState* play) {
                               (GET_CUR_FORM_BTN_ITEM(i) <= ITEM_MASK_GIANT)) &&
                             (GET_CUR_FORM_BTN_ITEM(i) != ITEM_PICTOGRAPH_BOX)) {
 
-                            if ((gSaveContext.buttonStatus[i] == BTN_DISABLED)) {
+                            if (gSaveContext.buttonStatus[i] == BTN_DISABLED) {
                                 restoreHudVisibility = true;
                                 gSaveContext.buttonStatus[i] = BTN_ENABLED;
                             }

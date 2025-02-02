@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Given a list of header files, compute the bss index that results from
 # including them.
 

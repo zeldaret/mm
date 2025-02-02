@@ -1078,12 +1078,13 @@ s32 EnTest3_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
 
     if (limbIndex == KAFEI_LIMB_ROOT) {
         sKafeiCurBodyPartPos = &this->player.bodyPartsPos[0] - 1;
-        if (!(this->player.skelAnime.moveFlags & ANIM_FLAG_4) || (this->player.skelAnime.moveFlags & ANIM_FLAG_1)) {
+        if (!(this->player.skelAnime.movementFlags & ANIM_FLAG_4) ||
+            (this->player.skelAnime.movementFlags & ANIM_FLAG_1)) {
             pos->x *= this->player.ageProperties->unk_08;
             pos->z *= this->player.ageProperties->unk_08;
         }
-        if (!(this->player.skelAnime.moveFlags & ANIM_FLAG_4) ||
-            (this->player.skelAnime.moveFlags & ANIM_FLAG_UPDATE_Y)) {
+        if (!(this->player.skelAnime.movementFlags & ANIM_FLAG_4) ||
+            (this->player.skelAnime.movementFlags & ANIM_FLAG_UPDATE_Y)) {
             pos->y *= this->player.ageProperties->unk_08;
         }
         pos->y -= this->player.unk_AB8;

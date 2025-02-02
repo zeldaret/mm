@@ -2,6 +2,7 @@
 #define FAULT_H
 
 #include "ultra64.h"
+#include "attributes.h"
 
 #include "stdarg.h"
 #include "stdint.h"
@@ -60,8 +61,8 @@ void Fault_Init(void);
 
 // Fatal Errors
 
-void Fault_AddHungupAndCrashImpl(const char* exp1, const char* exp2);
-void Fault_AddHungupAndCrash(const char* file, s32 line);
+NORETURN void Fault_AddHungupAndCrashImpl(const char* exp1, const char* exp2);
+NORETURN void Fault_AddHungupAndCrash(const char* file, s32 line);
 
 // Client Registration
 

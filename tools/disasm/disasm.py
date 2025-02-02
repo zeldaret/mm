@@ -118,9 +118,12 @@ def discard_decomped_files(files_spec, include_files):
                             .split("$(BUILD_DIR)/", 1)[1]
                             .replace(".o", ".c")[:-1]
                         )
-                        with open(root_path / last_line, "r") as f2:
-                            if "GLOBAL_ASM" in f2.read():
-                                include = True
+                        if os.path.exists(root_path / last_line):
+                            with open(root_path / last_line, "r") as f2:
+                                if "GLOBAL_ASM" in f2.read():
+                                    include = True
+                        else:
+                            assert os.path.exists(root_path / last_line.replace(".c", ".s"))
 
             include |= force_include
             if include:
@@ -131,8 +134,7 @@ def discard_decomped_files(files_spec, include_files):
             continue
         if included:
             f[4] = new_files
-
-        new_spec.append(f)
+            new_spec.append(f)
 
     return new_spec
 
@@ -456,7 +458,7 @@ def format_f32(f_wd):
         return ".float 3.4028235e+38"
 
     f = as_float(struct.pack(">I", f_wd))
-    if math.isnan(f):
+    if math.isnan(f) or math.isinf(f):
         return f".word 0x{f_wd:08X}"
     return f".float {reduce_float(repr(f))}"
 

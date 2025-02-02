@@ -5,3 +5,5 @@ mkldscript
 reloc_prereq
 preprocess_pragmas
 vtxdis
+
+ido_recomp/

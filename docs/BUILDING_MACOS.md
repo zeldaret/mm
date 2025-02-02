@@ -47,7 +47,7 @@ cd ~/binutils-tmp
 Get and extract binutils source
 
 ```bash
-wget https://ftp.gnu.org/gnu/binutils/binutils-2.35.tar.bz2
+curl -O https://ftp.gnu.org/gnu/binutils/binutils-2.35.tar.bz2
 tar xjf binutils-2.35.tar.bz2
 ```
 

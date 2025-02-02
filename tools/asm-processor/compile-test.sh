@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -o pipefail
 INPUT="$1"
 OUTPUT="${INPUT%.*}.o"
