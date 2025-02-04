@@ -6,8 +6,8 @@
 struct EnIshi;
 
 typedef void (*EnIshiActionFunc)(struct EnIshi*, PlayState*);
-typedef void (*EnIshiUnkFunc)(struct EnIshi*, PlayState*);
-typedef void (*EnIshiUnkFunc2)(Actor*, PlayState*);
+typedef void (*EnIshiSpawnDustFunc)(struct EnIshi*, PlayState*);
+typedef void (*EnIshiSpawnDebrisFunc)(Actor*, PlayState*);
 
 #define ENISHI_GET_BIG_FLAG(thisx) ((thisx)->params & 1)
 #define ENISHI_GET_2(thisx) (((thisx)->params >> 1) & 1)
@@ -22,7 +22,7 @@ typedef struct EnIshi {
     /* 0x000 */ Actor actor;
     /* 0x144 */ ColliderCylinder collider;
     /* 0x190 */ EnIshiActionFunc actionFunc;
-    /* 0x194 */ s8 unk_194; // timer
+    /* 0x194 */ s8 thrownTimer;
     /* 0x195 */ s8 unk_195; // timer
     /* 0x196 */ s8 objectSlot;
     /* 0x197 */ u8 flags; // todo enum

@@ -18,26 +18,26 @@ void EnIshi_Init(Actor* thisx, PlayState* play);
 void EnIshi_Destroy(Actor* thisx, PlayState* play2);
 void EnIshi_Update(Actor* thisx, PlayState* play);
 
-void func_8095D804(Actor* thisx, PlayState* play);
-void func_8095DABC(Actor* thisx, PlayState* play);
-void func_8095DDA8(EnIshi* this, PlayState* play);
-void func_8095DE9C(EnIshi* this, PlayState* play);
+void EnIshi_SpawnDebrisSmallRock(Actor* thisx, PlayState* play);
+void EnIshi_SpawnDebrisBoulder(Actor* thisx, PlayState* play);
+void EnIshi_SpawnDustSmallRock(EnIshi* this, PlayState* play);
+void EnIshi_SpawnDustBoulder(EnIshi* this, PlayState* play);
 void EnIshi_SetupWaitForObject(EnIshi* this);
 void EnIshi_WaitForObject(EnIshi* this, PlayState* play);
-void func_8095E64C(EnIshi* this);
-void func_8095E660(EnIshi* this, PlayState* play);
+void EnIshi_SetupIdle(EnIshi* this);
+void EnIshi_Idle(EnIshi* this, PlayState* play);
 void EnIshi_SetupHeldByPlayer(EnIshi* this);
 void EnIshi_HeldByPlayer(EnIshi* this, PlayState* play);
 void EnIshi_SetupThrown(EnIshi* this);
 void EnIshi_Thrown(EnIshi* this, PlayState* play);
-void func_8095F060(EnIshi* this);
-void func_8095F0A4(EnIshi* this, PlayState* play);
-void func_8095F180(EnIshi* this);
-void func_8095F194(EnIshi* this, PlayState* play);
-void func_8095F210(EnIshi* this, PlayState* play);
-void func_8095F36C(EnIshi* this, PlayState* play);
+void EnIshi_SetupCutsceneExplode(EnIshi* this);
+void EnIshi_CutsceneExplode(EnIshi* this, PlayState* play);
+void EnIshi_SetupKill(EnIshi* this);
+void EnIshi_Kill(EnIshi* this, PlayState* play);
+void EnIshi_DrawGameplayKeepSmallRock(EnIshi* this, PlayState* play);
+void EnIshi_DrawGameplayKeepBoulder(EnIshi* this, PlayState* play);
 void EnIshi_DrawBoulder(Actor* thisx, PlayState* play);
-void EnIshi_DrawSmallRock(Actor* thisx, PlayState* play);
+void EnIshi_DrawIshiObjectSmallRock(Actor* thisx, PlayState* play);
 
 static s16 D_8095F690 = 0;
 
@@ -59,15 +59,15 @@ static f32 sIshiSizes[] = { 0.1f, 0.4f };
 
 static f32 D_8095F6C0[] = { 58.0f, 80.0f };
 
-static f32 D_8095F6C8[] = { 0.0f, 0.005f };
+static f32 sIshiVelocities[] = { 0.0f, 0.005f };
 
-static u16 D_8095F6D0[] = { NA_SE_EV_ROCK_BROKEN, NA_SE_EV_WALL_BROKEN };
+static u16 sCutsceneSfxId[] = { NA_SE_EV_ROCK_BROKEN, NA_SE_EV_WALL_BROKEN };
 
-static u8 D_8095F6D4[] = { 25, 40 };
+static u8 sCutsceneSfxDuration[] = { 25, 40 };
 
-static EnIshiUnkFunc2 D_8095F6D8[] = { func_8095D804, func_8095DABC };
+static EnIshiSpawnDebrisFunc sIshiSpawnDebrisFuncs[] = { EnIshi_SpawnDebrisSmallRock, EnIshi_SpawnDebrisBoulder };
 
-static EnIshiUnkFunc D_8095F6E0[] = { func_8095DDA8, func_8095DE9C };
+static EnIshiSpawnDustFunc sIshiDustSpawnFuncs[] = { EnIshi_SpawnDustSmallRock, EnIshi_SpawnDustBoulder };
 
 static s16 sObjectIds[] = { GAMEPLAY_FIELD_KEEP, OBJECT_ISHI };
 
@@ -114,7 +114,7 @@ static ColliderCylinderInit sCylinderInit[] = {
 
 static CollisionCheckInfoInit sColChkInfoInit = { 0, 12, 60, MASS_IMMOVABLE };
 
-static s16 D_8095F74C[] = { 16, 13, 11, 9, 7, 5 };
+static s16 sIshiSmallRockDebrisScales[] = { 16, 13, 11, 9, 7, 5 };
 
 static s16 D_8095F758[] = { 145, 135, 120, 100, 70, 50, 45, 40, 35 };
 
@@ -141,7 +141,8 @@ static InitChainEntry sInitChain[][5] = {
 
 static u16 sIshiPullRockSfx[] = { NA_SE_PL_PULL_UP_ROCK, NA_SE_PL_PULL_UP_BIGROCK };
 
-static EnIshiUnkFunc D_8095F7B0[] = { func_8095F210, func_8095F36C };
+// bleh, dual type
+static EnIshiSpawnDustFunc sIshiGameplayKeepObjectDrawFuncs[] = { EnIshi_DrawGameplayKeepSmallRock, EnIshi_DrawGameplayKeepBoulder };
 
 void EnIshi_InitCollider(Actor* thisx, PlayState* play) {
     EnIshi* this = (EnIshi*)thisx;
@@ -169,131 +170,146 @@ s32 EnIshi_SnapToFloor(EnIshi* this, PlayState* play, f32 yOffset) {
     }
 }
 
-void func_8095D804(Actor* thisx, PlayState* play) {
+void EnIshi_SpawnDebrisSmallRock(Actor* thisx, PlayState* play) {
     EnIshi* this = (EnIshi*)thisx;
     s32 i;
     s16 objectId;
-    Gfx* phi_s4;
-    Vec3f spC4;
-    Vec3f spB8;
+    Gfx* debrisModel;
+    Vec3f randVel;
+    Vec3f randPos;
 
     if (!ENISHI_GET_USE_OBJECT(&this->actor)) {
-        phi_s4 = gameplay_field_keep_DL_0066B0;
+        debrisModel = gameplay_field_keep_DL_0066B0; // same dl in gameplay keep
     } else {
-        phi_s4 = gSmallRockDL;
+        debrisModel = gSmallRockDL;
     }
 
     objectId = sObjectIds[ENISHI_GET_USE_OBJECT(&this->actor)];
 
-    for (i = 0; i < ARRAY_COUNT(D_8095F74C); i++) {
-        spB8.x = ((Rand_ZeroOne() - 0.5f) * 8.0f) + this->actor.world.pos.x;
-        spB8.y = (Rand_ZeroOne() * 5.0f) + this->actor.world.pos.y + 5.0f;
-        spB8.z = ((Rand_ZeroOne() - 0.5f) * 8.0f) + this->actor.world.pos.z;
-        Math_Vec3f_Copy(&spC4, &this->actor.velocity);
+    for (i = 0; i < ARRAY_COUNT(sIshiSmallRockDebrisScales); i++) {
+        randPos.x = ((Rand_ZeroOne() - 0.5f) * 8.0f) + this->actor.world.pos.x;
+        randPos.y = (Rand_ZeroOne() * 5.0f) + this->actor.world.pos.y + 5.0f;
+        randPos.z = ((Rand_ZeroOne() - 0.5f) * 8.0f) + this->actor.world.pos.z;
+        Math_Vec3f_Copy(&randVel, &this->actor.velocity);
 
         if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
-            spC4.x *= 0.6f;
-            spC4.y *= -0.3f;
-            spC4.z *= 0.6f;
+            randVel.x *= 0.6f;
+            randVel.y *= -0.3f;
+            randVel.z *= 0.6f;
         } else if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
-            spC4.x *= -0.5f;
-            spC4.y *= 0.5f;
-            spC4.z *= -0.5f;
+            randVel.x *= -0.5f;
+            randVel.y *= 0.5f;
+            randVel.z *= -0.5f;
         }
 
-        spC4.x += (Rand_ZeroOne() - 0.5f) * 11.0f;
-        spC4.y += (Rand_ZeroOne() * 7.0f) + 6.0f;
-        spC4.z += (Rand_ZeroOne() - 0.5f) * 11.0f;
+        randVel.x += (Rand_ZeroOne() - 0.5f) * 11.0f;
+        randVel.y += (Rand_ZeroOne() * 7.0f) + 6.0f;
+        randVel.z += (Rand_ZeroOne() - 0.5f) * 11.0f;
 
-        EffectSsKakera_Spawn(play, &spB8, &spC4, &spB8, -420, ((s32)Rand_Next() > 0) ? 65 : 33, 30, 5, 0, D_8095F74C[i],
-                             3, 10, 40, -1, objectId, phi_s4);
+        // -420: gravity
+        // 40:life
+        EffectSsKakera_Spawn(play, &randPos, &randVel, &randPos, -420,
+               ((s32)Rand_Next() > 0) ? 65 : 33,
+                 30, 5, 0,
+                 sIshiSmallRockDebrisScales[i],
+                 3, 10, 40, -1, objectId, debrisModel);
     }
 }
 
-void func_8095DABC(Actor* thisx, PlayState* play) {
+void EnIshi_SpawnDebrisBoulder(Actor* thisx, PlayState* play) {
     EnIshi* this = (EnIshi*)thisx;
-    Vec3f spD8;
-    Vec3f spCC;
-    f32 temp_f20;
-    s16 temp_s1 = 0x1000;
+    Vec3f vel;
+    Vec3f pos;
+    f32 randMagnitude;
+    s16 angle = 0x1000;
     s32 i;
-    s16 phi_v0;
-    s16 phi_v1;
+    s16 arg5;
+    s16 gravity;
 
     for (i = 0; i < ARRAY_COUNT(D_8095F758); i++) {
-        temp_s1 += 0x4E20;
-        temp_f20 = Rand_ZeroOne() * 10.0f;
+        angle += 0x4E20;
+        randMagnitude = Rand_ZeroOne() * 10.0f;
 
-        spCC.x = (Math_SinS(temp_s1) * temp_f20) + this->actor.world.pos.x;
-        spCC.y = (Rand_ZeroOne() * 40.0f) + this->actor.world.pos.y + 5.0f;
-        spCC.z = (Math_CosS(temp_s1) * temp_f20) + this->actor.world.pos.z;
+        pos.x = (Math_SinS(angle) * randMagnitude) + this->actor.world.pos.x;
+        pos.y = (Rand_ZeroOne() * 40.0f) + this->actor.world.pos.y + 5.0f;
+        pos.z = (Math_CosS(angle) * randMagnitude) + this->actor.world.pos.z;
 
-        Math_Vec3f_Copy(&spD8, &this->actor.velocity);
+        Math_Vec3f_Copy(&vel, &this->actor.velocity);
 
         if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
-            spD8.x *= 0.9f;
-            spD8.y *= -0.8f;
-            spD8.z *= 0.9f;
+            vel.x *= 0.9f;
+            vel.y *= -0.8f;
+            vel.z *= 0.9f;
         } else if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
-            spD8.x *= -0.9f;
-            spD8.y *= 0.8f;
-            spD8.z *= -0.9f;
+            vel.x *= -0.9f;
+            vel.y *= 0.8f;
+            vel.z *= -0.9f;
         }
 
-        temp_f20 = Rand_ZeroOne() * 10.0f;
-        spD8.x += temp_f20 * Math_SinS(temp_s1);
-        spD8.y += (Rand_ZeroOne() * 4.0f) + (Rand_ZeroOne() * i * 0.7f);
-        spD8.z += temp_f20 * Math_CosS(temp_s1);
+        randMagnitude = Rand_ZeroOne() * 10.0f;
+        vel.x += randMagnitude * Math_SinS(angle);
+        vel.y += (Rand_ZeroOne() * 4.0f) + (Rand_ZeroOne() * i * 0.7f);
+        vel.z += randMagnitude * Math_CosS(angle);
 
         if (i == 0) {
-            phi_v0 = 41;
-            phi_v1 = -450;
+            arg5 = 41;
+            gravity = -450;
         } else if (i < 4) {
-            phi_v0 = 37;
-            phi_v1 = -380;
+            arg5 = 37;
+            gravity = -380;
         } else {
-            phi_v0 = 69;
-            phi_v1 = -320;
+            arg5 = 69;
+            gravity = -320;
         }
 
-        EffectSsKakera_Spawn(play, &spCC, &spD8, &this->actor.world.pos, phi_v1, phi_v0, 30, 5, 0, D_8095F758[i], 5, 2,
+        EffectSsKakera_Spawn(play, &pos, &vel, &this->actor.world.pos, gravity, arg5, 30, 5, 0, D_8095F758[i], 5, 2,
                              70, 0, GAMEPLAY_FIELD_KEEP, gameplay_field_keep_DL_006420);
     }
 }
 
-void func_8095DDA8(EnIshi* this, PlayState* play) {
-    Vec3f sp2C;
+void EnIshi_SpawnDustSmallRock(EnIshi* this, PlayState* play) {
+    Vec3f pos;
 
-    Math_Vec3f_Copy(&sp2C, &this->actor.world.pos);
+    Math_Vec3f_Copy(&pos, &this->actor.world.pos);
     if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
-        sp2C.x += 2.0f * this->actor.velocity.x;
-        sp2C.y -= 2.0f * this->actor.velocity.y;
-        sp2C.z += 2.0f * this->actor.velocity.z;
+        pos.x += 2.0f * this->actor.velocity.x;
+        pos.y -= 2.0f * this->actor.velocity.y;
+        pos.z += 2.0f * this->actor.velocity.z;
     } else if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
-        sp2C.x -= 2.0f * this->actor.velocity.x;
-        sp2C.y += 2.0f * this->actor.velocity.y;
-        sp2C.z -= 2.0f * this->actor.velocity.z;
+        pos.x -= 2.0f * this->actor.velocity.x;
+        pos.y += 2.0f * this->actor.velocity.y;
+        pos.z -= 2.0f * this->actor.velocity.z;
     }
-    func_800BBFB0(play, &sp2C, 60.0f, 3, 80, 60, 1);
+
+    // 60: distance from center
+    // 3:count of particle
+    // 80 scale multiplier
+    // 60 scale scale step, 
+    func_800BBFB0(play, &pos, 60.0f, 3, 80, 60, true);
 }
 
-void func_8095DE9C(EnIshi* this, PlayState* play) {
-    Vec3f sp2C;
+void EnIshi_SpawnDustBoulder(EnIshi* this, PlayState* play) {
+    Vec3f pos;
 
-    Math_Vec3f_Copy(&sp2C, &this->actor.world.pos);
+    Math_Vec3f_Copy(&pos, &this->actor.world.pos);
     if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
-        sp2C.x += 2.0f * this->actor.velocity.x;
-        sp2C.y -= 2.0f * this->actor.velocity.y;
-        sp2C.z += 2.0f * this->actor.velocity.z;
+        pos.x += 2.0f * this->actor.velocity.x;
+        pos.y -= 2.0f * this->actor.velocity.y;
+        pos.z += 2.0f * this->actor.velocity.z;
     } else if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
-        sp2C.x -= 2.0f * this->actor.velocity.x;
-        sp2C.y += 2.0f * this->actor.velocity.y;
-        sp2C.z -= 2.0f * this->actor.velocity.z;
+        pos.x -= 2.0f * this->actor.velocity.x;
+        pos.y += 2.0f * this->actor.velocity.y;
+        pos.z -= 2.0f * this->actor.velocity.z;
     }
-    func_800BBFB0(play, &sp2C, 140.0f, 10, 180, 90, 1);
+    
+    // 140: distance from center
+    // 10:count of particle
+    // 180 scale multiplier
+    // 90 scale scale step, 
+    func_800BBFB0(play, &pos, 140.0f, 10, 180, 90, true);
 }
 
-void func_8095DF90(EnIshi* this, PlayState* play) {
+void EnIshi_DropItem(EnIshi* this, PlayState* play) {
     if (!ENISHI_GET_BIG_FLAG(&this->actor) && !ENISHI_GET_100(&this->actor)) {
         Item_DropCollectibleRandom(play, NULL, &this->actor.world.pos, ENISHI_GET_F0(&this->actor) * 0x10);
     }
@@ -349,7 +365,7 @@ void EnIshi_SetVelocity(Vec3f* vel, f32 scale) {
     vel->z -= vel->z * scale;
 }
 
-void func_8095E204(EnIshi* this, PlayState* play) {
+void EnIshi_SpawnBugs(EnIshi* this, PlayState* play) {
     s32 i;
 
     for (i = 0; i < 3; i++) {
@@ -455,18 +471,17 @@ void EnIshi_WaitForObject(EnIshi* this, PlayState* play) {
         if (!ENISHI_GET_USE_OBJECT(&this->actor)) {
             this->actor.draw = EnIshi_DrawBoulder;
         } else {
-            this->actor.draw = EnIshi_DrawSmallRock;
+            this->actor.draw = EnIshi_DrawIshiObjectSmallRock;
         }
-        func_8095E64C(this);
+        EnIshi_SetupIdle(this);
     }
 }
 
-// idle
-void func_8095E64C(EnIshi* this) {
-    this->actionFunc = func_8095E660;
+void EnIshi_SetupIdle(EnIshi* this) {
+    this->actionFunc = EnIshi_Idle;
 }
 
-void func_8095E660(EnIshi* this, PlayState* play) {
+void EnIshi_Idle(EnIshi* this, PlayState* play) {
     s32 pad;
     s32 isBig = ENISHI_GET_BIG_FLAG(&this->actor);
     s32 activeCollider = (this->collider.base.acFlags & AC_HIT) != 0;
@@ -480,7 +495,7 @@ void func_8095E660(EnIshi* this, PlayState* play) {
         EnIshi_SetupHeldByPlayer(this);
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, sIshiPullRockSfx[isBig]);
         if (ENISHI_GET_2(&this->actor)) {
-            func_8095E204(this, play);
+            EnIshi_SpawnBugs(this, play);
         }
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
         return;
@@ -490,13 +505,13 @@ void func_8095E660(EnIshi* this, PlayState* play) {
     if (activeCollider && (isBig == 0) && (this->collider.elem.acHitElem->atDmgInfo.dmgFlags & 0x508)) {
         if (flag2 != 0) {
             func_8095DFF0(this, play);
-            func_8095F060(this);
+            EnIshi_SetupCutsceneExplode(this);
             return;
         }
-        func_8095DF90(this, play);
-        SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, D_8095F6D4[isBig], D_8095F6D0[isBig]);
-        D_8095F6D8[isBig](&this->actor, play);
-        D_8095F6E0[isBig](this, play);
+        EnIshi_DropItem(this, play);
+        SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, sCutsceneSfxDuration[isBig], sCutsceneSfxId[isBig]);
+        sIshiSpawnDebrisFuncs[isBig](&this->actor, play);
+        sIshiDustSpawnFuncs[isBig](this, play);
         Actor_Kill(&this->actor);
         return;
     }
@@ -549,7 +564,7 @@ void EnIshi_HeldByPlayer(EnIshi* this, PlayState* play) {
         }
         EnIshi_SetupThrown(this);
         EnIshi_ApplyGravity(this);
-        EnIshi_SetVelocity(&this->actor.velocity, D_8095F6C8[ENISHI_GET_BIG_FLAG(&this->actor)]);
+        EnIshi_SetVelocity(&this->actor.velocity, sIshiVelocities[ENISHI_GET_BIG_FLAG(&this->actor)]);
         Actor_UpdatePos(&this->actor);
         Actor_UpdateBgCheckInfo(play, &this->actor, 7.5f, 35.0f, 0.0f,
                                 UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40 |
@@ -578,7 +593,7 @@ void EnIshi_SetupThrown(EnIshi* this) {
         D_8095F694 = ((Rand_ZeroOne() - 0.5f) * 1200.0f) * (fabsf(sp24) + 0.5f);
     }
     this->actor.colChkInfo.mass = 200;
-    this->unk_194 = 100;
+    this->thrownTimer = 100;
     this->actionFunc = EnIshi_Thrown;
 }
 
@@ -587,26 +602,28 @@ void EnIshi_Thrown(EnIshi* this, PlayState* play) {
     s32 isBig = ENISHI_GET_BIG_FLAG(&this->actor);
     s16 temp_s0;
     s32 i;
-    s16 phi_s0;
-    Vec3f sp58;
-    s32 temp_v0 = (this->collider.base.atFlags & AT_HIT) != 0;
+    s16 spashAngle;
+    Vec3f pos;
+    s32 ATFlagSet = (this->collider.base.atFlags & AT_HIT) != 0;
 
-    if (temp_v0) {
+    if (ATFlagSet) {
         this->collider.base.atFlags &= ~AT_HIT;
     }
 
-    this->unk_194--;
+    this->thrownTimer--;
 
-    if ((this->actor.bgCheckFlags & (BGCHECKFLAG_GROUND | BGCHECKFLAG_WALL)) || temp_v0 || (this->unk_194 <= 0)) {
-        func_8095DF90(this, play);
-        D_8095F6D8[isBig](&this->actor, play);
+    // contact
+    if ((this->actor.bgCheckFlags & (BGCHECKFLAG_GROUND | BGCHECKFLAG_WALL)) 
+      || ATFlagSet || (this->thrownTimer <= 0)) {
+        EnIshi_DropItem(this, play);
+        sIshiSpawnDebrisFuncs[isBig](&this->actor, play);
 
         if (!(this->actor.bgCheckFlags & BGCHECKFLAG_WATER)) {
-            SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, D_8095F6D4[isBig], D_8095F6D0[isBig]);
-            D_8095F6E0[isBig](this, play);
+            SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, sCutsceneSfxDuration[isBig], sCutsceneSfxId[isBig]);
+            sIshiDustSpawnFuncs[isBig](this, play);
         }
 
-        if (isBig == 1) {
+        if (isBig == true) {
             s16 quakeIndex = Quake_Request(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
 
             Quake_SetSpeed(quakeIndex, 17232);
@@ -621,24 +638,24 @@ void EnIshi_Thrown(EnIshi* this, PlayState* play) {
     }
 
     if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER_TOUCH) {
-        if (isBig == 0) {
-            sp58.x = this->actor.world.pos.x;
-            sp58.y = this->actor.world.pos.y + this->actor.depthInWater;
-            sp58.z = this->actor.world.pos.z;
-            EffectSsGSplash_Spawn(play, &sp58, NULL, NULL, 0, 350);
-            EffectSsGRipple_Spawn(play, &sp58, 150, 650, 0);
+        if (isBig == false) {
+            pos.x = this->actor.world.pos.x;
+            pos.y = this->actor.world.pos.y + this->actor.depthInWater;
+            pos.z = this->actor.world.pos.z;
+            EffectSsGSplash_Spawn(play, &pos, NULL, NULL, 0, 350);
+            EffectSsGRipple_Spawn(play, &pos, 150, 650, 0);
         } else {
-            sp58.y = this->actor.world.pos.y + this->actor.depthInWater;
+            pos.y = this->actor.world.pos.y + this->actor.depthInWater;
 
-            for (phi_s0 = 0, i = 0; i < 11; i++, phi_s0 += 0x1746) {
-                sp58.x = this->actor.world.pos.x + (Math_SinS((s32)(Rand_ZeroOne() * 2000.0f) + phi_s0) * 50.0f);
-                sp58.z = this->actor.world.pos.z + (Math_CosS((s32)(Rand_ZeroOne() * 2000.0f) + phi_s0) * 50.0f);
-                EffectSsGSplash_Spawn(play, &sp58, NULL, NULL, 0, 350);
+            for (spashAngle = 0, i = 0; i < 11; i++, spashAngle += 0x1746) {
+                pos.x = this->actor.world.pos.x + (Math_SinS((s32)(Rand_ZeroOne() * 2000.0f) + spashAngle) * 50.0f);
+                pos.z = this->actor.world.pos.z + (Math_CosS((s32)(Rand_ZeroOne() * 2000.0f) + spashAngle) * 50.0f);
+                EffectSsGSplash_Spawn(play, &pos, NULL, NULL, 0, 350);
             }
 
-            sp58.x = this->actor.world.pos.x;
-            sp58.z = this->actor.world.pos.z;
-            EffectSsGRipple_Spawn(play, &sp58, 500, 900, 4);
+            pos.x = this->actor.world.pos.x;
+            pos.z = this->actor.world.pos.z;
+            EffectSsGRipple_Spawn(play, &pos, 500, 900, 4);
         }
 
         this->actor.terminalVelocity = -6.0f;
@@ -656,7 +673,7 @@ void EnIshi_Thrown(EnIshi* this, PlayState* play) {
 
     Math_StepToF(&this->actor.shape.yOffset, 0.0f, 2.0f);
     EnIshi_ApplyGravity(this);
-    EnIshi_SetVelocity(&this->actor.velocity, D_8095F6C8[isBig]);
+    EnIshi_SetVelocity(&this->actor.velocity, sIshiVelocities[isBig]);
     Actor_UpdatePos(&this->actor);
     this->actor.shape.rot.x += D_8095F690;
     this->actor.shape.rot.y += D_8095F694;
@@ -668,33 +685,33 @@ void EnIshi_Thrown(EnIshi* this, PlayState* play) {
     CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
 }
 
-void func_8095F060(EnIshi* this) {
+void EnIshi_SetupCutsceneExplode(EnIshi* this) {
     this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
     CutsceneManager_Queue(this->actor.csId);
-    this->actionFunc = func_8095F0A4;
+    this->actionFunc = EnIshi_CutsceneExplode;
 }
 
-void func_8095F0A4(EnIshi* this, PlayState* play) {
+void EnIshi_CutsceneExplode(EnIshi* this, PlayState* play) {
     s32 pad;
-    s32 sp28 = ENISHI_GET_BIG_FLAG(&this->actor);
+    s32 isBig = ENISHI_GET_BIG_FLAG(&this->actor);
 
     if (CutsceneManager_IsNext(this->actor.csId)) {
         CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
-        SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, D_8095F6D4[sp28], D_8095F6D0[sp28]);
-        D_8095F6D8[sp28](&this->actor, play);
-        D_8095F6E0[sp28](this, play);
+        SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, sCutsceneSfxDuration[isBig], sCutsceneSfxId[isBig]);
+        sIshiSpawnDebrisFuncs[isBig](&this->actor, play);
+        sIshiDustSpawnFuncs[isBig](this, play);
         this->actor.draw = NULL;
-        func_8095F180(this);
+        EnIshi_SetupKill(this);
     } else {
         CutsceneManager_Queue(this->actor.csId);
     }
 }
 
-void func_8095F180(EnIshi* this) {
-    this->actionFunc = func_8095F194;
+void EnIshi_SetupKill(EnIshi* this) {
+    this->actionFunc = EnIshi_Kill;
 }
 
-void func_8095F194(EnIshi* this, PlayState* play) {
+void EnIshi_Kill(EnIshi* this, PlayState* play) {
     if (this->actor.csId <= CS_ID_NONE) {
         Actor_Kill(&this->actor);
     } else if (CutsceneManager_GetCurrentCsId() != this->actor.csId) {
@@ -708,9 +725,9 @@ void EnIshi_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 }
 
-void func_8095F210(EnIshi* this, PlayState* play) {
+void EnIshi_DrawGameplayKeepSmallRock(EnIshi* this, PlayState* play) {
     s32 pad;
-    s32 sp28;
+    s32 alpha;
 
     if ((this->actor.projectedPos.z <= 1200.0f) || ((this->flags & 1) && (this->actor.projectedPos.z < 1300.0f))) {
         Gfx_DrawDListOpa(play, gameplay_field_keep_DL_0066B0);
@@ -722,17 +739,17 @@ void func_8095F210(EnIshi* this, PlayState* play) {
 
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
-        sp28 = (1300.0f - this->actor.projectedPos.z) * 2.55f;
+        alpha = (1300.0f - this->actor.projectedPos.z) * 2.55f; // what
 
         MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
-        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (s32)sp28);
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (s32) alpha);
         gSPDisplayList(POLY_XLU_DISP++, gameplay_field_keep_DL_006760);
 
         CLOSE_DISPS(play->state.gfxCtx);
     }
 }
 
-void func_8095F36C(EnIshi* this, PlayState* play) {
+void EnIshi_DrawGameplayKeepBoulder(EnIshi* this, PlayState* play) {
     s32 pad;
 
     OPEN_DISPS(play->state.gfxCtx);
@@ -747,15 +764,15 @@ void func_8095F36C(EnIshi* this, PlayState* play) {
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
         gSPDisplayList(POLY_OPA_DISP++, gameplay_field_keep_DL_0061E8);
     } else if (this->actor.projectedPos.z < 2250.0f) {
-        f32 sp20 = (2250.0f - this->actor.projectedPos.z) * 2.55f;
+        f32 alpha = (2250.0f - this->actor.projectedPos.z) * 2.55f;
 
-        this->actor.shape.shadowAlpha = sp20 * 0.627451f;
+        this->actor.shape.shadowAlpha = alpha * 0.627451f;
 
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
         gSPSegment(POLY_XLU_DISP++, 0x08, D_801AEF88);
         MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
-        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (s32)sp20);
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (s32)alpha);
         gSPDisplayList(POLY_XLU_DISP++, gameplay_field_keep_DL_0061E8);
     } else {
         this->actor.shape.shadowAlpha = 0;
@@ -767,9 +784,9 @@ void func_8095F36C(EnIshi* this, PlayState* play) {
 void EnIshi_DrawBoulder(Actor* thisx, PlayState* play) {
     EnIshi* this = (EnIshi*)thisx;
 
-    D_8095F7B0[ENISHI_GET_BIG_FLAG(&this->actor)](this, play);
+    sIshiGameplayKeepObjectDrawFuncs[ENISHI_GET_BIG_FLAG(&this->actor)](this, play);
 }
 
-void EnIshi_DrawSmallRock(Actor* thisx, PlayState* play) {
+void EnIshi_DrawIshiObjectSmallRock(Actor* thisx, PlayState* play) {
     Gfx_DrawDListOpa(play, gSmallRockDL);
 }
