@@ -13,10 +13,13 @@ typedef void (*EnIshiSpawnDebrisFunc)(Actor*, PlayState*);
 #define ENISHI_GET_2(thisx) (((thisx)->params >> 1) & 1)
 #define ENISHI_GET_4(thisx) (((thisx)->params >> 2) & 1)
 #define ENISHI_GET_USE_OBJECT(thisx) (((thisx)->params >> 3) & 1)
-#define ENISHI_GET_70(thisx) (((thisx)->params >> 4) & 7)
+#define ENISHI_GET_COLLECTABLE_ID(thisx) (((thisx)->params >> 4) & 7)
 #define ENISHI_GET_F0(thisx) (((thisx)->params >> 4) & 0xF)
 #define ENISHI_GET_100(thisx) (((thisx)->params >> 8) & 1)
 #define ENISHI_GET_FLAG(thisx) (((thisx)->params >> 9) & 0x7F)
+
+#define ISHI_FLAG_UNDERWATER   (1 << 0)
+#define ISHI_FLAG_2   (1 << 1)
 
 typedef struct EnIshi {
     /* 0x000 */ Actor actor;

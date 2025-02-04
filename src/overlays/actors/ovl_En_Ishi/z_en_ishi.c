@@ -39,9 +39,9 @@ void EnIshi_DrawGameplayKeepBoulder(EnIshi* this, PlayState* play);
 void EnIshi_DrawBoulder(Actor* thisx, PlayState* play);
 void EnIshi_DrawIshiObjectSmallRock(Actor* thisx, PlayState* play);
 
-static s16 D_8095F690 = 0;
+static s16 sIshiThrownXRotationVel = 0;
 
-static s16 D_8095F694 = 0;
+static s16 sIshiThrownYRotationVel = 0;
 
 ActorProfile En_Ishi_Profile = {
     /**/ ACTOR_EN_ISHI,
@@ -118,8 +118,16 @@ static s16 sIshiSmallRockDebrisScales[] = { 16, 13, 11, 9, 7, 5 };
 
 static s16 D_8095F758[] = { 145, 135, 120, 100, 70, 50, 45, 40, 35 };
 
-static s16 D_8095F76C[] = { -1, 1, 2, 20, 8, 0 };
+static s16 sIshiItemDrops[] = { 
+  ITEM00_NO_DROP, 
+  ITEM00_RUPEE_BLUE,
+  ITEM00_RUPEE_RED,
+  ITEM00_RUPEE_PURPLE,
+  ITEM00_ARROWS_30,
+  ITEM00_RUPEE_GREEN
+};
 
+// used for spawning the collectable item drops
 static Vec3f D_8095F778 = { 0.0f, 1.0f, 0.0f };
 
 static InitChainEntry sInitChain[][5] = {
@@ -317,16 +325,16 @@ void EnIshi_DropItem(EnIshi* this, PlayState* play) {
 
 void func_8095DFF0(EnIshi* this, PlayState* play) {
     s32 pad;
-    s32 temp = D_8095F76C[ENISHI_GET_70(&this->actor)];
-    Actor* sp3C;
+    s32 collectableItem00Id = sIshiItemDrops[ENISHI_GET_COLLECTABLE_ID(&this->actor)];
+    Actor* item;
     Vec3f sp30;
     f32 sp2C;
-    f32 temp_f2;
+    f32 verticalVelMagnitude;
     s16 temp_v1_2;
 
-    if (temp >= 0) {
-        sp3C = Item_DropCollectible(play, &this->actor.world.pos, temp | (ENISHI_GET_FLAG(&this->actor) << 8));
-        if (sp3C != NULL) {
+    if (collectableItem00Id >= ITEM00_RUPEE_GREEN) { // not ITEM00_NO_DROP, the 0 index of the list
+        item = Item_DropCollectible(play, &this->actor.world.pos, collectableItem00Id | (ENISHI_GET_FLAG(&this->actor) << 8));
+        if (item != NULL) {
             Matrix_Push();
             Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
             Matrix_RotateXS(this->actor.shape.rot.x, MTXMODE_APPLY);
@@ -334,15 +342,15 @@ void func_8095DFF0(EnIshi* this, PlayState* play) {
             Matrix_MultVecY(1.0f, &sp30);
             sp2C = Math3D_Cos(&sp30, &D_8095F778);
             if (sp2C < 0.707f) {
-                temp_v1_2 = Math_Atan2S_XY(sp30.z, sp30.x) - sp3C->world.rot.y;
+                temp_v1_2 = Math_Atan2S_XY(sp30.z, sp30.x) - item->world.rot.y;
                 if (ABS_ALT(temp_v1_2) > 0x4000) {
-                    sp3C->world.rot.y = BINANG_ROT180(sp3C->world.rot.y);
+                    item->world.rot.y = BINANG_ROT180(item->world.rot.y);
                 }
-                temp_f2 = sp2C + 0.5f;
-                if (temp_f2 < 0.5f) {
-                    temp_f2 = 0.5f;
+                verticalVelMagnitude = sp2C + 0.5f;
+                if (verticalVelMagnitude < 0.5f) {
+                    verticalVelMagnitude = 0.5f;
                 }
-                sp3C->velocity.y *= temp_f2;
+                item->velocity.y *= verticalVelMagnitude;
             }
             Matrix_Pop();
         }
@@ -356,7 +364,6 @@ void EnIshi_ApplyGravity(EnIshi* this) {
     }
 }
 
-// scale random velocity?
 void EnIshi_SetVelocity(Vec3f* vel, f32 scale) {
     scale += ((Rand_ZeroOne() * 0.2f) - 0.1f) * scale;
 
@@ -502,7 +509,7 @@ void EnIshi_Idle(EnIshi* this, PlayState* play) {
     }
 
     // huh? cutscene?
-    if (activeCollider && (isBig == 0) && (this->collider.elem.acHitElem->atDmgInfo.dmgFlags & 0x508)) {
+    if (activeCollider && (isBig == false) && (this->collider.elem.acHitElem->atDmgInfo.dmgFlags & 0x508)) {
         if (flag2 != 0) {
             func_8095DFF0(this, play);
             EnIshi_SetupCutsceneExplode(this);
@@ -579,18 +586,18 @@ void EnIshi_HeldByPlayer(EnIshi* this, PlayState* play) {
 }
 
 void EnIshi_SetupThrown(EnIshi* this) {
-    f32 sp24;
+    f32 randomStart;
 
     this->actor.velocity.x = Math_SinS(this->actor.world.rot.y) * this->actor.speed;
     this->actor.velocity.z = Math_CosS(this->actor.world.rot.y) * this->actor.speed;
     if (!ENISHI_GET_BIG_FLAG(&this->actor)) {
-        sp24 = Rand_ZeroOne() - 0.9f;
-        D_8095F690 = sp24 * 11000.0f;
-        D_8095F694 = ((Rand_ZeroOne() - 0.5f) * 3000.0f) * (fabsf(sp24) + 0.1f);
+        randomStart = Rand_ZeroOne() - 0.9f;
+        sIshiThrownXRotationVel = randomStart * 11000.0f;
+        sIshiThrownYRotationVel = ((Rand_ZeroOne() - 0.5f) * 3000.0f) * (fabsf(randomStart) + 0.1f);
     } else {
-        sp24 = Rand_ZeroOne() - 0.5f;
-        D_8095F690 = sp24 * 6000.0f;
-        D_8095F694 = ((Rand_ZeroOne() - 0.5f) * 1200.0f) * (fabsf(sp24) + 0.5f);
+        randomStart = Rand_ZeroOne() - 0.5f;
+        sIshiThrownXRotationVel = randomStart * 6000.0f;
+        sIshiThrownYRotationVel = ((Rand_ZeroOne() - 0.5f) * 1200.0f) * (fabsf(randomStart) + 0.5f);
     }
     this->actor.colChkInfo.mass = 200;
     this->thrownTimer = 100;
@@ -600,7 +607,7 @@ void EnIshi_SetupThrown(EnIshi* this) {
 void EnIshi_Thrown(EnIshi* this, PlayState* play) {
     s32 pad;
     s32 isBig = ENISHI_GET_BIG_FLAG(&this->actor);
-    s16 temp_s0;
+    s16 pad2;
     s32 i;
     s16 spashAngle;
     Vec3f pos;
@@ -637,6 +644,7 @@ void EnIshi_Thrown(EnIshi* this, PlayState* play) {
         return;
     }
 
+    // contact water
     if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER_TOUCH) {
         if (isBig == false) {
             pos.x = this->actor.world.pos.x;
@@ -664,8 +672,8 @@ void EnIshi_Thrown(EnIshi* this, PlayState* play) {
         this->actor.velocity.z *= 0.12f;
         this->actor.gravity *= 0.5f;
 
-        D_8095F690 >>= 2;
-        D_8095F694 >>= 2;
+        sIshiThrownXRotationVel >>= 2;
+        sIshiThrownYRotationVel >>= 2;
 
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EV_DIVE_INTO_WATER_L);
         this->actor.bgCheckFlags &= ~BGCHECKFLAG_WATER_TOUCH;
@@ -675,8 +683,8 @@ void EnIshi_Thrown(EnIshi* this, PlayState* play) {
     EnIshi_ApplyGravity(this);
     EnIshi_SetVelocity(&this->actor.velocity, sIshiVelocities[isBig]);
     Actor_UpdatePos(&this->actor);
-    this->actor.shape.rot.x += D_8095F690;
-    this->actor.shape.rot.y += D_8095F694;
+    this->actor.shape.rot.x += sIshiThrownXRotationVel;
+    this->actor.shape.rot.y += sIshiThrownYRotationVel;
     Actor_UpdateBgCheckInfo(play, &this->actor, 7.5f, 35.0f, 0.0f,
                             UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40 |
                                 UPDBGCHECKINFO_FLAG_80);
@@ -739,7 +747,7 @@ void EnIshi_DrawGameplayKeepSmallRock(EnIshi* this, PlayState* play) {
 
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
-        alpha = (1300.0f - this->actor.projectedPos.z) * 2.55f; // what
+        alpha = (1300.0f - this->actor.projectedPos.z) * 2.55f; // lower alpha as the object falls toward the core
 
         MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (s32) alpha);
@@ -763,6 +771,7 @@ void EnIshi_DrawGameplayKeepBoulder(EnIshi* this, PlayState* play) {
         MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
         gSPDisplayList(POLY_OPA_DISP++, gameplay_field_keep_DL_0061E8);
+
     } else if (this->actor.projectedPos.z < 2250.0f) {
         f32 alpha = (2250.0f - this->actor.projectedPos.z) * 2.55f;
 
@@ -774,6 +783,7 @@ void EnIshi_DrawGameplayKeepBoulder(EnIshi* this, PlayState* play) {
         MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (s32)alpha);
         gSPDisplayList(POLY_XLU_DISP++, gameplay_field_keep_DL_0061E8);
+
     } else {
         this->actor.shape.shadowAlpha = 0;
     }
