@@ -22,22 +22,22 @@ void func_8095D804(Actor* thisx, PlayState* play);
 void func_8095DABC(Actor* thisx, PlayState* play);
 void func_8095DDA8(EnIshi* this, PlayState* play);
 void func_8095DE9C(EnIshi* this, PlayState* play);
-void func_8095E5AC(EnIshi* this);
-void func_8095E5C0(EnIshi* this, PlayState* play);
+void EnIshi_SetupWaitForObject(EnIshi* this);
+void EnIshi_WaitForObject(EnIshi* this, PlayState* play);
 void func_8095E64C(EnIshi* this);
 void func_8095E660(EnIshi* this, PlayState* play);
-void func_8095E934(EnIshi* this);
-void func_8095E95C(EnIshi* this, PlayState* play);
-void func_8095EA70(EnIshi* this);
-void func_8095EBDC(EnIshi* this, PlayState* play);
+void EnIshi_SetupHeldByPlayer(EnIshi* this);
+void EnIshi_HeldByPlayer(EnIshi* this, PlayState* play);
+void EnIshi_SetupThrown(EnIshi* this);
+void EnIshi_Thrown(EnIshi* this, PlayState* play);
 void func_8095F060(EnIshi* this);
 void func_8095F0A4(EnIshi* this, PlayState* play);
 void func_8095F180(EnIshi* this);
 void func_8095F194(EnIshi* this, PlayState* play);
 void func_8095F210(EnIshi* this, PlayState* play);
 void func_8095F36C(EnIshi* this, PlayState* play);
-void func_8095F61C(Actor* thisx, PlayState* play);
-void func_8095F654(Actor* thisx, PlayState* play);
+void EnIshi_DrawBoulder(Actor* thisx, PlayState* play);
+void EnIshi_DrawSmallRock(Actor* thisx, PlayState* play);
 
 static s16 D_8095F690 = 0;
 
@@ -55,7 +55,7 @@ ActorProfile En_Ishi_Profile = {
     /**/ NULL,
 };
 
-static f32 D_8095F6B8[] = { 0.1f, 0.4f };
+static f32 sIshiSizes[] = { 0.1f, 0.4f };
 
 static f32 D_8095F6C0[] = { 58.0f, 80.0f };
 
@@ -139,33 +139,34 @@ static InitChainEntry sInitChain[][5] = {
     },
 };
 
-static u16 D_8095F7AC[] = { NA_SE_PL_PULL_UP_ROCK, NA_SE_PL_PULL_UP_BIGROCK };
+static u16 sIshiPullRockSfx[] = { NA_SE_PL_PULL_UP_ROCK, NA_SE_PL_PULL_UP_BIGROCK };
 
 static EnIshiUnkFunc D_8095F7B0[] = { func_8095F210, func_8095F36C };
 
-void func_8095D6E0(Actor* thisx, PlayState* play) {
+void EnIshi_InitCollider(Actor* thisx, PlayState* play) {
     EnIshi* this = (EnIshi*)thisx;
 
     Collider_InitCylinder(play, &this->collider);
-    Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit[ENISHI_GET_1(&this->actor)]);
+    Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit[ENISHI_GET_BIG_FLAG(&this->actor)]);
     Collider_UpdateCylinder(&this->actor, &this->collider);
 }
 
-s32 func_8095D758(EnIshi* this, PlayState* play, f32 arg2) {
-    Vec3f sp24;
+// return true/false if hte bush is able to snap to the floor and is above BGCHECK_Y_MIN
+s32 EnIshi_SnapToFloor(EnIshi* this, PlayState* play, f32 yOffset) {
+    Vec3f pos;
     s32 bgId;
 
-    sp24.x = this->actor.world.pos.x;
-    sp24.y = this->actor.world.pos.y + 30.0f;
-    sp24.z = this->actor.world.pos.z;
-    this->actor.floorHeight =
-        BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &bgId, &this->actor, &sp24);
+    pos.x = this->actor.world.pos.x;
+    pos.y = this->actor.world.pos.y + 30.0f;
+    pos.z = this->actor.world.pos.z;
+    this->actor.floorHeight = BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &bgId, &this->actor, &pos);
     if (this->actor.floorHeight > BGCHECK_Y_MIN) {
-        this->actor.world.pos.y = this->actor.floorHeight + arg2;
+        this->actor.world.pos.y = this->actor.floorHeight + yOffset;
         Math_Vec3f_Copy(&this->actor.home.pos, &this->actor.world.pos);
         return true;
+    } else {
+      return false;
     }
-    return false;
 }
 
 void func_8095D804(Actor* thisx, PlayState* play) {
@@ -176,13 +177,13 @@ void func_8095D804(Actor* thisx, PlayState* play) {
     Vec3f spC4;
     Vec3f spB8;
 
-    if (!ENISHI_GET_8(&this->actor)) {
+    if (!ENISHI_GET_USE_OBJECT(&this->actor)) {
         phi_s4 = gameplay_field_keep_DL_0066B0;
     } else {
         phi_s4 = gSmallRockDL;
     }
 
-    objectId = sObjectIds[ENISHI_GET_8(&this->actor)];
+    objectId = sObjectIds[ENISHI_GET_USE_OBJECT(&this->actor)];
 
     for (i = 0; i < ARRAY_COUNT(D_8095F74C); i++) {
         spB8.x = ((Rand_ZeroOne() - 0.5f) * 8.0f) + this->actor.world.pos.x;
@@ -293,7 +294,7 @@ void func_8095DE9C(EnIshi* this, PlayState* play) {
 }
 
 void func_8095DF90(EnIshi* this, PlayState* play) {
-    if (!ENISHI_GET_1(&this->actor) && !ENISHI_GET_100(&this->actor)) {
+    if (!ENISHI_GET_BIG_FLAG(&this->actor) && !ENISHI_GET_100(&this->actor)) {
         Item_DropCollectibleRandom(play, NULL, &this->actor.world.pos, ENISHI_GET_F0(&this->actor) * 0x10);
     }
 }
@@ -332,19 +333,20 @@ void func_8095DFF0(EnIshi* this, PlayState* play) {
     }
 }
 
-void func_8095E14C(EnIshi* this) {
+void EnIshi_ApplyGravity(EnIshi* this) {
     this->actor.velocity.y += this->actor.gravity;
     if (this->actor.velocity.y < this->actor.terminalVelocity) {
         this->actor.velocity.y = this->actor.terminalVelocity;
     }
 }
 
-void func_8095E180(Vec3f* arg0, f32 arg1) {
-    arg1 += ((Rand_ZeroOne() * 0.2f) - 0.1f) * arg1;
+// scale random velocity?
+void EnIshi_SetVelocity(Vec3f* vel, f32 scale) {
+    scale += ((Rand_ZeroOne() * 0.2f) - 0.1f) * scale;
 
-    arg0->x -= arg0->x * arg1;
-    arg0->y -= arg0->y * arg1;
-    arg0->z -= arg0->z * arg1;
+    vel->x -= vel->x * scale;
+    vel->y -= vel->y * scale;
+    vel->z -= vel->z * scale;
 }
 
 void func_8095E204(EnIshi* this, PlayState* play) {
@@ -377,34 +379,35 @@ s32 EnIshi_IsUnderwater(EnIshi* this, PlayState* play) {
 void EnIshi_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnIshi* this = (EnIshi*)thisx;
-    s32 sp34 = ENISHI_GET_1(&this->actor);
-    s32 sp30 = ENISHI_GET_4(&this->actor);
+    s32 isBig = ENISHI_GET_BIG_FLAG(&this->actor);
+    s32 ignoreSnapToFloor = ENISHI_GET_4(&this->actor);
 
-    if ((sp34 == 0) && (sp30 != 0)) {
-        this->unk_197 |= 2;
+    if ((isBig == false) && (ignoreSnapToFloor != 0)) {
+        this->flags |= 2; // TODO
     }
 
-    Actor_ProcessInitChain(&this->actor, sInitChain[sp34]);
+    Actor_ProcessInitChain(&this->actor, sInitChain[isBig]);
 
     if (play->csCtx.state != CS_STATE_IDLE) {
         this->actor.cullingVolumeDistance += 1000.0f;
     }
 
-    if ((this->actor.shape.rot.y == 0) && !(this->unk_197 & 2)) {
+    // randomize y rotation
+    if ((this->actor.shape.rot.y == 0) && !(this->flags & 2)) {
         this->actor.shape.rot.y = this->actor.world.rot.y = Rand_Next() >> 0x10;
     }
 
-    Actor_SetScale(&this->actor, D_8095F6B8[sp34]);
-    func_8095D6E0(&this->actor, play);
+    Actor_SetScale(&this->actor, sIshiSizes[isBig]);
+    EnIshi_InitCollider(&this->actor, play);
 
-    if ((sp34 == 1) && Flags_GetSwitch(play, ENISHI_GET_FLAG(&this->actor))) {
+    if (( isBig == 1) && Flags_GetSwitch(play, ENISHI_GET_FLAG(&this->actor))) {
         Actor_Kill(&this->actor);
         return;
     }
 
     CollisionCheck_SetInfo(&this->actor.colChkInfo, NULL, &sColChkInfoInit);
 
-    if (sp34 == 1) {
+    if ( isBig  == true) {
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
         this->actor.shape.shadowScale = 2.3f;
     } else {
@@ -412,24 +415,24 @@ void EnIshi_Init(Actor* thisx, PlayState* play) {
         this->actor.shape.shadowAlpha = 160;
     }
 
-    this->actor.shape.yOffset = D_8095F6C0[sp34];
+    this->actor.shape.yOffset = D_8095F6C0[isBig];
 
-    if ((sp30 == 0) && !func_8095D758(this, play, 0)) {
+    if ((ignoreSnapToFloor == 0) && !EnIshi_SnapToFloor(this, play, 0)) {
         Actor_Kill(&this->actor);
         return;
     }
 
     if (EnIshi_IsUnderwater(this, play)) {
-        this->unk_197 |= 1;
+        this->flags |= 1;
     }
 
-    this->objectSlot = Object_GetSlot(&play->objectCtx, sObjectIds[ENISHI_GET_8(&this->actor)]);
+    this->objectSlot = Object_GetSlot(&play->objectCtx, sObjectIds[ENISHI_GET_USE_OBJECT(&this->actor)]);
     if (this->objectSlot <= OBJECT_SLOT_NONE) {
         Actor_Kill(&this->actor);
         return;
     }
 
-    func_8095E5AC(this);
+    EnIshi_SetupWaitForObject(this);
 }
 
 void EnIshi_Destroy(Actor* thisx, PlayState* play2) {
@@ -439,40 +442,43 @@ void EnIshi_Destroy(Actor* thisx, PlayState* play2) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-void func_8095E5AC(EnIshi* this) {
-    this->actionFunc = func_8095E5C0;
+
+// While never used in vanilla, the code supports loading assets from object_ishi instead of gameplay_keep
+void EnIshi_SetupWaitForObject(EnIshi* this) {
+    this->actionFunc = EnIshi_WaitForObject;
 }
 
-void func_8095E5C0(EnIshi* this, PlayState* play) {
+void EnIshi_WaitForObject(EnIshi* this, PlayState* play) {
     if (Object_IsLoaded(&play->objectCtx, this->objectSlot)) {
         this->actor.objectSlot = this->objectSlot;
         this->actor.flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED;
-        if (!ENISHI_GET_8(&this->actor)) {
-            this->actor.draw = func_8095F61C;
+        if (!ENISHI_GET_USE_OBJECT(&this->actor)) {
+            this->actor.draw = EnIshi_DrawBoulder;
         } else {
-            this->actor.draw = func_8095F654;
+            this->actor.draw = EnIshi_DrawSmallRock;
         }
         func_8095E64C(this);
     }
 }
 
+// idle
 void func_8095E64C(EnIshi* this) {
     this->actionFunc = func_8095E660;
 }
 
 void func_8095E660(EnIshi* this, PlayState* play) {
     s32 pad;
-    s32 sp38 = ENISHI_GET_1(&this->actor);
-    s32 sp34 = (this->collider.base.acFlags & AC_HIT) != 0;
-    s32 sp30 = this->unk_197 & 2;
+    s32 isBig = ENISHI_GET_BIG_FLAG(&this->actor);
+    s32 activeCollider = (this->collider.base.acFlags & AC_HIT) != 0;
+    s32 flag2 = this->flags & 2;
 
-    if (sp34) {
+    if (activeCollider) {
         this->collider.base.acFlags &= ~AC_HIT;
     }
 
-    if (Actor_HasParent(&this->actor, play)) {
-        func_8095E934(this);
-        SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, D_8095F7AC[sp38]);
+    if (Actor_HasParent(&this->actor, play)) { // has been picked up by player
+        EnIshi_SetupHeldByPlayer(this);
+        SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, sIshiPullRockSfx[isBig]);
         if (ENISHI_GET_2(&this->actor)) {
             func_8095E204(this, play);
         }
@@ -480,29 +486,30 @@ void func_8095E660(EnIshi* this, PlayState* play) {
         return;
     }
 
-    if (sp34 && (sp38 == 0) && (this->collider.elem.acHitElem->atDmgInfo.dmgFlags & 0x508)) {
-        if (sp30 != 0) {
+    // huh? cutscene?
+    if (activeCollider && (isBig == 0) && (this->collider.elem.acHitElem->atDmgInfo.dmgFlags & 0x508)) {
+        if (flag2 != 0) {
             func_8095DFF0(this, play);
             func_8095F060(this);
             return;
         }
         func_8095DF90(this, play);
-        SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, D_8095F6D4[sp38], D_8095F6D0[sp38]);
-        D_8095F6D8[sp38](&this->actor, play);
-        D_8095F6E0[sp38](this, play);
+        SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, D_8095F6D4[isBig], D_8095F6D0[isBig]);
+        D_8095F6D8[isBig](&this->actor, play);
+        D_8095F6E0[isBig](this, play);
         Actor_Kill(&this->actor);
         return;
     }
 
-    if (sp34) {
+    if (activeCollider) {
         this->unk_195 = 5;
     }
 
-    if ((this->actor.xzDistToPlayer < 600.0f) || (sp30 != 0)) {
+    if ((this->actor.xzDistToPlayer < 600.0f) || (flag2 != 0)) {
         if (this->unk_195 > 0) {
             this->unk_195--;
             if (this->unk_195 == 0) {
-                this->collider.base.colMaterial = sCylinderInit[sp38].base.colMaterial;
+                this->collider.base.colMaterial = sCylinderInit[isBig].base.colMaterial;
             } else {
                 this->collider.base.colMaterial = COL_MATERIAL_NONE;
             }
@@ -511,8 +518,8 @@ void func_8095E660(EnIshi* this, PlayState* play) {
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 
-        if ((this->actor.xzDistToPlayer < 90.0f) && (sp30 == 0)) {
-            if (sp38 == 1) {
+        if ((this->actor.xzDistToPlayer < 90.0f) && (flag2 == 0)) {
+            if (isBig == true) {
                 Actor_OfferGetItem(&this->actor, play, GI_NONE, 80.0f, 20.0f);
             } else {
                 Actor_OfferGetItem(&this->actor, play, GI_NONE, 50.0f, 10.0f);
@@ -521,44 +528,47 @@ void func_8095E660(EnIshi* this, PlayState* play) {
     }
 }
 
-void func_8095E934(EnIshi* this) {
-    this->actionFunc = func_8095E95C;
+void EnIshi_SetupHeldByPlayer(EnIshi* this) {
+    this->actionFunc = EnIshi_HeldByPlayer;
     this->actor.room = -1;
+    // huh? is there someplace in the game where the camera can gain enough distance
+    // where the player is in camera in the distance, and you can see it dissapear?
     this->actor.flags |= ACTOR_FLAG_UPDATE_CULLING_DISABLED;
 }
 
-void func_8095E95C(EnIshi* this, PlayState* play) {
+void EnIshi_HeldByPlayer(EnIshi* this, PlayState* play) {
     s32 pad;
-    Vec3f sp30;
+    Vec3f pos;
     s32 bgId;
 
+    // player has tossed us
     if (Actor_HasNoParent(&this->actor, play)) {
         this->actor.room = play->roomCtx.curRoom.num;
-        if (ENISHI_GET_1(&this->actor) == 1) {
+        if (ENISHI_GET_BIG_FLAG(&this->actor) == true) {
             Flags_SetSwitch(play, ENISHI_GET_FLAG(&this->actor));
         }
-        func_8095EA70(this);
-        func_8095E14C(this);
-        func_8095E180(&this->actor.velocity, D_8095F6C8[ENISHI_GET_1(&this->actor)]);
+        EnIshi_SetupThrown(this);
+        EnIshi_ApplyGravity(this);
+        EnIshi_SetVelocity(&this->actor.velocity, D_8095F6C8[ENISHI_GET_BIG_FLAG(&this->actor)]);
         Actor_UpdatePos(&this->actor);
         Actor_UpdateBgCheckInfo(play, &this->actor, 7.5f, 35.0f, 0.0f,
                                 UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40 |
                                     UPDBGCHECKINFO_FLAG_80);
-    } else {
-        sp30.x = this->actor.world.pos.x;
-        sp30.y = this->actor.world.pos.y + 20.0f;
-        sp30.z = this->actor.world.pos.z;
+    } else { // still being held, follow player
+        pos.x = this->actor.world.pos.x;
+        pos.y = this->actor.world.pos.y + 20.0f;
+        pos.z = this->actor.world.pos.z;
         this->actor.floorHeight =
-            BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &bgId, &this->actor, &sp30);
+            BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &bgId, &this->actor, &pos);
     }
 }
 
-void func_8095EA70(EnIshi* this) {
+void EnIshi_SetupThrown(EnIshi* this) {
     f32 sp24;
 
     this->actor.velocity.x = Math_SinS(this->actor.world.rot.y) * this->actor.speed;
     this->actor.velocity.z = Math_CosS(this->actor.world.rot.y) * this->actor.speed;
-    if (!ENISHI_GET_1(&this->actor)) {
+    if (!ENISHI_GET_BIG_FLAG(&this->actor)) {
         sp24 = Rand_ZeroOne() - 0.9f;
         D_8095F690 = sp24 * 11000.0f;
         D_8095F694 = ((Rand_ZeroOne() - 0.5f) * 3000.0f) * (fabsf(sp24) + 0.1f);
@@ -569,12 +579,12 @@ void func_8095EA70(EnIshi* this) {
     }
     this->actor.colChkInfo.mass = 200;
     this->unk_194 = 100;
-    this->actionFunc = func_8095EBDC;
+    this->actionFunc = EnIshi_Thrown;
 }
 
-void func_8095EBDC(EnIshi* this, PlayState* play) {
+void EnIshi_Thrown(EnIshi* this, PlayState* play) {
     s32 pad;
-    s32 sp70 = ENISHI_GET_1(&this->actor);
+    s32 isBig = ENISHI_GET_BIG_FLAG(&this->actor);
     s16 temp_s0;
     s32 i;
     s16 phi_s0;
@@ -589,14 +599,14 @@ void func_8095EBDC(EnIshi* this, PlayState* play) {
 
     if ((this->actor.bgCheckFlags & (BGCHECKFLAG_GROUND | BGCHECKFLAG_WALL)) || temp_v0 || (this->unk_194 <= 0)) {
         func_8095DF90(this, play);
-        D_8095F6D8[sp70](&this->actor, play);
+        D_8095F6D8[isBig](&this->actor, play);
 
         if (!(this->actor.bgCheckFlags & BGCHECKFLAG_WATER)) {
-            SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, D_8095F6D4[sp70], D_8095F6D0[sp70]);
-            D_8095F6E0[sp70](this, play);
+            SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, D_8095F6D4[isBig], D_8095F6D0[isBig]);
+            D_8095F6E0[isBig](this, play);
         }
 
-        if (sp70 == 1) {
+        if (isBig == 1) {
             s16 quakeIndex = Quake_Request(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
 
             Quake_SetSpeed(quakeIndex, 17232);
@@ -611,7 +621,7 @@ void func_8095EBDC(EnIshi* this, PlayState* play) {
     }
 
     if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER_TOUCH) {
-        if (sp70 == 0) {
+        if (isBig == 0) {
             sp58.x = this->actor.world.pos.x;
             sp58.y = this->actor.world.pos.y + this->actor.depthInWater;
             sp58.z = this->actor.world.pos.z;
@@ -645,8 +655,8 @@ void func_8095EBDC(EnIshi* this, PlayState* play) {
     }
 
     Math_StepToF(&this->actor.shape.yOffset, 0.0f, 2.0f);
-    func_8095E14C(this);
-    func_8095E180(&this->actor.velocity, D_8095F6C8[sp70]);
+    EnIshi_ApplyGravity(this);
+    EnIshi_SetVelocity(&this->actor.velocity, D_8095F6C8[isBig]);
     Actor_UpdatePos(&this->actor);
     this->actor.shape.rot.x += D_8095F690;
     this->actor.shape.rot.y += D_8095F694;
@@ -666,7 +676,7 @@ void func_8095F060(EnIshi* this) {
 
 void func_8095F0A4(EnIshi* this, PlayState* play) {
     s32 pad;
-    s32 sp28 = ENISHI_GET_1(&this->actor);
+    s32 sp28 = ENISHI_GET_BIG_FLAG(&this->actor);
 
     if (CutsceneManager_IsNext(this->actor.csId)) {
         CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
@@ -702,7 +712,7 @@ void func_8095F210(EnIshi* this, PlayState* play) {
     s32 pad;
     s32 sp28;
 
-    if ((this->actor.projectedPos.z <= 1200.0f) || ((this->unk_197 & 1) && (this->actor.projectedPos.z < 1300.0f))) {
+    if ((this->actor.projectedPos.z <= 1200.0f) || ((this->flags & 1) && (this->actor.projectedPos.z < 1300.0f))) {
         Gfx_DrawDListOpa(play, gameplay_field_keep_DL_0066B0);
         return;
     }
@@ -727,7 +737,7 @@ void func_8095F36C(EnIshi* this, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    if ((this->actor.projectedPos.z <= 2150.0f) || ((this->unk_197 & 1) && (this->actor.projectedPos.z < 2250.0f))) {
+    if ((this->actor.projectedPos.z <= 2150.0f) || ((this->flags & 1) && (this->actor.projectedPos.z < 2250.0f))) {
         this->actor.shape.shadowAlpha = 160;
 
         Gfx_SetupDL25_Opa(play->state.gfxCtx);
@@ -754,12 +764,12 @@ void func_8095F36C(EnIshi* this, PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_8095F61C(Actor* thisx, PlayState* play) {
+void EnIshi_DrawBoulder(Actor* thisx, PlayState* play) {
     EnIshi* this = (EnIshi*)thisx;
 
-    D_8095F7B0[ENISHI_GET_1(&this->actor)](this, play);
+    D_8095F7B0[ENISHI_GET_BIG_FLAG(&this->actor)](this, play);
 }
 
-void func_8095F654(Actor* thisx, PlayState* play) {
+void EnIshi_DrawSmallRock(Actor* thisx, PlayState* play) {
     Gfx_DrawDListOpa(play, gSmallRockDL);
 }
