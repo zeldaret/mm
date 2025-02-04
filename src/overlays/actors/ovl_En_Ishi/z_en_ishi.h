@@ -29,7 +29,7 @@ typedef void (*EnIshiSpawnDebrisFunc)(Actor*, PlayState*);
 #define ISHI_FLAG_UNDERWATER    (1 << 0)
 #define ISHI_FLAG_CUTSCENE_ROCK (1 << 1)
 
-// if y is zero, y rotation gets randomized
+// if yRot is zero, y rotation gets randomized
 #define ISHI_RANDOM_ROTATION_FLAG 0
 
 typedef struct EnIshi {
