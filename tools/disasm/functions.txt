@@ -7766,7 +7766,7 @@
     0x8095DDA8:("EnIshi_SpawnDustSmallRock",),
     0x8095DE9C:("EnIshi_SpawnDustBoulder",),
     0x8095DF90:("EnIshi_DropItem",),
-    0x8095DFF0:("func_8095DFF0",),
+    0x8095DFF0:("EnIshi_DropCollectable",),
     0x8095E14C:("EnIshi_ApplyGravity",),
     0x8095E180:("EnIshi_SetVelocity",),
     0x8095E204:("EnIshi_SpawnBugs",),
