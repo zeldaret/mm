@@ -215,6 +215,7 @@ void EnIshi_SpawnDebrisSmallRock(Actor* thisx, PlayState* play) {
     }
 }
 
+// Spawn fragments after the boulder breaks apart.
 void EnIshi_SpawnDebrisBoulder(Actor* thisx, PlayState* play) {
     EnIshi* this = (EnIshi*)thisx;
     Vec3f vel;
@@ -328,7 +329,8 @@ void EnIshi_DropCollectable(EnIshi* this, PlayState* play) {
         item = Item_DropCollectible(play, &this->actor.world.pos,
                                     collectableItem00Id | (ENISHI_GET_COLLECTABLE_FLAG(&this->actor) << 8));
         if (item != NULL) {
-            // random direction calculations?
+            // random direction/rotation calculations?
+            // none of the other Item_DropCollectible rotation changes are this complicated
             Matrix_Push();
             Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
             Matrix_RotateXS(this->actor.shape.rot.x, MTXMODE_APPLY);
@@ -389,8 +391,9 @@ s32 EnIshi_IsUnderwater(EnIshi* this, PlayState* play) {
                                 &waterBox, &bgId) &&
         (this->actor.world.pos.y < waterSurface)) {
         return true;
+    } else {
+        return false;
     }
-    return false;
 }
 
 void EnIshi_Init(Actor* thisx, PlayState* play) {
@@ -531,8 +534,10 @@ void EnIshi_Idle(EnIshi* this, PlayState* play) {
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 
+        // pick up mechanic
         if ((this->actor.xzDistToPlayer < 90.0f) && (!cutsceneRock)) {
             if (isBig == true) {
+                // Silver can only be picked up by goron form
                 Actor_OfferGetItem(&this->actor, play, GI_NONE, 80.0f, 20.0f);
             } else {
                 Actor_OfferGetItem(&this->actor, play, GI_NONE, 50.0f, 10.0f);
@@ -570,6 +575,7 @@ void EnIshi_HeldByPlayer(EnIshi* this, PlayState* play) {
         pos.x = this->actor.world.pos.x;
         pos.y = this->actor.world.pos.y + 20.0f;
         pos.z = this->actor.world.pos.z;
+        // why does it track floor height? it uses bgcollision to detect floor hit in Thrown
         this->actor.floorHeight =
             BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &bgId, &this->actor, &pos);
     }
@@ -692,8 +698,8 @@ void EnIshi_SetupCutsceneExplode(EnIshi* this) {
 
 void EnIshi_CutsceneExplode(EnIshi* this, PlayState* play) {
     s32 pad;
-    // weirdly, you shouldnt be able to get here as silver boulder,
-    // it's explicitly ignored in EnIshi_Idle
+    // Weirdly, you shouldnt be able to get here as silver boulder,
+    // it's explicitly ignored in EnIshi_Idle, the only path here
     s32 isBig = ENISHI_GET_BIG_FLAG(&this->actor);
 
     if (CutsceneManager_IsNext(this->actor.csId)) {
@@ -730,8 +736,6 @@ void EnIshi_Update(Actor* thisx, PlayState* play) {
 void EnIshi_DrawGameplayKeepSmallRock(EnIshi* this, PlayState* play) {
     s32 pad;
     s32 alpha;
-
-    // both gFieldSmallRockOpaDL and gFieldSmallRockXluDL seem identical
 
     if ((this->actor.projectedPos.z <= 1200.0f) ||
         ((this->flags & ISHI_FLAG_UNDERWATER) && (this->actor.projectedPos.z < 1300.0f))) {
