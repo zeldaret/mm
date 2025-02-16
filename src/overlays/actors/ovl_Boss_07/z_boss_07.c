@@ -17,7 +17,6 @@
  * - An invisible "battle initializer" that spawns Majora's Mask and the "battle handler", resets the effects, etc.
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_boss_07.h"
 #include "z64shrink_window.h"
 #include "attributes.h"

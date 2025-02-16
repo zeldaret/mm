@@ -1,4 +1,3 @@
-#include "prevent_bss_reordering.h"
 #include "z64bgcheck.h"
 
 #include "libc64/fixed_point.h"
@@ -8,6 +7,8 @@
 #include "fault.h"
 #include "vt.h"
 #include "z64actor.h"
+
+#pragma increment_block_number "n64-us:128"
 
 #define DYNA_RAYCAST_FLOORS 1
 #define DYNA_RAYCAST_WALLS 2
