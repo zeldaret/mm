@@ -319,9 +319,10 @@ s32 func_80B781DC(ObjUm* this, EnHorse* bandit1, EnHorse* bandit2, PlayState* pl
                         phi_f20 *= -1.0f;
                     }
                     phi_s2 = D_80B7C164[i].unk_10;
+
+                    //! FAKE:
+                    if (1) {}
                 }
-                //! FAKE:
-                ;
             }
         }
     }

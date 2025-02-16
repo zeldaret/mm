@@ -262,12 +262,12 @@ void EnTimeTag_Diary_Wait(EnTimeTag* this, PlayState* play) {
                 Message_StartTextbox(play, 0x122B, &this->actor);
             }
             TIMETAG_DIARY_TIMER(&this->actor) = 1;
+
+            //! FAKE:
+            if (1) {}
         } else {
             // unable to read Zora script
             Message_StartTextbox(play, 0x122A, &this->actor);
-
-            //! FAKE: https://decomp.me/scratch/AHRNe
-            if (0) {}
 
             ((EnElf*)GET_PLAYER(play)->tatlActor)->unk_264 |= 4;
             Actor_ChangeFocus(&this->actor, play, GET_PLAYER(play)->tatlActor);

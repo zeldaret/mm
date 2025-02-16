@@ -305,9 +305,7 @@ void EnTest6_DrawAmmoDropRupee(EnTest6* this, PlayState* play, SoTCsAmmoDrops* a
     if (gfxHead != NULL) {
         Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
-        //! FAKE: & 0xFFFF
-        gDPSetTileSize(gfx++, 1, hilite->h.x1 & 0xFFFF, hilite->h.y1 & 0xFFFF, (hilite->h.x1 + 60) & 0xFFFF,
-                       (hilite->h.y1 + 60) & 0xFFFF);
+        gDPSetHilite1Tile(gfx++, 1, hilite, 0x10, 0x10);
         gSPEndDisplayList(gfx++);
 
         gSPSegment(POLY_OPA_DISP++, 0x07, gfxHead);
@@ -565,9 +563,6 @@ void EnTest6_InvertedSoTCutscene(EnTest6* this, PlayState* play) {
             }
 
             for (i = 0; i < SOTCS_INV_NUM_CLOCKS; i++) {
-                //! FAKE:
-                if (player != NULL) {}
-
                 clockYaw += 0x10000 / SOTCS_INV_NUM_CLOCKS;
                 this->invSoTClockPos[i].x = player->actor.world.pos.x + (Math_SinS(clockYaw) * this->clockDist);
                 this->invSoTClockPos[i].y = player->actor.world.pos.y;
@@ -669,6 +664,9 @@ void EnTest6_InvertedSoTCutscene(EnTest6* this, PlayState* play) {
 
     // Update white screen
     if (this->screenFillAlpha != 0) {
+        //! FAKE:
+        if (1) {}
+
         EnTest6_EnableWhiteFillScreen(play, this->screenFillAlpha * 0.05f);
         subCam->fov += (mainCam->fov - subCam->fov) * 0.05f;
         this->screenFillAlpha++;

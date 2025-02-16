@@ -43,10 +43,11 @@ void EffectBlure_AddVertex(EffectBlure* this, Vec3f* p1, Vec3f* p2) {
             MtxF sp50;
             Vec3f sp44;
             Vec3f sp38;
+            EffectBlureElement* prev = elem - 1;
 
-            sp16C.x = ((f32)(elem - 1)->p2.x + (f32)(elem - 1)->p1.x) / 2.0f;
-            sp16C.y = ((f32)(elem - 1)->p2.y + (f32)(elem - 1)->p1.y) / 2.0f;
-            sp16C.z = ((f32)(elem - 1)->p2.z + (f32)(elem - 1)->p1.z) / 2.0f;
+            sp16C.x = ((f32)prev->p2.x + (f32)prev->p1.x) / 2.0f;
+            sp16C.y = ((f32)prev->p2.y + (f32)prev->p1.y) / 2.0f;
+            sp16C.z = ((f32)prev->p2.z + (f32)prev->p1.z) / 2.0f;
             sp160.x = (p1->x + p2->x) / 2.0f;
             sp160.y = (p1->y + p2->y) / 2.0f;
             sp160.z = (p1->z + p2->z) / 2.0f;

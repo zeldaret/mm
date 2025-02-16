@@ -1698,9 +1698,8 @@ PlayerExplosive Player_GetExplosiveHeld(Player* player) {
 PlayerSword Player_SwordFromIA(Player* player, PlayerItemAction itemAction) {
     PlayerSword sword = PLAYER_SWORD_KOKIRI;
 
-    //! FAKE:
     if ((itemAction == PLAYER_IA_LAST_USED) ||
-        ((sword = GET_SWORD_FROM_IA(itemAction), (sword > PLAYER_SWORD_NONE)) && (sword < PLAYER_SWORD_MAX))) {
+        (sword = GET_SWORD_FROM_IA(itemAction), ((sword > PLAYER_SWORD_NONE) && (sword < PLAYER_SWORD_MAX)))) {
         return sword;
     }
 
@@ -3817,29 +3816,28 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
             }
         }
     } else if (limbIndex == PLAYER_LIMB_HEAD) {
-        //! FAKE:
-        if (((*dList1 != NULL) && ((((void)0, player->currentMask)) != (((void)0, PLAYER_MASK_NONE)))) &&
+        if (((*dList1 != NULL) && ((u32)player->currentMask != PLAYER_MASK_NONE)) &&
             (((player->transformation == PLAYER_FORM_HUMAN) &&
               ((player->skelAnime.animation != &gPlayerAnim_cl_setmask) || (player->skelAnime.curFrame >= 12.0f))) ||
              ((((player->transformation != PLAYER_FORM_HUMAN) && (player->currentMask >= PLAYER_MASK_FIERCE_DEITY)) &&
                ((player->transformation + PLAYER_MASK_FIERCE_DEITY) != player->currentMask)) &&
               (player->skelAnime.curFrame >= 10.0f)))) {
             if (func_80127438(play, player, player->currentMask)) {
-                s32 maskMinusOne = ((void)0, player->currentMask) - 1;
+                s32 maskMinusOne = player->currentMask - 1;
 
                 OPEN_DISPS(play->state.gfxCtx);
 
-                if (((void)0, player->currentMask) == PLAYER_MASK_COUPLE) {
+                if (player->currentMask == PLAYER_MASK_COUPLE) {
                     Player_DrawCouplesMask(play, player);
-                } else if (((void)0, player->currentMask) == PLAYER_MASK_CIRCUS_LEADER) {
+                } else if (player->currentMask == PLAYER_MASK_CIRCUS_LEADER) {
                     Player_DrawCircusLeadersMask(play, player);
-                } else if (((void)0, player->currentMask) == PLAYER_MASK_BLAST) {
+                } else if (player->currentMask == PLAYER_MASK_BLAST) {
                     Player_DrawBlastMask(play, player);
-                } else if (((void)0, player->currentMask) == PLAYER_MASK_BUNNY) {
+                } else if (player->currentMask == PLAYER_MASK_BUNNY) {
                     Player_DrawBunnyHood(play);
-                } else if (((void)0, player->currentMask) == PLAYER_MASK_GREAT_FAIRY) {
+                } else if (player->currentMask == PLAYER_MASK_GREAT_FAIRY) {
                     Player_DrawGreatFairysMask(play, player);
-                } else if (((void)0, player->currentMask) >= PLAYER_MASK_FIERCE_DEITY) {
+                } else if (player->currentMask >= PLAYER_MASK_FIERCE_DEITY) {
                     static Vec2f D_801C0E04[PLAYER_FORM_MAX] = {
                         { 140.0f, -130.0f }, // PLAYER_FORM_FIERCE_DEITY
                         { 0.0f, -200.0f },   // PLAYER_FORM_GORON
@@ -4013,6 +4011,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
     } else if ((limbIndex == PLAYER_LIMB_HAT) && (player->stateFlags3 & PLAYER_STATE3_100000)) {
         Vec3f sp5C;
         Vec3f sp50;
+        s32 pad;
 
         Matrix_MultVecX(3000.0f, &sp5C);
         Matrix_MultVecX(2300.0f, &sp50);

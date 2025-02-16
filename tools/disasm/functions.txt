@@ -16647,7 +16647,7 @@
     0x80C09C74:("EnKitan_OverrideLimbDraw",),
     0x80C09C90:("EnKitan_PostLimbDraw",),
     0x80C09CD0:("EnKitan_Draw",),
-    0x80C09ED0:("func_80C09ED0",),
+    0x80C09ED0:("BgAstrBombwall_InitCollider",),
     0x80C09FEC:("BgAstrBombwall_Init",),
     0x80C0A0EC:("BgAstrBombwall_Destroy",),
     0x80C0A120:("func_80C0A120",),
