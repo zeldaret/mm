@@ -19,10 +19,10 @@ typedef struct FlashromRequest {
 #define FLASH_TYPE_MAGIC 0x11118001
 
 s32 SysFlashrom_InitFlash(void);
-s32 SysFlashrom_ReadData(void* addr, u32 pageNum, u32 pageCount);
-void SysFlashrom_WriteDataAsync(void* addr, u32 pageNum, u32 pageCount);
+s32 SysFlashrom_Read(void* addr, u32 pageNum, u32 pageCount);
+void SysFlashrom_WriteAsync(void* addr, u32 pageNum, u32 pageCount);
 s32 SysFlashrom_IsBusy(void);
 s32 SysFlashrom_AwaitResult(void);
-void SysFlashrom_WriteDataSync(void* addr, u32 pageNum, u32 pageCount);
+void SysFlashrom_WriteSync(void* addr, u32 pageNum, u32 pageCount);
 
 #endif
