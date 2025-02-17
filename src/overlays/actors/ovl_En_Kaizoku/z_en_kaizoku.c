@@ -451,9 +451,9 @@ s32 EnKaizoku_ReactToPlayer(EnKaizoku* this, PlayState* play, s16 arg2) {
             // in OOT this was sidestep instead of block
             EnKaizoku_SetupBlock(this);
         } else {
-            angleToFacingLink = player->actor.shape.rot.y - this->picto.actor.shape.rot.y;
+            yawDiff = player->actor.shape.rot.y - this->picto.actor.shape.rot.y;
             if ((this->picto.actor.xzDistToPlayer <= 65.0f) && !Actor_OtherIsTargeted(play, &this->picto.actor) &&
-                (ABS_ALT(angleToFacingLink) < 0x5000)) {
+                (ABS_ALT(yawDiff) < 0x5000)) {
                 if (this->action != KAIZOKU_ACTION_SLASH) {
                     EnKaizoku_SetupSlash(this);
                     return true;
@@ -1328,9 +1328,9 @@ void EnKaizoku_Advance(EnKaizoku* this, PlayState* play) {
         }
 
         this->skelAnime.playSpeed = 1.0f;
-        facingAngleToLink = ABS_ALT(player->actor.shape.rot.y - this->picto.actor.shape.rot.y);
+        yawDiff = ABS_ALT(player->actor.shape.rot.y - this->picto.actor.shape.rot.y);
         if ((this->picto.actor.xzDistToPlayer < 150.0f) && (player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) &&
-            (facingAngleToLink >= 0x2000)) {
+            (yawDiff >= 0x2000)) {
             this->picto.actor.shape.rot.y = this->picto.actor.world.rot.y = this->picto.actor.yawTowardsPlayer;
             if (Rand_ZeroOne() > 0.7f) {
                 EnKaizoku_SetupCircle(this);
@@ -1347,8 +1347,7 @@ void EnKaizoku_Advance(EnKaizoku* this, PlayState* play) {
                 EnKaizoku_SetupReady(this);
             }
         } else if (this->picto.actor.xzDistToPlayer < 90.0f) {
-            if ((Rand_ZeroOne() > 0.03f) ||
-                ((this->picto.actor.xzDistToPlayer <= 65.0f) && (facingAngleToLink < 0x4000))) {
+            if ((Rand_ZeroOne() > 0.03f) || ((this->picto.actor.xzDistToPlayer <= 65.0f) && (yawDiff < 0x4000))) {
                 EnKaizoku_SetupSlash(this);
             } else if (Actor_OtherIsTargeted(play, &this->picto.actor) && (Rand_ZeroOne() > 0.5f)) {
                 EnKaizoku_SetupRollBack(this);
@@ -1484,10 +1483,10 @@ void EnKaizoku_SpinAttack(EnKaizoku* this, PlayState* play) {
             return;
         }
 
-        angleFacingLink = ABS_ALT(player->actor.shape.rot.y - this->picto.actor.shape.rot.y);
-        if (angleFacingLink <= 0x2710) {
-            angleToPlayer = ABS_ALT(this->picto.actor.yawTowardsPlayer - this->picto.actor.shape.rot.y);
-            if (angleToPlayer > 0x4000) {
+        angleToPlayer = ABS_ALT(player->actor.shape.rot.y - this->picto.actor.shape.rot.y);
+        if (angleToPlayer <= 0x2710) {
+            yawDiff = ABS_ALT(this->picto.actor.yawTowardsPlayer - this->picto.actor.shape.rot.y);
+            if (yawDiff > 0x4000) {
                 this->picto.actor.world.rot.y = this->picto.actor.yawTowardsPlayer;
                 EnKaizoku_SetupCircle(this);
             } else {
@@ -1520,13 +1519,13 @@ void EnKaizoku_Circle(EnKaizoku* this, PlayState* play) {
     Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.yawTowardsPlayer, 1, 0xFA0, 1);
     if (!EnKaizoku_DodgeRanged(this, play) && !EnKaizoku_ReactToPlayer(this, play, false)) {
         this->picto.actor.world.rot.y = this->picto.actor.shape.rot.y + 0x4000;
-        angleBehindLink = player->actor.shape.rot.y + 0x8000;
-        if (Math_SinS(angleBehindLink - this->picto.actor.shape.rot.y) >= 0.0f) {
+        angleBehindPlayer = player->actor.shape.rot.y + 0x8000;
+        if (Math_SinS(angleBehindPlayer - this->picto.actor.shape.rot.y) >= 0.0f) {
             this->picto.actor.speed -= 0.25f;
             if (this->picto.actor.speed < -8.0f) {
                 this->picto.actor.speed = -8.0f;
             }
-        } else if (Math_SinS(angleBehindLink - this->picto.actor.shape.rot.y) < 0.0f) {
+        } else if (Math_SinS(angleBehindPlayer - this->picto.actor.shape.rot.y) < 0.0f) {
             this->picto.actor.speed += 0.25f;
             if (this->picto.actor.speed > 8.0f) {
                 this->picto.actor.speed = 8.0f;
