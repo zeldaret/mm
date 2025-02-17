@@ -6,9 +6,8 @@
 struct EnIshi;
 
 typedef void (*EnIshiActionFunc)(struct EnIshi*, PlayState*);
-// used for dust spawn and draw funcs
-typedef void (*EnIshiMultiFunc)(struct EnIshi*, PlayState*);
-typedef void (*EnIshiSpawnDebrisFunc)(Actor*, PlayState*);
+typedef void (*EnIshiDrawFunc)(struct EnIshi*, PlayState*);
+typedef void (*EnIshiSpawnFunc)(Actor*, PlayState*);
 
 // silver boulder instead of small rock
 #define ENISHI_GET_SIZE_FLAG(thisx) ((thisx)->params & 1)

@@ -20,8 +20,8 @@ void EnIshi_Update(Actor* thisx, PlayState* play);
 
 void EnIshi_SpawnDebrisSmallRock(Actor* thisx, PlayState* play);
 void EnIshi_SpawnDebrisBoulder(Actor* thisx, PlayState* play);
-void EnIshi_SpawnDustSmallRock(EnIshi* this, PlayState* play);
-void EnIshi_SpawnDustBoulder(EnIshi* this, PlayState* play);
+void EnIshi_SpawnDustSmallRock(Actor* thisx, PlayState* play);
+void EnIshi_SpawnDustBoulder(Actor* thisx, PlayState* play);
 void EnIshi_SetupWaitForObject(EnIshi* this);
 void EnIshi_WaitForObject(EnIshi* this, PlayState* play);
 void EnIshi_SetupIdle(EnIshi* this);
@@ -64,9 +64,9 @@ static u16 sCutsceneSfxId[] = { NA_SE_EV_ROCK_BROKEN, NA_SE_EV_WALL_BROKEN };
 
 static u8 sCutsceneSfxDuration[] = { 25, 40 };
 
-static EnIshiSpawnDebrisFunc sIshiSpawnDebrisFuncs[] = { EnIshi_SpawnDebrisSmallRock, EnIshi_SpawnDebrisBoulder };
+static EnIshiSpawnFunc sIshiSpawnDebrisFuncs[] = { EnIshi_SpawnDebrisSmallRock, EnIshi_SpawnDebrisBoulder };
 
-static EnIshiMultiFunc sIshiDustSpawnFuncs[] = {
+static EnIshiSpawnFunc sIshiDustSpawnFuncs[] = {
     EnIshi_SpawnDustSmallRock,
     EnIshi_SpawnDustBoulder,
 };
@@ -146,7 +146,7 @@ static InitChainEntry sInitChain[][5] = {
 
 static u16 sIshiPullRockSfx[] = { NA_SE_PL_PULL_UP_ROCK, NA_SE_PL_PULL_UP_BIGROCK };
 
-static EnIshiMultiFunc sIshiGameplayKeepObjectDrawFuncs[] = {
+static EnIshiDrawFunc sIshiGameplayKeepObjectDrawFuncs[] = {
     EnIshi_DrawGameplayKeepSmallRock,
     EnIshi_DrawGameplayKeepBoulder,
 };
@@ -274,18 +274,18 @@ void EnIshi_SpawnDebrisBoulder(Actor* thisx, PlayState* play) {
     }
 }
 
-void EnIshi_SpawnDustSmallRock(EnIshi* this, PlayState* play) {
+void EnIshi_SpawnDustSmallRock(Actor* thisx, PlayState* play) {
     Vec3f pos;
 
-    Math_Vec3f_Copy(&pos, &this->actor.world.pos);
-    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
-        pos.x += 2.0f * this->actor.velocity.x;
-        pos.y -= 2.0f * this->actor.velocity.y;
-        pos.z += 2.0f * this->actor.velocity.z;
-    } else if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
-        pos.x -= 2.0f * this->actor.velocity.x;
-        pos.y += 2.0f * this->actor.velocity.y;
-        pos.z -= 2.0f * this->actor.velocity.z;
+    Math_Vec3f_Copy(&pos, &thisx->world.pos);
+    if (thisx->bgCheckFlags & BGCHECKFLAG_GROUND) {
+        pos.x += 2.0f * thisx->velocity.x;
+        pos.y -= 2.0f * thisx->velocity.y;
+        pos.z += 2.0f * thisx->velocity.z;
+    } else if (thisx->bgCheckFlags & BGCHECKFLAG_WALL) {
+        pos.x -= 2.0f * thisx->velocity.x;
+        pos.y += 2.0f * thisx->velocity.y;
+        pos.z -= 2.0f * thisx->velocity.z;
     }
 
     // 60: distance from center
@@ -295,18 +295,18 @@ void EnIshi_SpawnDustSmallRock(EnIshi* this, PlayState* play) {
     func_800BBFB0(play, &pos, 60.0f, 3, 80, 60, true);
 }
 
-void EnIshi_SpawnDustBoulder(EnIshi* this, PlayState* play) {
+void EnIshi_SpawnDustBoulder(Actor* thisx, PlayState* play) {
     Vec3f pos;
 
-    Math_Vec3f_Copy(&pos, &this->actor.world.pos);
-    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
-        pos.x += 2.0f * this->actor.velocity.x;
-        pos.y -= 2.0f * this->actor.velocity.y;
-        pos.z += 2.0f * this->actor.velocity.z;
-    } else if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
-        pos.x -= 2.0f * this->actor.velocity.x;
-        pos.y += 2.0f * this->actor.velocity.y;
-        pos.z -= 2.0f * this->actor.velocity.z;
+    Math_Vec3f_Copy(&pos, &thisx->world.pos);
+    if (thisx->bgCheckFlags & BGCHECKFLAG_GROUND) {
+        pos.x += 2.0f * thisx->velocity.x;
+        pos.y -= 2.0f * thisx->velocity.y;
+        pos.z += 2.0f * thisx->velocity.z;
+    } else if (thisx->bgCheckFlags & BGCHECKFLAG_WALL) {
+        pos.x -= 2.0f * thisx->velocity.x;
+        pos.y += 2.0f * thisx->velocity.y;
+        pos.z -= 2.0f * thisx->velocity.z;
     }
 
     // 140: distance from center
@@ -519,7 +519,7 @@ void EnIshi_Idle(EnIshi* this, PlayState* play) {
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, sCutsceneSfxDuration[rockSize],
                                            sCutsceneSfxId[rockSize]);
         sIshiSpawnDebrisFuncs[rockSize](&this->actor, play);
-        sIshiDustSpawnFuncs[rockSize](this, play);
+        sIshiDustSpawnFuncs[rockSize](&this->actor, play);
         Actor_Kill(&this->actor);
         return;
     }
@@ -631,7 +631,7 @@ void EnIshi_Thrown(EnIshi* this, PlayState* play) {
         if (!(this->actor.bgCheckFlags & BGCHECKFLAG_WATER)) {
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, sCutsceneSfxDuration[rockSize],
                                                sCutsceneSfxId[rockSize]);
-            sIshiDustSpawnFuncs[rockSize](this, play);
+            sIshiDustSpawnFuncs[rockSize](&this->actor, play);
         }
 
         if (rockSize == SILVER_BOULDER) {
@@ -715,7 +715,7 @@ void EnIshi_CutsceneExplode(EnIshi* this, PlayState* play) {
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, sCutsceneSfxDuration[rockSize],
                                            sCutsceneSfxId[rockSize]);
         sIshiSpawnDebrisFuncs[rockSize](&this->actor, play);
-        sIshiDustSpawnFuncs[rockSize](this, play);
+        sIshiDustSpawnFuncs[rockSize](&this->actor, play);
         this->actor.draw = NULL;
         EnIshi_SetupKill(this);
     } else {
