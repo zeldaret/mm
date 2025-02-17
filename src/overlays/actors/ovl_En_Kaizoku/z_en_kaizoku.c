@@ -74,12 +74,12 @@ typedef enum KaizokuAction {
 
 // text Ids, grouped into two batches of 4, and two mask values
 static u16 sKaizokuTextIds[] = {
-    0x11A4, // (intro.1) halt
-    0x11A5, // (intro.2) you must have courage, going to love doing this to you
+    0x11A4, // (shout) halt
+    0x11A5, // (intro) you must have courage, going to love doing this to you
     0x11A6, // (win) ouch, dont think this is the end
     0x11A7, // (loss) you're nothing to talk about
-    0x11A8, // (intro.1) go no further
-    0x11A9, // (intro.2) you wont get past here
+    0x11A8, // (shout) go no further
+    0x11A9, // (intro) you wont get past here
     0x11AA, // (win) not bad, but this isnt the end
     0x11AB, // (loss) hmph, we're not fools
     0x11AC, // (stone mask) we aren't fooled by that mask
@@ -445,7 +445,7 @@ s32 EnKaizoku_ReactToPlayer(EnKaizoku* this, PlayState* play, s16 arg2) {
     if (arg2) {
         s16 yawDiff;
 
-        //! FAKE:
+    //! FAKE:
     label:;
         if (angleToPlayer >= 0x2710) {
             // in OOT this was sidestep instead of block
@@ -1657,11 +1657,11 @@ void EnKaizoku_Stunned(EnKaizoku* this, PlayState* play) {
 }
 
 void EnKaizoku_SetupDamaged(EnKaizoku* this, PlayState* play) {
-    Vec3f sp34;
+    Vec3f velocity;
 
     Matrix_RotateYS(this->picto.actor.yawTowardsPlayer, MTXMODE_NEW);
-    Matrix_MultVecZ(-10.0f, &sp34);
-    Math_Vec3f_Copy(&this->velocity, &sp34);
+    Matrix_MultVecZ(-10.0f, &velocity);
+    Math_Vec3f_Copy(&this->velocity, &velocity);
     this->lookTimer = 0;
     this->dontUpdateSkel = false;
     this->picto.actor.speed = 0.0f;
