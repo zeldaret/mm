@@ -11,23 +11,28 @@ typedef void (*EnIshiMultiFunc)(struct EnIshi*, PlayState*);
 typedef void (*EnIshiSpawnDebrisFunc)(Actor*, PlayState*);
 
 // silver boulder instead of small rock
-#define ENISHI_GET_BIG_FLAG(thisx) ((thisx)->params & 1)
+#define ENISHI_GET_SIZE_FLAG(thisx) ((thisx)->params & 1)
 #define ENISHI_GET_SPAWN_BUGS_FLAG(thisx) (((thisx)->params >> 1) & 1)
-// for sitting still on walls in TF/Ikana Graveyard
-#define ENISHI_GET_IGNORE_SNAP_TO_FLOOR(thisx) (((thisx)->params >> 2) & 1)
+// for sitting still on rock/dirt cliffs in TF/Ikana Graveyard
+#define ENISHI_GET_LEVITATE_FLAG(thisx) (((thisx)->params >> 2) & 1)
 // dual objects: this actor can use field_keep or object_ishi
 // the only place its used in u0 is the swamp spiderhouse, which uses dangeon_keep
 #define ENISHI_GET_USE_OBJECT(thisx) (((thisx)->params >> 3) & 1)
+#define ENISHI_GET_IGNORE_DROP_TABLE_FLAG(thisx) (((thisx)->params >> 8) & 1)
 // index of a collectable item list in .data
 #define ENISHI_GET_COLLECTABLE_ID(thisx) (((thisx)->params >> 4) & 7)
 #define ENISHI_GET_DROP_TABLE(thisx) (((thisx)->params >> 4) & 0xF)
-#define ENISHI_GET_IGNORE_DROP_TABLE_FLAG(thisx) (((thisx)->params >> 8) & 1)
 // these two are the same, but are used by different subtypes
 #define ENISHI_GET_COLLECTABLE_FLAG(thisx) (((thisx)->params >> 9) & 0x7F)
 #define ENISHI_GET_SWITCH_FLAG(thisx) (((thisx)->params >> 9) & 0x7F)
 
 #define ISHI_FLAG_UNDERWATER    (1 << 0)
 #define ISHI_FLAG_CUTSCENE_ROCK (1 << 1)
+
+typedef enum IshiSize {
+  /* 0 */ SMALL_ROCK,
+  /* 1 */ SILVER_BOULDER
+} IshiSize;
 
 // if yRot is zero, y rotation gets randomized
 #define ISHI_RANDOM_ROTATION_FLAG 0
