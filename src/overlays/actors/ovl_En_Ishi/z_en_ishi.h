@@ -15,12 +15,12 @@ typedef void (*EnIshiSpawnFunc)(Actor*, PlayState*);
 // for sitting still on rock/dirt cliffs in TF/Ikana Graveyard
 #define ENISHI_GET_LEVITATE_FLAG(thisx) (((thisx)->params >> 2) & 1)
 // dual objects: this actor can use field_keep or object_ishi
-// the only place its used in u0 is the swamp spiderhouse, which uses dangeon_keep
+// the only place its used in the US version is the swamp spiderhouse, which uses dangeon_keep
 #define ENISHI_GET_USE_OBJECT(thisx) (((thisx)->params >> 3) & 1)
-#define ENISHI_GET_IGNORE_DROP_TABLE_FLAG(thisx) (((thisx)->params >> 8) & 1)
 // index of a collectable item list in .data
 #define ENISHI_GET_COLLECTABLE_ID(thisx) (((thisx)->params >> 4) & 7)
 #define ENISHI_GET_DROP_TABLE(thisx) (((thisx)->params >> 4) & 0xF)
+#define ENISHI_GET_IGNORE_DROP_TABLE_FLAG(thisx) (((thisx)->params >> 8) & 1)
 // these two are the same, but are used by different subtypes
 #define ENISHI_GET_COLLECTABLE_FLAG(thisx) (((thisx)->params >> 9) & 0x7F)
 #define ENISHI_GET_SWITCH_FLAG(thisx) (((thisx)->params >> 9) & 0x7F)
