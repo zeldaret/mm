@@ -443,11 +443,11 @@ s32 EnKaizoku_ReactToPlayer(EnKaizoku* this, PlayState* play, s16 arg2) {
     }
 
     if (arg2) {
-        s16 angleToFacingLink;
+        s16 yawDiff;
 
         //! FAKE:
     label:;
-        if (angleToPlayer >= 10000) {
+        if (angleToPlayer >= 0x2710) {
             // in OOT this was sidestep instead of block
             EnKaizoku_SetupBlock(this);
         } else {
@@ -1314,7 +1314,7 @@ void EnKaizoku_Advance(EnKaizoku* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 beforeCurFrame;
     s32 afterCurFrame;
-    s16 facingAngleToLink;
+    s16 yawDiff;
 
     if (!EnKaizoku_DodgeRanged(this, play)) {
         Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.yawTowardsPlayer, 1, 0x2EE, 0);
@@ -1430,7 +1430,7 @@ void EnKaizoku_SetupSpinAttack(EnKaizoku* this) {
 void EnKaizoku_SpinAttack(EnKaizoku* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     f32 curFrame = this->skelAnime.curFrame;
-    s16 angleFacingLink;
+    s16 yawDiff;
     s16 angleToPlayer;
     s32 pad;
 
@@ -1512,7 +1512,7 @@ void EnKaizoku_SetupCircle(EnKaizoku* this) {
 
 void EnKaizoku_Circle(EnKaizoku* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s16 angleBehindLink;
+    s16 angleBehindPlayer;
     s32 beforeCurFrame;
     s32 afterCurFrame;
     s16 yaw;
