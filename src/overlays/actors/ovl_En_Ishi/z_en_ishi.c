@@ -509,7 +509,8 @@ void EnIshi_Idle(EnIshi* this, PlayState* play) {
         return;
     }
 
-    if (colliderACHit && (rockSize == ISHI_SIZE_SMALL_ROCK) && (this->collider.elem.acHitElem->atDmgInfo.dmgFlags & 0x508)) {
+    if (colliderACHit && (rockSize == ISHI_SIZE_SMALL_ROCK) &&
+        (this->collider.elem.acHitElem->atDmgInfo.dmgFlags & 0x508)) {
         if (cutsceneRock) {
             EnIshi_DropCollectable(this, play);
             EnIshi_SetupCutsceneExplode(this);
