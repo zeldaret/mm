@@ -29,8 +29,8 @@ typedef void (*EnIshiSpawnFunc)(Actor*, PlayState*);
 #define ISHI_FLAG_CUTSCENE_ROCK (1 << 1)
 
 typedef enum IshiSize {
-  /* 0 */ SMALL_ROCK,
-  /* 1 */ SILVER_BOULDER
+  /* 0 */ ISHI_SIZE_SMALL_ROCK,
+  /* 1 */ ISHI_SIZE_SILVER_BOULDER
 } IshiSize;
 
 // if yRot is zero, y rotation gets randomized

@@ -36,8 +36,8 @@ void EnIshi_SetupKill(EnIshi* this);
 void EnIshi_Kill(EnIshi* this, PlayState* play);
 void EnIshi_DrawGameplayKeepSmallRock(EnIshi* this, PlayState* play);
 void EnIshi_DrawGameplayKeepBoulder(EnIshi* this, PlayState* play);
-void EnIshi_DrawBoulder(Actor* thisx, PlayState* play);
-void EnIshi_DrawIshiObjectSmallRock(Actor* thisx, PlayState* play);
+void EnIshi_DrawGameplayKeepObject(Actor* thisx, PlayState* play);
+void EnIshi_DrawIshiObject(Actor* thisx, PlayState* play);
 
 static s16 sIshiThrownXRotationVel = 0;
 static s16 sIshiThrownYRotationVel = 0;
@@ -66,7 +66,7 @@ static u8 sCutsceneSfxDuration[] = { 25, 40 };
 
 static EnIshiSpawnFunc sIshiSpawnDebrisFuncs[] = { EnIshi_SpawnDebrisSmallRock, EnIshi_SpawnDebrisBoulder };
 
-static EnIshiSpawnFunc sIshiDustSpawnFuncs[] = {
+static EnIshiSpawnFunc sIshiSpawnDustFuncs[] = {
     EnIshi_SpawnDustSmallRock,
     EnIshi_SpawnDustBoulder,
 };
@@ -409,7 +409,7 @@ void EnIshi_Init(Actor* thisx, PlayState* play) {
     s32 rockSize = ENISHI_GET_SIZE_FLAG(&this->actor);
     s32 ignoreSnapToFloor = ENISHI_GET_LEVITATE_FLAG(&this->actor);
 
-    if ((rockSize == SMALL_ROCK) && ignoreSnapToFloor) {
+    if ((rockSize == ISHI_SIZE_SMALL_ROCK) && ignoreSnapToFloor) {
         this->flags |= ISHI_FLAG_CUTSCENE_ROCK;
     }
 
@@ -426,14 +426,14 @@ void EnIshi_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, sIshiSizes[rockSize]);
     EnIshi_InitCollider(&this->actor, play);
 
-    if ((rockSize == SILVER_BOULDER) && Flags_GetSwitch(play, ENISHI_GET_SWITCH_FLAG(&this->actor))) {
+    if ((rockSize == ISHI_SIZE_SILVER_BOULDER) && Flags_GetSwitch(play, ENISHI_GET_SWITCH_FLAG(&this->actor))) {
         Actor_Kill(&this->actor);
         return;
     }
 
     CollisionCheck_SetInfo(&this->actor.colChkInfo, NULL, &sColChkInfoInit);
 
-    if (rockSize == SILVER_BOULDER) {
+    if (rockSize == ISHI_SIZE_SILVER_BOULDER) {
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
         this->actor.shape.shadowScale = 2.3f;
     } else {
@@ -477,9 +477,9 @@ void EnIshi_WaitForObject(EnIshi* this, PlayState* play) {
         this->actor.objectSlot = this->objectSlot;
         this->actor.flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED;
         if (!ENISHI_GET_USE_OBJECT(&this->actor)) {
-            this->actor.draw = EnIshi_DrawBoulder;
+            this->actor.draw = EnIshi_DrawGameplayKeepObject;
         } else {
-            this->actor.draw = EnIshi_DrawIshiObjectSmallRock;
+            this->actor.draw = EnIshi_DrawIshiObject;
         }
         EnIshi_SetupIdle(this);
     }
@@ -509,7 +509,7 @@ void EnIshi_Idle(EnIshi* this, PlayState* play) {
         return;
     }
 
-    if (colliderACHit && (rockSize == SMALL_ROCK) && (this->collider.elem.acHitElem->atDmgInfo.dmgFlags & 0x508)) {
+    if (colliderACHit && (rockSize == ISHI_SIZE_SMALL_ROCK) && (this->collider.elem.acHitElem->atDmgInfo.dmgFlags & 0x508)) {
         if (cutsceneRock) {
             EnIshi_DropCollectable(this, play);
             EnIshi_SetupCutsceneExplode(this);
@@ -519,7 +519,7 @@ void EnIshi_Idle(EnIshi* this, PlayState* play) {
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, sCutsceneSfxDuration[rockSize],
                                            sCutsceneSfxId[rockSize]);
         sIshiSpawnDebrisFuncs[rockSize](&this->actor, play);
-        sIshiDustSpawnFuncs[rockSize](&this->actor, play);
+        sIshiSpawnDustFuncs[rockSize](&this->actor, play);
         Actor_Kill(&this->actor);
         return;
     }
@@ -543,7 +543,7 @@ void EnIshi_Idle(EnIshi* this, PlayState* play) {
 
         // pick up mechanic
         if ((this->actor.xzDistToPlayer < 90.0f) && !cutsceneRock) {
-            if (rockSize == SILVER_BOULDER) {
+            if (rockSize == ISHI_SIZE_SILVER_BOULDER) {
                 // Silver can only be picked up by goron form
                 Actor_OfferGetItem(&this->actor, play, GI_NONE, 80.0f, 20.0f);
             } else {
@@ -631,10 +631,10 @@ void EnIshi_Thrown(EnIshi* this, PlayState* play) {
         if (!(this->actor.bgCheckFlags & BGCHECKFLAG_WATER)) {
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, sCutsceneSfxDuration[rockSize],
                                                sCutsceneSfxId[rockSize]);
-            sIshiDustSpawnFuncs[rockSize](&this->actor, play);
+            sIshiSpawnDustFuncs[rockSize](&this->actor, play);
         }
 
-        if (rockSize == SILVER_BOULDER) {
+        if (rockSize == ISHI_SIZE_SILVER_BOULDER) {
             s16 quakeIndex = Quake_Request(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
 
             Quake_SetSpeed(quakeIndex, 17232);
@@ -649,7 +649,7 @@ void EnIshi_Thrown(EnIshi* this, PlayState* play) {
     }
 
     if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER_TOUCH) {
-        if (rockSize == SMALL_ROCK) {
+        if (rockSize == ISHI_SIZE_SMALL_ROCK) {
             pos.x = this->actor.world.pos.x;
             pos.y = this->actor.world.pos.y + this->actor.depthInWater;
             pos.z = this->actor.world.pos.z;
@@ -715,7 +715,7 @@ void EnIshi_CutsceneExplode(EnIshi* this, PlayState* play) {
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, sCutsceneSfxDuration[rockSize],
                                            sCutsceneSfxId[rockSize]);
         sIshiSpawnDebrisFuncs[rockSize](&this->actor, play);
-        sIshiDustSpawnFuncs[rockSize](&this->actor, play);
+        sIshiSpawnDustFuncs[rockSize](&this->actor, play);
         this->actor.draw = NULL;
         EnIshi_SetupKill(this);
     } else {
@@ -785,7 +785,7 @@ void EnIshi_DrawGameplayKeepBoulder(EnIshi* this, PlayState* play) {
     } else if (this->actor.projectedPos.z < 2250.0f) { // falling after breaking
         f32 alpha = (2250.0f - this->actor.projectedPos.z) * 2.55f;
 
-        this->actor.shape.shadowAlpha = alpha * 0.627451f;
+        this->actor.shape.shadowAlpha = alpha * (160.0f / 255.0f);
 
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
@@ -801,12 +801,12 @@ void EnIshi_DrawGameplayKeepBoulder(EnIshi* this, PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void EnIshi_DrawBoulder(Actor* thisx, PlayState* play) {
+void EnIshi_DrawGameplayKeepObject(Actor* thisx, PlayState* play) {
     EnIshi* this = (EnIshi*)thisx;
 
     sIshiGameplayKeepObjectDrawFuncs[ENISHI_GET_SIZE_FLAG(&this->actor)](this, play);
 }
 
-void EnIshi_DrawIshiObjectSmallRock(Actor* thisx, PlayState* play) {
+void EnIshi_DrawIshiObject(Actor* thisx, PlayState* play) {
     Gfx_DrawDListOpa(play, gSmallRockDL);
 }
