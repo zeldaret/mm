@@ -1171,14 +1171,14 @@ void Sram_ResetSaveFromMoonCrash(SramContext* sramCtx) {
     bzero(sramCtx->saveBuf, SAVE_BUFFER_SIZE);
 
     if (SysFlashrom_Read(sramCtx->saveBuf, gFlashSaveStartPages[gSaveContext.fileNum * 2],
-                             gFlashSaveNumPages[gSaveContext.fileNum * 2]) != 0) {
+                         gFlashSaveNumPages[gSaveContext.fileNum * 2]) != 0) {
         SysFlashrom_Read(sramCtx->saveBuf, gFlashSaveStartPages[gSaveContext.fileNum * 2 + 1],
-                             gFlashSaveNumPages[gSaveContext.fileNum * 2 + 1]);
+                         gFlashSaveNumPages[gSaveContext.fileNum * 2 + 1]);
     }
     Lib_MemCpy(&gSaveContext.save, sramCtx->saveBuf, sizeof(Save));
     if (CHECK_NEWF(gSaveContext.save.saveInfo.playerData.newf)) {
         SysFlashrom_Read(sramCtx->saveBuf, gFlashSaveStartPages[gSaveContext.fileNum * 2 + 1],
-                             gFlashSaveNumPages[gSaveContext.fileNum * 2 + 1]);
+                         gFlashSaveNumPages[gSaveContext.fileNum * 2 + 1]);
         Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, sizeof(Save));
     }
     gSaveContext.save.cutsceneIndex = cutsceneIndex;
@@ -1241,16 +1241,14 @@ void Sram_OpenSave(FileSelectState* fileSelect, SramContext* sramCtx) {
             phi_t1 *= 2;
 
             if (SysFlashrom_Read(sramCtx->saveBuf, gFlashSaveStartPages[phi_t1], gFlashSaveNumPages[phi_t1]) != 0) {
-                SysFlashrom_Read(sramCtx->saveBuf, gFlashSaveStartPages[phi_t1 + 1],
-                                     gFlashSaveNumPages[phi_t1 + 1]);
+                SysFlashrom_Read(sramCtx->saveBuf, gFlashSaveStartPages[phi_t1 + 1], gFlashSaveNumPages[phi_t1 + 1]);
             }
         } else {
             phi_t1 = gSaveContext.fileNum;
             phi_t1 *= 2;
 
             if (SysFlashrom_Read(sramCtx->saveBuf, gFlashSaveStartPages[phi_t1], gFlashSaveNumPages[phi_t1]) != 0) {
-                SysFlashrom_Read(sramCtx->saveBuf, gFlashSaveStartPages[phi_t1 + 1],
-                                     gFlashSaveNumPages[phi_t1 + 1]);
+                SysFlashrom_Read(sramCtx->saveBuf, gFlashSaveStartPages[phi_t1 + 1], gFlashSaveNumPages[phi_t1 + 1]);
             }
         }
 
@@ -1411,8 +1409,8 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
                 // main save didn't work
                 sp6E = 1;
                 // read backup save from flash
-                if (SysFlashrom_Read(sramCtx->saveBuf, gFlashSaveStartPages[sp64 + 1],
-                                         gFlashSaveNumPages[sp64 + 1]) != 0) {
+                if (SysFlashrom_Read(sramCtx->saveBuf, gFlashSaveStartPages[sp64 + 1], gFlashSaveNumPages[sp64 + 1]) !=
+                    0) {
                     // backup save didn't work
                     phi_s2 = true;
                 }
@@ -1450,7 +1448,7 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
                         // read backup save from flash
                         phi_s2 = false;
                         if (SysFlashrom_Read(sramCtx->saveBuf, gFlashSaveStartPages[sp64 + 1],
-                                                 gFlashSaveNumPages[sp64 + 1]) != 0) {
+                                             gFlashSaveNumPages[sp64 + 1]) != 0) {
                             // backup save didn't work
                             phi_s2 = true;
                         }
@@ -1515,7 +1513,7 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
                     oldCheckSum = gSaveContext.save.saveInfo.checksum;
 
                     if (SysFlashrom_Read(sramCtx->saveBuf, gFlashSaveStartPages[sp64 + 1],
-                                             gFlashSaveNumPages[sp64 + 1]) != 0) {
+                                         gFlashSaveNumPages[sp64 + 1]) != 0) {
                         phi_s2 = 1;
                     } else {
                         Lib_MemCpy(&gSaveContext.save, sramCtx->saveBuf, sizeof(Save));
@@ -1564,7 +1562,7 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
                             phi_s2 = false;
                             // read backup save from flash
                             if (SysFlashrom_Read(sramCtx->saveBuf, gFlashSaveStartPages[sp64 + 1],
-                                                     gFlashSaveNumPages[sp64 + 1]) != 0) {
+                                                 gFlashSaveNumPages[sp64 + 1]) != 0) {
                                 // backup save didn't work
                                 phi_s2 = true;
                             }
@@ -1629,7 +1627,7 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
                         oldCheckSum = gSaveContext.save.saveInfo.checksum;
 
                         if (SysFlashrom_Read(sramCtx->saveBuf, gFlashSaveStartPages[sp64 + 1],
-                                                 gFlashSaveNumPages[sp64 + 1]) != 0) {
+                                             gFlashSaveNumPages[sp64 + 1]) != 0) {
                             phi_s2 = 1;
                         } else {
                             Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, gFlashSaveSizes[sp64]);
@@ -1640,8 +1638,7 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
 
                         if (CHECK_NEWF(gSaveContext.save.saveInfo.playerData.newf) || (sp7A != phi_s2) ||
                             (oldCheckSum != phi_s2)) {
-                            SysFlashrom_Read(sramCtx->saveBuf, gFlashSaveStartPages[sp64],
-                                                 gFlashSaveNumPages[sp64]);
+                            SysFlashrom_Read(sramCtx->saveBuf, gFlashSaveStartPages[sp64], gFlashSaveNumPages[sp64]);
                             Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, gFlashSaveSizes[sp64]);
                             Sram_SyncWriteToFlash(sramCtx, gFlashSaveStartPages[sp64], gFlashSaveNumPages[sp64]);
                             Sram_SyncWriteToFlash(sramCtx, gFlashSaveStartPages[sp64 + 1],
@@ -1741,10 +1738,10 @@ void Sram_CopySave(FileSelectState* fileSelect2, SramContext* sramCtx) {
         bzero(sramCtx->saveBuf, SAVE_BUFFER_SIZE);
         // read to buffer
         if (SysFlashrom_Read(&sramCtx->saveBuf[0], gFlashSaveStartPages[fileSelect->selectedFileIndex * 2],
-                                 gFlashSaveNumPages[fileSelect->selectedFileIndex * 2])) {}
+                             gFlashSaveNumPages[fileSelect->selectedFileIndex * 2])) {}
 
         if (SysFlashrom_Read(&sramCtx->saveBuf[0x2000], gFlashSaveStartPages[fileSelect->selectedFileIndex * 2 + 1],
-                                 gFlashSaveNumPages[fileSelect->selectedFileIndex * 2 + 1])) {}
+                             gFlashSaveNumPages[fileSelect->selectedFileIndex * 2 + 1])) {}
 
         // copy buffer to save context
         Lib_MemCpy(&gSaveContext.save, sramCtx->saveBuf, sizeof(Save));
@@ -1889,7 +1886,7 @@ void Sram_SaveSpecialEnterClockTown(PlayState* play) {
     gSaveContext.save.isOwlSave = false;
     func_80145698(sramCtx);
     SysFlashrom_WriteSync(sramCtx->saveBuf, gFlashSaveStartPages[gSaveContext.fileNum * 2],
-                              gFlashSpecialSaveNumPages[gSaveContext.fileNum * 2]);
+                          gFlashSpecialSaveNumPages[gSaveContext.fileNum * 2]);
 }
 
 /**
@@ -1911,7 +1908,7 @@ void Sram_SaveSpecialNewDay(PlayState* play) {
     gSaveContext.save.time = time;
     gSaveContext.save.cutsceneIndex = cutsceneIndex;
     SysFlashrom_WriteSync(play->sramCtx.saveBuf, gFlashSaveStartPages[gSaveContext.fileNum * 2],
-                              gFlashSaveNumPages[gSaveContext.fileNum * 2]);
+                          gFlashSaveNumPages[gSaveContext.fileNum * 2]);
 }
 
 void Sram_SetFlashPagesDefault(SramContext* sramCtx, u32 curPage, u32 numPages) {
@@ -2027,11 +2024,11 @@ void func_80147414(SramContext* sramCtx, s32 fileNum, s32 arg2) {
     bzero(sramCtx->saveBuf, SAVE_BUFFER_SIZE);
 
     // Read save file
-    if (SysFlashrom_Read(sramCtx->saveBuf, gFlashOwlSaveStartPages[fileNum * 2],
-                             gFlashOwlSaveNumPages[fileNum * 2]) != 0) {
+    if (SysFlashrom_Read(sramCtx->saveBuf, gFlashOwlSaveStartPages[fileNum * 2], gFlashOwlSaveNumPages[fileNum * 2]) !=
+        0) {
         // If failed, read backup save file
         SysFlashrom_Read(sramCtx->saveBuf, gFlashOwlSaveStartPages[fileNum * 2 + 1],
-                             gFlashOwlSaveNumPages[fileNum * 2 + 1]);
+                         gFlashOwlSaveNumPages[fileNum * 2 + 1]);
     }
 
     // Copy buffer to save context
