@@ -317,7 +317,7 @@ void EnIshi_SpawnDustBoulder(Actor* thisx, PlayState* play) {
 }
 
 void EnIshi_DropItem(EnIshi* this, PlayState* play) {
-    if ((ENISHI_GET_SIZE_FLAG(&this->actor) != ISHI_SIZE_SMALL_ROCK) &&
+    if ((ENISHI_GET_SIZE_FLAG(&this->actor) == ISHI_SIZE_SMALL_ROCK) &&
         !ENISHI_GET_IGNORE_DROP_TABLE_FLAG(&this->actor)) {
         Item_DropCollectibleRandom(play, NULL, &this->actor.world.pos, ENISHI_GET_DROP_TABLE(&this->actor) * 0x10);
     }
