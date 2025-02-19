@@ -414,6 +414,10 @@ void EnDg_SetupIdleMove(EnDg* this, PlayState* play) {
         } else if (play->sceneId == SCENE_CLOCKTOWER) {
             EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_RUN);
         } else if (sRacetrackDogInfo[this->index].textId & 0x11) {
+            //! @bug: There is no bounds check on sRacetrackDogInfo access.
+            //! The dog in the Romani Ranch credits uses params of 0x03FF which means an index equal to
+            //! `ENDG_INDEX_SOUTH_CLOCK_TOWN`. Since the if above just checks the scene not the index, this results in
+            //! an OOB access of `sRacetrackDogInfo` in this if.
             EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_WALK);
         } else {
             EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_RUN);
