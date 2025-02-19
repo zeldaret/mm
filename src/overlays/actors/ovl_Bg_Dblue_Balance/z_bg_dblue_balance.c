@@ -566,7 +566,7 @@ void func_80B833A8(BgDblueBalance* this) {
 }
 
 void func_80B833C4(BgDblueBalance* this, PlayState* play) {
-    s32 pad;
+    Actor* thisx = &this->dyna.actor;
     s32 sp28 = false;
     s16 sp26;
     s16 sp24;
@@ -585,12 +585,9 @@ void func_80B833C4(BgDblueBalance* this, PlayState* play) {
         this->unk_187 = Math_StepToS(&this->unk_178, 0x1F4, 5);
     }
 
-    sp26 = this->dyna.actor.shape.rot.x;
-    this->dyna.actor.shape.rot.x += this->unk_178;
-    sp24 = this->dyna.actor.shape.rot.x;
-
-    //! FAKE:
-    if (sp24) {}
+    sp26 = thisx->shape.rot.x;
+    thisx->shape.rot.x += this->unk_178;
+    sp24 = thisx->shape.rot.x;
 
     if (this->isSwitchFlagSet) {
         if (this->unk_186 != 0) {
@@ -611,7 +608,7 @@ void func_80B833C4(BgDblueBalance* this, PlayState* play) {
     func_80B8264C(this);
 
     if (sp28) {
-        this->dyna.actor.shape.rot.x = this->unk_184;
+        thisx->shape.rot.x = this->unk_184;
         func_80B83344(this);
     }
 }

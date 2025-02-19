@@ -39,8 +39,8 @@ typedef struct EnFirefly {
     /* 0x23C */ Vec3s morphTable[FIRE_KEESE_LIMB_MAX];
     /* 0x2E4 */ f32 maxAltitude;
     /* 0x2E8 */ f32 drawDmgEffAlpha;
-    /* 0x2E8 */ f32 drawDmgEffScale;
-    /* 0x2E8 */ f32 drawDmgEffFrozenSteamScale;
+    /* 0x2EC */ f32 drawDmgEffScale;
+    /* 0x2F0 */ f32 drawDmgEffFrozenSteamScale;
     /* 0x2F4 */ u32 lastDrawnFrame;
     /* 0x2F8 */ Vec3f bodyPartsPos[KEESE_BODYPART_MAX];
     /* 0x31C */ ColliderSphere collider;

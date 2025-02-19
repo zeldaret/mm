@@ -56,37 +56,34 @@ void BgHakuginElvpole_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80ABD92C(BgHakuginElvpole* this, PlayState* play) {
-    s32 pad;
+    Actor* thisx = &this->dyna.actor;
     s32 sp28 = false;
     f32 var_fv1;
 
     if (this->unk_15E > 0) {
-        if ((this->dyna.actor.world.pos.y - this->dyna.actor.home.pos.y) < -120.0f) {
-            this->dyna.actor.world.pos.y += 4.0f;
+        if ((thisx->world.pos.y - thisx->home.pos.y) < -120.0f) {
+            thisx->world.pos.y += 4.0f;
             sp28 = true;
         } else if (this->unk_15E > 0) {
             if (this->unk_15E == 100) {
-                Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_STONEDOOR_STOP);
+                Actor_PlaySfx(thisx, NA_SE_EV_STONEDOOR_STOP);
             }
-            this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y - 120.0f;
-
-            //! FAKE:
-            if (1) {}
+            thisx->world.pos.y = thisx->home.pos.y - 120.0f;
 
             this->unk_15E--;
         }
     } else if (this->unk_15E == 0) {
-        if ((this->dyna.actor.world.pos.y - this->dyna.actor.home.pos.y) > -320.0f) {
-            this->dyna.actor.world.pos.y -= 4.0f;
+        if ((thisx->world.pos.y - thisx->home.pos.y) > -320.0f) {
+            thisx->world.pos.y -= 4.0f;
             sp28 = true;
         } else {
-            this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y - 320.0f;
-            Flags_UnsetSwitch(play, BGHAKUGINELVPOLE_GET_SWITCH_FLAG(&this->dyna.actor));
+            thisx->world.pos.y = thisx->home.pos.y - 320.0f;
+            Flags_UnsetSwitch(play, BGHAKUGINELVPOLE_GET_SWITCH_FLAG(thisx));
             this->unk_15E = -1;
-            Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_STONEDOOR_STOP);
+            Actor_PlaySfx(thisx, NA_SE_EV_STONEDOOR_STOP);
         }
-    } else if ((BGHAKUGINELVPOLE_GET_SWITCH_FLAG(&this->dyna.actor) != 0x7F) &&
-               Flags_GetSwitch(play, BGHAKUGINELVPOLE_GET_SWITCH_FLAG(&this->dyna.actor))) {
+    } else if ((BGHAKUGINELVPOLE_GET_SWITCH_FLAG(thisx) != 0x7F) &&
+               Flags_GetSwitch(play, BGHAKUGINELVPOLE_GET_SWITCH_FLAG(thisx))) {
         this->unk_15E = 0x64;
         this->unk_160 = true;
     }
@@ -98,23 +95,23 @@ void func_80ABD92C(BgHakuginElvpole* this, PlayState* play) {
             var_fv1 = -1.0f;
         }
         this->unk_15C++;
-        this->dyna.actor.world.pos.x = (Math_SinS(this->unk_15C * 0x2000) * var_fv1) + this->dyna.actor.home.pos.x;
-        this->dyna.actor.world.pos.z = (Math_CosS(this->unk_15C * 0x2000) * var_fv1) + this->dyna.actor.home.pos.z;
-        Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_PLATE_LIFT_LEVEL - SFX_FLAG);
+        thisx->world.pos.x = (Math_SinS(this->unk_15C * 0x2000) * var_fv1) + thisx->home.pos.x;
+        thisx->world.pos.z = (Math_CosS(this->unk_15C * 0x2000) * var_fv1) + thisx->home.pos.z;
+        Actor_PlaySfx_Flagged(thisx, NA_SE_EV_PLATE_LIFT_LEVEL - SFX_FLAG);
     } else {
         this->unk_15C = 0;
     }
 
     if (this->unk_160) {
-        if (this->dyna.actor.csId == CS_ID_NONE) {
+        if (thisx->csId == CS_ID_NONE) {
             this->unk_160 = false;
             return;
-        } else if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
-            CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
+        } else if (CutsceneManager_IsNext(thisx->csId)) {
+            CutsceneManager_StartWithPlayerCs(thisx->csId, thisx);
             this->unk_160 = false;
             return;
         }
-        CutsceneManager_Queue(this->dyna.actor.csId);
+        CutsceneManager_Queue(thisx->csId);
     }
 }
 
