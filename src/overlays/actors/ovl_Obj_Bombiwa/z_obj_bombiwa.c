@@ -462,7 +462,7 @@ void func_8093A418(Actor* thisx, PlayState* play) {
 
         sp28 = (2300.0f - this->actor.projectedPos.z) * 2.55f;
 
-        this->actor.shape.shadowAlpha = sp28 * (32.0f / 51);
+        this->actor.shape.shadowAlpha = sp28 * (160.0f / 255.0f);
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
         MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);

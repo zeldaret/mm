@@ -124,7 +124,7 @@ void func_809A10F4(ObjHamishi* this, PlayState* play) {
         }
 
         EffectSsKakera_Spawn(play, &spBC, &spC8, &this->actor.world.pos, gravity, phi_v0, 30, 5, 0, D_809A1AD4[i], 3, 0,
-                             70, 1, GAMEPLAY_FIELD_KEEP, gameplay_field_keep_DL_006420);
+                             70, 1, GAMEPLAY_FIELD_KEEP, gFieldSilverBoulderDebrisDL);
     }
 
     func_800BBFB0(play, &this->actor.world.pos, 140.0f, 6, 180, 90, 1);
@@ -270,7 +270,7 @@ void ObjHamishi_Draw(Actor* thisx, PlayState* play) {
         gSPSegment(POLY_OPA_DISP++, 0x08, D_801AEFA0);
         MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 170, 130, 255);
-        gSPDisplayList(POLY_OPA_DISP++, gameplay_field_keep_DL_0061E8);
+        gSPDisplayList(POLY_OPA_DISP++, gFieldSilverBoulderDL);
     } else if (thisx->projectedPos.z < 2250.0f) {
         f32 sp20 = (2250.0f - thisx->projectedPos.z) * 2.55f;
 
@@ -280,7 +280,7 @@ void ObjHamishi_Draw(Actor* thisx, PlayState* play) {
         gSPSegment(POLY_XLU_DISP++, 0x08, D_801AEF88);
         MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 170, 130, (s32)sp20);
-        gSPDisplayList(POLY_XLU_DISP++, gameplay_field_keep_DL_0061E8);
+        gSPDisplayList(POLY_XLU_DISP++, gFieldSilverBoulderDL);
     } else {
         thisx->shape.shadowAlpha = 0;
     }
