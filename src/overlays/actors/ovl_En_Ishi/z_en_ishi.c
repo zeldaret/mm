@@ -317,7 +317,7 @@ void EnIshi_SpawnDustBoulder(Actor* thisx, PlayState* play) {
 }
 
 void EnIshi_DropItem(EnIshi* this, PlayState* play) {
-    if (!ENISHI_GET_SIZE_FLAG(&this->actor) && !ENISHI_GET_IGNORE_DROP_TABLE_FLAG(&this->actor)) {
+    if ((ENISHI_GET_SIZE_FLAG(&this->actor) != ISHI_SIZE_SMALL_ROCK) && !ENISHI_GET_IGNORE_DROP_TABLE_FLAG(&this->actor)) {
         Item_DropCollectibleRandom(play, NULL, &this->actor.world.pos, ENISHI_GET_DROP_TABLE(&this->actor) * 0x10);
     }
 }
@@ -569,7 +569,7 @@ void EnIshi_HeldByPlayer(EnIshi* this, PlayState* play) {
 
     if (Actor_HasNoParent(&this->actor, play)) { // player has tossed us
         this->actor.room = play->roomCtx.curRoom.num;
-        if (ENISHI_GET_SIZE_FLAG(&this->actor) == true) {
+        if (ENISHI_GET_SIZE_FLAG(&this->actor) == ISHI_SIZE_SILVER_BOULDER) {
             Flags_SetSwitch(play, ENISHI_GET_SWITCH_FLAG(&this->actor));
         }
         EnIshi_SetupThrown(this);
