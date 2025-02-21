@@ -671,7 +671,7 @@ s32 AudioScript_SeqLayerProcessScriptStep2(SequenceLayer* layer) {
 
         switch (cmd) {
             case ASEQ_OPC_LAYER_SHORTVEL: // layer: set short note velocity
-            case ASEQ_OPC_LAYER_NOTEPAN: // layer: set pan
+            case ASEQ_OPC_LAYER_NOTEPAN:  // layer: set pan
                 cmdArg8 = *(state->pc++);
                 if (cmd == ASEQ_OPC_LAYER_SHORTVEL) {
                     layer->velocitySquare = SQ(cmdArg8) / SQ(127.0f);
@@ -690,7 +690,7 @@ s32 AudioScript_SeqLayerProcessScriptStep2(SequenceLayer* layer) {
                 }
                 break;
 
-            case ASEQ_OPC_LAYER_LEGATO: // layer: continuous notes on
+            case ASEQ_OPC_LAYER_LEGATO:   // layer: continuous notes on
             case ASEQ_OPC_LAYER_NOLEGATO: // layer: continuous notes off
                 if (cmd == ASEQ_OPC_LAYER_LEGATO) {
                     layer->continuousNotes = true;
@@ -2015,7 +2015,7 @@ void AudioScript_SequencePlayerProcessSequence(SequencePlayer* seqPlayer) {
                         break;
 
                     case ASEQ_OPC_SEQUENCE_LDSHORTGATEARR: // seqPlayer: set short note gatetime table
-                    case ASEQ_OPC_SEQUENCE_LDSHORTVELARR: // seqPlayer: set short note velocity table
+                    case ASEQ_OPC_SEQUENCE_LDSHORTVELARR:  // seqPlayer: set short note velocity table
                         temp = AudioScript_ScriptReadS16(seqScript);
                         data3 = &seqPlayer->seqData[temp];
                         if (cmd == ASEQ_OPC_SEQUENCE_LDSHORTVELARR) {
