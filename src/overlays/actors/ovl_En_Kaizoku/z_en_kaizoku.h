@@ -89,7 +89,7 @@ typedef struct EnKaizoku {
     /* 0x2D2 */ s16 swordState;
     /* 0x2D4 */ s16 exitIndex;
     /* 0x2D6 */ s16 csId;
-    /* 0x2D8 */ u8 dontUpdateSkel;
+    /* 0x2D8 */ u8 animationsDisabled;
     /* 0x2D9 */ u8 defeatBreathingStarted;
     /* 0x2DC */ f32 animEndFrame;
     /* 0x2E0 */ f32 circlingRate;

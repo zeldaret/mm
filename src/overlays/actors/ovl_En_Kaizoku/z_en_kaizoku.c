@@ -487,7 +487,7 @@ s32 EnKaizoku_ValidatePictograph(PlayState* play, Actor* actor) {
 void EnKaizoku_SetupWaitForApproach(EnKaizoku* this) {
     Math_Vec3f_Copy(&this->swordScaleRight, &gZeroVec3f);
     Math_Vec3f_Copy(&this->swordScaleLeft, &gZeroVec3f);
-    this->dontUpdateSkel = true;
+    this->animationsDisabled = true;
     this->action = KAIZOKU_ACTION_HIDDEN;
     this->actionFunc = EnKaizoku_WaitForApproach;
 }
@@ -562,8 +562,8 @@ void EnKaizoku_WaitForApproach(EnKaizoku* this, PlayState* play) {
 
         case 2: // waiting for fall to land
             if (this->picto.actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
-                if (this->dontUpdateSkel) {
-                    this->dontUpdateSkel = false;
+                if (this->animationsDisabled) {
+                    this->animationsDisabled = false;
                     this->picto.actor.world.pos.y = this->picto.actor.floorHeight;
                     this->picto.actor.velocity.y = 0.0f;
                     Player_SetCsActionWithHaltedActors(play, &this->picto.actor, PLAYER_CSACTION_4);
@@ -710,7 +710,7 @@ void EnKaizoku_SetupPlayerLoss(EnKaizoku* this, PlayState* play) {
     this->picto.actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->cutsceneTimer = 0;
     this->cutsceneState = 0;
-    this->dontUpdateSkel = false;
+    this->animationsDisabled = false;
     this->action = KAIZOKU_ACTION_HIDDEN;
     this->actionFunc = EnKaizoku_PlayerLoss;
     this->picto.actor.speed = 0.0f;
@@ -780,7 +780,7 @@ void EnKaizoku_PlayerLoss(EnKaizoku* this, PlayState* play) {
 
 // Player has won the fight
 void EnKaizoku_SetupPlayerWinCutscene(EnKaizoku* this) {
-    this->dontUpdateSkel = false;
+    this->animationsDisabled = false;
     this->action = KAIZOKU_ACTION_HIDDEN;
     this->actionFunc = EnKaizoku_PlayerWinCutscene;
 }
@@ -1062,7 +1062,7 @@ void EnKaizoku_SetupBlock(EnKaizoku* this) {
     if (this->swordState != 0) {
         this->swordState = -1;
     }
-    this->dontUpdateSkel = false;
+    this->animationsDisabled = false;
     this->picto.actor.speed = 0.0f;
     this->combatTimer = Rand_S16Offset(10, 10);
     this->bodyCollider.base.acFlags |= AC_HARD;
@@ -1075,12 +1075,12 @@ void EnKaizoku_Block(EnKaizoku* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s16 angleToPlayer;
 
-    this->dontUpdateSkel = true;
+    this->animationsDisabled = true;
     if (this->combatTimer == 0) {
         this->skelAnime.playSpeed = 1.0f;
     }
     if (this->lookTimer == 0) {
-        this->dontUpdateSkel = false;
+        this->animationsDisabled = false;
         angleToPlayer = this->picto.actor.yawTowardsPlayer - this->picto.actor.shape.rot.y;
         if ((ABS_ALT(angleToPlayer) <= 0x4000) && (this->picto.actor.xzDistToPlayer < 40.0f) &&
             (fabsf(this->picto.actor.playerHeightRel) < 50.0f)) {
@@ -1163,7 +1163,7 @@ void EnKaizoku_Jump(EnKaizoku* this, PlayState* play) {
         EnKaizoku_SpawnVerticalFootDust(play, &this->rightFootPos);
     }
 
-    this->dontUpdateSkel = false;
+    this->animationsDisabled = false;
     if ((curFrame >= this->animEndFrame) &&
         (this->picto.actor.bgCheckFlags & (BGCHECKFLAG_GROUND | BGCHECKFLAG_GROUND_TOUCH))) {
         this->bodyCollider.elem.elemMaterial = ELEM_MATERIAL_UNK1;
@@ -1193,7 +1193,7 @@ void EnKaizoku_SetupRollBack(EnKaizoku* this) {
 void EnKaizoku_RollBack(EnKaizoku* this, PlayState* play) {
     f32 curFrame = this->skelAnime.curFrame;
 
-    this->dontUpdateSkel = false;
+    this->animationsDisabled = false;
     if (curFrame >= this->animEndFrame) {
         if ((this->picto.actor.xzDistToPlayer < 170.0f) && (this->picto.actor.xzDistToPlayer > 140.0f) &&
             (Rand_ZeroOne() < 0.2f)) {
@@ -1244,7 +1244,7 @@ void EnKaizoku_Slash(EnKaizoku* this, PlayState* play2) {
         return;
     }
 
-    this->dontUpdateSkel = false;
+    this->animationsDisabled = false;
     if (curFrame >= this->animEndFrame) {
         if (!Actor_IsFacingPlayer(&this->picto.actor, 0x1554)) {
             EnKaizoku_SetupReady(this);
@@ -1289,7 +1289,7 @@ void EnKaizoku_SetupRollForward(EnKaizoku* this) {
 void EnKaizoku_RollForward(EnKaizoku* this, PlayState* play) {
     f32 curFrame = this->skelAnime.curFrame;
 
-    this->dontUpdateSkel = false;
+    this->animationsDisabled = false;
     if (curFrame >= this->animEndFrame) {
         this->picto.actor.speed = 0.0f;
         if (!Actor_IsFacingPlayer(&this->picto.actor, 0x1554)) {
@@ -1456,7 +1456,7 @@ void EnKaizoku_SpinAttack(EnKaizoku* this, PlayState* play) {
         this->swordState = -1;
     }
 
-    this->dontUpdateSkel = false;
+    this->animationsDisabled = false;
     if ((curFrame >= this->animEndFrame) && (this->spinAttackState < 2)) {
         if (!Actor_IsFacingPlayer(&this->picto.actor, 0x1554)) {
             EnKaizoku_SetupReady(this);
@@ -1612,7 +1612,7 @@ void EnKaizoku_SetupStunned(EnKaizoku* this) {
     }
 
     Actor_PlaySfx(&this->picto.actor, NA_SE_EN_COMMON_FREEZE);
-    this->dontUpdateSkel = true;
+    this->animationsDisabled = true;
 
     if ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_SFX) &&
         (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX)) {
@@ -1643,7 +1643,7 @@ void EnKaizoku_Stunned(EnKaizoku* this, PlayState* play) {
     if ((this->iceTimer == 0) && (this->drawDmgEffTimer == 0) &&
         !CHECK_FLAG_ALL(this->picto.actor.flags, ACTOR_FLAG_HOOKSHOT_ATTACHED) &&
         (this->picto.actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
-        this->dontUpdateSkel = false;
+        this->animationsDisabled = false;
         EnKaizoku_ReactToPlayer(this, play, true);
 
         if ((this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_SFX) ||
@@ -1663,7 +1663,7 @@ void EnKaizoku_SetupDamaged(EnKaizoku* this, PlayState* play) {
     Matrix_MultVecZ(-10.0f, &velocity);
     Math_Vec3f_Copy(&this->velocity, &velocity);
     this->lookTimer = 0;
-    this->dontUpdateSkel = false;
+    this->animationsDisabled = false;
     this->picto.actor.speed = 0.0f;
     EnKaizoku_ChangeAnim(this, KAIZOKU_ANIM_DAMAGE);
 
@@ -1719,7 +1719,7 @@ void EnKaizoku_SetupDefeatKnockdown(EnKaizoku* this, PlayState* play) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
     }
     this->picto.actor.speed = 0.0f;
-    this->dontUpdateSkel = true;
+    this->animationsDisabled = true;
     Player_SetCsActionWithHaltedActors(play, &this->picto.actor, PLAYER_CSACTION_123);
     Enemy_StartFinishingBlow(play, &this->picto.actor);
     Actor_PlaySfx(&this->picto.actor, NA_SE_EN_PIRATE_DEAD);
@@ -1793,7 +1793,7 @@ void EnKaizoku_DefeatKnockdown(EnKaizoku* this, PlayState* play) {
     Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.yawTowardsPlayer, 1, 0xFA0, 1);
     SkelAnime_Update(&this->skelAnime);
     if (curFrame >= this->animEndFrame) {
-        this->dontUpdateSkel = false;
+        this->animationsDisabled = false;
         EnKaizoku_SetupPlayerWinCutscene(this);
     } else if (Animation_OnFrame(&this->skelAnime, 10.0f)) {
         Actor_PlaySfx(&this->picto.actor, NA_SE_EN_GERUDOFT_DOWN);
@@ -2022,7 +2022,7 @@ void EnKaizoku_Update(Actor* thisx, PlayState* play2) {
     EnKaizoku* this = (EnKaizoku*)thisx;
     PlayState* play = play2;
 
-    if (!this->dontUpdateSkel) {
+    if (!this->animationsDisabled) {
         SkelAnime_Update(&this->skelAnime);
     }
 
