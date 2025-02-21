@@ -411,6 +411,8 @@ $(shell mkdir -p $(foreach dir, \
                     $(dir:$(EXTRACTED_DIR)/%=$(BUILD_DIR)/%)))
 endif
 
+$(BUILD_DIR)/src/audio/lib/seqplayer.o: C_DEFINES += -DMML_VERSION=MML_VERSION_MM
+
 ifeq ($(COMPILER),ido)
 # directory flags
 $(BUILD_DIR)/src/libultra/os/%.o: OPTFLAGS := -O1
