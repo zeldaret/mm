@@ -4,7 +4,6 @@
  * Description: Pierre the Scarecorw
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_en_kakasi.h"
 
 #include "z64olib.h"

@@ -1,4 +1,3 @@
-#include "prevent_bss_reordering.h"
 #include "buffers.h"
 
 u64 gGfxSPTaskYieldBuffer[OS_YIELD_DATA_SIZE / sizeof(u64)] ALIGNED(16);

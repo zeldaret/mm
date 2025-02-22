@@ -6,7 +6,33 @@
 
 /**
  * Cutscene scripts are arrays of `CutsceneData` words, including bit-packed integers and floats.
+ *
+ * Most command macros have unused arguments. This is to account for the vanilla assets setting specific values
+ * that don't end up being used by any code. They can safely be set to anything, as they aren't used in the
+ * implementation.
+ *
+ * It is believed the original tool used for cutscenes handled most commands the same way, using similar
+ * fields, and the code would have accessed them using common structs. Given this, the unused values observed in vanilla
+ * assets may appear to map to a variable that makes sense, even if it doesn't end up being used in the code. It
+ * probably isn't garbage data.
+ *
+ * This codebase goes with specialized structs and macros to make it easier to follow the code.
+ * Note this common struct design is still partially reflected in all commands having a `startFrame` and `endFrame`,
+ * when sometimes only the `startFrame` matters (as documented).
  */
+
+/**
+ * CMD_F expects an (IEEE 754) encoded float (colloquially "in hex", such as `0x42280000`),
+ * rather than a C float literal (such as `42.0f`).
+ * Float literals cannot be used because cutscenes are arrays of union type CutsceneData, which may contain integers and floats.
+ * Regardless of CutsceneData having a float member, initializing with a float will cast the float to s32.
+ * Designated initializers (added in C99) would solve this problem but are not supported by IDO (C89 and some extensions).
+ */
+#ifdef __GNUC__
+#define CS_FLOAT(ieee754bin, f) (f)
+#else
+#define CS_FLOAT(ieee754bin, f) (ieee754bin)
+#endif
 
 /**
  * Marks the beginning of a cutscene script.

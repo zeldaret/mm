@@ -12,12 +12,13 @@ For macOS, use Homebrew to install the following dependencies:
 * libpng
 * bash
 * libxml2
+* libiconv
 
 You can install them with the following commands:
 
 ```bash
 brew update
-brew install coreutils make python3 libpng bash libxml2
+brew install coreutils make python3 libpng bash libxml2 libiconv
 ```
 
 (The repository expects Homebrew-installed programs to be either linked correctly in `$PATH` etc. or in their default locations.)
@@ -72,10 +73,10 @@ make -j
 sudo make install
 ```
 
-Edit your `~/.bash_profile`/`~/.zsh_profile` (or whichever shell you use) to add the new binutils binaries to the system PATH
+Edit your `~/.bash_profile`/`~/.zprofile` (or whichever shell you use) to add the new binutils binaries to the system PATH
 
 ```bash
-echo "export PATH=$PATH:/opt/cross/bin" >> ~/.bash_profile
+echo 'export PATH="$PATH:/opt/cross/bin"' >> ~/.bash_profile
 ```
 
 Reload ~/.bash_profile (or just launch a new terminal tab)

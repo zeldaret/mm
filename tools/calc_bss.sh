@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Given a list of header files, compute the bss index that results from
-# including them. (See prevent_bss_reordering.h for more information.)
+# including them.
 
 TEMPC=$(mktemp -t bss.XXXXXXX.c)
 TEMPO=$(mktemp -t bss.XXXXXXX.o)

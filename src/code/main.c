@@ -1,6 +1,7 @@
-#include "prevent_bss_reordering.h"
 #include "ultra64.h"
 #include "stack.h"
+
+#pragma increment_block_number "n64-us:128"
 
 // Variables are put before most headers as a hacky way to bypass bss reordering
 OSMesgQueue sSerialEventQueue;

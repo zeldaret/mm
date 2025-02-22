@@ -1,4 +1,3 @@
-#include "prevent_bss_reordering.h"
 #include "kaleido_manager.h"
 
 #include "z64.h"
