@@ -56,7 +56,7 @@ typedef enum KaizokuAction {
     /*  0 */ KAIZOKU_ACTION_HIDDEN,
     /*  1 */ KAIZOKU_ACTION_READY,
     /*  2 */ KAIZOKU_ACTION_SPIN_DODGE,
-    /*  3 */ KAIZOKU_ACTION_SIDESTEP,
+    /*  3 */ KAIZOKU_ACTION_CIRCLE,
     /*  4 */ KAIZOKU_ACTION_ADVANCE,
     /*  5 */ KAIZOKU_ACTION_ROLL_FORWARD,
     /*  6 */ KAIZOKU_ACTION_JUMP,
@@ -141,14 +141,14 @@ typedef enum KaizokuDamageEffect {
 } KaizokuDamageEffect;
 
 static DamageTable sDamageTable = {
-    /* Deku Nut       */ DMG_ENTRY(0, KAIZOKU_DMGEFF_STUNNED),
+    /* Deku Nut       */ DMG_ENTRY(0, KAIZOKU_DMGEFF_STUN),
     /* Deku Stick     */ DMG_ENTRY(1, KAIZOKU_DMGEFF_IFRAME_PROTECTED),
     /* Horse trample  */ DMG_ENTRY(0, KAIZOKU_DMGEFF_NONE),
     /* Explosives     */ DMG_ENTRY(1, KAIZOKU_DMGEFF_IFRAME_PROTECTED),
-    /* Zora boomerang */ DMG_ENTRY(0, KAIZOKU_DMGEFF_STUNNED),
+    /* Zora boomerang */ DMG_ENTRY(0, KAIZOKU_DMGEFF_STUN),
     /* Normal arrow   */ DMG_ENTRY(1, KAIZOKU_DMGEFF_IFRAME_PROTECTED),
     /* UNK_DMG_0x06   */ DMG_ENTRY(0, KAIZOKU_DMGEFF_NONE),
-    /* Hookshot       */ DMG_ENTRY(0, KAIZOKU_DMGEFF_STUNNED),
+    /* Hookshot       */ DMG_ENTRY(0, KAIZOKU_DMGEFF_STUN),
     /* Goron punch    */ DMG_ENTRY(1, KAIZOKU_DMGEFF_ALWAYS_HIT),
     /* Sword          */ DMG_ENTRY(1, KAIZOKU_DMGEFF_ALWAYS_HIT),
     /* Goron pound    */ DMG_ENTRY(0, KAIZOKU_DMGEFF_STUNNED_ONLY),
@@ -156,10 +156,10 @@ static DamageTable sDamageTable = {
     /* Ice arrow      */ DMG_ENTRY(2, KAIZOKU_DMGEFF_FREEZE),
     /* Light arrow    */ DMG_ENTRY(2, KAIZOKU_DMGEFF_LIGHT_ARROW),
     /* Goron spikes   */ DMG_ENTRY(1, KAIZOKU_DMGEFF_ALWAYS_HIT),
-    /* Deku spin      */ DMG_ENTRY(0, KAIZOKU_DMGEFF_STUNNED),
+    /* Deku spin      */ DMG_ENTRY(0, KAIZOKU_DMGEFF_STUN),
     /* Deku bubble    */ DMG_ENTRY(1, KAIZOKU_DMGEFF_ALWAYS_HIT),
     /* Deku launch    */ DMG_ENTRY(2, KAIZOKU_DMGEFF_ALWAYS_HIT),
-    /* UNK_DMG_0x12   */ DMG_ENTRY(0, KAIZOKU_DMGEFF_STUNNED),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, KAIZOKU_DMGEFF_STUN),
     /* Zora barrier   */ DMG_ENTRY(0, KAIZOKU_DMGEFF_ZORA_SHIELD),
     /* Normal shield  */ DMG_ENTRY(0, KAIZOKU_DMGEFF_NONE),
     /* Light ray      */ DMG_ENTRY(0, KAIZOKU_DMGEFF_NONE),
@@ -458,7 +458,7 @@ s32 EnKaizoku_ReactToPlayer(EnKaizoku* this, PlayState* play, s16 arg2) {
                     EnKaizoku_SetupSlash(this);
                     return true;
                 }
-            } else if (this->action != KAIZOKU_ACTION_SIDESTEP) {
+            } else if (this->action != KAIZOKU_ACTION_CIRCLE) {
                 EnKaizoku_SetupCircle(this);
             }
         }
@@ -1478,7 +1478,6 @@ void EnKaizoku_SpinAttack(EnKaizoku* this, PlayState* play) {
 
         this->picto.actor.world.rot.y = this->picto.actor.yawTowardsPlayer;
         if (BREG(12) * 0.1f + 0.01f * 40.0f < Rand_ZeroOne()) {
-            // dev seemed unsatisfied with randomized behavior
             EnKaizoku_SetupBlock(this); // in OOT this was sidestep
             return;
         }
@@ -1504,7 +1503,7 @@ void EnKaizoku_SetupCircle(EnKaizoku* this) {
     this->skelAnime.playSpeed = 1.0f;
     this->picto.actor.world.rot.y = this->picto.actor.shape.rot.y;
     this->combatTimer = Rand_ZeroOne() * 30.0f + 30.0f;
-    this->action = KAIZOKU_ACTION_SIDESTEP;
+    this->action = KAIZOKU_ACTION_CIRCLE;
     this->actionFunc = EnKaizoku_Circle;
     this->circlingRate = 0.0f;
 }
@@ -1856,7 +1855,7 @@ void EnKaizoku_UpdateDamage(EnKaizoku* this, PlayState* play) {
     }
 
     if ((this->picto.actor.bgCheckFlags & BGCHECKFLAG_WALL) && (this->picto.actor.wallBgId != BG_ACTOR_MAX) &&
-        ((this->action == KAIZOKU_ACTION_SPIN_DODGE) || (this->action == KAIZOKU_ACTION_SIDESTEP) ||
+        ((this->action == KAIZOKU_ACTION_SPIN_DODGE) || (this->action == KAIZOKU_ACTION_CIRCLE) ||
          (this->action == KAIZOKU_ACTION_ADVANCE) || (this->action == KAIZOKU_ACTION_READY))) {
         EnKaizoku_SetupSlash(this);
     }
@@ -1877,7 +1876,7 @@ void EnKaizoku_UpdateDamage(EnKaizoku* this, PlayState* play) {
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_MEDIUM;
                 }
                 FALLTHROUGH;
-            case KAIZOKU_DMGEFF_STUNNED:
+            case KAIZOKU_DMGEFF_STUN:
                 if (((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_SFX) &&
                      (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX)) ||
                     this->drawDmgEffTimer == 0) {
