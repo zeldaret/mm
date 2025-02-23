@@ -65,7 +65,7 @@
         <DList Name="gFighterPiratePonytailDL" Offset="0xCE30" />
         <DList Name="gFighterPirateHeadDL" Offset="0xCF20" />
 
-        <Limb Name="gFighterPirateRootLimb" Type="Standard" EnumName="KAIZOKU_LIMB_RIGHTOOT" Offset="0xD6B8" />
+        <Limb Name="gFighterPirateRootLimb" Type="Standard" EnumName="KAIZOKU_LIMB_ROOT" Offset="0xD6B8" />
         <Limb Name="gFighterPirateTorsoLimb" Type="Standard" EnumName="KAIZOKU_LIMB_TORSO" Offset="0xD6C4" />
         <Limb Name="gFighterPirateNeckLimb" Type="Standard" EnumName="KAIZOKU_LIMB_NECK" Offset="0xD6D0" />
         <Limb Name="gFighterPiratePonytailLimb" Type="Standard" EnumName="KAIZOKU_LIMB_PONYTAIL" Offset="0xD6DC" />

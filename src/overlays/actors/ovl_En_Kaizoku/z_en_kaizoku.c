@@ -130,12 +130,12 @@ static Color_RGBA8 sKaizokuOutfitColors[] = {
 
 typedef enum KaizokuDamageEffect {
     /* 0x0 */ KAIZOKU_DMGEFF_NONE,
-    /* 0x1 */ KAIZOKU_DMGEFF_STUNNED,
+    /* 0x1 */ KAIZOKU_DMGEFF_STUN,
     /* 0x2 */ KAIZOKU_DMGEFF_FIRE_ARROW,
     /* 0x3 */ KAIZOKU_DMGEFF_FREEZE,
     /* 0x4 */ KAIZOKU_DMGEFF_LIGHT_ARROW,
     /* 0x5 */ KAIZOKU_DMGEFF_ZORA_SHIELD,
-    /* 0xD */ KAIZOKU_DMGEFF_STUNNED_ONLY = 0xD, // smashed? it checks stun first?
+    /* 0xD */ KAIZOKU_DMGEFF_STUNNED_ONLY = 0xD, // deals damage only if the pirate is stunned; she jumps away otherwise
     /* 0xE */ KAIZOKU_DMGEFF_ALWAYS_HIT,
     /* 0xF */ KAIZOKU_DMGEFF_IFRAME_PROTECTED // can only hit while kaizoku has no iframe from rolling
 } KaizokuDamageEffect;
