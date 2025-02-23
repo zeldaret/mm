@@ -36,7 +36,8 @@ endif
 #### Defaults ####
 
 # Target game version. Currently only the following version is supported:
-#   n64-us   N64 USA (default)
+#   n64-jp-1.1 N64 Japan 1.1
+#   n64-us     N64 USA (default)
 VERSION ?= n64-us
 # If COMPARE is 1, check the output md5sum after building
 COMPARE ?= 1
@@ -76,7 +77,9 @@ export LANG := C
 CFLAGS :=
 CPPFLAGS :=
 
-ifeq ($(VERSION),n64-us)
+ifeq ($(VERSION),n64-jp-1.1)
+  COMPARE := 0
+else ifeq ($(VERSION),n64-us)
 # Intentionally blank for now
 else
 $(error Unsupported version $(VERSION))
@@ -558,9 +561,17 @@ setup:
 	$(PYTHON) tools/extract_yars.py $(EXTRACTED_DIR)/baserom -v $(VERSION)
 
 assets:
+ifeq ($(VERSION),n64-us)
 	$(PYTHON) tools/extract_assets.py $(EXTRACTED_DIR)/baserom $(EXTRACTED_DIR)/assets -j$(N_THREADS) -Z Wno-hardcoded-pointer -v $(VERSION)
 	$(PYTHON) tools/extract_text.py $(EXTRACTED_DIR)/baserom $(EXTRACTED_DIR)/text -v $(VERSION)
 	$(PYTHON) tools/extract_audio.py -b $(EXTRACTED_DIR)/baserom -o $(EXTRACTED_DIR) -v $(VERSION) --read-xml
+else
+# For non US versions just extract from the US rom
+	$(PYTHON) tools/extract_assets.py extracted/n64-us/baserom $(EXTRACTED_DIR)/assets -j$(N_THREADS) -Z Wno-hardcoded-pointer -v n64-us
+	$(PYTHON) tools/extract_text.py extracted/n64-us/baserom $(EXTRACTED_DIR)/text -v n64-us
+	$(PYTHON) tools/extract_audio.py -b extracted/n64-us/baserom -o $(EXTRACTED_DIR) -v n64-us --read-xml
+endif
+
 
 ## Assembly generation
 disasm:
@@ -570,7 +581,12 @@ disasm:
 diff-init: rom
 	$(RM) -r $(EXPECTED_DIR)
 	mkdir -p $(EXPECTED_DIR)
+ifneq ($(COMPARE),0)
+# If we could compare the rom successfully just copy from build
 	cp -r $(BUILD_DIR)/. $(EXPECTED_DIR)
+else
+	VERSION=$(VERSION) DISASM_DIR=$(EXTRACTED_DIR)/asm ASSEMBLE_DIR=$(EXPECTED_DIR) AS_CMD='$(AS) $(ASFLAGS) $(IINC)' LD=$(LD) ./tools/disasm/do_assemble.sh
+endif
 
 init: distclean
 	$(MAKE) venv

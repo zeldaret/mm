@@ -229,7 +229,6 @@ beginseg
     include "$(BUILD_DIR)/src/boot/libc/memmove.o"
     include "$(BUILD_DIR)/src/boot/build.o"
     include "$(BUILD_DIR)/rsp/rspboot.o"
-
 #ifdef COMPILER_GCC
     include "$(BUILD_DIR)/src/gcc_fix/missing_gcc_functions.o"
 #endif
