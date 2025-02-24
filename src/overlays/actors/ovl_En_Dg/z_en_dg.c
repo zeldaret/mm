@@ -421,7 +421,7 @@ void EnDg_SetupIdleMove(EnDg* this, PlayState* play) {
             //! this condition evaluating as true and the dog uses the walking animation with morph frames. Due to this,
             //! and since the dog doesn't update in the credits due to being considered an enemy, it ends up being
             //! upside down. It isn't certain but it is speculated its default pose is upside down as well, so when
-            //! morphing from no animiation it gets drawn upside down.
+            //! morphing from no animation it gets drawn upside down.
             EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_WALK);
         } else {
             EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_RUN);
