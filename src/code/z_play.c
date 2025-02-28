@@ -403,7 +403,7 @@ void Play_Destroy(GameState* thisx) {
     this->unk_18E64 = NULL;
     this->unk_18E68 = NULL;
     Effect_DestroyAll(this);
-    EffectSS_Clear(this);
+    EffectSs_ClearAll(this);
     CollisionCheck_DestroyContext(this, &this->colChkCtx);
 
     if (gTransitionTileState == TRANS_TILE_READY) {
@@ -1006,7 +1006,7 @@ void Play_UpdateMain(PlayState* this) {
                     Cutscene_UpdateManual(this, &this->csCtx);
                     Cutscene_UpdateScripted(this, &this->csCtx);
                     Effect_UpdateAll(this);
-                    EffectSS_UpdateAllParticles(this);
+                    EffectSs_UpdateAll(this);
                     EffFootmark_Update(this);
                 }
             } else {
@@ -2181,7 +2181,7 @@ void Play_Init(GameState* thisx) {
     SoundSource_InitAll(this);
     EffFootmark_Init(this);
     Effect_Init(this);
-    EffectSS_Init(this, 100);
+    EffectSs_InitInfo(this, 100);
     CollisionCheck_InitContext(this, &this->colChkCtx);
     AnimTaskQueue_Reset(&this->animTaskQueue);
     Cutscene_InitContext(this, &this->csCtx);

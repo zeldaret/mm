@@ -3187,7 +3187,7 @@ void Actor_DrawAll(PlayState* play, ActorContext* actorCtx) {
     }
 
     Effect_DrawAll(play->state.gfxCtx);
-    EffectSS_DrawAllParticles(play);
+    EffectSs_DrawAll(play);
     EffFootmark_Draw(play);
 
     ref2 = POLY_XLU_DISP;
