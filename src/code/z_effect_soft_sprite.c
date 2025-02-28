@@ -23,7 +23,7 @@ void EffectSS_Init(PlayState* play, s32 numEntries) {
         EffectSS_ResetEntry(effectsSs);
     }
 
-    overlay = &gParticleOverlayTable[0];
+    overlay = &gEffectSsOverlayTable[0];
     for (i = 0; i < EFFECT_SS_MAX; i++) {
         overlay->loadedRamAddr = NULL;
         overlay++;
@@ -47,7 +47,7 @@ void EffectSS_Clear(PlayState* play) {
     }
 
     // Free memory from loaded particle overlays
-    overlay = &gParticleOverlayTable[0];
+    overlay = &gEffectSsOverlayTable[0];
     for (i = 0; i < EFFECT_SS_MAX; i++) {
         addr = overlay->loadedRamAddr;
         if (addr != NULL) {
@@ -160,7 +160,7 @@ void EffectSS_Copy(PlayState* play, EffectSs* effectsSs) {
     s32 index;
 
     if (FrameAdvance_IsEnabled(play) != true) {
-        if (EffectSS_FindFreeSpace(effectsSs->priority, &index) == 0) {
+        if (!EffectSS_FindFreeSpace(effectsSs->priority, &index)) {
             sEffectSsInfo.searchIndex = index + 1;
             sEffectSsInfo.dataTable[index] = *effectsSs;
         }
@@ -170,10 +170,10 @@ void EffectSS_Copy(PlayState* play, EffectSs* effectsSs) {
 void EffectSs_Spawn(PlayState* play, s32 type, s32 priority, void* initData) {
     s32 index;
     u32 overlaySize;
-    EffectSsOverlay* overlayEntry = &gParticleOverlayTable[type];
+    EffectSsOverlay* overlayEntry = &gEffectSsOverlayTable[type];
     EffectSsProfile* profile;
 
-    if (EffectSS_FindFreeSpace(priority, &index) != 0) {
+    if (EffectSS_FindFreeSpace(priority, &index)) {
         // Abort because we couldn't find a suitable slot to add this effect in
         return;
     }

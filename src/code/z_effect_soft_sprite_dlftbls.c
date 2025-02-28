@@ -20,7 +20,7 @@
 
 #define DEFINE_EFFECT_SS_UNSET(_enumValue) { 0 },
 
-EffectSsOverlay gParticleOverlayTable[EFFECT_SS_MAX] = {
+EffectSsOverlay gEffectSsOverlayTable[EFFECT_SS_MAX] = {
 #include "tables/effect_ss_table.h"
 };
 

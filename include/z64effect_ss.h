@@ -166,6 +166,6 @@ void EffectSsIceSmoke_Spawn(struct PlayState* play, Vec3f* pos, Vec3f* velocity,
 void EffectSsIceBlock_Spawn(struct PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale);
 
 
-extern EffectSsOverlay gParticleOverlayTable[EFFECT_SS_MAX];
+extern EffectSsOverlay gEffectSsOverlayTable[EFFECT_SS_MAX];
 
 #endif
