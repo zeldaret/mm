@@ -21,15 +21,6 @@
             0x80080000 : "entry",
         },
     ],
-    ['dmadata', None, 'dmadata',
-        [
-            [0x8009F8B0, 0x800A5AB0, 'dmadata', None],
-            [0x800A5AB0, 0x800A5AC0, 'bss', None],
-        ],
-        {
-            0x8009F8B0 : "dmadata",
-        },
-    ],
     ['boot', None, 'boot',
         [
             [0x80080060, 0x800969C0, 'text', None],
@@ -341,6 +332,15 @@
             0x8009E5D0 : "pfsisplug",
             0x8009E610 : "cartrominit",
             0x8009E690 : "vimgr",
+        },
+    ],
+    ['dmadata', None, 'dmadata',
+        [
+            [0x8009F8B0, 0x800A5AB0, 'dmadata', None],
+            [0x800A5AB0, 0x800A5AC0, 'bss', None],
+        ],
+        {
+            0x8009F8B0 : "dmadata",
         },
     ],
     ['code', None, 'code',

@@ -2229,7 +2229,7 @@ for segment in files_spec:
                 data_size = 0x80800000 - file_list[full_index]
             elif segment[0] == "boot" and name == "vimgr" and segment[3][i][2] == "bss":
                 # This is the end of boot, hardcode it
-                data_size = 0x800A5AC0 - file_list[full_index]
+                data_size = 0x8009F8B0 - file_list[full_index]
             else:
                 data_size = file_list[full_index + 1] - file_list[full_index]
 
