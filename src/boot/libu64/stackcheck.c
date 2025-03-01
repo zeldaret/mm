@@ -94,6 +94,8 @@ StackStatus StackCheck_GetState(StackEntry* entry) {
         status = STACK_STATUS_OK;
     }
 
+    (void)"(null)";
+
     return status;
 }
 

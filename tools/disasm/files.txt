@@ -296,6 +296,7 @@
             0x80098280 : "CIC6105",
             0x800982B0 : "fault",
             0x80098C50 : "fault_drawer",
+            0x80099080 : "stackcheck",
             0x80099090 : "gfxprint",
             0x800990B0 : "debug",
             0x800990C0 : "math64",
