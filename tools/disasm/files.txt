@@ -501,7 +501,7 @@
             0x801A4EB0 : "voice_external",
             0x801A51F0 : "voice_internal",
             0x801A5BC0 : "[PADDING]",
-            0x801A5BD0 : "code_801A5BD0",
+            0x801A5BD0 : "sfx",
             0x801A7B10 : "sequence",
             0x801A9B10 : "jpegutils",
             0x801AA020 : "jpegdecoder",
