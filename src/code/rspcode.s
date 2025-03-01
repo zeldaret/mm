@@ -1,6 +1,24 @@
 .include "macro.inc"
 
+.section .text
+
+.balign 16
+
+glabel aspMainTextStart
+    .incbin "incbin/aspMainText"
+glabel aspMainTextEnd
+
+glabel gspS2DEX2_fifoTextStart
+    .incbin "incbin/gspS2DEX2_fifoText"
+glabel gspS2DEX2_fifoTextEnd
+
+glabel njpgdspMainTextStart
+    .incbin "incbin/njpgdspMainText"
+glabel njpgdspMainTextEnd
+
 .section .rodata
+
+.balign 16
 
 dlabel aspMainDataStart
     .incbin "incbin/aspMainData"
