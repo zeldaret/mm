@@ -383,7 +383,7 @@
             0x800EFE60 : "z_eff_footmark",
             0x800F0390 : "z_sound_source",
             0x800F05C0 : "z_elf_message",
-            0x800F07C0 : "z_en_hy",
+            0x800F07C0 : "z_en_hy_code",
             0x800F1250 : "z_face_reaction",
             0x800F12D0 : "z_env_flags",
             0x800F1460 : "z_eventmgr",
