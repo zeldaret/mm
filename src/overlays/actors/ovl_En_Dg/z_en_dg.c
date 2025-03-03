@@ -414,6 +414,14 @@ void EnDg_SetupIdleMove(EnDg* this, PlayState* play) {
         } else if (play->sceneId == SCENE_CLOCKTOWER) {
             EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_RUN);
         } else if (sRacetrackDogInfo[this->index].textId & 0x11) {
+            //! @bug: There is no bounds check on sRacetrackDogInfo access.
+            //! The dog in the Romani Ranch credits uses params of 0x03FF which means an index equal to
+            //! `ENDG_INDEX_SOUTH_CLOCK_TOWN`. Since the above condition just checks the scene not the index, this
+            //! results in an OOB access of `sRacetrackDogInfo` in this condition. With IDO, the OOB access results in
+            //! this condition evaluating as true and the dog uses the walking animation with morph frames. Due to this,
+            //! and since the dog doesn't update in the credits due to being considered an enemy, it ends up being
+            //! upside down. It isn't certain but it is speculated its default pose is upside down as well, so when
+            //! morphing from no animation it gets drawn upside down.
             EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_WALK);
         } else {
             EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_RUN);
