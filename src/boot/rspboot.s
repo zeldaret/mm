@@ -6,4 +6,5 @@
 
 glabel rspbootTextStart
     .incbin "incbin/rspbootText"
-glabel rspbootTextEnd
+endlabel rspbootTextStart
+dlabel rspbootTextEnd

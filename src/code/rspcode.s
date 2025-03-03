@@ -6,15 +6,18 @@
 
 glabel aspMainTextStart
     .incbin "incbin/aspMainText"
-glabel aspMainTextEnd
+endlabel aspMainTextStart
+dlabel aspMainTextEnd
 
 glabel gspS2DEX2_fifoTextStart
     .incbin "incbin/gspS2DEX2_fifoText"
-glabel gspS2DEX2_fifoTextEnd
+endlabel gspS2DEX2_fifoTextStart
+dlabel gspS2DEX2_fifoTextEnd
 
 glabel njpgdspMainTextStart
     .incbin "incbin/njpgdspMainText"
-glabel njpgdspMainTextEnd
+endlabel njpgdspMainTextStart
+dlabel njpgdspMainTextEnd
 
 .section .rodata
 
