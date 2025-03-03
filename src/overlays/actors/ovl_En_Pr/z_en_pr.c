@@ -639,6 +639,9 @@ void EnPr_Draw(Actor* thisx, PlayState* play) {
     }
 
     if (this->drawDmgEffAlpha != 0) {
+        //! @bug: `this->drawDmgEffAlpha` is not decremented, so once active; the damage effect will remain until the
+        //! actor is killed. This only affects zora barrier as the only other damage effect, light arrows, kills in one
+        //! hit.
         f32 drawDmgEffAlpha = this->drawDmgEffAlpha * 0.05f;
 
         this->unk_238 = 0.8f;

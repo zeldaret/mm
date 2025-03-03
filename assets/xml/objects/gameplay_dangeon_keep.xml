@@ -10,19 +10,19 @@
         <Texture Name="gameplay_dangeon_keep_Tex_0042C8" OutName="tex_0042C8" Format="i4" Width="96" Height="85" Offset="0x42C8" />
         <Texture Name="gameplay_dangeon_keep_Tex_0052C8" OutName="tex_0052C8" Format="i4" Width="96" Height="85" Offset="0x52C8" />
         <Texture Name="gameplay_dangeon_keep_Tex_0062C8" OutName="tex_0062C8" Format="i4" Width="96" Height="85" Offset="0x62C8" />
-        <DList Name="gameplay_dangeon_keep_DL_007300" Offset="0x7300" />
-        <Collision Name="gameplay_dangeon_keep_Colheader_007498" Offset="0x7498" />
-        <DList Name="gameplay_dangeon_keep_DL_007650" Offset="0x7650" />
-        <DList Name="gameplay_dangeon_keep_DL_007890" Offset="0x7890" />
-        <DList Name="gameplay_dangeon_keep_DL_007980" Offset="0x7980" />
-        <DList Name="gameplay_dangeon_keep_DL_007A50" Offset="0x7A50" />
-        <DList Name="gameplay_dangeon_keep_DL_007B20" Offset="0x7B20" />
-        <DList Name="gameplay_dangeon_keep_DL_007BF0" Offset="0x7BF0" />
-        <DList Name="gRustyFloorSwitchDL" Offset="0x7E00" />
-        <Collision Name="gFloorSwitchCol" Offset="0x8018" />
-        <DList Name="gameplay_dangeon_keep_DL_0081D0" Offset="0x81D0" />
-        <DList Name="gEyeSwitchGoldDL" Offset="0x83F0" />
-        <DList Name="gEyeSwitchSilverDL" Offset="0x85F0" />
+        <DList Name="gameplay_dangeon_keep_DL_007300" Offset="0x7300" /> <!-- Original name is "bombhukuro_model" -->
+        <Collision Name="gameplay_dangeon_keep_Colheader_007498" Offset="0x7498" /> <!-- Original name is "brick_15_bgdatainfo" -->
+        <DList Name="gameplay_dangeon_keep_DL_007650" Offset="0x7650" /> <!-- Original name is "floater_l_model" -->
+        <DList Name="gameplay_dangeon_keep_DL_007890" Offset="0x7890" /> <!-- Original name is "kibako_model" -->
+        <DList Name="gameplay_dangeon_keep_DL_007980" Offset="0x7980" /> <!-- Original name is "kibako_hahen_model" -->
+        <DList Name="gameplay_dangeon_keep_DL_007A50" Offset="0x7A50" /> <!-- Original name is "knife_model" -->
+        <DList Name="gameplay_dangeon_keep_DL_007B20" Offset="0x7B20" /> <!-- Original name is "mahou_bin_model" -->
+        <DList Name="gameplay_dangeon_keep_DL_007BF0" Offset="0x7BF0" /> <!-- Original name is "patinko_model" -->
+        <DList Name="gRustyFloorSwitchDL" Offset="0x7E00" /> <!-- Original name is "switch_10_model" -->
+        <Collision Name="gFloorSwitchCol" Offset="0x8018" /> <!-- Original name is "switch_1_bgdatainfo" -->
+        <DList Name="gameplay_dangeon_keep_DL_0081D0" Offset="0x81D0" /> <!-- Original name is "switch_3_model" -->
+        <DList Name="gEyeSwitchGoldDL" Offset="0x83F0" /> <!-- Original name is "switch_4_model" -->
+        <DList Name="gEyeSwitchSilverDL" Offset="0x85F0" /> <!-- Original name is "switch_5_model" -->
         <Texture Name="gameplay_dangeon_keep_Tex_0086C0" OutName="tex_0086C0" Format="rgba16" Width="32" Height="32" Offset="0x86C0" />
         <Texture Name="gameplay_dangeon_keep_Tex_008EC0" OutName="tex_008EC0" Format="rgba16" Width="32" Height="32" Offset="0x8EC0" />
         <Texture Name="gEyeSwitchGoldClosedTex" OutName="eye_gold_closed" Format="rgba16" Width="32" Height="32" Offset="0x96C0" />
@@ -54,29 +54,29 @@
         <Texture Name="gameplay_dangeon_keep_Tex_0162C0" OutName="tex_0162C0" Format="i8" Width="64" Height="64" Offset="0x162C0" />
         <Texture Name="gameplay_dangeon_keep_Tex_0172C0" OutName="tex_0172C0" Format="rgba16" Width="32" Height="32" Offset="0x172C0" />
         <Texture Name="gameplay_dangeon_keep_Tex_017AC0" OutName="tex_017AC0" Format="ia16" Width="4" Height="4" Offset="0x17AC0" />
-        <DList Name="gameplay_dangeon_keep_DL_017EA0" Offset="0x17EA0" /> <!-- pot displaylist -->
-        <DList Name="gameplay_dangeon_keep_DL_018090" Offset="0x18090" /> <!-- pot break shard displaylist -->
+        <DList Name="gameplay_dangeon_keep_DL_017EA0" Offset="0x17EA0" /> <!-- pot displaylist. Original name is "tubo_model" -->
+        <DList Name="gameplay_dangeon_keep_DL_018090" Offset="0x18090" /> <!-- pot break shard displaylist. Original name is "tubo_hahen_model" -->
         <DList Name="gameplay_dangeon_keep_DL_0182A0" Offset="0x182A0" />
-        <DList Name="gameplay_dangeon_keep_DL_0182A8" Offset="0x182A8" />
+        <DList Name="gameplay_dangeon_keep_DL_0182A8" Offset="0x182A8" /> <!-- Original name is "z2_brick_model" -->
         <Texture Name="gameplay_dangeon_keep_Tex_018350" OutName="tex_018350" Format="i8" Width="64" Height="64" Offset="0x18350" />
         <Texture Name="gameplay_dangeon_keep_Tex_019350" OutName="tex_019350" Format="i8" Width="64" Height="64" Offset="0x19350" />
         <Texture Name="gameplay_dangeon_keep_Tex_01A350" OutName="tex_01A350" Format="i8" Width="64" Height="64" Offset="0x1A350" />
         <TextureAnimation Name="gameplay_dangeon_keep_Matanimheader_01B370" Offset="0x1B370" />
         <DList Name="gameplay_dangeon_keep_DL_01B500" Offset="0x1B500" />
-        <DList Name="gFloorSwitch1DL" Offset="0x1B508" />
+        <DList Name="gFloorSwitch1DL" Offset="0x1B508" /> <!-- Original name is "z2_switch_1_model" -->
         <DList Name="gameplay_dangeon_keep_DL_01B780" Offset="0x1B780" />
-        <DList Name="gFloorSwitch2DL" Offset="0x1B788" />
+        <DList Name="gFloorSwitch2DL" Offset="0x1B788" /> <!-- Original name is "z2_switch_11_model" -->
         <DList Name="gameplay_dangeon_keep_DL_01B9F0" Offset="0x1B9F0" />
-        <DList Name="gFloorSwitch3DL" Offset="0x1B9F8" />
+        <DList Name="gFloorSwitch3DL" Offset="0x1B9F8" /> <!-- Original name is "z2_switch_2_model" -->
         <DList Name="gCrystalSwitchCoreDL" Offset="0x1BEE0" />
         <DList Name="gCrystalSwitchDiamondDL" Offset="0x1BFB8" />
         <DList Name="gCrystalSwitchBaseDL" Offset="0x1C058" />
         <TextureAnimation Name="gCrystalSwitchTexAnim" Offset="0x1C118" />
         <DList Name="gameplay_dangeon_keep_DL_01C220" Offset="0x1C220" />
-        <DList Name="gameplay_dangeon_keep_DL_01C228" Offset="0x1C228" />
+        <DList Name="gameplay_dangeon_keep_DL_01C228" Offset="0x1C228" /> <!-- Original name is "m2_TOGEblock_model" -->
         <Texture Name="gameplay_dangeon_keep_Tex_01C2D8" OutName="tex_01C2D8" Format="rgba16" Width="32" Height="64" Offset="0x1C2D8" />
-        <Collision Name="gameplay_dangeon_keep_Colheader_01D488" Offset="0x1D488" />
-        <DList Name="gameplay_dangeon_keep_DL_01D980" Offset="0x1D980" />
+        <Collision Name="gameplay_dangeon_keep_Colheader_01D488" Offset="0x1D488" /> <!-- Original name is "pzlblock_bgdatainfo" -->
+        <DList Name="gameplay_dangeon_keep_DL_01D980" Offset="0x1D980" /> <!-- Original name is "m2_RASENsita_model" -->
         <Texture Name="gameplay_dangeon_keep_Tex_01DC70" OutName="tex_01DC70" Format="rgba16" Width="32" Height="32" Offset="0x1DC70" />
         <Texture Name="gameplay_dangeon_keep_Tex_01E470" OutName="tex_01E470" Format="rgba16" Width="32" Height="32" Offset="0x1E470" />
         <!-- snowhead(?) floor changing stone staircase stone textures -->
@@ -86,12 +86,12 @@
         <Texture Name="gameplay_dangeon_keep_Tex_020470" OutName="tex_020470" Format="i4" Width="64" Height="64" Offset="0x20470" />
         <Texture Name="gameplay_dangeon_keep_Tex_020C70" OutName="tex_020C70" Format="i4" Width="64" Height="64" Offset="0x20C70" />
         <!-- snowhead(?) floor changing stone staircase -->
-        <DList Name="gameplay_dangeon_keep_DL_0219E0" Offset="0x219E0" />
+        <DList Name="gameplay_dangeon_keep_DL_0219E0" Offset="0x219E0" /> <!-- Original name is "m2_RASENue_model" -->
 
         <!-- En_Warp_tag assets -->
-        <DList Name="gWarpTagGoronTrialBaseDL" Offset="0x21EF0" />
+        <DList Name="gWarpTagGoronTrialBaseDL" Offset="0x21EF0" /> <!-- Original name is "a_warp_p_model" -->
         <Texture Name="gWarpTagRainbowTex" OutName="warptag_rainbow" Format="rgba32" Width="32" Height="32" Offset="0x21FF8" />
         <TextureAnimation Name="gWarpTagRainbowTexAnim" Offset="0x23008" />
-        <Collision Name="gWarpTagGoronTrialBaseCol" Offset="0x2324C" />
+        <Collision Name="gWarpTagGoronTrialBaseCol" Offset="0x2324C" /> <!-- Original name is "a_warp_p_bgdatainfo" -->
     </File>
 </Root>

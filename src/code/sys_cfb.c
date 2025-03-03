@@ -63,35 +63,54 @@ void SysCfb_SetHiResMode(void) {
     gWorkBuffer = gWorkBufferHiRes;
     gGfxSPTaskOutputBufferPtr = *gGfxSPTaskOutputBufferHiRes;
     gGfxSPTaskOutputBufferEnd = gGfxSPTaskOutputBufferEndHiRes;
-    if (1) {}
-    gCfbWidth = HIRES_BUFFER_WIDTH;
-    gCfbHeight = HIRES_BUFFER_HEIGHT;
-    gCfbLeftAdjust = 30;
-    gCfbUpperAdjust = 10;
+
+    if (0) {
+        // Remnant of debug
+    } else {
+        gCfbWidth = HIRES_BUFFER_WIDTH;
+        gCfbHeight = HIRES_BUFFER_HEIGHT;
+        gCfbLeftAdjust = 30;
+        gCfbUpperAdjust = 10;
+    }
     gScreenWidth = gCfbWidth;
     gScreenHeight = gCfbHeight;
+
     if ((gCfbWidth == SCREEN_WIDTH_HIRES) && (gCfbHeight == SCREEN_HEIGHT_HIRES)) {
         gActiveViMode = &osViModeNtscHpf1;
     } else {
+        s32 leftAdjust;
         s32 rightAdjust;
+        s32 upperAdjust;
         s32 lowerAdjust;
 
-    //! FAKE:
-    l1:
-        rightAdjust = gCfbWidth - 610;
-        lowerAdjust = gCfbHeight - 470;
-        ViMode_Configure(&sNotebookViMode, -1, osTvType, 0, 1, 0, 1, gCfbWidth, gCfbHeight, 30, rightAdjust, 10,
-                         lowerAdjust);
+        if (0) {
+            // Remnant of debug
+        } else {
+            leftAdjust = 30;
+            upperAdjust = 10;
+            rightAdjust = gCfbWidth - (SCREEN_WIDTH_HIRES - leftAdjust);
+            lowerAdjust = gCfbHeight - (SCREEN_HEIGHT_HIRES - upperAdjust);
+        }
+
+        ViMode_Configure(&sNotebookViMode, -1, osTvType, false, true, false, true, gCfbWidth, gCfbHeight, leftAdjust,
+                         rightAdjust, upperAdjust, lowerAdjust);
         gActiveViMode = &sNotebookViMode;
     }
+
     gSysCfbHiResEnabled = true;
 }
 
 void SysCfb_Init(void) {
-    sCfbLoRes1 = gLoBuffer.framebuffer;
-    sCfbLoRes0 = gHiBuffer.framebuffer;
-    sCfbHiRes1 = gFramebufferHiRes1;
-    sCfbHiRes0 = gFramebufferHiRes0;
+    do {
+        sCfbLoRes1 = gLoBuffer.framebuffer;
+        sCfbLoRes0 = gHiBuffer.framebuffer;
+    } while ((u64)0);
+
+    do {
+        sCfbHiRes1 = gLoBuffer.framebufferHiRes;
+        sCfbHiRes0 = gHiBuffer.framebufferHiRes;
+    } while ((u64)0);
+
     SysCfb_SetLoResMode();
 }
 

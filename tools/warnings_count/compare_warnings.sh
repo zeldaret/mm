@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Terminal colour codes
 # when $TERM is empty (non-interactive shell), then expand tput with '-T xterm-256color'

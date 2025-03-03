@@ -1684,8 +1684,8 @@ s8 EnInvadepoh_ModelInfo_GetNextFaceAnim(EnInvadepohFaceAnimNext* nextAnims, s32
         }
     }
 
-    //! FAKE:
-    return (nextAnims + nextIndex)->index;
+    nextAnim = &nextAnims[nextIndex];
+    return nextAnim->index;
 }
 
 void EnInvadepoh_ModelInfo_SetNextFaceAnim(EnInvadepohFaceAnimInfo* faceInfo, EnInvadepohFaceAnimBase* faceAnim) {

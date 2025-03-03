@@ -1378,7 +1378,7 @@ s32 Player_IsFacingActor(Actor* actor, s16 maxAngleDiff, struct PlayState* play)
 
 PlayerItemAction Player_GetExchangeItemAction(struct PlayState* play);
 
-void func_800B8D10(struct PlayState* play, Actor* actor, f32 arg2, s16 arg3, f32 arg4, u32 arg5, u32 arg6);
+void func_800B8D10(struct PlayState* play, Actor* actor, f32 arg2, s16 arg3, f32 arg4, s32 arg5, u32 arg6);
 void func_800B8D50(struct PlayState* play, Actor* actor, f32 arg2, s16 yaw, f32 arg4, u32 arg5);
 void func_800B8D98(struct PlayState* play, Actor* actor, f32 arg2, s16 arg3, f32 arg4);
 void func_800B8DD4(struct PlayState* play, Actor* actor, f32 arg2, s16 arg3, f32 arg4, u32 arg5);
@@ -1428,7 +1428,7 @@ void Player_SetAutoLockOnActor(struct PlayState* play, Actor* actor);
 s32 Player_SetBButtonAmmo(struct PlayState* play, s32 ammo);
 bool Player_IsBurningStickInRange(struct PlayState* play, Vec3f* pos, f32 xzRange, f32 yRange);
 u8 Player_GetStrength(void);
-PlayerMask Player_GetMask(struct PlayState* play);
+s32 Player_GetMask(struct PlayState* play);
 void Player_RemoveMask(struct PlayState* play);
 bool Player_HasMirrorShieldEquipped(struct PlayState* play);
 bool Player_IsHoldingMirrorShield(struct PlayState* play);

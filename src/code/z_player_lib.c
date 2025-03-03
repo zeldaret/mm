@@ -1307,6 +1307,17 @@ struct_80124618 D_801C0560[] = {
     { 2, { 95, 95, 100 } },
     { 3, { 105, 105, 100 } },
     { 5, { 102, 102, 102 } },
+#ifdef AVOID_UB
+    //! @bug gPlayerAnim_pz_gakkiplay uses this array with a frame count
+    //! of up to (and including) 6, which is larger than the last
+    //! keyframe frame number (5). This causes it to continue to read into
+    //! the next array in search of a keyframe that bounds frame 6.
+    // Avoid UB: Provide extra data elements that would be read in an
+    // out-of-bounds read from the next array. Both are read-only so are
+    // not expected to change.
+    { 0, { 100, 100, 100 } },
+    { 9, { 100, 100, 100 } },
+#endif
 };
 struct_80124618 D_801C0580[] = {
     { 0, { 100, 100, 100 } }, { 9, { 100, 100, 100 } }, { 10, { 150, 150, 150 } },
@@ -1581,7 +1592,7 @@ u8 Player_GetStrength(void) {
     return sPlayerStrengths[GET_PLAYER_FORM];
 }
 
-PlayerMask Player_GetMask(PlayState* play) {
+s32 Player_GetMask(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     return player->currentMask;
@@ -1687,9 +1698,8 @@ PlayerExplosive Player_GetExplosiveHeld(Player* player) {
 PlayerSword Player_SwordFromIA(Player* player, PlayerItemAction itemAction) {
     PlayerSword sword = PLAYER_SWORD_KOKIRI;
 
-    //! FAKE:
     if ((itemAction == PLAYER_IA_LAST_USED) ||
-        ((sword = GET_SWORD_FROM_IA(itemAction), (sword > PLAYER_SWORD_NONE)) && (sword < PLAYER_SWORD_MAX))) {
+        (sword = GET_SWORD_FROM_IA(itemAction), ((sword > PLAYER_SWORD_NONE) && (sword < PLAYER_SWORD_MAX)))) {
         return sword;
     }
 
@@ -1771,6 +1781,7 @@ void Player_UpdateBunnyEars(Player* player) {
 }
 
 void func_80124618(struct_80124618 arg0[], f32 curFrame, Vec3f* arg2) {
+    struct_80124618* prev;
     s32 currentFrame = curFrame;
     f32 temp_f0;
     f32 temp_f14;
@@ -1782,16 +1793,18 @@ void func_80124618(struct_80124618 arg0[], f32 curFrame, Vec3f* arg2) {
         arg0++;
     } while (temp_v1 < currentFrame);
 
-    temp_f0 = arg0[-1].unk_0;
+    prev = arg0 - 1;
+
+    temp_f0 = prev->unk_0;
     progress = (curFrame - temp_f0) / (temp_v1 - temp_f0);
 
-    temp_f14 = arg0[-1].unk_2.x;
+    temp_f14 = prev->unk_2.x;
     arg2->x = LERPIMP(temp_f14, arg0->unk_2.x, progress) * 0.01f;
 
-    temp_f14 = arg0[-1].unk_2.y;
+    temp_f14 = prev->unk_2.y;
     arg2->y = LERPIMP(temp_f14, arg0->unk_2.y, progress) * 0.01f;
 
-    temp_f14 = arg0[-1].unk_2.z;
+    temp_f14 = prev->unk_2.z;
     arg2->z = LERPIMP(temp_f14, arg0->unk_2.z, progress) * 0.01f;
 }
 
@@ -2361,11 +2374,12 @@ s32 Player_OverrideLimbDrawGameplayCommon(PlayState* play, s32 limbIndex, Gfx** 
         sPlayerCurBodyPartPos = &player->bodyPartsPos[0] - 1;
 
         if (player->transformation != PLAYER_FORM_FIERCE_DEITY) {
-            if (!(player->skelAnime.moveFlags & ANIM_FLAG_4) || (player->skelAnime.moveFlags & ANIM_FLAG_1)) {
+            if (!(player->skelAnime.movementFlags & ANIM_FLAG_4) || (player->skelAnime.movementFlags & ANIM_FLAG_1)) {
                 pos->x *= player->ageProperties->unk_08;
                 pos->z *= player->ageProperties->unk_08;
             }
-            if (!(player->skelAnime.moveFlags & ANIM_FLAG_4) || (player->skelAnime.moveFlags & ANIM_FLAG_UPDATE_Y)) {
+            if (!(player->skelAnime.movementFlags & ANIM_FLAG_4) ||
+                (player->skelAnime.movementFlags & ANIM_FLAG_UPDATE_Y)) {
                 pos->y *= player->ageProperties->unk_08;
             }
         }
@@ -3928,29 +3942,28 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
             }
         }
     } else if (limbIndex == PLAYER_LIMB_HEAD) {
-        //! FAKE:
-        if (((*dList1 != NULL) && ((((void)0, player->currentMask)) != (((void)0, PLAYER_MASK_NONE)))) &&
+        if (((*dList1 != NULL) && ((u32)player->currentMask != PLAYER_MASK_NONE)) &&
             (((player->transformation == PLAYER_FORM_HUMAN) &&
               ((player->skelAnime.animation != &gPlayerAnim_cl_setmask) || (player->skelAnime.curFrame >= 12.0f))) ||
              ((((player->transformation != PLAYER_FORM_HUMAN) && (player->currentMask >= PLAYER_MASK_FIERCE_DEITY)) &&
                ((player->transformation + PLAYER_MASK_FIERCE_DEITY) != player->currentMask)) &&
               (player->skelAnime.curFrame >= 10.0f)))) {
             if (func_80127438(play, player, player->currentMask)) {
-                s32 maskMinusOne = ((void)0, player->currentMask) - 1;
+                s32 maskMinusOne = player->currentMask - 1;
 
                 OPEN_DISPS(play->state.gfxCtx);
 
-                if (((void)0, player->currentMask) == PLAYER_MASK_COUPLE) {
+                if (player->currentMask == PLAYER_MASK_COUPLE) {
                     Player_DrawCouplesMask(play, player);
-                } else if (((void)0, player->currentMask) == PLAYER_MASK_CIRCUS_LEADER) {
+                } else if (player->currentMask == PLAYER_MASK_CIRCUS_LEADER) {
                     Player_DrawCircusLeadersMask(play, player);
-                } else if (((void)0, player->currentMask) == PLAYER_MASK_BLAST) {
+                } else if (player->currentMask == PLAYER_MASK_BLAST) {
                     Player_DrawBlastMask(play, player);
-                } else if (((void)0, player->currentMask) == PLAYER_MASK_BUNNY) {
+                } else if (player->currentMask == PLAYER_MASK_BUNNY) {
                     Player_DrawBunnyHood(play);
-                } else if (((void)0, player->currentMask) == PLAYER_MASK_GREAT_FAIRY) {
+                } else if (player->currentMask == PLAYER_MASK_GREAT_FAIRY) {
                     Player_DrawGreatFairysMask(play, player);
-                } else if (((void)0, player->currentMask) >= PLAYER_MASK_FIERCE_DEITY) {
+                } else if (player->currentMask >= PLAYER_MASK_FIERCE_DEITY) {
                     static Vec2f D_801C0E04[PLAYER_FORM_MAX] = {
                         { 140.0f, -130.0f }, // PLAYER_FORM_FIERCE_DEITY
                         { 0.0f, -200.0f },   // PLAYER_FORM_GORON
@@ -4124,6 +4137,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
     } else if ((limbIndex == PLAYER_LIMB_HAT) && (player->stateFlags3 & PLAYER_STATE3_100000)) {
         Vec3f sp5C;
         Vec3f sp50;
+        s32 pad;
 
         Matrix_MultVecX(3000.0f, &sp5C);
         Matrix_MultVecX(2300.0f, &sp50);

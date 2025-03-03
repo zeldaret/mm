@@ -4,7 +4,6 @@
  * Description: Soaring effects (wings, sphere, etc)
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_en_test7.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
@@ -233,20 +232,20 @@ void EnTest7_UpdateFeatherType2(PlayState* play, OwlWarpFeather* feather) {
 }
 
 void EnTest7_UpdateFeathers(PlayState* play, OwlWarpFeather* feathers, EnTest7* this, s32 arg3, s32 arg4) {
-    s32 pad[4];
-    OwlWarpFeather* feather;
-    s16 phi_s1;
+    s32 pad;
     s32 i;
     f32 temp_f28;
-    Vec3f sp8C;
     f32 temp_f0;
     f32 temp_f22;
     f32 temp_f24;
     f32 temp_f26;
     f32 temp_f2;
+    Vec3f sp8C;
+    OwlWarpFeather* feather;
+    s16 phi_s1;
 
-    for (i = 0, feather = feathers; i < (OWL_WARP_NUM_FEATHERS * sizeof(OwlWarpFeather));
-         i += sizeof(OwlWarpFeather), feather++) {
+    for (i = 0; i < OWL_WARP_NUM_FEATHERS; i++) {
+        feather = &feathers[i];
 
         if (feather->type == OWL_WARP_FEATHER_TYPE_DISABLED) {
             continue;
@@ -306,12 +305,8 @@ void EnTest7_UpdateFeathers(PlayState* play, OwlWarpFeather* feathers, EnTest7* 
 }
 
 void EnTest7_DrawFeathers(PlayState* play2, OwlWarpFeather* feathers) {
-    s32 pad[3];
     PlayState* play = play2;
-    Mtx* mtx;
-    OwlWarpFeather* feather;
     s32 i;
-    MtxF sp6C;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -322,8 +317,11 @@ void EnTest7_DrawFeathers(PlayState* play2, OwlWarpFeather* feathers) {
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, 255, 255, 255, 255);
     gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, 255);
 
-    for (i = 0, feather = feathers; i < (OWL_WARP_NUM_FEATHERS * sizeof(OwlWarpFeather));
-         i += sizeof(OwlWarpFeather), feather++) {
+    for (i = 0; i < OWL_WARP_NUM_FEATHERS; i++) {
+        Mtx* mtx;
+        MtxF sp6C;
+        OwlWarpFeather* feather = &feathers[i];
+
         if (feather->type == OWL_WARP_FEATHER_TYPE_DISABLED) {
             continue;
         }
@@ -647,7 +645,7 @@ void EnTest7_WarpCsWarp(EnTest7* this, PlayState* play) {
     Vec3f featherPos;
 
     //! FAKE:
-    if (this) {}
+    if (1) {}
 
     Math_Vec3f_Copy(&featherPos, &this->actor.world.pos);
 

@@ -3,7 +3,6 @@
  * Overlay: ovl_En_Thiefbird
  * Description: Takkuri
  */
-#include "prevent_bss_reordering.h"
 #include "z_en_thiefbird.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
@@ -361,9 +360,6 @@ s32 func_80C10E98(PlayState* play) {
 
     i = sp5C - phi_s0_2;
 
-    //! FAKE:
-    if (i) {}
-
     sp5C = phi_s0_2 * 50;
     sp98 -= sp5C;
 
@@ -393,9 +389,7 @@ s32 func_80C10E98(PlayState* play) {
     func_80C10DE8(dropItem00Ids, spA8, ITEM00_RUPEE_GREEN);
     if ((spB0 + spAC + phi_s0_2 + spA0 + phi_s2 + spA8) == 0) {
         return false;
-    }
-
-    {
+    } else {
         Vec3f sp64;
 
         for (i = 0; i < ARRAY_COUNT(dropItem00Ids); i++) {

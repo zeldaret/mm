@@ -539,23 +539,19 @@ void func_8095B6C8(EnOwl* this, PlayState* play) {
 }
 
 void func_8095B76C(EnOwl* this, PlayState* play) {
-    s32 pad;
+    Actor* thisx = &this->actor;
     s16 sp4A;
-    f32 sp44 = Path_OrientAndGetDistSq(&this->actor, this->path, this->unk_3F8, &sp4A);
-    Vec3s* points;
+    f32 sp44 = Path_OrientAndGetDistSq(thisx, this->path, this->unk_3F8, &sp4A);
+    Vec3s* point;
 
-    Math_SmoothStepToS(&this->actor.world.rot.y, sp4A, 6, 0x800, 0x200);
-    this->actor.shape.rot.y = this->actor.world.rot.y;
-    if (sp44 < SQ(this->actor.speed)) {
-        this->actor.speed = 0.0f;
-        points = Lib_SegmentedToVirtual(this->path->points);
-        points += this->unk_3F8;
+    Math_SmoothStepToS(&thisx->world.rot.y, sp4A, 6, 0x800, 0x200);
+    thisx->shape.rot.y = thisx->world.rot.y;
+    if (sp44 < SQ(thisx->speed)) {
+        thisx->speed = 0.0f;
+        point = &((Vec3s*)Lib_SegmentedToVirtual(this->path->points))[this->unk_3F8];
 
-        //! FAKE:
-        if (1) {
-            this->actor.world.pos.x = points->x;
-            this->actor.world.pos.z = points->z;
-        }
+        thisx->world.pos.x = point->x;
+        thisx->world.pos.z = point->z;
 
         this->unk_3F8++;
         if (this->unk_3F8 >= this->path->count) {
@@ -563,21 +559,21 @@ void func_8095B76C(EnOwl* this, PlayState* play) {
             return;
         }
 
-        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_OWL, this->actor.world.pos.x, this->actor.world.pos.y,
-                    this->actor.world.pos.z, 0, 0, 0, 0xF00);
-        this->actor.home.rot.x++;
-        if (this->actor.home.rot.x >= 3) {
+        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_OWL, thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, 0,
+                    0, 0, 0xF00);
+        thisx->home.rot.x++;
+        if (thisx->home.rot.x >= 3) {
             func_8095ACEC(this);
         }
         func_8095B0C8(this);
     } else if (sp44 < SQ(21.0f)) {
-        if (this->actor.speed > 1.0f) {
-            this->actor.speed -= 1.0f;
+        if (thisx->speed > 1.0f) {
+            thisx->speed -= 1.0f;
         } else {
-            this->actor.speed = 1.0f;
+            thisx->speed = 1.0f;
         }
-    } else if (this->actor.speed < 6.0f) {
-        this->actor.speed += 1.0f;
+    } else if (thisx->speed < 6.0f) {
+        thisx->speed += 1.0f;
     }
 
     func_8095B06C(this);

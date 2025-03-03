@@ -257,7 +257,7 @@
             0x80096C40 : "stackcheck",
             0x80096C50 : "gfxprint",
             0x80097500 : "system_heap",
-            0x80097520 : "fp",
+            0x80097510 : "fp",
             0x80097530 : "qrand",
             0x80097540 : "vimodentschpf1",
             0x80097590 : "vimodepallan1",

@@ -6,7 +6,7 @@
 MAKEFLAGS += --no-builtin-rules
 
 # Ensure the build fails if a piped command fails
-SHELL = /bin/bash
+SHELL = /usr/bin/env bash
 .SHELLFLAGS = -o pipefail -c
 
 # OS Detection
@@ -14,17 +14,21 @@ ifeq ($(OS),Windows_NT)
   DETECTED_OS = windows
   MAKE = make
   VENV_BIN_DIR = Scripts
+  ICONV = iconv
 else
   UNAME_S := $(shell uname -s)
   ifeq ($(UNAME_S),Linux)
     DETECTED_OS = linux
     MAKE = make
     VENV_BIN_DIR = bin
+    ICONV = iconv
   endif
   ifeq ($(UNAME_S),Darwin)
     DETECTED_OS = macos
     MAKE = gmake
     VENV_BIN_DIR = bin
+    # The default iconv on macOS has some differences from GNU iconv, so we use the Homebrew version instead
+    ICONV = $(shell brew --prefix)/opt/libiconv/bin/iconv
   endif
 endif
 
@@ -40,6 +44,8 @@ COMPARE ?= 1
 NON_MATCHING ?= 0
 # If ORIG_COMPILER is 1, compile with QEMU_IRIX and the original compiler
 ORIG_COMPILER ?= 0
+# If COMPILER is "gcc", compile with GCC instead of IDO.
+COMPILER ?= ido
 # if WERROR is 1, pass -Werror to CC_CHECK, so warnings would be treated as errors
 WERROR ?= 0
 # Keep .mdebug section in build
@@ -69,9 +75,18 @@ N64_EMULATOR ?=
 # Ensure the map file being created using English localization
 export LANG := C
 
+CFLAGS :=
+CPPFLAGS :=
+
+ifeq ($(COMPILER),gcc)
+  CPPFLAGS += -DCOMPILER_GCC
+  NON_MATCHING := 1
+  RUN_CC_CHECK := 0
+endif
+
 ifneq ($(NON_MATCHING),0)
-  CFLAGS := -DNON_MATCHING
-  CPPFLAGS := -DNON_MATCHING
+  CFLAGS += -DNON_MATCHING -DAVOID_UB
+  CPPFLAGS += -DNON_MATCHING -DAVOID_UB
   COMPARE := 0
 endif
 
@@ -92,8 +107,15 @@ ifneq ($(shell type $(MIPS_BINUTILS_PREFIX)ld >/dev/null 2>/dev/null; echo $$?),
   $(error Unable to find $(MIPS_BINUTILS_PREFIX)ld. Please install or build MIPS binutils, commonly mips-linux-gnu. (or set MIPS_BINUTILS_PREFIX if your MIPS binutils install uses another prefix))
 endif
 
-CC       := tools/ido_recomp/$(DETECTED_OS)/7.1/cc
-CC_OLD   := tools/ido_recomp/$(DETECTED_OS)/5.3/cc
+# Detect compiler and set variables appropriately.
+ifeq ($(COMPILER),gcc)
+  CC       := $(MIPS_BINUTILS_PREFIX)gcc
+else ifeq ($(COMPILER),ido)
+  CC       := tools/ido_recomp/$(DETECTED_OS)/7.1/cc
+  CC_OLD   := tools/ido_recomp/$(DETECTED_OS)/5.3/cc
+else
+$(error Unsupported compiler. Please use either ido or gcc as the COMPILER variable.)
+endif
 
 # if ORIG_COMPILER is 1, check that either QEMU_IRIX is set or qemu-irix package installed
 ifeq ($(ORIG_COMPILER),1)
@@ -126,8 +148,7 @@ CC_CHECK_WARNINGS := -Wall -Wextra -Wno-unknown-pragmas -Wno-unused-parameter -W
 CC_CHECK_WARNINGS += -Werror=implicit-int -Werror=implicit-function-declaration -Werror=int-conversion -Werror=incompatible-pointer-types
 # Have CC_CHECK pretend to be a MIPS compiler
 MIPS_BUILTIN_DEFS := -DMIPSEB -D_MIPS_FPSET=16 -D_MIPS_ISA=2 -D_ABIO32=1 -D_MIPS_SIM=_ABIO32 -D_MIPS_SZINT=32 -D_MIPS_SZPTR=32
-# The -MMD flags additionaly creates a .d file with the same name as the .o file.
-CC_CHECK_FLAGS    := -MMD -MP -fno-builtin -fsyntax-only -funsigned-char -fdiagnostics-color -std=gnu89 -m32 -DNON_MATCHING -DAVOID_UB -DCC_CHECK=1
+CC_CHECK_FLAGS    := -fno-builtin -fsyntax-only -funsigned-char -fdiagnostics-color -std=gnu89 -m32 -DNON_MATCHING -DAVOID_UB -DCC_CHECK=1
 
 ifneq ($(WERROR), 0)
   CC_CHECK_WARNINGS += -Werror
@@ -177,18 +198,36 @@ SFCFLAGS := --matching
 # We can't use the C preprocessor for this because it won't substitute inside string literals.
 BUILD_DIR_REPLACE := sed -e 's|$$(BUILD_DIR)|$(BUILD_DIR)|g'
 
-CFLAGS           += -G 0 -non_shared -Xcpluscomm -nostdinc -Wab,-r4300_mul
+GBI_DEFINES := -DF3DEX_GBI_2 -DF3DEX_GBI_PL -DGBI_DOWHILE
 
-WARNINGS         := -fullwarn -verbose -woff 624,649,838,712,516,513,596,564,594,807
-ASFLAGS          := -march=vr4300 -32 -G0
-GBI_DEFINES 	 := -DF3DEX_GBI_2 -DF3DEX_GBI_PL -DGBI_DOWHILE
-COMMON_DEFINES   := -D_MIPS_SZLONG=32 $(GBI_DEFINES)
-AS_DEFINES       := $(COMMON_DEFINES) -DMIPSEB -D_LANGUAGE_ASSEMBLY -D_ULTRA64
-C_DEFINES        := $(COMMON_DEFINES) -DLANGUAGE_C -D_LANGUAGE_C
-ENDIAN           := -EB
+ifeq ($(COMPILER),gcc)
+  # MIPS options
+  CFLAGS           += -G 0 -march=vr4300 -mtune=vr4300 -mfix4300 -mabi=32 -mno-abicalls -mdivide-breaks
+  # C dialect options
+  CFLAGS           += -nostdinc -fno-PIC -fno-common -ffreestanding -fbuiltin -fno-builtin-sinf -fno-builtin-cosf -funsigned-char
 
-OPTFLAGS := -O2 -g3
-MIPS_VERSION := -mips2
+  WARNINGS         := $(CC_CHECK_WARNINGS)
+  ASFLAGS          := -march=vr4300 -32 -G0
+  COMMON_DEFINES   := $(GBI_DEFINES)
+  AS_DEFINES       := $(COMMON_DEFINES) -DMIPSEB -D_LANGUAGE_ASSEMBLY -D_ULTRA64
+  C_DEFINES        := $(COMMON_DEFINES) -D_LANGUAGE_C
+  ENDIAN           :=
+
+  OPTFLAGS         := -Os -ffast-math -ftrapping-math -fno-associative-math
+  MIPS_VERSION     := -mips3
+else
+  CFLAGS           += -G 0 -non_shared -Xcpluscomm -nostdinc -Wab,-r4300_mul
+
+  WARNINGS         := -fullwarn -verbose -woff 624,649,838,712,516,513,596,564,594,807
+  ASFLAGS          := -march=vr4300 -32 -G0
+  COMMON_DEFINES   := -D_MIPS_SZLONG=32 $(GBI_DEFINES)
+  AS_DEFINES       := $(COMMON_DEFINES) -DMIPSEB -D_LANGUAGE_ASSEMBLY -D_ULTRA64
+  C_DEFINES        := $(COMMON_DEFINES) -D_LANGUAGE_C
+  ENDIAN           := -EB
+
+  OPTFLAGS         := -O2 -g3
+  MIPS_VERSION     := -mips2
+endif
 
 # Use relocations and abi fpr names in the dump
 OBJDUMP_FLAGS := --disassemble --reloc --disassemble-zeroes -Mreg-names=32
@@ -216,12 +255,18 @@ ELF      := $(ROM:.z64=.elf)
 MAP      := $(ROM:.z64=.map)
 LDSCRIPT := $(ROM:.z64=.ld)
 # description of ROM segments
-SPEC := spec
+SPEC := spec/spec
+SPEC_INCLUDES := $(wildcard spec/*.inc)
 
 # create asm directories
 $(shell mkdir -p asm data extracted)
 
+ifeq ($(COMPILER),ido)
+SRC_DIRS := $(shell find src -type d -not -path src/gcc_fix)
+else
 SRC_DIRS := $(shell find src -type d)
+endif
+
 ASM_DIRS := $(shell find asm -type d -not -path "asm/non_matchings*") $(shell find data -type d)
 
 ifneq ($(wildcard $(EXTRACTED_DIR)/assets/audio),)
@@ -315,11 +360,12 @@ TEXTURE_FILES_OUT := $(foreach f,$(TEXTURE_FILES_PNG_EXTRACTED:.png=.inc.c),$(f:
 ASSET_C_FILES_EXTRACTED := $(filter-out %.inc.c,$(foreach dir,$(ASSET_BIN_DIRS_EXTRACTED),$(wildcard $(dir)/*.c)))
 ASSET_C_FILES_COMMITTED := $(filter-out %.inc.c,$(foreach dir,$(ASSET_BIN_DIRS_COMMITTED),$(wildcard $(dir)/*.c)))
 C_FILES        := $(foreach dir,$(SRC_DIRS) $(ASSET_BIN_DIRS_C_FILES),$(wildcard $(dir)/*.c))
-S_FILES        := $(shell grep -F "\$$(BUILD_DIR)/asm" spec | sed 's/.*$$(BUILD_DIR)\/// ; s/\.o\".*/.s/') \
-                  $(shell grep -F "\$$(BUILD_DIR)/data" spec | sed 's/.*$$(BUILD_DIR)\/// ; s/\.o\".*/.s/')
+S_FILES        := $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.s)) \
+                  $(shell grep -F "\$$(BUILD_DIR)/asm" $(SPEC) | sed 's/.*$$(BUILD_DIR)\/// ; s/\.o\".*/.s/') \
+                  $(shell grep -F "\$$(BUILD_DIR)/data" $(SPEC) | sed 's/.*$$(BUILD_DIR)\/// ; s/\.o\".*/.s/')
 SCHEDULE_FILES := $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.schl))
-BASEROM_FILES  := $(shell grep -F "\$$(BUILD_DIR)/baserom" spec | sed 's/.*$$(BUILD_DIR)\/// ; s/\.o\".*//')
-ARCHIVES_O     := $(shell grep -F ".yar.o" spec | sed 's/.*include "// ; s/.*$$(BUILD_DIR)\/// ; s/\.o\".*/.o/')
+BASEROM_FILES  := $(shell grep -F "\$$(BUILD_DIR)/baserom" $(SPEC) | sed 's/.*$$(BUILD_DIR)\/// ; s/\.o\".*//')
+ARCHIVES_O     := $(shell grep -F ".yar.o" $(SPEC) | sed 's/.*include "// ; s/.*$$(BUILD_DIR)\/// ; s/\.o\".*/.o/')
 O_FILES        := $(foreach f,$(S_FILES:.s=.o),$(BUILD_DIR)/$f) \
                   $(foreach f,$(C_FILES:.c=.o),$(BUILD_DIR)/$f) \
                   $(foreach f,$(ASSET_C_FILES_EXTRACTED:.c=.o),$(f:$(EXTRACTED_DIR)/%=$(BUILD_DIR)/%)) \
@@ -368,6 +414,9 @@ $(shell mkdir -p $(foreach dir, \
                     $(dir:$(EXTRACTED_DIR)/%=$(BUILD_DIR)/%)))
 endif
 
+$(BUILD_DIR)/src/audio/lib/seqplayer.o: C_DEFINES += -DMML_VERSION=MML_VERSION_MM
+
+ifeq ($(COMPILER),ido)
 # directory flags
 $(BUILD_DIR)/src/libultra/os/%.o: OPTFLAGS := -O1
 $(BUILD_DIR)/src/libultra/voice/%.o: OPTFLAGS := -O2
@@ -385,7 +434,6 @@ $(BUILD_DIR)/src/boot/libc64/%.o: OPTFLAGS := -O2
 $(BUILD_DIR)/src/audio/%.o: OPTFLAGS := -O2
 
 $(BUILD_DIR)/assets/%.o: OPTFLAGS := -O1
-$(BUILD_DIR)/assets/%.o: ASM_PROC_FLAGS := 
 
 # file flags
 $(BUILD_DIR)/src/libultra/libc/ll.o: OPTFLAGS := -O1
@@ -408,15 +456,24 @@ $(BUILD_DIR)/src/code/osFlash.o: MIPS_VERSION := -mips1
 # cc & asm-processor
 $(BUILD_DIR)/src/libultra/%.o: CC := $(CC_OLD)
 
-$(BUILD_DIR)/src/boot/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
+# For using asm_processor on some files:
+#$(BUILD_DIR)/.../%.o: CC := $(PYTHON) $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
 
-$(BUILD_DIR)/src/code/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
-$(BUILD_DIR)/src/audio/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
+ifeq ($(PERMUTER),)  # permuter + preprocess.sh misbehaves, permuter doesn't care about rodata diffs or bss ordering so just don't use it in that case
+# Handle encoding (UTF-8 -> EUC-JP) and custom pragmas
+$(BUILD_DIR)/src/%.o: CC := ./tools/buildtools/preprocess.sh -v $(VERSION) -i $(ICONV) -- $(CC)
+endif
 
-$(BUILD_DIR)/src/overlays/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
+else
+# Note that if adding additional assets directories for modding reasons these flags must also be used there
+$(BUILD_DIR)/assets/%.o: CFLAGS += -fno-zero-initialized-in-bss -fno-toplevel-reorder
+$(BUILD_DIR)/src/%.o: CFLAGS += -fexec-charset=euc-jp
+$(BUILD_DIR)/src/libultra/libc/ll.o: OPTFLAGS := -Ofast
+$(BUILD_DIR)/src/overlays/%.o: CFLAGS += -fno-merge-constants -mno-explicit-relocs -mno-split-addresses
 
-$(BUILD_DIR)/assets/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
-
+# Temporary: Hardcoded pointers in assets (specifically object_dmask and object_osn)
+$(BUILD_DIR)/assets/%.o: WARNINGS += -Wno-error=int-conversion
+endif
 
 $(SHIFTJIS_O_FILES): CC_CHECK_WARNINGS += -Wno-multichar -Wno-type-limits -Wno-overflow
 
@@ -491,6 +548,7 @@ setup:
 	$(MAKE) -C tools
 	$(PYTHON) tools/decompress_baserom.py -v $(VERSION)
 	$(PYTHON) tools/extract_baserom.py $(BASEROM_DIR)/baserom-decompressed.z64 $(EXTRACTED_DIR)/baserom -v $(VERSION)
+	$(PYTHON) tools/extract_incbins.py $(EXTRACTED_DIR)/baserom $(EXTRACTED_DIR)/incbin -v $(VERSION)
 	$(PYTHON) tools/extract_yars.py $(EXTRACTED_DIR)/baserom -v $(VERSION)
 
 assets:
@@ -532,13 +590,13 @@ all: rom compress
 $(BUILD_DIR)/%.ld: %.ld
 	$(CPP) $(CPPFLAGS) $(IINC) $< > $@
 
-$(BUILD_DIR)/$(SPEC): $(SPEC)
-	$(CPP) $(CPPFLAGS) $< | $(BUILD_DIR_REPLACE) > $@
+$(BUILD_DIR)/spec: $(SPEC) $(SPEC_INCLUDES)
+	$(CPP) $(CPPFLAGS) -I. $< | $(BUILD_DIR_REPLACE) > $@
 
-$(LDSCRIPT): $(BUILD_DIR)/$(SPEC)
+$(LDSCRIPT): $(BUILD_DIR)/spec
 	$(MKLDSCRIPT) $< $@
 
-$(BUILD_DIR)/dmadata/dmadata_table_spec.h $(BUILD_DIR)/dmadata/compress_ranges.txt &: $(BUILD_DIR)/$(SPEC)
+$(BUILD_DIR)/dmadata/dmadata_table_spec.h $(BUILD_DIR)/dmadata/compress_ranges.txt &: $(BUILD_DIR)/spec
 	$(MKDMADATA) $< $(BUILD_DIR)/dmadata/dmadata_table_spec.h $(BUILD_DIR)/dmadata/compress_ranges.txt
 
 # Dependencies for files that may include the dmadata header automatically generated from the spec file
@@ -549,9 +607,13 @@ $(BUILD_DIR)/%.o: %.s
 	$(CPP) $(CPPFLAGS) $(IINC) $< | $(AS) $(ASFLAGS) $(IINC) $(ENDIAN) -o $@
 
 $(BUILD_DIR)/assets/text/%.o: assets/text/%.c
+ifneq ($(COMPILER),gcc)
 # Preprocess text with modern cpp for varargs macros
 	$(CPP) -undef -D_LANGUAGE_C -D__sgi $(CPPFLAGS) $(IINC) $< -o $(@:.o=.c)
-	$(CC) -c $(CFLAGS) $(WARNINGS) $(C_DEFINES) $(MIPS_VERSION) $(ENDIAN) $(OPTFLAGS) -o $@ $(@:.o=.c)
+	$(CC) -c $(CFLAGS) $(IINC) $(WARNINGS) $(C_DEFINES) $(MIPS_VERSION) $(ENDIAN) $(OPTFLAGS) -o $@ $(@:.o=.c)
+else
+	$(CC) -c $(CFLAGS) $(IINC) $(WARNINGS) $(C_DEFINES) $(MIPS_VERSION) $(ENDIAN) $(OPTFLAGS) -o $@ $<
+endif
 
 $(BUILD_DIR)/assets/%.o: assets/%.c
 	$(CC) -c $(CFLAGS) $(IINC) $(WARNINGS) $(C_DEFINES) $(MIPS_VERSION) $(ENDIAN) $(OPTFLAGS) -o $@ $<
@@ -580,13 +642,22 @@ $(BUILD_DIR)/assets/text/message_data_static.o: $(BUILD_DIR)/assets/text/message
 $(BUILD_DIR)/assets/text/staff_message_data_static.o: $(BUILD_DIR)/assets/text/message_data_staff.enc.h
 $(BUILD_DIR)/src/code/z_message.o: $(BUILD_DIR)/assets/text/message_data.enc.h $(BUILD_DIR)/assets/text/message_data_staff.enc.h
 
-$(BUILD_DIR)/src/overlays/%_reloc.o: $(BUILD_DIR)/$(SPEC)
+$(BUILD_DIR)/src/overlays/%_reloc.o: $(BUILD_DIR)/spec
 	$(FADO) $$(tools/buildtools/reloc_prereq $< $(*F)) -n $(*F) -o $(@:.o=.s) -M $(@:.o=.d)
 	$(AS) $(ASFLAGS) $(ENDIAN) $(IINC) $(@:.o=.s) -o $@
 
 # Incremental link z_game_over data into rodata
 $(BUILD_DIR)/src/code/z_game_over.o: src/code/z_game_over.c
-	$(CC_CHECK_COMP) $(CC_CHECK_FLAGS) $(IINC) $(CC_CHECK_WARNINGS) $(C_DEFINES) $(MIPS_BUILTIN_DEFS) -o $(@:.o=.tmp) $<
+	$(CC_CHECK_COMP) $(CC_CHECK_FLAGS) $(IINC) $(CC_CHECK_WARNINGS) $(C_DEFINES) $(MIPS_BUILTIN_DEFS) $<
+	$(CC) -c $(CFLAGS) $(IINC) $(WARNINGS) $(C_DEFINES) $(MIPS_VERSION) $(ENDIAN) $(OPTFLAGS) -o $(@:.o=.tmp) $<
+	$(LD) -r -T linker_scripts/data_with_rodata.ld $(@:.o=.tmp) -o $@
+	@$(RM) $(@:.o=.tmp)
+	$(OBJDUMP_CMD)
+	$(RM_MDEBUG)
+
+# Incremental link audio/session_init data into rodata
+$(BUILD_DIR)/src/audio/session_init.o: src/audio/session_init.c $(BUILD_DIR)/assets/audio/soundfont_sizes.h $(BUILD_DIR)/assets/audio/sequence_sizes.h
+	$(CC_CHECK_COMP) $(CC_CHECK_FLAGS) $(IINC) $(CC_CHECK_WARNINGS) $(C_DEFINES) $(MIPS_BUILTIN_DEFS) $<
 	$(CC) -c $(CFLAGS) $(IINC) $(WARNINGS) $(C_DEFINES) $(MIPS_VERSION) $(ENDIAN) $(OPTFLAGS) -o $(@:.o=.tmp) $<
 	$(LD) -r -T linker_scripts/data_with_rodata.ld $(@:.o=.tmp) -o $@
 	@$(RM) $(@:.o=.tmp)
@@ -595,27 +666,27 @@ $(BUILD_DIR)/src/code/z_game_over.o: src/code/z_game_over.c
 
 $(SHIFTJIS_O_FILES): $(BUILD_DIR)/src/%.o: src/%.c
 	$(SHIFTJIS_CONV) -o $(@:.o=.enc.c) $<
-	$(CC_CHECK_COMP) $(CC_CHECK_FLAGS) $(IINC) $(CC_CHECK_WARNINGS) $(C_DEFINES) $(MIPS_BUILTIN_DEFS) -o $@ $(@:.o=.enc.c)
+	$(CC_CHECK_COMP) $(CC_CHECK_FLAGS) $(IINC) $(CC_CHECK_WARNINGS) $(C_DEFINES) $(MIPS_BUILTIN_DEFS) $(@:.o=.enc.c)
 	$(CC) -c $(CFLAGS) $(IINC) $(WARNINGS) $(C_DEFINES) $(MIPS_VERSION) $(ENDIAN) $(OPTFLAGS) -o $@ $(@:.o=.enc.c)
 	$(OBJDUMP_CMD)
 	$(RM_MDEBUG)
 
 $(BUILD_DIR)/src/libultra/libc/ll.o: src/libultra/libc/ll.c
-	$(CC_CHECK_COMP) $(CC_CHECK_FLAGS) $(IINC) $(CC_CHECK_WARNINGS) $(C_DEFINES) $(MIPS_BUILTIN_DEFS) -o $@ $<
+	$(CC_CHECK_COMP) $(CC_CHECK_FLAGS) $(IINC) $(CC_CHECK_WARNINGS) $(C_DEFINES) $(MIPS_BUILTIN_DEFS) $<
 	$(CC) -c $(CFLAGS) $(IINC) $(WARNINGS) $(C_DEFINES) $(MIPS_VERSION) $(ENDIAN) $(OPTFLAGS) -o $@ $<
 	$(PYTHON) tools/set_o32abi_bit.py $@
 	$(OBJDUMP_CMD)
 	$(RM_MDEBUG)
 
 $(BUILD_DIR)/src/libultra/libc/llcvt.o: src/libultra/libc/llcvt.c
-	$(CC_CHECK_COMP) $(CC_CHECK_FLAGS) $(IINC) $(CC_CHECK_WARNINGS) $(C_DEFINES) $(MIPS_BUILTIN_DEFS) -o $@ $<
+	$(CC_CHECK_COMP) $(CC_CHECK_FLAGS) $(IINC) $(CC_CHECK_WARNINGS) $(C_DEFINES) $(MIPS_BUILTIN_DEFS) $<
 	$(CC) -c $(CFLAGS) $(IINC) $(WARNINGS) $(C_DEFINES) $(MIPS_VERSION) $(ENDIAN) $(OPTFLAGS) -o $@ $<
 	$(PYTHON) tools/set_o32abi_bit.py $@
 	$(OBJDUMP_CMD)
 	$(RM_MDEBUG)
 
 $(BUILD_DIR)/%.o: %.c
-	$(CC_CHECK_COMP) $(CC_CHECK_FLAGS) $(IINC) $(CC_CHECK_WARNINGS) $(C_DEFINES) $(MIPS_BUILTIN_DEFS) -o $@ $<
+	$(CC_CHECK_COMP) $(CC_CHECK_FLAGS) $(IINC) $(CC_CHECK_WARNINGS) $(C_DEFINES) $(MIPS_BUILTIN_DEFS) $<
 	$(CC) -c $(CFLAGS) $(IINC) $(WARNINGS) $(C_DEFINES) $(MIPS_VERSION) $(ENDIAN) $(OPTFLAGS) -o $@ $<
 	$(OBJDUMP_CMD)
 	$(RM_MDEBUG)
@@ -672,6 +743,9 @@ ifeq ($(AUDIO_BUILD_DEBUG),1)
 endif
 
 # then assemble the samplebanks...
+
+$(BUILD_DIR)/assets/audio/samples/%.bin: assets/audio/samples/%.bin
+	cp $< $@
 
 $(BUILD_DIR)/assets/audio/samples/%.bin: $(EXTRACTED_DIR)/assets/audio/samples/%.bin
 	cp $< $@
@@ -782,8 +856,6 @@ $(BUILD_DIR)/assets/audio/sequence_font_table.o: $(BUILD_DIR)/assets/audio/seque
 	$(AS) $(ASFLAGS) $< -o $@
 
 # make headers with file sizes and amounts
-
-$(BUILD_DIR)/src/audio/session_config.o: $(BUILD_DIR)/assets/audio/soundfont_sizes.h $(BUILD_DIR)/assets/audio/sequence_sizes.h
 
 $(BUILD_DIR)/assets/audio/soundfont_sizes.h: $(SOUNDFONT_O_FILES)
 	$(AFILE_SIZES) $@ NUM_SOUNDFONTS SOUNDFONT_SIZES .rodata $^
