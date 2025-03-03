@@ -1,6 +1,5 @@
 #include "z64game.h"
 
-#include "prevent_bss_reordering.h"
 #include "global.h"
 #include "audiomgr.h"
 #include "libu64/debug.h"
@@ -16,6 +15,8 @@
 #include "z64speed_meter.h"
 #include "z64vimode.h"
 #include "z64vis.h"
+
+#pragma increment_block_number "n64-us:128"
 
 s32 gFramerateDivisor = 1;
 f32 gFramerateDivisorF = 1.0f;
