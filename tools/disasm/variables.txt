@@ -416,7 +416,7 @@
     0x801AE488:("D_801AE488","Color_RGBA8","",0x4),
     0x801AE48C:("D_801AE48C","Color_RGBA8","",0x4),
     0x801AE490:("D_801AE490","Color_RGBA8","[4]",0x10),
-    0x801AE4A0:("gParticleOverlayTable","EffectSsOverlay","[39]",0x444),
+    0x801AE4A0:("gEffectSsOverlayTable","EffectSsOverlay","[39]",0x444),
     0x801AE8F0:("sFlagEntries","FlagSetEntry","[112]",0x8),
     0x801AEC70:("sEntryIndex","s32","",0x4),
     0x801AEC74:("sCurrentBit","u32","",0x4),

@@ -64,9 +64,9 @@ typedef struct EffectSs {
 } EffectSs; // size = 0x60
 
 typedef struct EffectSsInfo {
-    /* 0x0 */ EffectSs* dataTable; // "data_table" from debug assert
-    /* 0x4 */ s32 searchIndex;
-    /* 0x8 */ s32 size;
+    /* 0x0 */ EffectSs* table; // "data_table" from debug assert
+    /* 0x4 */ s32 searchStartIndex;
+    /* 0x8 */ s32 tableSize;
 } EffectSsInfo; // size = 0xC
 
 #define DEFINE_EFFECT_SS(_name, enumValue) enumValue,
@@ -74,23 +74,23 @@ typedef struct EffectSsInfo {
 
 typedef enum EffectSsType {
     #include "tables/effect_ss_table.h"
-    /* 0x27 */ EFFECT_SS_MAX
+    /* 0x27 */ EFFECT_SS_TYPE_MAX
 } EffectSsType;
 
 #undef DEFINE_EFFECT_SS
 #undef DEFINE_EFFECT_SS_UNSET
 
-void EffectSS_Init(struct PlayState* play, s32 numEntries);
-void EffectSS_Clear(struct PlayState* play);
-EffectSs* EffectSS_GetTable(void);
-void EffectSS_Delete(EffectSs* effectSs);
-void EffectSS_Copy(struct PlayState* play, EffectSs* effectsSs);
+void EffectSs_InitInfo(struct PlayState* play, s32 tableSize);
+void EffectSs_ClearAll(struct PlayState* play);
+EffectSs* EffectSs_GetTable(void);
+void EffectSs_Delete(EffectSs* effectSs);
+void EffectSs_Insert(struct PlayState* play, EffectSs* effectSs);
 void EffectSs_Spawn(struct PlayState* play, s32 type, s32 priority, void* initData);
-void EffectSS_UpdateAllParticles(struct PlayState* play);
-void EffectSS_DrawAllParticles(struct PlayState* play);
-s16 func_800B096C(s16 arg0, s16 arg1, s32 arg2);
-s16 func_800B09D0(s16 arg0, s16 arg1, f32 arg2);
-u8 func_800B0A24(u8 arg0, u8 arg1, f32 arg2);
+void EffectSs_UpdateAll(struct PlayState* play);
+void EffectSs_DrawAll(struct PlayState* play);
+s16 EffectSs_LerpInv(s16 a, s16 b, s32 weightInv);
+s16 EffectSs_LerpS16(s16 a, s16 b, f32 weight);
+u8 EffectSs_LerpU8(u8 a, u8 b, f32 weight);
 void EffectSs_DrawGEffect(struct PlayState* play, EffectSs* this, void* texture);
 void EffectSsDust_Spawn(struct PlayState* play, u16 drawFlags, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* primColor, Color_RGBA8* envColor, s16 scale, s16 scaleStep, s16 life, u8 updateMode);
 void func_800B0DE0(struct PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* primColor, Color_RGBA8* envColor, s16 scale, s16 scaleStep);
@@ -166,6 +166,6 @@ void EffectSsIceSmoke_Spawn(struct PlayState* play, Vec3f* pos, Vec3f* velocity,
 void EffectSsIceBlock_Spawn(struct PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale);
 
 
-extern EffectSsOverlay gParticleOverlayTable[EFFECT_SS_MAX];
+extern EffectSsOverlay gEffectSsOverlayTable[EFFECT_SS_TYPE_MAX];
 
 #endif
