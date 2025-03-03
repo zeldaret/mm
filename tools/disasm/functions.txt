@@ -69,7 +69,7 @@
     0x80082330:("Fault_PrintFPCSR",),
     0x800823D4:("Fault_LogFPCSR",),
     0x8008246C:("Fault_PrintThreadContext",),
-    0x800827BC:("osSyncPrintfThreadContext",),
+    0x800827BC:("Fault_LogThreadContext",),
     0x80082AB8:("Fault_FindFaultedThread",),
     0x80082B40:("Fault_Wait5Seconds",),
     0x80082BD0:("Fault_WaitForButtonCombo",),
