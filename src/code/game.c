@@ -16,6 +16,8 @@
 #include "z64vimode.h"
 #include "z64vis.h"
 
+#pragma increment_block_number "n64-us:128"
+
 s32 gFramerateDivisor = 1;
 f32 gFramerateDivisorF = 1.0f;
 f32 gFramerateDivisorHalf = 1.0f / 2.0f;
