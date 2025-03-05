@@ -4,6 +4,6 @@
         <Texture Name="sGfxPrintRainbowTLUT" OutName="gfx_print_rainbow_tlut" Format="rgba16" Width="8" Height="2" Offset="0x16C70"/>
         <!-- TODO: Properly extract fonts not as blobs -->
         <Blob Name="sGfxPrintRainbowFont" Size="0x8" Offset="0x16C90"/>
-        <Blob Name="sGfxPrintFont" Size="0x808" Offset="0x16C98"/>
+        <Blob Name="sGfxPrintFont" Size="0x800" Offset="0x16C98"/>
     </File>
 </Root>

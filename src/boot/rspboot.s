@@ -1,7 +1,10 @@
 .include "macro.inc"
 
-.section .data
+.section .text
 
-dlabel rspbootTextStart
+.balign 16
+
+glabel rspbootTextStart
     .incbin "incbin/rspbootText"
+endlabel rspbootTextStart
 dlabel rspbootTextEnd
