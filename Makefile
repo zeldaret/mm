@@ -104,6 +104,10 @@ BUILD_DIR     := build/$(VERSION)
 EXTRACTED_DIR := extracted/$(VERSION)
 EXPECTED_DIR  := expected/$(BUILD_DIR)
 
+VERSION_MACRO := $(shell echo $(VERSION) | tr a-z-. A-Z__)
+GAME_VERSION := -DMM_VERSION=$(VERSION_MACRO)
+
+
 #### Tools ####
 ifneq ($(shell type $(MIPS_BINUTILS_PREFIX)ld >/dev/null 2>/dev/null; echo $$?), 0)
   $(error Unable to find $(MIPS_BINUTILS_PREFIX)ld. Please install or build MIPS binutils, commonly mips-linux-gnu. (or set MIPS_BINUTILS_PREFIX if your MIPS binutils install uses another prefix))
@@ -204,6 +208,8 @@ SFCFLAGS := --matching
 # We can't use the C preprocessor for this because it won't substitute inside string literals.
 BUILD_DIR_REPLACE := sed -e 's|$$(BUILD_DIR)|$(BUILD_DIR)|g'
 
+CPPFLAGS += $(GAME_VERSION)
+
 GBI_DEFINES := -DF3DEX_GBI_2 -DF3DEX_GBI_PL -DGBI_DOWHILE
 
 ifeq ($(COMPILER),gcc)
@@ -215,7 +221,7 @@ ifeq ($(COMPILER),gcc)
   WARNINGS         := $(CC_CHECK_WARNINGS)
   ASFLAGS          := -march=vr4300 -32 -G0 -no-pad-sections
   CCASFLAGS        := $(GBI_DEFINES) -G 0 -nostdinc -march=vr4300 -mfix4300 -mabi=32 -mno-abicalls -fno-PIC -fno-common -Wa,-no-pad-sections
-  COMMON_DEFINES   := $(GBI_DEFINES)
+  COMMON_DEFINES   := $(GBI_DEFINES) $(GAME_VERSION)
   AS_DEFINES       := $(COMMON_DEFINES) -DMIPSEB -D_LANGUAGE_ASSEMBLY -D_ULTRA64
   C_DEFINES        := $(COMMON_DEFINES) -D_LANGUAGE_C
   ENDIAN           :=
@@ -228,7 +234,7 @@ else
   WARNINGS         := -fullwarn -verbose -woff 624,649,838,712,516,513,596,564,594,807
   ASFLAGS          := -march=vr4300 -32 -G0 -no-pad-sections
   CCASFLAGS        := $(GBI_DEFINES) -G 0 -non_shared -Xcpluscomm -nostdinc -Wab,-r4300_mul $(WARNINGS) -o32
-  COMMON_DEFINES   := -D_MIPS_SZLONG=32 $(GBI_DEFINES)
+  COMMON_DEFINES   := -D_MIPS_SZLONG=32 $(GBI_DEFINES) $(GAME_VERSION)
   AS_DEFINES       := $(COMMON_DEFINES) -DMIPSEB -D_LANGUAGE_ASSEMBLY -D_ULTRA64
   C_DEFINES        := $(COMMON_DEFINES) -D_LANGUAGE_C
   ENDIAN           := -EB
