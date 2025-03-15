@@ -695,7 +695,9 @@ beginseg
     include "$(BUILD_DIR)/src/code/z_sram_NES.o"
 #endif
     include "$(BUILD_DIR)/src/code/z_message.o"
+#if MM_VERSION >= N64_US
     include "$(BUILD_DIR)/src/code/z_message_nes.o"
+#endif
     include "$(BUILD_DIR)/src/code/z_message_staff.o"
     include "$(BUILD_DIR)/src/code/z_player_call.o"
     include "$(BUILD_DIR)/src/code/z_shrink_window.o"

@@ -4,6 +4,8 @@
 #include "PR/ultratypes.h"
 #include "stdbool.h"
 
+#include "versions.h"
+
 #include "z64bombers_notebook.h"
 #include "z64font.h"
 #include "z64view.h"
@@ -260,7 +262,9 @@ typedef struct MessageContext {
     /* 0x1207C */ s32 rupeesTotal; // Used for bank and doggy racetrack bet
     /* 0x12080 */ struct MessageTableEntry* messageTable;
     /* 0x12084 */ struct MessageTableEntry* messageTableNES;
+#if MM_VERSION >= N64_US
     /* 0x12088 */ UNK_TYPE1 unk12088[0x4];
+#endif
     /* 0x1208C */ struct MessageTableEntry* messageTableCredits;
     /* 0x12090 */ s16 textIsCredits;
     /* 0x12092 */ s16 messageHasSetSfx;
@@ -278,6 +282,7 @@ typedef struct MessageContext {
     /* 0x120B1 */ u8 bombersNotebookEventQueueCount;
     /* 0x120B2 */ u8 bombersNotebookEventQueue[10];
     /* 0x120BC */ u16 hudVisibility;
+#if MM_VERSION >= N64_US
     /* 0x120BE */ s16 unk120BE;
     /* 0x120C0 */ s16 unk120C0;
     /* 0x120C2 */ s16 unk120C2;
@@ -292,6 +297,7 @@ typedef struct MessageContext {
     /* 0x120D6 */ s16 unk120D6;
     /* 0x120D8 */ s16 unk120D8;
     /* 0x120DA */ UNK_TYPE1 unk_120DA[0x6];
+#endif
 } MessageContext; // size = 0x120E0
 
 bool Message_ShouldAdvance(struct PlayState* play);
