@@ -4,6 +4,8 @@
 #include "ultra64.h"
 #include "PR/os.h"
 
+#include "versions.h"
+
 #include "z64inventory.h"
 #include "z64item.h"
 #include "z64math.h"
@@ -307,6 +309,9 @@ typedef struct SaveInfo {
     /* 0xED4 */ u8 weekEventReg[100];                  // "week_event_reg"
     /* 0xF38 */ u32 regionsVisited;                    // "area_arrival"
     /* 0xF3C */ u32 worldMapCloudVisibility;           // "cloud_clear"
+#if MM_VERSION < N64_US
+                UNK_TYPE1 unk_F40_jp[0x384];
+#endif
     /* 0xF40 */ u8 unk_F40;                            // "oca_rec_flag"                   has scarecrows song
     /* 0xF41 */ u8 scarecrowSpawnSongSet;              // "oca_rec_flag8"
     /* 0xF42 */ u8 scarecrowSpawnSong[128];
@@ -341,6 +346,7 @@ typedef struct Save {
 
 typedef struct SaveContext {
     /* 0x0000 */ Save save;
+#if MM_VERSION >= N64_US
     /* 0x100C */ u8 eventInf[8]; // "event_inf"
     /* 0x1014 */ u8 unk_1014;    // "stone_set_flag"
     /* 0x1015 */ u8 bButtonStatus;
@@ -395,6 +401,62 @@ typedef struct SaveContext {
     /* 0x3F30 */ s16 magicFillTarget;     // target used to fill magic "magic_now_now"
     /* 0x3F32 */ s16 magicToConsume;      // accumulated magic that is requested to be consumed "magic_used"
     /* 0x3F34 */ s16 magicToAdd;          // accumulated magic that is requested to be added "magic_recovery"
+#else
+                 u8 pictoPhotoI5[PICTO_PHOTO_COMPRESSED_SIZE]; // buffer containing the pictograph photo, compressed to I5 from I8
+                 s32 fileNum;                           // "file_no"
+                 s16 powderKegTimer;                    // "big_bom_timer"
+                 u8 unk_1014;    // "stone_set_flag"
+                 u8 unk_3CA7;                           // "day_night_flag"
+                 u16 jinxTimer;
+                 u8 unk_3CA6;
+                 u8 bButtonStatus;
+                 s32 gameMode;                          // "mode"
+                 s32 sceneLayer;                        // "counter"
+                 s32 respawnFlag;                       // "restart_flag"
+                 RespawnData respawn[RESPAWN_MODE_MAX]; // "restart_data"
+                 f32 entranceSpeed;                     // "player_wipe_speedF"
+                 u16 entranceSound;                     // "player_wipe_door_SE"
+                 u8 unk_3DBA;                           // "player_wipe_item"
+                 u8 retainWeatherMode;                  // "next_walk"
+                 s16 dogParams;                         // OoT leftover. "dog_flag"
+                 u8 envHazardTextTriggerFlags;          // "guide_status"
+                 u8 showTitleCard;                      // "name_display"
+                 s16 nayrusLoveTimer;                   // remnant of OoT, "shield_magic_timer"
+                 u8 unk_3DC2;                           // "pad1"
+                 s16 rupeeAccumulator;                       // "lupy_udct"
+                 OSTime postmanTimerStopOsTime; // The osTime when the timer stops for the postman minigame. "get_time"
+                 u8 timerStates[TIMER_ID_MAX];  // See the `TimerState` enum. "event_fg"
+                 u8 timerDirections[TIMER_ID_MAX]; // See the `TimerDirection` enum. "calc_flag"
+                 u64 timerCurTimes[TIMER_ID_MAX]; // For countdown, the remaining time left. For countup, the time since the start. In centiseconds (1/100th sec). "event_ostime"
+                 u64 timerTimeLimits[TIMER_ID_MAX]; // The original total time given for the timer to count from, in centiseconds (1/100th sec). "event_sub"
+                 OSTime timerStartOsTimes[TIMER_ID_MAX]; // The osTime when the timer starts. "func_time"
+                 u64 timerStopTimes[TIMER_ID_MAX];  // The total amount of time taken between the start and end of the timer, in centiseconds (1/100th sec). "func_end_time"
+                 OSTime timerPausedOsTimes[TIMER_ID_MAX]; // The cumulative osTime spent with the timer paused. "func_stop_time"
+                 s16 timerX[TIMER_ID_MAX]; // "event_xp"
+                 s16 timerY[TIMER_ID_MAX]; // "event_yp"
+                 u8 bottleTimerStates[BOTTLE_MAX];           // See the `BottleTimerState` enum. "bottle_status"
+                 OSTime bottleTimerStartOsTimes[BOTTLE_MAX]; // The osTime when the timer starts. "bottle_ostime"
+                 u64 bottleTimerTimeLimits[BOTTLE_MAX]; // The original total time given before the timer expires, in centiseconds (1/100th sec). "bottle_sub"
+                 u64 bottleTimerCurTimes[BOTTLE_MAX];   // The remaining time left before the timer expires, in centiseconds (1/100th sec). "bottle_time"
+                 OSTime bottleTimerPausedOsTimes[BOTTLE_MAX]; // The cumulative osTime spent with the timer paused. "bottle_stop_time"
+                 s16 unk_3F14;             // "character_change"
+                 u8 seqId;                 // "old_bgm"
+                 u8 ambienceId;            // "old_env"
+                 u8 buttonStatus[6];       // "button_item"
+                 u8 hudVisibilityForceButtonAlphasByStatus; // if btn alphas are updated through Interface_UpdateButtonAlphas, instead update them through Interface_UpdateButtonAlphasByStatus "ck_fg"
+                 u16 nextHudVisibility;  // triggers the hud to change visibility to the requested value. Reset to HUD_VISIBILITY_IDLE when target is reached "alpha_type"
+                 u16 hudVisibility;      // current hud visibility "prev_alpha_type"
+                 u16 hudVisibilityTimer; // number of frames in the transition to a new hud visibility. Used to step alpha "alpha_count"
+                 u16 prevHudVisibility; // used to store and recover hud visibility for pause menu and text boxes "last_time_type"
+                 s16 magicState;          // determines magic meter behavior on each frame "magic_flag"
+                 s16 isMagicRequested;    // a request to add magic has been given "recovery_magic_flag"
+                 s16 magicFlag;           // Set to 0 in func_80812D94(), otherwise unused "keep_magic_flag"
+                 s16 magicCapacity;       // maximum magic available "magic_now_max"
+                 s16 magicFillTarget;     // target used to fill magic "magic_now_now"
+                 s16 magicToConsume;      // accumulated magic that is requested to be consumed "magic_used"
+                 s16 magicToAdd;          // accumulated magic that is requested to be added "magic_recovery"
+                 u8 eventInf[8]; // "event_inf"
+#endif
     /* 0x3F36 */ u16 mapIndex;            // set to enum DungeonSceneIndex when entering a dungeon related scene, or Map_GetMapIndexForOverworld on certain overworld scenes "scene_ID"
     /* 0x3F38 */ u16 minigameStatus;      // "yabusame_mode"
     /* 0x3F3A */ u16 minigameScore;       // "yabusame_total"
