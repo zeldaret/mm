@@ -5,6 +5,8 @@
  */
 
 #include "z_shot_sun.h"
+#include "z_en_item00.h"
+
 #include "overlays/actors/ovl_Item_Etcetera/z_item_etcetera.h"
 #include "overlays/actors/ovl_En_Elf/z_en_elf.h"
 

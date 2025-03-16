@@ -5,6 +5,7 @@
  */
 
 #include "z_en_wood02.h"
+#include "z_en_item00.h"
 #include "attributes.h"
 #include "assets/objects/object_wood02/object_wood02.h"
 

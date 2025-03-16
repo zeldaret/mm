@@ -30,6 +30,7 @@
  */
 
 #include "z_en_invadepoh.h"
+#include "z_en_item00.h"
 
 #include "sys_cfb.h"
 #include "z64horse.h"

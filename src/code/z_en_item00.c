@@ -1,3 +1,4 @@
+#include "z_en_item00.h"
 #include "global.h"
 #include "attributes.h"
 #include "overlays/actors/ovl_En_Elforg/z_en_elforg.h"

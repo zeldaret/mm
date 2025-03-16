@@ -5,6 +5,7 @@
  */
 
 #include "z_en_tubo_trap.h"
+#include "z_en_item00.h"
 #include "assets/objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
 
 #define FLAGS 0x00000000

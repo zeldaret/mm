@@ -5,6 +5,8 @@
  */
 
 #include "z_obj_kibako2.h"
+#include "z_en_item00.h"
+
 #include "assets/objects/object_kibako2/object_kibako2.h"
 #include "overlays/effects/ovl_Effect_Ss_Kakera/z_eff_ss_kakera.h"
 

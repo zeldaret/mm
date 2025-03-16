@@ -5,6 +5,7 @@
  */
 
 #include "z_en_dodongo.h"
+#include "z_en_item00.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "overlays/actors/ovl_En_Bombf/z_en_bombf.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"

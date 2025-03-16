@@ -5,6 +5,7 @@
  */
 
 #include "z_en_famos.h"
+#include "z_en_item00.h"
 #include "z64rumble.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
