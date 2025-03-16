@@ -76,9 +76,9 @@ typedef struct {
 #define BGCHECKFLAG_GROUND_STRICT (1 << 7) // Similar to BGCHECKFLAG_GROUND but with no velocity check and is cleared every frame
 #define BGCHECKFLAG_CRUSHED (1 << 8) // Crushed between a floor and ceiling (triggers a void for player)
 #define BGCHECKFLAG_PLAYER_WALL_INTERACT (1 << 9) // Only set/used by player, related to interacting with walls
-#define BGCHECKFLAG_PLAYER_400 (1 << 10) // 
-#define BGCHECKFLAG_PLAYER_800 (1 << 11) // 
-#define BGCHECKFLAG_PLAYER_1000 (1 << 12) // 
+#define BGCHECKFLAG_PLAYER_400 (1 << 10) //
+#define BGCHECKFLAG_PLAYER_800 (1 << 11) //
+#define BGCHECKFLAG_PLAYER_1000 (1 << 12) //
 
 // Flags for Actor_UpdateBgCheckInfo
 #define UPDBGCHECKINFO_FLAG_1 (1 << 0) // check wall
@@ -234,26 +234,6 @@ typedef struct EnItem00 {
     /* 0x158 */ ColliderCylinder collider;
     /* 0x1A4 */ s8 unk1A4;
 } EnItem00; // size = 0x1A8
-
-struct EnAObj;
-
-typedef void (*EnAObjActionFunc)(struct EnAObj*, struct PlayState*);
-
-typedef struct EnAObj {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ EnAObjActionFunc actionFunc;
-    /* 0x148 */ ColliderCylinder collision;
-} EnAObj; // size = 0x194
-
-typedef enum {
-    /* 0 */ AOBJ_SIGNPOST_OBLONG,
-    /* 1 */ AOBJ_SIGNPOST_ARROW
-} AObjType;
-
-#define AOBJ_GET_TEXTID(thisx) ((((thisx)->params >> 8) & 0xFF) | 0x300)
-#define AOBJ_GET_TYPE(thisx) (((thisx)->params & 0xFF) - 9)
-
-#define AOBJ_PARAMS(textId, type) ((((textId - 0x300) & 0xFF) << 8) | (type + 9))
 
 typedef enum {
     /* 0x00 */ ACTORCAT_SWITCH,
