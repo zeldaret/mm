@@ -2,6 +2,8 @@
  * ROM spec file
  */
 
+#include "include/versions.h"
+
 beginseg
     name "framebuffer_lo"
     address 0x80000500
@@ -1256,6 +1258,15 @@ beginseg
     include "$(BUILD_DIR)/src/overlays/actors/ovl_Bg_F40_Flift/z_bg_f40_flift.o"
     include "$(BUILD_DIR)/src/overlays/actors/ovl_Bg_F40_Flift/ovl_Bg_F40_Flift_reloc.o"
 endseg
+
+#if MM_VERSION < N64_US
+beginseg
+    name "ovl_Bg_Heavy_Block"
+    compress
+    include "$(BUILD_DIR)/src/overlays/actors/ovl_Bg_Heavy_Block/z_bg_heavy_block.o"
+    include "$(BUILD_DIR)/src/overlays/actors/ovl_Bg_Heavy_Block/ovl_Bg_Heavy_Block_reloc.o"
+endseg
+#endif
 
 beginseg
     name "ovl_Obj_Mure"
