@@ -6,6 +6,7 @@ pyyaml>=6.0.1,<7.0.0
 
 # disasm
 rabbitizer>=1.3.0,<2.0.0
+spimdisasm>=1.34.2,<2.0.0
 
 # yars
 pyelftools>=0.26
