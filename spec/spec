@@ -21,7 +21,6 @@ beginseg
     name "boot"
     address 0x80080060
     include "$(BUILD_DIR)/src/boot/boot_main.o"
-    include "$(BUILD_DIR)/src/boot/rspboot.o"
     include "$(BUILD_DIR)/src/boot/idle.o"
     include "$(BUILD_DIR)/src/boot/viconfig.o"
     include "$(BUILD_DIR)/src/boot/carthandle.o"
@@ -244,6 +243,7 @@ beginseg
     include "$(BUILD_DIR)/src/boot/libc/strcpy.o"
     include "$(BUILD_DIR)/src/boot/libc/memmove.o"
     include "$(BUILD_DIR)/src/boot/build.o"
+    include "$(BUILD_DIR)/src/microcode/rspboot.o"
 #ifdef COMPILER_GCC
     include "$(BUILD_DIR)/src/gcc_fix/missing_gcc_functions.o"
 #endif
@@ -609,7 +609,6 @@ beginseg
     name "code"
     compress
     after "dmadata"
-    include "$(BUILD_DIR)/src/code/rsptext.o"
     include "$(BUILD_DIR)/src/code/z_en_a_keep.o"
     include "$(BUILD_DIR)/src/code/z_en_item00.o"
     include "$(BUILD_DIR)/src/code/z_eff_blure.o"
@@ -780,7 +779,10 @@ beginseg
     include "$(BUILD_DIR)/assets/audio/sequence_font_table.o"
     include "$(BUILD_DIR)/src/audio/tables/sequence_table.o"
     include "$(BUILD_DIR)/src/audio/tables/samplebank_table.o"
-    include "$(BUILD_DIR)/src/code/rspdata.o"
+    include "$(BUILD_DIR)/src/microcode/aspMain.o"
+    include "$(BUILD_DIR)/src/microcode/gspF3DZEX2_NoN_PosLight_fifo.o"
+    include "$(BUILD_DIR)/src/microcode/gspS2DEX2_fifo.o"
+    include "$(BUILD_DIR)/src/microcode/njpgdspMain.o"
 endseg
 
 // The game expects all the segments after the `code` segment and before the first overlay to be `NOLOAD` ones
