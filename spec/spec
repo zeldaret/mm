@@ -229,6 +229,9 @@ beginseg
     include "$(BUILD_DIR)/src/boot/libc/memmove.o"
     include "$(BUILD_DIR)/src/boot/build.o"
     include "$(BUILD_DIR)/rsp/rspboot.o"
+#if MM_VERSION < N64_US
+    include "$(BUILD_DIR)/rsp/cic6105.o"
+#endif
 #ifdef COMPILER_GCC
     include "$(BUILD_DIR)/src/gcc_fix/missing_gcc_functions.o"
 #endif
@@ -764,6 +767,9 @@ beginseg
     include "$(BUILD_DIR)/src/audio/tables/sequence_table.o"
     include "$(BUILD_DIR)/src/audio/tables/samplebank_table.o"
     include "$(BUILD_DIR)/rsp/aspMain.o"
+#if MM_VERSION < N64_US
+    include "$(BUILD_DIR)/rsp/gspF3DZEX2.NoN.PosLight.fifo_legacy.o"
+#endif
     include "$(BUILD_DIR)/rsp/gspF3DZEX2.NoN.PosLight.fifo.o"
     include "$(BUILD_DIR)/rsp/gspS2DEX2.fifo.o"
     include "$(BUILD_DIR)/rsp/njpgdspMain.o"
