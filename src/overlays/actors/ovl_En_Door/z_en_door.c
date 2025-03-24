@@ -6,8 +6,21 @@
 
 #include "z_en_door.h"
 
+#include "libc64/qrand.h"
 #include "assert.h"
+#include "gfx.h"
+#include "gfx_setupdl.h"
+#include "ichain.h"
+#include "macros.h"
+#include "sfx.h"
+#include "z64effect.h"
+#include "z64play.h"
+#include "z64schedule.h"
 
+#include "global.h"
+
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/gameplay_field_keep/gameplay_field_keep.h"
 #include "assets/objects/object_kinsta2_obj/object_kinsta2_obj.h"
 #include "assets/objects/object_dor01/object_dor01.h"
 #include "assets/objects/object_dor02/object_dor02.h"
@@ -20,7 +33,6 @@
 #include "assets/objects/object_wdor05/object_wdor05.h"
 #include "assets/objects/object_numa_obj/object_numa_obj.h"
 #include "assets/objects/object_kaizoku_obj/object_kaizoku_obj.h"
-#include "assets/objects/gameplay_field_keep/gameplay_field_keep.h"
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 

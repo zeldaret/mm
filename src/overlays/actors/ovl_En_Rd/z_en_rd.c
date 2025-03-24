@@ -23,6 +23,7 @@
  */
 
 #include "z_en_rd.h"
+#include "z_en_item00.h"
 #include "z64rumble.h"
 #include "attributes.h"
 #include "assets/objects/object_rd/object_rd.h"

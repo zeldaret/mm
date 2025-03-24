@@ -5,6 +5,8 @@
  */
 
 #include "z_en_ruppecrow.h"
+#include "z_en_item00.h"
+
 #include "assets/objects/object_crow/object_crow.h"
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED | ACTOR_FLAG_CAN_ATTACH_TO_ARROW)

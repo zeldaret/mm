@@ -34,6 +34,7 @@
 #include "overlays/actors/ovl_En_Torch2/z_en_torch2.h"
 #include "overlays/actors/ovl_En_Zoraegg/z_en_zoraegg.h"
 #include "overlays/actors/ovl_Obj_Aqua/z_obj_aqua.h"
+#include "z_en_item00.h"
 
 #include "overlays/effects/ovl_Effect_Ss_Fhg_Flash/z_eff_ss_fhg_flash.h"
 #include "overlays/effects/ovl_Effect_Ss_G_Splash/z_eff_ss_g_splash.h"

@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_swprize.h"
+#include "z_en_item00.h"
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 

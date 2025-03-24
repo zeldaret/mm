@@ -5,6 +5,7 @@
  */
 
 #include "z_en_goroiwa.h"
+#include "z_en_item00.h"
 #include "z64quake.h"
 #include "assets/objects/object_goroiwa/object_goroiwa.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"

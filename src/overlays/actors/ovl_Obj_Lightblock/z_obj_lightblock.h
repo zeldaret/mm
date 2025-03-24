@@ -1,14 +1,15 @@
 #ifndef Z_OBJ_LIGHTBLOCK_H
 #define Z_OBJ_LIGHTBLOCK_H
 
-#include "global.h"
+#include "z64actor.h"
 
 #define LIGHTBLOCK_TYPE(thisx) ((thisx)->params & 1)
 #define LIGHTBLOCK_GET_DESTROYED_SWITCH_FLAG(thisx) (((thisx)->params >> 8) & 0x7F)
 
 struct ObjLightblock;
+struct PlayState;
 
-typedef void (*ObjLightblockActionFunc)(struct ObjLightblock*, PlayState*);
+typedef void (*ObjLightblockActionFunc)(struct ObjLightblock*, struct PlayState*);
 
 typedef struct ObjLightblock {
     /* 0x000 */ DynaPolyActor dyna;
