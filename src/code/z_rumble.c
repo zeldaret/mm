@@ -10,6 +10,9 @@
 #include "global.h"
 #include "z64rumble.h"
 
+#pragma increment_block_number "n64-us:128"
+
+static s32 sBssPad[4];
 RumbleManager gRumbleMgr;
 
 void Rumble_Update(void* arg0) {

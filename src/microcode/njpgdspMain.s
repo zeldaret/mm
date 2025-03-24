@@ -11,7 +11,7 @@ dlabel njpgdspMainTextEnd
 
 .section .rodata
 
-.balign
+.balign 16
 
 dlabel njpgdspMainDataStart
     .incbin "incbin/njpgdspMainData"
