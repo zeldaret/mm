@@ -6,6 +6,17 @@
 
 #include "z_en_clear_tag.h"
 #include "attributes.h"
+#include "gfx.h"
+#include "gfx_setupdl.h"
+#include "macros.h"
+#include "rand.h"
+#include "regs.h"
+#include "sfx.h"
+#include "sys_matrix.h"
+#include "z64lib.h"
+#include "z64play.h"
+
+#include "global.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS                                                                                 \

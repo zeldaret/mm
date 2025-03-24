@@ -1,13 +1,15 @@
 #ifndef Z_EN_PAMERA_H
 #define Z_EN_PAMERA_H
 
-#include "global.h"
+#include "z64actor.h"
+#include "unk.h"
 #include "assets/objects/object_pamera/object_pamera.h"
 
 struct EnPamera;
+struct PlayState;
 
-typedef void (*EnPameraActionFunc)(struct EnPamera*, PlayState*);
-typedef void (*EnPameraSetupFunc)(struct EnPamera*, PlayState*);
+typedef void (*EnPameraActionFunc)(struct EnPamera*, struct PlayState*);
+typedef void (*EnPameraSetupFunc)(struct EnPamera*, struct PlayState*);
 
 #define PAMELA_GET_PATH_INDEX(thisx) (((thisx)->params & 0xFF0) >> 4)
 #define PAMELA_GET_F000(thisx) (((thisx)->params & 0xF000) >> 0xC)
@@ -21,7 +23,7 @@ typedef struct EnPamera {
     /* 0x1DC */ Vec3s* pathPoints;
     /* 0x1E0 */ s32 waypointIndex;
     /* 0x1E4 */ s32 pathCount;
-    /* 0x1E8 */ s32 additionalPathIndex; 
+    /* 0x1E8 */ s32 additionalPathIndex;
     /* 0x1EC */ s32 unk_1EC;
     /* 0x1F0 */ Vec3s jointTable[PAMELA_LIMB_MAX];
     /* 0x27A */ Vec3s morphTable[PAMELA_LIMB_MAX];

@@ -6,6 +6,12 @@
 
 #include "z_en_girla.h"
 
+#include "macros.h"
+#include "sys_matrix.h"
+#include "z64play.h"
+
+#include "global.h"
+
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void EnGirlA_Init(Actor* thisx, PlayState* play);

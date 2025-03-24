@@ -872,7 +872,7 @@ typedef enum {
 #define SCENE_CMD_MINIMAP_INFO SCENE_CMD_MAP_DATA
 #define SCENE_CMD_MINIMAP_COMPASS_ICON_INFO SCENE_CMD_MAP_DATA_CHESTS
 
-void Scene_ResetTransitionActorList(GameState* gameState, TransitionActorList* transitionActors);
+void Scene_ResetTransitionActorList(struct GameState* gameState, TransitionActorList* transitionActors);
 void Scene_SetExitFade(struct PlayState* play);
 s32 Scene_ExecuteCommands(struct PlayState* play, SceneCmd* sceneCmd);
 u16 Entrance_Create(s32 scene, s32 spawn, s32 layer);

@@ -1,13 +1,16 @@
 #ifndef Z_EN_GM_H
 #define Z_EN_GM_H
 
-#include "global.h"
+#include "z64actor.h"
+#include "z64msgevent.h"
 #include "assets/objects/object_in2/object_in2.h"
 
 struct EnGm;
+struct Path;
+struct PlayState;
 
-typedef void (*EnGmActionFunc)(struct EnGm*, PlayState*);
-typedef void (*EnGmUnkFunc2)(struct EnGm*, PlayState*);
+typedef void (*EnGmActionFunc)(struct EnGm*, struct PlayState*);
+typedef void (*EnGmUnkFunc2)(struct EnGm*, struct PlayState*);
 
 #define ENGM_GET_PATH_INDEX(thisx) ((thisx)->params & 0xFF)
 
@@ -20,7 +23,7 @@ typedef struct EnGm {
     /* 0x18C */ EnGmUnkFunc2 unk_18C;
     /* 0x190 */ ColliderCylinder colliderCylinder;
     /* 0x1DC */ ColliderSphere colliderSphere;
-    /* 0x234 */ Path* timePath;
+    /* 0x234 */ struct Path* timePath;
     /* 0x238 */ Vec3f timePathTargetPos;
     /* 0x244 */ f32 timePathProgress;
     /* 0x248 */ s32 timePathTotalTime;
