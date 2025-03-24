@@ -468,7 +468,7 @@ void Fault_PrintThreadContext(OSThread* thread) {
     }
 }
 
-void osSyncPrintfThreadContext(OSThread* thread) {
+void Fault_LogThreadContext(OSThread* thread) {
     __OSThreadContext* threadCtx;
     s16 causeStrIndex = _SHIFTR((u32)thread->context.cause, 2, 5);
 
@@ -1035,7 +1035,7 @@ void Fault_ThreadEntry(void* arg) {
         do {
             // Thread context page
             Fault_PrintThreadContext(faultedThread);
-            osSyncPrintfThreadContext(faultedThread);
+            Fault_LogThreadContext(faultedThread);
             Fault_WaitForInput();
 
             // Stack trace page

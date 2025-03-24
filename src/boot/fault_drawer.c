@@ -266,8 +266,6 @@ void* FaultDrawer_FormatStringFunc(void* arg, const char* str, size_t count) {
     return arg;
 }
 
-const char D_80099080[] = "(null)";
-
 s32 FaultDrawer_VPrintf(const char* fmt, va_list ap) {
     return _Printf(FaultDrawer_FormatStringFunc, sFaultDrawerInstance, fmt, ap);
 }
