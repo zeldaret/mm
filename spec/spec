@@ -824,8 +824,13 @@ beginseg
     compress
     include "$(BUILD_DIR)/src/overlays/gamestates/ovl_file_choose/z_file_nameset_data.o"
     include "$(BUILD_DIR)/src/overlays/gamestates/ovl_file_choose/z_file_copy_erase.o"
+#if MM_VERSION >= N64_US
     include "$(BUILD_DIR)/src/overlays/gamestates/ovl_file_choose/z_file_nameset_NES.o"
     include "$(BUILD_DIR)/src/overlays/gamestates/ovl_file_choose/z_file_choose_NES.o"
+#else
+    include "$(BUILD_DIR)/src/overlays/gamestates/ovl_file_choose/z_file_nameset_JPN.o"
+    include "$(BUILD_DIR)/src/overlays/gamestates/ovl_file_choose/z_file_choose_JPN.o"
+#endif
     include "$(BUILD_DIR)/src/overlays/gamestates/ovl_file_choose/ovl_file_choose_reloc.o"
 endseg
 
