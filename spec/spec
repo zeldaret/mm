@@ -677,6 +677,9 @@ beginseg
     include "$(BUILD_DIR)/src/code/z_snap.o"
     include "$(BUILD_DIR)/src/code/z_sub_s.o"
     include "$(BUILD_DIR)/src/code/z_circle_tex.o"
+#if MM_VERSION < N64_US
+    include "$(BUILD_DIR)/src/code/z_sram_JPN.o"
+#endif
     include "$(BUILD_DIR)/src/code/z_rumble.o"
     include "$(BUILD_DIR)/src/code/z_view.o"
     include "$(BUILD_DIR)/src/code/z_vimode.o"
@@ -686,7 +689,9 @@ beginseg
     include "$(BUILD_DIR)/src/code/z_viszbuf.o"
     include "$(BUILD_DIR)/src/code/z_vr_box.o"
     include "$(BUILD_DIR)/src/code/z_vr_box_draw.o"
+#if MM_VERSION >= N64_US
     include "$(BUILD_DIR)/src/code/z_sram_NES.o"
+#endif
     include "$(BUILD_DIR)/src/code/z_message.o"
     include "$(BUILD_DIR)/src/code/z_message_nes.o"
     include "$(BUILD_DIR)/src/code/z_message_staff.o"
