@@ -295,7 +295,11 @@ def compare_pointers(version: str) -> dict[Path, BssSection]:
             # For the baserom, assume that the lowest address is the start of the BSS section. This might
             # not be true if the first BSS variable is not referenced so account for that specifically.
 
-            base_start_address = min(p.base_value for p in pointers_in_section) if pointers_in_section else 0
+            base_start_address = (
+                min(p.base_value for p in pointers_in_section)
+                if pointers_in_section
+                else 0
+            )
             # Account for the fact that z_rumble and session_config start with unreferenced bss
             if str(c_file) == "src/code/z_rumble.c":
                 base_start_address -= 0x10
@@ -304,7 +308,9 @@ def compare_pointers(version: str) -> dict[Path, BssSection]:
 
             build_start_address = file.vram
 
-            bss_sections[c_file] = BssSection(base_start_address, build_start_address, pointers_in_section)
+            bss_sections[c_file] = BssSection(
+                base_start_address, build_start_address, pointers_in_section
+            )
 
     return bss_sections
 
@@ -824,7 +830,8 @@ def main():
             continue
 
         if not all(
-            p.build_value - bss_section.build_start_address == p.base_value - bss_section.base_start_address
+            p.build_value - bss_section.build_start_address
+            == p.base_value - bss_section.base_start_address
             for p in bss_section.pointers
         ):
             files_with_reordering.append(file)
