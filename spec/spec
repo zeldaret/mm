@@ -850,7 +850,11 @@ beginseg
     include "$(BUILD_DIR)/src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_map.o"
     include "$(BUILD_DIR)/src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_mask.o"
     include "$(BUILD_DIR)/src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_prompt.o"
+#if MM_VERSION >= N64_US
     include "$(BUILD_DIR)/src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.o"
+#else
+    include "$(BUILD_DIR)/src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_JPN.o"
+#endif
     include "$(BUILD_DIR)/src/overlays/kaleido_scope/ovl_kaleido_scope/ovl_kaleido_scope_reloc.o"
 endseg
 
