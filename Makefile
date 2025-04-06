@@ -267,6 +267,7 @@ else
 SRC_DIRS := $(shell find src -type d)
 endif
 
+RSP_DIRS := $(shell find rsp -type d)
 ASM_DIRS := $(shell find asm -type d -not -path "asm/non_matchings*") $(shell find data -type d)
 
 ifneq ($(wildcard $(EXTRACTED_DIR)/assets/audio),)
@@ -363,11 +364,13 @@ C_FILES        := $(foreach dir,$(SRC_DIRS) $(ASSET_BIN_DIRS_C_FILES),$(wildcard
 S_FILES        := $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.s)) \
                   $(shell grep -F "\$$(BUILD_DIR)/asm" $(SPEC) | sed 's/.*$$(BUILD_DIR)\/// ; s/\.o\".*/.s/') \
                   $(shell grep -F "\$$(BUILD_DIR)/data" $(SPEC) | sed 's/.*$$(BUILD_DIR)\/// ; s/\.o\".*/.s/')
+RSP_FILES      := $(foreach dir,$(RSP_DIRS),$(wildcard $(dir)/*.s))
 SCHEDULE_FILES := $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.schl))
 BASEROM_FILES  := $(shell grep -F "\$$(BUILD_DIR)/baserom" $(SPEC) | sed 's/.*$$(BUILD_DIR)\/// ; s/\.o\".*//')
 ARCHIVES_O     := $(shell grep -F ".yar.o" $(SPEC) | sed 's/.*include "// ; s/.*$$(BUILD_DIR)\/// ; s/\.o\".*/.o/')
 O_FILES        := $(foreach f,$(S_FILES:.s=.o),$(BUILD_DIR)/$f) \
                   $(foreach f,$(C_FILES:.c=.o),$(BUILD_DIR)/$f) \
+                  $(foreach f,$(RSP_FILES:.s=.o),$(BUILD_DIR)/$f) \
                   $(foreach f,$(ASSET_C_FILES_EXTRACTED:.c=.o),$(f:$(EXTRACTED_DIR)/%=$(BUILD_DIR)/%)) \
                   $(foreach f,$(ASSET_C_FILES_COMMITTED:.c=.o),$(BUILD_DIR)/$f) \
                   $(foreach f,$(BASEROM_FILES),$(BUILD_DIR)/$f.o) \
@@ -391,6 +394,7 @@ OTHER_DIRS := assets/text baserom dmadata $(shell find linker_scripts -type d)
 
 # create build directories
 $(shell mkdir -p $(foreach dir, \
+                      $(RSP_DIRS) \
                       $(SRC_DIRS) \
                       $(ASM_DIRS) \
                       $(OTHER_DIRS), \
