@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_mure3.h"
+#include "z_en_item00.h"
 
 #define FLAGS 0x00000000
 

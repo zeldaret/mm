@@ -1,14 +1,15 @@
 #ifndef Z_EN_GIRLA_H
 #define Z_EN_GIRLA_H
 
-#include "global.h"
+#include "z64actor.h"
 
 struct EnGirlA;
+struct PlayState;
 
-typedef void (*EnGirlAActionFunc)(struct EnGirlA*, PlayState*);
-typedef void (*EnGirlADrawFunc)(struct Actor*, PlayState*, s32);
-typedef s32 (*EnGirlACanBuyFunc)(PlayState*, struct EnGirlA*);
-typedef void (*EnGirlAShopActionFunc)(PlayState*, struct EnGirlA*); // Buying/Restocking
+typedef void (*EnGirlAActionFunc)(struct EnGirlA*, struct PlayState*);
+typedef void (*EnGirlADrawFunc)(struct Actor*, struct PlayState*, s32);
+typedef s32 (*EnGirlACanBuyFunc)(struct PlayState*, struct EnGirlA*);
+typedef void (*EnGirlAShopActionFunc)(struct PlayState*, struct EnGirlA*); // Buying/Restocking
 
 typedef struct ShopItemEntry {
     /* 0x00 */ s16 objectId;
@@ -107,8 +108,8 @@ typedef enum {
     /* 0x2B */ SI_MAX
 } EnGirlAShopItemId;
 
-/* 
-* Shopkeeper Common Defines 
+/*
+* Shopkeeper Common Defines
 */
 #define CURSOR_INVALID 0xFF
 #define COL_CHAN_MIX(c1, c2, m) (c1 - (s32)(c2 * m)) & 0xFF

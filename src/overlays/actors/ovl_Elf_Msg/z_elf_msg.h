@@ -1,15 +1,16 @@
 #ifndef Z_ELF_MSG_H
 #define Z_ELF_MSG_H
 
-#include "global.h"
+#include "z64actor.h"
 
 #define ELFMSG_GET_FF(thisx) ((thisx)->params & 0xFF)
 #define ELFMSG_GET_SWITCH_FLAG(thisx) (((thisx)->params & 0x7F00) >> 8)
 #define ELFMSG_GET_8000(thisx) ((thisx)->params & 0x8000)
 
 struct ElfMsg;
+struct PlayState;
 
-typedef void (*ElfMsgActionFunc)(struct ElfMsg*, PlayState*);
+typedef void (*ElfMsgActionFunc)(struct ElfMsg*, struct PlayState*);
 
 typedef struct ElfMsg {
     /* 0x000 */ Actor actor;

@@ -5,6 +5,7 @@
  */
 
 #include "z_en_mkk.h"
+#include "z_en_item00.h"
 #include "assets/objects/object_mkk/object_mkk.h"
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE)

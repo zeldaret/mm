@@ -1,8 +1,9 @@
 #ifndef Z_EN_ELFORG_H
 #define Z_EN_ELFORG_H
 
+#include "z64actor.h"
+
 #include "global.h"
-#include "overlays/actors/ovl_Bg_Dy_Yoseizo/z_bg_dy_yoseizo.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define STRAY_FAIRY_TYPE(thisx) ((thisx)->params & 0xF)
@@ -30,19 +31,20 @@ typedef enum StrayFairyType {
     /* 8 */ STRAY_FAIRY_TYPE_RETURNING_TO_FOUNTAIN // The ones you "turn in" by walking into a Fairy Fountain
 } StrayFairyType;
 
-// Corresponds to the Great Fairy types
+// Corresponds to GreatFairyType
 typedef enum StrayFairyArea {
-    /* 0 */ STRAY_FAIRY_AREA_CLOCK_TOWN = GREAT_FAIRY_TYPE_MAGIC,
-    /* 1 */ STRAY_FAIRY_AREA_WOODFALL = GREAT_FAIRY_TYPE_POWER,
-    /* 2 */ STRAY_FAIRY_AREA_SNOWHEAD = GREAT_FAIRY_TYPE_WISDOM,
-    /* 3 */ STRAY_FAIRY_AREA_GREAT_BAY = GREAT_FAIRY_TYPE_COURAGE,
-    /* 4 */ STRAY_FAIRY_AREA_STONE_TOWER = GREAT_FAIRY_TYPE_KINDNESS,
+    /* 0 */ STRAY_FAIRY_AREA_CLOCK_TOWN,
+    /* 1 */ STRAY_FAIRY_AREA_WOODFALL,
+    /* 2 */ STRAY_FAIRY_AREA_SNOWHEAD,
+    /* 3 */ STRAY_FAIRY_AREA_GREAT_BAY,
+    /* 4 */ STRAY_FAIRY_AREA_STONE_TOWER,
     /* 5 */ STRAY_FAIRY_AREA_MAX
 } StrayFairyArea;
 
 struct EnElforg;
+struct PlayState;
 
-typedef void (*EnElforgActionFunc)(struct EnElforg*, PlayState*);
+typedef void (*EnElforgActionFunc)(struct EnElforg*, struct PlayState*);
 
 typedef struct EnElforg {
     /* 0x000 */ Actor actor;

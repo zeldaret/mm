@@ -5,6 +5,7 @@
  */
 
 #include "z_en_ik.h"
+#include "z_en_item00.h"
 #include "z64rumble.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
