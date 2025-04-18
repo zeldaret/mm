@@ -110,9 +110,11 @@ endif
 # Detect compiler and set variables appropriately.
 ifeq ($(COMPILER),gcc)
   CC       := $(MIPS_BINUTILS_PREFIX)gcc
+  CCAS     := $(CC) -x assembler-with-cpp
 else ifeq ($(COMPILER),ido)
   CC       := tools/ido_recomp/$(DETECTED_OS)/7.1/cc
   CC_OLD   := tools/ido_recomp/$(DETECTED_OS)/5.3/cc
+  CCAS     := $(CC_OLD)
 else
 $(error Unsupported compiler. Please use either ido or gcc as the COMPILER variable.)
 endif
@@ -127,6 +129,7 @@ ifeq ($(ORIG_COMPILER),1)
   endif
   CC        = $(QEMU_IRIX) -L tools/ido7.1_compiler tools/ido7.1_compiler/usr/bin/cc
   CC_OLD    = $(QEMU_IRIX) -L tools/ido5.3_compiler tools/ido5.3_compiler/usr/bin/cc
+  CCAS      = $(CC_OLD)
 endif
 
 AS      := $(MIPS_BINUTILS_PREFIX)as
@@ -134,6 +137,7 @@ LD      := $(MIPS_BINUTILS_PREFIX)ld
 NM      := $(MIPS_BINUTILS_PREFIX)nm
 OBJCOPY := $(MIPS_BINUTILS_PREFIX)objcopy
 OBJDUMP := $(MIPS_BINUTILS_PREFIX)objdump
+STRIP   := $(MIPS_BINUTILS_PREFIX)strip
 
 IINC := -Iinclude -Iinclude/libc -Isrc -I$(BUILD_DIR) -I. -I$(EXTRACTED_DIR)
 
@@ -207,7 +211,8 @@ ifeq ($(COMPILER),gcc)
   CFLAGS           += -nostdinc -fno-PIC -fno-common -ffreestanding -fbuiltin -fno-builtin-sinf -fno-builtin-cosf -funsigned-char
 
   WARNINGS         := $(CC_CHECK_WARNINGS)
-  ASFLAGS          := -march=vr4300 -32 -G0
+  ASFLAGS          := -march=vr4300 -32 -G0 -no-pad-sections
+  CCASFLAGS        := $(GBI_DEFINES) -G 0 -nostdinc -march=vr4300 -mfix4300 -mabi=32 -mno-abicalls -fno-PIC -fno-common -Wa,-no-pad-sections
   COMMON_DEFINES   := $(GBI_DEFINES)
   AS_DEFINES       := $(COMMON_DEFINES) -DMIPSEB -D_LANGUAGE_ASSEMBLY -D_ULTRA64
   C_DEFINES        := $(COMMON_DEFINES) -D_LANGUAGE_C
@@ -219,7 +224,8 @@ else
   CFLAGS           += -G 0 -non_shared -Xcpluscomm -nostdinc -Wab,-r4300_mul
 
   WARNINGS         := -fullwarn -verbose -woff 624,649,838,712,516,513,596,564,594,807
-  ASFLAGS          := -march=vr4300 -32 -G0
+  ASFLAGS          := -march=vr4300 -32 -G0 -no-pad-sections
+  CCASFLAGS        := $(GBI_DEFINES) -G 0 -non_shared -Xcpluscomm -nostdinc -Wab,-r4300_mul $(WARNINGS) -o32
   COMMON_DEFINES   := -D_MIPS_SZLONG=32 $(GBI_DEFINES)
   AS_DEFINES       := $(COMMON_DEFINES) -DMIPSEB -D_LANGUAGE_ASSEMBLY -D_ULTRA64
   C_DEFINES        := $(COMMON_DEFINES) -D_LANGUAGE_C
@@ -228,6 +234,7 @@ else
   OPTFLAGS         := -O2 -g3
   MIPS_VERSION     := -mips2
 endif
+ASOPTFLAGS := -O1
 
 # Use relocations and abi fpr names in the dump
 OBJDUMP_FLAGS := --disassemble --reloc --disassemble-zeroes -Mreg-names=32
@@ -374,7 +381,8 @@ O_FILES        := $(foreach f,$(S_FILES:.s=.o),$(BUILD_DIR)/$f) \
                   $(foreach f,$(ASSET_C_FILES_EXTRACTED:.c=.o),$(f:$(EXTRACTED_DIR)/%=$(BUILD_DIR)/%)) \
                   $(foreach f,$(ASSET_C_FILES_COMMITTED:.c=.o),$(BUILD_DIR)/$f) \
                   $(foreach f,$(BASEROM_FILES),$(BUILD_DIR)/$f.o) \
-                  $(foreach f,$(ARCHIVES_O),$(BUILD_DIR)/$f)
+                  $(foreach f,$(ARCHIVES_O),$(BUILD_DIR)/$f) \
+                  $(BUILD_DIR)/src/makerom/ipl3.o $(BUILD_DIR)/src/audio/lib/stack.o
 
 SHIFTJIS_C_FILES := src/libultra/voice/voicecheckword.c src/audio/voice_external.c src/code/z_message.c src/code/z_message_nes.c
 SHIFTJIS_O_FILES := $(foreach f,$(SHIFTJIS_C_FILES:.c=.o),$(BUILD_DIR)/$f)
@@ -420,7 +428,11 @@ endif
 
 $(BUILD_DIR)/src/audio/lib/seqplayer.o: C_DEFINES += -DMML_VERSION=MML_VERSION_MM
 
+# Command to patch certain object files after they are built
+POSTPROCESS_OBJ := @:
+
 ifeq ($(COMPILER),ido)
+
 # directory flags
 $(BUILD_DIR)/src/libultra/os/%.o: OPTFLAGS := -O1
 $(BUILD_DIR)/src/libultra/voice/%.o: OPTFLAGS := -O2
@@ -435,6 +447,8 @@ $(BUILD_DIR)/src/boot/libc/%.o: OPTFLAGS := -O2
 $(BUILD_DIR)/src/boot/libm/%.o: OPTFLAGS := -O2
 $(BUILD_DIR)/src/boot/libc64/%.o: OPTFLAGS := -O2
 
+$(BUILD_DIR)/src/code/%.o: ASOPTFLAGS := -O2
+
 $(BUILD_DIR)/src/audio/%.o: OPTFLAGS := -O2
 
 $(BUILD_DIR)/assets/%.o: OPTFLAGS := -O1
@@ -442,8 +456,14 @@ $(BUILD_DIR)/assets/%.o: OPTFLAGS := -O1
 # file flags
 $(BUILD_DIR)/src/libultra/libc/ll.o: OPTFLAGS := -O1
 $(BUILD_DIR)/src/libultra/libc/ll.o: MIPS_VERSION := -mips3 -32
+$(BUILD_DIR)/src/libultra/libc/ll.o: POSTPROCESS_OBJ := $(PYTHON) tools/set_o32abi_bit.py
+
 $(BUILD_DIR)/src/libultra/libc/llcvt.o: OPTFLAGS := -O1
 $(BUILD_DIR)/src/libultra/libc/llcvt.o: MIPS_VERSION := -mips3 -32
+$(BUILD_DIR)/src/libultra/libc/llcvt.o: POSTPROCESS_OBJ := $(PYTHON) tools/set_o32abi_bit.py
+
+$(BUILD_DIR)/src/libultra/os/exceptasm.o: MIPS_VERSION := -mips3 -32
+$(BUILD_DIR)/src/libultra/os/exceptasm.o: POSTPROCESS_OBJ := $(PYTHON) tools/set_o32abi_bit.py
 
 $(BUILD_DIR)/src/boot/fault.o: CFLAGS += -trapuv
 $(BUILD_DIR)/src/boot/fault_drawer.o: CFLAGS += -trapuv
@@ -607,8 +627,44 @@ $(BUILD_DIR)/dmadata/dmadata_table_spec.h $(BUILD_DIR)/dmadata/compress_ranges.t
 $(BUILD_DIR)/src/boot/z_std_dma.o: $(BUILD_DIR)/dmadata/dmadata_table_spec.h
 $(BUILD_DIR)/src/dmadata/dmadata.o: $(BUILD_DIR)/dmadata/dmadata_table_spec.h
 
-$(BUILD_DIR)/%.o: %.s
-	$(CPP) $(CPPFLAGS) $(IINC) $< | $(AS) $(ASFLAGS) $(IINC) $(ENDIAN) -o $@
+$(BUILD_DIR)/asm/%.o: asm/%.s
+	$(AS) $(ASFLAGS) $(IINC) $(ENDIAN) $< -o $@
+
+$(BUILD_DIR)/data/%.o: data/%.s
+	$(AS) $(ASFLAGS) $(IINC) $(ENDIAN) $< -o $@
+
+$(BUILD_DIR)/rsp/%.o: rsp/%.s
+	$(AS) $(ASFLAGS) $(IINC) $(ENDIAN) $< -o $@
+
+# Assemble the ROM header with GNU AS always
+$(BUILD_DIR)/src/makerom/rom_header.o: src/makerom/rom_header.s
+ifeq ($(COMPILER),ido)
+	$(CPP) $(CPPFLAGS) $(MIPS_BUILTIN_DEFS) $(IINC) $< | $(AS) $(ASFLAGS) $(IINC) $(ENDIAN) -o $@
+else
+	$(CCAS) -c $(CCASFLAGS) $(IINC) $(MIPS_VERSION) $(ASOPTFLAGS) -o $@ $<
+endif
+	$(OBJDUMP_CMD)
+
+$(BUILD_DIR)/src/makerom/ipl3.o: $(EXTRACTED_DIR)/incbin/ipl3
+	$(OBJCOPY) -I binary -O elf32-big --rename-section .data=.text $< $@
+
+$(BUILD_DIR)/src/audio/lib/stack.o: $(EXTRACTED_DIR)/incbin/aspMainStack
+	$(OBJCOPY) -I binary -O elf32-big --add-symbol aspMainStack=.data:0,global $< $@
+
+$(BUILD_DIR)/src/%.o: src/%.s
+ifeq ($(COMPILER),ido)
+	$(CCAS) -c $(CCASFLAGS) $(IINC) $(MIPS_VERSION) $(ASOPTFLAGS) -o $(@:.o=.tmp.o) $<
+# IDO generates bad symbol tables, fix the symbol table with strip..
+	$(STRIP) $(@:.o=.tmp.o) -N dummy-symbol-name
+# but strip doesn't know about file-relative offsets in .mdebug and doesn't relocate them, ld will
+# segfault unless .mdebug is removed
+	$(OBJCOPY) --remove-section .mdebug $(@:.o=.tmp.o) $@
+else
+	$(CCAS) -c $(CCASFLAGS) $(IINC) $(MIPS_VERSION) $(ASOPTFLAGS) -o $@ $<
+endif
+	$(POSTPROCESS_OBJ) $@
+	$(OBJDUMP_CMD)
+	$(RM_MDEBUG)
 
 $(BUILD_DIR)/assets/text/%.o: assets/text/%.c
 ifneq ($(COMPILER),gcc)
@@ -675,23 +731,10 @@ $(SHIFTJIS_O_FILES): $(BUILD_DIR)/src/%.o: src/%.c
 	$(OBJDUMP_CMD)
 	$(RM_MDEBUG)
 
-$(BUILD_DIR)/src/libultra/libc/ll.o: src/libultra/libc/ll.c
-	$(CC_CHECK_COMP) $(CC_CHECK_FLAGS) $(IINC) $(CC_CHECK_WARNINGS) $(C_DEFINES) $(MIPS_BUILTIN_DEFS) $<
-	$(CC) -c $(CFLAGS) $(IINC) $(WARNINGS) $(C_DEFINES) $(MIPS_VERSION) $(ENDIAN) $(OPTFLAGS) -o $@ $<
-	$(PYTHON) tools/set_o32abi_bit.py $@
-	$(OBJDUMP_CMD)
-	$(RM_MDEBUG)
-
-$(BUILD_DIR)/src/libultra/libc/llcvt.o: src/libultra/libc/llcvt.c
-	$(CC_CHECK_COMP) $(CC_CHECK_FLAGS) $(IINC) $(CC_CHECK_WARNINGS) $(C_DEFINES) $(MIPS_BUILTIN_DEFS) $<
-	$(CC) -c $(CFLAGS) $(IINC) $(WARNINGS) $(C_DEFINES) $(MIPS_VERSION) $(ENDIAN) $(OPTFLAGS) -o $@ $<
-	$(PYTHON) tools/set_o32abi_bit.py $@
-	$(OBJDUMP_CMD)
-	$(RM_MDEBUG)
-
 $(BUILD_DIR)/%.o: %.c
 	$(CC_CHECK_COMP) $(CC_CHECK_FLAGS) $(IINC) $(CC_CHECK_WARNINGS) $(C_DEFINES) $(MIPS_BUILTIN_DEFS) $<
 	$(CC) -c $(CFLAGS) $(IINC) $(WARNINGS) $(C_DEFINES) $(MIPS_VERSION) $(ENDIAN) $(OPTFLAGS) -o $@ $<
+	$(POSTPROCESS_OBJ) $@
 	$(OBJDUMP_CMD)
 	$(RM_MDEBUG)
 

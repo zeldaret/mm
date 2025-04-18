@@ -744,7 +744,7 @@ beginseg
     include "$(BUILD_DIR)/src/code/c_keyframe.o"
     include "$(BUILD_DIR)/src/code/sys_slowly.o"
     include "$(BUILD_DIR)/src/code/sys_flashrom.o"
-    include "$(BUILD_DIR)/asm/code/kanread.text.o" // handwritten
+    include "$(BUILD_DIR)/src/code/kanread.o"
     include "$(BUILD_DIR)/src/code/osFlash.o"
     pad_text
     pad_text
@@ -760,9 +760,8 @@ beginseg
     include "$(BUILD_DIR)/src/audio/lib/effects.o"
     include "$(BUILD_DIR)/src/audio/lib/seqplayer.o"
     include "$(BUILD_DIR)/src/audio/lib/stack.o"
-    include "$(BUILD_DIR)/asm/code/code_8019AE40.text.o" // handwritten
-    pad_text
-    include "$(BUILD_DIR)/asm/code/code_8019AEC0.text.o" // handwritten
+    include "$(BUILD_DIR)/src/audio/code_8019AE40.o"
+    include "$(BUILD_DIR)/src/audio/code_8019AEC0.o"
     include "$(BUILD_DIR)/src/audio/code_8019AF00.o"
     include "$(BUILD_DIR)/src/audio/voice_external.o"
     include "$(BUILD_DIR)/src/audio/voice_internal.o"
