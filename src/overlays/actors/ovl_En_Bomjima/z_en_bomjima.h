@@ -42,8 +42,8 @@ typedef struct EnBomjima {
     /* 0x2CA */ s16 unk_2CA;
     /* 0x2CC */ f32 animEndFrame;
     /* 0x2D0 */ f32 unk_2D0;
-    /* 0x2D4 */ s16 csIdList[2];
-    /* 0x2D8 */ UNK_TYPE1 unk2D8[4]; // maybe a part of the above?
+    /* 0x2D4 */ s16 csIdList[3];
+    /* 0x2D8 */ UNK_TYPE1 unk2D8[3]; // maybe a part of the above?
     /* 0x2DC */ s16 unk_2DC;
     /* 0x2DE */ s16 cutsceneEnded;
     /* 0x2E0 */ s16 unk_2E0;
