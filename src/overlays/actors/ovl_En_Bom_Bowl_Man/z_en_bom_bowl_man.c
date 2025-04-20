@@ -156,8 +156,8 @@ void EnBomBowlMan_Init(Actor* thisx, PlayState* play) {
 
     if ((gSaveContext.save.entrance == ENTRANCE(EAST_CLOCK_TOWN, 2)) && CHECK_WEEKEVENTREG(WEEKEVENTREG_73_80) &&
         !CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
-        this->csId3 = this->actor.csId;
-        if (this->csId3 == 0) {
+        this->csId = this->actor.csId;
+        if (this->csId == 0) {
             Actor_Kill(&this->actor);
         }
         func_809C52B4(this);
@@ -514,11 +514,11 @@ void func_809C5738(EnBomBowlMan* this, PlayState* play) {
             func_809C4B6C(this);
             if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
                 CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
-                CutsceneManager_Queue(this->csId3);
-            } else if (!CutsceneManager_IsNext(this->csId3)) {
-                CutsceneManager_Queue(this->csId3);
+                CutsceneManager_Queue(this->csId);
+            } else if (!CutsceneManager_IsNext(this->csId)) {
+                CutsceneManager_Queue(this->csId);
             } else {
-                CutsceneManager_StartWithPlayerCs(this->csId3, &this->actor);
+                CutsceneManager_StartWithPlayerCs(this->csId, &this->actor);
                 this->unk_2C2 = 2;
                 EnBomBowlMan_ChangeAnim(this, ENBOMBOWLMAN_ANIM_18, 1.0f);
             }
@@ -526,11 +526,11 @@ void func_809C5738(EnBomBowlMan* this, PlayState* play) {
     } else if (this->unk_2C2 == 1) {
         if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
             CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
-            CutsceneManager_Queue(this->csId3);
-        } else if (!CutsceneManager_IsNext(this->csId3)) {
-            CutsceneManager_Queue(this->csId3);
+            CutsceneManager_Queue(this->csId);
+        } else if (!CutsceneManager_IsNext(this->csId)) {
+            CutsceneManager_Queue(this->csId);
         } else {
-            CutsceneManager_StartWithPlayerCs(this->csId3, &this->actor);
+            CutsceneManager_StartWithPlayerCs(this->csId, &this->actor);
             this->unk_2C2 = 2;
             EnBomBowlMan_ChangeAnim(this, ENBOMBOWLMAN_ANIM_18, 1.0f);
         }
@@ -545,7 +545,7 @@ void func_809C5738(EnBomBowlMan* this, PlayState* play) {
             if (this->unk_298 >= this->path->count) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_84_80);
                 CLEAR_WEEKEVENTREG(WEEKEVENTREG_83_04);
-                CutsceneManager_Stop(this->csId3);
+                CutsceneManager_Stop(this->csId);
                 Actor_Kill(&this->actor);
                 return;
             }
