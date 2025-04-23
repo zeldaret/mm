@@ -558,7 +558,7 @@ setup:
 assets:
 	$(PYTHON) tools/extract_assets.py $(EXTRACTED_DIR)/baserom $(EXTRACTED_DIR)/assets -j$(N_THREADS) -Z Wno-hardcoded-pointer -v $(VERSION)
 	$(PYTHON) tools/extract_text.py $(EXTRACTED_DIR)/baserom $(EXTRACTED_DIR)/text -v $(VERSION)
-	$(PYTHON) tools/extract_audio.py -o $(EXTRACTED_DIR) -v $(VERSION) --read-xml
+	$(PYTHON) tools/extract_audio.py -b $(EXTRACTED_DIR)/baserom -o $(EXTRACTED_DIR) -v $(VERSION) --read-xml
 
 ## Assembly generation
 disasm:
