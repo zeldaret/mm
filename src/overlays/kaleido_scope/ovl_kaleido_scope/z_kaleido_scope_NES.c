@@ -18,6 +18,8 @@
 #include "assets/interface/icon_item_jpn_static/icon_item_jpn_static.h"
 #include "assets/interface/icon_item_vtx_static/icon_item_vtx_static.h"
 
+#pragma increment_block_number "n64-us:128"
+
 // Page Textures (Background of Page):
 // Broken up into multiple textures.
 // Numbered by column/row.
