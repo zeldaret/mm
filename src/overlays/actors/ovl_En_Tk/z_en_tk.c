@@ -5,9 +5,23 @@
  */
 
 #include "z_en_tk.h"
-#include "attributes.h"
 #include "overlays/actors/ovl_Bg_Danpei_Movebg/z_bg_danpei_movebg.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
+
+#include "libc64/qrand.h"
+#include "attributes.h"
+#include "gfx.h"
+#include "gfx_setupdl.h"
+#include "macros.h"
+#include "regs.h"
+#include "sfx.h"
+#include "sys_matrix.h"
+#include "z64lib.h"
+#include "z64play.h"
+#include "z64schedule.h"
+#include "assets/objects/object_tk/object_tk.h"
+
+#include "global.h"
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 

@@ -6,6 +6,14 @@
 
 #include "z_en_zov.h"
 #include "overlays/actors/ovl_En_Elf/z_en_elf.h"
+#include "gfx.h"
+#include "gfx_setupdl.h"
+#include "macros.h"
+#include "seqcmd.h"
+#include "sequence.h"
+#include "sys_matrix.h"
+#include "z64lib.h"
+#include "z64play.h"
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 

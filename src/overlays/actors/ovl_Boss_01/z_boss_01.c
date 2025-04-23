@@ -26,6 +26,7 @@
  */
 
 #include "z_boss_01.h"
+#include "z_en_item00.h"
 #include "z64rumble.h"
 #include "z64shrink_window.h"
 #include "attributes.h"

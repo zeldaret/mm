@@ -5,7 +5,18 @@
  */
 
 #include "z_en_fsn.h"
+#include "libc64/qrand.h"
 #include "attributes.h"
+#include "controller.h"
+#include "gfx.h"
+#include "gfx_setupdl.h"
+#include "sfx.h"
+#include "sys_matrix.h"
+#include "z64lib.h"
+#include "z64play.h"
+#include "z64subs.h"
+
+#include "global.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED)

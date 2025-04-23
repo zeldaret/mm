@@ -5,8 +5,10 @@
 #include "assets/objects/object_thiefbird/object_thiefbird.h"
 
 struct EnThiefbird;
+struct EnItem00;
+struct PlayState;
 
-typedef void (*EnThiefbirdActionFunc)(struct EnThiefbird*, PlayState*);
+typedef void (*EnThiefbirdActionFunc)(struct EnThiefbird*, struct PlayState*);
 
 typedef struct {
     /* 0x00 */ Vec3f unk_00;
@@ -54,7 +56,7 @@ typedef struct EnThiefbird {
     /* 0x3E0 */ f32 unk_3E0;
     /* 0x3E4 */ Gfx* unk_3E4;
     /* 0x3E8 */ Gfx* unk_3E8;
-    /* 0x3EC */ EnItem00* unk_3EC;
+    /* 0x3EC */ struct EnItem00* unk_3EC;
     /* 0x3F0 */ EnThiefbirdUnkStruct unk_3F0[40];
 } EnThiefbird; // size = 0x990
 

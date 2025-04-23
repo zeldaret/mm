@@ -2,16 +2,18 @@
 #define Z64_HORSE_H
 
 #include "ultra64.h"
-#include "z64.h"
 
+struct ActorContext;
+struct Player;
+struct PlayState;
 
-s32 Horse_GetJumpingFencePathIndex(PlayState* play);
-s32 Horse_CopyPointFromPathList(PlayState* play, s32 pathIndex, s32 pointIndex, Vec3s* dst, s16* arg4);
+s32 Horse_GetJumpingFencePathIndex(struct PlayState* play);
+s32 Horse_CopyPointFromPathList(struct PlayState* play, s32 pathIndex, s32 pointIndex, Vec3s* dst, s16* arg4);
 s32 Horse_IsValidSpawn(s16 sceneId);
-void Horse_ResetHorseData(PlayState* play);
-void Horse_Spawn(PlayState* play, Player* player);
+void Horse_ResetHorseData(struct PlayState* play);
+void Horse_Spawn(struct PlayState* play, struct Player* player);
 void Horse_RotateToPoint(Actor* actor, Vec3f* pos, s16 turnYaw);
-s32 Horse_IsActive(PlayState* play, ActorContext* actorCtx);
+s32 Horse_IsActive(struct PlayState* play, struct ActorContext* actorCtx);
 
 
 extern s32 gHorseIsMounted;

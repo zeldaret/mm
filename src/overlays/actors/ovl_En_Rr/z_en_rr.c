@@ -5,6 +5,8 @@
  */
 
 #include "z_en_rr.h"
+#include "z_en_item00.h"
+
 #include "z64rumble.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "assets/objects/object_rr/object_rr.h"

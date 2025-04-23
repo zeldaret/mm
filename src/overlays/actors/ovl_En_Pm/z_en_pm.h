@@ -1,13 +1,16 @@
 #ifndef Z_EN_PM_H
 #define Z_EN_PM_H
 
-#include "global.h"
+#include "z64actor.h"
+#include "z64msgevent.h"
 #include "assets/objects/object_mm/object_mm.h"
 
 struct EnPm;
+struct Path;
+struct PlayState;
 
-typedef void (*EnPmActionFunc)(struct EnPm*, PlayState*);
-typedef s32 (*EnPmFunc2)(struct EnPm*, PlayState*);
+typedef void (*EnPmActionFunc)(struct EnPm*, struct PlayState*);
+typedef s32 (*EnPmFunc2)(struct EnPm*, struct PlayState*);
 
 #define ENPM_GET_PATH_INDEX(thisx) ((thisx)->params & 0xFF)
 
@@ -18,7 +21,7 @@ typedef struct EnPm {
     /* 0x18C */ EnPmFunc2 unk_18C;
     /* 0x190 */ ColliderCylinder colliderCylinder;
     /* 0x1DC */ ColliderSphere colliderSphere;
-    /* 0x234 */ Path* timePath;
+    /* 0x234 */ struct Path* timePath;
     /* 0x238 */ Vec3f timePathTargetPos;
     /* 0x244 */ f32 timePathProgress;
     /* 0x248 */ s32 timePathTotalTime;

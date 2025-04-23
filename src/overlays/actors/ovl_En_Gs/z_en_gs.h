@@ -1,11 +1,12 @@
 #ifndef Z_EN_GS_H
 #define Z_EN_GS_H
 
-#include "global.h"
+#include "z64actor.h"
 
 struct EnGs;
+struct PlayState;
 
-typedef void (*EnGsActionFunc)(struct EnGs*, PlayState*);
+typedef void (*EnGsActionFunc)(struct EnGs*, struct PlayState*);
 
 #define ENGS_GET_1F(thisx) ((thisx)->params & 0x1F)
 #define ENGS_GET_SWITCH_FLAG(thisx) (((thisx)->params >> 5) & 0x7F)

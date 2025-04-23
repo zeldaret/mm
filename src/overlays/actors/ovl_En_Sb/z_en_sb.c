@@ -5,6 +5,7 @@
  */
 
 #include "z_en_sb.h"
+#include "z_en_item00.h"
 #include "overlays/actors/ovl_En_Part/z_en_part.h"
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE)
