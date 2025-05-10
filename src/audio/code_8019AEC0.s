@@ -5,6 +5,7 @@
 .align 5
 
 /* Copy 0x20 bytes at a1 to a0, with word alignment */
+/* void func_8019AEC0(u32 dst[8], u32 src[8]) */
 LEAF(func_8019AEC0)
     addi    t7, a1, 0x20
 1:
