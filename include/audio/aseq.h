@@ -1848,7 +1848,7 @@ $reladdr\@:
 .endm
 
 /**
- * ptraddi <value:u16>
+ * ptraddi <value:s16>
  *
  *  Like ptradd but for immediates instead of labels
  *
@@ -1856,7 +1856,7 @@ $reladdr\@:
  */
 .macro ptraddi value
     _wr_cmd_id  ptradd, ,ASEQ_OP_CHAN_PTRADD,,,,,,, 0, 0
-    _wr_u16     \value
+    _wr_s16     \value
 .endm
 
 /**
