@@ -5,6 +5,7 @@
  */
 
 #include "z_en_neo_reeba.h"
+#include "z_en_item00.h"
 #include "attributes.h"
 #include "assets/objects/object_rb/object_rb.h"
 

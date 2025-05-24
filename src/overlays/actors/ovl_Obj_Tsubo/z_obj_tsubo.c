@@ -5,7 +5,9 @@
  */
 
 #include "z_obj_tsubo.h"
+#include "z_en_item00.h"
 #include "overlays/actors/ovl_En_Sw/z_en_sw.h"
+
 #include "assets/objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
 #include "assets/objects/object_tsubo/object_tsubo.h"
 #include "assets/objects/object_racetsubo/object_racetsubo.h"

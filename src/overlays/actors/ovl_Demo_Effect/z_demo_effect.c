@@ -6,6 +6,15 @@
 
 #include "z_demo_effect.h"
 #include "attributes.h"
+#include "gfx.h"
+#include "gfx_setupdl.h"
+#include "macros.h"
+#include "sfx.h"
+#include "sys_matrix.h"
+#include "z64lib.h"
+#include "z64play.h"
+
+#include "global.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 #include "assets/objects/object_efc_tw/object_efc_tw.h"
 

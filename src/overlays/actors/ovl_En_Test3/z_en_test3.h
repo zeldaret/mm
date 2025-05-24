@@ -1,11 +1,14 @@
 #ifndef Z_EN_TEST3_H
 #define Z_EN_TEST3_H
 
-#include "global.h"
+#include "z64actor.h"
+#include "z64player.h"
 
 struct EnTest3;
+struct Path;
+struct PlayState;
 
-typedef void (*EnTest3ActionFunc)(struct EnTest3*, PlayState*);
+typedef void (*EnTest3ActionFunc)(struct EnTest3*, struct PlayState*);
 
 #define KAFEI_GET_PATH_INDEX(thisx) ((thisx)->params & 0x1F)
 #define KAFEI_GET_PARAM_1E0(thisx) (((thisx)->params >> 5) & 0xF)
@@ -19,7 +22,7 @@ typedef struct {
 typedef struct EnTest3 {
     /* 0x000 */ Player player;
     /* 0xD78 */ EnTest3_struct_D78* unk_D78;
-    /* 0xD7C */ Path* unk_D7C;
+    /* 0xD7C */ struct Path* unk_D7C;
     /* 0xD80 */ s32 unk_D80;
     /* 0xD84 */ f32 unk_D84;
     /* 0xD88 */ s8 scheduleResult;

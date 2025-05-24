@@ -5,6 +5,8 @@
  */
 
 #include "z_obj_kibako.h"
+#include "z_en_item00.h"
+
 #include "assets/objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
 #include "assets/objects/object_kibako/object_kibako.h"
 

@@ -1,10 +1,23 @@
-#include "global.h"
-#include "attributes.h"
-#include "overlays/actors/ovl_En_Elforg/z_en_elforg.h"
-#include "assets/objects/gameplay_keep/gameplay_keep.h"
-#include "assets/objects/object_gi_hearts/object_gi_hearts.h"
+#include "z_en_item00.h"
 #include "overlays/actors/ovl_En_Elf/z_en_elf.h"
 #include "overlays/actors/ovl_En_Elforg/z_en_elforg.h"
+
+#include "libc64/qrand.h"
+#include "attributes.h"
+#include "gfx.h"
+#include "gfx_setupdl.h"
+#include "ichain.h"
+#include "macros.h"
+#include "rand.h"
+#include "sfx.h"
+#include "sys_matrix.h"
+#include "z64effect.h"
+#include "z64lib.h"
+#include "z64play.h"
+
+#include "global.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_gi_hearts/object_gi_hearts.h"
 
 #define FLAGS 0x00000000
 
