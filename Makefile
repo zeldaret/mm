@@ -78,6 +78,12 @@ export LANG := C
 CFLAGS :=
 CPPFLAGS :=
 
+ifeq ($(VERSION),n64-us)
+# Intentionally blank for now
+else
+$(error Unsupported version $(VERSION))
+endif
+
 ifeq ($(COMPILER),gcc)
   CPPFLAGS += -DCOMPILER_GCC
   NON_MATCHING := 1

@@ -2,13 +2,15 @@
 #define Z_EN_AN_H
 
 #include "global.h"
+
+#include "z64msgevent.h"
+
 #include "assets/objects/object_an1/object_an1.h"
 
 struct EnAn;
 
 typedef void (*EnAnActionFunc)(struct EnAn*, PlayState*);
 typedef void (*EnAnDialogueFunc)(struct EnAn*, PlayState*);
-typedef s32 (*MsgEventFunc)(Actor*, PlayState*);
 
 #define ENAN_8000 0x8000
 
@@ -87,7 +89,7 @@ typedef struct EnAn {
     /* 0x392 */ s16 mouthTexIndex;
     /* 0x394 */ s16 msgEventState;
     /* 0x396 */ s16 dialogueFuncState;
-    /* 0x398 */ MsgEventFunc msgScriptCallback;
+    /* 0x398 */ MsgScriptCallback msgScriptCallback;
     /* 0x39C */ s32 animIndex; // EnAnAnimation enum
     /* 0x3A0 */ UNK_TYPE1 unk_3A0[0x8];
     /* 0x3A8 */ u32 trayTexScrollTimer1; // TwoTexScroll
