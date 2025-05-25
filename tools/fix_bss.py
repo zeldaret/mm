@@ -82,7 +82,8 @@ class Pointer:
 
 @dataclass
 class BssSection:
-    start_address: int
+    base_start_address: int
+    build_start_address: int
     pointers: list[Pointer]
 
 
@@ -91,6 +92,11 @@ def read_relocs(object_path: Path, section_name: str) -> list[Reloc]:
     with open(object_path, "rb") as f:
         elffile = elftools.elf.elffile.ELFFile(f)
         symtab = elffile.get_section_by_name(".symtab")
+
+        section = elffile.get_section_by_name(section_name)
+        if section is None:
+            return []
+
         data = elffile.get_section_by_name(section_name).data()
 
         reloc_section = elffile.get_section_by_name(f".rel{section_name}")
@@ -165,9 +171,9 @@ def get_file_pointers(
 
         # For relocations against a global symbol, subtract the addend so that the pointer
         # is for the start of the symbol. This can help deal with things like STACK_TOP
-        # (where the pointer is past the end of the symbol) or negative addends. If the
-        # relocation is against a section however, it's not useful to subtract the addend,
-        # so we keep it as-is and hope for the best.
+        # (where the pointer is past the end of the symbol) or negative addends. We can't
+        # do this for relocations against a section though, since we need the addend to
+        # distinguish between different static variables.
         if reloc.name.startswith("."):  # section
             addend = reloc.addend
         else:  # symbol
@@ -283,13 +289,28 @@ def compare_pointers(version: str) -> dict[Path, BssSection]:
             ]
 
             object_file = file.filepath.relative_to(f"build/{version}")
-            # Hack to handle the combined z_message_z_game_over.o file.
-            # Fortunately z_game_over has no BSS so we can just analyze z_message instead.
-            if str(object_file) == "src/code/z_message_z_game_over.o":
-                object_file = Path("src/code/z_message.o")
 
             c_file = object_file.with_suffix(".c")
-            bss_sections[c_file] = BssSection(file.vram, pointers_in_section)
+
+            # For the baserom, assume that the lowest address is the start of the BSS section. This might
+            # not be true if the first BSS variable is not referenced so account for that specifically.
+
+            base_start_address = (
+                min(p.base_value for p in pointers_in_section)
+                if pointers_in_section
+                else 0
+            )
+            # Account for the fact that z_rumble and session_config start with unreferenced bss
+            if str(c_file) == "src/code/z_rumble.c":
+                base_start_address -= 0x10
+            elif str(c_file) == "src/audio/session_config.c":
+                base_start_address -= 0x90
+
+            build_start_address = file.vram
+
+            bss_sections[c_file] = BssSection(
+                base_start_address, build_start_address, pointers_in_section
+            )
 
     return bss_sections
 
@@ -431,23 +452,21 @@ def determine_base_bss_ordering(
     build_bss_symbols: list[BssSymbol],
     bss_section: BssSection,
 ) -> list[BssSymbol]:
-    base_start_address = min(p.base_value for p in bss_section.pointers)
-
     found_symbols: dict[str, BssSymbol] = {}
     for p in bss_section.pointers:
-        base_offset = p.base_value - base_start_address
-        build_offset = p.build_value - bss_section.start_address
+        base_offset = p.base_value - bss_section.base_start_address
+        build_offset = p.build_value - bss_section.build_start_address
 
         new_symbol = None
         new_offset = 0
         for symbol in build_bss_symbols:
-            if (
-                symbol.offset <= build_offset
-                and build_offset < symbol.offset + symbol.size
-            ):
+            # To handle one-past-the-end pointers, we check <= instead of < for the symbol end.
+            # This won't work if there is another symbol right after this one, since we'll
+            # attribute this pointer to that symbol instead. This could prevent us from solving
+            # BSS ordering, but often the two symbols are adjacent in the baserom too so it works anyway.
+            if symbol.offset <= build_offset <= symbol.offset + symbol.size:
                 new_symbol = symbol
                 new_offset = base_offset - (build_offset - symbol.offset)
-                break
 
         if new_symbol is None:
             if p.addend > 0:
@@ -698,6 +717,12 @@ def process_file(
         raise FixBssException(f"Could not determine compiler command line for {file}")
 
     output(f"Compiler command: {shlex.join(command_line)}")
+
+    if any(s.startswith("tools/egcs/") for s in command_line):
+        raise FixBssException(
+            "Can't automatically fix BSS ordering for EGCS-compiled files"
+        )
+
     symbol_table, ucode = run_cfe(command_line, keep_files=False)
 
     bss_variables = find_bss_variables(symbol_table, ucode)
@@ -779,7 +804,7 @@ def main():
         dest="version",
         type=str,
         required=True,
-        help="OOT version",
+        help="MM version",
     )
     parser.add_argument(
         "--dry-run",
@@ -803,17 +828,10 @@ def main():
     for file, bss_section in bss_sections.items():
         if not bss_section.pointers:
             continue
-        # The following heuristic doesn't work for session_config, since the first pointer into BSS is not
-        # at the start of the section so we skip it
-        if str(file) in ("src/audio/session_config.c"):
-            continue
-        # For the baserom, assume that the lowest address is the start of the BSS section. This might
-        # not be true if the first BSS variable is not referenced, but in practice this doesn't happen
-        # (except for z_locale above).
-        base_min_address = min(p.base_value for p in bss_section.pointers)
-        build_min_address = bss_section.start_address
+
         if not all(
-            p.build_value - build_min_address == p.base_value - base_min_address
+            p.build_value - bss_section.build_start_address
+            == p.base_value - bss_section.base_start_address
             for p in bss_section.pointers
         ):
             files_with_reordering.append(file)
