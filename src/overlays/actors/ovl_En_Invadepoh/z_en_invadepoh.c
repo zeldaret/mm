@@ -30,12 +30,33 @@
  */
 
 #include "z_en_invadepoh.h"
-
-#include "sys_cfb.h"
-#include "z64horse.h"
-#include "assets/objects/gameplay_keep/gameplay_keep.h"
+#include "z_en_item00.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
+
+#include "libc64/qrand.h"
+#include "gfx.h"
+#include "gfx_setupdl.h"
+#include "ichain.h"
+#include "regs.h"
+#include "seqcmd.h"
+#include "sequence.h"
+#include "sfx.h"
+#include "sys_cfb.h"
+#include "sys_matrix.h"
+#include "z64effect.h"
+#include "z64horse.h"
+#include "z64lib.h"
+#include "z64play.h"
+
+#include "global.h"
+
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_cow/object_cow.h"
+#include "assets/objects/object_dog/object_dog.h"
+#include "assets/objects/object_ma1/object_ma1.h"
+#include "assets/objects/object_ma2/object_ma2.h"
+#include "assets/objects/object_uch/object_uch.h"
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 

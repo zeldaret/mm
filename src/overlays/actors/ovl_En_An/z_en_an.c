@@ -5,9 +5,23 @@
  */
 
 #include "z_en_an.h"
-#include "attributes.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
 
+#include "attributes.h"
+#include "gfx.h"
+#include "gfx_setupdl.h"
+#include "macros.h"
+#include "regs.h"
+#include "segmented_address.h"
+#include "sfx.h"
+#include "sys_matrix.h"
+#include "z64lib.h"
+#include "z64msgevent.h"
+#include "z64play.h"
+#include "z64schedule.h"
+#include "z64subs.h"
+
+#include "assets/objects/object_an1/object_an1.h"
 #include "assets/objects/object_an2/object_an2.h"
 #include "assets/objects/object_an3/object_an3.h"
 #include "assets/objects/object_an4/object_an4.h"

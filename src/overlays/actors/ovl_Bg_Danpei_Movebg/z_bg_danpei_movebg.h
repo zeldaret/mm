@@ -1,11 +1,12 @@
 #ifndef Z_BG_DANPEI_MOVEBG_H
 #define Z_BG_DANPEI_MOVEBG_H
 
-#include "global.h"
+#include "z64actor.h"
+#include "z64subs.h"
 
 struct BgDanpeiMovebg;
 
-typedef void (*BgDanpeiMovebgActionFunc)(struct BgDanpeiMovebg*, PlayState*);
+typedef void (*BgDanpeiMovebgActionFunc)(struct BgDanpeiMovebg*, struct PlayState*);
 
 #define BGDANPEIMOVEBG_GET_PATH_INDEX(thisx) ((thisx)->params & 0x7F)
 #define BGDANPEIMOVEBG_GET_TYPE(thisx)       (((thisx)->params >> 0xE) & 3)

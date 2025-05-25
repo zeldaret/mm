@@ -10,6 +10,10 @@
 
 #include "z_en_time_tag.h"
 #include "overlays/actors/ovl_En_Elf/z_en_elf.h"
+#include "macros.h"
+#include "sfx.h"
+#include "z64ocarina.h"
+#include "z64play.h"
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 

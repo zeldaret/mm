@@ -1,13 +1,14 @@
 #ifndef Z_BG_DY_YOSEIZO_H
 #define Z_BG_DY_YOSEIZO_H
 
+#include "z64actor.h"
 #include "global.h"
-#include "overlays/actors/ovl_En_Dy_Extra/z_en_dy_extra.h"
 #include "assets/objects/object_dy_obj/object_dy_obj.h"
 
 struct BgDyYoseizo;
+struct EnDyExtra;
 
-typedef void (*BgDyYoseizoActionFunc)(struct BgDyYoseizo*, PlayState*);
+typedef void (*BgDyYoseizoActionFunc)(struct BgDyYoseizo*, struct PlayState*);
 
 #define GREAT_FAIRY_GET_SWITCHFLAG(thisx) (((thisx)->params & 0xFE00) >> 9)
 #define GREAT_FAIRY_GET_TYPE(thisx) ((thisx)->params & 0xF)
@@ -47,7 +48,7 @@ typedef struct BgDyYoseizo {
     /* 0x0234 */ Vec3s morphTable[GREAT_FAIRY_LIMB_MAX];
     /* 0x02DC */ Vec3s headRot;
     /* 0x02DC */ Vec3s torsoRot;
-    /* 0x02E8 */ EnDyExtra* beam;
+    /* 0x02E8 */ struct EnDyExtra* beam;
     /* 0x02EC */ f32 unk2EC; // unused
     /* 0x02F0 */ f32 unk2F0;
     /* 0x02F4 */ f32 unk2F4;

@@ -3,13 +3,6 @@
 
 #include "z64.h"
 
-Actor* Item_DropCollectible(PlayState* play, Vec3f* spawnPos, u32 params);
-Actor* Item_DropCollectible2(PlayState* play, Vec3f* spawnPos, s32 params);
-void Item_DropCollectibleRandom(PlayState* play, Actor* fromActor, Vec3f* spawnPos, s16 params);
-s32 func_800A8150(s32 index);
-s32 func_800A817C(s32 index);
-bool Item_CanDropBigFairy(PlayState* play, s32 index, s32 collectibleFlag);
-
 // Ideally these two prototypes would be in z64actor.h, but they use PlayerItemAction which would require including z64player.h there.
 s32 Actor_OfferTalkExchange(Actor* actor, struct PlayState* play, f32 xzRange, f32 yRange, PlayerItemAction exchangeItemAction);
 s32 Actor_OfferTalkExchangeEquiCylinder(Actor* actor, struct PlayState* play, f32 radius, PlayerItemAction exchangeItemAction);

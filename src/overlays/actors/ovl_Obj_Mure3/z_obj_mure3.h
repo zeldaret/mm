@@ -7,14 +7,16 @@
 #define OBJMURE3_PARAM_RUPEEINDEX(thisx) (((thisx)->params >> 13) & 7)
 
 struct ObjMure3;
+struct EnItem00;
+struct PlayState;
 
-typedef void (*ObjMure3ActionFunc)(struct ObjMure3*, PlayState*);
-typedef void (*ObjMure3SpawnFunc)(struct ObjMure3*, PlayState*);
+typedef void (*ObjMure3ActionFunc)(struct ObjMure3*, struct PlayState*);
+typedef void (*ObjMure3SpawnFunc)(struct ObjMure3*, struct PlayState*);
 
 typedef struct ObjMure3 {
     /* 0x000 */ Actor actor;
     /* 0x144 */ ObjMure3ActionFunc actionFunc;
-    /* 0x148 */ EnItem00* unk148[6];
+    /* 0x148 */ struct EnItem00* unk148[6];
     /* 0x160 */ Actor* unk160;
     /* 0x164 */ u16 unk164;
 } ObjMure3; // size = 0x168

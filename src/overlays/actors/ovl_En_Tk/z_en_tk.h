@@ -1,13 +1,16 @@
 #ifndef Z_EN_TK_H
 #define Z_EN_TK_H
 
-#include "global.h"
+#include "unk.h"
+#include "z64actor.h"
 #include "assets/objects/object_tk/object_tk.h"
 
 struct EnTk;
+struct Path;
+struct PlayState;
 
-typedef void (*EnTkActionFunc)(struct EnTk*, PlayState*);
-typedef void (*EnTkUnkFunc)(struct EnTk*, PlayState*);
+typedef void (*EnTkActionFunc)(struct EnTk*, struct PlayState*);
+typedef void (*EnTkUnkFunc)(struct EnTk*, struct PlayState*);
 
 #define ENTK_GET_F(thisx) ((thisx)->params & 0xF)
 #define ENTK_GET_SWITCH_FLAG(thisx) (((thisx)->params >> 4) & 0x7F)
@@ -52,7 +55,7 @@ typedef struct EnTk {
     /* 0x324 */ Vec3f unk_324[6];
     /* 0x36C */ s32 unk_36C;
     /* 0x370 */ UNK_TYPE1 unk370[0x58];
-    /* 0x3C8 */ Path* timePath;
+    /* 0x3C8 */ struct Path* timePath;
     /* 0x3CC */ u8 scheduleResult;
     /* 0x3CE */ u16 unk_3CE;
     /* 0x3D0 */ s32 timePathTimeSpeed;

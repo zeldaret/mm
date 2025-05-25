@@ -1,3 +1,8 @@
+#include "z_en_a_obj.h"
+#include "gfx.h"
+#include "ichain.h"
+#include "z64play.h"
+
 #include "global.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 

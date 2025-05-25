@@ -5,8 +5,13 @@
  */
 
 #include "z_shot_sun.h"
+#include "z_en_item00.h"
 #include "overlays/actors/ovl_Item_Etcetera/z_item_etcetera.h"
 #include "overlays/actors/ovl_En_Elf/z_en_elf.h"
+#include "macros.h"
+#include "sfx.h"
+#include "z64ocarina.h"
+#include "z64play.h"
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 

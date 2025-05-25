@@ -76,9 +76,9 @@ typedef struct {
 #define BGCHECKFLAG_GROUND_STRICT (1 << 7) // Similar to BGCHECKFLAG_GROUND but with no velocity check and is cleared every frame
 #define BGCHECKFLAG_CRUSHED (1 << 8) // Crushed between a floor and ceiling (triggers a void for player)
 #define BGCHECKFLAG_PLAYER_WALL_INTERACT (1 << 9) // Only set/used by player, related to interacting with walls
-#define BGCHECKFLAG_PLAYER_400 (1 << 10) // 
-#define BGCHECKFLAG_PLAYER_800 (1 << 11) // 
-#define BGCHECKFLAG_PLAYER_1000 (1 << 12) // 
+#define BGCHECKFLAG_PLAYER_400 (1 << 10) //
+#define BGCHECKFLAG_PLAYER_800 (1 << 11) //
+#define BGCHECKFLAG_PLAYER_1000 (1 << 12) //
 
 // Flags for Actor_UpdateBgCheckInfo
 #define UPDBGCHECKINFO_FLAG_1 (1 << 0) // check wall
@@ -178,82 +178,6 @@ typedef struct DynaPolyActor {
     /* 0x154 */ u32 transformFlags;
     /* 0x158 */ u8 interactFlags;
 } DynaPolyActor; // size = 0x15C
-
-typedef enum Item00Type {
-    /* 0x00 */ ITEM00_RUPEE_GREEN,
-    /* 0x01 */ ITEM00_RUPEE_BLUE,
-    /* 0x02 */ ITEM00_RUPEE_RED,
-    /* 0x03 */ ITEM00_RECOVERY_HEART,
-    /* 0x04 */ ITEM00_BOMBS_A,
-    /* 0x05 */ ITEM00_ARROWS_10,
-    /* 0x06 */ ITEM00_HEART_PIECE,
-    /* 0x07 */ ITEM00_HEART_CONTAINER,
-    /* 0x08 */ ITEM00_ARROWS_30,
-    /* 0x09 */ ITEM00_ARROWS_40,
-    /* 0x0A */ ITEM00_ARROWS_50,
-    /* 0x0B */ ITEM00_BOMBS_B,
-    /* 0x0C */ ITEM00_DEKU_NUTS_1,
-    /* 0x0D */ ITEM00_DEKU_STICK,
-    /* 0x0E */ ITEM00_MAGIC_JAR_BIG,
-    /* 0x0F */ ITEM00_MAGIC_JAR_SMALL,
-    /* 0x10 */ ITEM00_MASK,
-    /* 0x11 */ ITEM00_SMALL_KEY,
-    /* 0x12 */ ITEM00_FLEXIBLE,
-    /* 0x13 */ ITEM00_RUPEE_HUGE,
-    /* 0x14 */ ITEM00_RUPEE_PURPLE,
-    /* 0x15 */ ITEM00_3_HEARTS,
-    /* 0x16 */ ITEM00_SHIELD_HERO,
-    /* 0x17 */ ITEM00_DEKU_NUTS_10,
-    /* 0x18 */ ITEM00_NOTHING,
-    /* 0x19 */ ITEM00_BOMBS_0,
-    /* 0x1A */ ITEM00_BIG_FAIRY,
-    /* 0x1B */ ITEM00_MAP,
-    /* 0x1C */ ITEM00_COMPASS,
-    /* 0x1D */ ITEM00_MUSHROOM_CLOUD,
-
-    /* 0xFF */ ITEM00_NO_DROP = -1
-} Item00Type;
-
-struct EnItem00;
-
-typedef void (*EnItem00ActionFunc)(struct EnItem00*, struct PlayState*);
-
-#define ENITEM00_GET_8000(thisx) ((thisx)->params & 0x8000)
-#define ENITEM00_GET_7F00(thisx) (((thisx)->params & 0x7F00) >> 8)
-
-typedef struct EnItem00 {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ EnItem00ActionFunc actionFunc;
-    /* 0x148 */ s16 collectibleFlag;
-    /* 0x14A */ s16 getItemId;
-    /* 0x14C */ s16 unk14C;
-    /* 0x14E */ s16 unk14E;
-    /* 0x150 */ s16 unk150;
-    /* 0x152 */ s16 unk152;
-    /* 0x154 */ f32 unk154;
-    /* 0x158 */ ColliderCylinder collider;
-    /* 0x1A4 */ s8 unk1A4;
-} EnItem00; // size = 0x1A8
-
-struct EnAObj;
-
-typedef void (*EnAObjActionFunc)(struct EnAObj*, struct PlayState*);
-
-typedef struct EnAObj {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ EnAObjActionFunc actionFunc;
-    /* 0x148 */ ColliderCylinder collision;
-} EnAObj; // size = 0x194
-
-typedef enum {
-    /* 0 */ AOBJ_SIGNPOST_OBLONG,
-    /* 1 */ AOBJ_SIGNPOST_ARROW
-} AObjType;
-
-#define AOBJ_GET_TEXTID(thisx) ((((thisx)->params >> 8) & 0xFF) | 0x300)
-#define AOBJ_GET_TYPE(thisx) (((thisx)->params & 0xFF) - 9)
-
-#define AOBJ_PARAMS(textId, type) ((((textId - 0x300) & 0xFF) << 8) | (type + 9))
 
 typedef enum {
     /* 0x00 */ ACTORCAT_SWITCH,

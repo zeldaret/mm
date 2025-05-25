@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_snowball.h"
+#include "z_en_item00.h"
 #include "assets/objects/object_goroiwa/object_goroiwa.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 

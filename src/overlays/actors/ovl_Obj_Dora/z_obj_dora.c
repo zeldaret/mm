@@ -5,6 +5,8 @@
  */
 
 #include "z_obj_dora.h"
+#include "z_en_item00.h"
+
 #include "assets/objects/object_dora/object_dora.h"
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)

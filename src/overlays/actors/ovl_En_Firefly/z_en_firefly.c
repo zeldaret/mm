@@ -5,6 +5,7 @@
  */
 
 #include "z_en_firefly.h"
+#include "z_en_item00.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/actors/ovl_Obj_Syokudai/z_obj_syokudai.h"
 

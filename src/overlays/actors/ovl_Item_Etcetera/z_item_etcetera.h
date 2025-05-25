@@ -1,14 +1,14 @@
 #ifndef Z_ITEM_ETCETERA_H
 #define Z_ITEM_ETCETERA_H
 
-#include "global.h"
+#include "z64actor.h"
 
 struct ItemEtcetera;
 
 #define ITEMETCETERA_GET_FF(thisx) ((thisx)->params & 0xFF)
 #define ITEMETCETERA_GET_TREASUREFLAG(thisx) (((thisx)->params >> 8) & 0x1F)
 
-typedef void (*ItemEtceteraActionFunc)(struct ItemEtcetera*, PlayState*);
+typedef void (*ItemEtceteraActionFunc)(struct ItemEtcetera*, struct PlayState*);
 
 typedef enum {
     /* 0x0 */ ITEM_ETC_BOTTLE_1,

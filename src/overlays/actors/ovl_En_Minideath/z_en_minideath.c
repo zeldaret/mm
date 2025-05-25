@@ -5,6 +5,7 @@
  */
 
 #include "z_en_minideath.h"
+#include "z_en_item00.h"
 #include "overlays/actors/ovl_En_Death/z_en_death.h"
 #include "assets/objects/object_death/object_death.h"
 

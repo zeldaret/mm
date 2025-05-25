@@ -1,14 +1,20 @@
 #ifndef Z_EN_AN_H
 #define Z_EN_AN_H
 
+#include "unk.h"
+#include "z64actor.h"
+#include "z64msgevent.h"
+
 #include "global.h"
 #include "assets/objects/object_an1/object_an1.h"
 
 struct EnAn;
+struct Path;
+struct PlayState;
 
-typedef void (*EnAnActionFunc)(struct EnAn*, PlayState*);
-typedef void (*EnAnDialogueFunc)(struct EnAn*, PlayState*);
-typedef s32 (*MsgEventFunc)(Actor*, PlayState*);
+typedef void (*EnAnActionFunc)(struct EnAn*, struct PlayState*);
+typedef void (*EnAnDialogueFunc)(struct EnAn*, struct PlayState*);
+typedef s32 (*MsgEventFunc)(Actor*, struct PlayState*);
 
 #define ENAN_8000 0x8000
 
@@ -35,7 +41,7 @@ typedef struct EnAn {
     /* 0x188 */ EnAnActionFunc actionFunc;
     /* 0x18C */ EnAnDialogueFunc dialogueFunc;
     /* 0x190 */ ColliderCylinder collider;
-    /* 0x1DC */ Path* timePath;
+    /* 0x1DC */ struct Path* timePath;
     /* 0x1E0 */ Vec3f timePathTargetPos;
     /* 0x1EC */ f32 timePathProgress;
     /* 0x1F0 */ s32 timePathTotalTime;
