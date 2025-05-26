@@ -129,7 +129,7 @@ def main():
     manager = multiprocessing.Manager()
     signal.signal(signal.SIGINT, SignalHandler)
 
-    extractedAssetsFile = Path("extracted") / args.version / ".extracted-assets.json"
+    extractedAssetsFile = outputDir / ".extracted-assets.json"
     extractedAssetsTracker = manager.dict()
     if not args.force and extractedAssetsFile.exists():
         with extractedAssetsFile.open(encoding='utf-8') as f:
