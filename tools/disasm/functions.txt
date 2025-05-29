@@ -845,7 +845,7 @@
     0x800BB8EC:("Attention_FindActor",),
     0x800BBA88:("Enemy_StartFinishingBlow",),
     0x800BBAC0:("FaceChange_UpdateBlinking",),
-    0x800BBB74:("FaceChange_UpdateBlinkingAlt",),
+    0x800BBB74:("FaceChange_UpdateBlinkingNonHuman",),
     0x800BBC20:("FaceChange_UpdateRandomSet",),
     0x800BBCEC:("Actor_SpawnBodyParts",),
     0x800BBDAC:("Actor_SpawnFloorDustRing",),

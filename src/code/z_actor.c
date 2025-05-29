@@ -3875,8 +3875,8 @@ s16 FaceChange_UpdateBlinking(FaceChange* faceChange, s16 blinkIntervalBase, s16
  * @param blinkIntervalRandRange  The range for a random number of frames that can be added to `blinkIntervalBase`
  * @param blinkDuration  The number of frames it takes for a single blink to occur
  */
-s16 FaceChange_UpdateBlinkingAlt(FaceChange* faceChange, s16 blinkIntervalBase, s16 blinkIntervalRandRange,
-                                 s16 blinkDuration) {
+s16 FaceChange_UpdateBlinkingNonHuman(FaceChange* faceChange, s16 blinkIntervalBase, s16 blinkIntervalRandRange,
+                                      s16 blinkDuration) {
     if (DECR(faceChange->timer) == 0) {
         faceChange->timer = Rand_S16Offset(blinkIntervalBase, blinkIntervalRandRange);
     }

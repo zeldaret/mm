@@ -12531,7 +12531,7 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
         }
 
         if ((this->transformation >= PLAYER_FORM_GORON) && (this->transformation <= PLAYER_FORM_DEKU)) {
-            FaceChange_UpdateBlinkingAlt(&this->faceChange, 20, 80, 3);
+            FaceChange_UpdateBlinkingNonHuman(&this->faceChange, 20, 80, 3);
         } else {
             FaceChange_UpdateBlinking(&this->faceChange, 20, 80, 6);
         }

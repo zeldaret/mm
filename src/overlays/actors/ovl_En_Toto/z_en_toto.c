@@ -198,7 +198,7 @@ void func_80BA383C(EnToto* this, PlayState* play) {
         }
         Animation_PlayOnce(&this->skelAnime, sAnimations[this->animIndex]);
     }
-    FaceChange_UpdateBlinkingAlt(&this->faceChange, 20, 80, 3);
+    FaceChange_UpdateBlinkingNonHuman(&this->faceChange, 20, 80, 3);
 }
 
 void func_80BA3930(EnToto* this, PlayState* play) {
