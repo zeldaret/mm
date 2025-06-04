@@ -2,6 +2,7 @@
 #define Z_EN_TOTO_H
 
 #include "global.h"
+#include "face_change.h"
 #include "assets/objects/object_zm/object_zm.h"
 
 struct EnToto;
@@ -31,7 +32,7 @@ typedef struct EnToto {
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ Vec3s jointTable[OBJECT_ZM_LIMB_MAX];
     /* 0x1F4 */ Vec3s morphTable[OBJECT_ZM_LIMB_MAX];
-    /* 0x260 */ BlinkInfo blinkInfo;
+    /* 0x260 */ FaceChange faceChange;
     /* 0x264 */ ColliderCylinder collider;
     /* 0x2B0 */ u8 actionFuncIndex;
     /* 0x2B1 */ u8 unk2B1;
