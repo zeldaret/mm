@@ -35,6 +35,7 @@ WORKDIR /mm/baseroms/n64-us
 COPY ./baseroms/n64-us/baserom.z64 .
 
 WORKDIR /mm
+RUN pip install -r requirements.txt
 RUN make init
 
 # Default entry (you may override in mcp config)

@@ -98,7 +98,7 @@ cd mm
 
 Place a copy of the US ROM inside the `baseroms/n64-us/` folder.
 
-Rename the file to `baserom.z64`, `baserom.n64` or `baserom.v64`, depending on the original extension.
+Rename the file to `mm-n64-us.z64`, `mm-n64-us.z64` or `mm-n64-us.z64`, depending on the original extension.
 
 #### 4. Make and Build the ROM
 
