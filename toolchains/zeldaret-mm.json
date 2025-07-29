@@ -1,0 +1,155 @@
+{
+  "name": "zeldaret_mm_tools",
+  "description": "Run Zelda decompilation tools for Majora's Mask using the Docker environment provided by zeldaret/mm. Supports extracting assets, compiling, and verifying against the original ROM. Designed for automation via Camel Owl Agent.",
+  "dockerfile_path": "C:\Users\dying\Documents\mm\Dockerfile",
+  "entrypoint": "/zeldaret/mm/tools/natural.sh",
+  "image_name": "mm",
+  "mount": {
+    "type": "bind",
+    "source": "$(pwd)",
+    "destination": "/mm"
+  },
+  "commands": [
+    {
+      "name": "diff",
+      "description": "Compares the original assembly extracted from the ROM instruction-for-instruction with what the code you have written compiles to.",
+      "script": "./tools/diff.py",
+      "parameters": [
+        {
+          "name": "function_symbol",
+          "description": "The function symbol name to diff (e.g., ObjTree_Init)",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "flags",
+          "description": "Optional flags for diff.py (e.g., -mwo, -mwo3, -mwob)",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    {
+      "name": "m2ctx",
+      "description": "Generates the context for a C file to help mips_to_c. Writes to a file called ctx.c in the root directory of the repo.",
+      "script": "./tools/m2ctx.py",
+      "parameters": [
+        {
+          "name": "c_file_path",
+          "description": "Path to the C file",
+          "type": "string",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "actor_symbols",
+      "description": "Takes a VRAM or VROM address to get overlay file and offset for an Actor.",
+      "script": "./tools/overlayhelpers/actor_symbols.py",
+      "parameters": [
+        {
+          "name": "address",
+          "description": "VRAM or VROM address",
+          "type": "string",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "first_diff",
+      "description": "Gives the addresses of first difference in the ROM, the difference, and a count of how many bytes differ, or if the whole ROM is shifted.",
+      "script": "./tools/first_diff.py",
+      "parameters": []
+    },
+    {
+      "name": "sym_info",
+      "description": "Finds ROM, VRAM, and file information for a given symbol (function or variable name) using the map file.",
+      "script": "./tools/sym_info.py",
+      "parameters": [
+        {
+          "name": "symbol_name",
+          "description": "The symbol name (e.g., ObjTree_Init)",
+          "type": "string",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "extract_assets",
+      "description": "Uses ZAPD to extract assets from the baserom.",
+      "script": "./extract_assets.py",
+      "parameters": []
+    },
+    {
+      "name": "assist",
+      "description": "Searches for similar functions to the one you are passing, and it tells you which one are decompiled. Can also search for similar functions for every function in a given overlay.",
+      "script": "./tools/assist.py",
+      "parameters": [
+        {
+          "name": "function_or_overlay_name",
+          "description": "Function name or overlay name",
+          "type": "string",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "get_actor_sizes",
+      "description": "Generates a list of actors with various statistics about their function sizes.",
+      "script": "./tools/get_actor_sizes.py",
+      "parameters": [
+        {
+          "name": "flags",
+          "description": "Optional flags for get_actor_sizes.py",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    {
+      "name": "progress",
+      "description": "Gives the progress output that the website uses.",
+      "script": "./tools/progress.py",
+      "parameters": []
+    },
+    {
+      "name": "regconvert",
+      "description": "Converts mips2c's gRegEditor->data[n] output (or a raw offset) into the appropriate variable in the REG pages. Can also be run on a file to mass-convert them.",
+      "script": "./tools/regconvert.py",
+      "parameters": [
+        {
+          "name": "input",
+          "description": "Input (gRegEditor->data[n] output, raw offset, or file path)",
+          "type": "string",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "rename_global_asm",
+      "description": "Renames single-function assembly files in asm/non_matchings when the function they contain has been renamed.",
+      "script": "./tools/rename_global_asm.py",
+      "parameters": []
+    },
+    {
+      "name": "rename_sym",
+      "description": "Renames a symbol throughout the codebase. Use with caution as it has no sanity checks.",
+      "script": "./tools/rename_sym.sh",
+      "parameters": [
+        {
+          "name": "old_symbol_name",
+          "description": "The old symbol name",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "new_symbol_name",
+          "description": "The new symbol name",
+          "type": "string",
+          "required": true
+        }
+      ]
+    }
+  ]
+}
+

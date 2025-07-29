@@ -164,39 +164,24 @@ The disadvantage that the ordering of the terminal output is scrambled, so for d
 
 ```json
 {
-  "name": "zeldaret_mm_tools",
-  "description": "Zelda: Majora’s Mask decompilation tools using Docker. Integrates with AI agents such as Camel Owl, Claude Desktop, and MCP Proxy.",
-  "dockerfile_path": "./Dockerfile",
-  "image_name": "mm",
-  "entrypoint": "/usr/bin/env bash",
-  "mount": {
-    "type": "bind",
-    "source": "$(pwd)",
-    "destination": "/mm"
-  },
-  "commands": [
-    {
-      "name": "launch_terminal",
-      "description": "Launch an interactive shell inside the mm Docker container",
-      "script": "",
-      "params": []
-    },
-    {
-      "name": "run_natural_tool",
-      "description": "Run a tool from the natural.sh script inside the Docker container",
-      "script": "/mm/tools/natural.sh",
-      "params": [
-        {
-          "name": "command",
-          "description": "Command to pass to natural.sh (e.g., build, extract-assets, match-func)",
-          "type": "string",
-          "required": true
-        }
+  "mcpServers": {
+    "zeldaret-mm": {
+      "command": "docker",
+      "args": [
+        "run",
+        "--rm",
+        "-v", "${PWD}:/project",
+        "-w", "/project",
+        "ghcr.io/Axle-Bucamp/mm",
+        "bash"
       ]
     }
-  ]
+  }
 }
+
 ```
+
+which should select tools among the toolchain file description
 
 ---
 
