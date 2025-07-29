@@ -201,8 +201,8 @@ Run the following in my current folder:
 
 ```
 docker run -it --rm \
-  --mount type=bind,source="$(pwd)",destination=/mm \
-  mm /usr/bin/env bash
+ -v ./baseroms:/mm/baseroms \
+  mm
 ```
 
 Once inside, Claude can:
