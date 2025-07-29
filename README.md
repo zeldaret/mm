@@ -156,6 +156,159 @@ Running `make init` will also make the `./expected` directory and copy all of th
 The disadvantage that the ordering of the terminal output is scrambled, so for debugging it is best to stick to one thread (i.e. not pass `-jN`).
 (`-j` also exists, which uses unlimited jobs, but is generally slower.)
 
+#### work with AI agent :
+
+---
+
+##### 📁 `mcp-config.json` exemple
+
+```json
+{
+  "name": "zeldaret_mm_tools",
+  "description": "Zelda: Majora’s Mask decompilation tools using Docker. Integrates with AI agents such as Camel Owl, Claude Desktop, and MCP Proxy.",
+  "dockerfile_path": "./Dockerfile",
+  "image_name": "mm",
+  "entrypoint": "/usr/bin/env bash",
+  "mount": {
+    "type": "bind",
+    "source": "$(pwd)",
+    "destination": "/mm"
+  },
+  "commands": [
+    {
+      "name": "launch_terminal",
+      "description": "Launch an interactive shell inside the mm Docker container",
+      "script": "",
+      "params": []
+    },
+    {
+      "name": "run_natural_tool",
+      "description": "Run a tool from the natural.sh script inside the Docker container",
+      "script": "/mm/tools/natural.sh",
+      "params": [
+        {
+          "name": "command",
+          "description": "Command to pass to natural.sh (e.g., build, extract-assets, match-func)",
+          "type": "string",
+          "required": true
+        }
+      ]
+    }
+  ]
+}
+```
+
+---
+
+##### 🤖 Integration Examples
+
+###### 🟦 Claude Desktop Example
+
+Claude Desktop (when extended with MCP or external terminal automation) can launch and run inside the Docker container by using this workflow:
+
+```bash
+# Ensure Docker is running and Claude Desktop has terminal access
+open -a Claude
+
+# Claude prompt:
+Run the following in my current folder:
+```
+
+```
+docker run -it --rm \
+  --mount type=bind,source="$(pwd)",destination=/mm \
+  mm /usr/bin/env bash
+```
+
+Once inside, Claude can:
+
+* Call `/mm/tools/natural.sh build`
+* Navigate files and propose code changes interactively
+* Trigger matching or decompile analysis
+
+as an alternative you can also pass the mcp-config file to you claude mcp settings file.
+
+---
+
+###### 🐫 Camel Owl Agent
+
+Camel Owl can directly use the `mcp-config.json` as a launch and command schema.
+
+####### 🧠 Example Task: Matching Function
+
+```json
+{
+  "agent": "owl",
+  "tool": "zeldaret_mm_tools",
+  "action": "run_natural_tool",
+  "args": {
+    "command": "match-func Bg_Gnd_Iceblock_Init"
+  }
+}
+```
+
+####### 🧠 Example Task: Rebuild
+
+```json
+{
+  "agent": "owl",
+  "tool": "zeldaret_mm_tools",
+  "action": "run_natural_tool",
+  "args": {
+    "command": "build"
+  }
+}
+```
+
+> The agent will mount the current directory and invoke the Docker image using the interactive shell or directly call `/mm/tools/natural.sh`.
+
+---
+
+###### 🔁 MCP Proxy Integration
+
+If using an MCP proxy server (for example, a RESTful or socket-based automation server), the proxy can consume `mcp-config.json` like this:
+
+####### Build & Run Flow
+
+```bash
+mcp-proxy --load mcp-config.json --start
+```
+
+The proxy will:
+
+1. Build the Docker image `mm`
+2. Launch the container interactively or via command
+3. Use JSON-based command execution (like POST requests to endpoints)
+
+####### Example: JSON API Call
+
+```http
+POST /run
+Content-Type: application/json
+
+{
+  "tool": "zeldaret_mm_tools",
+  "command": "run_natural_tool",
+  "args": {
+    "command": "build"
+  }
+}
+```
+
+---
+
+##### 🔚 Summary
+
+| Agent     | Integration Method                                |
+| --------- | ------------------------------------------------- |
+| Claude    | Paste Docker command, work inside shell           |
+| Camel Owl | Native support via `mcp-config.json`              |
+| MCP Proxy | Programmatic control via REST or CLI using config |
+
+---
+
+
+
 ## Contributing
 
 All contributions are welcome. This is a group effort, and even small contributions can make a difference.
