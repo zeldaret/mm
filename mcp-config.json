@@ -3,6 +3,12 @@
   "description": "Run Zelda decompilation tools for Majora's Mask using the Docker environment provided by zeldaret/mm. Supports extracting assets, compiling, and verifying against the original ROM. Designed for automation via Camel Owl Agent.",
   "dockerfile_path": "./Dockerfile",
   "entrypoint": "/zeldaret/mm/tools/natural.sh",
+  "image_name": "mm",
+  "mount": {
+    "type": "bind",
+    "source": "$(pwd)",
+    "destination": "/mm"
+  },
   "commands": [
     {
       "name": "diff",
