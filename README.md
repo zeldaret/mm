@@ -202,7 +202,7 @@ The disadvantage that the ordering of the terminal output is scrambled, so for d
 
 ##### 🤖 Integration Examples
 
-###### 🟦 Claude Desktop Example
+##### 🟦 Claude Desktop Example
 
 Claude Desktop (when extended with MCP or external terminal automation) can launch and run inside the Docker container by using this workflow:
 
@@ -230,11 +230,11 @@ as an alternative you can also pass the mcp-config file to you claude mcp settin
 
 ---
 
-###### 🐫 Camel Owl Agent
+##### 🐫 Camel Owl Agent
 
 Camel Owl can directly use the `mcp-config.json` as a launch and command schema.
 
-####### 🧠 Example Task: Matching Function
+##### 🧠 Example Task: Matching Function
 
 ```json
 {
@@ -247,7 +247,7 @@ Camel Owl can directly use the `mcp-config.json` as a launch and command schema.
 }
 ```
 
-####### 🧠 Example Task: Rebuild
+##### 🧠 Example Task: Rebuild
 
 ```json
 {
@@ -264,11 +264,11 @@ Camel Owl can directly use the `mcp-config.json` as a launch and command schema.
 
 ---
 
-###### 🔁 MCP Proxy Integration
+##### 🔁 MCP Proxy Integration
 
 If using an MCP proxy server (for example, a RESTful or socket-based automation server), the proxy can consume `mcp-config.json` like this:
 
-####### Build & Run Flow
+##### Build & Run Flow
 
 ```bash
 mcp-proxy --load mcp-config.json --start
@@ -280,7 +280,7 @@ The proxy will:
 2. Launch the container interactively or via command
 3. Use JSON-based command execution (like POST requests to endpoints)
 
-####### Example: JSON API Call
+##### Example: JSON API Call
 
 ```http
 POST /run
