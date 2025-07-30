@@ -32,7 +32,10 @@ RUN git clone https://github.com/zeldaret/mm.git
 # remove dependancies
 # add volume for rom endpoint
 WORKDIR /mm/baseroms/n64-us
-COPY ./baseroms/n64-us/baserom.z64 .
+COPY ./baseroms/n64-us .
+
+WORKDIR /mm/build/n64-us
+COPY ./build/n64-us/mm-n64-us.z64 .
 
 WORKDIR /mm
 RUN pip install -r requirements.txt

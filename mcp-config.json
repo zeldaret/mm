@@ -1,28 +1,12 @@
 {
   "mcpServers": {
-    "desktop-commander": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@wonderwhy-er/desktop-commander"
-      ]
-    },
-    "playwright": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@executeautomation/playwright-mcp-server",
-        "--browser",
-        "chromium"
-      ]
-    },
     "zeldaret-mm": {
       "command": "docker",
       "args": [
         "run",
         "--rm",
-        "-v", "${PWD}:/project",
-        "-w", "/project",
+        "-v", "${PWD}:/mm",
+        "-w", "/mm",
         "ghcr.io/zeldaret/mm",
         "bash"
       ]
