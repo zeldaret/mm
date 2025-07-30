@@ -1,5 +1,5 @@
-#ifndef ASM_H
-#define ASM_H
+#ifndef PR_ASM_H
+#define PR_ASM_H
 
 #ifdef __sgi
 #define _MIPS_ISA_MIPS1 1
@@ -8,8 +8,7 @@
 #define _MIPS_ISA_MIPS4 4
 
 #define _MIPS_SIM_ABI32     1   /* MIPS MSIG calling convention */
-#define _MIPS_SIM_NABI32    2   /* MIPS new 32-bit abi */
-                                /* NABI32 is 64bit calling convention but 32bit type sizes) */
+#define _MIPS_SIM_NABI32    2   /* MIPS new 32-bit abi. NABI32 is 64bit calling convention but 32bit type sizes */
 #define _MIPS_SIM_ABI64     3   /* MIPS 64 calling convention */
 #endif
 

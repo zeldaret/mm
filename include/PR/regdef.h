@@ -1,5 +1,5 @@
-#ifndef REGDEF_H
-#define REGDEF_H
+#ifndef PR_REGDEF_H
+#define PR_REGDEF_H
 
 #ifdef __GNUC__
 #define _MIPS_SIM_ABI32 _ABIO32
