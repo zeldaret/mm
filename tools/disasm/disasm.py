@@ -122,7 +122,7 @@ def discard_decomped_files(files_spec, include_files):
                             with open(root_path / last_line, "r") as f2:
                                 if "GLOBAL_ASM" in f2.read():
                                     include = True
-                        else:
+                        elif last_line.rsplit(".", 1)[0] not in ("src/makerom/ipl3"):
                             assert os.path.exists(root_path / last_line.replace(".c", ".s"))
 
             include |= force_include
