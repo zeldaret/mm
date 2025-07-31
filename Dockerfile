@@ -14,6 +14,7 @@ RUN apt-get update && apt-get install -y curl && \
 RUN apt-get update && apt-get install -y \
     build-essential \
     binutils-mips-linux-gnu \
+    gcc-mips-linux-gnu \
     pkg-config \
     python3 \
     python3-pip \
