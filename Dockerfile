@@ -3,10 +3,15 @@ FROM ubuntu:24.04 AS build
 ENV TZ=UTC
 ENV LANG=C.UTF-8
 
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+# Add source for practicerom-dev install
+RUN apt-get update && apt-get install -y curl && \
+    curl -o /etc/apt/trusted.gpg.d/practicerom.gpg https://practicerom.com/public/packages/practicerom.gpg && \
+    echo 'deb [arch=amd64] http://practicerom.com/public/packages/debian unstable main' > /etc/apt/sources.list.d/practicerom.list
+
 # Install Required Dependencies
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone && \
-    apt-get update && apt-get install -y \
-    curl \
+RUN apt-get update && apt-get install -y \
     build-essential \
     binutils-mips-linux-gnu \
     pkg-config \
@@ -20,12 +25,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone &
     vim \
     clang-tidy-14 \
     clang-format-14 \
-    libpng-dev && \
-    # Add source for practicerom-dev install
-    curl https://practicerom.com/public/packages/debian/pgp.pub | apt-key add - && \ 
-    echo deb http://practicerom.com/public/packages/debian staging main >/etc/apt/sources.list.d/practicerom.list && \
-    apt-get update && \
-    apt-get install -y \
+    libpng-dev \
     practicerom-dev && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
