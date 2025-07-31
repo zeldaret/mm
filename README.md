@@ -62,7 +62,6 @@ Preparation is covered in [Building Docker](docs/BUILDING_DOCKER.md).
 
 The build process has the following package requirements:
 
-* make
 * git
 * build-essential
 * binutils-mips-linux-gnu
@@ -77,7 +76,7 @@ Under Debian / Ubuntu (which we recommend using), you can install them with the 
 
 ```bash
 sudo apt update
-sudo apt install make git build-essential binutils-mips-linux-gnu curl python3 python3-pip python3-venv libpng-dev libxml2-dev
+sudo apt install git build-essential binutils-mips-linux-gnu curl python3 python3-pip python3-venv libpng-dev libxml2-dev
 ```
 
 #### 2. Clone the repository
@@ -102,11 +101,13 @@ Rename the file to `baserom.z64`, `baserom.n64` or `baserom.v64`, depending on t
 
 #### 4. Make and Build the ROM
 
-To start the extraction/build process, run the following command:
+For a first time build, run the following command, where `N` is the number of cores your processor has (see the note at the bottom for more information):
 
 ```bash
-make init
+make init -j N
 ```
+
+After the very first build you'll want to run `make -j N` instead, since you likely won't need all the setup the `init` command provides.
 
 The extraction/build process:
 1. Prepares build environment:
