@@ -14,6 +14,7 @@
 #include "PR/sptask.h"
 #include "PR/rcp.h"
 #include "PR/rdp.h"
+#include "PR/os_internal_rsp.h"
 #include "PR/R4300.h"
 #include "PR/ucode.h"
 #include "PR/viint.h"

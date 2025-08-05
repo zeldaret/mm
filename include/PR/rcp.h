@@ -532,6 +532,8 @@
 #define VI_CTRL_PIXEL_ADV(n)        (((n) << 12) & VI_CTRL_PIXEL_ADV_MASK) /* Bit [15:12] pixel advance mode: Always 3 on N64 */
 #define VI_CTRL_DITHER_FILTER_ON    0x10000 /* 16: dither-filter mode */
 
+#define VI_CTRL_PIXEL_ADV_3         VI_CTRL_PIXEL_ADV(3)
+
 /*
  * Possible video clocks (NTSC or PAL)
  */
