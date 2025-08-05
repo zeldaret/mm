@@ -42,8 +42,7 @@ beginseg
     include "$(BUILD_DIR)/src/boot/libu64/system_heap.o"
     include "$(BUILD_DIR)/src/boot/libu64/padsetup.o"
     include "$(BUILD_DIR)/src/boot/libc64/math64.o"
-    include "$(BUILD_DIR)/asm/boot/fp.text.o" // Part of libc64
-    include "$(BUILD_DIR)/data/boot/fp.data.o"
+    include "$(BUILD_DIR)/src/boot/libc64/fp.o"
     include "$(BUILD_DIR)/src/boot/libc64/malloc.o"
     include "$(BUILD_DIR)/src/boot/libc64/qrand.o"
     include "$(BUILD_DIR)/src/boot/libc64/__osMalloc.o"
