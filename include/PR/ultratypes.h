@@ -1,6 +1,8 @@
 #ifndef PR_ULTRATYPES_H
 #define PR_ULTRATYPES_H
 
+#ifdef _LANGUAGE_C
+
 typedef signed char            s8;
 typedef unsigned char          u8;
 typedef signed short int       s16;
@@ -37,5 +39,7 @@ typedef unsigned int  size_t;
 
 // TODO: move this somewhere else
 typedef void* TexturePtr;
+
+#endif
 
 #endif

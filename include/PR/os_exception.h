@@ -1,12 +1,6 @@
 #ifndef PR_OS_EXCEPTION_H
 #define PR_OS_EXCEPTION_H
 
-#include "ultratypes.h"
-
-
-typedef u32 OSIntMask;
-typedef u32 OSHWIntr;
-
 /* Flags for debugging purpose */
 
 #define OS_FLAG_CPU_BREAK   1   /* Break exception has occurred */
@@ -34,6 +28,15 @@ typedef u32 OSHWIntr;
 #define RCP_IMASK       0x003F0000
 #define RCP_IMASKSHIFT  16
 
+/* OSHWIntr values */
+#define OS_INTR_CART    1
+
+#ifdef _LANGUAGE_C
+
+#include "ultratypes.h"
+
+typedef u32 OSIntMask;
+typedef u32 OSHWIntr;
 
 OSIntMask osGetIntMask(void);
 OSIntMask osSetIntMask(OSIntMask im);
@@ -45,5 +48,6 @@ void __osGetHWIntrRoutine(OSHWIntr interrupt, s32 (**handler)(void), void** stac
 void __osSetGlobalIntMask(OSHWIntr mask);
 void __osResetGlobalIntMask(OSHWIntr mask);
 
+#endif
 
 #endif
