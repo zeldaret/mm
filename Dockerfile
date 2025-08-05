@@ -7,8 +7,8 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # Add source for practicerom-dev install
 RUN apt-get update && apt-get install -y curl && \
-    curl -o /etc/apt/trusted.gpg.d/practicerom.gpg https://practicerom.com/public/packages/practicerom.gpg && \
-    echo 'deb [arch=amd64] http://practicerom.com/public/packages/debian unstable main' > /etc/apt/sources.list.d/practicerom.list
+    curl -o /usr/share/keyrings/practicerom-archive-keyring.gpg https://practicerom.com/public/packages/debian/practicerom-archive-keyring.gpg && \
+    echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/practicerom-archive-keyring.gpg] http://practicerom.com/public/packages/debian unstable main' > /etc/apt/sources.list.d/practicerom.list
 
 # Install Required Dependencies
 RUN apt-get update && apt-get install -y \
