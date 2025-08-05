@@ -27,8 +27,10 @@ RUN apt-get update && apt-get install -y \
     clang-tidy-14 \
     clang-format-14 \
     libpng-dev \
-    practicerom-dev && \
-    apt-get clean && \
+    practicerom-dev
+
+# Post dependencies cleanup
+RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /mm
