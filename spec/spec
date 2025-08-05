@@ -103,7 +103,6 @@ beginseg
     include "$(BUILD_DIR)/src/libultra/io/sptaskyield.o"
     include "$(BUILD_DIR)/src/libultra/io/pfsreadwritefile.o"
     include "$(BUILD_DIR)/src/libultra/io/pfsgetstatus.o"
-    pad_text
     include "$(BUILD_DIR)/src/libultra/mgu/mtxidentf.o"
     include "$(BUILD_DIR)/src/libultra/io/visetmode.o"
     include "$(BUILD_DIR)/src/libultra/os/getconfig.o"
@@ -114,13 +113,11 @@ beginseg
     include "$(BUILD_DIR)/asm/boot/probetlb.text.o"
     include "$(BUILD_DIR)/src/libultra/io/pimgr.o"
     include "$(BUILD_DIR)/src/libultra/io/piacs.o"
-    pad_text
     include "$(BUILD_DIR)/src/libultra/io/devmgr.o"
     include "$(BUILD_DIR)/src/libultra/io/pirawdma.o"
     include "$(BUILD_DIR)/src/libultra/vimodes/vimodentschpn1.o"
     include "$(BUILD_DIR)/src/libultra/io/contpfs.o"
     include "$(BUILD_DIR)/src/libultra/os/getcount.o"
-    pad_text
     include "$(BUILD_DIR)/src/libultra/mgu/mtxl2f.o"
     include "$(BUILD_DIR)/src/libultra/os/getmemsize.o"
     include "$(BUILD_DIR)/src/libultra/io/pfssearchfile.o"
@@ -202,7 +199,6 @@ beginseg
     include "$(BUILD_DIR)/src/libultra/io/epiwrite.o"
     include "$(BUILD_DIR)/asm/boot/maptlbrdb.text.o"
     include "$(BUILD_DIR)/src/libultra/os/yieldthread.o"
-    pad_text
     include "$(BUILD_DIR)/src/libultra/mgu/translate.o"
     include "$(BUILD_DIR)/src/libultra/os/getcause.o"
     include "$(BUILD_DIR)/src/libultra/io/contramwrite.o"
@@ -215,13 +211,11 @@ beginseg
     include "$(BUILD_DIR)/src/libultra/io/sirawwrite.o"
     include "$(BUILD_DIR)/src/libultra/io/spgetstat.o"
     include "$(BUILD_DIR)/src/libultra/io/spsetstat.o"
-    pad_text
     include "$(BUILD_DIR)/src/libultra/io/vimgr.o"
     include "$(BUILD_DIR)/src/libultra/io/vigetcurrcontext.o"
     include "$(BUILD_DIR)/asm/boot/writebackdcacheall.text.o"
     include "$(BUILD_DIR)/src/libultra/os/getcurrfaultthread.o"
     include "$(BUILD_DIR)/src/libultra/voice/voicemaskdictionary.o"
-    pad_text
     include "$(BUILD_DIR)/src/libultra/mgu/mtxf2l.o"
     include "$(BUILD_DIR)/src/libultra/os/startthread.o"
     include "$(BUILD_DIR)/src/libultra/io/visetyscale.o"
