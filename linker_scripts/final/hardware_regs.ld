@@ -7,15 +7,6 @@ D_8000000C = 0x8000000C;    // __osExceptionPreamble
 D_80000010 = 0x80000010;    //
 D_80000020 = 0x80000020;    //
 
-osTvType       = 0x80000300;
-osRomType      = 0x80000304;
-osRomBase      = 0x80000308;
-osResetType    = 0x8000030C;
-osCicId        = 0x80000310;
-osVersion      = 0x80000314;
-osMemSize      = 0x80000318;
-osAppNMIBuffer = 0x8000031C;
-
 /// OS hardware registers
 
 // Signal Processor Registers

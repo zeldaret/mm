@@ -86,12 +86,7 @@ beginseg
     include "$(BUILD_DIR)/asm/boot/writebackdcache.text.o"
     include "$(BUILD_DIR)/src/libultra/os/initialize.o"
     include "$(BUILD_DIR)/src/libultra/debug/kdebugserver.o"
-    pad_text // These pads are from src/libultra/os/parameters.o
-    pad_text
-    pad_text
-    pad_text
-    pad_text
-    pad_text
+    include "$(BUILD_DIR)/src/libultra/os/parameters.o"
     include "$(BUILD_DIR)/src/libultra/io/vigetnextframebuf.o"
     include "$(BUILD_DIR)/src/libultra/gu/perspective.o"
     include "$(BUILD_DIR)/src/libultra/io/sprawdma.o"
