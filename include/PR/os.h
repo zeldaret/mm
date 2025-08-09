@@ -10,6 +10,7 @@
 #include "os_host.h"
 #include "os_internal_error.h"
 #include "os_internal_reg.h"
+#include "os_internal_rsp.h"
 #include "os_internal_si.h"
 #include "os_internal.h"
 #include "os_libc.h"

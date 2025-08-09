@@ -2,7 +2,7 @@
 #include "alignment.h"
 
 s32 __osSiRawStartDma(s32 direction, void* dramAddr) {
-    if (IO_READ(SI_STATUS_REG) & (SI_STATUS_DMA_BUSY | SI_STATUS_IO_READ_BUSY)) {
+    if (IO_READ(SI_STATUS_REG) & (SI_STATUS_DMA_BUSY | SI_STATUS_RD_BUSY)) {
         return -1;
     }
 

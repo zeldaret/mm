@@ -1,3 +1,5 @@
-[95mWarning: [97mInvalid pointer indirect: 0 for samplebank SampleBank_2[0m
+[95mWarning: [97mIn Soundfont Soundfont_40: Invalid pointer indirect 0 for samplebank SampleBank_2[0m
+cc: Warning: -mips3 should not be used for ucode 32-bit compiles
+as1: Warning: src/libultra/os/getintmask.s, line 38: Macro instruction used in branch delay slot
 cc: Warning: -mips3 should not be used for ucode 32-bit compiles
 cc: Warning: -mips3 should not be used for ucode 32-bit compiles
