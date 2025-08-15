@@ -114,8 +114,8 @@ gobackwards:
     add     a1, a1,a2
     blt     a2, 16, backwards_bytecopy
 
-    andi    v0, a0, 0x3
-    andi    v1, a1, 0x3
+    and     v0, a0, 0x3
+    and     v1, a1, 0x3
     beq     v0, v1, backalignable
 
 backwards_bytecopy:
