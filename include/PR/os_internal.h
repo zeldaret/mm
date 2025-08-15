@@ -13,8 +13,8 @@ typedef struct __osHwInt {
 #else
 
 /* __osHwInt struct member offsets */
-#define HWINT_CALLBACK 0x00
-#define HWINT_SP       0x04
+#define HWINT_CALLBACK 0x0
+#define HWINT_SP       0x4
 
 /* __osHwInt struct size */
 #define HWINT_SIZE     0x8
