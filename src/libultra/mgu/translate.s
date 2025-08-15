@@ -36,7 +36,7 @@ LEAF(guTranslate)
 
     srl     t2, t1, 0x10
     sll     t0, t2, 0x10
-    addiu   t0, t0, 1
+    addu    t0, t0, 1
     sw      t0, 0x1C(a0)
 
     sll     t2, t1, 0x10

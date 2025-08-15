@@ -12,7 +12,7 @@
 LEAF(guMtxL2F)
     li.s    fv0, FIXTOF
     li      t9, 0xFFFF0000
-    addiu   t8, a1, MTX_FRACPART
+    addu    t8, a1, MTX_FRACPART
 1:
     lw      t0, MTX_INTPART(a1)
     lw      t1, MTX_FRACPART(a1)

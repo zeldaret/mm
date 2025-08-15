@@ -25,7 +25,7 @@ LEAF(guScale)
 
     srl     t0, t1, 0x10
     sw      t0, 0x08(a0)
-    andi    t2, t1, 0xFFFF
+    and     t2, t1, 0xFFFF
     sw      t2, 0x28(a0)
 
     mtc1    a3, ft1
