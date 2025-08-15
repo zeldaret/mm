@@ -54,11 +54,11 @@ forw_copy2:
 forw_copy3:
     lb      v0, (a0)
     lh      v1, 1(a0)
-    addiu   a0, a0, 3
+    addu    a0, a0, 3
     sb      v0, (a1)
     sh      v1, 1(a1)
-    addiu   a1, a1, 3
-    addiu   a2, a2, -3
+    addu    a1, a1, 3
+    addu    a2, a2, -3
 
 forwards:
 forwards_32:
@@ -71,7 +71,7 @@ forwards_32:
     lw      t3, 20(a0)
     lw      t4, 24(a0)
     lw      t5, 28(a0)
-    addiu   a0, a0, 32
+    addu    a0, a0, 32
     sw      v0, 0(a1)
     sw      v1, 4(a1)
     sw      t0, 8(a1)
@@ -80,8 +80,8 @@ forwards_32:
     sw      t3, 20(a1)
     sw      t4, 24(a1)
     sw      t5, 28(a1)
-    addiu   a1, a1, 32
-    addiu   a2, a2, -32
+    addu    a1, a1, 32
+    addu    a2, a2, -32
     b       forwards_32
 
 forwards_16:
@@ -90,23 +90,23 @@ forwards_16:
     lw      v1, 4(a0)
     lw      t0, 8(a0)
     lw      t1, 12(a0)
-    addiu   a0, a0, 16
+    addu    a0, a0, 16
     sw      v0, 0(a1)
     sw      v1, 4(a1)
     sw      t0, 8(a1)
     sw      t1, 12(a1)
-    addiu   a1, a1, 16
-    addiu   a2, a2, -16
+    addu    a1, a1, 16
+    addu    a2, a2, -16
     b       forwards_16
 
 forwards_4:
     blt     a2, 4, forwards_bytecopy
 
     lw      v0, 0(a0)
-    addiu   a0, a0, 4
+    addu    a0, a0, 4
     sw      v0, 0(a1)
-    addiu   a1, a1, 4
-    addiu   a2, a2, -4
+    addu    a1, a1, 4
+    addu    a2, a2, -4
     b       forwards_4
 
 gobackwards:
@@ -120,14 +120,14 @@ gobackwards:
 
 backwards_bytecopy:
     beqz    a2, ret
-    addiu   a0, a0, -1
-    addiu   a1, a1, -1
+    addu    a0, a0, -1
+    addu    a1, a1, -1
     subu    v1, a0,a2
 99:
     lb      v0, 0(a0)
-    addiu   a0, a0, -1
+    addu    a0, a0, -1
     sb      v0, 0(a1)
-    addiu   a1, a1, -1
+    addu    a1, a1, -1
     bne     a0, v1,99b
 
     move    v0, a3
@@ -138,28 +138,28 @@ backalignable:
     beq     v0, 3, back_copy3
     beq     v0, 2, back_copy2
     lb      v0, -1(a0)
-    addiu   a0, a0, -1
+    addu    a0, a0, -1
     sb      v0, -1(a1)
-    addiu   a1, a1, -1
-    addiu   a2, a2, -1
+    addu    a1, a1, -1
+    addu    a2, a2, -1
     b       backwards
 
 back_copy2:
     lh      v0, -2(a0)
-    addiu   a0, a0, -2
+    addu    a0, a0, -2
     sh      v0, -2(a1)
-    addiu   a1, a1, -2
-    addiu   a2, a2, -2
+    addu    a1, a1, -2
+    addu    a2, a2, -2
     b       backwards
 
 back_copy3:
     lb      v0, -1(a0)
     lh      v1, -3(a0)
-    addiu   a0, a0, -3
+    addu    a0, a0, -3
     sb      v0, -1(a1)
     sh      v1, -3(a1)
-    addiu   a1, a1, -3
-    addiu   a2, a2, -3
+    addu    a1, a1, -3
+    addu    a2, a2, -3
 
 backwards:
 backwards_32:
@@ -172,7 +172,7 @@ backwards_32:
     lw      t3, -24(a0)
     lw      t4, -28(a0)
     lw      t5, -32(a0)
-    addiu   a0, a0, -32
+    addu    a0, a0, -32
     sw      v0, -4(a1)
     sw      v1, -8(a1)
     sw      t0, -12(a1)
@@ -181,8 +181,8 @@ backwards_32:
     sw      t3, -24(a1)
     sw      t4, -28(a1)
     sw      t5, -32(a1)
-    addiu   a1, a1, -32
-    addiu   a2, a2, -32
+    addu    a1, a1, -32
+    addu    a2, a2, -32
     b       backwards_32
 
 backwards_16:
@@ -191,21 +191,21 @@ backwards_16:
     lw      v1, -8(a0)
     lw      t0, -12(a0)
     lw      t1, -16(a0)
-    addiu   a0, a0, -16
+    addu    a0, a0, -16
     sw      v0, -4(a1)
     sw      v1, -8(a1)
     sw      t0, -12(a1)
     sw      t1, -16(a1)
-    addiu   a1, a1, -16
-    addiu   a2, a2, -16
+    addu    a1, a1, -16
+    addu    a2, a2, -16
     b       backwards_16
 
 backwards_4:
     blt     a2, 4, backwards_bytecopy
     lw      v0, -4(a0)
-    addiu   a0, a0, -4
+    addu    a0, a0, -4
     sw      v0, -4(a1)
-    addiu   a1, a1, -4
-    addiu   a2, a2, -4
+    addu    a1, a1, -4
+    addu    a2, a2, -4
     b       backwards_4
 END(bcopy)

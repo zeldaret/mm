@@ -26,7 +26,7 @@ blkzero:
     sw      zero, 4(a0)
     sw      zero, 8(a0)
     sw      zero, 12(a0)
-    addiu   a0, a0, 0x20
+    addu    a0, a0, 0x20
     sw      zero, -16(a0)
     sw      zero, -12(a0)
     sw      zero, -8(a0)
@@ -51,7 +51,7 @@ bytezero:
     /* zero one byte at a time */
     addu    a1, a1, a0
 1:
-    addiu   a0, a0, 1
+    addu    a0, a0, 1
     sb      zero, -1(a0)
     bne     a0, a1, 1b
 zerodone:
