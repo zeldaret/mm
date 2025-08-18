@@ -22,13 +22,13 @@ LEAF(osGetIntMask)
 .set noreorder
     /* Extract interrupt enable bits from current SR */
     mfc0    v0, C0_SR
-    andi    v0, v0, (SR_IMASK | SR_IE)
+    and     v0, v0, (SR_IMASK | SR_IE)
     /* Get value of __OSGlobalIntMask */
     la      t0, __OSGlobalIntMask
     lw      t1, (t0)
     /* Bitwise-OR in the disabled CPU bits of __OSGlobalIntMask */
     xor     t0, t1, ~0
-    andi    t0, t0, SR_IMASK
+    and     t0, t0, SR_IMASK
     or      v0, v0, t0
     /* Fetch MI_INTR_MASK_REG */
     lw      t1, PHYS_TO_K1(MI_INTR_MASK_REG)
@@ -40,7 +40,7 @@ LEAF(osGetIntMask)
     /* Bitwise-OR in the disabled RCP bits of __OSGlobalIntMask */
     srl     t0, t0, RCP_IMASKSHIFT
     xor     t0, t0, ~0
-    andi    t0, t0, (RCP_IMASK >> RCP_IMASKSHIFT)
+    and     t0, t0, (RCP_IMASK >> RCP_IMASKSHIFT)
     or      t1, t1, t0
 1:
     /* Shift the RCP bits to not conflict with the CPU bits */

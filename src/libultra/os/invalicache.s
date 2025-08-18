@@ -17,14 +17,14 @@ LEAF(osInvalICache)
     addu    t1, a0, a1
     bgeu    t0, t1, 2f
     /* Mask and subtract to align to cache line */
-    addiu   t1, t1, -ICACHE_LINESIZE
-    andi    t2, t0, ICACHE_LINEMASK
+    addu    t1, t1, -ICACHE_LINESIZE
+    and     t2, t0, ICACHE_LINEMASK
     subu    t0, t0, t2
 1:
     CACHE(   (CACH_PI | C_HINV), (t0))
 .set noreorder
     bltu    t0, t1, 1b
-     addiu  t0, t0, ICACHE_LINESIZE
+     addu   t0, t0, ICACHE_LINESIZE
 .set reorder
 2:
     jr      ra
@@ -32,12 +32,12 @@ LEAF(osInvalICache)
 3:
     li      t0, K0BASE
     addu    t1, t0, t3
-    addiu   t1, t1, -ICACHE_LINESIZE
+    addu    t1, t1, -ICACHE_LINESIZE
 4:
     CACHE(   (CACH_PI | C_IINV), (t0))
 .set noreorder
     bltu    t0, t1, 4b
-     addiu  t0, ICACHE_LINESIZE
+     addu   t0, ICACHE_LINESIZE
 .set reorder
     jr      ra
 .set reorder

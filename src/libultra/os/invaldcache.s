@@ -32,8 +32,8 @@ LEAF(osInvalDCache)
     addu    t1, a0, a1
     bgeu    t0, t1, 3f
     /* Mask start with cache line */
-    addiu  t1, t1, -DCACHE_LINESIZE
-    andi    t2, t0, DCACHE_LINEMASK
+    addu   t1, t1, -DCACHE_LINESIZE
+    and    t2, t0, DCACHE_LINEMASK
     /* If mask is not zero, the start is not cache aligned */
     beqz    t2, 1f
     /* Subtract mask result to align to cache line */
@@ -42,10 +42,10 @@ LEAF(osInvalDCache)
     CACHE(  (CACH_PD | C_HWBINV), (t0))
     /* If that's all there is to do, return early */
     bgeu    t0, t1, 3f
-    addiu   t0, t0, DCACHE_LINESIZE
+    addu    t0, t0, DCACHE_LINESIZE
 1:
     /* Mask end with cache line */
-    andi    t2, t1, DCACHE_LINEMASK
+    and     t2, t1, DCACHE_LINEMASK
     /* If mask is not zero, the end is not cache aligned */
     beqz    t2, 2f
     /* Subtract mask result to align to cache line */
@@ -60,7 +60,7 @@ LEAF(osInvalDCache)
     CACHE(  (CACH_PD | C_HINV), (t0))
 .set noreorder
     bltu    t0, t1, 2b
-     addiu  t0, t0, DCACHE_LINESIZE
+     addu   t0, t0, DCACHE_LINESIZE
 .set reorder
 3:
     jr      ra
@@ -68,13 +68,13 @@ LEAF(osInvalDCache)
 4:
     li      t0, K0BASE
     addu    t1, t0, t3
-    addiu   t1, t1, -DCACHE_LINESIZE
+    addu    t1, t1, -DCACHE_LINESIZE
 5:
     /* Index-Writeback-Invalidate */
     CACHE(  (CACH_PD | C_IWBINV), (t0))
 .set noreorder
     bltu    t0, t1, 5b
-     addiu  t0, DCACHE_LINESIZE
+     addu   t0, DCACHE_LINESIZE
 .set reorder
     jr      ra
 END(osInvalDCache)
