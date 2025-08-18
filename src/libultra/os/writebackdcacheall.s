@@ -10,8 +10,8 @@ LEAF(osWritebackDCacheAll)
     addu    t1, t0, t2
     addu    t1, t1, -DCACHE_LINESIZE
 1:
+    CACHE(  (CACH_PD | C_IWBINV), (t0))
 .set noreorder
-    cache   (CACH_PD | C_IWBINV), (t0)
     bltu    t0, t1, 1b
      addu   t0, DCACHE_LINESIZE
 .set reorder
