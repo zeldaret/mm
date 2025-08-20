@@ -15,7 +15,7 @@ FaultClient sRomInfoFaultClient;
 s32 gCICValue1;
 s32 gCICValue2;
 
-s32 func_80081A54_unknown(void);
+s32 CIC6105_ILoveYou(void);
 #endif
 
 void CIC6105_Noop1(void) {
@@ -38,19 +38,19 @@ void CIC6105_PrintRomInfo(void) {
 #else
     u32 status = IO_READ(SP_STATUS_REG);
 
-    FaultDrawer_SetCursor(0x30, 0xC8);
+    FaultDrawer_SetCursor(48, 200);
     if (status & SP_STATUS_SIG7) {
         FaultDrawer_Printf("OCARINA %08x %08x", gCICValue1, gCICValue2);
     } else {
         FaultDrawer_Printf("LEGEND %08x %08x", gCICValue1, gCICValue2);
     }
-    FaultDrawer_SetCursor(0x28, 0xB8);
+    FaultDrawer_SetCursor(40, 184);
     FaultDrawer_Printf("ROM_F");
     FaultDrawer_Printf(" [Creator:%s]", gBuildCreator);
-    FaultDrawer_SetCursor(0x38, 0xC0);
+    FaultDrawer_SetCursor(56, 192);
     FaultDrawer_Printf("[Date:%s]", gBuildDate);
-    FaultDrawer_SetCursor(0x60, 0x20);
-    FaultDrawer_Printf("I LOVE YOU %08x", func_80081A54_unknown());
+    FaultDrawer_SetCursor(96, 32);
+    FaultDrawer_Printf("I LOVE YOU %08x", CIC6105_ILoveYou());
 
     {
         // TODO: where to put this?
@@ -67,13 +67,8 @@ void CIC6105_Destroy(void) {
     Fault_RemoveClient(&sRomInfoFaultClient);
 }
 
-extern Scheduler B_801F85E0_unknown;
-extern OSMesgQueue B_801F86F8_unknown;
-
 #if MM_VERSION <= N64_JP_1_1
-extern u64 cic6105TextStart[];
-
-void func_80081980_unknown(void) {
+void CIC6105_ScheduleCICTask(void) {
     // TODO: do something with the hardcoded sizes
     static OSTask D_80097AA0_unknown = {
         M_CICTASK, // type
@@ -106,17 +101,17 @@ void func_80081980_unknown(void) {
     task.msg = (OSMesg)0;
     task.framebuffer = NULL;
     task.list = D_80097AA0_unknown;
-    osSendMesg(&B_801F86F8_unknown, &task, OS_MESG_BLOCK);
+    osSendMesg(&gScheduler.cmdQueue, &task, OS_MESG_BLOCK);
 
-    Sched_SendNotifyMsg(&B_801F85E0_unknown);
+    Sched_SendNotifyMsg(&gScheduler);
     osRecvMesg(&queue, NULL, OS_MESG_BLOCK);
 
     gCICValue1 = IO_READ(SP_DMEM_START + 0xFF4);
     gCICValue2 = IO_READ(SP_DMEM_START + 0xFFC);
-    func_80081A54_unknown();
+    CIC6105_ILoveYou();
 }
 
-s32 func_80081A54_unknown(void) {
+s32 CIC6105_ILoveYou(void) {
     return 0;
 }
 #endif

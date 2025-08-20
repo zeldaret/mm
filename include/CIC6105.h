@@ -18,7 +18,7 @@ void CIC6105_Destroy(void);
 void CIC6105_Init(void);
 
 #if MM_VERSION <= N64_JP_1_1
-void func_80081980_unknown(void);
+void CIC6105_ScheduleCICTask(void);
 #endif
 
 extern s32 gCICAddr1Val;
