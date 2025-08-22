@@ -37,7 +37,7 @@ def main():
         " expected/build/VERSION/context.csv"
     )
     parser.add_argument("sym_or_vma")
-    default_version = "ntsc-1.2"
+    default_version = "n64-us"
     parser.add_argument(
         "-v",
         "--version",

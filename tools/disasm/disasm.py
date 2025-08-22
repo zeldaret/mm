@@ -86,8 +86,9 @@ def main():
     args = parser.parse_args()
 
     if spimdisasm.__version_info__ < (1, 28, 1):
-        print(f"Error: spimdisasm>=1.28.1 is required (you have {spimdisasm.__version__})")
-        print("Hint: run `make setup` to update the venv.")
+        # Version should be kept up to date with requirements.txt
+        print(f"Error: spimdisasm>=1.34.2 is required (you have {spimdisasm.__version__})")
+        print("Hint: run `make venv` to update the venv.")
         exit(1)
 
     context = spimdisasm.common.Context()
@@ -112,12 +113,16 @@ def main():
             file_splits = load_file_splits(context, args.config_dir, dma_file, f)
             all_file_splits.append(file_splits)
 
+    progress_str = ""
+
     print("Analyzing...")
     for i, file_splits in enumerate(all_file_splits):
         f = i / len(all_file_splits)
-        spimdisasm.common.Utils.printQuietless(
-            f"{f*100:3.0f}%", "Analyzing", file_splits.name, end="    \r"
-        )
+
+        spimdisasm.common.Utils.printQuietless(f'{len(progress_str) * " "}\r', end="")
+        progress_str = f'{f*100:3.0f}% Analyzing {file_splits.name}\r'
+        spimdisasm.common.Utils.printQuietless(progress_str, end="", flush=True)
+
         file_splits.analyze()
     print()
     print("Analyzing done.")
@@ -130,9 +135,11 @@ def main():
     print("Writing disassembled sections...")
     for i, file_splits in enumerate(all_file_splits):
         f = i / len(all_file_splits)
-        spimdisasm.common.Utils.printQuietless(
-            f"{f*100:3.0f}%", "Writing", file_splits.name, end="    \r"
-        )
+
+        spimdisasm.common.Utils.printQuietless(f'{len(progress_str) * " "} \r', end="")
+        progress_str = f'{f*100:3.0f}% Writing {file_splits.name}\r'
+        spimdisasm.common.Utils.printQuietless(progress_str, end="", flush=True)
+
         for sectDict in file_splits.sectionsDict.values():
             for name, section in sectDict.items():
                 basepath = output_dir / name
@@ -154,9 +161,10 @@ def main():
         print("Writing disassembled functions individually...")
         for i, file_splits in enumerate(all_file_splits):
             f = i / len(all_file_splits)
-            spimdisasm.common.Utils.printQuietless(
-                f"{f*100:3.0f}%", "Writing", file_splits.name, end="    \r"
-            )
+
+            spimdisasm.common.Utils.printQuietless(f'{len(progress_str) * " "} \r', end="")
+            progress_str = f'{f*100:3.0f}% Writing {file_splits.name}\r'
+            spimdisasm.common.Utils.printQuietless(progress_str, end="", flush=True)
 
             for section_name, text_section in file_splits.sectionsDict[
                 spimdisasm.common.FileSectionType.Text
