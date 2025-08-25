@@ -5,7 +5,10 @@
 void GameAlloc_Log(GameAlloc* this) {
     GameAllocEntry* iter = this->base.next;
 
+    (void)"this = %08x\n";
+
     while (iter != &this->base) {
+        (void)"ptr = %08x size = %d\n";
         iter = iter->next;
     }
 }
