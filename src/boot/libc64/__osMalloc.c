@@ -28,22 +28,22 @@
 #else
 #define SET_DEBUG_INFO(node, f, l, a) \
     { \
-        node->unk_10 = (f); \
-        node->unk_14 = (l); \
-        node->unk_18 = osGetThreadId(NULL); \
-        node->unk_1C = (a); \
-        node->unk_20 = osGetTime(); \
+        node->filename = (f); \
+        node->line = (l); \
+        node->threadId = osGetThreadId(NULL); \
+        node->arena = (a); \
+        node->time = osGetTime(); \
     } (void) 0
 
-#define CHECK_CORRECT_ARENA(node, arena) ((node)->unk_1C == (arena))
+#define CHECK_CORRECT_ARENA(node, arena) ((node)->arena == (arena))
 
-s32 D_800984A0_unknown = 0;
+s32 gTotalAllocFailures = 0; // "Arena_failcnt"
 
 #define CHECK_ALLOC_FAILURE(arena, ptr) \
     do { \
         if ((ptr) == NULL) { \
-            D_800984A0_unknown++; \
-            (arena)->unk20++; \
+            gTotalAllocFailures++; \
+            (arena)->allocFailures++; \
         } \
     } while (0)
 #endif
@@ -157,7 +157,7 @@ u8 __osMallocIsInitialized(Arena* arena) {
 }
 
 #if MM_VERSION <= N64_JP_1_1
-void *__osMallocDebug(Arena *arena, size_t size, s32 arg2, s32 arg3) {
+void *__osMallocDebug(Arena *arena, size_t size, const char* file, int line) {
     ArenaNode *iter;
     ArenaNode *newNode;
     void *alloc = NULL;
@@ -191,7 +191,7 @@ void *__osMallocDebug(Arena *arena, size_t size, s32 arg2, s32 arg3) {
 
             iter->isFree = false;
 
-            SET_DEBUG_INFO(iter, arg2, arg3, arena);
+            SET_DEBUG_INFO(iter, file, line, arena);
 
             alloc = (void*)((uintptr_t)iter + sizeof(ArenaNode));
             break;
@@ -204,8 +204,10 @@ void *__osMallocDebug(Arena *arena, size_t size, s32 arg2, s32 arg3) {
 
     return alloc;
 }
+#endif
 
-void *__osMallocRDebug(Arena *arena, size_t size, s32 arg2, s32 arg3) {
+#if MM_VERSION <= N64_JP_1_1
+void *__osMallocRDebug(Arena *arena, size_t size, const char* file, int line) {
     ArenaNode *iter;
     ArenaNode *newNode;
     size_t blockSize;
@@ -240,7 +242,7 @@ void *__osMallocRDebug(Arena *arena, size_t size, s32 arg2, s32 arg3) {
 
             iter->isFree = false;
 
-            SET_DEBUG_INFO(iter, arg2, arg3, arena);
+            SET_DEBUG_INFO(iter, file, line, arena);
 
             alloc = (void*)((uintptr_t)iter + sizeof(ArenaNode));
             break;
@@ -309,7 +311,7 @@ void* __osMalloc(Arena* arena, size_t size) {
 
             iter->isFree = false;
 
-            SET_DEBUG_INFO(iter, 0, 0, arena);
+            SET_DEBUG_INFO(iter, NULL, 0, arena);
 
             alloc = (void*)((uintptr_t)iter + sizeof(ArenaNode));
             break;
@@ -379,7 +381,7 @@ void* __osMallocR(Arena* arena, size_t size) {
 
             iter->isFree = false;
 
-            SET_DEBUG_INFO(iter, 0, 0, arena);
+            SET_DEBUG_INFO(iter, NULL, 0, arena);
 
             alloc = (void*)((uintptr_t)iter + sizeof(ArenaNode));
             break;
@@ -427,7 +429,7 @@ void __osFree(Arena* arena, void* ptr) {
         prev = node->prev;
         node->isFree = true;
 
-        SET_DEBUG_INFO(node, 0, 0, arena);
+        SET_DEBUG_INFO(node, NULL, 0, arena);
 
         // Checks if the next node is contiguous to the current node and if it isn't currently allocated. Then merge the
         // two nodes into one.
@@ -459,9 +461,8 @@ void __osFree(Arena* arena, void* ptr) {
     ArenaImpl_Unlock(arena);
 }
 
-// TODO
 #if MM_VERSION <= N64_JP_1_1
-void __osFreeDebug(Arena* arena, void* ptr, s32 arg2, s32 arg3) {
+void __osFreeDebug(Arena* arena, void* ptr, const char* file, int line) {
     ArenaNode* node;
     ArenaNode* next;
     ArenaNode* prev;
@@ -482,7 +483,7 @@ void __osFreeDebug(Arena* arena, void* ptr, s32 arg2, s32 arg3) {
         prev = node->prev;
         node->isFree = true;
 
-        SET_DEBUG_INFO(node, arg2, arg3, arena);
+        SET_DEBUG_INFO(node, file, line, arena);
 
         // Checks if the next node is contiguous to the current node and if it isn't currently allocated. Then merge the
         // two nodes into one.
@@ -674,6 +675,6 @@ s32 __osCheckArena(Arena* arena) {
 
 #if MM_VERSION <= N64_JP_1_1
 u8 ArenaImpl_GetAllocFailures(Arena* arena) {
-    return arena->unk20;
+    return arena->allocFailures;
 }
 #endif
