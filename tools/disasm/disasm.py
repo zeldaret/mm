@@ -85,10 +85,10 @@ def main():
 
     args = parser.parse_args()
 
-    if spimdisasm.__version_info__ < (1, 28, 1):
-        # Version should be kept up to date with requirements.txt
-        print(f"Error: spimdisasm>=1.34.2 is required (you have {spimdisasm.__version__})")
-        print("Hint: run `make venv` to update the venv.")
+    if spimdisasm.__version_info__ < (1, 36, 0):
+         # Version should be kept up to date with requirements.txt
+        print(f"Error: spimdisasm>=1.36.0 is required (you have {spimdisasm.__version__})")
+        print("Hint: run `make setup` to update the venv.")
         exit(1)
 
     context = spimdisasm.common.Context()
