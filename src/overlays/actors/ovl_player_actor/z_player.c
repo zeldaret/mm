@@ -12225,7 +12225,9 @@ s8 sPlayerCueToCsActionMap[PLAYER_CUEID_MAX] = {
     PLAYER_CSACTION_120,  // PLAYER_CUEID_88
     PLAYER_CSACTION_114,  // PLAYER_CUEID_89
     PLAYER_CSACTION_111,  // PLAYER_CUEID_90
+#if MM_VERSION >= N64_US
     PLAYER_CSACTION_122,  // PLAYER_CUEID_91
+#endif
 };
 
 f32 D_8085D3E0[PLAYER_FORM_MAX] = {
@@ -20204,7 +20206,9 @@ PlayerCsActionEntry sPlayerCsActionInitFuncs[PLAYER_CSACTION_MAX] = {
     /* PLAYER_CSACTION_119 */ { PLAYER_CSTYPE_ANIM_7, { &gPlayerAnim_demo_suwari2 } },
     /* PLAYER_CSACTION_120 */ { PLAYER_CSTYPE_ANIM_7, { &gPlayerAnim_demo_suwari3 } },
     /* PLAYER_CSACTION_121 */ { PLAYER_CSTYPE_ACTION, { Player_CsAction_7 } },
+#if MM_VERSION >= N64_US
     /* PLAYER_CSACTION_122 */ { PLAYER_CSTYPE_NONE, { NULL } },
+#endif
     /* PLAYER_CSACTION_123 */ { PLAYER_CSTYPE_ACTION, { Player_CsAction_9 } },
     /* PLAYER_CSACTION_124 */ { PLAYER_CSTYPE_ANIM_7, { &gPlayerAnim_clink_demo_get1 } },
     /* PLAYER_CSACTION_125 */ { PLAYER_CSTYPE_ANIM_5, { &gPlayerAnim_clink_demo_get2 } },
@@ -20347,7 +20351,9 @@ PlayerCsActionEntry sPlayerCsActionUpdateFuncs[PLAYER_CSACTION_MAX] = {
     /* PLAYER_CSACTION_119 */ { PLAYER_CSTYPE_ANIM_11, { NULL } },
     /* PLAYER_CSACTION_120 */ { PLAYER_CSTYPE_ANIM_11, { NULL } },
     /* PLAYER_CSACTION_121 */ { PLAYER_CSTYPE_ACTION, { Player_CsAction_8 } },
+#if MM_VERSION >= N64_US
     /* PLAYER_CSACTION_122 */ { PLAYER_CSTYPE_ACTION, { Player_CsAction_12 } },
+#endif
     /* PLAYER_CSACTION_123 */ { PLAYER_CSTYPE_ACTION, { Player_CsAction_10 } },
     /* PLAYER_CSACTION_125 */ { PLAYER_CSTYPE_ANIM_11, { NULL } },
     /* PLAYER_CSACTION_124 */ { PLAYER_CSTYPE_ANIM_11, { NULL } },
