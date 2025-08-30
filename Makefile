@@ -50,8 +50,6 @@ COMPILER ?= ido
 WERROR ?= 0
 # Keep .mdebug section in build
 KEEP_MDEBUG ?= 0
-# Disassembles all asm from the ROM instead of skipping files which are entirely in C
-FULL_DISASM ?= 0
 # Check code syntax with host compiler
 RUN_CC_CHECK ?= 1
 CC_CHECK_COMP ?= gcc
@@ -96,17 +94,12 @@ ifneq ($(NON_MATCHING),0)
   COMPARE := 0
 endif
 
-DISASM_FLAGS := --reg-names=o32
-ifneq ($(FULL_DISASM), 0)
-  DISASM_FLAGS += --all
-endif
-
 PROJECT_DIR   := $(dir $(realpath $(firstword $(MAKEFILE_LIST))))
 
 BASEROM_DIR   := baseroms/$(VERSION)
 BUILD_DIR     := build/$(VERSION)
 EXTRACTED_DIR := extracted/$(VERSION)
-
+EXPECTED_DIR  := expected/$(BUILD_DIR)
 
 #### Tools ####
 ifneq ($(shell type $(MIPS_BINUTILS_PREFIX)ld >/dev/null 2>/dev/null; echo $$?), 0)
@@ -271,8 +264,7 @@ LDSCRIPT := $(ROM:.z64=.ld)
 SPEC := spec/spec
 SPEC_INCLUDES := $(wildcard spec/*.inc)
 
-# create asm directories
-$(shell mkdir -p asm data extracted)
+$(shell mkdir -p extracted)
 
 ifeq ($(COMPILER),ido)
 SRC_DIRS := $(shell find src -type d -not -path src/gcc_fix)
@@ -281,7 +273,6 @@ SRC_DIRS := $(shell find src -type d)
 endif
 
 RSP_DIRS := $(shell find rsp -type d)
-ASM_DIRS := $(shell find asm -type d -not -path "asm/non_matchings*") $(shell find data -type d)
 
 ifneq ($(wildcard $(EXTRACTED_DIR)/assets/audio),)
   SAMPLE_EXTRACT_DIRS := $(shell find $(EXTRACTED_DIR)/assets/audio/samples -type d)
@@ -397,7 +388,6 @@ OTHER_DIRS := assets/text baserom dmadata $(shell find linker_scripts -type d)
 $(shell mkdir -p $(foreach dir, \
                       $(RSP_DIRS) \
                       $(SRC_DIRS) \
-                      $(ASM_DIRS) \
                       $(OTHER_DIRS), \
                     $(BUILD_DIR)/$(dir)))
 $(shell mkdir -p $(foreach dir, \
@@ -547,13 +537,10 @@ clean:
 	$(RM) -r $(BUILD_DIR)
 
 assetclean:
-	$(RM) -r $(EXTRACTED_DIR)/assets
-	$(RM) -r $(EXTRACTED_DIR)/text
-	$(RM) -r $(EXTRACTED_DIR)/.extracted-assets.json
+	$(RM) -r $(EXTRACTED_DIR)
 	$(RM) -r $(BUILD_DIR)/assets
 
 distclean: assetclean clean
-	$(RM) -r asm data extracted
 	$(MAKE) -C tools clean
 
 venv:
@@ -577,13 +564,13 @@ assets:
 
 ## Assembly generation
 disasm:
-	$(RM) -r asm data
-	$(PYTHON) tools/disasm/disasm.py $(EXTRACTED_DIR)/baserom -j $(N_THREADS) $(DISASM_FLAGS)
+	$(RM) -r $(EXTRACTED_DIR)/asm
+	VERSION=$(VERSION) DISASM_BASEROM=$(BASEROM_DIR)/baserom-decompressed.z64 DISASM_DIR=$(EXTRACTED_DIR)/asm PYTHON=$(PYTHON) ./tools/disasm/do_disasm.sh
 
 diff-init: rom
-	$(RM) -r expected/
-	mkdir -p expected/
-	cp -r build expected/build
+	$(RM) -r $(EXPECTED_DIR)
+	mkdir -p $(EXPECTED_DIR)
+	cp -r $(BUILD_DIR)/. $(EXPECTED_DIR)
 
 init: distclean
 	$(MAKE) venv

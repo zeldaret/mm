@@ -52,16 +52,6 @@ pipeline {
                 sh 'bash -c "./tools/warnings_count/compare_warnings.sh assets"'
             }
         }
-        stage('Disasm') {
-            steps {
-                sh 'bash -c "make -j disasm 2> >(tee tools/warnings_count/warnings_disasm_new.txt)"'
-            }
-        }
-        stage('Check disasm warnings') {
-            steps {
-                sh 'bash -c "./tools/warnings_count/compare_warnings.sh disasm"'
-            }
-        }
         stage('Build') {
             steps {
                 sh 'bash -c "make -j rom 2> >(tee tools/warnings_count/warnings_build_new.txt)"'
@@ -111,7 +101,7 @@ pipeline {
     }
     post {
         failure {
-            sh 'cat tools/check_format.txt tools/warnings_count/warnings_setup_new.txt tools/warnings_count/warnings_disasm_new.txt tools/warnings_count/warnings_build_new.txt'
+            sh 'cat tools/check_format.txt tools/warnings_count/warnings_setup_new.txt tools/warnings_count/warnings_build_new.txt'
         }
         always {
             cleanWs()

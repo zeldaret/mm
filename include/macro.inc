@@ -3,25 +3,61 @@
 .internal _MACRO_INC_GUARD
 .set _MACRO_INC_GUARD, 1
 
-.macro glabel label
-    .global \label
-    .ent \label
+# A function symbol.
+.macro glabel label, visibility=global
+    .\visibility \label
     .type \label, @function
+    \label:
+        .ent \label
+.endm
+
+# The end of a function symbol.
+.macro endlabel label
+    .size \label, . - \label
+    .end \label
+.endm
+
+# An alternative entry to a function.
+.macro alabel label, visibility=global
+    .\visibility \label
+    .type \label, @function
+    \label:
+        .aent \label
+.endm
+
+# A label referenced by an error handler table.
+.macro ehlabel label, visibility=global
+    .\visibility \label
     \label:
 .endm
 
-.macro endlabel label
-    .end \label
+
+# A label referenced by a jumptable.
+.macro jlabel label, visibility=local
+    .\visibility \label
+    \label:
+.endm
+
+
+# A data symbol.
+.macro dlabel label, visibility=global
+    .\visibility \label
+    .type \label, @object
+    \label:
+.endm
+
+# End of a data symbol.
+.macro enddlabel label
     .size \label, . - \label
 .endm
 
-.macro dlabel label
-    .global \label
-    \label:
-.endm
 
-.macro jlabel label
-    \label:
+# Label to signal the symbol haven't been matched yet.
+.macro nonmatching label, size=1
+    .global \label\().NON_MATCHING
+    .type \label\().NON_MATCHING, @object
+    .size \label\().NON_MATCHING, \size
+    \label\().NON_MATCHING:
 .endm
 
 # COP0 register aliases
