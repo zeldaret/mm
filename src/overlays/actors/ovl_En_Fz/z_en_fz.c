@@ -180,7 +180,7 @@ void EnFz_Init(Actor* thisx, PlayState* play) {
     this->actor.velocity.y = 0.0f;
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
-    this->unk_BC8 = 0;
+    this->timerBC8 = 0;
     this->unk_BCF = 0;
     this->unk_BCC = 1;
     this->unk_BCD = 0;
@@ -203,7 +203,7 @@ void EnFz_Init(Actor* thisx, PlayState* play) {
     } else {
         this->unk_BC0 = 255;
         if (this->actor.shape.rot.z == 0) {
-            this->unk_BC6 = (s32)Rand_ZeroFloat(64.0f) + 192;
+            this->counterBC6 = (s32)Rand_ZeroFloat(64.0f) + 192;
         } else {
             if (this->actor.shape.rot.z < 0) {
                 this->actor.shape.rot.z = 1;
@@ -211,7 +211,7 @@ void EnFz_Init(Actor* thisx, PlayState* play) {
                 this->actor.shape.rot.z = 0x10;
             }
             this->actor.shape.rot.z += -1;
-            this->unk_BC6 = this->actor.shape.rot.z * 0x10;
+            this->counterBC6 = this->actor.shape.rot.z * 0x10;
         }
 
         this->actor.shape.rot.z = 0;
@@ -327,7 +327,7 @@ void func_80932AF4(EnFz* this) {
     Vec3f sp38;
     Vec3f sp2C;
 
-    if (!(this->unk_BC6 & 0xF)) {
+    if (!(this->counterBC6 & 0xF)) {
         sp44.x = Rand_CenteredFloat(40.0f) + this->actor.world.pos.x;
         sp44.y = Rand_CenteredFloat(40.0f) + this->actor.world.pos.y + 30.0f;
         sp44.z = Rand_CenteredFloat(40.0f) + this->actor.world.pos.z;
@@ -343,7 +343,7 @@ void func_80932BD4(EnFz* this) {
     Vec3f sp38;
     Vec3f sp2C;
 
-    if (!(this->unk_BC6 & 3)) {
+    if (!(this->counterBC6 & 3)) {
         sp44.x = Rand_CenteredFloat(40.0f) + this->actor.world.pos.x;
         sp44.y = this->unk_BB4;
         sp44.z = Rand_CenteredFloat(40.0f) + this->actor.world.pos.z;
@@ -405,7 +405,7 @@ void func_80932C98(EnFz* this, PlayState* play) {
             this->unk_BBC = 0.0f;
             this->collider1.base.acFlags &= ~AC_HIT;
             this->actor.speed = 0.0f;
-            this->unk_BCA = 10;
+            this->timerBCA = 10;
             func_809330D4(this);
         } else if (this->collider2.base.acFlags & AC_BOUNCED) {
             this->collider2.base.acFlags &= ~AC_BOUNCED;
@@ -490,7 +490,7 @@ void func_80933184(EnFz* this) {
     this->unk_BD6 = 0;
     this->unk_BD2 = 0;
     this->unk_BD0 = 0;
-    this->unk_BCA = 100;
+    this->timerBCA = 100;
 
     this->actor.world.pos.x = this->unk_BA8;
     this->actor.world.pos.y = this->unk_BAC;
@@ -498,7 +498,7 @@ void func_80933184(EnFz* this) {
 
     if (ENFZ_GET_4000(&this->actor)) {
         this->unk_BD6 = 2;
-        this->unk_BCA = 10;
+        this->timerBCA = 10;
         this->unk_BD2 = 4000;
         this->actionFunc = func_80933274;
     } else {
@@ -507,20 +507,20 @@ void func_80933184(EnFz* this) {
 }
 
 void func_809331F8(EnFz* this, PlayState* play) {
-    if ((this->unk_BCA == 0) && (this->actor.xzDistToPlayer < 400.0f)) {
+    if ((this->timerBCA == 0) && (this->actor.xzDistToPlayer < 400.0f)) {
         func_80933248(this);
     }
 }
 
 void func_80933248(EnFz* this) {
     this->unk_BD6 = 2;
-    this->unk_BCA = 20;
+    this->timerBCA = 20;
     this->unk_BD2 = 4000;
     this->actionFunc = func_80933274;
 }
 
 void func_80933274(EnFz* this, PlayState* play) {
-    if (this->unk_BCA == 0) {
+    if (this->timerBCA == 0) {
 
         this->unk_BC0 += 8;
         if (this->unk_BC0 > 255) {
@@ -539,7 +539,7 @@ void func_80933274(EnFz* this, PlayState* play) {
 
 void func_80933324(EnFz* this) {
     this->unk_BD6 = 1;
-    this->unk_BCA = 40;
+    this->timerBCA = 40;
     this->unk_BCC = 1;
     this->unk_BCE = 1;
     this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
@@ -549,7 +549,7 @@ void func_80933324(EnFz* this) {
 
 void func_80933368(EnFz* this, PlayState* play) {
     func_80933014(this);
-    if (this->unk_BCA == 0) {
+    if (this->timerBCA == 0) {
         func_809333A4(this);
     }
 }
@@ -557,13 +557,13 @@ void func_80933368(EnFz* this, PlayState* play) {
 void func_809333A4(EnFz* this) {
     this->unk_BD6 = 1;
     this->unk_BCD = 1;
-    this->unk_BCA = 100;
+    this->timerBCA = 100;
     this->unk_BBC = 4.0f;
     this->actionFunc = func_809333D8;
 }
 
 void func_809333D8(EnFz* this, PlayState* play) {
-    if ((this->unk_BCA == 0) || (this->unk_BCD == 0)) {
+    if ((this->timerBCA == 0) || (this->unk_BCD == 0)) {
         func_80933414(this);
     }
 }
@@ -572,20 +572,20 @@ void func_80933414(EnFz* this) {
     this->unk_BD6 = 1;
     this->unk_BBC = 0.0f;
     this->actor.speed = 0.0f;
-    this->unk_BCA = 40;
+    this->timerBCA = 40;
     this->actionFunc = func_80933444;
 }
 
 void func_80933444(EnFz* this, PlayState* play) {
     func_80933014(this);
-    if (this->unk_BCA == 0) {
+    if (this->timerBCA == 0) {
         func_80933480(this, play);
     }
 }
 
 void func_80933480(EnFz* this, PlayState* play) {
     this->unk_BD6 = 1;
-    this->unk_BCA = 80;
+    this->timerBCA = 80;
     this->actionFunc = func_809334B8;
     func_80932784(this, play);
 }
@@ -598,17 +598,17 @@ void func_809334B8(EnFz* this, PlayState* play) {
     u8 sp3F;
     s16 sp3C;
 
-    if (this->unk_BCA == 0) {
+    if (this->timerBCA == 0) {
         func_809330D4(this);
         return;
     }
 
-    if (this->unk_BCA > 10) {
+    if (this->timerBCA > 10) {
         sp3F = 0;
         sp3C = 150;
         Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_FREEZAD_BREATH - SFX_FLAG);
-        if ((this->unk_BCA - 10) < 16) {
-            sp3C = (this->unk_BCA * 10) - 100;
+        if ((this->timerBCA - 10) < 16) {
+            sp3C = (this->timerBCA * 10) - 100;
         }
 
         sp40.x = sp40.z = 0.0f;
@@ -629,7 +629,7 @@ void func_809334B8(EnFz* this, PlayState* play) {
 
         Matrix_MultVec3f(&sp64, &sp4C);
 
-        if ((this->unk_BCA & 7) == 0) {
+        if ((this->timerBCA & 7) == 0) {
             sp3F = 1;
         }
 
@@ -654,14 +654,14 @@ void func_809336C0(EnFz* this, PlayState* play) {
     this->unk_BD8 = 1;
     this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->unk_BD7 = 0;
-    this->unk_BCA = 60;
+    this->timerBCA = 60;
     Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_PROP);
     Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0xA0);
     this->actionFunc = func_80933760;
 }
 
 void func_80933760(EnFz* this, PlayState* play) {
-    if (this->unk_BCA == 0) {
+    if (this->timerBCA == 0) {
         Actor_Kill(&this->actor);
     }
 }
@@ -698,7 +698,7 @@ void func_809337D4(EnFz* this, PlayState* play) {
 
 void func_8093389C(EnFz* this) {
     this->unk_BD6 = 1;
-    this->unk_BCA = 40;
+    this->timerBCA = 40;
     this->unk_BCC = 1;
     this->unk_BCE = 1;
     this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
@@ -714,7 +714,7 @@ void func_809338E0(EnFz* this, PlayState* play) {
     u8 sp3F;
     s16 sp3C;
 
-    if (this->unk_BC6 & (0x80 | 0x40)) {
+    if (this->counterBC6 & (0x80 | 0x40)) {
         func_80933014(this);
         func_80932784(this, play);
         return;
@@ -724,8 +724,8 @@ void func_809338E0(EnFz* this, PlayState* play) {
     sp3C = 150;
     Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_FREEZAD_BREATH - SFX_FLAG);
 
-    if ((this->unk_BC6 & 0x3F) >= 0x30) {
-        sp3C = 630 - ((this->unk_BC6 & 0x3F) * 10);
+    if ((this->counterBC6 & 0x3F) >= 0x30) {
+        sp3C = 630 - ((this->counterBC6 & 0x3F) * 10);
     }
 
     sp40.x = sp40.z = 0.0f;
@@ -746,7 +746,7 @@ void func_809338E0(EnFz* this, PlayState* play) {
 
     Matrix_MultVec3f(&sp64, &sp4C);
 
-    if (!(this->unk_BC6 & 7)) {
+    if (!(this->counterBC6 & 7)) {
         sp3F = 1;
     }
 
@@ -759,7 +759,7 @@ void func_809338E0(EnFz* this, PlayState* play) {
 
 void func_80933AF4(EnFz* this) {
     this->unk_BD6 = 1;
-    this->unk_BCA = 40;
+    this->timerBCA = 40;
     this->unk_BCC = 1;
     this->unk_BCE = 1;
     this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
@@ -790,17 +790,17 @@ void EnFz_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     EnFz* this = (EnFz*)thisx;
 
-    this->unk_BC6++;
-    if (this->unk_BC8 != 0) {
-        this->unk_BC8--;
+    this->counterBC6++;
+    if (this->timerBC8 != 0) {
+        this->timerBC8--;
     }
 
-    if (this->unk_BCA != 0) {
-        this->unk_BCA--;
+    if (this->timerBCA != 0) {
+        this->timerBCA--;
     }
 
-    if (this->unk_BD9 != 0) {
-        this->unk_BD9--;
+    if (this->timerBD9 != 0) {
+        this->timerBD9--;
     }
 
     Actor_SetFocus(&this->actor, 50.0f);
@@ -878,18 +878,18 @@ void EnFz_Draw(Actor* thisx, PlayState* play) {
 
 void func_80934018(EnFz* this, Vec3f* a, Vec3f* b, Vec3f* c, f32 arg4) {
     s16 i;
-    EnFzStruct* ptr = &this->unk_23C[0];
+    EnFzEffect* effect = &this->effects[0];
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_23C); i++, ptr++) {
-        if (ptr->unk_00 == 0) {
-            ptr->unk_00 = 1;
-            ptr->unk_04 = *a;
-            ptr->unk_10 = *b;
-            ptr->unk_1C = *c;
-            ptr->unk_2E = 0;
-            ptr->unk_30 = arg4 / 1000.0f;
-            ptr->unk_2C = 0;
-            ptr->unk_01 = 0;
+    for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
+        if (effect->type == 0) {
+            effect->type = 1;
+            effect->unk_04 = *a;
+            effect->unk_10 = *b;
+            effect->unk_1C = *c;
+            effect->unk_2E = 0;
+            effect->unk_30 = arg4 / 1000.0f;
+            effect->unk_2C = 0;
+            effect->unk_01 = 0;
             break;
         }
     }
@@ -897,20 +897,20 @@ void func_80934018(EnFz* this, Vec3f* a, Vec3f* b, Vec3f* c, f32 arg4) {
 
 void func_809340BC(EnFz* this, Vec3f* a, Vec3f* b, Vec3f* c, f32 arg4, f32 arg5, s16 arg6, u8 arg7) {
     s16 i;
-    EnFzStruct* ptr = &this->unk_23C[0];
+    EnFzEffect* effect = &this->effects[0];
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_23C); i++, ptr++) {
-        if (ptr->unk_00 == 0) {
-            ptr->unk_00 = 2;
-            ptr->unk_04 = *a;
-            ptr->unk_10 = *b;
-            ptr->unk_1C = *c;
-            ptr->unk_2E = 0;
-            ptr->unk_30 = arg4 / 1000.0f;
-            ptr->unk_34 = arg5 / 1000.0f;
-            ptr->unk_2C = arg6;
-            ptr->unk_01 = 0;
-            ptr->unk_38 = arg7;
+    for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
+        if (effect->type == 0) {
+            effect->type = 2;
+            effect->unk_04 = *a;
+            effect->unk_10 = *b;
+            effect->unk_1C = *c;
+            effect->unk_2E = 0;
+            effect->unk_30 = arg4 / 1000.0f;
+            effect->unk_34 = arg5 / 1000.0f;
+            effect->unk_2C = arg6;
+            effect->unk_01 = 0;
+            effect->unk_38 = arg7;
             break;
         }
     }
@@ -918,66 +918,66 @@ void func_809340BC(EnFz* this, Vec3f* a, Vec3f* b, Vec3f* c, f32 arg4, f32 arg5,
 
 void func_80934178(EnFz* this, PlayState* play) {
     s16 i;
-    EnFzStruct* ptr = this->unk_23C;
+    EnFzEffect* effect = this->effects;
     Vec3f sp64;
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_23C); i++, ptr++) {
-        if (ptr->unk_00 != 0) {
-            ptr->unk_04.x += ptr->unk_10.x;
-            ptr->unk_04.y += ptr->unk_10.y;
-            ptr->unk_04.z += ptr->unk_10.z;
+    for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
+        if (effect->type != 0) {
+            effect->unk_04.x += effect->unk_10.x;
+            effect->unk_04.y += effect->unk_10.y;
+            effect->unk_04.z += effect->unk_10.z;
 
-            ptr->unk_01++;
+            effect->unk_01++;
 
-            ptr->unk_10.x += ptr->unk_1C.x;
-            ptr->unk_10.y += ptr->unk_1C.y;
-            ptr->unk_10.z += ptr->unk_1C.z;
+            effect->unk_10.x += effect->unk_1C.x;
+            effect->unk_10.y += effect->unk_1C.y;
+            effect->unk_10.z += effect->unk_1C.z;
 
-            if (ptr->unk_00 == 1) {
-                if (ptr->unk_2E == 0) {
-                    ptr->unk_2C += 10;
-                    if (ptr->unk_2C >= 100) {
-                        ptr->unk_2E++;
+            if (effect->type == 1) {
+                if (effect->unk_2E == 0) {
+                    effect->unk_2C += 10;
+                    if (effect->unk_2C >= 100) {
+                        effect->unk_2E++;
                     }
                 } else {
-                    ptr->unk_2C -= 3;
-                    if (ptr->unk_2C <= 0) {
-                        ptr->unk_2C = 0;
-                        ptr->unk_00 = 0;
+                    effect->unk_2C -= 3;
+                    if (effect->unk_2C <= 0) {
+                        effect->unk_2C = 0;
+                        effect->type = 0;
                     }
                 }
-            } else if (ptr->unk_00 == 2) {
-                Math_ApproachF(&ptr->unk_30, ptr->unk_34, 0.1f, ptr->unk_34 / 10.0f);
-                if (ptr->unk_2E == 0) {
-                    if (ptr->unk_01 >= 7) {
-                        ptr->unk_2E++;
+            } else if (effect->type == 2) {
+                Math_ApproachF(&effect->unk_30, effect->unk_34, 0.1f, effect->unk_34 / 10.0f);
+                if (effect->unk_2E == 0) {
+                    if (effect->unk_01 >= 7) {
+                        effect->unk_2E++;
                     }
                 } else {
-                    ptr->unk_10.x *= 0.75f;
-                    ptr->unk_1C.y = 2.0f;
-                    ptr->unk_10.z *= 0.75f;
-                    ptr->unk_2C -= 17;
-                    if (ptr->unk_2C <= 0) {
-                        ptr->unk_2C = 0;
-                        ptr->unk_00 = 0;
+                    effect->unk_10.x *= 0.75f;
+                    effect->unk_1C.y = 2.0f;
+                    effect->unk_10.z *= 0.75f;
+                    effect->unk_2C -= 17;
+                    if (effect->unk_2C <= 0) {
+                        effect->unk_2C = 0;
+                        effect->type = 0;
                     }
                 }
 
-                if ((this->unk_BD9 == 0) && (ptr->unk_2C > 100) && (ptr->unk_38 != 0)) {
-                    this->collider3.dim.pos.x = ptr->unk_04.x;
-                    this->collider3.dim.pos.y = ptr->unk_04.y;
-                    this->collider3.dim.pos.z = ptr->unk_04.z;
+                if ((this->timerBD9 == 0) && (effect->unk_2C > 100) && (effect->unk_38 != 0)) {
+                    this->collider3.dim.pos.x = effect->unk_04.x;
+                    this->collider3.dim.pos.y = effect->unk_04.y;
+                    this->collider3.dim.pos.z = effect->unk_04.z;
                     CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider3.base);
                 }
 
-                sp64.x = ptr->unk_04.x;
-                sp64.y = ptr->unk_04.y + 10.0f;
-                sp64.z = ptr->unk_04.z;
+                sp64.x = effect->unk_04.x;
+                sp64.y = effect->unk_04.y + 10.0f;
+                sp64.z = effect->unk_04.z;
 
-                if ((ptr->unk_2E != 2) && func_809328A4(this, &sp64)) {
-                    ptr->unk_2E = 2;
-                    ptr->unk_10.x = 0.0f;
-                    ptr->unk_10.z = 0.0f;
+                if ((effect->unk_2E != 2) && func_809328A4(this, &sp64)) {
+                    effect->unk_2E = 2;
+                    effect->unk_10.x = 0.0f;
+                    effect->unk_10.z = 0.0f;
                 }
             }
         }
@@ -988,7 +988,7 @@ void func_80934464(EnFz* this, PlayState* play) {
     GraphicsContext* gfxCtx = play->state.gfxCtx;
     s16 i;
     u8 flag = 0;
-    EnFzStruct* ptr = this->unk_23C;
+    EnFzEffect* effect = this->effects;
 
     OPEN_DISPS(gfxCtx);
 
@@ -997,8 +997,8 @@ void func_80934464(EnFz* this, PlayState* play) {
     gDPSetColorDither(POLY_XLU_DISP++, G_CD_BAYER);
     gDPSetAlphaDither(POLY_XLU_DISP++, G_AD_PATTERN);
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_23C); i++, ptr++) {
-        if (ptr->unk_00 > 0) {
+    for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
+        if (effect->type > 0) {
             gDPPipeSync(POLY_XLU_DISP++);
 
             if (flag == 0) {
@@ -1006,14 +1006,14 @@ void func_80934464(EnFz* this, PlayState* play) {
                 flag++;
             }
 
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 195, 225, 235, ptr->unk_2C);
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 195, 225, 235, effect->unk_2C);
             gSPSegment(POLY_XLU_DISP++, 0x08,
-                       Gfx_TwoTexScroll(play->state.gfxCtx, 0, (ptr->unk_01 + (i * 3)) * 3,
-                                        (ptr->unk_01 + (i * 3)) * 15, 0x20, 0x40, 1, 0, 0, 0x20, 0x20));
+                       Gfx_TwoTexScroll(play->state.gfxCtx, 0, (effect->unk_01 + (i * 3)) * 3,
+                                        (effect->unk_01 + (i * 3)) * 15, 0x20, 0x40, 1, 0, 0, 0x20, 0x20));
 
-            Matrix_Translate(ptr->unk_04.x, ptr->unk_04.y, ptr->unk_04.z, MTXMODE_NEW);
+            Matrix_Translate(effect->unk_04.x, effect->unk_04.y, effect->unk_04.z, MTXMODE_NEW);
             Matrix_ReplaceRotation(&play->billboardMtxF);
-            Matrix_Scale(ptr->unk_30, ptr->unk_30, 1.0f, MTXMODE_APPLY);
+            Matrix_Scale(effect->unk_30, effect->unk_30, 1.0f, MTXMODE_APPLY);
 
             MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, gfxCtx);
             gSPDisplayList(POLY_XLU_DISP++, gFrozenSteamModelDL);

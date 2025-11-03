@@ -21,7 +21,7 @@ typedef enum {
 } EnFzParam;
 
 typedef struct {
-    /* 0x00 */ u8 unk_00;
+    /* 0x00 */ u8 type;
     /* 0x01 */ u8 unk_01;
     /* 0x04 */ Vec3f unk_04;
     /* 0x10 */ Vec3f unk_10;
@@ -32,7 +32,7 @@ typedef struct {
     /* 0x30 */ f32 unk_30;
     /* 0x34 */ f32 unk_34;
     /* 0x38 */ u8 unk_38;
-} EnFzStruct; // size = 0x3C
+} EnFzEffect; // size = 0x3C
 
 typedef struct EnFz {
     /* 0x000 */ Actor actor;
@@ -42,7 +42,7 @@ typedef struct EnFz {
     /* 0x1E0 */ ColliderCylinder collider3;
     /* 0x22C */ Vec3f unk_22C;
     /* 0x238 */ f32 unk_238;
-    /* 0x23C */ EnFzStruct unk_23C[40];
+    /* 0x23C */ EnFzEffect effects[40];
     /* 0xB9C */ f32 drawDmgEffAlpha;
     /* 0xBA0 */ f32 drawDmgEffScale;
     /* 0xBA4 */ s16 drawDmgEffTimer;
@@ -54,9 +54,9 @@ typedef struct EnFz {
     /* 0xBBC */ f32 unk_BBC;
     /* 0xBC0 */ u32 unk_BC0;
     /* 0xBC4 */ s16 unk_BC4;
-    /* 0xBC6 */ s16 unk_BC6;
-    /* 0xBC8 */ s16 unk_BC8;
-    /* 0xBCA */ s16 unk_BCA;
+    /* 0xBC6 */ s16 counterBC6;
+    /* 0xBC8 */ s16 timerBC8;
+    /* 0xBCA */ s16 timerBCA;
     /* 0xBCC */ u8 unk_BCC;
     /* 0xBCD */ u8 unk_BCD;
     /* 0xBCE */ u8 unk_BCE;
@@ -67,7 +67,7 @@ typedef struct EnFz {
     /* 0xBD6 */ u8 unk_BD6;
     /* 0xBD7 */ u8 unk_BD7;
     /* 0xBD8 */ u8 unk_BD8;
-    /* 0xBD9 */ u8 unk_BD9;
+    /* 0xBD9 */ u8 timerBD9;
 } EnFz; /* size = 0xBDC */
 
 #endif // Z_EN_FZ_H
