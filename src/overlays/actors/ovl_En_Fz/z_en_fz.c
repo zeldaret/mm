@@ -707,7 +707,6 @@ void EnFz_SetupBlowSmokeStationary(EnFz* this) {
     this->actionFunc = EnFz_BlowSmokeStationary;
 }
 
-// EnFz_BlowSmokeStationary
 void EnFz_BlowSmokeStationary(EnFz* this, PlayState* play) {
     Vec3f vec1;
     Vec3f pos;
@@ -759,7 +758,6 @@ void EnFz_BlowSmokeStationary(EnFz* this, PlayState* play) {
     EnWz_SpawnIceSmokeFreeze(this, &pos, &velocity, &accel, 2.0f, 25.0f, primAlpha, false);
 }
 
-// EnFz_SetupType3
 void EnFz_SetupType3(EnFz* this) {
     this->state = 1;
     this->mainTimer = 40;
@@ -770,11 +768,10 @@ void EnFz_SetupType3(EnFz* this) {
     this->actionFunc = EnFz_Type3;
 }
 
-// EnFz_Type3
 void EnFz_Type3(EnFz* this, PlayState* play) {
 }
 
-void func_80933B48(EnFz* this, PlayState* play) {
+void EnFz_UpdateEffect(EnFz* this, PlayState* play) {
     if (this->drawDmgEffTimer != 0) {
         if (this->drawDmgEffTimer > 0) {
             this->drawDmgEffTimer--;
@@ -795,17 +792,9 @@ void EnFz_Update(Actor* thisx, PlayState* play) {
     EnFz* this = (EnFz*)thisx;
 
     this->counter++;
-    if (this->unusedTimer != 0) {
-        this->unusedTimer--;
-    }
-
-    if (this->mainTimer != 0) {
-        this->mainTimer--;
-    }
-
-    if (this->timerBD9 != 0) {
-        this->timerBD9--;
-    }
+    DECR(this->unusedTimer);
+    DECR(this->mainTimer);
+    DECR(this->timerBD9);
 
     Actor_SetFocus(&this->actor, 50.0f);
     EnWz_ApplyDamage(this, play);
@@ -831,7 +820,7 @@ void EnFz_Update(Actor* thisx, PlayState* play) {
     }
 
     sIceSmokeSpawnFunctions[this->state](this);
-    func_80933B48(this, play);
+    EnFz_UpdateEffect(this, play);
     EnWz_UpdateIceSmoke(this, play);
 }
 
