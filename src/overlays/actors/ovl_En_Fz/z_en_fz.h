@@ -22,16 +22,16 @@ typedef enum {
 
 typedef struct {
     /* 0x00 */ u8 type;
-    /* 0x01 */ u8 unk_01;
-    /* 0x04 */ Vec3f unk_04;
-    /* 0x10 */ Vec3f unk_10;
-    /* 0x1C */ Vec3f unk_1C;
+    /* 0x01 */ u8 timer;
+    /* 0x04 */ Vec3f pos;
+    /* 0x10 */ Vec3f velocity;
+    /* 0x1C */ Vec3f accel;
     /* 0x28 */ UNK_TYPE1 unk_28[0x4];
-    /* 0x2C */ s16 unk_2C;
-    /* 0x2E */ s16 unk_2E;
-    /* 0x30 */ f32 unk_30;
-    /* 0x34 */ f32 unk_34;
-    /* 0x38 */ u8 unk_38;
+    /* 0x2C */ s16 primAlpha;
+    /* 0x2E */ s16 primAlphaState;
+    /* 0x30 */ f32 xyScale;
+    /* 0x34 */ f32 xyScaleTarget;
+    /* 0x38 */ u8 unk_38; // not the same as oot?
 } EnFzEffect; // size = 0x3C
 
 typedef struct EnFz {
@@ -40,33 +40,33 @@ typedef struct EnFz {
     /* 0x148 */ ColliderCylinder collider1;
     /* 0x194 */ ColliderCylinder collider2;
     /* 0x1E0 */ ColliderCylinder collider3;
-    /* 0x22C */ Vec3f unk_22C;
-    /* 0x238 */ f32 unk_238;
+    /* 0x22C */ Vec3f wallHitPos;
+    /* 0x238 */ f32 distToTargetSq;
     /* 0x23C */ EnFzEffect effects[40];
     /* 0xB9C */ f32 drawDmgEffAlpha;
     /* 0xBA0 */ f32 drawDmgEffScale;
     /* 0xBA4 */ s16 drawDmgEffTimer;
-    /* 0xBA8 */ f32 unk_BA8;
-    /* 0xBAC */ f32 unk_BAC;
-    /* 0xBB0 */ f32 unk_BB0;
-    /* 0xBB4 */ f32 unk_BB4;
+    /* 0xBA8 */ Vec3f originPos; // not in order
+    /* 0xBB4 */ f32 originPosY2;
     /* 0xBB8 */ f32 unk_BB8;
-    /* 0xBBC */ f32 unk_BBC;
-    /* 0xBC0 */ u32 unk_BC0;
-    /* 0xBC4 */ s16 unk_BC4;
-    /* 0xBC6 */ s16 counterBC6;
-    /* 0xBC8 */ s16 timerBC8;
-    /* 0xBCA */ s16 timerBCA;
+    /* 0xBBC */ f32 speedXZ;
+    /* 0xBC0 */ u32 envAlpha;
+    // we set it, and read it, but never the same value
+    //   assumed it was a shared variable with wizrobe
+    /* 0xBC4 */ s16 wizrobeFlag;
+    /* 0xBC6 */ s16 counter;
+    /* 0xBC8 */ s16 unusedTimer;
+    /* 0xBCA */ s16 mainTimer;
     /* 0xBCC */ u8 unk_BCC;
-    /* 0xBCD */ u8 unk_BCD;
-    /* 0xBCE */ u8 unk_BCE;
-    /* 0xBCF */ u8 unk_BCF;
+    /* 0xBCD */ u8 isMoving;
+    /* 0xBCE */ u8 isFreezing;
+    /* 0xBCF */ u8 unusedCounter;
     /* 0xBD0 */ s16 unk_BD0;
     /* 0xBD2 */ s16 unk_BD2;
     /* 0xBD4 */ UNK_TYPE1 unkBD4[2];
-    /* 0xBD6 */ u8 unk_BD6;
+    /* 0xBD6 */ u8 state;
     /* 0xBD7 */ u8 unk_BD7;
-    /* 0xBD8 */ u8 unk_BD8;
+    /* 0xBD8 */ u8 isDespawning;
     /* 0xBD9 */ u8 timerBD9;
 } EnFz; /* size = 0xBDC */
 
