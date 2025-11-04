@@ -1,8 +1,8 @@
 #ifndef BUILD_H
 #define BUILD_H
 
-extern char gBuildCreator[];
-extern char gBuildDate[];
-extern char gBuildMakeOption[];
+extern const char gBuildCreator[];
+extern const char gBuildDate[];
+extern const char gBuildMakeOption[];
 
 #endif
