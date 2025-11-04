@@ -44,7 +44,7 @@ void EnFz_BlowSmokeStationary(EnFz* this, PlayState* play);
 void EnFz_SetupType3(EnFz* this);
 void EnFz_Type3(EnFz* this, PlayState* play);
 void EnWz_SpawnIceSmokeNoFreeze(EnFz* this, Vec3f* a, Vec3f* b, Vec3f* c, f32 arg4);
-void EnWz_SpawnIceSmokeFreeze(EnFz* this, Vec3f* a, Vec3f* b, Vec3f* c, f32 arg4, f32 arg5, s16 arg6, u8 arg7);
+void EnWz_SpawnIceSmokeFreeze(EnFz* this, Vec3f* a, Vec3f* b, Vec3f* c, f32 arg4, f32 arg5, s16 arg6, u8 effectFlag);
 void EnWz_UpdateIceSmoke(EnFz* this, PlayState* play);
 void EnWz_DrawEffects(EnFz* this, PlayState* play);
 
@@ -166,7 +166,7 @@ void EnFz_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     this->actor.colChkInfo.damageTable = &sDamageTable;
-    this->actor.colChkInfo.health = 3;
+    this->actor.colChkInfo.health = 3; // decreased from 6 in OOT
 
     Collider_InitCylinder(play, &this->collider1);
     Collider_SetCylinderType1(play, &this->collider1, &this->actor, &sCylinderInit1);
@@ -182,7 +182,7 @@ void EnFz_Init(Actor* thisx, PlayState* play) {
     this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->unusedTimer = 0;
     this->unusedCounter = 0;
-    this->unk_BCC = 1;
+    this->isBgEnabled = 1;
     this->isMoving = false;
     this->isFreezing = false;
     this->unk_BD7 = 1;
@@ -192,7 +192,7 @@ void EnFz_Init(Actor* thisx, PlayState* play) {
     this->originPos.x = this->actor.world.pos.x;
     this->originPos.y = this->actor.world.pos.y;
     this->originPos.z = this->actor.world.pos.z;
-    this->originPosY2 = this->actor.world.pos.y;
+    this->originPosY = this->actor.world.pos.y;
     this->actor.velocity.y = this->actor.gravity;
     this->unk_BB8 = 135.0f;
 
@@ -348,7 +348,7 @@ void EnFz_SpawnIceSmokeActiveState(EnFz* this) {
 
     if ((this->counter % 4) == 0) {
         pos.x = Rand_CenteredFloat(40.0f) + this->actor.world.pos.x;
-        pos.y = this->originPosY2;
+        pos.y = this->originPosY;
         pos.z = Rand_CenteredFloat(40.0f) + this->actor.world.pos.z;
         accel.x = accel.z = 0.0f;
         accel.y = 0.1f;
@@ -358,7 +358,7 @@ void EnFz_SpawnIceSmokeActiveState(EnFz* this) {
 }
 
 void EnWz_ApplyDamage(EnFz* this, PlayState* play) {
-    Vec3f vec;
+    Vec3f currentPos;
 
     if (this->isMoving && ((this->actor.bgCheckFlags & BGCHECKFLAG_WALL) || !Actor_TestFloorInDirection(&this->actor, play, 60.0f, this->actor.world.rot.y))) {
         this->actor.bgCheckFlags &= ~BGCHECKFLAG_WALL;
@@ -376,10 +376,10 @@ void EnWz_ApplyDamage(EnFz* this, PlayState* play) {
                 this->wizrobeFlag = 5;
                 Actor_PlaySfx(&this->actor, NA_SE_EN_FREEZAD_DEAD);
                 Actor_PlaySfx(&this->actor, NA_SE_EV_ICE_BROKEN);
-                vec.x = this->actor.world.pos.x;
-                vec.y = this->actor.world.pos.y;
-                vec.z = this->actor.world.pos.z;
-                EnWz_Damaged(this, play, &vec, 30, 10.0f);
+                currentPos.x = this->actor.world.pos.x;
+                currentPos.y = this->actor.world.pos.y;
+                currentPos.z = this->actor.world.pos.z;
+                EnWz_Damaged(this, play, &currentPos, 30, 10.0f);
                 EnWz_SetupDespawn(this, play);
                 return;
             }
@@ -389,10 +389,10 @@ void EnWz_ApplyDamage(EnFz* this, PlayState* play) {
                 this->wizrobeFlag = 5;
                 Actor_PlaySfx(&this->actor, NA_SE_EN_FREEZAD_DEAD);
                 Actor_PlaySfx(&this->actor, NA_SE_EV_ICE_BROKEN);
-                vec.x = this->actor.world.pos.x;
-                vec.y = this->actor.world.pos.y;
-                vec.z = this->actor.world.pos.z;
-                EnWz_Damaged(this, play, &vec, 30, 10.0f);
+                currentPos.x = this->actor.world.pos.x;
+                currentPos.y = this->actor.world.pos.y;
+                currentPos.z = this->actor.world.pos.z;
+                EnWz_Damaged(this, play, &currentPos, 30, 10.0f);
                 EnWz_SetupDespawn(this, play);
                 return;
             }
@@ -422,19 +422,19 @@ void EnWz_ApplyDamage(EnFz* this, PlayState* play) {
                     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_XLU, 8);
                     if (this->actor.colChkInfo.health != 0) {
                         Actor_PlaySfx(&this->actor, NA_SE_EN_FREEZAD_DAMAGE);
-                        vec.x = this->actor.world.pos.x;
-                        vec.y = this->actor.world.pos.y;
-                        vec.z = this->actor.world.pos.z;
-                        EnWz_Damaged(this, play, &vec, 10, 0.0f);
+                        currentPos.x = this->actor.world.pos.x;
+                        currentPos.y = this->actor.world.pos.y;
+                        currentPos.z = this->actor.world.pos.z;
+                        EnWz_Damaged(this, play, &currentPos, 10, 0.0f);
                         this->unusedCounter++;
                         break;
                     }
                     Actor_PlaySfx(&this->actor, NA_SE_EN_FREEZAD_DEAD);
                     Actor_PlaySfx(&this->actor, NA_SE_EV_ICE_BROKEN);
-                    vec.x = this->actor.world.pos.x;
-                    vec.y = this->actor.world.pos.y;
-                    vec.z = this->actor.world.pos.z;
-                    EnWz_Damaged(this, play, &vec, 30, 10.0f);
+                    currentPos.x = this->actor.world.pos.x;
+                    currentPos.y = this->actor.world.pos.y;
+                    currentPos.z = this->actor.world.pos.z;
+                    EnWz_Damaged(this, play, &currentPos, 30, 10.0f);
                     EnWz_SetupDespawn(this, play);
                     break;
 
@@ -540,7 +540,7 @@ void EnFz_Appear(EnFz* this, PlayState* play) {
 void EnFz_SetupAimForMove(EnFz* this) {
     this->state = 1;
     this->mainTimer = 40;
-    this->unk_BCC = 1;
+    this->isBgEnabled = true;
     this->isFreezing = true;
     this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
     this->actor.gravity = -1.0f;
@@ -596,8 +596,6 @@ void EnWz_BlowSmoke(EnFz* this, PlayState* play) {
     Vec3f pos;
     Vec3f velocity;
     Vec3f accel;
-    u8 sp3F;
-    s16 primAlpha;
 
     if (this->mainTimer == 0) {
         EnFz_SetupDisappear(this);
@@ -605,8 +603,8 @@ void EnWz_BlowSmoke(EnFz* this, PlayState* play) {
     }
 
     if (this->mainTimer > 10) {
-        sp3F = 0;
-        primAlpha = 150;
+        u8 flag = false;
+        s16 primAlpha = 150;
         Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_FREEZAD_BREATH - SFX_FLAG);
         if ((this->mainTimer - 10) < 16) {
             primAlpha = (this->mainTimer * 10) - 100;
@@ -624,17 +622,15 @@ void EnWz_BlowSmoke(EnFz* this, PlayState* play) {
         vec1.x = 0.0f;
         vec1.y = -2.0f;
         vec1.z = ((ENFZ_GET_F(&this->actor) == ENFZ_F_1)   ? 10.0f
-                  : (ENFZ_GET_F(&this->actor) == ENFZ_F_2) ? 20.0f
-                                                           : 0.0f) +
-                 20;
+                  : (ENFZ_GET_F(&this->actor) == ENFZ_F_2) ? 20.0f  : 0.0f) + 20;
 
         Matrix_MultVec3f(&vec1, &velocity);
 
         if ((this->mainTimer & 7) == 0) {
-            sp3F = 1;
+            flag = true;
         }
 
-        EnWz_SpawnIceSmokeFreeze(this, &pos, &velocity, &accel, 2.0f, 25.0f, primAlpha, sp3F);
+        EnWz_SpawnIceSmokeFreeze(this, &pos, &velocity, &accel, 2.0f, 25.0f, primAlpha, flag);
 
         pos.x += velocity.x * 0.5f;
         pos.y += velocity.y * 0.5f;
@@ -650,7 +646,7 @@ void EnWz_SetupDespawn(EnFz* this, PlayState* play) {
     this->actor.gravity = 0.0f;
     this->actor.velocity.y = 0.0f;
     this->actor.speed = 0.0f;
-    this->unk_BCC = 1;
+    this->isBgEnabled = true;
     this->isFreezing = 0;
     this->isDespawning = true;
     this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
@@ -700,7 +696,7 @@ void EnWz_Melt(EnFz* this, PlayState* play) {
 void EnFz_SetupBlowSmokeStationary(EnFz* this) {
     this->state = 1;
     this->mainTimer = 40;
-    this->unk_BCC = 1;
+    this->isBgEnabled = true;
     this->isFreezing = true;
     this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
     this->actor.gravity = -1.0f;
@@ -708,7 +704,7 @@ void EnFz_SetupBlowSmokeStationary(EnFz* this) {
 }
 
 void EnFz_BlowSmokeStationary(EnFz* this, PlayState* play) {
-    Vec3f vec1;
+    Vec3f baseVelocity;
     Vec3f pos;
     Vec3f velocity;
     Vec3f accel;
@@ -738,14 +734,14 @@ void EnFz_BlowSmokeStationary(EnFz* this, PlayState* play) {
 
     Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
 
-    vec1.x = 0.0f;
-    vec1.y = -2.0f;
-    vec1.z = ((ENFZ_GET_F(&this->actor) == ENFZ_F_1)   ? 10.0f
+    baseVelocity.x = 0.0f;
+    baseVelocity.y = -2.0f;
+    baseVelocity.z = ((ENFZ_GET_F(&this->actor) == ENFZ_F_1)   ? 10.0f
               : (ENFZ_GET_F(&this->actor) == ENFZ_F_2) ? 20.0f
                                                        : 0.0f) +
              20;
 
-    Matrix_MultVec3f(&vec1, &velocity);
+    Matrix_MultVec3f(&baseVelocity, &velocity);
 
     if (!(this->counter & 7)) {
         flag = true;
@@ -761,7 +757,7 @@ void EnFz_BlowSmokeStationary(EnFz* this, PlayState* play) {
 void EnFz_SetupType3(EnFz* this) {
     this->state = 1;
     this->mainTimer = 40;
-    this->unk_BCC = 1;
+    this->isBgEnabled = true;
     this->isFreezing = true;
     this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
     this->actor.gravity = -1.0f;
@@ -815,7 +811,7 @@ void EnFz_Update(Actor* thisx, PlayState* play) {
 
     Math_StepToF(&this->actor.speed, this->speedXZ, 0.2f);
     Actor_MoveWithGravity(&this->actor);
-    if (this->unk_BCC != 0) {
+    if (this->isBgEnabled) {
         Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 20.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     }
 
@@ -889,7 +885,7 @@ void EnWz_SpawnIceSmokeNoFreeze(EnFz* this, Vec3f* pos, Vec3f* velocity, Vec3f* 
 }
 
 void EnWz_SpawnIceSmokeFreeze(EnFz* this, Vec3f* pos, Vec3f* velocity, Vec3f* accel,
-     f32 xyScale, f32 xyScaleTarget, s16 primAlpha, u8 arg7) {
+     f32 xyScale, f32 xyScaleTarget, s16 primAlpha, u8 effectFlag) {
     s16 i;
     EnFzEffect* effect = &this->effects[0];
 
@@ -904,7 +900,7 @@ void EnWz_SpawnIceSmokeFreeze(EnFz* this, Vec3f* pos, Vec3f* velocity, Vec3f* ac
             effect->xyScaleTarget = xyScaleTarget / 1000.0f;
             effect->primAlpha = primAlpha;
             effect->timer = 0;
-            effect->unk_38 = arg7;
+            effect->unk_38 = effectFlag;
             break;
         }
     }

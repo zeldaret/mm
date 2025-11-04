@@ -46,8 +46,8 @@ typedef struct EnFz {
     /* 0xB9C */ f32 drawDmgEffAlpha;
     /* 0xBA0 */ f32 drawDmgEffScale;
     /* 0xBA4 */ s16 drawDmgEffTimer;
-    /* 0xBA8 */ Vec3f originPos; // not in order
-    /* 0xBB4 */ f32 originPosY2;
+    /* 0xBA8 */ Vec3f originPos;
+    /* 0xBB4 */ f32 originPosY; 
     /* 0xBB8 */ f32 unk_BB8;
     /* 0xBBC */ f32 speedXZ;
     /* 0xBC0 */ u32 envAlpha;
@@ -57,7 +57,7 @@ typedef struct EnFz {
     /* 0xBC6 */ s16 counter;
     /* 0xBC8 */ s16 unusedTimer;
     /* 0xBCA */ s16 mainTimer;
-    /* 0xBCC */ u8 unk_BCC;
+    /* 0xBCC */ u8 isBgEnabled;
     /* 0xBCD */ u8 isMoving;
     /* 0xBCE */ u8 isFreezing;
     /* 0xBCF */ u8 unusedCounter;
