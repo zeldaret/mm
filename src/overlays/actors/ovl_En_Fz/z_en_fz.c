@@ -119,39 +119,48 @@ static ColliderCylinderInitType1 sCylinderInit3 = {
     { 20, 30, -15, { 0, 0, 0 } },
 };
 
+typedef enum EnFzDamageEffect{
+    /* 0x0 */ FZ_DMGEFF_NONE,
+    /* 0x2 */ FZ_DMGEFF_FIRE = 0x2,
+    /* 0x4 */ FZ_DMGEFF_LIGHT = 0x4,
+    /* 0xD */ FZ_DMGEFF_BOUNCE = 0xD,
+    /* 0xE */ FZ_DMGEFF_E,
+    /* 0xF */ FZ_DMGEFF_CHIP
+} EnFzDamageEffect;
+
 static DamageTable sDamageTable = {
-    /* Deku Nut       */ DMG_ENTRY(0, 0x0),
-    /* Deku Stick     */ DMG_ENTRY(0, 0xD),
-    /* Horse trample  */ DMG_ENTRY(0, 0x0),
-    /* Explosives     */ DMG_ENTRY(2, 0xF),
-    /* Zora boomerang */ DMG_ENTRY(0, 0x0),
-    /* Normal arrow   */ DMG_ENTRY(0, 0xD),
-    /* UNK_DMG_0x06   */ DMG_ENTRY(2, 0xF),
-    /* Hookshot       */ DMG_ENTRY(3, 0xF),
-    /* Goron punch    */ DMG_ENTRY(2, 0xF),
-    /* Sword          */ DMG_ENTRY(1, 0xF),
-    /* Goron pound    */ DMG_ENTRY(3, 0xF),
-    /* Fire arrow     */ DMG_ENTRY(2, 0x2),
-    /* Ice arrow      */ DMG_ENTRY(0, 0x0),
-    /* Light arrow    */ DMG_ENTRY(2, 0x4),
-    /* Goron spikes   */ DMG_ENTRY(1, 0xF),
-    /* Deku spin      */ DMG_ENTRY(0, 0x0),
-    /* Deku bubble    */ DMG_ENTRY(0, 0x0),
-    /* Deku launch    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x12   */ DMG_ENTRY(0, 0x0),
-    /* Zora barrier   */ DMG_ENTRY(0, 0x0),
-    /* Normal shield  */ DMG_ENTRY(0, 0x0),
-    /* Light ray      */ DMG_ENTRY(0, 0xE),
-    /* Thrown object  */ DMG_ENTRY(1, 0xF),
-    /* Zora punch     */ DMG_ENTRY(1, 0xF),
-    /* Spin attack    */ DMG_ENTRY(1, 0xF),
-    /* Sword beam     */ DMG_ENTRY(0, 0x0),
-    /* Normal Roll    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, 0x0),
-    /* Unblockable    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, 0x0),
-    /* Powder Keg     */ DMG_ENTRY(1, 0xF),
+    /* Deku Nut       */ DMG_ENTRY(0, FZ_DMGEFF_NONE),
+    /* Deku Stick     */ DMG_ENTRY(0, FZ_DMGEFF_BOUNCE),
+    /* Horse trample  */ DMG_ENTRY(0, FZ_DMGEFF_NONE),
+    /* Explosives     */ DMG_ENTRY(2, FZ_DMGEFF_CHIP),
+    /* Zora boomerang */ DMG_ENTRY(0, FZ_DMGEFF_NONE),
+    /* Normal arrow   */ DMG_ENTRY(0, FZ_DMGEFF_BOUNCE),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(2, FZ_DMGEFF_CHIP),
+    /* Hookshot       */ DMG_ENTRY(3, FZ_DMGEFF_CHIP),
+    /* Goron punch    */ DMG_ENTRY(2, FZ_DMGEFF_CHIP),
+    /* Sword          */ DMG_ENTRY(1, FZ_DMGEFF_CHIP),
+    /* Goron pound    */ DMG_ENTRY(3, FZ_DMGEFF_CHIP),
+    /* Fire arrow     */ DMG_ENTRY(2, FZ_DMGEFF_FIRE),
+    /* Ice arrow      */ DMG_ENTRY(0, FZ_DMGEFF_NONE),
+    /* Light arrow    */ DMG_ENTRY(2, FZ_DMGEFF_LIGHT),
+    /* Goron spikes   */ DMG_ENTRY(1, FZ_DMGEFF_CHIP),
+    /* Deku spin      */ DMG_ENTRY(0, FZ_DMGEFF_NONE),
+    /* Deku bubble    */ DMG_ENTRY(0, FZ_DMGEFF_NONE),
+    /* Deku launch    */ DMG_ENTRY(0, FZ_DMGEFF_NONE),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, FZ_DMGEFF_NONE),
+    /* Zora barrier   */ DMG_ENTRY(0, FZ_DMGEFF_NONE),
+    /* Normal shield  */ DMG_ENTRY(0, FZ_DMGEFF_NONE),
+    /* Light ray      */ DMG_ENTRY(0, FZ_DMGEFF_E),
+    /* Thrown object  */ DMG_ENTRY(1, FZ_DMGEFF_CHIP),
+    /* Zora punch     */ DMG_ENTRY(1, FZ_DMGEFF_CHIP),
+    /* Spin attack    */ DMG_ENTRY(1, FZ_DMGEFF_CHIP),
+    /* Sword beam     */ DMG_ENTRY(0, FZ_DMGEFF_NONE),
+    /* Normal Roll    */ DMG_ENTRY(0, FZ_DMGEFF_NONE),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, FZ_DMGEFF_NONE),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, FZ_DMGEFF_NONE),
+    /* Unblockable    */ DMG_ENTRY(0, FZ_DMGEFF_NONE),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, FZ_DMGEFF_NONE),
+    /* Powder Keg     */ DMG_ENTRY(1, FZ_DMGEFF_CHIP),
 };
 
 static InitChainEntry sInitChain[] = {
@@ -185,7 +194,7 @@ void EnFz_Init(Actor* thisx, PlayState* play) {
     this->isBgEnabled = 1;
     this->isMoving = false;
     this->isFreezing = false;
-    this->unk_BD7 = 1;
+    this->drawBody = true;
     this->isDespawning = false;
     this->actor.speed = 0.0f;
     this->actor.cullingVolumeScale = 400.0f;
@@ -285,6 +294,7 @@ s32 EnFz_ReachedTarget(EnFz* this, Vec3f* vec) {
     }
 }
 
+// Spawn ice chunks on damage taken
 void EnFz_Damaged(EnFz* this, PlayState* play, Vec3f* vec, s32 numEffects, f32 randFloat) {
     s32 i;
     Vec3f pos;
@@ -590,9 +600,8 @@ void EnFz_SetupBlowSmoke(EnFz* this, PlayState* play) {
     EnFz_UpdateTargetPos(this, play);
 }
 
-// BlowSmoke
 void EnFz_BlowSmoke(EnFz* this, PlayState* play) {
-    Vec3f vec1;
+    Vec3f baseVelocity;
     Vec3f pos;
     Vec3f velocity;
     Vec3f accel;
@@ -619,12 +628,12 @@ void EnFz_BlowSmoke(EnFz* this, PlayState* play) {
 
         Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
 
-        vec1.x = 0.0f;
-        vec1.y = -2.0f;
-        vec1.z = ((ENFZ_GET_F(&this->actor) == ENFZ_F_1)   ? 10.0f
+        baseVelocity.x = 0.0f;
+        baseVelocity.y = -2.0f;
+        baseVelocity.z = ((ENFZ_GET_F(&this->actor) == ENFZ_F_1)   ? 10.0f
                   : (ENFZ_GET_F(&this->actor) == ENFZ_F_2) ? 20.0f  : 0.0f) + 20;
 
-        Matrix_MultVec3f(&vec1, &velocity);
+        Matrix_MultVec3f(&baseVelocity, &velocity);
 
         if ((this->mainTimer & 7) == 0) {
             flag = true;
@@ -650,7 +659,7 @@ void EnFz_SetupDespawn(EnFz* this, PlayState* play) {
     this->isFreezing = 0;
     this->isDespawning = true;
     this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
-    this->unk_BD7 = 0;
+    this->drawBody = false;
     this->mainTimer = 60;
     Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_PROP);
     Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0xA0);
@@ -754,6 +763,7 @@ void EnFz_BlowSmokeStationary(EnFz* this, PlayState* play) {
     EnFz_SpawnIceSmokeFreeze(this, &pos, &velocity, &accel, 2.0f, 25.0f, primAlpha, false);
 }
 
+// Unused and Unfinished
 void EnFz_SetupType3(EnFz* this) {
     this->state = 1;
     this->mainTimer = 40;
@@ -821,7 +831,7 @@ void EnFz_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnFz_Draw(Actor* thisx, PlayState* play) {
-    static Gfx* sDisplayLists[] = { object_fz_DL_001130, object_fz_DL_0021A0, object_fz_DL_002CA0 };
+    static Gfx* sBodyDisplayLists[] = { object_fz_DL_001130, object_fz_DL_0021A0, object_fz_DL_002CA0 };
     s32 pad;
     EnFz* this = (EnFz*)thisx;
     s32 dlIndex = 3 - this->actor.colChkInfo.health;
@@ -832,8 +842,8 @@ void EnFz_Draw(Actor* thisx, PlayState* play) {
         dlIndex = 2;
     }
 
-    if (this->unk_BD7 != 0) {
-        func_800B8118(&this->actor, play, 0);
+    if (this->drawBody) {
+        func_800B8118(&this->actor, play, false);
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
         gSPSegment(POLY_XLU_DISP++, 0x08,
@@ -844,7 +854,7 @@ void EnFz_Draw(Actor* thisx, PlayState* play) {
                           PRIMITIVE, ENVIRONMENT, COMBINED, ENVIRONMENT, COMBINED, 0, ENVIRONMENT, 0);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 155, 255, 255, 255);
         gDPSetEnvColor(POLY_XLU_DISP++, 200, 200, 200, this->envAlpha);
-        gSPDisplayList(POLY_XLU_DISP++, sDisplayLists[dlIndex]);
+        gSPDisplayList(POLY_XLU_DISP++, sBodyDisplayLists[dlIndex]);
     }
 
     EnFz_DrawEffects(this, play);
@@ -978,7 +988,7 @@ void EnFz_UpdateIceSmoke(EnFz* this, PlayState* play) {
 void EnFz_DrawEffects(EnFz* this, PlayState* play) {
     GraphicsContext* gfxCtx = play->state.gfxCtx;
     s16 i;
-    u8 materialFlag = 0;
+    u8 isSteamDrawn = false;
     EnFzEffect* effect = this->effects;
 
     OPEN_DISPS(gfxCtx);
@@ -992,9 +1002,9 @@ void EnFz_DrawEffects(EnFz* this, PlayState* play) {
         if (effect->type > 0) {
             gDPPipeSync(POLY_XLU_DISP++);
 
-            if (materialFlag == 0) {
+            if (isSteamDrawn == false) {
                 gSPDisplayList(POLY_XLU_DISP++, gFrozenSteamMaterialDL);
-                materialFlag++;
+                isSteamDrawn++;
             }
 
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 195, 225, 235, effect->primAlpha);

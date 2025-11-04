@@ -20,6 +20,7 @@ typedef enum {
     /* 3 */ ENFZ_F_3
 } EnFzParam;
 
+// we dont know which effect this is, is this the smoke or the wind?
 typedef struct {
     /* 0x00 */ u8 type;
     /* 0x01 */ u8 timer;
@@ -37,7 +38,7 @@ typedef struct {
 typedef struct EnFz {
     /* 0x000 */ Actor actor;
     /* 0x144 */ EnFzActionFunc actionFunc;
-    /* 0x148 */ ColliderCylinder collider1;
+    /* 0x148 */ ColliderCylinder collider1; // body takes damage I think
     /* 0x194 */ ColliderCylinder collider2;
     /* 0x1E0 */ ColliderCylinder collider3;
     /* 0x22C */ Vec3f wallHitPos;
@@ -48,7 +49,7 @@ typedef struct EnFz {
     /* 0xBA4 */ s16 drawDmgEffTimer;
     /* 0xBA8 */ Vec3f originPos;
     /* 0xBB4 */ f32 originPosY; 
-    /* 0xBB8 */ f32 unk_BB8;
+    /* 0xBB8 */ f32 unk_BB8; // set (135.0f), never read
     /* 0xBBC */ f32 speedXZ;
     /* 0xBC0 */ u32 envAlpha;
     // we set it, and read it, but never the same value
@@ -61,13 +62,13 @@ typedef struct EnFz {
     /* 0xBCD */ u8 isMoving;
     /* 0xBCE */ u8 isFreezing;
     /* 0xBCF */ u8 unusedCounter;
-    /* 0xBD0 */ s16 unk_BD0;
-    /* 0xBD2 */ s16 unk_BD2;
+    /* 0xBD0 */ s16 unk_BD0; // set (0), never read
+    /* 0xBD2 */ s16 unk_BD2; // set (0,4000), never read
     /* 0xBD4 */ UNK_TYPE1 unkBD4[2];
     /* 0xBD6 */ u8 state;
-    /* 0xBD7 */ u8 unk_BD7;
+    /* 0xBD7 */ u8 drawBody; 
     /* 0xBD8 */ u8 isDespawning;
-    /* 0xBD9 */ u8 timerBD9;
+    /* 0xBD9 */ u8 timerBD9; // never set, always zero
 } EnFz; /* size = 0xBDC */
 
 #endif // Z_EN_FZ_H
