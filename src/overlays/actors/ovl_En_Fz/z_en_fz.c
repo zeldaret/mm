@@ -35,18 +35,18 @@ void EnFz_SetupSkatingAimFreeze(EnFz* this);
 void EnFz_SkatingAimFreeze(EnFz* this, PlayState* play);
 void EnFz_SetupSkatingBlowSmoke(EnFz* this, PlayState* play);
 void EnFz_SkatingBlowSmoke(EnFz* this, PlayState* play);
-void EnFz_SetupDespawn(EnFz* , PlayState* );
-void EnFz_Despawn(EnFz*, PlayState* );
-void EnFz_SetupMelt(EnFz* );
-void EnFz_Melt(EnFz* , PlayState* );
-void EnFz_SetupBlowSmokeStationary(EnFz* );
-void EnFz_BlowSmokeStationary(EnFz* , PlayState* );
-void EnFz_SetupPassive(EnFz* );
-void EnFz_Passive(EnFz* , PlayState* );
-void EnFz_SpawnMistAura(EnFz* , Vec3f* , Vec3f* , Vec3f* , f32 );
-void EnFz_SpawnSnowheadHowl(EnFz* , Vec3f* , Vec3f* , Vec3f* , f32 , f32 , s16 , u8 );
-void EnFz_UpdateEffects(EnFz* , PlayState* );
-void EnFz_DrawEffects(EnFz* , PlayState* );
+void EnFz_SetupDespawn(EnFz*, PlayState*);
+void EnFz_Despawn(EnFz*, PlayState*);
+void EnFz_SetupMelt(EnFz*);
+void EnFz_Melt(EnFz*, PlayState*);
+void EnFz_SetupBlowSmokeStationary(EnFz*);
+void EnFz_BlowSmokeStationary(EnFz*, PlayState*);
+void EnFz_SetupPassive(EnFz*);
+void EnFz_Passive(EnFz*, PlayState*);
+void EnFz_SpawnMistAura(EnFz*, Vec3f*, Vec3f*, Vec3f*, f32);
+void EnFz_SpawnSnowheadHowl(EnFz*, Vec3f*, Vec3f*, Vec3f*, f32, f32, s16, u8);
+void EnFz_UpdateEffects(EnFz*, PlayState*);
+void EnFz_DrawEffects(EnFz*, PlayState*);
 
 ActorProfile En_Fz_Profile = {
     /**/ ACTOR_EN_FZ,
@@ -121,7 +121,7 @@ static ColliderCylinderInitType1 sCylinderInit3 = {
     { 20, 30, -15, { 0, 0, 0 } },
 };
 
-typedef enum EnFzDamageEffect{
+typedef enum EnFzDamageEffect {
     /* 0x0 */ FZ_DMGEFF_NONE,
     /* 0x2 */ FZ_DMGEFF_FIRE = 0x2,
     /* 0x4 */ FZ_DMGEFF_LIGHT = 0x4,
@@ -217,11 +217,11 @@ void EnFz_Init(Actor* thisx, PlayState* play) {
             this->counter = (s32)Rand_ZeroFloat(64.0f) + 192;
         } else {
             if (ENFZ_GETZ_COUNTER(thisx) < 0) {
-                 ENFZ_GETZ_COUNTER(thisx) = 1;
+                ENFZ_GETZ_COUNTER(thisx) = 1;
             } else if (ENFZ_GETZ_COUNTER(thisx) > 0x10) {
-                 ENFZ_GETZ_COUNTER(thisx) = 0x10;
+                ENFZ_GETZ_COUNTER(thisx) = 0x10;
             }
-             ENFZ_GETZ_COUNTER(thisx) -= 1;
+            ENFZ_GETZ_COUNTER(thisx) -= 1;
             this->counter = ENFZ_GETZ_COUNTER(thisx) * 0x10;
         }
         this->actor.shape.rot.z = 0; // reset after parameter use
@@ -276,7 +276,8 @@ void EnFz_UpdateTargetPos(EnFz* this, PlayState* play) {
     unkVec.z = 440.0f;
 
     Matrix_MultVec3f(&unkVec, &this->wallHitPos);
-    if (BgCheck_EntityLineTest1(&play->colCtx, &pos, &this->wallHitPos, &hitPos, &hitPoly, true, false, false, true, &bgId)) {
+    if (BgCheck_EntityLineTest1(&play->colCtx, &pos, &this->wallHitPos, &hitPos, &hitPoly, true, false, false, true,
+                                &bgId)) {
         Math_Vec3f_Copy(&this->wallHitPos, &hitPos);
     }
 
@@ -332,7 +333,6 @@ void EnFz_Damaged(EnFz* this, PlayState* play, Vec3f* vec, s32 numEffects, f32 r
     CollisionCheck_SpawnShieldParticles(play, vec);
 }
 
-
 // why do these devs never re-use noop
 void EnFz_SpawnMistHidden(EnFz* this) {
 }
@@ -372,7 +372,8 @@ void EnFz_SpawnMistFullSize(EnFz* this) {
 void EnFz_ApplyDamage(EnFz* this, PlayState* play) {
     Vec3f currentPos;
 
-    if (this->isMoving && ((this->actor.bgCheckFlags & BGCHECKFLAG_WALL) || !Actor_TestFloorInDirection(&this->actor, play, 60.0f, this->actor.world.rot.y))) {
+    if (this->isMoving && ((this->actor.bgCheckFlags & BGCHECKFLAG_WALL) ||
+                           !Actor_TestFloorInDirection(&this->actor, play, 60.0f, this->actor.world.rot.y))) {
         this->actor.bgCheckFlags &= ~BGCHECKFLAG_WALL;
         this->isMoving = false;
         this->speedXZ = 0.0f;
@@ -383,7 +384,7 @@ void EnFz_ApplyDamage(EnFz* this, PlayState* play) {
     if (this->actor.parent != NULL) {
         if ((this->wizrobeFlag != 5) && (this->actor.parent->id == ACTOR_EN_WIZ)) {
             Actor* parent = this->actor.parent;
-            
+
             if ((parent->update == NULL) || (parent->colChkInfo.health <= 0)) {
                 this->actor.colChkInfo.health = 0;
                 this->wizrobeFlag = 5;
@@ -511,7 +512,7 @@ void EnFz_SetupWait(EnFz* this) {
         this->mainTimer = 10; // slightly shorter timer for EnFz_Appear
         this->unk_BD2 = 4000;
         this->actionFunc = EnFz_Appear; // skip SetupAppear
-    } else { // ENFZ_GET_TRACK_TYPE
+    } else {                            // ENFZ_GET_TRACK_TYPE
         this->actionFunc = EnFz_Wait;
     }
 }
@@ -573,7 +574,7 @@ void EnFz_SetupSkateTowardPlayer(EnFz* this) {
 }
 
 void EnFz_SkateTowardPlayer(EnFz* this, PlayState* play) {
-    if ((this->mainTimer == 0) || (! this->isMoving)) {
+    if ((this->mainTimer == 0) || (!this->isMoving)) {
         EnFz_SetupSkatingAimFreeze(this);
     }
 }
@@ -582,7 +583,7 @@ void EnFz_SetupSkatingAimFreeze(EnFz* this) {
     this->state = FZ_STATE_FULLSIZE;
     this->speedXZ = 0.0f;
     this->actor.speed = 0.0f;
-    this->mainTimer = 2* 20;
+    this->mainTimer = 2 * 20;
     this->actionFunc = EnFz_SkatingAimFreeze;
 }
 
@@ -631,7 +632,9 @@ void EnFz_SkatingBlowSmoke(EnFz* this, PlayState* play) {
         baseVelocity.x = 0.0f;
         baseVelocity.y = -2.0f;
         baseVelocity.z = ((ENFZ_GET_POWER(&this->actor) == FZ_POWER_1)   ? 10.0f
-                  : (ENFZ_GET_POWER(&this->actor) == FZ_POWER_2) ? 20.0f  : 0.0f) + 20;
+                          : (ENFZ_GET_POWER(&this->actor) == FZ_POWER_2) ? 20.0f
+                                                                         : 0.0f) +
+                         20;
 
         Matrix_MultVec3f(&baseVelocity, &velocity);
 
@@ -746,9 +749,9 @@ void EnFz_BlowSmokeStationary(EnFz* this, PlayState* play) {
     baseVelocity.x = 0.0f;
     baseVelocity.y = -2.0f;
     baseVelocity.z = ((ENFZ_GET_POWER(&this->actor) == FZ_POWER_1)   ? 10.0f
-              : (ENFZ_GET_POWER(&this->actor) == FZ_POWER_2) ? 20.0f
-                                                       : 0.0f) +
-             20;
+                      : (ENFZ_GET_POWER(&this->actor) == FZ_POWER_2) ? 20.0f
+                                                                     : 0.0f) +
+                     20;
 
     Matrix_MultVec3f(&baseVelocity, &velocity);
 
@@ -757,7 +760,7 @@ void EnFz_BlowSmokeStationary(EnFz* this, PlayState* play) {
     }
 
     EnFz_SpawnSnowheadHowl(this, &pos, &velocity, &accel, 2.0f, 25.0f, primAlpha, colliderActive);
-    
+
     //! @bug: this does nothing, the above function already assigned all unused effects
     pos.x += velocity.x * 0.5f;
     pos.y += velocity.y * 0.5f;
@@ -795,7 +798,8 @@ void EnFz_UpdateLightArrowEffects(EnFz* this, PlayState* play) {
 }
 
 void EnFz_Update(Actor* thisx, PlayState* play) {
-    static EnFzUnkFunc sIceSmokeSpawnFunctions[] = { EnFz_SpawnMistHidden, EnFz_SpawnMistChanging, EnFz_SpawnMistFullSize, EnFz_SpawnMistFullSize };
+    static EnFzUnkFunc sIceSmokeSpawnFunctions[] = { EnFz_SpawnMistHidden, EnFz_SpawnMistChanging,
+                                                     EnFz_SpawnMistFullSize, EnFz_SpawnMistFullSize };
     s32 pad;
     EnFz* this = (EnFz*)thisx;
 
@@ -809,7 +813,7 @@ void EnFz_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
 
-    if (! this->isDespawning) {
+    if (!this->isDespawning) {
         Collider_UpdateCylinder(&this->actor, &this->collider1);
         Collider_UpdateCylinder(&this->actor, &this->collider2);
         if (this->isFreezing) {
@@ -896,8 +900,8 @@ void EnFz_SpawnMistAura(EnFz* this, Vec3f* pos, Vec3f* velocity, Vec3f* accel, f
     }
 }
 
-void EnFz_SpawnSnowheadHowl(EnFz* this, Vec3f* pos, Vec3f* velocity, Vec3f* accel,
-     f32 xyScale, f32 xyScaleTarget, s16 primAlpha, u8 colliderActive) {
+void EnFz_SpawnSnowheadHowl(EnFz* this, Vec3f* pos, Vec3f* velocity, Vec3f* accel, f32 xyScale, f32 xyScaleTarget,
+                            s16 primAlpha, u8 colliderActive) {
     s16 i;
     EnFzEffect* effect = &this->effects[0];
 
@@ -987,7 +991,6 @@ void EnFz_UpdateEffects(EnFz* this, PlayState* play) {
     }
 }
 
-
 void EnFz_DrawEffects(EnFz* this, PlayState* play) {
     GraphicsContext* gfxCtx = play->state.gfxCtx;
     s16 i;
@@ -1006,7 +1009,8 @@ void EnFz_DrawEffects(EnFz* this, PlayState* play) {
             gDPPipeSync(POLY_XLU_DISP++);
 
             if (materialLoaded == false) {
-                // surely there is a better way to make sure this only goes off if there are effects than to force another branch per loop
+                // surely there is a better way to make sure this only goes off if there are effects than to force
+                // another branch per loop
                 gSPDisplayList(POLY_XLU_DISP++, gFrozenSteamMaterialDL);
                 materialLoaded++;
             }
