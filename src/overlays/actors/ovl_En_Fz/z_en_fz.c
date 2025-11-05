@@ -12,39 +12,39 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
-void EnFz_Init(Actor* thisx, PlayState* play);
-void EnFz_Destroy(Actor* thisx, PlayState* play);
-void EnFz_Update(Actor* thisx, PlayState* play);
-void EnFz_Draw(Actor* thisx, PlayState* play);
+void EnFz_Init(Actor* , PlayState* );
+void EnFz_Destroy(Actor* , PlayState* );
+void EnFz_Update(Actor* , PlayState* );
+void EnFz_Draw(Actor* , PlayState* );
 
-void EnFz_UpdateTargetPos(EnFz* this, PlayState* play);
-void EnFz_SpawnMistHidden(EnFz* this);
-void EnFz_SpawnMistChanging(EnFz* this);
-void EnFz_SpawnMistFullSize(EnFz* this);
-void EnFz_SetupDisappear(EnFz* this);
-void EnFz_Disappear(EnFz* this, PlayState* play);
-void EnFz_SetupWait(EnFz* this);
-void EnFz_Wait(EnFz* this, PlayState* play);
-void EnFz_SetupAppear(EnFz* this);
-void EnFz_Appear(EnFz* this, PlayState* play);
-void EnFz_SetupAimForSkate(EnFz* this);
-void EnFz_AimForSkate(EnFz* this, PlayState* play);
-void EnFz_SetupSkateTowardPlayer(EnFz* this);
-void EnFz_SkateTowardPlayer(EnFz* this, PlayState* play);
-void EnFz_SetupSkatingAimFreeze(EnFz* this);
-void EnFz_SkatingAimFreeze(EnFz* this, PlayState* play);
-void EnFz_SetupSkatingBlowSmoke(EnFz* this, PlayState* play);
-void EnFz_SkatingBlowSmoke(EnFz* this, PlayState* play);
+void EnFz_UpdateTargetPos(EnFz* , PlayState* );
+void EnFz_SpawnMistHidden(EnFz* );
+void EnFz_SpawnMistChanging(EnFz* );
+void EnFz_SpawnMistFullSize(EnFz* );
+void EnFz_SetupDisappear(EnFz* );
+void EnFz_Disappear(EnFz* , PlayState* );
+void EnFz_SetupWait(EnFz* );
+void EnFz_Wait(EnFz* , PlayState* );
+void EnFz_SetupAppear(EnFz* );
+void EnFz_Appear(EnFz* , PlayState* );
+void EnFz_SetupAimForSkate(EnFz* );
+void EnFz_AimForSkate(EnFz* , PlayState* );
+void EnFz_SetupSkateTowardPlayer(EnFz* );
+void EnFz_SkateTowardPlayer(EnFz* , PlayState* );
+void EnFz_SetupSkatingAimFreeze(EnFz* );
+void EnFz_SkatingAimFreeze(EnFz* , PlayState* );
+void EnFz_SetupSkatingBreath(EnFz* , PlayState* );
+void EnFz_SkatingBreath(EnFz* , PlayState* );
 void EnFz_SetupDespawn(EnFz*, PlayState*);
 void EnFz_Despawn(EnFz*, PlayState*);
 void EnFz_SetupMelt(EnFz*);
 void EnFz_Melt(EnFz*, PlayState*);
-void EnFz_SetupBlowSmokeStationary(EnFz*);
-void EnFz_BlowSmokeStationary(EnFz*, PlayState*);
+void EnFz_SetupIdleStationary(EnFz*);
+void EnFz_IdleStationary(EnFz*, PlayState*);
 void EnFz_SetupPassive(EnFz*);
 void EnFz_Passive(EnFz*, PlayState*);
 void EnFz_SpawnMistAura(EnFz*, Vec3f*, Vec3f*, Vec3f*, f32);
-void EnFz_SpawnSnowheadHowl(EnFz*, Vec3f*, Vec3f*, Vec3f*, f32, f32, s16, u8);
+void EnFz_SpawnBreath(EnFz*, Vec3f*, Vec3f*, Vec3f*, f32, f32, s16, u8);
 void EnFz_UpdateEffects(EnFz*, PlayState*);
 void EnFz_DrawEffects(EnFz*, PlayState*);
 
@@ -81,7 +81,6 @@ static ColliderCylinderInitType1 sCylinderInit1 = {
     { 30, 80, 0, { 0, 0, 0 } },
 };
 
-// hard? maybe used for arrow/stick?
 static ColliderCylinderInitType1 sCylinderInit2 = {
     {
         COL_MATERIAL_METAL,
@@ -101,7 +100,7 @@ static ColliderCylinderInitType1 sCylinderInit2 = {
     { 35, 80, 0, { 0, 0, 0 } },
 };
 
-// Used by the howl attack
+// Used by the breath attack
 static ColliderCylinderInitType1 sCylinderInit3 = {
     {
         COL_MATERIAL_NONE,
@@ -195,7 +194,7 @@ void EnFz_Init(Actor* thisx, PlayState* play) {
     this->hitCounter = 0;
     this->isBgEnabled = 1;
     this->isMoving = false;
-    this->isFreezing = false;
+    this->isColliderActive = false;
     this->drawBody = true;
     this->isDespawning = false;
     this->actor.speed = 0.0f;
@@ -205,7 +204,7 @@ void EnFz_Init(Actor* thisx, PlayState* play) {
     this->originPos.z = this->actor.world.pos.z;
     this->originPosY = this->actor.world.pos.y;
     this->actor.velocity.y = this->actor.gravity;
-    this->unk_BB8 = 135.0f;
+    this->unkBB8 = 135.0f;
 
     if (ENFZ_GET_TRACK_TYPE(&this->actor)) {
         this->envAlpha = 0;
@@ -213,16 +212,16 @@ void EnFz_Init(Actor* thisx, PlayState* play) {
         EnFz_SetupWait(this);
     } else {
         this->envAlpha = 255;
-        if (ENFZ_GETZ_COUNTER(thisx) == 0) {
-            this->counter = (s32)Rand_ZeroFloat(64.0f) + 192;
+        if (ENFZ_GETZ_CLOCK(thisx) == 0) {
+            this->internalClock = (s32)Rand_ZeroFloat(64.0f) + 192;
         } else {
-            if (ENFZ_GETZ_COUNTER(thisx) < 0) {
-                ENFZ_GETZ_COUNTER(thisx) = 1;
-            } else if (ENFZ_GETZ_COUNTER(thisx) > 0x10) {
-                ENFZ_GETZ_COUNTER(thisx) = 0x10;
+            if (ENFZ_GETZ_CLOCK(thisx) < 0) {
+                ENFZ_GETZ_CLOCK(thisx) = 1;
+            } else if (ENFZ_GETZ_CLOCK(thisx) > 0x10) {
+                ENFZ_GETZ_CLOCK(thisx) = 0x10;
             }
-            ENFZ_GETZ_COUNTER(thisx) -= 1;
-            this->counter = ENFZ_GETZ_COUNTER(thisx) * 0x10;
+            ENFZ_GETZ_CLOCK(thisx) -= 1;
+            this->internalClock = ENFZ_GETZ_CLOCK(thisx) * 0x10;
         }
         this->actor.shape.rot.z = 0; // reset after parameter use
 
@@ -233,7 +232,7 @@ void EnFz_Init(Actor* thisx, PlayState* play) {
         } else if (ENFZ_GET_POWER(&this->actor) == FZ_POWER_3) {
             EnFz_SetupPassive(this);
         } else {
-            EnFz_SetupBlowSmokeStationary(this);
+            EnFz_SetupIdleStationary(this);
         }
     }
 
@@ -342,7 +341,7 @@ void EnFz_SpawnMistChanging(EnFz* this) {
     Vec3f velocity;
     Vec3f accel;
 
-    if ((this->counter % 16) == 0) {
+    if ((this->internalClock % 16) == 0) {
         pos.x = Rand_CenteredFloat(40.0f) + this->actor.world.pos.x;
         pos.y = Rand_CenteredFloat(40.0f) + this->actor.world.pos.y + 30.0f;
         pos.z = Rand_CenteredFloat(40.0f) + this->actor.world.pos.z;
@@ -358,7 +357,7 @@ void EnFz_SpawnMistFullSize(EnFz* this) {
     Vec3f velocity;
     Vec3f accel;
 
-    if ((this->counter % 4) == 0) {
+    if ((this->internalClock % 4) == 0) {
         pos.x = Rand_CenteredFloat(40.0f) + this->actor.world.pos.x;
         pos.y = this->originPosY;
         pos.z = Rand_CenteredFloat(40.0f) + this->actor.world.pos.z;
@@ -413,7 +412,7 @@ void EnFz_ApplyDamage(EnFz* this, PlayState* play) {
         }
     }
 
-    if (this->isFreezing) {
+    if (this->isColliderActive) {
         if (ENFZ_GET_TRACK_TYPE(&this->actor) && (this->collider1.base.atFlags & AT_HIT)) {
             this->isMoving = false;
             this->speedXZ = 0.0f;
@@ -463,7 +462,7 @@ void EnFz_ApplyDamage(EnFz* this, PlayState* play) {
 
 void EnFz_SetYawTowardsPlayer(EnFz* this) {
     s16 yaw = this->actor.yawTowardsPlayer;
-    s32 limitIndex = ENFZ_GET_3000(&this->actor);
+    s32 limitIndex = ENFZ_GET_ROTATION_LIMIT(&this->actor);
 
     if (!ENFZ_GET_TRACK_TYPE(&this->actor)) {
         s32 homeYaw = this->actor.home.rot.y;
@@ -481,7 +480,7 @@ void EnFz_SetYawTowardsPlayer(EnFz* this) {
 
 void EnFz_SetupDisappear(EnFz* this) {
     this->state = FZ_STATE_CHANGING;
-    this->isFreezing = false;
+    this->isColliderActive = false;
     this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->actionFunc = EnFz_Disappear;
 }
@@ -499,8 +498,8 @@ void EnFz_Disappear(EnFz* this, PlayState* play) {
 
 void EnFz_SetupWait(EnFz* this) {
     this->state = FZ_STATE_HIDDEN;
-    this->unk_BD2 = 0;
-    this->unk_BD0 = 0;
+    this->unkBD2 = 0;
+    this->unkBD0 = 0;
     this->mainTimer = 5 * 20;
 
     this->actor.world.pos.x = this->originPos.x;
@@ -510,7 +509,7 @@ void EnFz_SetupWait(EnFz* this) {
     if (ENFZ_GET_APPEAR_TYPE(&this->actor)) {
         this->state = FZ_STATE_CHANGING;
         this->mainTimer = 10; // slightly shorter timer for EnFz_Appear
-        this->unk_BD2 = 4000;
+        this->unkBD2 = 4000;
         this->actionFunc = EnFz_Appear; // skip SetupAppear
     } else {                            // ENFZ_GET_TRACK_TYPE
         this->actionFunc = EnFz_Wait;
@@ -526,7 +525,7 @@ void EnFz_Wait(EnFz* this, PlayState* play) {
 void EnFz_SetupAppear(EnFz* this) {
     this->state = FZ_STATE_CHANGING;
     this->mainTimer = 20;
-    this->unk_BD2 = 4000;
+    this->unkBD2 = 4000;
     this->actionFunc = EnFz_Appear;
 }
 
@@ -540,7 +539,7 @@ void EnFz_Appear(EnFz* this, PlayState* play) {
 
         if (Math_SmoothStepToF(&this->actor.scale.y, 0.008f, 1.0f, 0.0005f, 0.0f) == 0.0f) {
             if (ENFZ_GET_APPEAR_TYPE(&this->actor)) {
-                EnFz_SetupBlowSmokeStationary(this);
+                EnFz_SetupIdleStationary(this);
             } else { // ENFZ_GET_TRACK_TYPE
                 EnFz_SetupAimForSkate(this);
             }
@@ -552,7 +551,7 @@ void EnFz_SetupAimForSkate(EnFz* this) {
     this->state = FZ_STATE_FULLSIZE;
     this->mainTimer = 2 * 20;
     this->isBgEnabled = true;
-    this->isFreezing = true;
+    this->isColliderActive = true;
     this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
     this->actor.gravity = -1.0f;
     this->actionFunc = EnFz_AimForSkate;
@@ -574,6 +573,7 @@ void EnFz_SetupSkateTowardPlayer(EnFz* this) {
 }
 
 void EnFz_SkateTowardPlayer(EnFz* this, PlayState* play) {
+    // isMoving gets set false in EnFz_ApplyDamage
     if ((this->mainTimer == 0) || (!this->isMoving)) {
         EnFz_SetupSkatingAimFreeze(this);
     }
@@ -590,18 +590,18 @@ void EnFz_SetupSkatingAimFreeze(EnFz* this) {
 void EnFz_SkatingAimFreeze(EnFz* this, PlayState* play) {
     EnFz_SetYawTowardsPlayer(this);
     if (this->mainTimer == 0) {
-        EnFz_SetupSkatingBlowSmoke(this, play);
+        EnFz_SetupSkatingBreath(this, play);
     }
 }
 
-void EnFz_SetupSkatingBlowSmoke(EnFz* this, PlayState* play) {
+void EnFz_SetupSkatingBreath(EnFz* this, PlayState* play) {
     this->state = FZ_STATE_FULLSIZE;
     this->mainTimer = 4 * 20;
-    this->actionFunc = EnFz_SkatingBlowSmoke;
+    this->actionFunc = EnFz_SkatingBreath;
     EnFz_UpdateTargetPos(this, play);
 }
 
-void EnFz_SkatingBlowSmoke(EnFz* this, PlayState* play) {
+void EnFz_SkatingBreath(EnFz* this, PlayState* play) {
     Vec3f baseVelocity;
     Vec3f pos;
     Vec3f velocity;
@@ -613,7 +613,7 @@ void EnFz_SkatingBlowSmoke(EnFz* this, PlayState* play) {
     }
 
     if (this->mainTimer > 10) {
-        u8 flag = false;
+        u8 damaging = false;
         s16 primAlpha = 150;
         Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_FREEZAD_BREATH - SFX_FLAG);
         if ((this->mainTimer - 10) < 16) {
@@ -638,17 +638,17 @@ void EnFz_SkatingBlowSmoke(EnFz* this, PlayState* play) {
 
         Matrix_MultVec3f(&baseVelocity, &velocity);
 
-        if ((this->mainTimer & 7) == 0) {
-            flag = true;
+        if ((this->mainTimer & 0x7) == 0) {
+            damaging = true;
         }
 
-        EnFz_SpawnSnowheadHowl(this, &pos, &velocity, &accel, 2.0f, 25.0f, primAlpha, flag);
+        EnFz_SpawnBreath(this, &pos, &velocity, &accel, 2.0f, 25.0f, primAlpha, damaging);
 
         //! @bug: this does nothing, the above function already assigned all unused effects
         pos.x += velocity.x * 0.5f;
         pos.y += velocity.y * 0.5f;
         pos.z += velocity.z * 0.5f;
-        EnFz_SpawnSnowheadHowl(this, &pos, &velocity, &accel, 2.0f, 25.0f, primAlpha, 0);
+        EnFz_SpawnBreath(this, &pos, &velocity, &accel, 2.0f, 25.0f, primAlpha, 0);
     }
 }
 
@@ -659,7 +659,7 @@ void EnFz_SetupDespawn(EnFz* this, PlayState* play) {
     this->actor.velocity.y = 0.0f;
     this->actor.speed = 0.0f;
     this->isBgEnabled = true;
-    this->isFreezing = 0;
+    this->isColliderActive = false;
     this->isDespawning = true;
     this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->drawBody = false;
@@ -677,7 +677,7 @@ void EnFz_Despawn(EnFz* this, PlayState* play) {
 
 void EnFz_SetupMelt(EnFz* this) {
     this->state = FZ_STATE_MELTING;
-    this->isFreezing = false;
+    this->isColliderActive = false;
     this->isDespawning = true;
     this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->actor.speed = 0.0f;
@@ -705,36 +705,36 @@ void EnFz_Melt(EnFz* this, PlayState* play) {
     }
 }
 
-void EnFz_SetupBlowSmokeStationary(EnFz* this) {
+void EnFz_SetupIdleStationary(EnFz* this) {
     this->state = FZ_STATE_FULLSIZE;
     this->mainTimer = 2 * 20;
     this->isBgEnabled = true;
-    this->isFreezing = true;
+    this->isColliderActive = true;
     this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
     this->actor.gravity = -1.0f;
-    this->actionFunc = EnFz_BlowSmokeStationary;
+    this->actionFunc = EnFz_IdleStationary;
 }
 
-void EnFz_BlowSmokeStationary(EnFz* this, PlayState* play) {
+void EnFz_IdleStationary(EnFz* this, PlayState* play) {
     Vec3f baseVelocity;
     Vec3f pos;
     Vec3f velocity;
     Vec3f accel;
-    u8 colliderActive;
+    u8 damaging;
     s16 primAlpha;
 
-    if (this->counter & 0xC0) {
+    if (this->internalClock & 0xC0) {
         EnFz_SetYawTowardsPlayer(this);
         EnFz_UpdateTargetPos(this, play);
         return;
     }
 
-    colliderActive = false;
+    damaging = false;
     primAlpha = 150;
     Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_FREEZAD_BREATH - SFX_FLAG);
 
-    if ((this->counter & 0x3F) >= 0x30) {
-        primAlpha = 630 - ((this->counter & 0x3F) * 10);
+    if ((this->internalClock & 0x3F) >= 0x30) {
+        primAlpha = 630 - ((this->internalClock & 0x3F) * 10);
     }
 
     accel.x = accel.z = 0.0f;
@@ -755,17 +755,17 @@ void EnFz_BlowSmokeStationary(EnFz* this, PlayState* play) {
 
     Matrix_MultVec3f(&baseVelocity, &velocity);
 
-    if (!(this->counter & 7)) {
-        colliderActive = true;
+    if (!(this->internalClock & 0x7)) {
+        damaging = true;
     }
 
-    EnFz_SpawnSnowheadHowl(this, &pos, &velocity, &accel, 2.0f, 25.0f, primAlpha, colliderActive);
+    EnFz_SpawnBreath(this, &pos, &velocity, &accel, 2.0f, 25.0f, primAlpha, damaging);
 
     //! @bug: this does nothing, the above function already assigned all unused effects
     pos.x += velocity.x * 0.5f;
     pos.y += velocity.y * 0.5f;
     pos.z += velocity.z * 0.5f;
-    EnFz_SpawnSnowheadHowl(this, &pos, &velocity, &accel, 2.0f, 25.0f, primAlpha, false);
+    EnFz_SpawnBreath(this, &pos, &velocity, &accel, 2.0f, 25.0f, primAlpha, false);
 }
 
 // Unfinished, still spawns as a non-attacking variant
@@ -773,7 +773,7 @@ void EnFz_SetupPassive(EnFz* this) {
     this->state = FZ_STATE_FULLSIZE;
     this->mainTimer = 2 * 20;
     this->isBgEnabled = true;
-    this->isFreezing = true;
+    this->isColliderActive = true;
     this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
     this->actor.gravity = -1.0f;
     this->actionFunc = EnFz_Passive;
@@ -798,15 +798,15 @@ void EnFz_UpdateLightArrowEffects(EnFz* this, PlayState* play) {
 }
 
 void EnFz_Update(Actor* thisx, PlayState* play) {
-    static EnFzUnkFunc sIceSmokeSpawnFunctions[] = { EnFz_SpawnMistHidden, EnFz_SpawnMistChanging,
+    static EnFzUnkFunc sMistSpawnFunctions[] = { EnFz_SpawnMistHidden, EnFz_SpawnMistChanging,
                                                      EnFz_SpawnMistFullSize, EnFz_SpawnMistFullSize };
     s32 pad;
     EnFz* this = (EnFz*)thisx;
 
-    this->counter++;
+    this->internalClock++;
     DECR(this->unusedTimer);
     DECR(this->mainTimer);
-    DECR(this->timerBD9);
+    DECR(this->attackTimer);
 
     Actor_SetFocus(&this->actor, 50.0f);
     EnFz_ApplyDamage(this, play);
@@ -816,7 +816,7 @@ void EnFz_Update(Actor* thisx, PlayState* play) {
     if (!this->isDespawning) {
         Collider_UpdateCylinder(&this->actor, &this->collider1);
         Collider_UpdateCylinder(&this->actor, &this->collider2);
-        if (this->isFreezing) {
+        if (this->isColliderActive) {
             if (this->actor.colorFilterTimer == 0) {
                 CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider1.base);
                 CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider2.base);
@@ -831,7 +831,7 @@ void EnFz_Update(Actor* thisx, PlayState* play) {
         Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 20.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     }
 
-    sIceSmokeSpawnFunctions[this->state](this);
+    sMistSpawnFunctions[this->state](this);
     EnFz_UpdateLightArrowEffects(this, play);
     EnFz_UpdateEffects(this, play);
 }
@@ -900,14 +900,14 @@ void EnFz_SpawnMistAura(EnFz* this, Vec3f* pos, Vec3f* velocity, Vec3f* accel, f
     }
 }
 
-void EnFz_SpawnSnowheadHowl(EnFz* this, Vec3f* pos, Vec3f* velocity, Vec3f* accel, f32 xyScale, f32 xyScaleTarget,
-                            s16 primAlpha, u8 colliderActive) {
+void EnFz_SpawnBreath(EnFz* this, Vec3f* pos, Vec3f* velocity, Vec3f* accel, f32 xyScale, f32 xyScaleTarget,
+                            s16 primAlpha, u8 damaging) {
     s16 i;
     EnFzEffect* effect = &this->effects[0];
 
     for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
         if (effect->type == FZ_EFFECT_DISABLED) {
-            effect->type = FZ_EFFECT_SNOWHEAD_HOWL;
+            effect->type = FZ_EFFECT_BREATH;
             effect->pos = *pos;
             effect->velocity = *velocity;
             effect->accel = *accel;
@@ -916,7 +916,7 @@ void EnFz_SpawnSnowheadHowl(EnFz* this, Vec3f* pos, Vec3f* velocity, Vec3f* acce
             effect->xyScaleTarget = xyScaleTarget / 1000.0f;
             effect->primAlpha = primAlpha;
             effect->timer = 0;
-            effect->useCollider3 = colliderActive;
+            effect->damaging = damaging;
             break;
         }
     }
@@ -952,7 +952,7 @@ void EnFz_UpdateEffects(EnFz* this, PlayState* play) {
                         effect->type = FZ_EFFECT_DISABLED;
                     }
                 }
-            } else if (effect->type == FZ_EFFECT_SNOWHEAD_HOWL) {
+            } else if (effect->type == FZ_EFFECT_BREATH) {
                 Math_ApproachF(&effect->xyScale, effect->xyScaleTarget, 0.1f, effect->xyScaleTarget / 10.0f);
                 if (effect->primAlphaState == 0) {
                     if (effect->timer >= 7) {
@@ -969,8 +969,8 @@ void EnFz_UpdateEffects(EnFz* this, PlayState* play) {
                     }
                 }
 
-                // note: timerBD9 is never set, always zero
-                if ((this->timerBD9 == 0) && (effect->primAlpha > 100) && (effect->useCollider3)) {
+                // note: attackTimer is never set, always zero
+                if ((this->attackTimer == 0) && (effect->primAlpha > 100) && (effect->damaging)) {
                     this->collider3.dim.pos.x = effect->pos.x;
                     this->collider3.dim.pos.y = effect->pos.y;
                     this->collider3.dim.pos.z = effect->pos.z;
