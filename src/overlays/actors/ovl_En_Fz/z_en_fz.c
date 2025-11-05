@@ -213,7 +213,7 @@ void EnFz_Init(Actor* thisx, PlayState* play) {
     } else {
         this->envAlpha = 255;
         if (ENFZ_GETZ_CLOCK(thisx) == 0) {
-            this->internalClock = (s32)Rand_ZeroFloat(64.0f) + 192;
+            this->internalClock = 192 + (s32)Rand_ZeroFloat(64.0f);
         } else {
             if (ENFZ_GETZ_CLOCK(thisx) < 0) {
                 ENFZ_GETZ_CLOCK(thisx) = 1;
@@ -260,7 +260,7 @@ void EnFz_Destroy(Actor* thisx, PlayState* play) {
 void EnFz_UpdateTargetPos(EnFz* this, PlayState* play) {
     Vec3f pos;
     Vec3f hitPos;
-    Vec3f unkVec;
+    Vec3f baseVelocity;
     s32 bgId;
     CollisionPoly* hitPoly;
 
@@ -271,10 +271,10 @@ void EnFz_UpdateTargetPos(EnFz* this, PlayState* play) {
     Matrix_Translate(pos.x, pos.y, pos.z, MTXMODE_NEW);
     Matrix_RotateZYX(this->actor.shape.rot.x, this->actor.shape.rot.y, this->actor.shape.rot.z, MTXMODE_APPLY);
 
-    unkVec.x = unkVec.y = 0.0f;
-    unkVec.z = 440.0f;
+    baseVelocity.x = baseVelocity.y = 0.0f;
+    baseVelocity.z = 440.0f;
 
-    Matrix_MultVec3f(&unkVec, &this->wallHitPos);
+    Matrix_MultVec3f(&baseVelocity, &this->wallHitPos);
     if (BgCheck_EntityLineTest1(&play->colCtx, &pos, &this->wallHitPos, &hitPos, &hitPoly, true, false, false, true,
                                 &bgId)) {
         Math_Vec3f_Copy(&this->wallHitPos, &hitPos);
@@ -297,7 +297,7 @@ s32 EnFz_ReachedTarget(EnFz* this, Vec3f* vec) {
 }
 
 // Spawn ice chunks on damage taken
-void EnFz_Damaged(EnFz* this, PlayState* play, Vec3f* vec, s32 numEffects, f32 randFloat) {
+void EnFz_Damaged(EnFz* this, PlayState* play, Vec3f* hitPos, s32 numEffects, f32 randPosRange) {
     s32 i;
     Vec3f pos;
     Vec3f velocity;
@@ -318,18 +318,18 @@ void EnFz_Damaged(EnFz* this, PlayState* play, Vec3f* vec, s32 numEffects, f32 r
     envColor.b = 200;
 
     for (i = 0; i < numEffects; i++) {
-        scale = Rand_CenteredFloat(0.3f) + 0.6f;
-        life = (s32)Rand_CenteredFloat(5.0f) + 12;
-        pos.x = Rand_CenteredFloat(randFloat) + vec->x;
-        pos.y = Rand_ZeroFloat(randFloat) + vec->y;
-        pos.z = Rand_CenteredFloat(randFloat) + vec->z;
+        scale = 0.6f + Rand_CenteredFloat(0.3f);
+        life = 12 + (s32)Rand_CenteredFloat(5.0f);
+        pos.x = hitPos->x + Rand_CenteredFloat(randPosRange);
+        pos.y = hitPos->y + Rand_ZeroFloat(randPosRange);
+        pos.z = hitPos->z + Rand_CenteredFloat(randPosRange);
         velocity.x = Rand_CenteredFloat(10.0f);
         velocity.y = Rand_ZeroFloat(10.0f) + 2.0f;
         velocity.z = Rand_CenteredFloat(10.0f);
         EffectSsEnIce_Spawn(play, &pos, scale, &velocity, &accel, &primColor, &envColor, life);
     }
 
-    CollisionCheck_SpawnShieldParticles(play, vec);
+    CollisionCheck_SpawnShieldParticles(play, hitPos);
 }
 
 // why do these devs never re-use noop
@@ -342,9 +342,9 @@ void EnFz_SpawnMistChanging(EnFz* this) {
     Vec3f accel;
 
     if ((this->internalClock % 16) == 0) {
-        pos.x = Rand_CenteredFloat(40.0f) + this->actor.world.pos.x;
-        pos.y = Rand_CenteredFloat(40.0f) + this->actor.world.pos.y + 30.0f;
-        pos.z = Rand_CenteredFloat(40.0f) + this->actor.world.pos.z;
+        pos.x = this->actor.world.pos.x + Rand_CenteredFloat(40.0f);
+        pos.y = this->actor.world.pos.y + Rand_CenteredFloat(40.0f) + 30.0f;
+        pos.z = this->actor.world.pos.z + Rand_CenteredFloat(40.0f);
         accel.x = accel.z = 0.0f;
         accel.y = 0.1f;
         velocity.x = velocity.y = velocity.z = 0.0f;
@@ -358,9 +358,9 @@ void EnFz_SpawnMistFullSize(EnFz* this) {
     Vec3f accel;
 
     if ((this->internalClock % 4) == 0) {
-        pos.x = Rand_CenteredFloat(40.0f) + this->actor.world.pos.x;
+        pos.x = this->actor.world.pos.x + Rand_CenteredFloat(40.0f);
         pos.y = this->originPosY;
-        pos.z = Rand_CenteredFloat(40.0f) + this->actor.world.pos.z;
+        pos.z = this->actor.world.pos.z + Rand_CenteredFloat(40.0f);
         accel.x = accel.z = 0.0f;
         accel.y = 0.1f;
         velocity.x = velocity.y = velocity.z = 0.0f;
