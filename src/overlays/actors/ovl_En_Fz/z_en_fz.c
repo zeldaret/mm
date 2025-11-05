@@ -829,7 +829,7 @@ void EnFz_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnFz_Draw(Actor* thisx, PlayState* play) {
-    static Gfx* sBodyDisplayLists[] = { object_fz_DL_001130, object_fz_DL_0021A0, object_fz_DL_002CA0 };
+    static Gfx* sBodyDisplayLists[] = { gFreezardIntactDL, gFreezardHornBrokenDL, gFreezardHeadBrokenDL };
     s32 pad;
     EnFz* this = (EnFz*)thisx;
     s32 dlIndex = 3 - this->actor.colChkInfo.health;
