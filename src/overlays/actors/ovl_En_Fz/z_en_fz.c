@@ -12,29 +12,29 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
-void EnFz_Init(Actor* , PlayState* );
-void EnFz_Destroy(Actor* , PlayState* );
-void EnFz_Update(Actor* , PlayState* );
-void EnFz_Draw(Actor* , PlayState* );
+void EnFz_Init(Actor*, PlayState*);
+void EnFz_Destroy(Actor*, PlayState*);
+void EnFz_Update(Actor*, PlayState*);
+void EnFz_Draw(Actor*, PlayState*);
 
-void EnFz_UpdateTargetPos(EnFz* , PlayState* );
-void EnFz_SpawnMistHidden(EnFz* );
-void EnFz_SpawnMistChanging(EnFz* );
-void EnFz_SpawnMistFullSize(EnFz* );
-void EnFz_SetupDisappear(EnFz* );
-void EnFz_Disappear(EnFz* , PlayState* );
-void EnFz_SetupWait(EnFz* );
-void EnFz_Wait(EnFz* , PlayState* );
-void EnFz_SetupAppear(EnFz* );
-void EnFz_Appear(EnFz* , PlayState* );
-void EnFz_SetupAimForSkate(EnFz* );
-void EnFz_AimForSkate(EnFz* , PlayState* );
-void EnFz_SetupSkateTowardPlayer(EnFz* );
-void EnFz_SkateTowardPlayer(EnFz* , PlayState* );
-void EnFz_SetupSkatingAimFreeze(EnFz* );
-void EnFz_SkatingAimFreeze(EnFz* , PlayState* );
-void EnFz_SetupSkatingBreath(EnFz* , PlayState* );
-void EnFz_SkatingBreath(EnFz* , PlayState* );
+void EnFz_UpdateTargetPos(EnFz*, PlayState*);
+void EnFz_SpawnMistHidden(EnFz*);
+void EnFz_SpawnMistChanging(EnFz*);
+void EnFz_SpawnMistFullSize(EnFz*);
+void EnFz_SetupDisappear(EnFz*);
+void EnFz_Disappear(EnFz*, PlayState*);
+void EnFz_SetupWait(EnFz*);
+void EnFz_Wait(EnFz*, PlayState*);
+void EnFz_SetupAppear(EnFz*);
+void EnFz_Appear(EnFz*, PlayState*);
+void EnFz_SetupAimForSkate(EnFz*);
+void EnFz_AimForSkate(EnFz*, PlayState*);
+void EnFz_SetupSkateTowardPlayer(EnFz*);
+void EnFz_SkateTowardPlayer(EnFz*, PlayState*);
+void EnFz_SetupSkatingAimFreeze(EnFz*);
+void EnFz_SkatingAimFreeze(EnFz*, PlayState*);
+void EnFz_SetupSkatingBreath(EnFz*, PlayState*);
+void EnFz_SkatingBreath(EnFz*, PlayState*);
 void EnFz_SetupDespawn(EnFz*, PlayState*);
 void EnFz_Despawn(EnFz*, PlayState*);
 void EnFz_SetupMelt(EnFz*);
@@ -798,8 +798,8 @@ void EnFz_UpdateLightArrowEffects(EnFz* this, PlayState* play) {
 }
 
 void EnFz_Update(Actor* thisx, PlayState* play) {
-    static EnFzUnkFunc sMistSpawnFunctions[] = { EnFz_SpawnMistHidden, EnFz_SpawnMistChanging,
-                                                     EnFz_SpawnMistFullSize, EnFz_SpawnMistFullSize };
+    static EnFzUnkFunc sMistSpawnFunctions[] = { EnFz_SpawnMistHidden, EnFz_SpawnMistChanging, EnFz_SpawnMistFullSize,
+                                                 EnFz_SpawnMistFullSize };
     s32 pad;
     EnFz* this = (EnFz*)thisx;
 
@@ -901,7 +901,7 @@ void EnFz_SpawnMistAura(EnFz* this, Vec3f* pos, Vec3f* velocity, Vec3f* accel, f
 }
 
 void EnFz_SpawnBreath(EnFz* this, Vec3f* pos, Vec3f* velocity, Vec3f* accel, f32 xyScale, f32 xyScaleTarget,
-                            s16 primAlpha, u8 damaging) {
+                      s16 primAlpha, u8 damaging) {
     s16 i;
     EnFzEffect* effect = &this->effects[0];
 
