@@ -28,26 +28,21 @@ typedef void (*EnFzUnkFunc)(struct EnFz*);
 #define ENFZ_GETZ_COUNTER(thisx) ((thisx)->shape.rot.z)
 
 // 0,1,2 are how powerful (distance) the attack is
-// 3 has special code which is unfinished
 // F is treated like 0
 typedef enum {
-    /* 0 */ FZ_POWER_0,
-    /* 1 */ FZ_POWER_1,
-    /* 2 */ FZ_POWER_2,
-    /* 3 */ FZ_POWER_3,
+    /* 0 */ FZ_POWER_0, // +  0
+    /* 1 */ FZ_POWER_1, // + 10
+    /* 2 */ FZ_POWER_2, // + 20
+    /* 3 */ FZ_POWER_3, // unfinished specal case: passive
     /* F */ FZ_POWER_F = 0xF // snowhead map room
 } EnFzPower;
 
-// TODO figure out effect types
 typedef enum {
-    /* 0 */ ENFZ_EFFECT_DISABLED,
-    /* 1 */ ENFZ_EFFECT_1,
-    /* 2 */ ENFZ_EFFECT_2
+    /* 0 */ FZ_EFFECT_DISABLED,
+    /* 1 */ FZ_EFFECT_MIST_AURA,
+    /* 2 */ FZ_EFFECT_SNOWHEAD_HOWL
 } EnFzEffectType;
 
-// This can be multiple different effects:
-//   The "Frozen steam" that rises off of the body
-//   The Fog stream attack is a stream of effects
 typedef struct {
     /* 0x00 */ u8 type;
     /* 0x01 */ u8 timer;
@@ -59,13 +54,13 @@ typedef struct {
     /* 0x2E */ s16 primAlphaState;
     /* 0x30 */ f32 xyScale;
     /* 0x34 */ f32 xyScaleTarget;
-    /* 0x38 */ u8 unk_38; // not the same as oot?
+    /* 0x38 */ u8 useCollider3;
 } EnFzEffect; // size = 0x3C
 
 // indexes the different smoke functions
 typedef enum {
     /* 0 */ FZ_STATE_HIDDEN, 
-    /* 1 */ FZ_STATE_FULLGROWN,
+    /* 1 */ FZ_STATE_FULLSIZE,
     /* 2 */ FZ_STATE_CHANGING,
     /* 3 */ FZ_STATE_MELTING, // fire arrows
 } EnFzState;
