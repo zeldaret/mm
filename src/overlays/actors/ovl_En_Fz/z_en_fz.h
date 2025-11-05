@@ -8,19 +8,46 @@ struct EnFz;
 typedef void (*EnFzActionFunc)(struct EnFz*, PlayState*);
 typedef void (*EnFzUnkFunc)(struct EnFz*);
 
-#define ENFZ_GET_F(thisx) ((thisx)->params & 0xF)
+#define ENFZ_GET_POWER(thisx) ((thisx)->params & 0xF)
 #define ENFZ_GET_3000(thisx) (((thisx)->params & 0x3000) >> 0xC)
-#define ENFZ_GET_4000(thisx) ((thisx)->params & 0x4000)
-#define ENFZ_GET_8000(thisx) ((thisx)->params & 0x8000)
+// appears out of the ground
+#define ENFZ_GET_APPEAR_TYPE(thisx) ((thisx)->params & 0x4000)
+// has two behaviors:
+// if ENFZ_GET_TRACK_TYPE AND ENFZ_GET_APPEAR_TYPE (0xC000)
+// appears from the ground immediately, stays still, but follows player to aim
+// if ENFZ_GET_TRACK_TYPE and NOT ENFZ_GET_APPEAR_TYPE (0x8000)
+// appears from the ground if player approaches, skates after them
+#define ENFZ_GET_TRACK_TYPE(thisx) ((thisx)->params & 0x8000)
 
+
+// specifies where the internal counter starts, zero is random
+// used to force specific attack timing
+// used in SnowheadTemple: 0x3, 0x7, 0xD in room 02
+// causing them to blow smoke at the bridge in series so the player has to time the jump
+// the value passed is 1/10 final value in frames
+#define ENFZ_GETZ_COUNTER(thisx) ((thisx)->shape.rot.z)
+
+// 0,1,2 are how powerful (distance) the attack is
+// 3 has special code which is unfinished
+// F is treated like 0
 typedef enum {
-    /* 0 */ ENFZ_F_0,
-    /* 1 */ ENFZ_F_1,
-    /* 2 */ ENFZ_F_2,
-    /* 3 */ ENFZ_F_3
-} EnFzParam;
+    /* 0 */ FZ_POWER_0,
+    /* 1 */ FZ_POWER_1,
+    /* 2 */ FZ_POWER_2,
+    /* 3 */ FZ_POWER_3,
+    /* F */ FZ_POWER_F = 0xF // snowhead map room
+} EnFzPower;
 
-// we dont know which effect this is, is this the smoke or the wind?
+// TODO figure out effect types
+typedef enum {
+    /* 0 */ ENFZ_EFFECT_DISABLED,
+    /* 1 */ ENFZ_EFFECT_1,
+    /* 2 */ ENFZ_EFFECT_2
+} EnFzEffectType;
+
+// This can be multiple different effects:
+//   The "Frozen steam" that rises off of the body
+//   The Fog stream attack is a stream of effects
 typedef struct {
     /* 0x00 */ u8 type;
     /* 0x01 */ u8 timer;
@@ -34,6 +61,14 @@ typedef struct {
     /* 0x34 */ f32 xyScaleTarget;
     /* 0x38 */ u8 unk_38; // not the same as oot?
 } EnFzEffect; // size = 0x3C
+
+// indexes the different smoke functions
+typedef enum {
+    /* 0 */ FZ_STATE_HIDDEN, 
+    /* 1 */ FZ_STATE_FULLGROWN,
+    /* 2 */ FZ_STATE_CHANGING,
+    /* 3 */ FZ_STATE_MELTING, // fire arrows
+} EnFzState;
 
 typedef struct EnFz {
     /* 0x000 */ Actor actor;
@@ -61,7 +96,7 @@ typedef struct EnFz {
     /* 0xBCC */ u8 isBgEnabled;
     /* 0xBCD */ u8 isMoving;
     /* 0xBCE */ u8 isFreezing;
-    /* 0xBCF */ u8 unusedCounter;
+    /* 0xBCF */ u8 hitCounter; /// set, never read
     /* 0xBD0 */ s16 unk_BD0; // set (0), never read
     /* 0xBD2 */ s16 unk_BD2; // set (0,4000), never read
     /* 0xBD4 */ UNK_TYPE1 unkBD4[2];
