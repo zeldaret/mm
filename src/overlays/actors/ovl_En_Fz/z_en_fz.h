@@ -83,10 +83,10 @@ typedef struct EnFz {
     /* 0xBBC */ f32 speedXZ;
     /* 0xBC0 */ u32 envAlpha;
     // we set it, and read it, but never the same value
-    //   assumed it was a shared variable with wizrobe
+    //   assumed unfinished shared variable with wizrobe
     /* 0xBC4 */ s16 wizrobeFlag;
     /* 0xBC6 */ s16 counter;
-    /* 0xBC8 */ s16 unusedTimer;
+    /* 0xBC8 */ s16 unusedTimer; // set (0), never read
     /* 0xBCA */ s16 mainTimer;
     /* 0xBCC */ u8 isBgEnabled;
     /* 0xBCD */ u8 isMoving;

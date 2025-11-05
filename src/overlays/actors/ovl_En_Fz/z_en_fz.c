@@ -379,11 +379,11 @@ void EnFz_ApplyDamage(EnFz* this, PlayState* play) {
         this->actor.speed = 0.0f;
     }
 
-    // Unused Wizrobe collaboration?
+    // Unfinished Wizrobe collaboration?
     if (this->actor.parent != NULL) {
         if ((this->wizrobeFlag != 5) && (this->actor.parent->id == ACTOR_EN_WIZ)) {
             Actor* parent = this->actor.parent;
-
+            
             if ((parent->update == NULL) || (parent->colChkInfo.health <= 0)) {
                 this->actor.colChkInfo.health = 0;
                 this->wizrobeFlag = 5;
@@ -641,10 +641,10 @@ void EnFz_SkatingBlowSmoke(EnFz* this, PlayState* play) {
 
         EnFz_SpawnSnowheadHowl(this, &pos, &velocity, &accel, 2.0f, 25.0f, primAlpha, flag);
 
+        //! @bug: this does nothing, the above function already assigned all unused effects
         pos.x += velocity.x * 0.5f;
         pos.y += velocity.y * 0.5f;
         pos.z += velocity.z * 0.5f;
-
         EnFz_SpawnSnowheadHowl(this, &pos, &velocity, &accel, 2.0f, 25.0f, primAlpha, 0);
     }
 }
@@ -757,6 +757,8 @@ void EnFz_BlowSmokeStationary(EnFz* this, PlayState* play) {
     }
 
     EnFz_SpawnSnowheadHowl(this, &pos, &velocity, &accel, 2.0f, 25.0f, primAlpha, colliderActive);
+    
+    //! @bug: this does nothing, the above function already assigned all unused effects
     pos.x += velocity.x * 0.5f;
     pos.y += velocity.y * 0.5f;
     pos.z += velocity.z * 0.5f;
@@ -860,7 +862,7 @@ void EnFz_Draw(Actor* thisx, PlayState* play) {
     EnFz_DrawEffects(this, play);
 
     if (this->drawDmgEffTimer > 0) {
-        s32 pad2[6];
+        s32 pad2[6]; // what in tarnation
         Vec3f bodyPartsPos[2];
         s32 pad3;
 
