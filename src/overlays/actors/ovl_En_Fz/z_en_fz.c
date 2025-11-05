@@ -35,8 +35,8 @@ void EnFz_SetupSkatingAimFreeze(EnFz*);
 void EnFz_SkatingAimFreeze(EnFz*, PlayState*);
 void EnFz_SetupSkatingFreeze(EnFz*, PlayState*);
 void EnFz_SkatingFreeze(EnFz*, PlayState*);
-void EnFz_SetupDespawn(EnFz*, PlayState*);
-void EnFz_Despawn(EnFz*, PlayState*);
+void EnFz_SetupDie(EnFz*, PlayState*);
+void EnFz_Die(EnFz*, PlayState*);
 void EnFz_SetupMelt(EnFz*);
 void EnFz_Melt(EnFz*, PlayState*);
 void EnFz_SetupIdleStationary(EnFz*);
@@ -332,7 +332,6 @@ void EnFz_Damaged(EnFz* this, PlayState* play, Vec3f* hitPos, s32 numEffects, f3
     CollisionCheck_SpawnShieldParticles(play, hitPos);
 }
 
-// why do these devs never re-use noop
 void EnFz_SpawnMistHidden(EnFz* this) {
 }
 
@@ -393,7 +392,7 @@ void EnFz_ApplyDamage(EnFz* this, PlayState* play) {
                 currentPos.y = this->actor.world.pos.y;
                 currentPos.z = this->actor.world.pos.z;
                 EnFz_Damaged(this, play, &currentPos, 30, 10.0f);
-                EnFz_SetupDespawn(this, play);
+                EnFz_SetupDie(this, play);
                 return;
             }
 
@@ -406,7 +405,7 @@ void EnFz_ApplyDamage(EnFz* this, PlayState* play) {
                 currentPos.y = this->actor.world.pos.y;
                 currentPos.z = this->actor.world.pos.z;
                 EnFz_Damaged(this, play, &currentPos, 30, 10.0f);
-                EnFz_SetupDespawn(this, play);
+                EnFz_SetupDie(this, play);
                 return;
             }
         }
@@ -448,7 +447,7 @@ void EnFz_ApplyDamage(EnFz* this, PlayState* play) {
                     currentPos.y = this->actor.world.pos.y;
                     currentPos.z = this->actor.world.pos.z;
                     EnFz_Damaged(this, play, &currentPos, 30, 10.0f);
-                    EnFz_SetupDespawn(this, play);
+                    EnFz_SetupDie(this, play);
                     break;
 
                 case FZ_DMGEFF_FIRE:
@@ -478,6 +477,9 @@ void EnFz_SetYawTowardsPlayer(EnFz* this) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
 }
 
+/**
+ * Disappearing into the ground to re-appear at actor.home
+ */
 void EnFz_SetupDisappear(EnFz* this) {
     this->state = FZ_STATE_CHANGING;
     this->isColliderActive = false;
@@ -511,11 +513,15 @@ void EnFz_SetupWait(EnFz* this) {
         this->mainTimer = 10; // slightly shorter timer for EnFz_Appear
         this->unkBD2 = 4000;
         this->actionFunc = EnFz_Appear; // skip SetupAppear
-    } else {                            // ENFZ_GET_TRACK_TYPE
+    } else {
+        // ENFZ_GET_TRACK_TYPE
         this->actionFunc = EnFz_Wait;
     }
 }
 
+/**
+ * Waiting in hiding for the player go get close
+ */
 void EnFz_Wait(EnFz* this, PlayState* play) {
     if ((this->mainTimer == 0) && (this->actor.xzDistToPlayer < 400.0f)) {
         EnFz_SetupAppear(this);
@@ -529,6 +535,9 @@ void EnFz_SetupAppear(EnFz* this) {
     this->actionFunc = EnFz_Appear;
 }
 
+/**
+ * Appearing out of the ground to attack player
+ */
 void EnFz_Appear(EnFz* this, PlayState* play) {
     if (this->mainTimer == 0) {
 
@@ -652,7 +661,7 @@ void EnFz_SkatingFreeze(EnFz* this, PlayState* play) {
     }
 }
 
-void EnFz_SetupDespawn(EnFz* this, PlayState* play) {
+void EnFz_SetupDie(EnFz* this, PlayState* play) {
     this->state = FZ_STATE_HIDDEN;
     this->speedXZ = 0.0f;
     this->actor.gravity = 0.0f;
@@ -666,15 +675,18 @@ void EnFz_SetupDespawn(EnFz* this, PlayState* play) {
     this->mainTimer = 3 * 20;
     Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_PROP);
     Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, (0xA << 4)); // drop table 0xA
-    this->actionFunc = EnFz_Despawn;
+    this->actionFunc = EnFz_Die;
 }
 
-void EnFz_Despawn(EnFz* this, PlayState* play) {
+void EnFz_Die(EnFz* this, PlayState* play) {
     if (this->mainTimer == 0) {
         Actor_Kill(&this->actor);
     }
 }
 
+/**
+ * Fire arrow specific death
+ */
 void EnFz_SetupMelt(EnFz* this) {
     this->state = FZ_STATE_MELTING;
     this->isColliderActive = false;
@@ -701,7 +713,7 @@ void EnFz_Melt(EnFz* this, PlayState* play) {
     }
 
     if (this->envAlpha == 0) {
-        EnFz_SetupDespawn(this, play);
+        EnFz_SetupDie(this, play);
     }
 }
 
@@ -768,7 +780,10 @@ void EnFz_IdleStationary(EnFz* this, PlayState* play) {
     EnFz_SpawnBreath(this, &pos, &velocity, &accel, 2.0f, 25.0f, primAlpha, false);
 }
 
-// Unfinished, still spawns as a non-attacking variant
+/**
+ * Unfinished and unused, specified by Init as separate power
+ * still spawns as a functional non-attacking variant
+ */
 void EnFz_SetupPassive(EnFz* this) {
     this->state = FZ_STATE_FULLSIZE;
     this->mainTimer = 2 * 20;
@@ -881,6 +896,9 @@ void EnFz_Draw(Actor* thisx, PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
+/**
+ * The rising cloud of mist coming from the Freezard's body
+ */
 void EnFz_SpawnMistAura(EnFz* this, Vec3f* pos, Vec3f* velocity, Vec3f* accel, f32 xyScale) {
     s16 i;
     EnFzEffect* effect = &this->effects[0];
@@ -900,6 +918,9 @@ void EnFz_SpawnMistAura(EnFz* this, Vec3f* pos, Vec3f* velocity, Vec3f* accel, f
     }
 }
 
+/**
+ * The breath attack stream is made up of small steam effects
+ */
 void EnFz_SpawnBreath(EnFz* this, Vec3f* pos, Vec3f* velocity, Vec3f* accel, f32 xyScale, f32 xyScaleTarget,
                       s16 primAlpha, u8 damaging) {
     s16 i;
