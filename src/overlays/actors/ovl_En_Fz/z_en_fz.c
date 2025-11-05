@@ -27,14 +27,14 @@ void EnFz_SetupWait(EnFz* this);
 void EnFz_Wait(EnFz* this, PlayState* play);
 void EnFz_SetupAppear(EnFz* this);
 void EnFz_Appear(EnFz* this, PlayState* play);
-void EnFz_SetupAimForMove(EnFz* this);
-void EnFz_AimForMove(EnFz* this, PlayState* play);
-void EnFz_SetupMoveTowardPlayer(EnFz* this);
-void EnFz_MoveTowardPlayer(EnFz* this, PlayState* play);
-void EnFz_SetupAimForFreeze(EnFz* this);
-void EnFz_AimForFreeze(EnFz* this, PlayState* play);
-void EnFz_SetupBlowSmoke(EnFz* this, PlayState* play);
-void EnFz_BlowSmoke(EnFz* this, PlayState* play);
+void EnFz_SetupAimForSkate(EnFz* this);
+void EnFz_AimForSkate(EnFz* this, PlayState* play);
+void EnFz_SetupSkateTowardPlayer(EnFz* this);
+void EnFz_SkateTowardPlayer(EnFz* this, PlayState* play);
+void EnFz_SetupSkatingAimFreeze(EnFz* this);
+void EnFz_SkatingAimFreeze(EnFz* this, PlayState* play);
+void EnFz_SetupSkatingBlowSmoke(EnFz* this, PlayState* play);
+void EnFz_SkatingBlowSmoke(EnFz* this, PlayState* play);
 void EnFz_SetupDespawn(EnFz* this, PlayState* play);
 void EnFz_Despawn(EnFz* this, PlayState* play);
 void EnFz_SetupMelt(EnFz* this);
@@ -425,7 +425,7 @@ void EnFz_ApplyDamage(EnFz* this, PlayState* play) {
             this->collider1.base.acFlags &= ~AC_HIT;
             switch (this->actor.colChkInfo.damageEffect) {
                 case FZ_DMGEFF_LIGHT:
-                    this->drawDmgEffTimer = 40;
+                    this->drawDmgEffTimer = 2 * 20;
                     this->drawDmgEffAlpha = 1.0f;
                     FALLTHROUGH;
                 case FZ_DMGEFF_CHIP:
@@ -498,7 +498,7 @@ void EnFz_SetupWait(EnFz* this) {
     this->state = FZ_STATE_HIDDEN;
     this->unk_BD2 = 0;
     this->unk_BD0 = 0;
-    this->mainTimer = 100;
+    this->mainTimer = 5 * 20;
 
     this->actor.world.pos.x = this->originPos.x;
     this->actor.world.pos.y = this->originPos.y;
@@ -539,66 +539,66 @@ void EnFz_Appear(EnFz* this, PlayState* play) {
             if (ENFZ_GET_APPEAR_TYPE(&this->actor)) {
                 EnFz_SetupBlowSmokeStationary(this);
             } else { // ENFZ_GET_TRACK_TYPE
-                EnFz_SetupAimForMove(this);
+                EnFz_SetupAimForSkate(this);
             }
         }
     }
 }
 
-void EnFz_SetupAimForMove(EnFz* this) {
+void EnFz_SetupAimForSkate(EnFz* this) {
     this->state = FZ_STATE_FULLGROWN;
-    this->mainTimer = 40;
+    this->mainTimer = 2 * 20;
     this->isBgEnabled = true;
     this->isFreezing = true;
     this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
     this->actor.gravity = -1.0f;
-    this->actionFunc = EnFz_AimForMove;
+    this->actionFunc = EnFz_AimForSkate;
 }
 
-void EnFz_AimForMove(EnFz* this, PlayState* play) {
+void EnFz_AimForSkate(EnFz* this, PlayState* play) {
     EnFz_SetYawTowardsPlayer(this);
     if (this->mainTimer == 0) {
-        EnFz_SetupMoveTowardPlayer(this);
+        EnFz_SetupSkateTowardPlayer(this);
     }
 }
 
-void EnFz_SetupMoveTowardPlayer(EnFz* this) {
+void EnFz_SetupSkateTowardPlayer(EnFz* this) {
     this->state = FZ_STATE_FULLGROWN;
     this->isMoving = true;
-    this->mainTimer = 100;
+    this->mainTimer = 5 * 20;
     this->speedXZ = 4.0f;
-    this->actionFunc = EnFz_MoveTowardPlayer;
+    this->actionFunc = EnFz_SkateTowardPlayer;
 }
 
-void EnFz_MoveTowardPlayer(EnFz* this, PlayState* play) {
+void EnFz_SkateTowardPlayer(EnFz* this, PlayState* play) {
     if ((this->mainTimer == 0) || (! this->isMoving)) {
-        EnFz_SetupAimForFreeze(this);
+        EnFz_SetupSkatingAimFreeze(this);
     }
 }
 
-void EnFz_SetupAimForFreeze(EnFz* this) {
+void EnFz_SetupSkatingAimFreeze(EnFz* this) {
     this->state = FZ_STATE_FULLGROWN;
     this->speedXZ = 0.0f;
     this->actor.speed = 0.0f;
-    this->mainTimer = 40;
-    this->actionFunc = EnFz_AimForFreeze;
+    this->mainTimer = 2 * 20;
+    this->actionFunc = EnFz_SkatingAimFreeze;
 }
 
-void EnFz_AimForFreeze(EnFz* this, PlayState* play) {
+void EnFz_SkatingAimFreeze(EnFz* this, PlayState* play) {
     EnFz_SetYawTowardsPlayer(this);
     if (this->mainTimer == 0) {
-        EnFz_SetupBlowSmoke(this, play);
+        EnFz_SetupSkatingBlowSmoke(this, play);
     }
 }
 
-void EnFz_SetupBlowSmoke(EnFz* this, PlayState* play) {
+void EnFz_SetupSkatingBlowSmoke(EnFz* this, PlayState* play) {
     this->state = FZ_STATE_FULLGROWN;
-    this->mainTimer = 80;
-    this->actionFunc = EnFz_BlowSmoke;
+    this->mainTimer = 4 * 20;
+    this->actionFunc = EnFz_SkatingBlowSmoke;
     EnFz_UpdateTargetPos(this, play);
 }
 
-void EnFz_BlowSmoke(EnFz* this, PlayState* play) {
+void EnFz_SkatingBlowSmoke(EnFz* this, PlayState* play) {
     Vec3f baseVelocity;
     Vec3f pos;
     Vec3f velocity;
@@ -658,7 +658,7 @@ void EnFz_SetupDespawn(EnFz* this, PlayState* play) {
     this->isDespawning = true;
     this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->drawBody = false;
-    this->mainTimer = 60;
+    this->mainTimer = 3 * 20;
     Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_PROP);
     Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0xA0);
     this->actionFunc = EnFz_Despawn;
@@ -702,7 +702,7 @@ void EnFz_Melt(EnFz* this, PlayState* play) {
 
 void EnFz_SetupBlowSmokeStationary(EnFz* this) {
     this->state = FZ_STATE_FULLGROWN;
-    this->mainTimer = 40;
+    this->mainTimer = 2 * 20;
     this->isBgEnabled = true;
     this->isFreezing = true;
     this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
@@ -764,7 +764,7 @@ void EnFz_BlowSmokeStationary(EnFz* this, PlayState* play) {
 // Unfinished, still spawns as a non-attacking variant
 void EnFz_SetupPassive(EnFz* this) {
     this->state = FZ_STATE_FULLGROWN;
-    this->mainTimer = 40;
+    this->mainTimer = 2 * 20;
     this->isBgEnabled = true;
     this->isFreezing = true;
     this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
@@ -775,6 +775,7 @@ void EnFz_SetupPassive(EnFz* this) {
 void EnFz_Passive(EnFz* this, PlayState* play) {
 }
 
+// Light arrows
 void EnFz_UpdateEffect(EnFz* this, PlayState* play) {
     if (this->drawDmgEffTimer != 0) {
         if (this->drawDmgEffTimer > 0) {
