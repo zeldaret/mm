@@ -10,7 +10,7 @@ typedef void (*EnFzUnkFunc)(struct EnFz*);
 
 #define ENFZ_GET_POWER(thisx) ((thisx)->params & 0xF)
 #define ENFZ_GET_ROTATION_LIMIT(thisx) (((thisx)->params & 0x3000) >> 0xC)
-// appears out of the ground
+// appears out of the ground imediately
 #define ENFZ_GET_APPEAR_TYPE(thisx) ((thisx)->params & 0x4000)
 // if ENFZ_GET_TRACK_TYPE and NOT ENFZ_GET_APPEAR_TYPE (0x8000)
 // appears from the ground if player approaches, skates after them
@@ -20,8 +20,7 @@ typedef void (*EnFzUnkFunc)(struct EnFz*);
 // appears from the ground immediately, stays still, 
 // but follows player to aim, while ignoring rotation limit
 
-
-// Counter specifies where the internal counter starts, zero is random
+// Clock specifies where the internal clock starts, zero is random
 // used to force specific attack timing
 // used in Snowhead Temple: 0x3, 0x7, 0xD in room 02
 // causing them to breath at the bridge in series so the player has to time the jump
@@ -50,7 +49,7 @@ typedef struct {
     /* 0x04 */ Vec3f pos;
     /* 0x10 */ Vec3f velocity;
     /* 0x1C */ Vec3f accel;
-    /* 0x28 */ UNK_TYPE1 unk_28[0x4];
+    /* 0x28 */ UNK_TYPE1 unk28[0x4];
     /* 0x2C */ s16 primAlpha;
     /* 0x2E */ s16 primAlphaState;
     /* 0x30 */ f32 xyScale;

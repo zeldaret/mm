@@ -33,8 +33,8 @@ void EnFz_SetupSkateTowardPlayer(EnFz*);
 void EnFz_SkateTowardPlayer(EnFz*, PlayState*);
 void EnFz_SetupSkatingAimFreeze(EnFz*);
 void EnFz_SkatingAimFreeze(EnFz*, PlayState*);
-void EnFz_SetupSkatingBreath(EnFz*, PlayState*);
-void EnFz_SkatingBreath(EnFz*, PlayState*);
+void EnFz_SetupSkatingFreeze(EnFz*, PlayState*);
+void EnFz_SkatingFreeze(EnFz*, PlayState*);
 void EnFz_SetupDespawn(EnFz*, PlayState*);
 void EnFz_Despawn(EnFz*, PlayState*);
 void EnFz_SetupMelt(EnFz*);
@@ -348,7 +348,7 @@ void EnFz_SpawnMistChanging(EnFz* this) {
         accel.x = accel.z = 0.0f;
         accel.y = 0.1f;
         velocity.x = velocity.y = velocity.z = 0.0f;
-        EnFz_SpawnMistAura(this, &pos, &velocity, &accel, Rand_ZeroFloat(7.5f) + 15.0f);
+        EnFz_SpawnMistAura(this, &pos, &velocity, &accel, 15.0f + Rand_ZeroFloat(7.5f));
     }
 }
 
@@ -590,18 +590,18 @@ void EnFz_SetupSkatingAimFreeze(EnFz* this) {
 void EnFz_SkatingAimFreeze(EnFz* this, PlayState* play) {
     EnFz_SetYawTowardsPlayer(this);
     if (this->mainTimer == 0) {
-        EnFz_SetupSkatingBreath(this, play);
+        EnFz_SetupSkatingFreeze(this, play);
     }
 }
 
-void EnFz_SetupSkatingBreath(EnFz* this, PlayState* play) {
+void EnFz_SetupSkatingFreeze(EnFz* this, PlayState* play) {
     this->state = FZ_STATE_FULLSIZE;
     this->mainTimer = 4 * 20;
-    this->actionFunc = EnFz_SkatingBreath;
+    this->actionFunc = EnFz_SkatingFreeze;
     EnFz_UpdateTargetPos(this, play);
 }
 
-void EnFz_SkatingBreath(EnFz* this, PlayState* play) {
+void EnFz_SkatingFreeze(EnFz* this, PlayState* play) {
     Vec3f baseVelocity;
     Vec3f pos;
     Vec3f velocity;
@@ -665,7 +665,7 @@ void EnFz_SetupDespawn(EnFz* this, PlayState* play) {
     this->drawBody = false;
     this->mainTimer = 3 * 20;
     Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_PROP);
-    Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0xA0);
+    Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, (0xA << 4)); // drop table 0xA
     this->actionFunc = EnFz_Despawn;
 }
 
@@ -837,15 +837,15 @@ void EnFz_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnFz_Draw(Actor* thisx, PlayState* play) {
-    static Gfx* sBodyDisplayLists[] = { gFreezardIntactDL, gFreezardHornBrokenDL, gFreezardHeadBrokenDL };
+    static Gfx* sBodyDisplayLists[] = { gFreezardBodyIntactDL, gFreezardBodyHornBrokenDL, gFreezardBodyHeadBrokenDL };
     s32 pad;
     EnFz* this = (EnFz*)thisx;
-    s32 dlIndex = 3 - this->actor.colChkInfo.health;
+    s32 bodyDlIndex = 3 - this->actor.colChkInfo.health;
 
     OPEN_DISPS(play->state.gfxCtx);
 
     if (this->actor.colChkInfo.health == 0) {
-        dlIndex = 2;
+        bodyDlIndex = 2;
     }
 
     if (this->drawBody) {
@@ -860,7 +860,7 @@ void EnFz_Draw(Actor* thisx, PlayState* play) {
                           PRIMITIVE, ENVIRONMENT, COMBINED, ENVIRONMENT, COMBINED, 0, ENVIRONMENT, 0);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 155, 255, 255, 255);
         gDPSetEnvColor(POLY_XLU_DISP++, 200, 200, 200, this->envAlpha);
-        gSPDisplayList(POLY_XLU_DISP++, sBodyDisplayLists[dlIndex]);
+        gSPDisplayList(POLY_XLU_DISP++, sBodyDisplayLists[bodyDlIndex]);
     }
 
     EnFz_DrawEffects(this, play);
