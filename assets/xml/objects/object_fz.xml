@@ -3,7 +3,7 @@
         <DList Name="gFreezardIntactDL" Offset="0x1130" />
         <DList Name="gFreezardHornBrokenDL" Offset="0x21A0" />
         <DList Name="gFreezardHeadBrokenDL" Offset="0x2CA0" />
-        <Texture Name="gFreezardSteamTex" OutName="tex_002E70" Format="i4" Width="32" Height="32" Offset="0x2E70" />
+        <Texture Name="gFreezardSteamTex" OutName="steam" Format="i4" Width="32" Height="32" Offset="0x2E70" />
         <DList Name="gFreezardSteamStartDL" Offset="0x30A0" />
         <DList Name="gFreezardSteamDL" Offset="0x3158" />
         <!-- Unused, wasn't used in OOT either -->
