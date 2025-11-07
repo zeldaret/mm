@@ -33,17 +33,17 @@ typedef enum EnFzPower {
     /* 0 */ FZ_POWER_0, // +  0
     /* 1 */ FZ_POWER_1, // + 10
     /* 2 */ FZ_POWER_2, // + 20
-    /* 3 */ FZ_POWER_3, // unfinished specal case: passive
+    /* 3 */ FZ_POWER_PASSIVE, // unfinished empty actionfunc
     /* F */ FZ_POWER_F = 0xF // snowhead map room
 } EnFzPower;
 
-typedef enum {
+typedef enum EnFzEffectType {
     /* 0 */ FZ_EFFECT_DISABLED,
     /* 1 */ FZ_EFFECT_MIST_AURA,
     /* 2 */ FZ_EFFECT_BREATH
 } EnFzEffectType;
 
-typedef struct {
+typedef struct EnFzEffect {
     /* 0x00 */ u8 type;
     /* 0x01 */ u8 timer;
     /* 0x04 */ Vec3f pos;
@@ -58,7 +58,7 @@ typedef struct {
 } EnFzEffect; // size = 0x3C
 
 // indexes the different mist functions
-typedef enum {
+typedef enum EnFzState {
     /* 0 */ FZ_STATE_HIDDEN,   // OOT, waiting for player approach, ice cavern
     /* 1 */ FZ_STATE_FULLSIZE,
     /* 2 */ FZ_STATE_CHANGING, // OOT, growing and disappearing, ice cavern
@@ -97,7 +97,7 @@ typedef struct EnFz {
     /* 0xBD4 */ UNK_TYPE1 unkBD4[2];
     /* 0xBD6 */ u8 state;
     /* 0xBD7 */ u8 drawBody; 
-    /* 0xBD8 */ u8 isDespawning;
+    /* 0xBD8 */ u8 isDying;
     /* 0xBD9 */ u8 attackTimer; // never set, always zero
 } EnFz; /* size = 0xBDC */
 

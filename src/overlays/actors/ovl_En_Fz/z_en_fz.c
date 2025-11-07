@@ -196,7 +196,7 @@ void EnFz_Init(Actor* thisx, PlayState* play) {
     this->isMoving = false;
     this->isColliderActive = false;
     this->drawBody = true;
-    this->isDespawning = false;
+    this->isDying = false;
     this->actor.speed = 0.0f;
     this->actor.cullingVolumeScale = 400.0f;
     this->originPos.x = this->actor.world.pos.x;
@@ -229,7 +229,7 @@ void EnFz_Init(Actor* thisx, PlayState* play) {
             this->envAlpha = 0;
             this->actor.scale.y = 0.0f;
             EnFz_SetupWait(this);
-        } else if (ENFZ_GET_POWER(&this->actor) == FZ_POWER_3) {
+        } else if (ENFZ_GET_POWER(&this->actor) == FZ_POWER_PASSIVE) {
             EnFz_SetupPassive(this);
         } else {
             EnFz_SetupIdleStationary(this);
@@ -651,7 +651,7 @@ void EnFz_SkatingFreeze(EnFz* this, PlayState* play) {
 
         Matrix_MultVec3f(&baseVelocity, &velocity);
 
-        if ((this->mainTimer & 0x7) == 0) {
+        if ((this->mainTimer % 8) == 0) {
             damaging = true;
         }
 
@@ -673,7 +673,7 @@ void EnFz_SetupDie(EnFz* this, PlayState* play) {
     this->actor.speed = 0.0f;
     this->isBgEnabled = true;
     this->isColliderActive = false;
-    this->isDespawning = true;
+    this->isDying = true;
     this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->drawBody = false;
     this->mainTimer = 3 * 20;
@@ -694,7 +694,7 @@ void EnFz_Die(EnFz* this, PlayState* play) {
 void EnFz_SetupMelt(EnFz* this) {
     this->state = FZ_STATE_MELTING;
     this->isColliderActive = false;
-    this->isDespawning = true;
+    this->isDying = true;
     this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->actor.speed = 0.0f;
     this->speedXZ = 0.0f;
@@ -771,7 +771,7 @@ void EnFz_IdleStationary(EnFz* this, PlayState* play) {
 
     Matrix_MultVec3f(&baseVelocity, &velocity);
 
-    if (!(this->internalClock & 0x7)) {
+    if ((this->internalClock % 8) == 0) {
         damaging = true;
     }
 
@@ -817,8 +817,12 @@ void EnFz_UpdateLightArrowEffects(EnFz* this, PlayState* play) {
 }
 
 void EnFz_Update(Actor* thisx, PlayState* play) {
-    static EnFzUnkFunc sMistSpawnFunctions[] = { EnFz_SpawnMistHidden, EnFz_SpawnMistChanging, EnFz_SpawnMistFullSize,
-                                                 EnFz_SpawnMistFullSize };
+    static EnFzUnkFunc sMistSpawnFunctions[] = {
+        EnFz_SpawnMistHidden,
+        EnFz_SpawnMistChanging,
+        EnFz_SpawnMistFullSize,
+        EnFz_SpawnMistFullSize,
+    };
     s32 pad;
     EnFz* this = (EnFz*)thisx;
 
@@ -832,7 +836,7 @@ void EnFz_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
 
-    if (!this->isDespawning) {
+    if (!this->isDying) {
         Collider_UpdateCylinder(&this->actor, &this->collider1);
         Collider_UpdateCylinder(&this->actor, &this->collider2);
         if (this->isColliderActive) {
