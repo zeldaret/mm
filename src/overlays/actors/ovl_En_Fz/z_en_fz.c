@@ -12,41 +12,42 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
-void EnFz_Init(Actor*, PlayState*);
-void EnFz_Destroy(Actor*, PlayState*);
-void EnFz_Update(Actor*, PlayState*);
-void EnFz_Draw(Actor*, PlayState*);
+void EnFz_Init(Actor* thisx, PlayState* play);
+void EnFz_Destroy(Actor* thisx, PlayState* play);
+void EnFz_Update(Actor* thisx, PlayState* play);
+void EnFz_Draw(Actor* thisx, PlayState* play);
 
-void EnFz_UpdateTargetPos(EnFz*, PlayState*);
-void EnFz_SpawnMistHidden(EnFz*);
-void EnFz_SpawnMistChanging(EnFz*);
-void EnFz_SpawnMistFullSize(EnFz*);
-void EnFz_SetupDisappear(EnFz*);
-void EnFz_Disappear(EnFz*, PlayState*);
-void EnFz_SetupWait(EnFz*);
-void EnFz_Wait(EnFz*, PlayState*);
-void EnFz_SetupAppear(EnFz*);
-void EnFz_Appear(EnFz*, PlayState*);
-void EnFz_SetupAimForSkate(EnFz*);
-void EnFz_AimForSkate(EnFz*, PlayState*);
-void EnFz_SetupSkateTowardPlayer(EnFz*);
-void EnFz_SkateTowardPlayer(EnFz*, PlayState*);
-void EnFz_SetupSkatingAimFreeze(EnFz*);
-void EnFz_SkatingAimFreeze(EnFz*, PlayState*);
-void EnFz_SetupSkatingFreeze(EnFz*, PlayState*);
-void EnFz_SkatingFreeze(EnFz*, PlayState*);
-void EnFz_SetupDie(EnFz*, PlayState*);
-void EnFz_Die(EnFz*, PlayState*);
-void EnFz_SetupMelt(EnFz*);
-void EnFz_Melt(EnFz*, PlayState*);
-void EnFz_SetupIdleStationary(EnFz*);
-void EnFz_IdleStationary(EnFz*, PlayState*);
-void EnFz_SetupPassive(EnFz*);
-void EnFz_Passive(EnFz*, PlayState*);
-void EnFz_SpawnMistAura(EnFz*, Vec3f*, Vec3f*, Vec3f*, f32);
-void EnFz_SpawnBreath(EnFz*, Vec3f*, Vec3f*, Vec3f*, f32, f32, s16, u8);
-void EnFz_UpdateEffects(EnFz*, PlayState*);
-void EnFz_DrawEffects(EnFz*, PlayState*);
+void EnFz_UpdateTargetPos(EnFz* this, PlayState* play);
+void EnFz_SpawnMistHidden(EnFz* this);
+void EnFz_SpawnMistChanging(EnFz* this);
+void EnFz_SpawnMistFullSize(EnFz* this);
+void EnFz_SetupDisappear(EnFz* this);
+void EnFz_Disappear(EnFz* this, PlayState* play);
+void EnFz_SetupWait(EnFz* this);
+void EnFz_Wait(EnFz* this, PlayState* play);
+void EnFz_SetupAppear(EnFz* this);
+void EnFz_Appear(EnFz* this, PlayState* play);
+void EnFz_SetupAimForSkate(EnFz* this);
+void EnFz_AimForSkate(EnFz* this, PlayState* play);
+void EnFz_SetupSkateTowardPlayer(EnFz* this);
+void EnFz_SkateTowardPlayer(EnFz* this, PlayState* play);
+void EnFz_SetupSkatingAimFreeze(EnFz* this);
+void EnFz_SkatingAimFreeze(EnFz* this, PlayState* play);
+void EnFz_SetupSkatingFreeze(EnFz* this, PlayState* play);
+void EnFz_SkatingFreeze(EnFz* this, PlayState* play);
+void EnFz_SetupDie(EnFz* this, PlayState* play);
+void EnFz_Die(EnFz* this, PlayState* play);
+void EnFz_SetupMelt(EnFz* this);
+void EnFz_Melt(EnFz* this, PlayState* play);
+void EnFz_SetupIdleStationary(EnFz* this);
+void EnFz_IdleStationary(EnFz* this, PlayState* play);
+void EnFz_SetupPassive(EnFz* this);
+void EnFz_Passive(EnFz* this, PlayState* play);
+void EnFz_SpawnMistAura(EnFz* this, Vec3f* pos, Vec3f* velocity, Vec3f* accel, f32 xyScale);
+void EnFz_SpawnBreath(EnFz* this, Vec3f* pos, Vec3f* velocity, Vec3f* accel, f32 xyScale, f32 xyScaleTarget,
+                      s16 primAlpha, u8 damaging);
+void EnFz_UpdateEffects(EnFz* this, PlayState* play);
+void EnFz_DrawEffects(EnFz* this, PlayState* play);
 
 ActorProfile En_Fz_Profile = {
     /**/ ACTOR_EN_FZ,
