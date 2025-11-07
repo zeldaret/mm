@@ -192,7 +192,7 @@ void EnFz_Init(Actor* thisx, PlayState* play) {
     this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     this->unusedTimer = 0;
     this->hitCounter = 0;
-    this->isBgEnabled = 1;
+    this->isBgEnabled = true;
     this->isMoving = false;
     this->isColliderActive = false;
     this->drawBody = true;
@@ -465,10 +465,13 @@ void EnFz_SetYawTowardsPlayer(EnFz* this) {
 
     if (!ENFZ_GET_TRACK_TYPE(&this->actor)) {
         s32 homeYaw = this->actor.home.rot.y;
+
         if (limitIndex != 3) {
             s16 homeYawDiff = yaw - homeYaw;
+
             if (sTurningLimits[limitIndex] < ABS_ALT(homeYawDiff)) {
                 s16 angleLimit = (homeYawDiff > 0) ? sTurningLimits[limitIndex] : -sTurningLimits[limitIndex];
+
                 yaw = this->actor.home.rot.y + angleLimit;
             }
         }
@@ -624,6 +627,7 @@ void EnFz_SkatingFreeze(EnFz* this, PlayState* play) {
     if (this->mainTimer > 10) {
         u8 damaging = false;
         s16 primAlpha = 150;
+
         Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_FREEZAD_BREATH - SFX_FLAG);
         if ((this->mainTimer - 10) < 16) {
             primAlpha = (this->mainTimer * 10) - 100;

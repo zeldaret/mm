@@ -29,7 +29,7 @@ typedef void (*EnFzUnkFunc)(struct EnFz*);
 
 // 0,1,2 are how powerful (distance) the attack is
 // F is treated like 0 (else case)
-typedef enum {
+typedef enum EnFzPower {
     /* 0 */ FZ_POWER_0, // +  0
     /* 1 */ FZ_POWER_1, // + 10
     /* 2 */ FZ_POWER_2, // + 20
