@@ -662,7 +662,7 @@ void EnFz_SkatingFreeze(EnFz* this, PlayState* play) {
         pos.x += velocity.x * 0.5f;
         pos.y += velocity.y * 0.5f;
         pos.z += velocity.z * 0.5f;
-        EnFz_SpawnBreath(this, &pos, &velocity, &accel, 2.0f, 25.0f, primAlpha, 0);
+        EnFz_SpawnBreath(this, &pos, &velocity, &accel, 2.0f, 25.0f, primAlpha, false);
     }
 }
 
