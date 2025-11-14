@@ -587,7 +587,7 @@ void EnFz_SetupSkateTowardPlayer(EnFz* this) {
 
 void EnFz_SkateTowardPlayer(EnFz* this, PlayState* play) {
     // isMoving gets set false in EnFz_ApplyDamage
-    if ((this->mainTimer == 0) || (!this->isMoving)) {
+    if ((this->mainTimer == 0) || !this->isMoving) {
         EnFz_SetupSkatingAimFreeze(this);
     }
 }
@@ -1000,7 +1000,7 @@ void EnFz_UpdateEffects(EnFz* this, PlayState* play) {
                 }
 
                 // note: attackTimer is never set, always zero
-                if ((this->attackTimer == 0) && (effect->primAlpha > 100) && (effect->damaging)) {
+                if ((this->attackTimer == 0) && (effect->primAlpha > 100) && effect->damaging) {
                     this->collider3.dim.pos.x = effect->pos.x;
                     this->collider3.dim.pos.y = effect->pos.y;
                     this->collider3.dim.pos.z = effect->pos.z;
