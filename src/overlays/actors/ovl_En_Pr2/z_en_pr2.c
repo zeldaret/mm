@@ -14,14 +14,16 @@ void EnPr2_Destroy(Actor* thisx, PlayState* play);
 void EnPr2_Update(Actor* thisx, PlayState* play);
 void EnPr2_Draw(Actor* thisx, PlayState* play);
 
-void func_80A745C4(EnPr2* this);
-void func_80A745FC(EnPr2* this, PlayState* play);
-void func_80A74888(EnPr2* this);
-void func_80A748E8(EnPr2* this, PlayState* play);
-void func_80A74DEC(EnPr2* this, PlayState* play);
-void func_80A74E90(EnPr2* this, PlayState* play);
-void func_80A751B4(EnPr2* this);
-void func_80A75310(EnPr2* this, PlayState* play);
+void EnPr2_SetupFollowPath(EnPr2* this);
+void EnPr2_FollowPath(EnPr2* this, PlayState* play);
+void EnPr2_SetupIdle(EnPr2* this);
+void EnPr2_Idle(EnPr2* this, PlayState* play);
+void EnPr2_SetupAttack(EnPr2* this, PlayState* play);
+void EnPr2_Attack(EnPr2* this, PlayState* play);
+void EnPr2_SetupDie(EnPr2* this);
+void EnPr2_Die(EnPr2* this, PlayState* play);
+
+// TODO write out damage enum
 
 static DamageTable sDamageTable = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x0),
@@ -109,6 +111,7 @@ static u8 sAnimationModes[ENPR2_ANIM_MAX] = {
     ANIMMODE_ONCE, // PR2_ANIM_FLINCH
 };
 
+// ... why? why not just shift the inject by 4?
 static s16 sDropTables[] = {
     0x00, 0x10, 0x20, 0x30, 0x40, 0x50, 0x60, 0x70, 0x80, 0x90, 0xA0, 0xB0, 0xC0, 0xD0, 0xE0, 0xF0,
 };
@@ -128,7 +131,7 @@ void EnPr2_Init(Actor* thisx, PlayState* play) {
     this->actor.colChkInfo.mass = 10;
     Math_Vec3f_Copy(&this->originalHome, &this->actor.home.pos);
 
-    if (this->type == PR2_TYPE_2) {
+    if (this->type == PR2_TYPE_RESIDENT) {
         this->agroDistance = ENPR2_GET_FF0(&this->actor) * 20.0f;
     }
     this->alpha = 255;
@@ -154,7 +157,7 @@ void EnPr2_Init(Actor* thisx, PlayState* play) {
             this->actor.world.rot.z = 0;
         }
 
-        if (this->type == PR2_TYPE_3) {
+        if (this->type == PR2_TYPE_PATHING) {
             if (this->actor.parent != NULL) {
                 Actor* encount1 = this->actor.parent;
 
@@ -166,17 +169,18 @@ void EnPr2_Init(Actor* thisx, PlayState* play) {
                         this->agroDistance = 20.0f;
                     }
                 }
-                func_80A745C4(this);
+                EnPr2_SetupFollowPath(this);
             } else {
                 Actor_Kill(&this->actor);
                 return;
             }
         } else {
-            func_80A74888(this);
+            EnPr2_SetupIdle(this);
         }
-    } else { // type > 10 ?
+    } else { // type > PR2_TYPE_BROKEN 
+        // these are broken pieces floating after death
         this->scale = 0.02f;
-        func_80A751B4(this);
+        EnPr2_SetupDie(this);
     }
 
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 20.0f, 20.0f,
@@ -204,8 +208,7 @@ void EnPr2_Destroy(Actor* thisx, PlayState* play) {
     }
 }
 
-// EnPr2_IsAttackable ?
-s32 func_80A7429C(EnPr2* this, PlayState* play) {
+s32 EnPr2_IsOnScreen(EnPr2* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s16 screenPosX;
     s16 screenPosY;
@@ -226,6 +229,8 @@ s32 func_80A7429C(EnPr2* this, PlayState* play) {
     }
 }
 
+// EnPr2
+// control yaw direction? is this overall?
 void func_80A7436C(EnPr2* this, s16 targetYRot) {
     s16 yawDiff = targetYRot - this->actor.world.rot.y;
 
@@ -265,14 +270,13 @@ void EnPr2_ChangeAnim(EnPr2* this, s32 animIndex) {
                      sAnimationModes[animIndex], 0.0f);
 }
 
-// follow path, then switch types
-void func_80A745C4(EnPr2* this) {
+void EnPr2_SetupFollowPath(EnPr2* this) {
     EnPr2_ChangeAnim(this, PR2_ANIM_GENTLE_SWIM);
     this->state = 0;
-    this->actionFunc = func_80A745FC;
+    this->actionFunc = EnPr2_FollowPath;
 }
 
-void func_80A745FC(EnPr2* this, PlayState* play) {
+void EnPr2_FollowPath(EnPr2* this, PlayState* play) {
     f32 x;
     f32 y;
     f32 z;
@@ -314,8 +318,8 @@ void func_80A745FC(EnPr2* this, PlayState* play) {
         Math_Vec3f_Copy(&this->originalHome, &this->actor.world.pos);
         if (this->waypoint >= this->path->count) {
             // you have reached your destination
-            this->type = PR2_TYPE_2;
-            func_80A74888(this);
+            this->type = PR2_TYPE_RESIDENT;
+            EnPr2_SetupIdle(this);
         }
     }
 
@@ -323,16 +327,16 @@ void func_80A745FC(EnPr2* this, PlayState* play) {
     func_80A7436C(this, this->yawTowardsWaypoint);
 }
 
-void func_80A74888(EnPr2* this) {
+void EnPr2_SetupIdle(EnPr2* this) {
     EnPr2_ChangeAnim(this, PR2_ANIM_GENTLE_SWIM);
     this->waypointTimer = 2;
     this->timer = 0;
     Math_Vec3f_Copy(&this->waypointPos, &this->originalHome);
     this->state = 1;
-    this->actionFunc = func_80A748E8;
+    this->actionFunc = EnPr2_Idle;
 }
 
-void func_80A748E8(EnPr2* this, PlayState* play) {
+void EnPr2_Idle(EnPr2* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     f32 deltaX; // reused for two separate purposes
     f32 deltaZ;
@@ -349,7 +353,7 @@ void func_80A748E8(EnPr2* this, PlayState* play) {
         SkelAnime_Update(&this->skelAnime);
     }
 
-    if (this->alpha != 255) {
+    if (this->alpha != 255) { // dying
         this->actor.speed = 0.0f;
         Math_SmoothStepToS(&this->alpha, 0, 1, 30, 100);
         if (this->alpha < 2) {
@@ -357,16 +361,16 @@ void func_80A748E8(EnPr2* this, PlayState* play) {
         }
     } else {
         switch (this->type) {
-            case PR2_TYPE_1:
+            case PR2_TYPE_SPAWNED:
                 if (this->targetingTimer == 0) {
                     updateFlag = true;
-                    func_80A74DEC(this, play);
-                } else if (!func_80A7429C(this, play) && (this->alpha == 255)) {
+                    EnPr2_SetupAttack(this, play);
+                } else if (!EnPr2_IsOnScreen(this, play) && (this->alpha == 255)) {
                     this->alpha = 254; // triggers actor kill
                 }
                 break;
 
-            case PR2_TYPE_2:
+            case PR2_TYPE_RESIDENT:
                 if (this->timer4 == 0) {
                     // distance diff from player to home
                     deltaX = player->actor.world.pos.x - this->originalHome.x;
@@ -375,7 +379,7 @@ void func_80A748E8(EnPr2* this, PlayState* play) {
 
                     if (swimming && (player->stateFlags1 & PLAYER_STATE1_8000000) && (sqrtXZ < this->agroDistance)) {
                         updateFlag = true;
-                        func_80A74DEC(this, play);
+                        EnPr2_SetupAttack(this, play);
                     }
                 } else {
                     // distance diff from current pos to home
@@ -447,7 +451,7 @@ void func_80A748E8(EnPr2* this, PlayState* play) {
     }
 }
 
-void func_80A74DEC(EnPr2* this, PlayState* play) {
+void EnPr2_SetupAttack(EnPr2* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     this->unk_1F0 = 0;
@@ -460,20 +464,20 @@ void func_80A74DEC(EnPr2* this, PlayState* play) {
     this->targetingTimer = 0;
     this->timer = (3 * 20) + 10;
     this->state = 2;
-    this->actionFunc = func_80A74E90;
+    this->actionFunc = EnPr2_Attack;
 }
 
-void func_80A74E90(EnPr2* this, PlayState* play) {
+void EnPr2_Attack(EnPr2* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     WaterBox* waterBox;
 
     Math_ApproachF(&this->scale, 0.02f, 0.1f, 0.005f);
     if ((this->timer == 0) || !(player->stateFlags1 & PLAYER_STATE1_8000000) || (this->type == PR2_TYPE_PASSIVE)) {
-        func_80A74888(this);
+        EnPr2_SetupIdle(this);
         return;
     }
 
-    if (this->alpha != 255) {
+    if (this->alpha != 255) { // dying
         this->actor.speed = 0.0f;
         Math_SmoothStepToS(&this->alpha, 0, 1, 30, 100);
         if (this->alpha < 2) {
@@ -495,28 +499,29 @@ void func_80A74E90(EnPr2* this, PlayState* play) {
         Math_ApproachF(&this->actor.speed, 5.0f, 0.3f, 1.0f);
         this->unk_1F0 = 0;
 
-        if (this->type == PR2_TYPE_2) {
-            f32 temp_f2 = this->actor.world.pos.x - this->originalHome.x;
-            f32 temp_f12 = this->actor.world.pos.z - this->originalHome.z;
-            f32 homeDistance = sqrtf(SQ(temp_f2) + SQ(temp_f12));
+        if (this->type == PR2_TYPE_RESIDENT) {
+            f32 deltaX = this->actor.world.pos.x - this->originalHome.x;
+            f32 deltaZ = this->actor.world.pos.z - this->originalHome.z;
+            f32 homeDistance = sqrtf(SQ(deltaX) + SQ(deltaZ));
 
-            if (this->agroDistance < homeDistance) {
+            if (homeDistance > this->agroDistance) {
                 this->timer4 = 20;
-                func_80A74888(this);
+                EnPr2_SetupIdle(this);
                 return;
             }
         } else {
+            // like scuttlebug?
             Math_Vec3f_Copy(&this->originalHome, &this->actor.world.pos);
         }
 
-        if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &this->waterSurfaceHeight,
-                                 &waterBox)) {
+        if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, 
+            &this->waterSurfaceHeight, &waterBox)) {
             if (this->waypointPos.y > (this->waterSurfaceHeight - 40.0f)) {
                 this->waypointPos.y = this->waterSurfaceHeight - 40.0f;
             }
         }
 
-        if ((this->type == PR2_TYPE_1) && !func_80A7429C(this, play)) {
+        if ((this->type == PR2_TYPE_SPAWNED) && !EnPr2_IsOnScreen(this, play)) {
             if (this->alpha == 255) {
                 this->alpha = 254; // triggers actor kill
             }
@@ -524,8 +529,8 @@ void func_80A74E90(EnPr2* this, PlayState* play) {
             if (this->collider.base.atFlags & AT_HIT) {
                 this->targetingTimer = Rand_S16Offset(30, 30);
                 this->timer = 20 * 5;
-                if (this->type != PR2_TYPE_2) {
-                    func_80A74888(this);
+                if (this->type != PR2_TYPE_RESIDENT) {
+                    EnPr2_SetupIdle(this);
                 }
             }
             this->yawTowardsWaypoint = Math_Vec3f_Yaw(&this->actor.world.pos, &this->waypointPos);
@@ -534,9 +539,7 @@ void func_80A74E90(EnPr2* this, PlayState* play) {
     }
 }
 
-// type > 10 from init
-// also called from apply damage on death?
-void func_80A751B4(EnPr2* this) {
+void EnPr2_SetupDie(EnPr2* this) {
     this->primColor = 0;
     this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
     this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
@@ -561,11 +564,11 @@ void func_80A751B4(EnPr2* this) {
     }
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 10);
     this->state = PR2_STATE_DEAD;
-    this->actionFunc = func_80A75310;
+    this->actionFunc = EnPr2_Die;
 }
 
-void func_80A75310(EnPr2* this, PlayState* play) {
-    s32 atOrAboveWater;
+void EnPr2_Die(EnPr2* this, PlayState* play) {
+    s32 nearSurface;
     f32 curFrame;
     WaterBox* waterBox;
 
@@ -588,7 +591,7 @@ void func_80A75310(EnPr2* this, PlayState* play) {
         }
     } else {
         Vec3f bubblePos;
-        atOrAboveWater = false;
+        nearSurface = false;
 
         Math_SmoothStepToS(&this->actor.shape.rot.x, 0, 5, 0x2710, 0x3E8);
         Math_SmoothStepToS(&this->actor.shape.rot.z, this->targetZRot, 5, 0x2710, 0x3E8);
@@ -601,13 +604,13 @@ void func_80A75310(EnPr2* this, PlayState* play) {
         if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &this->waterSurfaceHeight,
                                  &waterBox)) {
             if (this->actor.world.pos.y >= (this->waterSurfaceHeight - 15.0f)) {
-                atOrAboveWater = true;
+                nearSurface = true;
             } else {
                 Math_ApproachF(&this->actor.world.pos.y, this->waterSurfaceHeight - 15.0f, 0.3f, 1.0f);
             }
         }
 
-        if ((this->timer == 0) || atOrAboveWater) {
+        if ((this->timer == 0) || nearSurface) {
             s32 i;
 
             Math_SmoothStepToS(&this->alpha, 0, 1, 15, 50);
@@ -629,8 +632,7 @@ void func_80A75310(EnPr2* this, PlayState* play) {
     }
 }
 
-// EnPr2_ApplyDamage ?
-void func_80A755D8(EnPr2* this, PlayState* play) {
+void EnPr2_ApplyDamage(EnPr2* this, PlayState* play) {
     s32 pad;
 
     if (this->collider.base.acFlags & AC_HIT) {
@@ -645,7 +647,7 @@ void func_80A755D8(EnPr2* this, PlayState* play) {
             }
 
             this->actor.colChkInfo.health = 0;
-            func_80A751B4(this);
+            EnPr2_SetupDie(this);
         }
     }
 
@@ -669,7 +671,7 @@ void EnPr2_Update(Actor* thisx, PlayState* play) {
     DECR(this->timer4);
 
     Actor_SetFocus(&this->actor, 10.0f);
-    func_80A755D8(this, play);
+    EnPr2_ApplyDamage(this, play);
     Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(play, &this->actor, 0, 10.0f, 20.0f,
                             UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4 |

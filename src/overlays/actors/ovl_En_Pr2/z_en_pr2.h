@@ -21,9 +21,9 @@ typedef void (*EnPr2ActionFunc)(struct EnPr2*, PlayState*);
 
 typedef enum EnPr2Type {
     /* 00 */ PR2_TYPE_PASSIVE,
-    /* 01 */ PR2_TYPE_1, // called from Encount1
-    /* 02 */ PR2_TYPE_2,
-    /* 03 */ PR2_TYPE_3, // path, spawned by Encount1
+    /* 01 */ PR2_TYPE_SPAWNED, // called from Encount1
+    /* 02 */ PR2_TYPE_RESIDENT,
+    /* 03 */ PR2_TYPE_PATHING, // path, spawned by Encount1
     /* 10 */ PR2_TYPE_BROKEN = 10 // not 0x10, just 10
     // all types above 10 are limb based, for drawing the dead fish
 } EnPr2Type;
