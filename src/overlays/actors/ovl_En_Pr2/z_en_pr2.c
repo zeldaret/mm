@@ -23,41 +23,44 @@ void EnPr2_Attack(EnPr2* this, PlayState* play);
 void EnPr2_SetupDie(EnPr2* this);
 void EnPr2_Die(EnPr2* this, PlayState* play);
 
-// TODO write out damage enum
+typedef enum EnPr2DamageEffect {
+    /* 0x0 */ PR2_DMGEFF_NONE,
+    /* 0xF */ PR2_DMGEFF_BREAK = 0xF,
+} EnPr2DamageEffect;
 
 static DamageTable sDamageTable = {
-    /* Deku Nut       */ DMG_ENTRY(0, 0x0),
-    /* Deku Stick     */ DMG_ENTRY(0, 0x0),
-    /* Horse trample  */ DMG_ENTRY(0, 0x0),
-    /* Explosives     */ DMG_ENTRY(1, 0xF),
-    /* Zora boomerang */ DMG_ENTRY(1, 0xF),
-    /* Normal arrow   */ DMG_ENTRY(1, 0xF),
-    /* UNK_DMG_0x06   */ DMG_ENTRY(0, 0x0),
-    /* Hookshot       */ DMG_ENTRY(1, 0xF),
-    /* Goron punch    */ DMG_ENTRY(0, 0x0),
-    /* Sword          */ DMG_ENTRY(0, 0x0),
-    /* Goron pound    */ DMG_ENTRY(0, 0x0),
-    /* Fire arrow     */ DMG_ENTRY(1, 0xF),
-    /* Ice arrow      */ DMG_ENTRY(1, 0xF),
-    /* Light arrow    */ DMG_ENTRY(2, 0xF),
-    /* Goron spikes   */ DMG_ENTRY(0, 0x0),
-    /* Deku spin      */ DMG_ENTRY(0, 0x0),
-    /* Deku bubble    */ DMG_ENTRY(1, 0xF),
-    /* Deku launch    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x12   */ DMG_ENTRY(0, 0x0),
-    /* Zora barrier   */ DMG_ENTRY(1, 0xF),
-    /* Normal shield  */ DMG_ENTRY(0, 0x0),
-    /* Light ray      */ DMG_ENTRY(0, 0x0),
-    /* Thrown object  */ DMG_ENTRY(0, 0x0),
-    /* Zora punch     */ DMG_ENTRY(1, 0xF),
-    /* Spin attack    */ DMG_ENTRY(0, 0x0),
-    /* Sword beam     */ DMG_ENTRY(0, 0x0),
-    /* Normal Roll    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, 0x0),
-    /* Unblockable    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, 0x0),
-    /* Powder Keg     */ DMG_ENTRY(1, 0xF),
+    /* Deku Nut       */ DMG_ENTRY(0, PR2_DMGEFF_NONE),
+    /* Deku Stick     */ DMG_ENTRY(0, PR2_DMGEFF_NONE),
+    /* Horse trample  */ DMG_ENTRY(0, PR2_DMGEFF_NONE),
+    /* Explosives     */ DMG_ENTRY(1, PR2_DMGEFF_BREAK),
+    /* Zora boomerang */ DMG_ENTRY(1, PR2_DMGEFF_BREAK),
+    /* Normal arrow   */ DMG_ENTRY(1, PR2_DMGEFF_BREAK),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, PR2_DMGEFF_NONE),
+    /* Hookshot       */ DMG_ENTRY(1, PR2_DMGEFF_BREAK),
+    /* Goron punch    */ DMG_ENTRY(0, PR2_DMGEFF_NONE),
+    /* Sword          */ DMG_ENTRY(0, PR2_DMGEFF_NONE),
+    /* Goron pound    */ DMG_ENTRY(0, PR2_DMGEFF_NONE),
+    /* Fire arrow     */ DMG_ENTRY(1, PR2_DMGEFF_BREAK),
+    /* Ice arrow      */ DMG_ENTRY(1, PR2_DMGEFF_BREAK),
+    /* Light arrow    */ DMG_ENTRY(2, PR2_DMGEFF_BREAK),
+    /* Goron spikes   */ DMG_ENTRY(0, PR2_DMGEFF_NONE),
+    /* Deku spin      */ DMG_ENTRY(0, PR2_DMGEFF_NONE),
+    /* Deku bubble    */ DMG_ENTRY(1, PR2_DMGEFF_BREAK),
+    /* Deku launch    */ DMG_ENTRY(0, PR2_DMGEFF_NONE),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, PR2_DMGEFF_NONE),
+    /* Zora barrier   */ DMG_ENTRY(1, PR2_DMGEFF_BREAK),
+    /* Normal shield  */ DMG_ENTRY(0, PR2_DMGEFF_NONE),
+    /* Light ray      */ DMG_ENTRY(0, PR2_DMGEFF_NONE),
+    /* Thrown object  */ DMG_ENTRY(0, PR2_DMGEFF_NONE),
+    /* Zora punch     */ DMG_ENTRY(1, PR2_DMGEFF_BREAK),
+    /* Spin attack    */ DMG_ENTRY(0, PR2_DMGEFF_NONE),
+    /* Sword beam     */ DMG_ENTRY(0, PR2_DMGEFF_NONE),
+    /* Normal Roll    */ DMG_ENTRY(0, PR2_DMGEFF_NONE),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, PR2_DMGEFF_NONE),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, PR2_DMGEFF_NONE),
+    /* Unblockable    */ DMG_ENTRY(0, PR2_DMGEFF_NONE),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, PR2_DMGEFF_NONE),
+    /* Powder Keg     */ DMG_ENTRY(1, PR2_DMGEFF_BREAK),
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -111,7 +114,7 @@ static u8 sAnimationModes[ENPR2_ANIM_MAX] = {
     ANIMMODE_ONCE, // PR2_ANIM_FLINCH
 };
 
-// ... why? why not just shift the inject by 4?
+// ... why? why not just lshift the index by 4?
 static s16 sDropTables[] = {
     0x00, 0x10, 0x20, 0x30, 0x40, 0x50, 0x60, 0x70, 0x80, 0x90, 0xA0, 0xB0, 0xC0, 0xD0, 0xE0, 0xF0,
 };
@@ -229,7 +232,6 @@ s32 EnPr2_IsOnScreen(EnPr2* this, PlayState* play) {
     }
 }
 
-// EnPr2
 // control yaw direction? is this overall?
 void func_80A7436C(EnPr2* this, s16 targetYRot) {
     s16 yawDiff = targetYRot - this->actor.world.rot.y;
@@ -272,7 +274,7 @@ void EnPr2_ChangeAnim(EnPr2* this, s32 animIndex) {
 
 void EnPr2_SetupFollowPath(EnPr2* this) {
     EnPr2_ChangeAnim(this, PR2_ANIM_GENTLE_SWIM);
-    this->state = 0;
+    this->state = PR2_STATE_PATHING;
     this->actionFunc = EnPr2_FollowPath;
 }
 
@@ -317,7 +319,7 @@ void EnPr2_FollowPath(EnPr2* this, PlayState* play) {
         this->waypoint++;
         Math_Vec3f_Copy(&this->originalHome, &this->actor.world.pos);
         if (this->waypoint >= this->path->count) {
-            // you have reached your destination
+            // destination reached
             this->type = PR2_TYPE_RESIDENT;
             EnPr2_SetupIdle(this);
         }
@@ -332,7 +334,7 @@ void EnPr2_SetupIdle(EnPr2* this) {
     this->waypointTimer = 2;
     this->timer = 0;
     Math_Vec3f_Copy(&this->waypointPos, &this->originalHome);
-    this->state = 1;
+    this->state = PR2_STATE_IDLE;
     this->actionFunc = EnPr2_Idle;
 }
 
@@ -366,12 +368,13 @@ void EnPr2_Idle(EnPr2* this, PlayState* play) {
                     updateFlag = true;
                     EnPr2_SetupAttack(this, play);
                 } else if (!EnPr2_IsOnScreen(this, play) && (this->alpha == 255)) {
+                    // despawn if not on screen
                     this->alpha = 254; // triggers actor kill
                 }
                 break;
 
             case PR2_TYPE_RESIDENT:
-                if (this->timer4 == 0) {
+                if (this->returnHomeTimer == 0) {
                     // distance diff from player to home
                     deltaX = player->actor.world.pos.x - this->originalHome.x;
                     deltaZ = player->actor.world.pos.z - this->originalHome.z;
@@ -388,7 +391,7 @@ void EnPr2_Idle(EnPr2* this, PlayState* play) {
                     sqrtXZ = sqrtf(SQ(deltaX) + SQ(deltaZ));
 
                     if (sqrtXZ > 20.0f) {
-                        this->timer4 = 5;
+                        this->returnHomeTimer = 5;
                         updateFlag = true;
                         this->targetingTimer = 0;
                         Math_Vec3f_Copy(&this->waypointPos, &this->originalHome);
@@ -425,15 +428,16 @@ void EnPr2_Idle(EnPr2* this, PlayState* play) {
                 if (fabsf(this->actor.world.rot.y - this->yawTowardsWaypoint) < 100.0f) {
                     if (BgCheck_SphVsFirstPoly(&play->colCtx, &currentPos, 20.0f) ||
                         (this->actor.bgCheckFlags & BGCHECKFLAG_WALL)) {
+                        // dam
                         this->targetingTimer = 0;
-                        this->unk_1F2++;
+                        this->wallCollisionCounter++;
                         Math_Vec3f_Copy(&this->waypointPos, &this->originalHome);
-                        if (this->unk_1F2 > 10) {
-                            this->unk_1F0 += 0x2000;
+                        if (this->wallCollisionCounter > 10) {
+                            this->wallCollisionAngleAdjustment += 0x2000;
                         }
                     } else {
-                        Math_SmoothStepToS(&this->unk_1F0, 0, 1, 0x3E8, 0x64);
-                        this->unk_1F2 = 0;
+                        Math_SmoothStepToS(&this->wallCollisionAngleAdjustment, 0, 1, 0x3E8, 0x64);
+                        this->wallCollisionCounter = 0;
                     }
                 }
 
@@ -445,7 +449,7 @@ void EnPr2_Idle(EnPr2* this, PlayState* play) {
         }
 
         if (this->waypointTimer == 0) {
-            this->yawTowardsWaypoint = Math_Vec3f_Yaw(&this->actor.world.pos, &this->waypointPos) + this->unk_1F0;
+            this->yawTowardsWaypoint = Math_Vec3f_Yaw(&this->actor.world.pos, &this->waypointPos) + this->wallCollisionAngleAdjustment;
             func_80A7436C(this, this->yawTowardsWaypoint);
         }
     }
@@ -454,7 +458,7 @@ void EnPr2_Idle(EnPr2* this, PlayState* play) {
 void EnPr2_SetupAttack(EnPr2* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    this->unk_1F0 = 0;
+    this->wallCollisionAngleAdjustment = 0;
     EnPr2_ChangeAnim(this, PR2_ANIM_FAST_SWIM);
     Actor_PlaySfx(&this->actor, NA_SE_EN_PIRANHA_ATTACK);
     Math_Vec3f_Copy(&this->waypointPos, &player->actor.world.pos);
@@ -463,7 +467,7 @@ void EnPr2_SetupAttack(EnPr2* this, PlayState* play) {
     this->randomTargetHeightOffset = Rand_ZeroFloat(30.0f);
     this->targetingTimer = 0;
     this->timer = (3 * 20) + 10;
-    this->state = 2;
+    this->state = PR2_STATE_ATTACKING;
     this->actionFunc = EnPr2_Attack;
 }
 
@@ -497,7 +501,7 @@ void EnPr2_Attack(EnPr2* this, PlayState* play) {
 
         this->waypointPos.y = player->actor.world.pos.y + 30.0f + this->randomTargetHeightOffset;
         Math_ApproachF(&this->actor.speed, 5.0f, 0.3f, 1.0f);
-        this->unk_1F0 = 0;
+        this->wallCollisionAngleAdjustment = 0;
 
         if (this->type == PR2_TYPE_RESIDENT) {
             f32 deltaX = this->actor.world.pos.x - this->originalHome.x;
@@ -505,7 +509,7 @@ void EnPr2_Attack(EnPr2* this, PlayState* play) {
             f32 homeDistance = sqrtf(SQ(deltaX) + SQ(deltaZ));
 
             if (homeDistance > this->agroDistance) {
-                this->timer4 = 20;
+                this->returnHomeTimer = 20;
                 EnPr2_SetupIdle(this);
                 return;
             }
@@ -578,8 +582,8 @@ void EnPr2_Die(EnPr2* this, PlayState* play) {
 
         curFrame = this->skelAnime.curFrame;
 
-        if (curFrame >= this->animEndFrame) {
-            // flinch animation done, spawn LIMB_COUNT EnPr2, one for each limb, to draw floating pieces
+        if (curFrame >= this->animEndFrame) { // flinch animation done
+            // spawn LIMB_COUNT EnPr2, one for each limb, to draw floating pieces
             for (i = 0; i < ARRAY_COUNT(this->limbPos); i++) {
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_PR2, this->limbPos[i].x, this->limbPos[i].y,
                             this->limbPos[i].z, this->actor.world.rot.x, this->actor.world.rot.y,
@@ -668,7 +672,7 @@ void EnPr2_Update(Actor* thisx, PlayState* play) {
     DECR(this->waypointTimer);
     DECR(this->timer);
     DECR(this->targetingTimer);
-    DECR(this->timer4);
+    DECR(this->returnHomeTimer);
 
     Actor_SetFocus(&this->actor, 10.0f);
     EnPr2_ApplyDamage(this, play);
@@ -715,7 +719,8 @@ s32 EnPr2_OverrideLimbDrawOpa(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f
         if (limbIndex == OBJECT_PR_2_LIMB_02) {
             rot->y += TRUNCF_BINANG(this->slowLimbYaw) * -1;
         }
-    } else if ((limbIndex + 10) != this->type) {
+    } else if (this->type != limbIndex + PR2_TYPE_BROKEN) {
+        // broken: only draw the one limb we represent, NULL the rest
         *dList = NULL;
     }
     return false;

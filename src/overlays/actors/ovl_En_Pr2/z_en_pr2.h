@@ -20,18 +20,18 @@ typedef void (*EnPr2ActionFunc)(struct EnPr2*, PlayState*);
 #define ENPR2_PARAMS(paramF, paramFF0) (((paramF) & 0xF) | (((paramFF0) << 4) & 0xFF0))
 
 typedef enum EnPr2Type {
-    /* 00 */ PR2_TYPE_PASSIVE,
-    /* 01 */ PR2_TYPE_SPAWNED, // called from Encount1
-    /* 02 */ PR2_TYPE_RESIDENT,
-    /* 03 */ PR2_TYPE_PATHING, // path, spawned by Encount1
-    /* 10 */ PR2_TYPE_BROKEN = 10 // not 0x10, just 10
-    // all types above 10 are limb based, for drawing the dead fish
+    /* 00 */ PR2_TYPE_PASSIVE,   // does not attack, used as a hazard around the cape heartpiece likelike
+    /* 01 */ PR2_TYPE_SPAWNED,   // called from Encount1 as part of endless spawn
+    /* 02 */ PR2_TYPE_RESIDENT,  // regular spawn and remain in the world
+    /* 03 */ PR2_TYPE_PATHING,   // spawned by Encount1 in GBT so they swim out of a waterway
+    // all types above 10 are limb based, for drawing the dead fish parts after being broken
+    /* 10 */ PR2_TYPE_BROKEN = 10
 } EnPr2Type;
 
 typedef enum EnPr2State {
-    /* 00 */ PR2_STATE_0,
-    /* 01 */ PR2_STATE_1,
-    /* 02 */ PR2_STATE_2,
+    /* 00 */ PR2_STATE_PATHING,
+    /* 01 */ PR2_STATE_IDLE,
+    /* 02 */ PR2_STATE_ATTACKING,
     /* 03 */ PR2_STATE_DEAD,
 } EnPr2State;
 
@@ -48,8 +48,8 @@ typedef struct EnPr2 {
     /* 0x1D6 */ s16 bubbleToggle;
     /* 0x1D8 */ s16 timer;
     /* 0x1DA */ s16 waypointTimer; // path related, maybe rename
-    /* 0x1DC */ s16 targetingTimer; // on zero, re-point at player
-    /* 0x1DE */ s16 timer4; // go home timer?
+    /* 0x1DC */ s16 targetingTimer; // on zero, attack attempt on player
+    /* 0x1DE */ s16 returnHomeTimer; // frames until attacking player acceptable again
     /* 0x1E0 */ s16 type;
     /* 0x1E2 */ UNK_TYPE1 unk1E2[2];
     /* 0x1E4 */ s16 targetZRot;
@@ -57,8 +57,8 @@ typedef struct EnPr2 {
     /* 0x1E8 */ UNK_TYPE1 unk1E8[4];
     /* 0x1EC */ s16 primColor; // r and g and b, all same var, think this is to force the actor black
     /* 0x1EE */ s16 yawTowardsWaypoint;
-    /* 0x1F0 */ s16 unk_1F0; // this has something to do with angle facing I think, swimming?
-    /* 0x1F2 */ s16 unk_1F2;
+    /* 0x1F0 */ s16 wallCollisionAngleAdjustment;
+    /* 0x1F2 */ s16 wallCollisionCounter;
     /* 0x1F4 */ s16 alpha;
     /* 0x1F8 */ f32 animEndFrame;
     /* 0x1FC */ f32 slowLimbYaw; // think this is related to swimming animation, for head turning
