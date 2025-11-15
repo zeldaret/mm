@@ -103,9 +103,9 @@ typedef enum EnPr2Animation {
 } EnPr2Animation;
 
 static AnimationHeader* sAnimations[ENPR2_ANIM_MAX] = {
-    &object_pr_Anim_004340, // PR2_ANIM_GENTLE_SWIM
-    &object_pr_Anim_004274, // PR2_ANIM_FAST_SWIM
-    &object_pr_Anim_003904, // PR2_ANIM_FLINCH
+    &gSkullFishSwimAnim, // PR2_ANIM_GENTLE_SWIM
+    &gSkullFishAttackAnim, // PR2_ANIM_FAST_SWIM
+    &gSkullFishDieAnim, // PR2_ANIM_FLINCH
 };
 
 static u8 sAnimationModes[ENPR2_ANIM_MAX] = {
@@ -128,7 +128,7 @@ void EnPr2_Init(Actor* thisx, PlayState* play) {
     this->actor.colChkInfo.health = 1;
     this->actor.colChkInfo.damageTable = &sDamageTable;
 
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_pr_Skel_004188, &object_pr_Anim_004340, this->jointTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &gSkullFishSkel, &gSkullFishSwimAnim, this->jointTable,
                        this->morphTable, OBJECT_PR_2_LIMB_MAX);
     this->type = ENPR2_GET_TYPE(&this->actor);
     this->actor.colChkInfo.mass = 10;
@@ -550,8 +550,8 @@ void EnPr2_SetupDie(EnPr2* this) {
     if (this->type < PR2_TYPE_BROKEN) {
         EnPr2_ChangeAnim(this, PR2_ANIM_FLINCH);
     } else {
-        this->animEndFrame = Animation_GetLastFrame(&object_pr_Anim_003904);
-        Animation_Change(&this->skelAnime, &object_pr_Anim_003904, 1.0f, this->animEndFrame, this->animEndFrame,
+        this->animEndFrame = Animation_GetLastFrame(&gSkullFishDieAnim);
+        Animation_Change(&this->skelAnime, &gSkullFishDieAnim, 1.0f, this->animEndFrame, this->animEndFrame,
                          ANIMMODE_ONCE, 0.0f);
         this->timer = Rand_S16Offset(20, 30);
         this->targetZRot = 0x4000;
