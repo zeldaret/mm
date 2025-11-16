@@ -8,13 +8,19 @@ struct EnPr2;
 
 typedef void (*EnPr2ActionFunc)(struct EnPr2*, PlayState*);
 
-#define ENPR2_GET_TYPE(thisx) ((thisx)->params & 0xF)
-// distance?
-#define ENPR2_GET_FF0(thisx) (((thisx)->params >> 4) & 0xFF)
+// I wonder if they planned more for this actor, because there 
+// is room enough in params without using rotation of the parent
 
+#define ENPR2_GET_TYPE(thisx) ((thisx)->params & 0xF)
+// only used for type PR2_TYPE_RESIDENT (agro distance is 1/20th of final units) 
+#define ENPR2_GET_AGRO_DISTANCE(thisx) (((thisx)->params >> 4) & 0xFF)
+
+// only if we are NOT spawned by a parent actor
 #define ENPR2_GETZ_DROPID(thisx) ((thisx)->world.rot.z)
-#define ENPR2_GET_PARENTY_DROPID(parent) ((parent)->world.rot.y)
-#define ENPR2_GET_PARENTZ_UNK(parent) ((parent)->world.rot.z)
+// only if we are spawned by En_Encount1
+#define ENPR2_GETY_PARENT_DROPID(parent) ((parent)->world.rot.y)
+// agro distance is 1/20th of final distance
+#define ENPR2_GETZ_PARENT_AGRO_DISTANCE(parent) ((parent)->world.rot.z)
 
 #define ENPR2_PATH_INDEX_NONE 0x3F
 #define ENPR2_PARAMS(paramF, paramFF0) (((paramF) & 0xF) | (((paramFF0) << 4) & 0xFF0))
@@ -46,7 +52,7 @@ typedef struct EnPr2 {
     /* 0x1D0 */ s32 waypoint;
     /* 0x1D4 */ s16 state;
     /* 0x1D6 */ s16 bubbleToggle;
-    /* 0x1D8 */ s16 timer;
+    /* 0x1D8 */ s16 mainTimer;
     /* 0x1DA */ s16 waypointTimer; // path related, maybe rename
     /* 0x1DC */ s16 targetingTimer; // on zero, attack attempt on player
     /* 0x1DE */ s16 returnHomeTimer; // frames until attacking player acceptable again
@@ -70,7 +76,7 @@ typedef struct EnPr2 {
     /* 0x214 */ UNK_TYPE1 unk214[4];
     /* 0x218 */ s32 dropID;
     /* 0x21C */ Vec3f waypointPos;
-    /* 0x228 */ Vec3f originalHome;
+    /* 0x228 */ Vec3f newHome;
     /* 0x234 */ Vec3f limbPos[5];
     /* 0x270 */ Vec3f limbJawPos;
     /* 0x27C */ ColliderCylinder collider;

@@ -96,25 +96,25 @@ ActorProfile En_Pr2_Profile = {
 };
 
 typedef enum EnPr2Animation {
-    /* 0 */ PR2_ANIM_GENTLE_SWIM,
-    /* 1 */ PR2_ANIM_FAST_SWIM,
-    /* 2 */ PR2_ANIM_FLINCH,
+    /* 0 */ PR2_ANIM_SWIM,
+    /* 1 */ PR2_ANIM_ATTACK,
+    /* 2 */ PR2_ANIM_DIE,
     /* 3 */ ENPR2_ANIM_MAX
 } EnPr2Animation;
 
 static AnimationHeader* sAnimations[ENPR2_ANIM_MAX] = {
-    &gSkullFishSwimAnim, // PR2_ANIM_GENTLE_SWIM
-    &gSkullFishAttackAnim, // PR2_ANIM_FAST_SWIM
-    &gSkullFishDieAnim, // PR2_ANIM_FLINCH
+    &gSkullFishSwimAnim, // PR2_ANIM_SWIM
+    &gSkullFishAttackAnim, // PR2_ANIM_ATTACK
+    &gSkullFishDieAnim, // PR2_ANIM_DIE
 };
 
 static u8 sAnimationModes[ENPR2_ANIM_MAX] = {
-    ANIMMODE_LOOP, // PR2_ANIM_GENTLE_SWIM
-    ANIMMODE_LOOP, // PR2_ANIM_FAST_SWIM
-    ANIMMODE_ONCE, // PR2_ANIM_FLINCH
+    ANIMMODE_LOOP, // PR2_ANIM_SWIM
+    ANIMMODE_LOOP, // PR2_ANIM_ATTACK
+    ANIMMODE_ONCE, // PR2_ANIM_DIE
 };
 
-// ... why? why not just lshift the index by 4?
+// ... ? why not just lshift the index by 4?
 static s16 sDropTables[] = {
     0x00, 0x10, 0x20, 0x30, 0x40, 0x50, 0x60, 0x70, 0x80, 0x90, 0xA0, 0xB0, 0xC0, 0xD0, 0xE0, 0xF0,
 };
@@ -132,27 +132,29 @@ void EnPr2_Init(Actor* thisx, PlayState* play) {
                        this->morphTable, OBJECT_PR_2_LIMB_MAX);
     this->type = ENPR2_GET_TYPE(&this->actor);
     this->actor.colChkInfo.mass = 10;
-    Math_Vec3f_Copy(&this->originalHome, &this->actor.home.pos);
+    Math_Vec3f_Copy(&this->newHome, &this->actor.home.pos);
 
     if (this->type == PR2_TYPE_RESIDENT) {
-        this->agroDistance = ENPR2_GET_FF0(&this->actor) * 20.0f;
+        this->agroDistance = ENPR2_GET_AGRO_DISTANCE(&this->actor) * 20.0f;
     }
+
     this->alpha = 255;
     this->actor.shape.yOffset = 500.0f;
     this->actor.shape.shadowScale = 12.0f;
 
-    if (this->type < PR2_TYPE_BROKEN) {
+    if (this->type < PR2_TYPE_BROKEN) { // regular spawns
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 19.0f);
         Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
         this->dropID = -1;
         this->scale = 0.0f;
 
+        // spawned by EnEncount1
         if (this->actor.parent != NULL) {
             Actor* encount1 = this->actor.parent;
 
             if (encount1->update != NULL) {
-                if (ENPR2_GET_PARENTY_DROPID(encount1) != 0) {
-                    this->dropID = ENPR2_GET_PARENTY_DROPID(encount1) - 1;
+                if (ENPR2_GETY_PARENT_DROPID(encount1) != 0) {
+                    this->dropID = ENPR2_GETY_PARENT_DROPID(encount1) - 1;
                 }
             }
         } else if (ENPR2_GETZ_DROPID(thisx) != 0) {
@@ -167,7 +169,7 @@ void EnPr2_Init(Actor* thisx, PlayState* play) {
                 if (encount1->update != NULL) {
                     this->pathIndex = ((EnEncount1*)encount1)->pathIndex;
                     this->path = SubS_GetPathByIndex(play, this->pathIndex, ENPR2_PATH_INDEX_NONE);
-                    this->agroDistance = ENPR2_GET_PARENTZ_UNK(encount1) * 20.0f;
+                    this->agroDistance = ENPR2_GETZ_PARENT_AGRO_DISTANCE(encount1) * 20.0f;
                     if (this->agroDistance < 20.0f) {
                         this->agroDistance = 20.0f;
                     }
@@ -191,6 +193,7 @@ void EnPr2_Init(Actor* thisx, PlayState* play) {
                                 UPDBGCHECKINFO_FLAG_10);
 
     if (!(this->actor.bgCheckFlags & (BGCHECKFLAG_WATER | BGCHECKFLAG_WATER_TOUCH))) {
+        // no spawning in air
         Actor_Kill(&this->actor);
     }
 }
@@ -232,8 +235,7 @@ s32 EnPr2_IsOnScreen(EnPr2* this, PlayState* play) {
     }
 }
 
-// control yaw direction? is this overall?
-void func_80A7436C(EnPr2* this, s16 targetYRot) {
+void EnPr2_HandleYaw(EnPr2* this, s16 targetYRot) {
     s16 yawDiff = targetYRot - this->actor.world.rot.y;
 
     if (yawDiff > 10000) {
@@ -273,7 +275,7 @@ void EnPr2_ChangeAnim(EnPr2* this, s32 animIndex) {
 }
 
 void EnPr2_SetupFollowPath(EnPr2* this) {
-    EnPr2_ChangeAnim(this, PR2_ANIM_GENTLE_SWIM);
+    EnPr2_ChangeAnim(this, PR2_ANIM_SWIM);
     this->state = PR2_STATE_PATHING;
     this->actionFunc = EnPr2_FollowPath;
 }
@@ -317,7 +319,7 @@ void EnPr2_FollowPath(EnPr2* this, PlayState* play) {
 
     if (waypointDist < (Rand_ZeroFloat(20.0f) + 15.0f)) {
         this->waypoint++;
-        Math_Vec3f_Copy(&this->originalHome, &this->actor.world.pos);
+        Math_Vec3f_Copy(&this->newHome, &this->actor.world.pos);
         if (this->waypoint >= this->path->count) {
             // destination reached
             this->type = PR2_TYPE_RESIDENT;
@@ -326,32 +328,32 @@ void EnPr2_FollowPath(EnPr2* this, PlayState* play) {
     }
 
     this->yawTowardsWaypoint = Math_Vec3f_Yaw(&this->actor.world.pos, &this->waypointPos);
-    func_80A7436C(this, this->yawTowardsWaypoint);
+    EnPr2_HandleYaw(this, this->yawTowardsWaypoint);
 }
 
 void EnPr2_SetupIdle(EnPr2* this) {
-    EnPr2_ChangeAnim(this, PR2_ANIM_GENTLE_SWIM);
+    EnPr2_ChangeAnim(this, PR2_ANIM_SWIM);
     this->waypointTimer = 2;
-    this->timer = 0;
-    Math_Vec3f_Copy(&this->waypointPos, &this->originalHome);
+    this->mainTimer = 0;
+    Math_Vec3f_Copy(&this->waypointPos, &this->newHome);
     this->state = PR2_STATE_IDLE;
     this->actionFunc = EnPr2_Idle;
 }
 
 void EnPr2_Idle(EnPr2* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    f32 deltaX; // reused for two separate purposes
+    f32 deltaX; // reused for both dist-to-player and dist-to-home
     f32 deltaZ;
     f32 sqrtXZ;
-    s32 updateFlag = false; // think this is "Needs updated pos/target"
-    s32 swimming = false; // TODO needs double checking
+    s32 changingCourse = false;
+    s32 swimmingStraight = false;
     Vec3f currentPos; // this describes where it starts, not what its doing, rename
 
     Math_ApproachF(&this->scale, 0.02f, 0.1f, 0.005f);
     Actor_PlaySfx(&this->actor, NA_SE_EN_PIRANHA_EXIST - SFX_FLAG);
 
     if (fabsf(this->actor.world.rot.y - this->yawTowardsWaypoint) < 200.0f) {
-        swimming = true;
+        swimmingStraight = true;
         SkelAnime_Update(&this->skelAnime);
     }
 
@@ -365,7 +367,7 @@ void EnPr2_Idle(EnPr2* this, PlayState* play) {
         switch (this->type) {
             case PR2_TYPE_SPAWNED:
                 if (this->targetingTimer == 0) {
-                    updateFlag = true;
+                    changingCourse = true;
                     EnPr2_SetupAttack(this, play);
                 } else if (!EnPr2_IsOnScreen(this, play) && (this->alpha == 255)) {
                     // despawn if not on screen
@@ -376,25 +378,25 @@ void EnPr2_Idle(EnPr2* this, PlayState* play) {
             case PR2_TYPE_RESIDENT:
                 if (this->returnHomeTimer == 0) {
                     // distance diff from player to home
-                    deltaX = player->actor.world.pos.x - this->originalHome.x;
-                    deltaZ = player->actor.world.pos.z - this->originalHome.z;
+                    deltaX = player->actor.world.pos.x - this->newHome.x;
+                    deltaZ = player->actor.world.pos.z - this->newHome.z;
                     sqrtXZ = sqrtf(SQ(deltaX) + SQ(deltaZ));
 
-                    if (swimming && (player->stateFlags1 & PLAYER_STATE1_8000000) && (sqrtXZ < this->agroDistance)) {
-                        updateFlag = true;
+                    if (swimmingStraight && (player->stateFlags1 & PLAYER_STATE1_8000000) && (sqrtXZ < this->agroDistance)) {
+                        changingCourse = true;
                         EnPr2_SetupAttack(this, play);
                     }
                 } else {
                     // distance diff from current pos to home
-                    deltaX = this->actor.world.pos.x - this->originalHome.x;
-                    deltaZ = this->actor.world.pos.z - this->originalHome.z;
+                    deltaX = this->actor.world.pos.x - this->newHome.x;
+                    deltaZ = this->actor.world.pos.z - this->newHome.z;
                     sqrtXZ = sqrtf(SQ(deltaX) + SQ(deltaZ));
 
                     if (sqrtXZ > 20.0f) {
                         this->returnHomeTimer = 5;
-                        updateFlag = true;
+                        changingCourse = true;
                         this->targetingTimer = 0;
-                        Math_Vec3f_Copy(&this->waypointPos, &this->originalHome);
+                        Math_Vec3f_Copy(&this->waypointPos, &this->newHome);
                         Math_ApproachF(&this->actor.speed, 3.0f, 0.3f, 0.2f);
                     }
                 }
@@ -404,7 +406,8 @@ void EnPr2_Idle(EnPr2* this, PlayState* play) {
                 break;
         }
 
-        if (!updateFlag) {
+        // if we already plan to change behavior, ignore this expensive maintanence code
+        if (!changingCourse) {
             this->waypointPos.y = this->actor.world.pos.y;
             if (this->waypointTimer != 0) {
                 if ((Rand_ZeroOne() < 0.3f) && !this->bubbleToggle) {
@@ -414,8 +417,8 @@ void EnPr2_Idle(EnPr2* this, PlayState* play) {
                 Math_ApproachZeroF(&this->actor.speed, 0.1f, 0.2f);
 
                 if (this->waypointTimer == 1) {
-                    this->timer = Rand_S16Offset(100, 100);
-                    Math_Vec3f_Copy(&currentPos, &this->originalHome);
+                    this->mainTimer = Rand_S16Offset(100, 100);
+                    Math_Vec3f_Copy(&currentPos, &this->newHome);
                     currentPos.x += Rand_CenteredFloat(300.0f);
                     currentPos.z += Rand_CenteredFloat(300.0f);
                     Math_Vec3f_Copy(&this->waypointPos, &currentPos);
@@ -428,10 +431,10 @@ void EnPr2_Idle(EnPr2* this, PlayState* play) {
                 if (fabsf(this->actor.world.rot.y - this->yawTowardsWaypoint) < 100.0f) {
                     if (BgCheck_SphVsFirstPoly(&play->colCtx, &currentPos, 20.0f) ||
                         (this->actor.bgCheckFlags & BGCHECKFLAG_WALL)) {
-                        // dam
+                        // Dam 
                         this->targetingTimer = 0;
                         this->wallCollisionCounter++;
-                        Math_Vec3f_Copy(&this->waypointPos, &this->originalHome);
+                        Math_Vec3f_Copy(&this->waypointPos, &this->newHome);
                         if (this->wallCollisionCounter > 10) {
                             this->wallCollisionAngleAdjustment += 0x2000;
                         }
@@ -441,7 +444,7 @@ void EnPr2_Idle(EnPr2* this, PlayState* play) {
                     }
                 }
 
-                if ((this->timer == 0) || ((fabsf(this->waypointPos.x - this->actor.world.pos.x) < 10.0f) &&
+                if ((this->mainTimer == 0) || ((fabsf(this->waypointPos.x - this->actor.world.pos.x) < 10.0f) &&
                                              (fabsf(this->waypointPos.z - this->actor.world.pos.z) < 10.0f))) {
                     this->waypointTimer = Rand_S16Offset(20, 30);
                 }
@@ -450,7 +453,7 @@ void EnPr2_Idle(EnPr2* this, PlayState* play) {
 
         if (this->waypointTimer == 0) {
             this->yawTowardsWaypoint = Math_Vec3f_Yaw(&this->actor.world.pos, &this->waypointPos) + this->wallCollisionAngleAdjustment;
-            func_80A7436C(this, this->yawTowardsWaypoint);
+            EnPr2_HandleYaw(this, this->yawTowardsWaypoint);
         }
     }
 }
@@ -459,14 +462,14 @@ void EnPr2_SetupAttack(EnPr2* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     this->wallCollisionAngleAdjustment = 0;
-    EnPr2_ChangeAnim(this, PR2_ANIM_FAST_SWIM);
+    EnPr2_ChangeAnim(this, PR2_ANIM_ATTACK);
     Actor_PlaySfx(&this->actor, NA_SE_EN_PIRANHA_ATTACK);
     Math_Vec3f_Copy(&this->waypointPos, &player->actor.world.pos);
 
     this->yawTowardsWaypoint = Math_Vec3f_Yaw(&this->actor.world.pos, &this->waypointPos);
     this->randomTargetHeightOffset = Rand_ZeroFloat(30.0f);
     this->targetingTimer = 0;
-    this->timer = (3 * 20) + 10;
+    this->mainTimer = 3.5 * 20;
     this->state = PR2_STATE_ATTACKING;
     this->actionFunc = EnPr2_Attack;
 }
@@ -476,7 +479,7 @@ void EnPr2_Attack(EnPr2* this, PlayState* play) {
     WaterBox* waterBox;
 
     Math_ApproachF(&this->scale, 0.02f, 0.1f, 0.005f);
-    if ((this->timer == 0) || !(player->stateFlags1 & PLAYER_STATE1_8000000) || (this->type == PR2_TYPE_PASSIVE)) {
+    if ((this->mainTimer == 0) || !(player->stateFlags1 & PLAYER_STATE1_8000000) || (this->type == PR2_TYPE_PASSIVE)) {
         EnPr2_SetupIdle(this);
         return;
     }
@@ -504,8 +507,8 @@ void EnPr2_Attack(EnPr2* this, PlayState* play) {
         this->wallCollisionAngleAdjustment = 0;
 
         if (this->type == PR2_TYPE_RESIDENT) {
-            f32 deltaX = this->actor.world.pos.x - this->originalHome.x;
-            f32 deltaZ = this->actor.world.pos.z - this->originalHome.z;
+            f32 deltaX = this->actor.world.pos.x - this->newHome.x;
+            f32 deltaZ = this->actor.world.pos.z - this->newHome.z;
             f32 homeDistance = sqrtf(SQ(deltaX) + SQ(deltaZ));
 
             if (homeDistance > this->agroDistance) {
@@ -514,8 +517,8 @@ void EnPr2_Attack(EnPr2* this, PlayState* play) {
                 return;
             }
         } else {
-            // like scuttlebug?
-            Math_Vec3f_Copy(&this->originalHome, &this->actor.world.pos);
+            // home moves to follow player, like scuttlebug  
+            Math_Vec3f_Copy(&this->newHome, &this->actor.world.pos);
         }
 
         if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, 
@@ -532,13 +535,13 @@ void EnPr2_Attack(EnPr2* this, PlayState* play) {
         } else {
             if (this->collider.base.atFlags & AT_HIT) {
                 this->targetingTimer = Rand_S16Offset(30, 30);
-                this->timer = 20 * 5;
+                this->mainTimer = 5 * 20;
                 if (this->type != PR2_TYPE_RESIDENT) {
                     EnPr2_SetupIdle(this);
                 }
             }
             this->yawTowardsWaypoint = Math_Vec3f_Yaw(&this->actor.world.pos, &this->waypointPos);
-            func_80A7436C(this, this->yawTowardsWaypoint);
+            EnPr2_HandleYaw(this, this->yawTowardsWaypoint);
         }
     }
 }
@@ -548,12 +551,12 @@ void EnPr2_SetupDie(EnPr2* this) {
     this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
     this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
     if (this->type < PR2_TYPE_BROKEN) {
-        EnPr2_ChangeAnim(this, PR2_ANIM_FLINCH);
+        EnPr2_ChangeAnim(this, PR2_ANIM_DIE);
     } else {
         this->animEndFrame = Animation_GetLastFrame(&gSkullFishDieAnim);
         Animation_Change(&this->skelAnime, &gSkullFishDieAnim, 1.0f, this->animEndFrame, this->animEndFrame,
                          ANIMMODE_ONCE, 0.0f);
-        this->timer = Rand_S16Offset(20, 30);
+        this->mainTimer = Rand_S16Offset(20, 30);
         this->targetZRot = 0x4000;
         if (Rand_ZeroOne() < 0.5f) {
             this->targetZRot = -0x4000;
@@ -562,7 +565,7 @@ void EnPr2_SetupDie(EnPr2* this) {
         this->actor.shape.rot.x = this->actor.world.rot.x;
         this->actor.shape.rot.y = this->actor.world.rot.y;
         this->actor.shape.rot.z = this->actor.world.rot.z;
-        this->timer = 20 + 10;
+        this->mainTimer = 1.5 * 20;
         this->actor.speed = Rand_ZeroFloat(0.5f);
         this->actor.world.rot.y = Rand_CenteredFloat(0x8000);
     }
@@ -582,7 +585,7 @@ void EnPr2_Die(EnPr2* this, PlayState* play) {
 
         curFrame = this->skelAnime.curFrame;
 
-        if (curFrame >= this->animEndFrame) { // flinch animation done
+        if (curFrame >= this->animEndFrame) { // death animation done
             // spawn LIMB_COUNT EnPr2, one for each limb, to draw floating pieces
             for (i = 0; i < ARRAY_COUNT(this->limbPos); i++) {
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_PR2, this->limbPos[i].x, this->limbPos[i].y,
@@ -614,7 +617,7 @@ void EnPr2_Die(EnPr2* this, PlayState* play) {
             }
         }
 
-        if ((this->timer == 0) || nearSurface) {
+        if ((this->mainTimer == 0) || nearSurface) {
             s32 i;
 
             Math_SmoothStepToS(&this->alpha, 0, 1, 15, 50);
@@ -655,7 +658,7 @@ void EnPr2_ApplyDamage(EnPr2* this, PlayState* play) {
         }
     }
 
-    // Huh?
+    // against mikau shild?
     if (this->collider.base.atFlags & AT_BOUNCED) {
         this->actor.speed = -10.0f;
     }
@@ -670,7 +673,7 @@ void EnPr2_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     DECR(this->waypointTimer);
-    DECR(this->timer);
+    DECR(this->mainTimer);
     DECR(this->targetingTimer);
     DECR(this->returnHomeTimer);
 
@@ -748,6 +751,7 @@ s32 EnPr2_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 
     if (this->type < PR2_TYPE_BROKEN) {
         if (limbIndex == OBJECT_PR_2_LIMB_02) {
+            // head is upside down in the animations for some reason, they decided to fix it here?
             rot->y += TRUNCF_BINANG(this->slowLimbYaw) * -1;
         }
     } else if ((limbIndex + PR2_TYPE_BROKEN) != this->type) {

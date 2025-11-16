@@ -43,6 +43,7 @@
         <Limb Name="object_pr_Standardlimb_003888" Type="Standard" EnumName="OBJECT_PR_1_LIMB_09" Offset="0x3888" />
         <Skeleton Name="object_pr_Skel_0038B8" Type="Flex" LimbType="Standard" LimbNone="OBJECT_PR_1_LIMB_NONE" LimbMax="OBJECT_PR_1_LIMB_MAX" EnumName="ObjectPr1Limb" Offset="0x38B8" />
 
+        <!-- Pr2 (Small skullfish) assets -->
         <Animation Name="gSkullFishDieAnim" Offset="0x3904" /> <!-- Original name might be "prz_dead" -->
         <DList Name="gSkullFishBodyDL" Offset="0x3AB0" />
         <DList Name="gSkullFishTailDL" Offset="0x3B50" />
@@ -60,7 +61,6 @@
         <Limb Name="gSkullFishTailLimb" Type="Standard" EnumName="OBJECT_PR_2_LIMB_04" Offset="0x416C" />
         <Skeleton Name="gSkullFishSkel" Type="Flex" LimbType="Standard" LimbNone="OBJECT_PR_2_LIMB_NONE" LimbMax="OBJECT_PR_2_LIMB_MAX" EnumName="ObjectPr2Limb" Offset="0x4188" />
 
-        <!-- Pr2 (Small skullfish)  animations -->
         <Animation Name="gSkullFishAttackAnim" Offset="0x4274" /> <!-- Original name is "prz_gattuku" -->
         <Animation Name="gSkullFishSwimAnim" Offset="0x4340" /> <!-- Original name is "prz_swim" -->
     </File>
