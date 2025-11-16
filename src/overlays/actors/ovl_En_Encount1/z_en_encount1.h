@@ -13,7 +13,7 @@
 #define ENENCOUNT1_PATH_INDEX_NONE 0x3F
 
 #define ENENCOUNT1_GET_SPAWN_TIME_MIN(thisx) ((thisx)->world.rot.x) // Time to wait between spawning
-#define ENENCOUNT1_GET_SPAWN_DROP_TABLE(thisx) ((thisx)->world.rot.y) // Read from EnPr2
+#define ENENCOUNT1_GET_SPAWN_DROP_ID(thisx) ((thisx)->world.rot.y) // Read from EnPr2, index to drop table array
 #define ENENCOUNT1_GET_SPAWN_DISTANCE_MAX(thisx) ((thisx)->world.rot.z) // Negative means infinite distance
 
 typedef enum EnEncount1Enemy {

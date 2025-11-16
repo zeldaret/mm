@@ -54,7 +54,7 @@ void EnEncount1_Init(Actor* thisx, PlayState* play) {
     this->spawnActiveMax = ENENCOUNT1_GET_SPAWN_ACTIVE_MAX(&this->actor);
     this->spawnTotalMax = ENENCOUNT1_GET_SPAWN_TOTAL_MAX(&this->actor);
     this->spawnTimeMin = ENENCOUNT1_GET_SPAWN_TIME_MIN(&this->actor);
-    this->spawnDropTable = ENENCOUNT1_GET_SPAWN_DROP_TABLE(&this->actor);
+    this->spawnDropTable = ENENCOUNT1_GET_SPAWN_DROP_ID(&this->actor);
     this->spawnDistanceMax = (ENENCOUNT1_GET_SPAWN_DISTANCE_MAX(&this->actor) * 40.0f) + 120.0f;
 
     if (this->spawnTotalMax >= ENENCOUNT1_SPAWNS_TOTAL_MAX_INFINITE) {

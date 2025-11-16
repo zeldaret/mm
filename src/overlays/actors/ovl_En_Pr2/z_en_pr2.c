@@ -153,12 +153,12 @@ void EnPr2_Init(Actor* thisx, PlayState* play) {
             Actor* encount1 = this->actor.parent;
 
             if (encount1->update != NULL) {
-                if (ENPR2_GETY_PARENT_DROPID(encount1) != 0) {
-                    this->dropID = ENPR2_GETY_PARENT_DROPID(encount1) - 1;
+                if (ENPR2_GETY_PARENT_DROP_ID(encount1) != 0) {
+                    this->dropID = ENPR2_GETY_PARENT_DROP_ID(encount1) - 1;
                 }
             }
-        } else if (ENPR2_GETZ_DROPID(thisx) != 0) {
-            this->dropID = ENPR2_GETZ_DROPID(thisx) - 1;
+        } else if (ENPR2_GETZ_DROP_ID(thisx) != 0) {
+            this->dropID = ENPR2_GETZ_DROP_ID(thisx) - 1;
             this->actor.world.rot.z = 0;
         }
 
@@ -333,7 +333,7 @@ void EnPr2_FollowPath(EnPr2* this, PlayState* play) {
 
 void EnPr2_SetupIdle(EnPr2* this) {
     EnPr2_ChangeAnim(this, PR2_ANIM_SWIM);
-    this->waypointTimer = 2;
+    this->idleTimer = 2;
     this->mainTimer = 0;
     Math_Vec3f_Copy(&this->waypointPos, &this->newHome);
     this->state = PR2_STATE_IDLE;
@@ -347,7 +347,7 @@ void EnPr2_Idle(EnPr2* this, PlayState* play) {
     f32 sqrtXZ;
     s32 changingCourse = false;
     s32 swimmingStraight = false;
-    Vec3f currentPos; // this describes where it starts, not what its doing, rename
+    Vec3f targetPos;
 
     Math_ApproachF(&this->scale, 0.02f, 0.1f, 0.005f);
     Actor_PlaySfx(&this->actor, NA_SE_EN_PIRANHA_EXIST - SFX_FLAG);
@@ -371,7 +371,7 @@ void EnPr2_Idle(EnPr2* this, PlayState* play) {
                     EnPr2_SetupAttack(this, play);
                 } else if (!EnPr2_IsOnScreen(this, play) && (this->alpha == 255)) {
                     // despawn if not on screen
-                    this->alpha = 254; // triggers actor kill
+                    this->alpha = 254; // triggers actor kill above
                 }
                 break;
 
@@ -410,27 +410,27 @@ void EnPr2_Idle(EnPr2* this, PlayState* play) {
         // if we already plan to change behavior, ignore this expensive maintanence code
         if (!changingCourse) {
             this->waypointPos.y = this->actor.world.pos.y;
-            if (this->waypointTimer != 0) {
+            if (this->idleTimer != 0) {
                 if ((Rand_ZeroOne() < 0.3f) && !this->bubbleToggle) {
                     this->bubbleToggle = true;
                 }
 
                 Math_ApproachZeroF(&this->actor.speed, 0.1f, 0.2f);
 
-                if (this->waypointTimer == 1) {
+                if (this->idleTimer == 1) {
                     this->mainTimer = Rand_S16Offset(100, 100);
-                    Math_Vec3f_Copy(&currentPos, &this->newHome);
-                    currentPos.x += Rand_CenteredFloat(300.0f);
-                    currentPos.z += Rand_CenteredFloat(300.0f);
-                    Math_Vec3f_Copy(&this->waypointPos, &currentPos);
+                    Math_Vec3f_Copy(&targetPos, &this->newHome);
+                    targetPos.x += Rand_CenteredFloat(300.0f);
+                    targetPos.z += Rand_CenteredFloat(300.0f);
+                    Math_Vec3f_Copy(&this->waypointPos, &targetPos);
                 }
             } else {
                 Math_ApproachF(&this->actor.speed, 2.0f, 0.3f, 0.2f);
-                Math_Vec3f_Copy(&currentPos, &this->actor.world.pos);
-                currentPos.x += Math_SinS(this->actor.world.rot.y) * 20.0f;
-                currentPos.z += Math_CosS(this->actor.world.rot.y) * 20.0f;
+                Math_Vec3f_Copy(&targetPos, &this->actor.world.pos);
+                targetPos.x += Math_SinS(this->actor.world.rot.y) * 20.0f;
+                targetPos.z += Math_CosS(this->actor.world.rot.y) * 20.0f;
                 if (fabsf(this->actor.world.rot.y - this->yawTowardsWaypoint) < 100.0f) {
-                    if (BgCheck_SphVsFirstPoly(&play->colCtx, &currentPos, 20.0f) ||
+                    if (BgCheck_SphVsFirstPoly(&play->colCtx, &targetPos, 20.0f) ||
                         (this->actor.bgCheckFlags & BGCHECKFLAG_WALL)) {
                         this->targetingTimer = 0;
                         this->wallCollisionCounter++;
@@ -446,12 +446,12 @@ void EnPr2_Idle(EnPr2* this, PlayState* play) {
 
                 if ((this->mainTimer == 0) || ((fabsf(this->waypointPos.x - this->actor.world.pos.x) < 10.0f) &&
                                                (fabsf(this->waypointPos.z - this->actor.world.pos.z) < 10.0f))) {
-                    this->waypointTimer = Rand_S16Offset(20, 30);
+                    this->idleTimer = Rand_S16Offset(20, 30);
                 }
             }
         }
 
-        if (this->waypointTimer == 0) {
+        if (this->idleTimer == 0) {
             this->yawTowardsWaypoint =
                 Math_Vec3f_Yaw(&this->actor.world.pos, &this->waypointPos) + this->wallCollisionAngleAdjustment;
             EnPr2_HandleYaw(this, this->yawTowardsWaypoint);
@@ -531,7 +531,7 @@ void EnPr2_Attack(EnPr2* this, PlayState* play) {
 
         if ((this->type == PR2_TYPE_SPAWNED) && !EnPr2_IsOnScreen(this, play)) {
             if (this->alpha == 255) {
-                this->alpha = 254; // triggers actor kill
+                this->alpha = 254; // triggers actor kill at top of this function
             }
         } else {
             if (this->collider.base.atFlags & AT_HIT) {
@@ -586,7 +586,7 @@ void EnPr2_Die(EnPr2* this, PlayState* play) {
 
         curFrame = this->skelAnime.curFrame;
 
-        if (curFrame >= this->animEndFrame) { // death animation done
+        if (curFrame >= this->animEndFrame) {
             // spawn LIMB_COUNT EnPr2, one for each limb, to draw floating pieces
             for (i = 0; i < ARRAY_COUNT(this->limbPos); i++) {
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_PR2, this->limbPos[i].x, this->limbPos[i].y,
@@ -660,7 +660,7 @@ void EnPr2_ApplyDamage(EnPr2* this, PlayState* play) {
         }
     }
 
-    // against mikau shild?
+    // against mikau shield?
     if (this->collider.base.atFlags & AT_BOUNCED) {
         this->actor.speed = -10.0f;
     }
@@ -674,7 +674,7 @@ void EnPr2_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
 
-    DECR(this->waypointTimer);
+    DECR(this->idleTimer);
     DECR(this->mainTimer);
     DECR(this->targetingTimer);
     DECR(this->returnHomeTimer);
@@ -721,7 +721,7 @@ s32 EnPr2_OverrideLimbDrawOpa(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f
     EnPr2* this = (EnPr2*)thisx;
 
     if (this->type < PR2_TYPE_BROKEN) {
-        if (limbIndex == OBJECT_PR_2_LIMB_02) {
+        if (limbIndex == OBJECT_PR_2_LIMB_02) { // jaw
             rot->y += TRUNCF_BINANG(this->slowLimbYaw) * -1;
         }
     } else if (this->type != limbIndex + PR2_TYPE_BROKEN) {
@@ -743,7 +743,6 @@ void EnPr2_PostLimbDrawOpa(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* r
             Matrix_MultZero(&this->limbJawPos);
         }
 
-        // store current limbPos
         Matrix_MultZero(&this->limbPos[limbIndex]);
     }
 }
