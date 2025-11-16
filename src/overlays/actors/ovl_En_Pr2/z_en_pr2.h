@@ -24,7 +24,7 @@ typedef void (*EnPr2ActionFunc)(struct EnPr2*, PlayState*);
 #define ENPR2_GETZ_PARENT_AGRO_DISTANCE(parent) ((parent)->world.rot.z)
 
 #define ENPR2_PATH_INDEX_NONE 0x3F
-#define ENPR2_PARAMS(paramF, paramFF0) (((paramF) & 0xF) | (((paramFF0) << 4) & 0xFF0))
+#define ENPR2_PARAMS(type, agroDistance) (((type) & 0xF) | (((agroDistance) << 4) & 0xFF0))
 
 typedef enum EnPr2Type {
     /* 00 */ PR2_TYPE_PASSIVE,   // does not attack, used as a hazard around the cape heartpiece likelike

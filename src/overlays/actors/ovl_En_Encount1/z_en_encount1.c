@@ -38,8 +38,8 @@ static s16 sActorIds[] = {
 static s16 sActorParams[] = {
     DRAGONFLY_PARAMS(DRAGONFLY_TYPE_GROWS_WHEN_SPAWNED),     // EN_ENCOUNT1_GRASSHOPPER
     WALLMASTER_PARAMS(WALLMASTER_TYPE_TIMER_ONLY, 0, false), // EN_ENCOUNT1_WALLMASTER
-    ENPR2_PARAMS(1, 0),                                      // EN_ENCOUNT1_SKULLFISH_RESPAWNING
-    ENPR2_PARAMS(3, 0)                                       // EN_ENCOUNT1_SKULLFISH_PATHING
+    ENPR2_PARAMS(PR2_TYPE_SPAWNED, 0),                       // EN_ENCOUNT1_SKULLFISH_RESPAWNING
+    ENPR2_PARAMS(PR2_TYPE_PATHING, 0)                        // EN_ENCOUNT1_SKULLFISH_PATHING
 };
 
 void EnEncount1_Init(Actor* thisx, PlayState* play) {
