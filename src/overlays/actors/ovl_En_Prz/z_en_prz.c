@@ -111,8 +111,8 @@ void EnPrz_Init(Actor* thisx, PlayState* play) {
     this->actor.colChkInfo.damageTable = &sDamageTable;
     this->actor.colChkInfo.health = 1;
 
-    SkelAnime_InitFlex(play, &this->skelAnime, &gSkullFishSkel, &gSkullFishSwimAnim, this->jointTable,
-                       this->morphTable, OBJECT_PR_2_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gSkullFishSkel, &gSkullFishSwimAnim, this->jointTable, this->morphTable,
+                       OBJECT_PR_2_LIMB_MAX);
 
     this->unk_1E6 = ENPRZ_GET(&this->actor);
     this->actor.shape.yOffset = 500.0f;
@@ -139,7 +139,7 @@ typedef enum EnPrzAnimation {
 } EnPrzAnimation;
 
 static AnimationHeader* sAnimations[ENPRZ_ANIM_MAX] = {
-    &gSkullFishSwimAnim, // ENPRZ_ANIM_0
+    &gSkullFishSwimAnim,   // ENPRZ_ANIM_0
     &gSkullFishAttackAnim, // ENPRZ_ANIM_1
 };
 

@@ -103,9 +103,9 @@ typedef enum EnPr2Animation {
 } EnPr2Animation;
 
 static AnimationHeader* sAnimations[ENPR2_ANIM_MAX] = {
-    &gSkullFishSwimAnim, // PR2_ANIM_SWIM
+    &gSkullFishSwimAnim,   // PR2_ANIM_SWIM
     &gSkullFishAttackAnim, // PR2_ANIM_ATTACK
-    &gSkullFishDieAnim, // PR2_ANIM_DIE
+    &gSkullFishDieAnim,    // PR2_ANIM_DIE
 };
 
 static u8 sAnimationModes[ENPR2_ANIM_MAX] = {
@@ -128,8 +128,8 @@ void EnPr2_Init(Actor* thisx, PlayState* play) {
     this->actor.colChkInfo.health = 1;
     this->actor.colChkInfo.damageTable = &sDamageTable;
 
-    SkelAnime_InitFlex(play, &this->skelAnime, &gSkullFishSkel, &gSkullFishSwimAnim, this->jointTable,
-                       this->morphTable, OBJECT_PR_2_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gSkullFishSkel, &gSkullFishSwimAnim, this->jointTable, this->morphTable,
+                       OBJECT_PR_2_LIMB_MAX);
     this->type = ENPR2_GET_TYPE(&this->actor);
     this->actor.colChkInfo.mass = 10;
     Math_Vec3f_Copy(&this->newHome, &this->actor.home.pos);
@@ -182,7 +182,7 @@ void EnPr2_Init(Actor* thisx, PlayState* play) {
         } else {
             EnPr2_SetupIdle(this);
         }
-    } else { // type > PR2_TYPE_BROKEN 
+    } else { // type > PR2_TYPE_BROKEN
         // these are broken pieces floating after death
         this->scale = 0.02f;
         EnPr2_SetupDie(this);
@@ -247,8 +247,8 @@ void EnPr2_HandleYaw(EnPr2* this, s16 targetYRot) {
     Math_ApproachF(&this->actor.world.pos.y, this->waypointPos.y, 0.3f, 5.0f);
 
     if (fabsf(this->actor.world.pos.y - this->waypointPos.y) > 10.0f) {
-        Math_SmoothStepToS(&this->actor.world.rot.x, Math_Vec3f_Pitch(&this->actor.world.pos, &this->waypointPos) * 0.3f,
-                           20, 0x1388, 0x1F4);
+        Math_SmoothStepToS(&this->actor.world.rot.x,
+                           Math_Vec3f_Pitch(&this->actor.world.pos, &this->waypointPos) * 0.3f, 20, 0x1388, 0x1F4);
     } else {
         Math_SmoothStepToS(&this->actor.world.rot.x, 0, 20, 0x1388, 0x1F4);
     }
@@ -306,8 +306,8 @@ void EnPr2_FollowPath(EnPr2* this, PlayState* play) {
     Math_ApproachF(&this->actor.world.pos.y, this->waypointPos.y, 0.3f, 5.0f);
 
     if (fabsf(this->actor.world.pos.y - this->waypointPos.y) > 10.0f) {
-        Math_SmoothStepToS(&this->actor.world.rot.x, Math_Vec3f_Pitch(&this->actor.world.pos, &this->waypointPos) * 0.3f,
-                           20, 0x1388, 0x1F4);
+        Math_SmoothStepToS(&this->actor.world.rot.x,
+                           Math_Vec3f_Pitch(&this->actor.world.pos, &this->waypointPos) * 0.3f, 20, 0x1388, 0x1F4);
     } else {
         Math_SmoothStepToS(&this->actor.world.rot.x, 0, 20, 0x1388, 0x1F4);
     }
@@ -382,7 +382,8 @@ void EnPr2_Idle(EnPr2* this, PlayState* play) {
                     deltaZ = player->actor.world.pos.z - this->newHome.z;
                     sqrtXZ = sqrtf(SQ(deltaX) + SQ(deltaZ));
 
-                    if (swimmingStraight && (player->stateFlags1 & PLAYER_STATE1_8000000) && (sqrtXZ < this->agroDistance)) {
+                    if (swimmingStraight && (player->stateFlags1 & PLAYER_STATE1_8000000) &&
+                        (sqrtXZ < this->agroDistance)) {
                         changingCourse = true;
                         EnPr2_SetupAttack(this, play);
                     }
@@ -431,7 +432,6 @@ void EnPr2_Idle(EnPr2* this, PlayState* play) {
                 if (fabsf(this->actor.world.rot.y - this->yawTowardsWaypoint) < 100.0f) {
                     if (BgCheck_SphVsFirstPoly(&play->colCtx, &currentPos, 20.0f) ||
                         (this->actor.bgCheckFlags & BGCHECKFLAG_WALL)) {
-                        // Dam 
                         this->targetingTimer = 0;
                         this->wallCollisionCounter++;
                         Math_Vec3f_Copy(&this->waypointPos, &this->newHome);
@@ -445,14 +445,15 @@ void EnPr2_Idle(EnPr2* this, PlayState* play) {
                 }
 
                 if ((this->mainTimer == 0) || ((fabsf(this->waypointPos.x - this->actor.world.pos.x) < 10.0f) &&
-                                             (fabsf(this->waypointPos.z - this->actor.world.pos.z) < 10.0f))) {
+                                               (fabsf(this->waypointPos.z - this->actor.world.pos.z) < 10.0f))) {
                     this->waypointTimer = Rand_S16Offset(20, 30);
                 }
             }
         }
 
         if (this->waypointTimer == 0) {
-            this->yawTowardsWaypoint = Math_Vec3f_Yaw(&this->actor.world.pos, &this->waypointPos) + this->wallCollisionAngleAdjustment;
+            this->yawTowardsWaypoint =
+                Math_Vec3f_Yaw(&this->actor.world.pos, &this->waypointPos) + this->wallCollisionAngleAdjustment;
             EnPr2_HandleYaw(this, this->yawTowardsWaypoint);
         }
     }
@@ -517,12 +518,12 @@ void EnPr2_Attack(EnPr2* this, PlayState* play) {
                 return;
             }
         } else {
-            // home moves to follow player, like scuttlebug  
+            // home moves to follow player, like scuttlebug
             Math_Vec3f_Copy(&this->newHome, &this->actor.world.pos);
         }
 
-        if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, 
-            &this->waterSurfaceHeight, &waterBox)) {
+        if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
+                                 &this->waterSurfaceHeight, &waterBox)) {
             if (this->waypointPos.y > (this->waterSurfaceHeight - 40.0f)) {
                 this->waypointPos.y = this->waterSurfaceHeight - 40.0f;
             }
@@ -608,8 +609,8 @@ void EnPr2_Die(EnPr2* this, PlayState* play) {
             this->bubbleToggle = true;
         }
 
-        if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &this->waterSurfaceHeight,
-                                 &waterBox)) {
+        if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
+                                 &this->waterSurfaceHeight, &waterBox)) {
             if (this->actor.world.pos.y >= (this->waterSurfaceHeight - 15.0f)) {
                 nearSurface = true;
             } else {
@@ -644,12 +645,13 @@ void EnPr2_ApplyDamage(EnPr2* this, PlayState* play) {
 
     if (this->collider.base.acFlags & AC_HIT) {
         Actor_ApplyDamage(&this->actor);
+
         if ((this->actor.colChkInfo.health <= 0) && (this->state != PR2_STATE_DEAD)) {
             Enemy_StartFinishingBlow(play, &this->actor);
             this->actor.speed = 0.0f;
             Actor_PlaySfx(&this->actor, NA_SE_EN_PIRANHA_DEAD);
 
-            if (this->dropID >= 0) {
+            if (this->dropID > -1) {
                 Item_DropCollectibleRandom(play, NULL, &this->actor.world.pos, sDropTables[this->dropID]);
             }
 
@@ -723,7 +725,8 @@ s32 EnPr2_OverrideLimbDrawOpa(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f
             rot->y += TRUNCF_BINANG(this->slowLimbYaw) * -1;
         }
     } else if (this->type != limbIndex + PR2_TYPE_BROKEN) {
-        // broken: only draw the one limb we represent, NULL the rest
+        // after death we spawn one actor per floating limb:
+        // only draw the one limb we represent, NULL the rest
         *dList = NULL;
     }
     return false;
@@ -735,7 +738,7 @@ void EnPr2_PostLimbDrawOpa(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* r
     if (this->type < PR2_TYPE_BROKEN) {
         if (limbIndex == OBJECT_PR_2_LIMB_02) {
             // why use a matrix to save the limb pos? is there no faster method?
-            // also we always store limbpos, why have a secondary?
+            // also we always store limb pos in the array, why have a secondary copy?
             Matrix_Translate(0.0f, 0.0f, 0.0f, MTXMODE_APPLY);
             Matrix_MultZero(&this->limbJawPos);
         }
@@ -751,7 +754,6 @@ s32 EnPr2_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 
     if (this->type < PR2_TYPE_BROKEN) {
         if (limbIndex == OBJECT_PR_2_LIMB_02) {
-            // head is upside down in the animations for some reason, they decided to fix it here?
             rot->y += TRUNCF_BINANG(this->slowLimbYaw) * -1;
         }
     } else if ((limbIndex + PR2_TYPE_BROKEN) != this->type) {
