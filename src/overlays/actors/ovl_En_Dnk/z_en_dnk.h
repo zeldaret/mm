@@ -35,8 +35,8 @@ typedef struct EnDnk {
     /* 0x28C */ u16 flags; // head rotation only
     /* 0x28E */ s8 objectSlot;
     /* 0x290 */ Vec3s currentHeadRot;
-    /* 0x296 */ s16 unk_296; // unused X for some part of head rotation
-    /* 0x298 */ s16 unk_298; // unused Y for some part of head rotation
+    /* 0x296 */ s16 unk_296; // unused X, read but not set in head rotation
+    /* 0x298 */ s16 unk_298; // unused Y, read but not set in head rotation
     /* 0x29A */ UNK_TYPE1 unk_29A[0x4];
     /* 0x29E */ s16 blinkTimer;
     /* 0x2A0 */ s16 eyeTexIndex;

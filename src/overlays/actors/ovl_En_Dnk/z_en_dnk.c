@@ -408,6 +408,7 @@ void EnDnk_Nuts_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s*
 
     // Note: Also for `limbIndex == OBJECT_HINTNUTS_LIMB_02`
     // Assumes `OBJECT_HINTNUTS_LIMB_02` is the same value as `DEKU_SCRUB_LIMB_HEAD`
+    // this is not head tracking, this is hair shaking with the animation to make his movement look more dynamic
     if (limbIndex == DEKU_SCRUB_LIMB_HEAD) {
         Matrix_MultVec3f(&zeroVec, &headPos);
         Matrix_Get(&mtxFCopy);
