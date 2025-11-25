@@ -503,8 +503,8 @@ void EnDnk_HandleCSAudio(EnDnk* this, PlayState* play) {
 
 void EnDnk_UpdateCutscene(EnDnk* this, PlayState* play) {
     // only play the sounds during the curse cutscene, not the healing cutscene
-    if ((play->csCtx.state != CS_STATE_IDLE) && (ENDNK_GET_CUTSCENE_BEHAVIOR(&this->actor) == ENDNK_CUTSCENE_CONTROL) && (play->sceneId == SCENE_SPOT00) &&
-        (gSaveContext.sceneLayer == 2)) {
+    if ((play->csCtx.state != CS_STATE_IDLE) && (ENDNK_GET_CUTSCENE_BEHAVIOR(&this->actor) == ENDNK_CUTSCENE_CONTROL) &&
+        (play->sceneId == SCENE_SPOT00) && (gSaveContext.sceneLayer == 2)) {
         EnDnk_HandleCSAudio(this, play);
     }
 }
