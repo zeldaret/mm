@@ -55,6 +55,7 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 1, 0, 0, 0, MASS_IMMOVABLE };
 
+// unfinished
 // if spawned out of cutscene, you can indeed attack them and it results in blood but no interaction
 static DamageTable sDamageTable = {
     /* Deku Nut       */ DMG_ENTRY(1, 0x0),
@@ -128,10 +129,11 @@ typedef enum {
     /* 32 */ ENDNK_ANIM_32,
     /* 33 */ ENDNK_ANIM_33,
     /* 34 */ ENDNK_ANIM_34,
-    /* 35 */ ENDNK_ANIM_35,
+    /* 35 */ ENDNK_ANIM_IDLE,
     /* 36 */ ENDNK_ANIM_MAX
 } EnDnkAnimation;
 
+// almost none of these animations get used
 static AnimationInfoS sAnimationInfo[ENDNK_ANIM_MAX] = {
     { &gDekuPalaceGuardStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },    // ENDNK_ANIM_0
     { &gDekuPalaceGuardStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },   // ENDNK_ANIM_1
@@ -168,7 +170,7 @@ static AnimationInfoS sAnimationInfo[ENDNK_ANIM_MAX] = {
     { &gDekuScrubPantingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },       // ENDNK_ANIM_32
     { &gDekuScrubRunAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },            // ENDNK_ANIM_33
     { &gDekuScrubRunAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },           // ENDNK_ANIM_34
-    { &gDekuScrubStandingIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },   // ENDNK_ANIM_35
+    { &gDekuScrubStandingIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },   // ENDNK_ANIM_IDLE
 };
 
 s32 EnDnk_ChangeAnim(SkelAnime* skelAnime, s16 animIndex) {
@@ -217,13 +219,13 @@ void EnDnk_WaitForObject(EnDnk* this, PlayState* play) {
         ActorShape_Init(&this->actor.shape, 0.0f, NULL, 18.0f);
 
         switch (ENDNK_GET_TYPE(&this->actor)) {
-            case ENDNK_GET_TYPE_GUARD:
+            case ENDNK_GET_TYPE_GUARD: // unused
                 SkelAnime_Init(play, &this->skelAnime, &gDekuPalaceGuardSkel, NULL, this->jointTable, this->morphTable,
                                DEKU_PALACE_GUARD_LIMB_MAX);
                 EnDnk_ChangeAnim(&this->skelAnime, ENDNK_ANIM_7);
                 break;
 
-            case ENDNK_GET_TYPE_HINT:
+            case ENDNK_GET_TYPE_HINT: // unused
                 SkelAnime_Init(play, &this->skelAnime, &object_hintnuts_Skel_0023B8.sh, NULL, this->jointTable,
                                this->morphTable, OBJECT_HINTNUTS_LIMB_MAX);
                 EnDnk_ChangeAnim(&this->skelAnime, ENDNK_ANIM_18);
@@ -232,7 +234,7 @@ void EnDnk_WaitForObject(EnDnk* this, PlayState* play) {
             case ENDNK_GET_TYPE_ATTACK:
                 SkelAnime_Init(play, &this->skelAnime, &gDekuScrubSkel, NULL, this->jointTable, this->morphTable,
                                DEKU_SCRUB_LIMB_MAX);
-                EnDnk_ChangeAnim(&this->skelAnime, ENDNK_ANIM_35);
+                EnDnk_ChangeAnim(&this->skelAnime, ENDNK_ANIM_IDLE);
                 break;
         }
 
