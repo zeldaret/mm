@@ -2,6 +2,7 @@
  * File: z_en_dnk.c
  * Overlay: ovl_En_Dnk
  * Description: Hallucinatory Mad Scrubs (Deku curse and healing cutscenes)
+ *   This actor has two alternate objects that would use alternate models, unfinished
  */
 
 #include "z_en_dnk.h"
@@ -17,7 +18,7 @@ void EnDnk_DoNothing(EnDnk* this, PlayState* play);
 void func_80A52018(Actor* thisx, PlayState* play);
 void func_80A52134(EnDnk* this, PlayState* play);
 
-static s16 D_80A521A0 = 0;
+static s16 sScrubCount = 0;
 
 ActorProfile En_Dnk_Profile = {
     /**/ ACTOR_EN_DNK,
@@ -53,6 +54,7 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 1, 0, 0, 0, MASS_IMMOVABLE };
 
+// if spawned out of cutscene, you can indeed attack them and it results in blood but no interaction
 static DamageTable sDamageTable = {
     /* Deku Nut       */ DMG_ENTRY(1, 0x0),
     /* Deku Stick     */ DMG_ENTRY(1, 0x0),
@@ -192,20 +194,22 @@ s32 EnDnk_ChangeAnim(SkelAnime* skelAnime, s16 animIndex) {
     return didAnimChange;
 }
 
+// EnDnk_Blink
 s32 func_80A515C4(EnDnk* this) {
     s32 ret = false;
 
-    if (DECR(this->unk_29E) == 0) {
-        this->unk_2A0++;
-        if (this->unk_2A0 >= 3) {
-            this->unk_29E = Rand_S16Offset(20, 20);
-            this->unk_2A0 = 0;
+    if (DECR(this->blinkTimer) == 0) {
+        this->eyeTexIndex++;
+        if (this->eyeTexIndex >= 3) {
+            this->blinkTimer = Rand_S16Offset(20, 20);
+            this->eyeTexIndex = 0;
         }
         ret = true;
     }
     return ret;
 }
 
+// EnDnk_WaitForObject
 void func_80A51648(EnDnk* this, PlayState* play) {
     if (SubS_IsObjectLoaded(this->objectSlot, play) == true) {
         gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[this->objectSlot].segment);
@@ -213,20 +217,20 @@ void func_80A51648(EnDnk* this, PlayState* play) {
         this->actor.objectSlot = this->objectSlot;
         ActorShape_Init(&this->actor.shape, 0.0f, NULL, 18.0f);
 
-        switch (ENDNK_GET_3(&this->actor)) {
-            case ENDNK_GET_3_0:
+        switch (ENDNK_GET_TYPE(&this->actor)) {
+            case ENDNK_GET_TYPE_0:
                 SkelAnime_Init(play, &this->skelAnime, &gDekuPalaceGuardSkel, NULL, this->jointTable, this->morphTable,
                                DEKU_PALACE_GUARD_LIMB_MAX);
                 EnDnk_ChangeAnim(&this->skelAnime, ENDNK_ANIM_7);
                 break;
 
-            case ENDNK_GET_3_1:
+            case ENDNK_GET_TYPE_1:
                 SkelAnime_Init(play, &this->skelAnime, &object_hintnuts_Skel_0023B8.sh, NULL, this->jointTable,
                                this->morphTable, OBJECT_HINTNUTS_LIMB_MAX);
                 EnDnk_ChangeAnim(&this->skelAnime, ENDNK_ANIM_18);
                 break;
 
-            case ENDNK_GET_3_2:
+            case ENDNK_GET_TYPE_2:
                 SkelAnime_Init(play, &this->skelAnime, &gDekuScrubSkel, NULL, this->jointTable, this->morphTable,
                                DEKU_SCRUB_LIMB_MAX);
                 EnDnk_ChangeAnim(&this->skelAnime, ENDNK_ANIM_35);
@@ -263,16 +267,16 @@ void EnDnk_Init(Actor* thisx, PlayState* play) {
 
     this->objectSlot = OBJECT_SLOT_NONE;
 
-    switch (ENDNK_GET_3(&this->actor)) {
-        case ENDNK_GET_3_1:
+    switch (ENDNK_GET_TYPE(&this->actor)) {
+        case ENDNK_GET_TYPE_1:
             this->objectSlot = SubS_GetObjectSlot(OBJECT_HINTNUTS, play);
             break;
 
-        case ENDNK_GET_3_0:
+        case ENDNK_GET_TYPE_0:
             this->objectSlot = SubS_GetObjectSlot(OBJECT_DNK, play);
             break;
 
-        case ENDNK_GET_3_2:
+        case ENDNK_GET_TYPE_2:
             this->objectSlot = SubS_GetObjectSlot(OBJECT_DEKUNUTS, play);
             break;
     }
@@ -283,8 +287,8 @@ void EnDnk_Init(Actor* thisx, PlayState* play) {
         Actor_Kill(&this->actor);
     }
 
-    this->unk_2A2 = D_80A521A0;
-    D_80A521A0++;
+    this->scrubId = sScrubCount;
+    sScrubCount++;
 }
 
 void EnDnk_Destroy(Actor* thisx, PlayState* play) {
@@ -362,8 +366,9 @@ void EnDnk_PostLimbDraw2(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
+// dnk version?
 void func_80A51CB8(EnDnk* this, PlayState* play) {
-    static TexturePtr D_80A5245C[] = {
+    static TexturePtr sDnkEyes[] = {
         gDekuPalaceGuardEyeOpenTex,
         gDekuPalaceGuardEyeHalfTex,
         gDekuPalaceGuardEyeClosedTex,
@@ -374,7 +379,7 @@ void func_80A51CB8(EnDnk* this, PlayState* play) {
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A5245C[this->unk_2A0]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sDnkEyes[this->eyeTexIndex]));
     gDPPipeSync(POLY_OPA_DISP++);
 
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnDnk_OverrideLimbDraw2,
@@ -447,16 +452,19 @@ void func_80A51FC0(EnDnk* this, PlayState* play) {
                       EnDnk_PostLimbDraw1, &this->actor);
 }
 
+// EnDnk_Draw
 void func_80A52018(Actor* thisx, PlayState* play) {
     EnDnk* this = (EnDnk*)thisx;
 
-    switch (ENDNK_GET_3(thisx)) {
-        case ENDNK_GET_3_0:
+    switch (ENDNK_GET_TYPE(thisx)) {
+        // palace guard type skeleton
+        case ENDNK_GET_TYPE_0:
             func_80A51CB8(this, play);
             break;
 
-        case ENDNK_GET_3_1:
-        case ENDNK_GET_3_2:
+        // deku nuts type skeleton
+        case ENDNK_GET_TYPE_1:
+        case ENDNK_GET_TYPE_2:
             func_80A51FC0(this, play);
             break;
 
@@ -465,6 +473,7 @@ void func_80A52018(Actor* thisx, PlayState* play) {
     }
 }
 
+// EnDnk_HandleCSAudio
 void func_80A52074(EnDnk* this, PlayState* play) {
     switch (play->csCtx.curFrame) {
         case 80:
@@ -492,6 +501,7 @@ void func_80A52074(EnDnk* this, PlayState* play) {
     }
 }
 
+// EnDnk_UpdateCutscene
 void func_80A52134(EnDnk* this, PlayState* play) {
     if ((play->csCtx.state != CS_STATE_IDLE) && (ENDNK_GET_3C(&this->actor) == 4) && (play->sceneId == SCENE_SPOT00) &&
         (gSaveContext.sceneLayer == 2)) {
