@@ -23,6 +23,9 @@ typedef enum {
 
 #define DNK_LIMB_MAX MAX(MAX((s32)DEKU_PALACE_GUARD_LIMB_MAX, (s32)OBJECT_HINTNUTS_LIMB_MAX), (s32)DEKU_SCRUB_LIMB_MAX)
 
+#define DNK_FLAG_10 0x10
+#define DNK_FLAG_20 0x20
+
 typedef struct EnDnk {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
@@ -32,7 +35,7 @@ typedef struct EnDnk {
     /* 0x1DC */ Vec3s jointTable[DNK_LIMB_MAX];
     /* 0x21E */ Vec3s morphTable[DNK_LIMB_MAX];
     /* 0x260 */ Gfx* limbGfx[DEKU_PALACE_GUARD_LIMB_MAX];
-    /* 0x28C */ u16 flags; // head rotation only
+    /* 0x28C */ u16 flags; // head rotation flags, not sure they do anything
     /* 0x28E */ s8 objectSlot;
     /* 0x290 */ Vec3s currentHeadRot;
     /* 0x296 */ s16 unk_296; // unused X, read but not set in head rotation

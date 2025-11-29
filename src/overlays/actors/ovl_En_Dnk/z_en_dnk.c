@@ -336,8 +336,9 @@ void EnDnk_Guard_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s
         Matrix_MtxFToYXZRot(&mtxFCopy, &headRot, false);
         Matrix_Translate(headPos.x, headPos.y, headPos.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        if (this->flags & 0x10) {
-            if (this->flags & 0x20) {
+
+        if (this->flags & DNK_FLAG_10) {
+            if (this->flags & DNK_FLAG_20) {
                 headRot.x = this->unk_296;
                 headRot.y = this->unk_298;
                 headRot.y += this->actor.shape.rot.y;
@@ -416,8 +417,8 @@ void EnDnk_Nuts_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s*
         Matrix_Translate(headPos.x, headPos.y, headPos.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
 
-        if (this->flags & 0x10) {
-            if (this->flags & 0x20) {
+        if (this->flags & DNK_FLAG_10) {
+            if (this->flags & DNK_FLAG_20) {
                 headRot.z = this->unk_296 + 0x4000;
                 headRot.y = this->unk_298 + 0x4000;
                 headRot.y += this->actor.shape.rot.y;
