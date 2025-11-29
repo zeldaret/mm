@@ -3,7 +3,8 @@
  * Overlay: ovl_En_Dnk
  * Description: Hallucinatory Mad Scrubs (Deku curse and healing cutscenes)
  *   This actor has two alternate objects that would use alternate models, unfinished
- *   Variant 0x2 and 0x6 both use object_dekunuts, instead of object_dnk and object_hintnuts
+ *   Variant 0x2 (encircling link) and 0x6 (big, chases link, cutscene) both use object_dekunuts,
+ *     instead of object_dnk and object_hintnuts
  */
 
 #include "z_en_dnk.h"
