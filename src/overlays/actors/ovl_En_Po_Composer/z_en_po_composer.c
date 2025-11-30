@@ -162,7 +162,7 @@ static AnimationInfo sAnimationInfo[POE_COMPOSER_ANIM_MAX] = {
     /* 12 */ { &gPoeComposerAttackAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
 };
 
-// also used for skirt base color and hat emblem, skirt gets overridden by sSharpClothingColor2
+// also used for robe base color and hat emblem, robe gets overridden by sSharpClothingColor2
 static Color_RGBA8 sEyeColor = { 255, 255, 210, 0 };
 
 static Color_RGBA8 sLightColorInit = { 0, 0, 0, 255 };
@@ -201,23 +201,21 @@ void EnPoComposer_Init(Actor* thisx, PlayState* play) {
     this->lightColor = sLightColorInit;
     this->cueId = POE_COMPOSER_CUEID_NONE;
 
-    // is flat spawned by the curtain actor?
-    if (POE_COMPOSER_IS_FLAT(&this->actor)) { // flat
+    if (POE_COMPOSER_IS_FLAT(&this->actor)) {
         this->sharpCsNum = 0;
         this->inCutscene = true;
         EnPoComposer_SetupStartedCutscene(this);
-    } else if (POE_COMPOSER_IS_SHARP_HEALED(&this->actor)) {
+    } else if (POE_COMPOSER_SHARP_HEALED(&this->actor)) {
         // Player spawned in the cave after music house river cutscene
         if (gSaveContext.save.entrance != ENTRANCE(IKANA_CANYON, 10)) {
             Actor_Kill(&this->actor);
             return;
         }
 
-        this->sharpCsNum = SHARP_CS_ENCOUNTER_HEALED_TALK; // this is wrong, this is the second encounter after healing
+        this->sharpCsNum = SHARP_CS_ENCOUNTER_HEALED_TALK;
         this->inCutscene = true;
         EnPoComposer_SetupStartedCutscene(this);
-    } else {
-        // Sharp (hostile)
+    } else { // Sharp (hostile)
         s32 i;
         s16 csId = this->actor.csId;
 
@@ -529,7 +527,7 @@ s32 EnPoComposer_UpdateAction(EnPoComposer* this, PlayState* play) {
 
         if (POE_COMPOSER_IS_FLAT(&this->actor)) {
             EnPoComposer_SetupStartedCutscene(this);
-        } else if (POE_COMPOSER_IS_SHARP_HEALED(&this->actor)) {
+        } else if (POE_COMPOSER_SHARP_HEALED(&this->actor)) {
             EnPoComposer_SetupStartedCutscene(this);
         } else { // Sharp is hostile
             this->inCutscene = false;
@@ -660,7 +658,7 @@ void EnPoComposer_Draw(Actor* thisx, PlayState* play) {
     Gfx* gfx;
     // Clothing color draws on shirt, coat, hat, and the emblem on the lantern
     Color_RGBA8* clothingColor;
-    // Overrides clothingColor, colors on top of hat, shirt, robe (overrides eye color on robe)
+    // Overrides clothingColorL: hat, shirt, robe (overrides eye color on robe)
     Color_RGBA8* clothingColor2;
     Vec3f lightOffset;
     Vec3s lightPos;
