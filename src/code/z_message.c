@@ -15,7 +15,7 @@
 
 #include "assets/interface/parameter_static/parameter_static.h"
 
-u8 D_801C6A70 = 0;
+u8 sMessageStartFrameCount = 0;
 s16 sOcarinaButtonIndexBufPos = 0;
 s16 sOcarinaButtonIndexBufLen = 0;
 s16 sLastPlayedSong = 0xFF;
@@ -24,7 +24,7 @@ s16 sOcarinaButtonStepG = 0;
 s16 sOcarinaButtonStepB = 0;
 s16 sOcarinaButtonFlashTimer = 12;
 s16 sOcarinaButtonFlashColorIndex = 1;
-s16 D_801C6A94 = 0;
+s16 sOcarinaButtonDropYOffset = 0;
 
 u8 gPageSwitchNextButtonStatus[][5] = {
     { BTN_ENABLED, BTN_ENABLED, BTN_DISABLED, BTN_ENABLED, BTN_ENABLED },
@@ -3147,7 +3147,7 @@ void Message_OpenText(PlayState* play, u16 textId) {
     }
 
     msgCtx->messageHasSetSfx = false;
-    D_801C6A70 = 0;
+    sMessageStartFrameCount = 0;
     msgCtx->textboxSkipped = false;
     msgCtx->textIsCredits = false;
     var_fv0 = 1.0f;
@@ -3258,7 +3258,7 @@ void func_801514B0(PlayState* play, u16 arg1, u8 arg2) {
         gSaveContext.prevHudVisibility = gSaveContext.hudVisibility;
     }
     msgCtx->messageHasSetSfx = false;
-    D_801C6A70 = 0;
+    sMessageStartFrameCount = 0;
     msgCtx->textboxSkipped = false;
     msgCtx->textIsCredits = false;
 
@@ -4517,7 +4517,7 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
             case MSGMODE_OCARINA_FAIL_NO_TEXT:
                 msgCtx->stateTimer--;
                 if (msgCtx->stateTimer == 0) {
-                    D_801C6A94 = 1;
+                    sOcarinaButtonDropYOffset = 1;
                     if (msgCtx->msgMode == MSGMODE_SONG_PROMPT_FAIL) {
                         Message_ContinueTextbox(play, 0x1B89);
                         Message_Decode(play);
@@ -4531,10 +4531,10 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
             case MSGMODE_OCARINA_NOTES_DROP:
             case MSGMODE_SONG_PROMPT_NOTES_DROP:
                 for (i = 0; i < 5; i++) {
-                    msgCtx->ocarinaButtonsPosY[i] += D_801C6A94;
+                    msgCtx->ocarinaButtonsPosY[i] += sOcarinaButtonDropYOffset;
                 }
-                D_801C6A94 += D_801C6A94;
-                if (D_801C6A94 >= 0x226) {
+                sOcarinaButtonDropYOffset += sOcarinaButtonDropYOffset;
+                if (sOcarinaButtonDropYOffset >= 0x226) {
                     Message_ResetOcarinaButtonAlphas();
                     if (msgCtx->msgMode == MSGMODE_SONG_PROMPT_NOTES_DROP) {
                         msgCtx->msgMode = MSGMODE_OCARINA_AWAIT_INPUT;
@@ -4941,15 +4941,15 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
                     ocarinaError = func_8019B5AC();
                     if (ocarinaError == OCARINA_ERROR_2) {
                         Audio_PlaySfx(NA_SE_SY_OCARINA_ERROR);
-                        D_801C6A94 = 1;
+                        sOcarinaButtonDropYOffset = 1;
                         msgCtx->msgMode = MSGMODE_3B;
                     } else if (ocarinaError == OCARINA_ERROR_3) {
                         Audio_PlaySfx(NA_SE_SY_OCARINA_ERROR);
-                        D_801C6A94 = 1;
+                        sOcarinaButtonDropYOffset = 1;
                         msgCtx->msgMode = MSGMODE_3E;
                     } else {
                         Audio_PlaySfx(NA_SE_SY_OCARINA_ERROR);
-                        D_801C6A94 = 1;
+                        sOcarinaButtonDropYOffset = 1;
                         msgCtx->msgMode = MSGMODE_38;
                     }
                 }
@@ -4966,11 +4966,11 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
             case MSGMODE_3E:
                 // notes drop
                 for (i = 0; i < 5; i++) {
-                    msgCtx->ocarinaButtonsPosY[i] += D_801C6A94;
+                    msgCtx->ocarinaButtonsPosY[i] += sOcarinaButtonDropYOffset;
                 }
 
-                D_801C6A94 += D_801C6A94;
-                if (D_801C6A94 >= 0x226) {
+                sOcarinaButtonDropYOffset += sOcarinaButtonDropYOffset;
+                if (sOcarinaButtonDropYOffset >= 0x226) {
                     Message_ResetOcarinaButtonAlphas();
                     msgCtx->textBoxType = TEXTBOX_TYPE_0;
                     msgCtx->textboxColorRed = msgCtx->textboxColorGreen = msgCtx->textboxColorBlue = 0;
@@ -5327,10 +5327,10 @@ void Message_Update(PlayState* play) {
 
     switch (msgCtx->msgMode) {
         case MSGMODE_TEXT_START:
-            D_801C6A70++;
+            sMessageStartFrameCount++;
 
             temp = false;
-            if ((D_801C6A70 >= 4) || ((msgCtx->talkActor == NULL) && (D_801C6A70 >= 2))) {
+            if ((sMessageStartFrameCount >= 4) || ((msgCtx->talkActor == NULL) && (sMessageStartFrameCount >= 2))) {
                 temp = true;
             }
             if (temp) {
