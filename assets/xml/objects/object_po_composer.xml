@@ -24,7 +24,7 @@
         <!-- Display Lists -->
         <DList Name="object_po_composer_DL_004600" Offset="0x4600" />
         <DList Name="gPoeComposerSharpHeadDL" Offset="0x6A70" />
-        <DList Name="object_po_composer_DL_006D80" Offset="0x6D80" />
+        <DList Name="gPoeComposerBatonDL" Offset="0x6D80" />
         <DList Name="gPoeComposerLanternBaseDL" Offset="0x6E08" />
         <DList Name="gPoeComposerLanternTopDL" Offset="0x6EA8" />
         <DList Name="gPoeComposerLanternGlassDL" Offset="0x6F38" />
