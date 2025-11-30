@@ -55,7 +55,7 @@ typedef struct EnPoComposer {
     /* 0x334 */ u16 cueId;
     /* 0x336 */ union {
                 Color_RGBA8 mainAlpha;  // the alpha is used as general alpha for the whole body
-                Color_RGBA8 eyeColor;   // also used for robe bottom, emblem on hat
+                Color_RGBA8 eyeColor;   // also used for robe bottom
     };
     /* 0x33A */ Color_RGBA8 lightColor; // used by lantern light, and lantern glass tint
 } EnPoComposer; // size = 0x340
