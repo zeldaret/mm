@@ -34,6 +34,15 @@ typedef enum TextBoxType {
     /* 0x10 */ TEXTBOX_TYPE_MAX
 } TextBoxType;
 
+typedef enum TextBoxBackground {
+    /* 0x0 */ TEXTBOX_BG_DEFAULT,
+    /* 0x1 */ TEXTBOX_BG_WOODEN,
+    /* 0x2 */ TEXTBOX_BG_OCARINA,
+    /* 0x3 */ TEXTBOX_BG_FADED,
+    /* 0x4 */ TEXTBOX_BG_NOTEBOOK,
+    /* 0xE */ TEXTBOX_BG_NONE,
+} TextBoxBackground;
+
 #define TEXTBOX_ENDTYPE_DEFAULT    0x00
 
 #define TEXTBOX_ENDTYPE_TWO_CHOICE    0x10
