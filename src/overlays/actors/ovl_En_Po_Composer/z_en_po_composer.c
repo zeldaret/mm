@@ -93,7 +93,7 @@ static ColliderJntSphInit sJntSphInit = {
 
 static CollisionCheckInfoInit sColChkInfoInit = { 4, 25, 50, 40 };
 
-// Interesting that they had planned for a fight at some point, maybe flat?
+// Unused. Interesting that they had planned for a fight at some point, maybe flat?
 static DamageTable sDamageTable = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x0),
     /* Deku Stick     */ DMG_ENTRY(2, 0x0),
@@ -162,7 +162,7 @@ static AnimationInfo sAnimationInfo[POE_COMPOSER_ANIM_MAX] = {
     /* 12 */ { &gPoeComposerAttackAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
 };
 
-// also used for robe base color and hat emblem, robe gets overridden by sSharpClothingColor2
+// also used for robe hem base color, but it gets overridden by sSharpClothingColor2 (bug?)
 static Color_RGBA8 sEyeColor = { 255, 255, 210, 0 };
 
 static Color_RGBA8 sLightColorInit = { 0, 0, 0, 255 };
@@ -656,9 +656,9 @@ void EnPoComposer_Draw(Actor* thisx, PlayState* play) {
     EnPoComposer* this = (EnPoComposer*)thisx;
     s32 pad;
     Gfx* gfx;
-    // Clothing color draws on shirt, coat, hat, and the emblem on the lantern
+    // Clothing color draws on robe top, coat, hat, and the emblem on the lantern
     Color_RGBA8* clothingColor;
-    // Overrides clothingColorL: hat, shirt, robe (overrides eye color on robe)
+    // Overrides clothingColor: hat, robe top, robe hem (overrides eye color)
     Color_RGBA8* clothingColor2;
     Vec3f lightOffset;
     Vec3s lightPos;
