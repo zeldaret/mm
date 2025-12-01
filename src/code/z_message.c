@@ -3059,7 +3059,7 @@ void Message_SetTextboxRgba(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
     s32 textBoxType = msgCtx->textBoxType;
 
-    if (gTextBoxBackgroundTypes[textBoxType] != 14) {
+    if (gTextBoxBackgroundTypes[textBoxType] != TEXTBOX_BG_NONE) {
         DmaMgr_RequestSync(msgCtx->textboxSegment,
                            SEGMENT_ROM_START(message_static) + gTextBoxBackgroundTypes[textBoxType] * 0x1000, 0x1000);
 
@@ -4197,7 +4197,7 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
                     (msgCtx->msgMode != MSGMODE_40) &&
                     (((msgCtx->msgMode >= MSGMODE_TEXT_BOX_GROWING) && (msgCtx->msgMode <= MSGMODE_TEXT_DONE)) ||
                      ((msgCtx->msgMode >= MSGMODE_NEW_CYCLE_0) && (msgCtx->msgMode <= MSGMODE_OWL_SAVE_2))) &&
-                    (gTextBoxBackgroundTypes[msgCtx->textBoxType] != 0xE)) {
+                    (gTextBoxBackgroundTypes[msgCtx->textBoxType] != TEXTBOX_BG_NONE)) {
                     Message_DrawTextBox(play, &gfx);
                 }
             }
