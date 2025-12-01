@@ -4151,7 +4151,7 @@ u8 sPlayerFormOcarinaInstruments[] = {
     OCARINA_INSTRUMENT_DEKU_PIPES,
 };
 
-s16 D_801D03A8[TEXTBOX_TYPE_MAX] = {
+s16 gTextBoxNextIconYOffsets[TEXTBOX_TYPE_MAX] = {
     0x3B, // TEXTBOX_TYPE_BLACK
     0x3B, // TEXTBOX_TYPE_WOODEN
     0x3B, // TEXTBOX_TYPE_BLUE_FADED
@@ -4270,7 +4270,7 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
             case MSGMODE_TEXT_AWAIT_NEXT:
                 Message_DrawText(play, &gfx);
                 Message_DrawTextboxIcon(play, &gfx, 158,
-                                        (s16)(D_801D03A8[msgCtx->textBoxType] + msgCtx->textboxYTarget));
+                                        (s16)(gTextBoxNextIconYOffsets[msgCtx->textBoxType] + msgCtx->textboxYTarget));
                 break;
 
             case MSGMODE_OCARINA_STARTING:
@@ -5079,13 +5079,15 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
                     case TEXTBOX_ENDTYPE_INPUT_BANK:
                     case TEXTBOX_ENDTYPE_INPUT_DOGGY_RACETRACK_BET:
                     default:
-                        Message_DrawTextboxIcon(play, &gfx, 158,
-                                                (s16)(D_801D03A8[msgCtx->textBoxType] + msgCtx->textboxYTarget));
+                        Message_DrawTextboxIcon(
+                            play, &gfx, 158,
+                            (s16)(gTextBoxNextIconYOffsets[msgCtx->textBoxType] + msgCtx->textboxYTarget));
                         break;
 
                     case TEXTBOX_ENDTYPE_EVENT2:
-                        Message_DrawTextboxIcon(play, &gfx, 158,
-                                                (s16)(D_801D03A8[msgCtx->textBoxType] + msgCtx->textboxYTarget));
+                        Message_DrawTextboxIcon(
+                            play, &gfx, 158,
+                            (s16)(gTextBoxNextIconYOffsets[msgCtx->textBoxType] + msgCtx->textboxYTarget));
                         break;
                 }
                 break;
