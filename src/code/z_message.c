@@ -3276,7 +3276,7 @@ void Message_PauseMenu_ShowInfo(PlayState* play, u16 textId, u8 textBoxPos) {
     sCharTexScale = temp / msgCtx->textCharScale;
     D_801F6B08 = temp / 1;
 
-    if ((textId == 0x1709) && (player->transformation == 3)) {
+    if ((textId == 0x1709) && (player->transformation == PLAYER_FORM_DEKU)) {
         textId = 0x1705;
     }
 
