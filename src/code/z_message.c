@@ -2250,8 +2250,7 @@ void Message_Decode(PlayState* play) {
                 msgCtx->decodedTextLen = decodedBufPos;
                 if (msgCtx->textboxSkipped || (msgCtx->textBoxType == TEXTBOX_TYPE_WOODEN) ||
                     (msgCtx->textBoxType == TEXTBOX_TYPE_OCARINA) ||
-                    (msgCtx->textBoxType == TEXTBOX_TYPE_DISPLAY_ALL) ||
-                    (msgCtx->textBoxType == TEXTBOX_TYPE_BLUE) ||
+                    (msgCtx->textBoxType == TEXTBOX_TYPE_DISPLAY_ALL) || (msgCtx->textBoxType == TEXTBOX_TYPE_BLUE) ||
                     (msgCtx->textBoxType == TEXTBOX_TYPE_PAUSE_INFO) || (msgCtx->textBoxType == TEXTBOX_TYPE_B) ||
                     (msgCtx->unk11F0C == 3)) {
                     msgCtx->textDrawPos = msgCtx->decodedTextLen;
@@ -3014,8 +3013,7 @@ void Message_Decode(PlayState* play) {
                 msgCtx->decodedBuffer.wchar[++decodedBufPos] = font->msgBuf.wchar[++msgCtx->msgBufPos];
                 if (msgCtx->textboxSkipped || (msgCtx->textBoxType == TEXTBOX_TYPE_WOODEN) ||
                     (msgCtx->textBoxType == TEXTBOX_TYPE_OCARINA) ||
-                    (msgCtx->textBoxType == TEXTBOX_TYPE_DISPLAY_ALL) ||
-                    (msgCtx->textBoxType == TEXTBOX_TYPE_BLUE) ||
+                    (msgCtx->textBoxType == TEXTBOX_TYPE_DISPLAY_ALL) || (msgCtx->textBoxType == TEXTBOX_TYPE_BLUE) ||
                     (msgCtx->textBoxType == TEXTBOX_TYPE_PAUSE_INFO) || (msgCtx->textBoxType == TEXTBOX_TYPE_B) ||
                     (msgCtx->unk11F0C == 3)) {
                     Audio_PlaySfx(msgCtx->decodedBuffer.wchar[decodedBufPos]);
