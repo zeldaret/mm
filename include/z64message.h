@@ -211,7 +211,7 @@ typedef struct MessageContext {
     /* 0x11FF8 */ s16 unk11FF8;
     /* 0x11FFA */ s16 unk11FFA;
     /* 0x11FFC */ s16 unk11FFC;
-    /* 0x11FFE */ s16 unk11FFE[0x3];
+    /* 0x11FFE */ s16 choicePosY[0x3];
     /* 0x12004 */ s16 textboxXTarget;
     /* 0x12006 */ s16 textboxYTarget;
     /* 0x12008 */ s16 unk12008;

@@ -524,14 +524,14 @@ void Message_HandleChoiceSelection(PlayState* play, u8 numChoices) {
     }
 }
 
-void func_80148CBC(PlayState* play, Gfx** gfxP, u8 arg2) {
+void Message_DrawChoiceIcon(PlayState* play, Gfx** gfxP, u8 numChoices) {
     MessageContext* msgCtx = &play->msgCtx;
 
     msgCtx->textPosX = 48;
-    if (arg2 == 1) {
-        msgCtx->textPosY = msgCtx->unk11FFE[1 + msgCtx->choiceIndex];
+    if (numChoices == 1) {
+        msgCtx->textPosY = msgCtx->choicePosY[1 + msgCtx->choiceIndex];
     } else {
-        msgCtx->textPosY = msgCtx->unk11FFE[msgCtx->choiceIndex];
+        msgCtx->textPosY = msgCtx->choicePosY[msgCtx->choiceIndex];
     }
     Message_DrawTextboxIcon(play, gfxP, msgCtx->textPosX, msgCtx->textPosY);
 }
@@ -5051,15 +5051,15 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
 
                 switch (msgCtx->textboxEndType) {
                     case TEXTBOX_ENDTYPE_TWO_CHOICE:
-                        func_80148CBC(play, &gfx, 1);
+                        Message_DrawChoiceIcon(play, &gfx, 1);
                         break;
 
                     case TEXTBOX_ENDTYPE_THREE_CHOICE:
-                        func_80148CBC(play, &gfx, 2);
+                        Message_DrawChoiceIcon(play, &gfx, 2);
                         break;
 
                     case TEXTBOX_ENDTYPE_12:
-                        func_80148CBC(play, &gfx, 1);
+                        Message_DrawChoiceIcon(play, &gfx, 1);
                         break;
 
                     case TEXTBOX_ENDTYPE_PERSISTENT:
@@ -5377,13 +5377,13 @@ void Message_Update(PlayState* play) {
                 msgCtx->textboxXTarget = sTextboxXPositions[var_v1];
 
                 if ((gSaveContext.options.language == LANGUAGE_JPN) && !msgCtx->textIsCredits) {
-                    msgCtx->unk11FFE[0] = (s16)(msgCtx->textboxYTarget + 7);
-                    msgCtx->unk11FFE[1] = (s16)(msgCtx->textboxYTarget + 25);
-                    msgCtx->unk11FFE[2] = (s16)(msgCtx->textboxYTarget + 43);
+                    msgCtx->choicePosY[0] = (s16)(msgCtx->textboxYTarget + 7);
+                    msgCtx->choicePosY[1] = (s16)(msgCtx->textboxYTarget + 25);
+                    msgCtx->choicePosY[2] = (s16)(msgCtx->textboxYTarget + 43);
                 } else {
-                    msgCtx->unk11FFE[0] = (s16)(msgCtx->textboxYTarget + 20);
-                    msgCtx->unk11FFE[1] = (s16)(msgCtx->textboxYTarget + 32);
-                    msgCtx->unk11FFE[2] = (s16)(msgCtx->textboxYTarget + 44);
+                    msgCtx->choicePosY[0] = (s16)(msgCtx->textboxYTarget + 20);
+                    msgCtx->choicePosY[1] = (s16)(msgCtx->textboxYTarget + 32);
+                    msgCtx->choicePosY[2] = (s16)(msgCtx->textboxYTarget + 44);
                 }
 
                 if ((msgCtx->textBoxType == TEXTBOX_TYPE_4) || (msgCtx->textBoxType == TEXTBOX_TYPE_5)) {

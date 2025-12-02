@@ -2343,7 +2343,7 @@ asm/non_matchings/code/z_message/Message_DrawTextboxIcon.s,Message_DrawTextboxIc
 asm/non_matchings/code/z_message/func_80147F18.s,func_80147F18,0x80147F18,0x190
 asm/non_matchings/code/z_message/func_80148558.s,func_80148558,0x80148558,0x190
 asm/non_matchings/code/z_message/Message_HandleChoiceSelection.s,Message_HandleChoiceSelection,0x80148B98,0x49
-asm/non_matchings/code/z_message/func_80148CBC.s,func_80148CBC,0x80148CBC,0x2A
+asm/non_matchings/code/z_message/Message_DrawChoiceIcon.s,Message_DrawChoiceIcon,0x80148CBC,0x2A
 asm/non_matchings/code/z_message/func_80148D64.s,func_80148D64,0x80148D64,0xB9
 asm/non_matchings/code/z_message/func_80149048.s,func_80149048,0x80149048,0x65
 asm/non_matchings/code/z_message/func_801491DC.s,func_801491DC,0x801491DC,0x9E
