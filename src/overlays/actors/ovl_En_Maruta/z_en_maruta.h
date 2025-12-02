@@ -24,7 +24,7 @@ typedef struct EnMaruta {
     /* 0x21A */ s16 unk_21A;
     /* 0x21C */ s16 unk_21C;
     /* 0x21E */ s16 unk_21E;
-    /* 0x220 */ s16 unk_220;
+    /* 0x220 */ s16 isRetracting;
 } EnMaruta; // size = 0x224
 
 #endif // Z_EN_MARUTA_H

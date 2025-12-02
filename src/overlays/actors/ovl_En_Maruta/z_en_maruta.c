@@ -19,7 +19,7 @@ void func_80B372B8(EnMaruta* this);
 void func_80B372CC(EnMaruta* this, PlayState* play);
 void func_80B37364(EnMaruta* this);
 void func_80B3738C(EnMaruta* this, PlayState* play);
-void func_80B373F4(EnMaruta* this);
+void EnMaruta_StartRetracting(EnMaruta* this);
 void func_80B37428(EnMaruta* this, PlayState* play);
 void func_80B374FC(EnMaruta* this, PlayState* play);
 void func_80B37590(EnMaruta* this, PlayState* play);
@@ -236,7 +236,7 @@ void EnMaruta_Init(Actor* thisx, PlayState* play) {
     }
 
     this->unk_214 = -1;
-    this->unk_220 = 0;
+    this->isRetracting = 0;
 
     if (this->unk_210 == 0) {
         Collider_InitCylinder(play, &this->collider);
@@ -276,14 +276,14 @@ void func_80B372CC(EnMaruta* this, PlayState* play) {
         this->actor.shape.rot.y -= 0x2AAA;
     }
 
-    if (this->unk_220 == 1) {
-        func_80B373F4(this);
+    if (this->isRetracting == 1) {
+        EnMaruta_StartRetracting(this);
     }
 
     if ((this->actor.parent != NULL) && (this->actor.parent->id == ACTOR_EN_KENDO_JS)) {
         EnKendoJs* kendoJs = (EnKendoJs*)this->actor.parent;
 
-        kendoJs->unk_292 = this->actor.isLockedOn;
+        kendoJs->isPlayerLockedOn = this->actor.isLockedOn;
     }
 }
 
@@ -298,7 +298,7 @@ void func_80B3738C(EnMaruta* this, PlayState* play) {
     }
 }
 
-void func_80B373F4(EnMaruta* this) {
+void EnMaruta_StartRetracting(EnMaruta* this) {
     this->collider.base.acFlags |= AC_HIT;
     this->actor.velocity.y = 0.0f;
     this->actor.gravity = -2.0f;
@@ -313,7 +313,7 @@ void func_80B37428(EnMaruta* this, PlayState* play) {
         if ((this->actor.parent != NULL) && (this->actor.parent->id == ACTOR_EN_KENDO_JS)) {
             EnKendoJs* kendoJs = (EnKendoJs*)this->actor.parent;
 
-            kendoJs->unk_28C--;
+            kendoJs->numLogs--;
         }
         Actor_Kill(&this->actor);
     }
@@ -545,7 +545,7 @@ void func_80B37CA0(EnMaruta* this, PlayState* play) {
                     EnKendoJs* kendoJs = (EnKendoJs*)this->actor.parent;
 
                     kendoJs->unk_28E = 1;
-                    kendoJs->unk_28C--;
+                    kendoJs->numLogs--;
                 }
                 return;
             }
