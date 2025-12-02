@@ -171,7 +171,7 @@ typedef enum EnKendoJsCourseState {
     /* 0 */ ENKENDOJS_COURSE_PAUSED,
     /* 1 */ ENKENDOJS_COURSE_ACTIVE,
     /* 2 */ ENKENDOJS_COURSE_RETRY,
-}
+} EnKendoJsCourseState;
 
 typedef enum EnKendoJsNoviceCourseLesson {
     /* 0 */ ENKENDOJS_NOVICE_SIDE_JUMP,
@@ -182,13 +182,13 @@ typedef enum EnKendoJsNoviceCourseLesson {
     /* 5 */ ENKENDOJS_NOVICE_SWORD_THRUST,
     /* 6 */ ENKENDOJS_NOVICE_JUMP_ATTACK,
     /* 7 */ ENKENDOJS_NOVICE_FINISHED,
-}
+} EnKendoJsNoviceCourseLesson;
 
 typedef enum EnKendoJsNoviceCourseActionResult {
     /* 0 */ ENKENDOJS_RESULT_CORRECT,
     /* 1 */ ENKENDOJS_RESULT_INCORRECT,
     /* 2 */ ENKENDOJS_RESULT_PENDING,
-}
+} EnKendoJsNoviceCourseActionResult;
 
 void EnKendoJs_Init(Actor* thisx, PlayState* play) {
     s32 pad;
