@@ -2365,7 +2365,7 @@ asm/non_matchings/code/z_message/Message_LoadOwlWarpText.s,Message_LoadOwlWarpTe
 asm/non_matchings/code/z_message/Message_Decode.s,Message_Decode,0x8014D7B4,0xCB4
 asm/non_matchings/code/z_message/func_80150A84.s,func_80150A84,0x80150A84,0xA1
 asm/non_matchings/code/z_message/Message_OpenText.s,Message_OpenText,0x80150D08,0x1EA
-asm/non_matchings/code/z_message/Message_PauseMenu_ShowInfo.s,Message_PauseMenu_ShowInfo,0x801514B0,0x100
+asm/non_matchings/code/z_message/Message_PauseMenu_ShowDescription.s,Message_PauseMenu_ShowDescription,0x801514B0,0x100
 asm/non_matchings/code/z_message/Message_StartTextbox.s,Message_StartTextbox,0x801518B0,0x22
 asm/non_matchings/code/z_message/Message_ContinueTextbox.s,Message_ContinueTextbox,0x80151938,0x4C
 asm/non_matchings/code/z_message/Message_DisplaySceneTitleCard.s,Message_DisplaySceneTitleCard,0x80151A68,0x53

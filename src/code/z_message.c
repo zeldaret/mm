@@ -3246,7 +3246,7 @@ void Message_OpenText(PlayState* play, u16 textId) {
     }
 }
 
-void Message_PauseMenu_ShowInfo(PlayState* play, u16 textId, u8 textBoxPos) {
+void Message_PauseMenu_ShowDescription(PlayState* play, u16 textId, u8 textBoxPos) {
     MessageContext* msgCtx = &play->msgCtx;
     Font* font = &msgCtx->font;
     Player* player = GET_PLAYER(play);
