@@ -549,7 +549,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                         msgCtx->textPosX += 50;
                     }
                 } else if (msgCtx->choiceNum == 2) {
-                    if (msgCtx->numLines != 3) {
+                    if (msgCtx->lineCount != 3) {
                         if (!play->pauseCtx.bombersNotebookOpen) {
                             msgCtx->textPosX += 10;
                         } else {
@@ -746,7 +746,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                     msgCtx->choiceTextId = msgCtx->currentTextId;
                     msgCtx->stateTimer = 4;
                     Font_LoadMessageBoxEndIcon(font, 2);
-                    if (msgCtx->numLines != 3) {
+                    if (msgCtx->lineCount != 3) {
                         msgCtx->unk11FFE[0] = (s16)(msgCtx->textboxYTarget + 14);
                         msgCtx->unk11FFE[1] = (s16)(msgCtx->textboxYTarget + 26);
                         msgCtx->unk11FFE[2] = (s16)(msgCtx->textboxYTarget + 38);
@@ -761,7 +761,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                     msgCtx->choiceTextId = msgCtx->currentTextId;
                     msgCtx->stateTimer = 4;
                     Font_LoadMessageBoxEndIcon(font, 2);
-                    if (msgCtx->numLines != 3) {
+                    if (msgCtx->lineCount != 3) {
                         msgCtx->unk11FFE[0] = (s16)(msgCtx->textboxYTarget + 14);
                         msgCtx->unk11FFE[1] = (s16)(msgCtx->textboxYTarget + 26);
                         msgCtx->unk11FFE[2] = (s16)(msgCtx->textboxYTarget + 38);
@@ -1100,7 +1100,7 @@ void Message_DecodeNES(PlayState* play) {
             }
 
             msgCtx->decodedTextLen = decodedBufPos;
-            msgCtx->numLines = numLines;
+            msgCtx->lineCount = numLines;
             if (msgCtx->textboxSkipped || (msgCtx->textBoxType == TEXTBOX_TYPE_1) ||
                 (msgCtx->textBoxType == TEXTBOX_TYPE_3) || (msgCtx->textBoxType == TEXTBOX_TYPE_6) ||
                 (msgCtx->textBoxType == TEXTBOX_TYPE_8) || (msgCtx->textBoxType == TEXTBOX_TYPE_9) ||
@@ -1486,7 +1486,7 @@ void Message_DecodeNES(PlayState* play) {
             msgCtx->unk120C4 = charTexIndex;
 
             for (i = 0; i < 5; i++) {
-                msgCtx->unk12054[i] = 1;
+                msgCtx->codeGuessDigits[i] = 1;
                 Message_LoadCharNES(play, '1', &charTexIndex, &spA4, decodedBufPos);
                 decodedBufPos++;
             }
@@ -1519,7 +1519,7 @@ void Message_DecodeNES(PlayState* play) {
             msgCtx->unk120C4 = charTexIndex;
 
             for (i = 0; i < 3; i++) {
-                msgCtx->unk12054[i] = 1;
+                msgCtx->codeGuessDigits[i] = 1;
                 Font_LoadCharNES(play, '1', charTexIndex);
                 charTexIndex += FONT_CHAR_TEX_SIZE;
                 msgCtx->decodedBuffer.schar[decodedBufPos] = '1';

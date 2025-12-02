@@ -290,7 +290,7 @@ typedef struct MessageContext {
     /* 0x120D2 */ s16 unk120D2;
     /* 0x120D4 */ s16 unk120D4;
     /* 0x120D6 */ s16 unk120D6;
-    /* 0x120D8 */ s16 numLines;
+    /* 0x120D8 */ s16 lineCount;
     /* 0x120DA */ UNK_TYPE1 unk_120DA[0x6];
 } MessageContext; // size = 0x120E0
 
