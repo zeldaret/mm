@@ -40,7 +40,7 @@ typedef enum TextBoxBackground {
     /* 0x2 */ TEXTBOX_BG_OCARINA,
     /* 0x3 */ TEXTBOX_BG_FADED,
     /* 0x4 */ TEXTBOX_BG_NOTEBOOK,
-    /* 0xE */ TEXTBOX_BG_NONE,
+    /* 0xE */ TEXTBOX_BG_NONE = 14,
 } TextBoxBackground;
 
 #define TEXTBOX_ENDTYPE_DEFAULT    0x00
