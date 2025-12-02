@@ -186,7 +186,7 @@ typedef struct MessageContext {
     /* 0x11F00 */ struct OcarinaStaff* ocarinaStaff;
     /* 0x11F04 */ u16 currentTextId;
     /* 0x11F06 */ u16 choiceTextId; // s16?
-    /* 0x11F08 */ u16 unk11F08;
+    /* 0x11F08 */ u16 textBoxProperties;
     /* 0x11F0A */ u8 textBoxType;
     /* 0x11F0B */ u8 textBoxPos;
     /* 0x11F0C */ u8 unk11F0C;
@@ -249,12 +249,12 @@ typedef struct MessageContext {
     /* 0x12046 */ s16 blockSunsSong;
     /* 0x12048 */ u8 ocarinaButtonIndex;
     /* 0x1204A */ s16 ocarinaButtonsPosY[5];
-    /* 0x12054 */ s16 unk12054[6]; // First, second and third digits in lottery code guess
+    /* 0x12054 */ s16 codeGuessDigits[6]; // First, second and third digits in lottery code guess
     /* 0x1205A */ UNK_TYPE1 unk12060[0x8];
     /* 0x12068 */ s16 textboxX;
     /* 0x1206A */ s16 textboxY;
-    /* 0x1206C */ s32 unk1206C;
-    /* 0x12070 */ s32 unk12070;
+    /* 0x1206C */ s32 firstChoiceValue;
+    /* 0x12070 */ s32 secondChoiceValue;
     /* 0x12074 */ s32 unk12074;
     /* 0x12078 */ s32 rupeesSelected; // Used for bank and doggy racetrack bet
     /* 0x1207C */ s32 rupeesTotal; // Used for bank and doggy racetrack bet
@@ -290,7 +290,7 @@ typedef struct MessageContext {
     /* 0x120D2 */ s16 unk120D2;
     /* 0x120D4 */ s16 unk120D4;
     /* 0x120D6 */ s16 unk120D6;
-    /* 0x120D8 */ s16 unk120D8;
+    /* 0x120D8 */ s16 numLines;
     /* 0x120DA */ UNK_TYPE1 unk_120DA[0x6];
 } MessageContext; // size = 0x120E0
 

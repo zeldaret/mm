@@ -231,13 +231,13 @@ void func_80B26758(EnKendoJs* this, PlayState* play) {
                     Message_StartTextbox(play, 0x272C, &this->actor);
                     this->unk_288 = 0x272C;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENKENDOJS_ANIM_2);
-                } else if (gSaveContext.save.saveInfo.playerData.rupees < play->msgCtx.unk1206C) {
+                } else if (gSaveContext.save.saveInfo.playerData.rupees < play->msgCtx.firstChoiceValue) {
                     Audio_PlaySfx(NA_SE_SY_ERROR);
                     Message_StartTextbox(play, 0x2718, &this->actor);
                     this->unk_288 = 0x2718;
                 } else {
                     Audio_PlaySfx_MessageDecide();
-                    Rupees_ChangeBy(-play->msgCtx.unk1206C);
+                    Rupees_ChangeBy(-play->msgCtx.firstChoiceValue);
                     Message_StartTextbox(play, 0x2719, &this->actor);
                     this->unk_288 = 0x2719;
                 }
@@ -249,13 +249,13 @@ void func_80B26758(EnKendoJs* this, PlayState* play) {
                     Message_StartTextbox(play, 0x272C, &this->actor);
                     this->unk_288 = 0x272C;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENKENDOJS_ANIM_2);
-                } else if (gSaveContext.save.saveInfo.playerData.rupees < play->msgCtx.unk12070) {
+                } else if (gSaveContext.save.saveInfo.playerData.rupees < play->msgCtx.secondChoiceValue) {
                     Audio_PlaySfx(NA_SE_SY_ERROR);
                     Message_StartTextbox(play, 0x2718, &this->actor);
                     this->unk_288 = 0x2718;
                 } else {
                     Audio_PlaySfx_MessageDecide();
-                    Rupees_ChangeBy(-play->msgCtx.unk12070);
+                    Rupees_ChangeBy(-play->msgCtx.secondChoiceValue);
                     Message_StartTextbox(play, 0x273A, &this->actor);
                     this->unk_288 = 0x273A;
                 }
