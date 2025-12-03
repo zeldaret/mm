@@ -71,7 +71,7 @@ static ColliderCylinderInit sCylinderInit = {
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
 typedef enum EnKendoJsAnimation {
-    /* 0 */ ENKENDOJS_ANIM_UNUSED,
+    /* 0 */ ENKENDOJS_ANIM_SLAPPING_KNEE, // unused
     /* 1 */ ENKENDOJS_ANIM_DEFAULT,
     /* 2 */ ENKENDOJS_ANIM_FLAILING,
     /* 3 */ ENKENDOJS_ANIM_STOP_FLAILING,
@@ -80,7 +80,7 @@ typedef enum EnKendoJsAnimation {
 } EnKendoJsAnimation;
 
 static AnimationInfo sAnimationInfo[ENKENDOJS_ANIM_MAX] = {
-    { &object_js_Anim_Unused, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
+    { &object_js_Anim_SlappingKnee, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f }, // unused
     { &object_js_Anim_Default, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
     { &object_js_Anim_Flailing, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
     { &object_js_Anim_StopFlailing, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },

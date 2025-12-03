@@ -3,7 +3,7 @@
         <Animation Name="object_js_Anim_Flailing" Offset="0x16C" /> <!-- Original name is "js_chigau" -->
         <Animation Name="object_js_Anim_StopFlailing" Offset="0x3DC" /> <!-- Original name is "js_chigau2wait" -->
         <Animation Name="object_js_Anim_Scared" Offset="0xAD4" /> <!-- Original name is "js_furueru" -->
-        <Animation Name="object_js_Anim_Unused" Offset="0xC7C" /> <!-- Original name is "js_maido" -->
+        <Animation Name="object_js_Anim_SlappingKnee" Offset="0xC7C" /> <!-- Original name is "js_maido" -->
         <Animation Name="object_js_Anim_Default" Offset="0xF4C" /> <!-- Original name is "js_matsu" -->
         <DList Name="object_js_DL_003F30" Offset="0x3F30" />
         <DList Name="object_js_DL_004510" Offset="0x4510" />
