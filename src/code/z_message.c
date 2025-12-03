@@ -3055,7 +3055,7 @@ void Message_Decode(PlayState* play) {
     }
 }
 
-void Message_SetTextboxRgba(PlayState* play) {
+void Message_SetTextboxColor(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
     s32 textBoxType = msgCtx->textBoxType;
 
@@ -3342,7 +3342,7 @@ void Message_ContinueTextbox(PlayState* play, u16 textId) {
 
     msgCtx->msgLength = 0;
     Message_OpenText(play, textId);
-    Message_SetTextboxRgba(play);
+    Message_SetTextboxColor(play);
     msgCtx->msgMode = MSGMODE_TEXT_CONTINUING;
     msgCtx->stateTimer = 8;
     msgCtx->textDelayTimer = 0;
@@ -3369,7 +3369,7 @@ void Message_DisplaySceneTitleCard(PlayState* play, u16 textId) {
 
     msgCtx->msgLength = 0;
     Message_OpenText(play, textId);
-    Message_SetTextboxRgba(play);
+    Message_SetTextboxColor(play);
     Message_DecodeNES(play);
     msgCtx->msgMode = MSGMODE_SCENE_TITLE_CARD_FADE_IN_BACKGROUND;
     msgCtx->textDelayTimer = 0;
@@ -3523,40 +3523,40 @@ void Message_DisplayOcarinaStaffImpl(PlayState* play, u16 ocarinaAction) {
     if ((ocarinaAction >= OCARINA_ACTION_TIMED_PROMPT_SONATA) &&
         (ocarinaAction <= OCARINA_ACTION_TIMED_PROMPT_STORMS)) {
         Message_OpenText(play, 0x1B59);
-        Message_SetTextboxRgba(play);
+        Message_SetTextboxColor(play);
     } else if ((ocarinaAction == OCARINA_ACTION_3B) || (ocarinaAction == OCARINA_ACTION_3C)) {
         noStop = true;
         Message_OpenText(play, D_801D028C[ocarinaAction - 0x29]);
-        Message_SetTextboxRgba(play);
+        Message_SetTextboxColor(play);
     } else if ((ocarinaAction >= OCARINA_ACTION_DEMONSTRATE_EVAN_PART1_FIRST_HALF) &&
                (ocarinaAction <= OCARINA_ACTION_PROMPT_EVAN_PART2_SECOND_HALF)) {
         noStop = true;
         Message_OpenText(play, D_801D028C[ocarinaAction - 0x29]);
-        Message_SetTextboxRgba(play);
+        Message_SetTextboxColor(play);
     } else if ((ocarinaAction >= OCARINA_ACTION_PROMPT_WIND_FISH_HUMAN) &&
                (ocarinaAction <= OCARINA_ACTION_PROMPT_WIND_FISH_DEKU)) {
         noStop = true;
         Message_OpenText(play, 0x1B59);
-        Message_SetTextboxRgba(play);
+        Message_SetTextboxColor(play);
     } else if ((ocarinaAction == OCARINA_ACTION_FREE_PLAY) || (ocarinaAction >= OCARINA_ACTION_CHECK_TIME)) {
         if ((ocarinaAction >= OCARINA_ACTION_CHECK_TIME) && (ocarinaAction <= OCARINA_ACTION_CHECK_STORMS)) {
             Audio_PlaySfx(NA_SE_SY_TRE_BOX_APPEAR);
         }
         if (ocarinaAction == OCARINA_ACTION_SCARECROW_SPAWN_DEMONSTRATION) {
             Message_OpenText(play, 0x1B5B);
-            Message_SetTextboxRgba(play);
+            Message_SetTextboxColor(play);
         } else {
             Message_OpenText(play, 0x1B5A);
-            Message_SetTextboxRgba(play);
+            Message_SetTextboxColor(play);
         }
     } else {
         noStop = true;
         if (ocarinaAction >= OCARINA_ACTION_PROMPT_SONATA) {
             Message_OpenText(play, 0x1B59);
-            Message_SetTextboxRgba(play);
+            Message_SetTextboxColor(play);
         } else {
             Message_OpenText(play, D_801D028C[ocarinaAction]);
-            Message_SetTextboxRgba(play);
+            Message_SetTextboxColor(play);
         }
     }
 
@@ -5408,7 +5408,7 @@ void Message_Update(PlayState* play) {
                 msgCtx->msgMode = MSGMODE_TEXT_BOX_GROWING;
 
                 if (!pauseCtx->itemDescriptionOn) {
-                    Message_SetTextboxRgba(play);
+                    Message_SetTextboxColor(play);
                 }
             }
             break;
