@@ -524,6 +524,9 @@ void Message_HandleChoiceSelection(PlayState* play, u8 numChoices) {
     }
 }
 
+/**
+ * Draws the arrow icon next to the currently selected choice.
+ */
 void Message_DrawChoiceIcon(PlayState* play, Gfx** gfxP, u8 numChoices) {
     MessageContext* msgCtx = &play->msgCtx;
 
