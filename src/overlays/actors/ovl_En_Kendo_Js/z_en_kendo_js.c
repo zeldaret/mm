@@ -75,16 +75,16 @@ typedef enum EnKendoJsAnimation {
     /* 1 */ ENKENDOJS_ANIM_DEFAULT,
     /* 2 */ ENKENDOJS_ANIM_FLAILING,
     /* 3 */ ENKENDOJS_ANIM_STOP_FLAILING,
-    /* 4 */ ENKENDOJS_ANIM_SCARED,
+    /* 4 */ ENKENDOJS_ANIM_COWERING,
     /* 5 */ ENKENDOJS_ANIM_MAX
 } EnKendoJsAnimation;
 
 static AnimationInfo sAnimationInfo[ENKENDOJS_ANIM_MAX] = {
-    { &object_js_Anim_SlappingKnee, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f }, // unused
-    { &object_js_Anim_Default, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
-    { &object_js_Anim_Flailing, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
-    { &object_js_Anim_StopFlailing, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
-    { &object_js_Anim_Scared, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
+    { &gSwordmasterSlappingKneeAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f }, // unused
+    { &gSwordmasterDefaultAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
+    { &gSwordmasterFlailingAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
+    { &gSwordmasterStopFlailingAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
+    { &gSwordmasterCoweringAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
 };
 
 typedef enum EnKendoJsMessage {
@@ -200,7 +200,7 @@ void EnKendoJs_Init(Actor* thisx, PlayState* play) {
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
 
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_js_Skel_006990, &object_js_Anim_Default, this->jointTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_js_Skel_006990, &gSwordmasterDefaultAnim, this->jointTable,
                        this->morphTable, OBJECT_JS_LIMB_MAX);
 
     if ((CURRENT_DAY == 3) && ((CURRENT_TIME > CLOCK_TIME(23, 0)) || (CURRENT_TIME < CLOCK_TIME(6, 0)))) {
@@ -210,7 +210,7 @@ void EnKendoJs_Init(Actor* thisx, PlayState* play) {
                         this->actor.home.rot.z, 0x10);
             Actor_Kill(&this->actor);
         } else {
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENKENDOJS_ANIM_SCARED);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENKENDOJS_ANIM_COWERING);
         }
     } else if (ENKENDOJS_GET_FF(&this->actor) == ENKENDOJS_FF_1) {
         Actor_Kill(&this->actor);
@@ -611,7 +611,7 @@ void EnKendoJs_NoviceCourse(EnKendoJs* this, PlayState* play) {
         if (this->curTextId == ENKENDOJS_MSG_NOVICE_COURSE_WRONG) {
             EnKendoJs_NoviceCourseTryAgain(this, play);
         } else if (!EnKendoJs_HasMoreAdviceToTryAgain(this, play)) {
-            if (this->skelAnime.animation == &object_js_Anim_Flailing) {
+            if (this->skelAnime.animation == &gSwordmasterFlailingAnim) {
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENKENDOJS_ANIM_STOP_FLAILING);
             }
             this->courseState = ENKENDOJS_COURSE_RETRY;
@@ -650,7 +650,7 @@ void EnKendoJs_NoviceCourse(EnKendoJs* this, PlayState* play) {
                 break;
         }
 
-        if ((this->skelAnime.animation == &object_js_Anim_StopFlailing) &&
+        if ((this->skelAnime.animation == &gSwordmasterStopFlailingAnim) &&
             Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENKENDOJS_ANIM_DEFAULT);
         }
