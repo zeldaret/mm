@@ -2008,11 +2008,11 @@ void Message_DecodeHeader(PlayState* play) {
         msgCtx->nextTextId = font->msgBuf.schar[++msgCtx->msgBufPos] << 8;
         msgCtx->nextTextId |= font->msgBuf.schar[++msgCtx->msgBufPos];
 
-        msgCtx->firstChoiceValue = font->msgBuf.schar[++msgCtx->msgBufPos] << 8;
-        msgCtx->firstChoiceValue |= font->msgBuf.schar[++msgCtx->msgBufPos];
+        msgCtx->firstChoicePrice = font->msgBuf.schar[++msgCtx->msgBufPos] << 8;
+        msgCtx->firstChoicePrice |= font->msgBuf.schar[++msgCtx->msgBufPos];
 
-        msgCtx->secondChoiceValue = font->msgBuf.schar[++msgCtx->msgBufPos] << 8;
-        msgCtx->secondChoiceValue |= font->msgBuf.schar[++msgCtx->msgBufPos];
+        msgCtx->secondChoicePrice = font->msgBuf.schar[++msgCtx->msgBufPos] << 8;
+        msgCtx->secondChoicePrice |= font->msgBuf.schar[++msgCtx->msgBufPos];
 
         msgCtx->unk12074 = font->msgBuf.schar[++msgCtx->msgBufPos] << 8;
         msgCtx->unk12074 |= font->msgBuf.schar[++msgCtx->msgBufPos];

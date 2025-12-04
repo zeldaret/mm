@@ -123,8 +123,8 @@
     { __VA_ARGS__ END }
 
 // Not a control command, used to define the data that begins every message
-#define HEADER(textBoxProperties, itemId, nextTextId, firstChoiceValue, secondChoiceValue, unk12074) \
-    ARG2(textBoxProperties) ARG1(itemId) ARG2(nextTextId) ARG2(firstChoiceValue) ARG2(secondChoiceValue) ARG2(unk12074)
+#define HEADER(textBoxProperties, itemId, nextTextId, firstChoicePrice, secondChoicePrice, unk12074) \
+    ARG2(textBoxProperties) ARG1(itemId) ARG2(nextTextId) ARG2(firstChoicePrice) ARG2(secondChoicePrice) ARG2(unk12074)
 
 #define COLOR_DEFAULT CTRL_BASE(COLOR_DEFAULT)
 #define COLOR_RED CTRL_BASE(COLOR_RED)

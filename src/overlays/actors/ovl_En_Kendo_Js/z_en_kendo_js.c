@@ -231,13 +231,13 @@ void func_80B26758(EnKendoJs* this, PlayState* play) {
                     Message_StartTextbox(play, 0x272C, &this->actor);
                     this->unk_288 = 0x272C;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENKENDOJS_ANIM_2);
-                } else if (gSaveContext.save.saveInfo.playerData.rupees < play->msgCtx.firstChoiceValue) {
+                } else if (gSaveContext.save.saveInfo.playerData.rupees < play->msgCtx.firstChoicePrice) {
                     Audio_PlaySfx(NA_SE_SY_ERROR);
                     Message_StartTextbox(play, 0x2718, &this->actor);
                     this->unk_288 = 0x2718;
                 } else {
                     Audio_PlaySfx_MessageDecide();
-                    Rupees_ChangeBy(-play->msgCtx.firstChoiceValue);
+                    Rupees_ChangeBy(-play->msgCtx.firstChoicePrice);
                     Message_StartTextbox(play, 0x2719, &this->actor);
                     this->unk_288 = 0x2719;
                 }
@@ -249,13 +249,13 @@ void func_80B26758(EnKendoJs* this, PlayState* play) {
                     Message_StartTextbox(play, 0x272C, &this->actor);
                     this->unk_288 = 0x272C;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENKENDOJS_ANIM_2);
-                } else if (gSaveContext.save.saveInfo.playerData.rupees < play->msgCtx.secondChoiceValue) {
+                } else if (gSaveContext.save.saveInfo.playerData.rupees < play->msgCtx.secondChoicePrice) {
                     Audio_PlaySfx(NA_SE_SY_ERROR);
                     Message_StartTextbox(play, 0x2718, &this->actor);
                     this->unk_288 = 0x2718;
                 } else {
                     Audio_PlaySfx_MessageDecide();
-                    Rupees_ChangeBy(-play->msgCtx.secondChoiceValue);
+                    Rupees_ChangeBy(-play->msgCtx.secondChoicePrice);
                     Message_StartTextbox(play, 0x273A, &this->actor);
                     this->unk_288 = 0x273A;
                 }

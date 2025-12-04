@@ -253,8 +253,8 @@ typedef struct MessageContext {
     /* 0x1205A */ UNK_TYPE1 unk12060[0x8];
     /* 0x12068 */ s16 textboxX;
     /* 0x1206A */ s16 textboxY;
-    /* 0x1206C */ s32 firstChoiceValue;
-    /* 0x12070 */ s32 secondChoiceValue;
+    /* 0x1206C */ s32 firstChoicePrice;
+    /* 0x12070 */ s32 secondChoicePrice;
     /* 0x12074 */ s32 unk12074;
     /* 0x12078 */ s32 rupeesSelected; // Used for bank and doggy racetrack bet
     /* 0x1207C */ s32 rupeesTotal; // Used for bank and doggy racetrack bet
