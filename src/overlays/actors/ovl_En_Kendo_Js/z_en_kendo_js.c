@@ -239,7 +239,7 @@ void EnKendoJs_Destroy(Actor* thisx, PlayState* play) {
     EnKendoJs* this = (EnKendoJs*)thisx;
 
     Collider_DestroyCylinder(play, &this->collider);
-    CLEAR_WEEKEVENTREG(WEEKEVENTREG_PLAYING_SWORDSMAN_MINIGAME );
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_PLAYING_SWORDSMAN_MINIGAME);
 }
 
 void EnKendoJs_SetupAwaitingTalk(EnKendoJs* this) {
@@ -596,7 +596,7 @@ void EnKendoJs_MovePlayerToStartNoviceCourse(EnKendoJs* this, PlayState* play) {
 }
 
 void EnKendoJs_StartNoviceCourse(EnKendoJs* this) {
-    SET_WEEKEVENTREG(WEEKEVENTREG_PLAYING_SWORDSMAN_MINIGAME );
+    SET_WEEKEVENTREG(WEEKEVENTREG_PLAYING_SWORDSMAN_MINIGAME);
     this->numLogs = 1;
     this->timer = 0;
     this->minigameRound = ENKENDOJS_NOVICE_SIDE_JUMP;
@@ -656,14 +656,14 @@ void EnKendoJs_NoviceCourse(EnKendoJs* this, PlayState* play) {
         }
 
         if (this->minigameRound == ENKENDOJS_NOVICE_FINISHED) {
-            CLEAR_WEEKEVENTREG(WEEKEVENTREG_PLAYING_SWORDSMAN_MINIGAME );
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_PLAYING_SWORDSMAN_MINIGAME);
             EnKendoJs_SetupMessageStateHandler(this);
         }
     }
 }
 
 void EnKendoJs_SetupExpertCourse(EnKendoJs* this) {
-    SET_WEEKEVENTREG(WEEKEVENTREG_PLAYING_SWORDSMAN_MINIGAME );
+    SET_WEEKEVENTREG(WEEKEVENTREG_PLAYING_SWORDSMAN_MINIGAME);
     this->timer = 120;
     this->minigameRound = 0;
     this->courseState = ENKENDOJS_COURSE_ACTIVE;
@@ -694,7 +694,7 @@ void EnKendoJs_ExpertCourse(EnKendoJs* this, PlayState* play) {
                 ENKENDOJS_QUEUE_MSG(this, play, ENKENDOJS_MSG_EXPERT_COURSE_INSUFFICIENT);
             }
             player->stateFlags1 |= PLAYER_STATE1_20;
-            CLEAR_WEEKEVENTREG(WEEKEVENTREG_PLAYING_SWORDSMAN_MINIGAME );
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_PLAYING_SWORDSMAN_MINIGAME);
             EnKendoJs_SetupMessageStateHandler(this);
             return;
         }
