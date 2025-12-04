@@ -3248,7 +3248,7 @@ void Message_OpenText(PlayState* play, u16 textId) {
     }
 }
 
-void func_801514B0(PlayState* play, u16 arg1, u8 arg2) {
+void Message_PauseMenu_ShowDescription(PlayState* play, u16 textId, u8 textBoxPos) {
     MessageContext* msgCtx = &play->msgCtx;
     Font* font = &msgCtx->font;
     Player* player = GET_PLAYER(play);
@@ -3278,19 +3278,19 @@ void func_801514B0(PlayState* play, u16 arg1, u8 arg2) {
     sCharTexScale = temp / msgCtx->textCharScale;
     D_801F6B08 = temp / 1;
 
-    if ((arg1 == 0x1709) && (player->transformation == 3)) {
-        arg1 = 0x1705;
+    if ((textId == 0x1709) && (player->transformation == PLAYER_FORM_DEKU)) {
+        textId = 0x1705;
     }
 
-    msgCtx->currentTextId = arg1;
+    msgCtx->currentTextId = textId;
 
     if (gSaveContext.options.language == LANGUAGE_JPN) {
-        Message_FindMessage(play, arg1);
+        Message_FindMessage(play, textId);
         msgCtx->msgLength = font->messageEnd;
         DmaMgr_RequestSync(&font->msgBuf, SEGMENT_ROM_START(message_data_static) + font->messageStart,
                            font->messageEnd);
     } else {
-        Message_FindMessageNES(play, arg1);
+        Message_FindMessageNES(play, textId);
         msgCtx->msgLength = font->messageEnd;
         DmaMgr_RequestSync(&font->msgBuf, SEGMENT_ROM_START(message_data_static) + font->messageStart,
                            font->messageEnd);
@@ -3304,7 +3304,7 @@ void func_801514B0(PlayState* play, u16 arg1, u8 arg2) {
     msgCtx->unk11F08 = font->msgBuf.wchar[msgCtx->msgBufPos];
     msgCtx->unk11F18 = (msgCtx->unk11F08 & 0xF000) >> 0xC;
     msgCtx->textBoxType = TEXTBOX_TYPE_PAUSE_INFO;
-    msgCtx->textBoxPos = arg2;
+    msgCtx->textBoxPos = textBoxPos;
     msgCtx->unk11F0C = msgCtx->unk11F08 & 0xF;
     msgCtx->textUnskippable = true;
     DmaMgr_RequestSync(msgCtx->textboxSegment,
