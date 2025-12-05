@@ -46,6 +46,21 @@ ActorProfile En_Maruta_Profile = {
     /**/ EnMaruta_Draw,
 };
 
+/**
+ * These chunks of log are arranged like so (indices in array included):
+ *
+ * -------
+ * |6 | 7|
+ * |  |  |
+ * |\ | /|
+ * |4\|/5|
+ * -------
+ * |2/|\3|
+ * |/ | \|
+ * |  |  |
+ * |0 | 1|
+ * -------
+ */
 Gfx* sDisplayLists[] = {
     gPracticeLogBottomLeftBigChunkDL,     gPracticeLogBottomRightBigChunkDL, gPracticeLogBottomLeftCornerChunkDL,
     gPracticeLogBottomRightCornerChunkDL, gPracticeLogTopLeftCornerChunkDL,  gPracticeLogTopRightCornerChunkDL,
