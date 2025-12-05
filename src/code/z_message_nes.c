@@ -934,14 +934,14 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                         break;
 
                     default:
-                        if (((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_INPUT_BOMBER_CODE) && (i >= msgCtx->unk120C0) &&
-                             ((msgCtx->unk120C0 + 4) >= i)) ||
+                        if (((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_INPUT_BOMBER_CODE) &&
+                             (i >= msgCtx->codeBufOffset) && ((msgCtx->codeBufOffset + 4) >= i)) ||
                             ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_INPUT_LOTTERY_CODE) &&
-                             (i >= msgCtx->unk120C0) && ((msgCtx->unk120C0 + 2) >= i)) ||
-                            ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_INPUT_BANK) && (i >= msgCtx->unk120C0) &&
-                             ((msgCtx->unk120C0 + 2) >= i)) ||
+                             (i >= msgCtx->codeBufOffset) && ((msgCtx->codeBufOffset + 2) >= i)) ||
+                            ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_INPUT_BANK) && (i >= msgCtx->codeBufOffset) &&
+                             ((msgCtx->codeBufOffset + 2) >= i)) ||
                             ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_INPUT_DOGGY_RACETRACK_BET) &&
-                             (i >= msgCtx->unk120C0) && ((msgCtx->unk120C0 + 1) >= i))) {
+                             (i >= msgCtx->codeBufOffset) && ((msgCtx->codeBufOffset + 1) >= i))) {
                             msgCtx->textPosX += (s32)(16.0f * msgCtx->textCharScale);
                         } else {
                             msgCtx->textPosX += (s32)(sNESFontWidths[character - ' '] * msgCtx->textCharScale);
@@ -1258,8 +1258,8 @@ void Message_DecodeNES(PlayState* play) {
         } else if (curChar == MESSAGE_INPUT_BANK) {
             decodedBufPos++;
             msgCtx->unk120BE = spC6;
-            msgCtx->unk120C0 = decodedBufPos;
-            msgCtx->unk120C2 = 2;
+            msgCtx->codeBufOffset = decodedBufPos;
+            msgCtx->inputDigitIndex = 2;
             msgCtx->rupeesSelected = 0;
             msgCtx->unk120C4 = charTexIndex;
             digits[0] = digits[1] = digits[2] = 0;
@@ -1467,8 +1467,8 @@ void Message_DecodeNES(PlayState* play) {
         } else if (curChar == MESSAGE_INPUT_DOGGY_RACETRACK_BET) {
             decodedBufPos++;
             msgCtx->unk120BE = spC6;
-            msgCtx->unk120C0 = decodedBufPos;
-            msgCtx->unk120C2 = 0;
+            msgCtx->codeBufOffset = decodedBufPos;
+            msgCtx->inputDigitIndex = 0;
             msgCtx->rupeesSelected = 0;
             msgCtx->unk120C4 = charTexIndex;
             digits[0] = digits[1] = digits[2] = 0;
@@ -1480,8 +1480,8 @@ void Message_DecodeNES(PlayState* play) {
         } else if (curChar == MESSAGE_INPUT_BOMBER_CODE) {
             decodedBufPos++;
             msgCtx->unk120BE = spC6;
-            msgCtx->unk120C0 = decodedBufPos;
-            msgCtx->unk120C2 = 0;
+            msgCtx->codeBufOffset = decodedBufPos;
+            msgCtx->inputDigitIndex = 0;
             msgCtx->rupeesSelected = 0;
             msgCtx->unk120C4 = charTexIndex;
 
@@ -1513,8 +1513,8 @@ void Message_DecodeNES(PlayState* play) {
         } else if (curChar == MESSAGE_INPUT_LOTTERY_CODE) {
             decodedBufPos++;
             msgCtx->unk120BE = spC6;
-            msgCtx->unk120C0 = decodedBufPos;
-            msgCtx->unk120C2 = 0;
+            msgCtx->codeBufOffset = decodedBufPos;
+            msgCtx->inputDigitIndex = 0;
             msgCtx->rupeesSelected = 0;
             msgCtx->unk120C4 = charTexIndex;
 

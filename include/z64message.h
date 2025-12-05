@@ -249,7 +249,7 @@ typedef struct MessageContext {
     /* 0x12046 */ s16 blockSunsSong;
     /* 0x12048 */ u8 ocarinaButtonIndex;
     /* 0x1204A */ s16 ocarinaButtonsPosY[5];
-    /* 0x12054 */ s16 codeGuessDigits[6]; // First, second and third digits in lottery code guess
+    /* 0x12054 */ s16 codeGuessDigits[6];
     /* 0x1205A */ UNK_TYPE1 unk12060[0x8];
     /* 0x12068 */ s16 textboxX;
     /* 0x1206A */ s16 textboxY;
@@ -279,8 +279,8 @@ typedef struct MessageContext {
     /* 0x120B2 */ u8 bombersNotebookEventQueue[10];
     /* 0x120BC */ u16 hudVisibility;
     /* 0x120BE */ s16 unk120BE;
-    /* 0x120C0 */ s16 unk120C0;
-    /* 0x120C2 */ s16 unk120C2;
+    /* 0x120C0 */ s16 codeBufOffset;
+    /* 0x120C2 */ s16 inputDigitIndex;
     /* 0x120C4 */ s32 unk120C4;
     /* 0x120C8 */ s16 unk120C8;
     /* 0x120CA */ s16 unk120CA;

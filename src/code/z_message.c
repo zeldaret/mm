@@ -541,34 +541,34 @@ void func_80148D64(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
 
     if (play->msgCtx.stickAdjY <= -30) {
-        msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2]--;
-        if (msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2] < '0') {
-            msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2] = '9';
+        msgCtx->decodedBuffer.schar[msgCtx->codeBufOffset + msgCtx->inputDigitIndex]--;
+        if (msgCtx->decodedBuffer.schar[msgCtx->codeBufOffset + msgCtx->inputDigitIndex] < '0') {
+            msgCtx->decodedBuffer.schar[msgCtx->codeBufOffset + msgCtx->inputDigitIndex] = '9';
         }
-        Font_LoadCharNES(play, msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2],
-                         msgCtx->unk120C4 + (msgCtx->unk120C2 << 7));
+        Font_LoadCharNES(play, msgCtx->decodedBuffer.schar[msgCtx->codeBufOffset + msgCtx->inputDigitIndex],
+                         msgCtx->unk120C4 + (msgCtx->inputDigitIndex << 7));
         Audio_PlaySfx(NA_SE_SY_RUPY_COUNT);
     } else if (msgCtx->stickAdjY >= 30) {
-        msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2]++;
-        if (msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2] > '9') {
-            msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2] = '0';
+        msgCtx->decodedBuffer.schar[msgCtx->codeBufOffset + msgCtx->inputDigitIndex]++;
+        if (msgCtx->decodedBuffer.schar[msgCtx->codeBufOffset + msgCtx->inputDigitIndex] > '9') {
+            msgCtx->decodedBuffer.schar[msgCtx->codeBufOffset + msgCtx->inputDigitIndex] = '0';
         }
-        Font_LoadCharNES(play, msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2],
-                         msgCtx->unk120C4 + (msgCtx->unk120C2 << 7));
+        Font_LoadCharNES(play, msgCtx->decodedBuffer.schar[msgCtx->codeBufOffset + msgCtx->inputDigitIndex],
+                         msgCtx->unk120C4 + (msgCtx->inputDigitIndex << 7));
         Audio_PlaySfx(NA_SE_SY_RUPY_COUNT);
     } else if ((msgCtx->stickAdjX >= 30) && !sAnalogStickHeld) {
         sAnalogStickHeld = true;
-        msgCtx->unk120C2++;
-        if (msgCtx->unk120C2 > 2) {
-            msgCtx->unk120C2 = 2;
+        msgCtx->inputDigitIndex++;
+        if (msgCtx->inputDigitIndex > 2) {
+            msgCtx->inputDigitIndex = 2;
         } else {
             Audio_PlaySfx(NA_SE_SY_CURSOR);
         }
     } else if ((msgCtx->stickAdjX <= -30) && !sAnalogStickHeld) {
         sAnalogStickHeld = true;
-        msgCtx->unk120C2--;
-        if (msgCtx->unk120C2 < 0) {
-            msgCtx->unk120C2 = 0;
+        msgCtx->inputDigitIndex--;
+        if (msgCtx->inputDigitIndex < 0) {
+            msgCtx->inputDigitIndex = 0;
         } else {
             Audio_PlaySfx(NA_SE_SY_CURSOR);
         }
@@ -576,33 +576,33 @@ void func_80148D64(PlayState* play) {
         sAnalogStickHeld = false;
     }
 
-    msgCtx->rupeesSelected = (msgCtx->decodedBuffer.schar[msgCtx->unk120C0] - '0') * 100;
-    msgCtx->rupeesSelected += (msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + 1] - '0') * 10;
-    msgCtx->rupeesSelected += msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + 2] - '0';
+    msgCtx->rupeesSelected = (msgCtx->decodedBuffer.schar[msgCtx->codeBufOffset] - '0') * 100;
+    msgCtx->rupeesSelected += (msgCtx->decodedBuffer.schar[msgCtx->codeBufOffset + 1] - '0') * 10;
+    msgCtx->rupeesSelected += msgCtx->decodedBuffer.schar[msgCtx->codeBufOffset + 2] - '0';
 }
 
 void func_80149048(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
 
     if (msgCtx->stickAdjY <= -30) {
-        msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2]--;
-        if (msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2] < '0') {
-            msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2] = '9';
+        msgCtx->decodedBuffer.schar[msgCtx->codeBufOffset + msgCtx->inputDigitIndex]--;
+        if (msgCtx->decodedBuffer.schar[msgCtx->codeBufOffset + msgCtx->inputDigitIndex] < '0') {
+            msgCtx->decodedBuffer.schar[msgCtx->codeBufOffset + msgCtx->inputDigitIndex] = '9';
         }
-        Font_LoadCharNES(play, msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2],
-                         msgCtx->unk120C4 + (msgCtx->unk120C2 << 7));
+        Font_LoadCharNES(play, msgCtx->decodedBuffer.schar[msgCtx->codeBufOffset + msgCtx->inputDigitIndex],
+                         msgCtx->unk120C4 + (msgCtx->inputDigitIndex << 7));
         Audio_PlaySfx(NA_SE_SY_RUPY_COUNT);
     } else if (msgCtx->stickAdjY >= 30) {
-        msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2]++;
-        if (msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2] > '9') {
-            msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2] = '0';
+        msgCtx->decodedBuffer.schar[msgCtx->codeBufOffset + msgCtx->inputDigitIndex]++;
+        if (msgCtx->decodedBuffer.schar[msgCtx->codeBufOffset + msgCtx->inputDigitIndex] > '9') {
+            msgCtx->decodedBuffer.schar[msgCtx->codeBufOffset + msgCtx->inputDigitIndex] = '0';
         }
-        Font_LoadCharNES(play, msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2],
-                         msgCtx->unk120C4 + (msgCtx->unk120C2 << 7));
+        Font_LoadCharNES(play, msgCtx->decodedBuffer.schar[msgCtx->codeBufOffset + msgCtx->inputDigitIndex],
+                         msgCtx->unk120C4 + (msgCtx->inputDigitIndex << 7));
         Audio_PlaySfx(NA_SE_SY_RUPY_COUNT);
     }
 
-    msgCtx->rupeesSelected = (msgCtx->decodedBuffer.schar[msgCtx->unk120C0] - '0') * 10;
+    msgCtx->rupeesSelected = (msgCtx->decodedBuffer.schar[msgCtx->codeBufOffset] - '0') * 10;
 }
 
 void func_801491DC(PlayState* play) {
@@ -610,38 +610,38 @@ void func_801491DC(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
 
     if (msgCtx->stickAdjY <= -30) {
-        msgCtx->codeGuessDigits[msgCtx->unk120C2]--;
-        if (msgCtx->codeGuessDigits[msgCtx->unk120C2] <= 0) {
-            msgCtx->codeGuessDigits[msgCtx->unk120C2] = 5;
+        msgCtx->codeGuessDigits[msgCtx->inputDigitIndex]--;
+        if (msgCtx->codeGuessDigits[msgCtx->inputDigitIndex] <= 0) {
+            msgCtx->codeGuessDigits[msgCtx->inputDigitIndex] = 5;
         }
-        msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2] =
-            msgCtx->codeGuessDigits[msgCtx->unk120C2] + '0';
-        Font_LoadCharNES(play, msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2],
-                         msgCtx->unk120C4 + (msgCtx->unk120C2 << 7));
+        msgCtx->decodedBuffer.schar[msgCtx->codeBufOffset + msgCtx->inputDigitIndex] =
+            msgCtx->codeGuessDigits[msgCtx->inputDigitIndex] + '0';
+        Font_LoadCharNES(play, msgCtx->decodedBuffer.schar[msgCtx->codeBufOffset + msgCtx->inputDigitIndex],
+                         msgCtx->unk120C4 + (msgCtx->inputDigitIndex << 7));
         Audio_PlaySfx(NA_SE_SY_RUPY_COUNT);
     } else if (msgCtx->stickAdjY >= 30) {
-        msgCtx->codeGuessDigits[msgCtx->unk120C2]++;
-        if (msgCtx->codeGuessDigits[msgCtx->unk120C2] > 5) {
-            msgCtx->codeGuessDigits[msgCtx->unk120C2] = 1;
+        msgCtx->codeGuessDigits[msgCtx->inputDigitIndex]++;
+        if (msgCtx->codeGuessDigits[msgCtx->inputDigitIndex] > 5) {
+            msgCtx->codeGuessDigits[msgCtx->inputDigitIndex] = 1;
         }
-        msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2] =
-            msgCtx->codeGuessDigits[msgCtx->unk120C2] + '0';
-        Font_LoadCharNES(play, msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2],
-                         msgCtx->unk120C4 + (msgCtx->unk120C2 << 7));
+        msgCtx->decodedBuffer.schar[msgCtx->codeBufOffset + msgCtx->inputDigitIndex] =
+            msgCtx->codeGuessDigits[msgCtx->inputDigitIndex] + '0';
+        Font_LoadCharNES(play, msgCtx->decodedBuffer.schar[msgCtx->codeBufOffset + msgCtx->inputDigitIndex],
+                         msgCtx->unk120C4 + (msgCtx->inputDigitIndex << 7));
         Audio_PlaySfx(NA_SE_SY_RUPY_COUNT);
     } else if ((msgCtx->stickAdjX >= 30) && !sAnalogStickHeld) {
         sAnalogStickHeld = true;
-        msgCtx->unk120C2++;
-        if (msgCtx->unk120C2 > 4) {
-            msgCtx->unk120C2 = 4;
+        msgCtx->inputDigitIndex++;
+        if (msgCtx->inputDigitIndex > 4) {
+            msgCtx->inputDigitIndex = 4;
         } else {
             Audio_PlaySfx(NA_SE_SY_CURSOR);
         }
     } else if ((msgCtx->stickAdjX <= -30) && !sAnalogStickHeld) {
         sAnalogStickHeld = true;
-        msgCtx->unk120C2--;
-        if (msgCtx->unk120C2 < 0) {
-            msgCtx->unk120C2 = 0;
+        msgCtx->inputDigitIndex--;
+        if (msgCtx->inputDigitIndex < 0) {
+            msgCtx->inputDigitIndex = 0;
         } else {
             Audio_PlaySfx(NA_SE_SY_CURSOR);
         }
@@ -655,38 +655,38 @@ void func_80149454(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
 
     if (msgCtx->stickAdjY <= -30) {
-        msgCtx->codeGuessDigits[msgCtx->unk120C2]--;
-        if (msgCtx->codeGuessDigits[msgCtx->unk120C2] < 0) {
-            msgCtx->codeGuessDigits[msgCtx->unk120C2] = 9;
+        msgCtx->codeGuessDigits[msgCtx->inputDigitIndex]--;
+        if (msgCtx->codeGuessDigits[msgCtx->inputDigitIndex] < 0) {
+            msgCtx->codeGuessDigits[msgCtx->inputDigitIndex] = 9;
         }
-        msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2] =
-            msgCtx->codeGuessDigits[msgCtx->unk120C2] + '0';
-        Font_LoadCharNES(play, msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2],
-                         msgCtx->unk120C4 + (msgCtx->unk120C2 << 7));
+        msgCtx->decodedBuffer.schar[msgCtx->codeBufOffset + msgCtx->inputDigitIndex] =
+            msgCtx->codeGuessDigits[msgCtx->inputDigitIndex] + '0';
+        Font_LoadCharNES(play, msgCtx->decodedBuffer.schar[msgCtx->codeBufOffset + msgCtx->inputDigitIndex],
+                         msgCtx->unk120C4 + (msgCtx->inputDigitIndex << 7));
         Audio_PlaySfx(NA_SE_SY_RUPY_COUNT);
     } else if (msgCtx->stickAdjY >= 30) {
-        msgCtx->codeGuessDigits[msgCtx->unk120C2]++;
-        if (msgCtx->codeGuessDigits[msgCtx->unk120C2] > 9) {
-            msgCtx->codeGuessDigits[msgCtx->unk120C2] = 0;
+        msgCtx->codeGuessDigits[msgCtx->inputDigitIndex]++;
+        if (msgCtx->codeGuessDigits[msgCtx->inputDigitIndex] > 9) {
+            msgCtx->codeGuessDigits[msgCtx->inputDigitIndex] = 0;
         }
-        msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2] =
-            msgCtx->codeGuessDigits[msgCtx->unk120C2] + '0';
-        Font_LoadCharNES(play, msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2],
-                         msgCtx->unk120C4 + (msgCtx->unk120C2 << 7));
+        msgCtx->decodedBuffer.schar[msgCtx->codeBufOffset + msgCtx->inputDigitIndex] =
+            msgCtx->codeGuessDigits[msgCtx->inputDigitIndex] + '0';
+        Font_LoadCharNES(play, msgCtx->decodedBuffer.schar[msgCtx->codeBufOffset + msgCtx->inputDigitIndex],
+                         msgCtx->unk120C4 + (msgCtx->inputDigitIndex << 7));
         Audio_PlaySfx(NA_SE_SY_RUPY_COUNT);
     } else if ((msgCtx->stickAdjX >= 30) && !sAnalogStickHeld) {
         sAnalogStickHeld = true;
-        msgCtx->unk120C2++;
-        if (msgCtx->unk120C2 > 2) {
-            msgCtx->unk120C2 = 2;
+        msgCtx->inputDigitIndex++;
+        if (msgCtx->inputDigitIndex > 2) {
+            msgCtx->inputDigitIndex = 2;
         } else {
             Audio_PlaySfx(NA_SE_SY_CURSOR);
         }
     } else if ((msgCtx->stickAdjX <= -30) && !sAnalogStickHeld) {
         sAnalogStickHeld = true;
-        msgCtx->unk120C2--;
-        if (msgCtx->unk120C2 < 0) {
-            msgCtx->unk120C2 = 0;
+        msgCtx->inputDigitIndex--;
+        if (msgCtx->inputDigitIndex < 0) {
+            msgCtx->inputDigitIndex = 0;
         } else {
             Audio_PlaySfx(NA_SE_SY_CURSOR);
         }
@@ -700,38 +700,38 @@ void func_801496C8(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
 
     if (play->msgCtx.stickAdjY <= -30) {
-        msgCtx->codeGuessDigits[msgCtx->unk120C2]--;
-        if (msgCtx->codeGuessDigits[msgCtx->unk120C2] < 0) {
-            msgCtx->codeGuessDigits[msgCtx->unk120C2] = 3;
+        msgCtx->codeGuessDigits[msgCtx->inputDigitIndex]--;
+        if (msgCtx->codeGuessDigits[msgCtx->inputDigitIndex] < 0) {
+            msgCtx->codeGuessDigits[msgCtx->inputDigitIndex] = 3;
         }
-        msgCtx->decodedBuffer.wchar[msgCtx->unk120C0 + msgCtx->unk120C2] =
-            msgCtx->codeGuessDigits[msgCtx->unk120C2] + '０';
-        Font_LoadChar(play, msgCtx->decodedBuffer.wchar[msgCtx->unk120C0 + msgCtx->unk120C2],
-                      msgCtx->unk120C4 + (msgCtx->unk120C2 << 7));
+        msgCtx->decodedBuffer.wchar[msgCtx->codeBufOffset + msgCtx->inputDigitIndex] =
+            msgCtx->codeGuessDigits[msgCtx->inputDigitIndex] + '０';
+        Font_LoadChar(play, msgCtx->decodedBuffer.wchar[msgCtx->codeBufOffset + msgCtx->inputDigitIndex],
+                      msgCtx->unk120C4 + (msgCtx->inputDigitIndex << 7));
         Audio_PlaySfx(NA_SE_SY_RUPY_COUNT);
     } else if (msgCtx->stickAdjY >= 30) {
-        msgCtx->codeGuessDigits[msgCtx->unk120C2]++;
-        if (msgCtx->codeGuessDigits[msgCtx->unk120C2] >= 4) {
-            msgCtx->codeGuessDigits[msgCtx->unk120C2] = 0;
+        msgCtx->codeGuessDigits[msgCtx->inputDigitIndex]++;
+        if (msgCtx->codeGuessDigits[msgCtx->inputDigitIndex] >= 4) {
+            msgCtx->codeGuessDigits[msgCtx->inputDigitIndex] = 0;
         }
-        msgCtx->decodedBuffer.wchar[msgCtx->unk120C0 + msgCtx->unk120C2] =
-            msgCtx->codeGuessDigits[msgCtx->unk120C2] + '０';
-        Font_LoadChar(play, msgCtx->decodedBuffer.wchar[msgCtx->unk120C0 + msgCtx->unk120C2],
-                      msgCtx->unk120C4 + (msgCtx->unk120C2 << 7));
+        msgCtx->decodedBuffer.wchar[msgCtx->codeBufOffset + msgCtx->inputDigitIndex] =
+            msgCtx->codeGuessDigits[msgCtx->inputDigitIndex] + '０';
+        Font_LoadChar(play, msgCtx->decodedBuffer.wchar[msgCtx->codeBufOffset + msgCtx->inputDigitIndex],
+                      msgCtx->unk120C4 + (msgCtx->inputDigitIndex << 7));
         Audio_PlaySfx(NA_SE_SY_RUPY_COUNT);
     } else if ((msgCtx->stickAdjX >= 30) && !sAnalogStickHeld) {
         sAnalogStickHeld = true;
-        msgCtx->unk120C2++;
-        if (msgCtx->unk120C2 > 5) {
-            msgCtx->unk120C2 = 5;
+        msgCtx->inputDigitIndex++;
+        if (msgCtx->inputDigitIndex > 5) {
+            msgCtx->inputDigitIndex = 5;
         } else {
             Audio_PlaySfx(NA_SE_SY_CURSOR);
         }
     } else if ((msgCtx->stickAdjX <= -30) && !sAnalogStickHeld) {
         sAnalogStickHeld = true;
-        msgCtx->unk120C2--;
-        if (msgCtx->unk120C2 < 0) {
-            msgCtx->unk120C2 = 0;
+        msgCtx->inputDigitIndex--;
+        if (msgCtx->inputDigitIndex < 0) {
+            msgCtx->inputDigitIndex = 0;
         } else {
             Audio_PlaySfx(NA_SE_SY_CURSOR);
         }
@@ -2406,8 +2406,8 @@ void Message_Decode(PlayState* play) {
             } else if (curChar == 0x20C) {
                 decodedBufPos++;
                 msgCtx->unk120BE = spD2;
-                msgCtx->unk120C0 = decodedBufPos;
-                msgCtx->unk120C2 = 2;
+                msgCtx->codeBufOffset = decodedBufPos;
+                msgCtx->inputDigitIndex = 2;
                 msgCtx->rupeesSelected = 0;
                 msgCtx->unk120C4 = charTexIndex;
                 digits[0] = digits[1] = digits[2] = 0;
@@ -2570,8 +2570,8 @@ void Message_Decode(PlayState* play) {
             } else if (curChar == 0x220) {
                 decodedBufPos++;
                 msgCtx->unk120BE = spD2;
-                msgCtx->unk120C0 = decodedBufPos;
-                msgCtx->unk120C2 = 0;
+                msgCtx->codeBufOffset = decodedBufPos;
+                msgCtx->inputDigitIndex = 0;
                 msgCtx->rupeesSelected = 0;
                 msgCtx->unk120C4 = charTexIndex;
                 digits[0] = digits[1] = digits[2] = 0;
@@ -2583,8 +2583,8 @@ void Message_Decode(PlayState* play) {
             } else if (curChar == 0x221) {
                 decodedBufPos++;
                 msgCtx->unk120BE = spD2;
-                msgCtx->unk120C0 = decodedBufPos;
-                msgCtx->unk120C2 = 0;
+                msgCtx->codeBufOffset = decodedBufPos;
+                msgCtx->inputDigitIndex = 0;
                 msgCtx->rupeesSelected = 0;
                 msgCtx->unk120C4 = charTexIndex;
 
@@ -2616,8 +2616,8 @@ void Message_Decode(PlayState* play) {
             } else if (curChar == 0x225) {
                 decodedBufPos++;
                 msgCtx->unk120BE = spD2;
-                msgCtx->unk120C0 = decodedBufPos;
-                msgCtx->unk120C2 = 0;
+                msgCtx->codeBufOffset = decodedBufPos;
+                msgCtx->inputDigitIndex = 0;
                 msgCtx->rupeesSelected = 0;
                 msgCtx->unk120C4 = charTexIndex;
 
@@ -5001,7 +5001,7 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
                         temp = msgCtx->unk11FFA + (msgCtx->unk11FFC * temp_v0_33);
                         func_80147F18(play, &gfx,
                                       msgCtx->unk11F1A[temp_v0_33] +
-                                          (s32)(16.0f * msgCtx->textCharScale * (msgCtx->unk120C2 + 5)) - 1,
+                                          (s32)(16.0f * msgCtx->textCharScale * (msgCtx->inputDigitIndex + 5)) - 1,
                                       temp);
                         func_80148D64(play);
                         break;
@@ -5020,7 +5020,7 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
                         temp = msgCtx->unk11FFA + (msgCtx->unk11FFC * temp_v0_33);
                         func_80147F18(play, &gfx,
                                       msgCtx->unk11F1A[temp_v0_33] +
-                                          (s32)(16.0f * msgCtx->textCharScale * (msgCtx->unk120C2 + 5)) - 1,
+                                          (s32)(16.0f * msgCtx->textCharScale * (msgCtx->inputDigitIndex + 5)) - 1,
                                       temp);
                         func_801491DC(play);
                         break;
@@ -5030,7 +5030,7 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
                         temp = msgCtx->unk11FFA + (msgCtx->unk11FFC * temp_v0_33);
                         func_80147F18(play, &gfx,
                                       msgCtx->unk11F1A[temp_v0_33] +
-                                          (s32)(16.0f * msgCtx->textCharScale * (msgCtx->unk120C2 + 5)) - 1,
+                                          (s32)(16.0f * msgCtx->textCharScale * (msgCtx->inputDigitIndex + 5)) - 1,
                                       temp);
                         func_80149454(play);
                         break;
@@ -5040,7 +5040,7 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
                         temp = msgCtx->unk11FFA + (msgCtx->unk11FFC * temp_v0_33);
                         func_80147F18(play, &gfx,
                                       msgCtx->unk11F1A[temp_v0_33] +
-                                          (s32)(16.0f * msgCtx->textCharScale * (msgCtx->unk120C2 + 4)) - 6,
+                                          (s32)(16.0f * msgCtx->textCharScale * (msgCtx->inputDigitIndex + 4)) - 6,
                                       temp);
                         func_801496C8(play);
                         break;
@@ -6060,8 +6060,8 @@ void Message_Init(PlayState* play) {
     msgCtx->textboxY = 36;
     msgCtx->ocarinaSongEffectActive = false;
     msgCtx->unk120BE = 0;
-    msgCtx->unk120C0 = 0;
-    msgCtx->unk120C2 = 0;
+    msgCtx->codeBufOffset = 0;
+    msgCtx->inputDigitIndex = 0;
     msgCtx->unk120C4 = 0;
     msgCtx->unk120C8 = 0;
     msgCtx->unk120CA = 0;
