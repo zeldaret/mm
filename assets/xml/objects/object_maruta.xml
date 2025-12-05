@@ -3,14 +3,14 @@
         <Texture Name="object_maruta_Tex_000000" OutName="tex_000000" Format="rgba16" Width="32" Height="32" Offset="0x0" />
         <Texture Name="object_maruta_Tex_000800" OutName="tex_000800" Format="rgba16" Width="32" Height="32" Offset="0x800" />
         <Texture Name="object_maruta_Tex_001000" OutName="tex_001000" Format="rgba16" Width="32" Height="32" Offset="0x1000" />
-        <DList Name="object_maruta_DL_BottomLeftBigChunk" Offset="0x2220" /> <!-- Original name is "parts_1_model" -->
-        <DList Name="object_maruta_DL_BottomRightBigChunk" Offset="0x23D0" /> <!-- Original name is "parts_2_model" -->
-        <DList Name="object_maruta_DL_BottomLeftCornerChunk" Offset="0x2568" /> <!-- Original name is "parts_3_model" -->
-        <DList Name="object_maruta_DL_BottomRightCornerChunk" Offset="0x2660" /> <!-- Original name is "parts_4_model" -->
-        <DList Name="object_maruta_DL_TopLeftCornerChunk" Offset="0x2758" /> <!-- Original name is "parts_5_model" -->
-        <DList Name="object_maruta_DL_TopRightCornerChunk" Offset="0x2850" /> <!-- Original name is "parts_6_model" -->
-        <DList Name="object_maruta_DL_TopLeftBigChunk" Offset="0x2948" /> <!-- Original name is "parts_7_model" -->
-        <DList Name="object_maruta_DL_TopRightBigChunk" Offset="0x2AE0" /> <!-- Original name is "parts_8_model" -->
-        <DList Name="object_maruta_DL_Whole" Offset="0x2EC0" /> <!-- Original name is "kiretenaimaruta_model" -->
+        <DList Name="gPracticeLogBottomLeftBigChunkDL" Offset="0x2220" /> <!-- Original name is "parts_1_model" -->
+        <DList Name="gPracticeLogBottomRightBigChunkDL" Offset="0x23D0" /> <!-- Original name is "parts_2_model" -->
+        <DList Name="gPracticeLogBottomLeftCornerChunkDL" Offset="0x2568" /> <!-- Original name is "parts_3_model" -->
+        <DList Name="gPracticeLogBottomRightCornerChunkDL" Offset="0x2660" /> <!-- Original name is "parts_4_model" -->
+        <DList Name="gPracticeLogTopLeftCornerChunkDL" Offset="0x2758" /> <!-- Original name is "parts_5_model" -->
+        <DList Name="gPracticeLogTopRightCornerChunkDL" Offset="0x2850" /> <!-- Original name is "parts_6_model" -->
+        <DList Name="gPracticeLogTopLeftBigChunkDL" Offset="0x2948" /> <!-- Original name is "parts_7_model" -->
+        <DList Name="gPracticeLogTopRightBigChunkDL" Offset="0x2AE0" /> <!-- Original name is "parts_8_model" -->
+        <DList Name="gPracticeLogWhole" Offset="0x2EC0" /> <!-- Original name is "kiretenaimaruta_model" -->
     </File>
 </Root>

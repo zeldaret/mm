@@ -47,10 +47,10 @@ ActorProfile En_Maruta_Profile = {
 };
 
 Gfx* sDisplayLists[] = {
-    object_maruta_DL_BottomLeftBigChunk,    object_maruta_DL_BottomRightBigChunk,
-    object_maruta_DL_BottomLeftCornerChunk, object_maruta_DL_BottomRightCornerChunk,
-    object_maruta_DL_TopLeftCornerChunk,    object_maruta_DL_TopRightCornerChunk,
-    object_maruta_DL_TopLeftBigChunk,       object_maruta_DL_TopRightBigChunk,
+    gPracticeLogBottomLeftBigChunkDL,    gPracticeLogBottomRightBigChunkDL,
+    gPracticeLogBottomLeftCornerChunkDL, gPracticeLogBottomRightCornerChunkDL,
+    gPracticeLogTopLeftCornerChunkDL,    gPracticeLogTopRightCornerChunkDL,
+    gPracticeLogTopLeftBigChunkDL,       gPracticeLogTopRightBigChunkDL,
 };
 
 u8 sFragmentsByShape[] = {
@@ -723,7 +723,7 @@ void EnMaruta_Draw(Actor* thisx, PlayState* play) {
 
     if (this->shape == ENMARUTA_SHAPE_WHOLE) {
         MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
-        gSPDisplayList(POLY_OPA_DISP++, object_maruta_DL_Whole);
+        gSPDisplayList(POLY_OPA_DISP++, gPracticeLogWhole);
     } else {
         translate = sTranslationVectorsToRecoilAxis[this->shape];
 
