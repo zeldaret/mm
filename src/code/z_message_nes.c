@@ -424,17 +424,17 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
     u16 stateTimerHi;
     Gfx* gfx = *gfxP;
     u16 character;
-    s16 sp130;
+    s16 lineNum;
     s16 prevR;
     s16 prevG;
     s16 prevB;
 
-    msgCtx->textPosX = msgCtx->unk11F1A[0] + msgCtx->unk11FF8;
-    msgCtx->textPosY = msgCtx->unk11FFA;
+    msgCtx->textPosX = msgCtx->lineIndent[0] + msgCtx->textPosXTarget;
+    msgCtx->textPosY = msgCtx->textPosYTarget;
 
-    sp130 = 0;
+    lineNum = 0;
     if (!msgCtx->textIsCredits) {
-        msgCtx->textPosY = msgCtx->unk11FFA;
+        msgCtx->textPosY = msgCtx->textPosYTarget;
     } else {
         msgCtx->textPosY = 48;
     }
@@ -536,12 +536,12 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                 break;
 
             case MESSAGE_NEWLINE:
-                msgCtx->textPosY += msgCtx->unk11FFC;
+                msgCtx->textPosY += msgCtx->lineHeight;
                 FALLTHROUGH;
             case MESSAGE_CARRIAGE_RETURN:
-                sp130++;
+                lineNum++;
 
-                msgCtx->textPosX = msgCtx->unk11F1A[sp130] + msgCtx->unk11FF8;
+                msgCtx->textPosX = msgCtx->lineIndent[lineNum] + msgCtx->textPosXTarget;
                 if (msgCtx->choiceNum == 1) {
                     if (!play->pauseCtx.bombersNotebookOpen) {
                         msgCtx->textPosX += 16;
@@ -555,7 +555,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                         } else {
                             msgCtx->textPosX += 57;
                         }
-                    } else if (sp130 >= 2) {
+                    } else if (lineNum >= 2) {
                         if (!play->pauseCtx.bombersNotebookOpen) {
                             msgCtx->textPosX += 10;
                         } else {
@@ -1022,7 +1022,7 @@ void Message_DecodeNES(PlayState* play) {
 #define numLines (forceLayout.numLines)
 #define digits (forceLayout.digits)
 #endif
-    s16 spC6 = 0;
+    s16 lineNum = 0;
     u16 sfxHi;
     f32 var_fs0;
     s32 charTexIndex = 0;
@@ -1054,13 +1054,13 @@ void Message_DecodeNES(PlayState* play) {
             msgCtx->msgMode = MSGMODE_TEXT_DISPLAYING;
             msgCtx->textDrawPos = 1;
             if (msgCtx->textBoxType == TEXTBOX_TYPE_3) {
-                msgCtx->unk11FFA = msgCtx->textboxY + 2;
+                msgCtx->textPosYTarget = msgCtx->textboxY + 2;
             } else {
-                msgCtx->unk11FFA = msgCtx->textboxY + 8;
+                msgCtx->textPosYTarget = msgCtx->textboxY + 8;
             }
-            msgCtx->unk11F1A[spC6] = 0;
-            if (msgCtx->unk11F18 != 0) {
-                msgCtx->unk11F1A[spC6] = TRUNCF_BINANG((msgCtx->textCharScale * 16.0f * 16.0f) - spA4) / 2;
+            msgCtx->lineIndent[lineNum] = 0;
+            if (msgCtx->hasChoices != 0) {
+                msgCtx->lineIndent[lineNum] = TRUNCF_BINANG((msgCtx->textCharScale * 16.0f * 16.0f) - spA4) / 2;
             }
 
             spA4 = 0.0f;
@@ -1068,21 +1068,21 @@ void Message_DecodeNES(PlayState* play) {
             if (curChar == MESSAGE_BOX_BREAK2) {
                 if ((msgCtx->textBoxType != TEXTBOX_TYPE_3) && (msgCtx->textBoxType != TEXTBOX_TYPE_4)) {
                     if (numLines < 2) {
-                        msgCtx->unk11FFA = msgCtx->textboxY + XREG(10);
+                        msgCtx->textPosYTarget = msgCtx->textboxY + XREG(10);
                     } else if (numLines == 2) {
-                        msgCtx->unk11FFA = msgCtx->textboxY + XREG(11);
+                        msgCtx->textPosYTarget = msgCtx->textboxY + XREG(11);
                     } else if (numLines == 3) {
-                        msgCtx->unk11FFA = msgCtx->textboxY + XREG(12);
+                        msgCtx->textPosYTarget = msgCtx->textboxY + XREG(12);
                     }
                 }
             } else {
                 if ((msgCtx->textBoxType != TEXTBOX_TYPE_3) && (msgCtx->textBoxType != TEXTBOX_TYPE_4)) {
                     if (numLines == 0) {
-                        msgCtx->unk11FFA = msgCtx->textboxY + XREG(13) + XREG(10);
+                        msgCtx->textPosYTarget = msgCtx->textboxY + XREG(13) + XREG(10);
                     } else if (numLines == 1) {
-                        msgCtx->unk11FFA = msgCtx->textboxY + XREG(13) + XREG(11);
+                        msgCtx->textPosYTarget = msgCtx->textboxY + XREG(13) + XREG(11);
                     } else if (numLines == 2) {
-                        msgCtx->unk11FFA = msgCtx->textboxY + XREG(13) + XREG(12);
+                        msgCtx->textPosYTarget = msgCtx->textboxY + XREG(13) + XREG(12);
                     }
                 }
             }
@@ -1151,17 +1151,17 @@ void Message_DecodeNES(PlayState* play) {
             DmaMgr_RequestSync(msgCtx->textboxSegment + 0x1900, SEGMENT_ROM_START(message_texture_static) + 0x900,
                                0x900);
             numLines = 2;
-            spC6 = 2;
+            lineNum = 2;
             msgCtx->unk12012 = msgCtx->textboxY + 8;
-            msgCtx->unk11F18 = 1;
+            msgCtx->hasChoices = 1;
             msgCtx->unk12010 = XREG(47);
         } else if (curChar == MESSAGE_TWO_CHOICE) {
-            msgCtx->unk11F18 = 0;
+            msgCtx->hasChoices = 0;
             msgCtx->choiceNum = 2;
         } else if (curChar == MESSAGE_THREE_CHOICE) {
-            msgCtx->unk11F18 = 0;
+            msgCtx->hasChoices = 0;
             msgCtx->choiceNum = 3;
-            msgCtx->unk11FF8 += 22;
+            msgCtx->textPosXTarget += 22;
         } else if (curChar == MESSAGE_TIMER_POSTMAN) {
             Message_GetTimerDigitsNES(((void)0, gSaveContext.timerCurTimes[curChar - MESSAGE_TIMER_POSTMAN]), spA8);
 
@@ -1257,7 +1257,7 @@ void Message_DecodeNES(PlayState* play) {
             decodedBufPos--;
         } else if (curChar == MESSAGE_INPUT_BANK) {
             decodedBufPos++;
-            msgCtx->unk120BE = spC6;
+            msgCtx->inputLineNumber = lineNum;
             msgCtx->codeBufOffset = decodedBufPos;
             msgCtx->inputDigitIndex = 2;
             msgCtx->rupeesSelected = 0;
@@ -1466,7 +1466,7 @@ void Message_DecodeNES(PlayState* play) {
             decodedBufPos--;
         } else if (curChar == MESSAGE_INPUT_DOGGY_RACETRACK_BET) {
             decodedBufPos++;
-            msgCtx->unk120BE = spC6;
+            msgCtx->inputLineNumber = lineNum;
             msgCtx->codeBufOffset = decodedBufPos;
             msgCtx->inputDigitIndex = 0;
             msgCtx->rupeesSelected = 0;
@@ -1479,7 +1479,7 @@ void Message_DecodeNES(PlayState* play) {
             Message_LoadPluralRupeesNES(play, &decodedBufPos, &charTexIndex, &spA4);
         } else if (curChar == MESSAGE_INPUT_BOMBER_CODE) {
             decodedBufPos++;
-            msgCtx->unk120BE = spC6;
+            msgCtx->inputLineNumber = lineNum;
             msgCtx->codeBufOffset = decodedBufPos;
             msgCtx->inputDigitIndex = 0;
             msgCtx->rupeesSelected = 0;
@@ -1512,7 +1512,7 @@ void Message_DecodeNES(PlayState* play) {
             Message_LoadOwlWarpTextNES(play, &charTexIndex, &spA4, &decodedBufPos);
         } else if (curChar == MESSAGE_INPUT_LOTTERY_CODE) {
             decodedBufPos++;
-            msgCtx->unk120BE = spC6;
+            msgCtx->inputLineNumber = lineNum;
             msgCtx->codeBufOffset = decodedBufPos;
             msgCtx->inputDigitIndex = 0;
             msgCtx->rupeesSelected = 0;
@@ -1913,11 +1913,11 @@ void Message_DecodeNES(PlayState* play) {
             }
             msgCtx->msgBufPos++;
         } else if ((curChar == MESSAGE_CARRIAGE_RETURN) || (curChar == MESSAGE_NEWLINE)) {
-            msgCtx->unk11F1A[spC6] = 0;
-            if (msgCtx->unk11F18 != 0) {
-                msgCtx->unk11F1A[spC6] = ((msgCtx->textCharScale * 16.0f * 16.0f) - spA4) * 0.5f;
+            msgCtx->lineIndent[lineNum] = 0;
+            if (msgCtx->hasChoices != 0) {
+                msgCtx->lineIndent[lineNum] = ((msgCtx->textCharScale * 16.0f * 16.0f) - spA4) * 0.5f;
             }
-            spC6++;
+            lineNum++;
             spA4 = 0.0f;
             if (curChar == MESSAGE_NEWLINE) {
                 numLines++;

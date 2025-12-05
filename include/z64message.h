@@ -193,8 +193,8 @@ typedef struct MessageContext {
     /* 0x11F10 */ s32 msgLength;
     /* 0x11F14 */ u16 nextTextId;
     /* 0x11F16 */ u16 itemId;
-    /* 0x11F18 */ u8 unk11F18;
-    /* 0x11F1A */ s16 unk11F1A[3];
+    /* 0x11F18 */ u8 hasChoices;
+    /* 0x11F1A */ s16 lineIndent[3];
     /* 0x11F20 */ UNK_TYPE1 unk11F20[0x2];
     /* 0x11F22 */ u8 msgMode;
     /* 0x11F23 */ UNK_TYPE1 unk11F23;
@@ -208,9 +208,9 @@ typedef struct MessageContext {
     /* 0x11FF2 */ u16 textUnskippable;
     /* 0x11FF4 */ s16 textPosX;
     /* 0x11FF6 */ s16 textPosY;
-    /* 0x11FF8 */ s16 unk11FF8;
-    /* 0x11FFA */ s16 unk11FFA;
-    /* 0x11FFC */ s16 unk11FFC;
+    /* 0x11FF8 */ s16 textPosXTarget;
+    /* 0x11FFA */ s16 textPosYTarget;
+    /* 0x11FFC */ s16 lineHeight;
     /* 0x11FFE */ s16 unk11FFE[0x3];
     /* 0x12004 */ s16 textboxXTarget;
     /* 0x12006 */ s16 textboxYTarget;
@@ -278,7 +278,7 @@ typedef struct MessageContext {
     /* 0x120B1 */ u8 bombersNotebookEventQueueCount;
     /* 0x120B2 */ u8 bombersNotebookEventQueue[10];
     /* 0x120BC */ u16 hudVisibility;
-    /* 0x120BE */ s16 unk120BE;
+    /* 0x120BE */ s16 inputLineNumber;
     /* 0x120C0 */ s16 codeBufOffset;
     /* 0x120C2 */ s16 inputDigitIndex;
     /* 0x120C4 */ s32 unk120C4;
