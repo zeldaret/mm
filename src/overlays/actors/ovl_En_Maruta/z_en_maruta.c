@@ -47,10 +47,9 @@ ActorProfile En_Maruta_Profile = {
 };
 
 Gfx* sDisplayLists[] = {
-    gPracticeLogBottomLeftBigChunkDL,    gPracticeLogBottomRightBigChunkDL,
-    gPracticeLogBottomLeftCornerChunkDL, gPracticeLogBottomRightCornerChunkDL,
-    gPracticeLogTopLeftCornerChunkDL,    gPracticeLogTopRightCornerChunkDL,
-    gPracticeLogTopLeftBigChunkDL,       gPracticeLogTopRightBigChunkDL,
+    gPracticeLogBottomLeftBigChunkDL,     gPracticeLogBottomRightBigChunkDL, gPracticeLogBottomLeftCornerChunkDL,
+    gPracticeLogBottomRightCornerChunkDL, gPracticeLogTopLeftCornerChunkDL,  gPracticeLogTopRightCornerChunkDL,
+    gPracticeLogTopLeftBigChunkDL,        gPracticeLogTopRightBigChunkDL,
 };
 
 u8 sFragmentsByShape[] = {
