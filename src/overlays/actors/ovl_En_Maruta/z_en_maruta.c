@@ -544,7 +544,7 @@ void func_80B37CA0(EnMaruta* this, PlayState* play) {
                 if ((this->actor.parent != NULL) && (this->actor.parent->id == ACTOR_EN_KENDO_JS)) {
                     EnKendoJs* kendoJs = (EnKendoJs*)this->actor.parent;
 
-                    kendoJs->isSlashingLog = 1;
+                    kendoJs->isSlashingLog = true;
                     kendoJs->numLogs--;
                 }
                 return;

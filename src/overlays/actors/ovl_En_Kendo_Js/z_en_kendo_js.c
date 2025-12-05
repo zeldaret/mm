@@ -230,7 +230,7 @@ void EnKendoJs_Init(Actor* thisx, PlayState* play) {
     this->actor.child = NULL;
     this->hasSpoken = false;
     this->numLogs = 0;
-    this->isSlashingLog = 0;
+    this->isSlashingLog = false;
     this->courseState = ENKENDOJS_COURSE_PAUSED;
     EnKendoJs_SetupAwaitingTalk(this);
 }
@@ -474,60 +474,60 @@ s32 EnKendoJs_GetNoviceCourseActionResult(EnKendoJs* this, PlayState* play) {
                 (player->stateFlags3 & PLAYER_STATE3_8000000) || (player->stateFlags2 & PLAYER_STATE2_80000)) {
                 return ENKENDOJS_RESULT_INCORRECT;
             }
-            this->isSlashingLog = 0;
+            this->isSlashingLog = false;
             break;
 
         case ENKENDOJS_NOVICE_SWORD_ATTACK:
-            if ((this->isSlashingLog == 1) && ((player->meleeWeaponAnimation == PLAYER_MWA_RIGHT_SLASH_1H) ||
+            if ((this->isSlashingLog == true) && ((player->meleeWeaponAnimation == PLAYER_MWA_RIGHT_SLASH_1H) ||
                                                (player->meleeWeaponAnimation == PLAYER_MWA_RIGHT_COMBO_1H))) {
-                this->isSlashingLog = 0;
+                this->isSlashingLog = false;
                 return ENKENDOJS_RESULT_CORRECT;
             }
 
-            if ((this->isSlashingLog == 1) || (player->stateFlags3 & PLAYER_STATE3_8000000) ||
+            if ((this->isSlashingLog == true) || (player->stateFlags3 & PLAYER_STATE3_8000000) ||
                 (player->stateFlags2 & PLAYER_STATE2_80000)) {
-                this->isSlashingLog = 0;
+                this->isSlashingLog = false;
                 return ENKENDOJS_RESULT_INCORRECT;
             }
             break;
 
         case ENKENDOJS_NOVICE_SWORD_TARGET:
-            if ((this->isSlashingLog == 1) && ((player->meleeWeaponAnimation == PLAYER_MWA_FORWARD_SLASH_1H) ||
+            if ((this->isSlashingLog == true) && ((player->meleeWeaponAnimation == PLAYER_MWA_FORWARD_SLASH_1H) ||
                                                (player->meleeWeaponAnimation == PLAYER_MWA_FORWARD_COMBO_1H))) {
-                this->isSlashingLog = 0;
+                this->isSlashingLog = false;
                 return ENKENDOJS_RESULT_CORRECT;
             }
 
-            if ((this->isSlashingLog == 1) || (player->stateFlags3 & PLAYER_STATE3_8000000) ||
+            if ((this->isSlashingLog == true) || (player->stateFlags3 & PLAYER_STATE3_8000000) ||
                 (player->stateFlags2 & PLAYER_STATE2_80000)) {
-                this->isSlashingLog = 0;
+                this->isSlashingLog = false;
                 return ENKENDOJS_RESULT_INCORRECT;
             }
             break;
 
         case ENKENDOJS_NOVICE_SWORD_THRUST:
-            if ((this->isSlashingLog == 1) && (player->meleeWeaponAnimation == PLAYER_MWA_STAB_1H)) {
-                this->isSlashingLog = 0;
+            if ((this->isSlashingLog == true) && (player->meleeWeaponAnimation == PLAYER_MWA_STAB_1H)) {
+                this->isSlashingLog = false;
                 return ENKENDOJS_RESULT_CORRECT;
             }
 
-            if ((this->isSlashingLog == 1) || (player->stateFlags3 & PLAYER_STATE3_8000000) ||
+            if ((this->isSlashingLog == true) || (player->stateFlags3 & PLAYER_STATE3_8000000) ||
                 (player->stateFlags2 & PLAYER_STATE2_80000)) {
-                this->isSlashingLog = 0;
+                this->isSlashingLog = false;
                 return ENKENDOJS_RESULT_INCORRECT;
             }
             break;
 
         case ENKENDOJS_NOVICE_JUMP_ATTACK:
-            if ((this->isSlashingLog == 1) && ((player->meleeWeaponAnimation == PLAYER_MWA_JUMPSLASH_START) ||
+            if ((this->isSlashingLog == true) && ((player->meleeWeaponAnimation == PLAYER_MWA_JUMPSLASH_START) ||
                                                (player->meleeWeaponAnimation == PLAYER_MWA_JUMPSLASH_FINISH))) {
-                this->isSlashingLog = 0;
+                this->isSlashingLog = false;
                 return ENKENDOJS_RESULT_CORRECT;
             }
 
-            if ((this->isSlashingLog == 1) || (player->stateFlags3 & PLAYER_STATE3_8000000) ||
+            if ((this->isSlashingLog == true) || (player->stateFlags3 & PLAYER_STATE3_8000000) ||
                 (player->stateFlags2 & PLAYER_STATE2_80000)) {
-                this->isSlashingLog = 0;
+                this->isSlashingLog = false;
                 return ENKENDOJS_RESULT_INCORRECT;
             }
             break;
@@ -711,7 +711,7 @@ void EnKendoJs_ExpertCourse(EnKendoJs* this, PlayState* play) {
         this->timer++;
     }
 
-    if (this->isSlashingLog == 1) {
+    if (this->isSlashingLog == true) {
         if ((player->meleeWeaponAnimation == PLAYER_MWA_JUMPSLASH_START) ||
             (player->meleeWeaponAnimation == PLAYER_MWA_JUMPSLASH_FINISH)) {
             play->interfaceCtx.minigamePoints = 3;
@@ -724,7 +724,7 @@ void EnKendoJs_ExpertCourse(EnKendoJs* this, PlayState* play) {
             play->interfaceCtx.minigamePoints = 1;
         }
         Actor_PlaySfx(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
-        this->isSlashingLog = 0;
+        this->isSlashingLog = false;
     }
     EnKendoJs_SetExpertCourseCamera(this, play);
 }
