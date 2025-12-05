@@ -8,10 +8,10 @@ struct EnKendoJs;
 
 typedef void (*EnKendoJsActionFunc)(struct EnKendoJs*, PlayState*);
 
-#define ENKENDOJS_GET_FF(thisx) ((thisx)->params & 0xFF)
+#define ENKENDOJS_GET_LOCATION(thisx) ((thisx)->params & 0xFF)
 #define ENKENDOJS_GET_PATH_INDEX(thisx) (((thisx)->params & 0xFF00) >> 8)
 
-#define ENKENDOJS_FF_1 1
+#define ENKENDOJS_IN_BACK_ROOM 1
 
 typedef struct EnKendoJs {
     /* 0x000 */ Actor actor;

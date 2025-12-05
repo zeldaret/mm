@@ -204,7 +204,7 @@ void EnKendoJs_Init(Actor* thisx, PlayState* play) {
                        this->morphTable, OBJECT_JS_LIMB_MAX);
 
     if ((CURRENT_DAY == 3) && ((CURRENT_TIME > CLOCK_TIME(23, 0)) || (CURRENT_TIME < CLOCK_TIME(6, 0)))) {
-        if (ENKENDOJS_GET_FF(&this->actor) != ENKENDOJS_FF_1) {
+        if (ENKENDOJS_GET_LOCATION(&this->actor) != ENKENDOJS_IN_BACK_ROOM) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_KANBAN, this->actor.home.pos.x, this->actor.home.pos.y,
                         this->actor.home.pos.z - 10.0f, this->actor.home.rot.x, this->actor.home.rot.y,
                         this->actor.home.rot.z, 0x10);
@@ -212,13 +212,13 @@ void EnKendoJs_Init(Actor* thisx, PlayState* play) {
         } else {
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENKENDOJS_ANIM_COWERING);
         }
-    } else if (ENKENDOJS_GET_FF(&this->actor) == ENKENDOJS_FF_1) {
+    } else if (ENKENDOJS_GET_LOCATION(&this->actor) == ENKENDOJS_IN_BACK_ROOM) {
         Actor_Kill(&this->actor);
     }
 
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 
-    if (ENKENDOJS_GET_FF(&this->actor) != ENKENDOJS_FF_1) {
+    if (ENKENDOJS_GET_LOCATION(&this->actor) != ENKENDOJS_IN_BACK_ROOM) {
         Path* path = &play->setupPathList[ENKENDOJS_GET_PATH_INDEX(&this->actor)];
 
         this->pathPoints = Lib_SegmentedToVirtual(path->points);
@@ -257,7 +257,7 @@ void EnKendoJs_AwaitTalk(EnKendoJs* this, PlayState* play) {
             dayIndex = 0;
         }
 
-        if (ENKENDOJS_GET_FF(&this->actor) == ENKENDOJS_FF_1) {
+        if (ENKENDOJS_GET_LOCATION(&this->actor) == ENKENDOJS_IN_BACK_ROOM) {
             ENKENDOJS_QUEUE_MSG(this, play, ENKENDOJS_MSG_DONT_WANT_TO_DIE);
         } else if (GET_PLAYER_FORM != PLAYER_FORM_HUMAN) {
             switch (GET_PLAYER_FORM) {
@@ -479,7 +479,7 @@ s32 EnKendoJs_GetNoviceCourseActionResult(EnKendoJs* this, PlayState* play) {
 
         case ENKENDOJS_NOVICE_SWORD_ATTACK:
             if ((this->isSlashingLog == true) && ((player->meleeWeaponAnimation == PLAYER_MWA_RIGHT_SLASH_1H) ||
-                                               (player->meleeWeaponAnimation == PLAYER_MWA_RIGHT_COMBO_1H))) {
+                                                  (player->meleeWeaponAnimation == PLAYER_MWA_RIGHT_COMBO_1H))) {
                 this->isSlashingLog = false;
                 return ENKENDOJS_RESULT_CORRECT;
             }
@@ -493,7 +493,7 @@ s32 EnKendoJs_GetNoviceCourseActionResult(EnKendoJs* this, PlayState* play) {
 
         case ENKENDOJS_NOVICE_SWORD_TARGET:
             if ((this->isSlashingLog == true) && ((player->meleeWeaponAnimation == PLAYER_MWA_FORWARD_SLASH_1H) ||
-                                               (player->meleeWeaponAnimation == PLAYER_MWA_FORWARD_COMBO_1H))) {
+                                                  (player->meleeWeaponAnimation == PLAYER_MWA_FORWARD_COMBO_1H))) {
                 this->isSlashingLog = false;
                 return ENKENDOJS_RESULT_CORRECT;
             }
@@ -520,7 +520,7 @@ s32 EnKendoJs_GetNoviceCourseActionResult(EnKendoJs* this, PlayState* play) {
 
         case ENKENDOJS_NOVICE_JUMP_ATTACK:
             if ((this->isSlashingLog == true) && ((player->meleeWeaponAnimation == PLAYER_MWA_JUMPSLASH_START) ||
-                                               (player->meleeWeaponAnimation == PLAYER_MWA_JUMPSLASH_FINISH))) {
+                                                  (player->meleeWeaponAnimation == PLAYER_MWA_JUMPSLASH_FINISH))) {
                 this->isSlashingLog = false;
                 return ENKENDOJS_RESULT_CORRECT;
             }
@@ -776,7 +776,7 @@ void EnKendoJs_KeepPlayerInTrainingArea(EnKendoJs* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     f32 zClamp = this->actor.world.pos.z + 70.0f;
 
-    if ((ENKENDOJS_GET_FF(&this->actor) != ENKENDOJS_FF_1) && (player->actor.world.pos.z < zClamp)) {
+    if ((ENKENDOJS_GET_LOCATION(&this->actor) != ENKENDOJS_IN_BACK_ROOM) && (player->actor.world.pos.z < zClamp)) {
         player->actor.world.pos.z = zClamp;
     }
 }
