@@ -200,7 +200,7 @@ void EnKendoJs_Init(Actor* thisx, PlayState* play) {
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
 
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_js_Skel_006990, &gSwordmasterDefaultAnim, this->jointTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &gSwordmasterSkel, &gSwordmasterDefaultAnim, this->jointTable,
                        this->morphTable, OBJECT_JS_LIMB_MAX);
 
     if ((CURRENT_DAY == 3) && ((CURRENT_TIME > CLOCK_TIME(23, 0)) || (CURRENT_TIME < CLOCK_TIME(6, 0)))) {
