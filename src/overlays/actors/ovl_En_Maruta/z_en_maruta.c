@@ -259,7 +259,7 @@ void EnMaruta_Init(Actor* thisx, PlayState* play) {
     }
 
     if (this->shape == ENMARUTA_SHAPE_WHOLE) {
-        if (ENMARUTA_GET_FF(&this->actor) == 0xFF) {
+        if (ENMARUTA_GET_TYPE(&this->actor) == ENMARUTA_INIT_ON_FLOOR) {
             EnMaruta_SetInPositionWhole(this);
         } else {
             EnMaruta_StartUnderFloor(this);

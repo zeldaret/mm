@@ -7,8 +7,10 @@ struct EnMaruta;
 
 typedef void (*EnMarutaActionFunc)(struct EnMaruta*, PlayState*);
 
-#define ENMARUTA_GET_FF(thisx) ((thisx)->params & 0xFF)
+#define ENMARUTA_GET_TYPE(thisx) ((thisx)->params & 0xFF)
 #define ENMARUTA_GET_SHAPE(thisx) (((thisx)->params & 0xFF00) >> 8)
+
+#define ENMARUTA_INIT_ON_FLOOR 0xFF
 
 typedef struct EnMaruta {
     /* 0x000 */ Actor actor;
