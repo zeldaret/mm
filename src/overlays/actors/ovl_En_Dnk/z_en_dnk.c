@@ -220,19 +220,19 @@ void EnDnk_WaitForObject(EnDnk* this, PlayState* play) {
         ActorShape_Init(&this->actor.shape, 0.0f, NULL, 18.0f);
 
         switch (ENDNK_GET_TYPE(&this->actor)) {
-            case ENDNK_GET_TYPE_GUARD: // unused
+            case ENDNK_TYPE_GUARD: // unused
                 SkelAnime_Init(play, &this->skelAnime, &gDekuPalaceGuardSkel, NULL, this->jointTable, this->morphTable,
                                DEKU_PALACE_GUARD_LIMB_MAX);
                 EnDnk_ChangeAnim(&this->skelAnime, ENDNK_ANIM_7);
                 break;
 
-            case ENDNK_GET_TYPE_HINT: // unused
+            case ENDNK_TYPE_HINT: // unused
                 SkelAnime_Init(play, &this->skelAnime, &object_hintnuts_Skel_0023B8.sh, NULL, this->jointTable,
                                this->morphTable, OBJECT_HINTNUTS_LIMB_MAX);
                 EnDnk_ChangeAnim(&this->skelAnime, ENDNK_ANIM_18);
                 break;
 
-            case ENDNK_GET_TYPE_ATTACK:
+            case ENDNK_TYPE_ATTACK:
                 SkelAnime_Init(play, &this->skelAnime, &gDekuScrubSkel, NULL, this->jointTable, this->morphTable,
                                DEKU_SCRUB_LIMB_MAX);
                 EnDnk_ChangeAnim(&this->skelAnime, ENDNK_ANIM_IDLE);
@@ -271,15 +271,15 @@ void EnDnk_Init(Actor* thisx, PlayState* play) {
     this->objectSlot = OBJECT_SLOT_NONE;
 
     switch (ENDNK_GET_TYPE(&this->actor)) {
-        case ENDNK_GET_TYPE_HINT:
+        case ENDNK_TYPE_HINT:
             this->objectSlot = SubS_GetObjectSlot(OBJECT_HINTNUTS, play);
             break;
 
-        case ENDNK_GET_TYPE_GUARD:
+        case ENDNK_TYPE_GUARD:
             this->objectSlot = SubS_GetObjectSlot(OBJECT_DNK, play);
             break;
 
-        case ENDNK_GET_TYPE_ATTACK:
+        case ENDNK_TYPE_ATTACK:
             this->objectSlot = SubS_GetObjectSlot(OBJECT_DEKUNUTS, play);
             break;
     }
@@ -353,7 +353,7 @@ void EnDnk_Guard_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s
                 this->currentHeadRot.z = headRot.z;
             }
         } else {
-            this->flags |= 0x10;
+            this->flags |= DNK_FLAG_10;
             this->currentHeadRot.x = headRot.x;
             this->currentHeadRot.y = headRot.y;
             this->currentHeadRot.z = headRot.z;
@@ -433,7 +433,7 @@ void EnDnk_Nuts_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s*
                 this->currentHeadRot.z = headRot.z;
             }
         } else {
-            this->flags |= 0x10;
+            this->flags |= DNK_FLAG_10;
             this->currentHeadRot.x = headRot.x;
             this->currentHeadRot.y = headRot.y;
             this->currentHeadRot.z = headRot.z;
@@ -463,13 +463,13 @@ void EnDnk_Draw(Actor* thisx, PlayState* play) {
 
     switch (ENDNK_GET_TYPE(thisx)) {
         // palace guard type skeleton
-        case ENDNK_GET_TYPE_GUARD:
+        case ENDNK_TYPE_GUARD:
             EnDnk_Guard_Draw(this, play);
             break;
 
         // deku nuts type skeleton
-        case ENDNK_GET_TYPE_HINT:
-        case ENDNK_GET_TYPE_ATTACK:
+        case ENDNK_TYPE_HINT:
+        case ENDNK_TYPE_ATTACK:
             EnDnk_Nuts_Draw(this, play);
             break;
 

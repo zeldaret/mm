@@ -15,10 +15,10 @@ typedef void (*EnDnkActionFunc)(struct EnDnk*, PlayState*);
 
 #define ENDNK_CUTSCENE_CONTROL 0x4
 
-typedef enum {
-    /* 0 */ ENDNK_GET_TYPE_GUARD, // dnk object, deku palace patroling guards
-    /* 1 */ ENDNK_GET_TYPE_HINT, // hintnuts, used for sleeping scrub in swamp spiderhouse
-    /* 2 */ ENDNK_GET_TYPE_ATTACK, // dekunuts, the one that gets used, attacking deku in woodfall
+typedef enum EnDnkType{
+    /* 0 */ ENDNK_TYPE_GUARD, // dnk object, deku palace patroling guards
+    /* 1 */ ENDNK_TYPE_HINT, // hintnuts, used for sleeping scrub in swamp spiderhouse
+    /* 2 */ ENDNK_TYPE_ATTACK, // dekunuts, the one that gets used, attacking deku in woodfall
 } EnDnkType;
 
 #define DNK_LIMB_MAX MAX(MAX((s32)DEKU_PALACE_GUARD_LIMB_MAX, (s32)OBJECT_HINTNUTS_LIMB_MAX), (s32)DEKU_SCRUB_LIMB_MAX)
