@@ -99,16 +99,16 @@ typedef enum EnPr2Animation {
     /* 0 */ PR2_ANIM_SWIM,
     /* 1 */ PR2_ANIM_ATTACK,
     /* 2 */ PR2_ANIM_DIE,
-    /* 3 */ ENPR2_ANIM_MAX
+    /* 3 */ PR2_ANIM_MAX
 } EnPr2Animation;
 
-static AnimationHeader* sAnimations[ENPR2_ANIM_MAX] = {
+static AnimationHeader* sAnimations[PR2_ANIM_MAX] = {
     &gSkullFishSwimAnim,   // PR2_ANIM_SWIM
     &gSkullFishAttackAnim, // PR2_ANIM_ATTACK
     &gSkullFishDieAnim,    // PR2_ANIM_DIE
 };
 
-static u8 sAnimationModes[ENPR2_ANIM_MAX] = {
+static u8 sAnimationModes[PR2_ANIM_MAX] = {
     ANIMMODE_LOOP, // PR2_ANIM_SWIM
     ANIMMODE_LOOP, // PR2_ANIM_ATTACK
     ANIMMODE_ONCE, // PR2_ANIM_DIE
@@ -267,7 +267,7 @@ void EnPr2_ChangeAnim(EnPr2* this, s32 animIndex) {
 
     this->animIndex = animIndex;
     this->animEndFrame = Animation_GetLastFrame(sAnimations[animIndex]);
-    if (this->animIndex == ENPR2_ANIM_MAX) {
+    if (this->animIndex == PR2_ANIM_MAX) {
         playSpeed = 0.0f;
     }
     Animation_Change(&this->skelAnime, sAnimations[animIndex], playSpeed, 0.0f, this->animEndFrame,
@@ -721,7 +721,7 @@ s32 EnPr2_OverrideLimbDrawOpa(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f
     EnPr2* this = (EnPr2*)thisx;
 
     if (this->type < PR2_TYPE_BROKEN) {
-        if (limbIndex == OBJECT_PR_2_LIMB_02) { // jaw
+        if (limbIndex == PR_2_LIMB_SKULL) {
             rot->y += TRUNCF_BINANG(this->slowLimbYaw) * -1;
         }
     } else if (this->type != limbIndex + PR2_TYPE_BROKEN) {
@@ -736,7 +736,7 @@ void EnPr2_PostLimbDrawOpa(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* r
     EnPr2* this = (EnPr2*)thisx;
 
     if (this->type < PR2_TYPE_BROKEN) {
-        if (limbIndex == OBJECT_PR_2_LIMB_02) {
+        if (limbIndex == PR_2_LIMB_SKULL) {
             // why use a matrix to save the limb pos? is there no faster method?
             // also we always store limb pos in the array, why have a secondary copy?
             Matrix_Translate(0.0f, 0.0f, 0.0f, MTXMODE_APPLY);
@@ -752,7 +752,7 @@ s32 EnPr2_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
     EnPr2* this = (EnPr2*)thisx;
 
     if (this->type < PR2_TYPE_BROKEN) {
-        if (limbIndex == OBJECT_PR_2_LIMB_02) {
+        if (limbIndex == PR_2_LIMB_SKULL) {
             rot->y += TRUNCF_BINANG(this->slowLimbYaw) * -1;
         }
     } else if ((limbIndex + PR2_TYPE_BROKEN) != this->type) {
