@@ -1,7 +1,7 @@
 /*
  * File: z_bg_heavy_block.c
  * Overlay: ovl_Bg_Heavy_Block
- * Description: Large block that can only be lifted with Golden Gauntlets
+ * Description: Large block that can only be lifted with Golden Gauntlets (JP only)
  */
 
 #include "z_bg_heavy_block.h"
