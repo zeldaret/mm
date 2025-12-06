@@ -35,8 +35,8 @@ endif
 
 #### Defaults ####
 
-# Target game version. Currently only the following version is supported:
-#   n64-jp-1.1 N64 Japan 1.1
+# Target game version. Currently only the following versions are supported:
+#   n64-jp-1.1 N64 Japan 1.1 (WIP)
 #   n64-us     N64 USA (default)
 VERSION ?= n64-us
 # If COMPARE is 1, check the output md5sum after building
