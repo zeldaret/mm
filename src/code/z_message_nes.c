@@ -747,9 +747,9 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                     msgCtx->stateTimer = 4;
                     Font_LoadMessageBoxEndIcon(font, 2);
                     if (msgCtx->unk120D8 != 3) {
-                        msgCtx->unk11FFE[0] = (s16)(msgCtx->textboxYTarget + 14);
-                        msgCtx->unk11FFE[1] = (s16)(msgCtx->textboxYTarget + 26);
-                        msgCtx->unk11FFE[2] = (s16)(msgCtx->textboxYTarget + 38);
+                        msgCtx->choicePosY[0] = (s16)(msgCtx->textboxYTarget + 14);
+                        msgCtx->choicePosY[1] = (s16)(msgCtx->textboxYTarget + 26);
+                        msgCtx->choicePosY[2] = (s16)(msgCtx->textboxYTarget + 38);
                     }
                 }
                 break;
@@ -762,9 +762,9 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                     msgCtx->stateTimer = 4;
                     Font_LoadMessageBoxEndIcon(font, 2);
                     if (msgCtx->unk120D8 != 3) {
-                        msgCtx->unk11FFE[0] = (s16)(msgCtx->textboxYTarget + 14);
-                        msgCtx->unk11FFE[1] = (s16)(msgCtx->textboxYTarget + 26);
-                        msgCtx->unk11FFE[2] = (s16)(msgCtx->textboxYTarget + 38);
+                        msgCtx->choicePosY[0] = (s16)(msgCtx->textboxYTarget + 14);
+                        msgCtx->choicePosY[1] = (s16)(msgCtx->textboxYTarget + 26);
+                        msgCtx->choicePosY[2] = (s16)(msgCtx->textboxYTarget + 38);
                     }
                 }
                 break;
