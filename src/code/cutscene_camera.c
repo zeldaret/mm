@@ -4,6 +4,8 @@
 
 #include "z64olib.h"
 
+#pragma increment_block_number "n64-us:128"
+
 CutsceneCamera* sCurCsCamera;
 
 typedef s16 (*CsCamInterpolateCallback)(Vec3f*, f32*, s16*, CsCmdCamPoint*, CsCmdCamMisc*, CutsceneCameraInterp*);
