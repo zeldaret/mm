@@ -307,7 +307,7 @@ void Message_DrawItemIcon(struct PlayState* play, Gfx** gfxP);
 void Message_HandleOcarina(struct PlayState* play);
 void Message_LoadItemIcon(struct PlayState* play, u16 itemId, s16 arg2);
 void Message_DecodeHeader(struct PlayState* play);
-void func_801514B0(struct PlayState* play, u16 arg1, u8 arg2);
+void Message_PauseMenu_ShowDescription(struct PlayState* play, u16 textId, u8 textBoxPos);
 void Message_StartTextbox(struct PlayState* play, u16 textId, struct Actor* actor);
 void Message_ContinueTextbox(struct PlayState* play, u16 textId);
 void Message_DisplaySceneTitleCard(struct PlayState* play, u16 textId);
