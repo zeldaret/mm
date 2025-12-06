@@ -499,7 +499,7 @@ void EnPrz_Update(Actor* thisx, PlayState* play) {
 s32 EnPrz_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnPrz* this = (EnPrz*)thisx;
 
-    if (limbIndex == OBJECT_PR_2_LIMB_02) {
+    if (limbIndex == PR_2_LIMB_SKULL) {
         rot->y += TRUNCF_BINANG(this->unk_218) * -100;
     }
     return false;
@@ -509,7 +509,7 @@ void EnPrz_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
     Vec3f sZeroVec = { 0.0f, 0.0f, 0.0f };
     EnPrz* this = (EnPrz*)thisx;
 
-    if (limbIndex == OBJECT_PR_2_LIMB_02) {
+    if (limbIndex == PR_2_LIMB_SKULL) {
         Matrix_Translate(0.0f, 0.0f, 0.0f, MTXMODE_APPLY);
         Matrix_MultVec3f(&sZeroVec, &this->unk_1CC);
     }
