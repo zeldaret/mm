@@ -595,7 +595,7 @@ weekEventReg = {
     (73 << 8) | 0x10: "WEEKEVENTREG_73_10",
     (73 << 8) | 0x20: "WEEKEVENTREG_73_20",
     (73 << 8) | 0x40: "WEEKEVENTREG_73_40",
-    (73 << 8) | 0x80: "WEEKEVENTREG_73_80",
+    (73 << 8) | 0x80: "WEEKEVENTREG_ENTERED_BOMBERS_CODE",
     (74 << 8) | 0x01: "WEEKEVENTREG_74_01",
     (74 << 8) | 0x02: "WEEKEVENTREG_74_02",
     (74 << 8) | 0x04: "WEEKEVENTREG_74_04",
