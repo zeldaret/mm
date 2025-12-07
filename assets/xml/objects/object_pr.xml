@@ -59,7 +59,7 @@
         <Limb Name="gSkullFishSkullLimb" Type="Standard" EnumName="PR_2_LIMB_SKULL" Offset="0x4154" />
         <Limb Name="gSkullFishJawLimb" Type="Standard" EnumName="PR_2_LIMB_JAW" Offset="0x4160" />
         <Limb Name="gSkullFishTailLimb" Type="Standard" EnumName="PR_2_LIMB_TAIL" Offset="0x416C" />
-        <Skeleton Name="gSkullFishSkel" Type="Flex" LimbType="Standard" LimbNone="OBJECT_PR_2_LIMB_NONE" LimbMax="OBJECT_PR_2_LIMB_MAX" EnumName="ObjectPr2Limb" Offset="0x4188" />
+        <Skeleton Name="gSkullFishSkel" Type="Flex" LimbType="Standard" LimbNone="PR_2_LIMB_NONE" LimbMax="PR_2_LIMB_MAX" EnumName="Pr2Limb" Offset="0x4188" />
 
         <Animation Name="gSkullFishAttackAnim" Offset="0x4274" /> <!-- Original name is "prz_gattuku" -->
         <Animation Name="gSkullFishSwimAnim" Offset="0x4340" /> <!-- Original name is "prz_swim" -->

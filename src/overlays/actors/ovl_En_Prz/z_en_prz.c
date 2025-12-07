@@ -112,7 +112,7 @@ void EnPrz_Init(Actor* thisx, PlayState* play) {
     this->actor.colChkInfo.health = 1;
 
     SkelAnime_InitFlex(play, &this->skelAnime, &gSkullFishSkel, &gSkullFishSwimAnim, this->jointTable, this->morphTable,
-                       OBJECT_PR_2_LIMB_MAX);
+                       PR_2_LIMB_MAX);
 
     this->unk_1E6 = ENPRZ_GET(&this->actor);
     this->actor.shape.yOffset = 500.0f;

@@ -129,7 +129,7 @@ void EnPr2_Init(Actor* thisx, PlayState* play) {
     this->actor.colChkInfo.damageTable = &sDamageTable;
 
     SkelAnime_InitFlex(play, &this->skelAnime, &gSkullFishSkel, &gSkullFishSwimAnim, this->jointTable, this->morphTable,
-                       OBJECT_PR_2_LIMB_MAX);
+                       PR_2_LIMB_MAX);
     this->type = ENPR2_GET_TYPE(&this->actor);
     this->actor.colChkInfo.mass = 10;
     Math_Vec3f_Copy(&this->newHome, &this->actor.home.pos);
