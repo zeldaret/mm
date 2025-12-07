@@ -264,7 +264,7 @@ void EnMaruta_Init(Actor* thisx, PlayState* play) {
     }
 
     this->lowestPointIndex = -1;
-    this->isRetracting = 0;
+    this->isRetracting = false;
 
     if (this->shape == ENMARUTA_SHAPE_WHOLE) {
         Collider_InitCylinder(play, &this->collider);
@@ -304,7 +304,7 @@ void EnMaruta_SittingWhole(EnMaruta* this, PlayState* play) {
         this->actor.shape.rot.y -= 0x2AAA;
     }
 
-    if (this->isRetracting == 1) {
+    if (this->isRetracting == true) {
         EnMaruta_StartRetracting(this);
     }
 
