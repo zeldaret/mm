@@ -91,22 +91,22 @@ static AnimationInfo sAnimationInfo[ENKENDOJS_ANIM_MAX] = {
     Message_StartTextbox(play, textId, &this->actor); \
     this->curTextId = textId;
 
-s16 sNonHumanMessages[][3] = {
+s16 sNonHumanTextIds[][3] = {
     { 0x2731, 0x2732, 0x2733 },
     { 0x2734, 0x2735, 0x2736 },
     { 0x2737, 0x2738, 0x2739 },
 };
 
-s16 sHumanMessages[][3] = {
+s16 sHumanTextIds[][3] = {
     { 0x2710, 0x2712, 0x2714 },
     { 0x2711, 0x2713, 0x2715 },
 };
 
-s16 sNoviceCourseProgressMessages[] = {
+s16 sNoviceCourseProgressTextIds[] = {
     0x271C, 0x271E, 0x2720, 0x2722, 0x2724, 0x2726, 0x2728,
 };
 
-s16 sNoviceCourseTryAgainMessages[] = {
+s16 sNoviceCourseTryAgainTextIds[] = {
     0x271B, 0x271D, 0x271F, 0x2721, 0x2723, 0x2725, 0x2727,
 };
 
@@ -221,7 +221,7 @@ void EnKendoJs_AwaitTalk(EnKendoJs* this, PlayState* play) {
                     break;
             }
 
-            ENKENDOJS_START_MSG(this, play, sNonHumanMessages[mainIndex][dayIndex]);
+            ENKENDOJS_START_MSG(this, play, sNonHumanTextIds[mainIndex][dayIndex]);
         } else if ((Player_GetMask(play) != PLAYER_MASK_NONE) && (Player_GetMask(play) < PLAYER_MASK_GIANT)) {
             u16 maskMessage = Player_GetMask(play) + 0x273C;
 
@@ -236,7 +236,7 @@ void EnKendoJs_AwaitTalk(EnKendoJs* this, PlayState* play) {
             } else {
                 mainIndex = 1;
             }
-            ENKENDOJS_START_MSG(this, play, sHumanMessages[mainIndex][dayIndex]);
+            ENKENDOJS_START_MSG(this, play, sHumanTextIds[mainIndex][dayIndex]);
         }
 
         EnKendoJs_SetupMessageStateHandler(this);
@@ -480,12 +480,12 @@ s32 EnKendoJs_GetNoviceCourseActionResult(EnKendoJs* this, PlayState* play) {
 }
 
 void EnKendoJs_NoviceCourseProgress(EnKendoJs* this, PlayState* play) {
-    ENKENDOJS_START_MSG(this, play, sNoviceCourseProgressMessages[this->minigameRound]);
+    ENKENDOJS_START_MSG(this, play, sNoviceCourseProgressTextIds[this->minigameRound]);
     this->minigameRound++;
 }
 
 void EnKendoJs_NoviceCourseTryAgain(EnKendoJs* this, PlayState* play) {
-    ENKENDOJS_START_MSG(this, play, sNoviceCourseTryAgainMessages[this->minigameRound]);
+    ENKENDOJS_START_MSG(this, play, sNoviceCourseTryAgainTextIds[this->minigameRound]);
 }
 
 s32 EnKendoJs_HasMoreAdviceToTryAgain(EnKendoJs* this, PlayState* play) {
