@@ -87,8 +87,6 @@ static AnimationInfo sAnimationInfo[ENKENDOJS_ANIM_MAX] = {
     { &gSwordmasterCoweringAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
 };
 
-#define ENKENDOJS_MSG_MASK(play) Player_GetMask(play) + 0x273C
-
 #define ENKENDOJS_QUEUE_MSG(thisx, play, textId)       \
     Message_StartTextbox(play, textId, &thisx->actor); \
     thisx->curTextId = textId;
@@ -225,7 +223,7 @@ void EnKendoJs_AwaitTalk(EnKendoJs* this, PlayState* play) {
 
             ENKENDOJS_QUEUE_MSG(this, play, sNonHumanMessages[mainIndex][dayIndex]);
         } else if ((Player_GetMask(play) != PLAYER_MASK_NONE) && (Player_GetMask(play) < PLAYER_MASK_GIANT)) {
-            u16 maskMessage = ENKENDOJS_MSG_MASK(play);
+            u16 maskMessage = Player_GetMask(play) + 0x273C;
 
             //! FAKE:
             if (1) {}
