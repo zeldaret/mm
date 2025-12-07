@@ -87,9 +87,9 @@ static AnimationInfo sAnimationInfo[ENKENDOJS_ANIM_MAX] = {
     { &gSwordmasterCoweringAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
 };
 
-#define ENKENDOJS_QUEUE_MSG(thisx, play, textId)       \
-    Message_StartTextbox(play, textId, &thisx->actor); \
-    thisx->curTextId = textId;
+#define ENKENDOJS_START_MSG(this, play, textId)       \
+    Message_StartTextbox(play, textId, &this->actor); \
+    this->curTextId = textId;
 
 s16 sNonHumanMessages[][3] = {
     { 0x2731, 0x2732, 0x2733 },
@@ -201,7 +201,7 @@ void EnKendoJs_AwaitTalk(EnKendoJs* this, PlayState* play) {
         }
 
         if (ENKENDOJS_GET_LOCATION(&this->actor) == ENKENDOJS_IN_BACK_ROOM) {
-            ENKENDOJS_QUEUE_MSG(this, play, 0x273C);
+            ENKENDOJS_START_MSG(this, play, 0x273C);
         } else if (GET_PLAYER_FORM != PLAYER_FORM_HUMAN) {
             switch (GET_PLAYER_FORM) {
                 case PLAYER_FORM_DEKU:
@@ -221,14 +221,14 @@ void EnKendoJs_AwaitTalk(EnKendoJs* this, PlayState* play) {
                     break;
             }
 
-            ENKENDOJS_QUEUE_MSG(this, play, sNonHumanMessages[mainIndex][dayIndex]);
+            ENKENDOJS_START_MSG(this, play, sNonHumanMessages[mainIndex][dayIndex]);
         } else if ((Player_GetMask(play) != PLAYER_MASK_NONE) && (Player_GetMask(play) < PLAYER_MASK_GIANT)) {
             u16 maskMessage = Player_GetMask(play) + 0x273C;
 
             //! FAKE:
             if (1) {}
 
-            ENKENDOJS_QUEUE_MSG(this, play, maskMessage);
+            ENKENDOJS_START_MSG(this, play, maskMessage);
         } else {
             if (!this->hasSpoken) {
                 this->hasSpoken = true;
@@ -236,7 +236,7 @@ void EnKendoJs_AwaitTalk(EnKendoJs* this, PlayState* play) {
             } else {
                 mainIndex = 1;
             }
-            ENKENDOJS_QUEUE_MSG(this, play, sHumanMessages[mainIndex][dayIndex]);
+            ENKENDOJS_START_MSG(this, play, sHumanMessages[mainIndex][dayIndex]);
         }
 
         EnKendoJs_SetupMessageStateHandler(this);
@@ -251,36 +251,36 @@ void EnKendoJs_HandleCourseChoice(EnKendoJs* this, PlayState* play) {
             case 0:
                 if (GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SWORD) == EQUIP_VALUE_SWORD_NONE) {
                     Audio_PlaySfx(NA_SE_SY_ERROR);
-                    ENKENDOJS_QUEUE_MSG(this, play, 0x272C);
+                    ENKENDOJS_START_MSG(this, play, 0x272C);
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENKENDOJS_ANIM_FLAILING);
                 } else if (gSaveContext.save.saveInfo.playerData.rupees < play->msgCtx.unk1206C) {
                     Audio_PlaySfx(NA_SE_SY_ERROR);
-                    ENKENDOJS_QUEUE_MSG(this, play, 0x2718);
+                    ENKENDOJS_START_MSG(this, play, 0x2718);
                 } else {
                     Audio_PlaySfx_MessageDecide();
                     Rupees_ChangeBy(-play->msgCtx.unk1206C);
-                    ENKENDOJS_QUEUE_MSG(this, play, 0x2719);
+                    ENKENDOJS_START_MSG(this, play, 0x2719);
                 }
                 break;
 
             case 1:
                 if (GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SWORD) == EQUIP_VALUE_SWORD_NONE) {
                     Audio_PlaySfx(NA_SE_SY_ERROR);
-                    ENKENDOJS_QUEUE_MSG(this, play, 0x272C);
+                    ENKENDOJS_START_MSG(this, play, 0x272C);
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENKENDOJS_ANIM_FLAILING);
                 } else if (gSaveContext.save.saveInfo.playerData.rupees < play->msgCtx.unk12070) {
                     Audio_PlaySfx(NA_SE_SY_ERROR);
-                    ENKENDOJS_QUEUE_MSG(this, play, 0x2718);
+                    ENKENDOJS_START_MSG(this, play, 0x2718);
                 } else {
                     Audio_PlaySfx_MessageDecide();
                     Rupees_ChangeBy(-play->msgCtx.unk12070);
-                    ENKENDOJS_QUEUE_MSG(this, play, 0x273A);
+                    ENKENDOJS_START_MSG(this, play, 0x273A);
                 }
                 break;
 
             case 2:
                 Audio_PlaySfx_MessageCancel();
-                ENKENDOJS_QUEUE_MSG(this, play, 0x2717);
+                ENKENDOJS_START_MSG(this, play, 0x2717);
                 break;
 
             default:
@@ -303,7 +303,7 @@ void EnKendoJs_HandleEvents(EnKendoJs* this, PlayState* play) {
         case 0x2713:
         case 0x2714:
         case 0x2715:
-            ENKENDOJS_QUEUE_MSG(this, play, 0x2716);
+            ENKENDOJS_START_MSG(this, play, 0x2716);
             break;
 
         case 0x2719:
@@ -318,7 +318,7 @@ void EnKendoJs_HandleEvents(EnKendoJs* this, PlayState* play) {
             break;
 
         case 0x273A:
-            ENKENDOJS_QUEUE_MSG(this, play, 0x273B);
+            ENKENDOJS_START_MSG(this, play, 0x273B);
             break;
 
         case 0x273B:
@@ -480,12 +480,12 @@ s32 EnKendoJs_GetNoviceCourseActionResult(EnKendoJs* this, PlayState* play) {
 }
 
 void EnKendoJs_NoviceCourseProgress(EnKendoJs* this, PlayState* play) {
-    ENKENDOJS_QUEUE_MSG(this, play, sNoviceCourseProgressMessages[this->minigameRound]);
+    ENKENDOJS_START_MSG(this, play, sNoviceCourseProgressMessages[this->minigameRound]);
     this->minigameRound++;
 }
 
 void EnKendoJs_NoviceCourseTryAgain(EnKendoJs* this, PlayState* play) {
-    ENKENDOJS_QUEUE_MSG(this, play, sNoviceCourseTryAgainMessages[this->minigameRound]);
+    ENKENDOJS_START_MSG(this, play, sNoviceCourseTryAgainMessages[this->minigameRound]);
 }
 
 s32 EnKendoJs_HasMoreAdviceToTryAgain(EnKendoJs* this, PlayState* play) {
@@ -494,14 +494,14 @@ s32 EnKendoJs_HasMoreAdviceToTryAgain(EnKendoJs* this, PlayState* play) {
     switch (this->curTextId) {
         case 0x271D:
             if (Player_GetMeleeWeaponHeld(player) != PLAYER_MELEEWEAPON_NONE) {
-                ENKENDOJS_QUEUE_MSG(this, play, 0x272A);
+                ENKENDOJS_START_MSG(this, play, 0x272A);
                 return true;
             }
             break;
 
         case 0x2721:
             if (this->isPlayerLockedOn) {
-                ENKENDOJS_QUEUE_MSG(this, play, 0x272B);
+                ENKENDOJS_START_MSG(this, play, 0x272B);
                 return true;
             }
             break;
@@ -528,7 +528,7 @@ void EnKendoJs_MovePlayerToStartNoviceCourse(EnKendoJs* this, PlayState* play) {
             this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
             player->stateFlags1 &= ~PLAYER_STATE1_20;
             EnKendoJs_SpawnLog(this, play, 0);
-            ENKENDOJS_QUEUE_MSG(this, play, 0x271A);
+            ENKENDOJS_START_MSG(this, play, 0x271A);
             EnKendoJs_SetupMessageStateHandler(this);
         } else {
             Actor_OfferTalk(&this->actor, play, 800.0f);
@@ -576,7 +576,7 @@ void EnKendoJs_NoviceCourse(EnKendoJs* this, PlayState* play) {
                 Actor_PlaySfx(&this->actor, NA_SE_SY_ERROR);
                 this->courseState = ENKENDOJS_COURSE_PAUSED;
                 player->stateFlags1 |= PLAYER_STATE1_20;
-                ENKENDOJS_QUEUE_MSG(this, play, 0x2729);
+                ENKENDOJS_START_MSG(this, play, 0x2729);
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENKENDOJS_ANIM_FLAILING);
                 break;
 
@@ -630,9 +630,9 @@ void EnKendoJs_ExpertCourse(EnKendoJs* this, PlayState* play) {
     if (this->timer >= 140) {
         if (this->minigameRound == 5) {
             if (gSaveContext.minigameScore == 30) {
-                ENKENDOJS_QUEUE_MSG(this, play, 0x272D);
+                ENKENDOJS_START_MSG(this, play, 0x272D);
             } else {
-                ENKENDOJS_QUEUE_MSG(this, play, 0x272E);
+                ENKENDOJS_START_MSG(this, play, 0x272E);
             }
             player->stateFlags1 |= PLAYER_STATE1_20;
             CLEAR_WEEKEVENTREG(WEEKEVENTREG_PLAYING_SWORDSMAN_MINIGAME);
@@ -695,9 +695,9 @@ void EnKendoJs_AwaitFinalMessage(EnKendoJs* this, PlayState* play) {
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_SWORDSMANS_SCHOOL_HEART_PIECE)) {
             SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_SWORDSMANS_SCHOOL_HEART_PIECE);
-            ENKENDOJS_QUEUE_MSG(this, play, 0x272F);
+            ENKENDOJS_START_MSG(this, play, 0x272F);
         } else {
-            ENKENDOJS_QUEUE_MSG(this, play, 0x2730);
+            ENKENDOJS_START_MSG(this, play, 0x2730);
         }
         EnKendoJs_SetupMessageStateHandler(this);
         player->stateFlags1 &= ~PLAYER_STATE1_20;
