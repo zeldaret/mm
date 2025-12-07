@@ -236,7 +236,7 @@ void EnMaruta_Init(Actor* thisx, PlayState* play) {
     }
 
     this->unk_214 = -1;
-    this->isRetracting = 0;
+    this->isRetracting = false;
 
     if (this->unk_210 == 0) {
         Collider_InitCylinder(play, &this->collider);
@@ -276,7 +276,7 @@ void func_80B372CC(EnMaruta* this, PlayState* play) {
         this->actor.shape.rot.y -= 0x2AAA;
     }
 
-    if (this->isRetracting == 1) {
+    if (this->isRetracting == true) {
         EnMaruta_StartRetracting(this);
     }
 

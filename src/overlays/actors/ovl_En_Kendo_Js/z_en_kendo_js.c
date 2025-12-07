@@ -767,7 +767,7 @@ void EnKendoJs_RetractLogs(EnKendoJs* this, PlayState* play) {
 
     while (actor != NULL) {
         if (actor->id == ACTOR_EN_MARUTA) {
-            ((EnMaruta*)actor)->isRetracting = 1;
+            ((EnMaruta*)actor)->isRetracting = true;
         }
         actor = actor->next;
     }
