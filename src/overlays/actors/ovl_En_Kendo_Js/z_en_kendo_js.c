@@ -87,54 +87,6 @@ static AnimationInfo sAnimationInfo[ENKENDOJS_ANIM_MAX] = {
     { &gSwordmasterCoweringAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
 };
 
-typedef enum EnKendoJsMessage {
-    ENKENDOJS_MSG_HUMAN_INTRO_DAY1 = 0x2710,
-    ENKENDOJS_MSG_HUMAN_INTRO_SHORT_DAY1 = 0x2711,
-    ENKENDOJS_MSG_HUMAN_INTRO_DAY2 = 0x2712,
-    ENKENDOJS_MSG_HUMAN_INTRO_SHORT_DAY2 = 0x2713,
-    ENKENDOJS_MSG_HUMAN_INTRO_DAY3 = 0x2714,
-    ENKENDOJS_MSG_HUMAN_INTRO_SHORT_DAY3 = 0x2715,
-    ENKENDOJS_MSG_WHICH_COURSE = 0x2716,
-    ENKENDOJS_MSG_CANCEL = 0x2717,
-    ENKENDOJS_MSG_NOT_ENOUGH_RUPEES = 0x2718,
-    ENKENDOJS_MSG_NOVICE_COURSE_SELECTED = 0x2719,
-    ENKENDOJS_MSG_NOVICE_COURSE_START = 0x271A,
-    ENKENDOJS_MSG_NOVICE_COURSE_RETRY_ROUND1 = 0x271B,
-    ENKENDOJS_MSG_NOVICE_COURSE_PASS_ROUND1 = 0x271C,
-    ENKENDOJS_MSG_NOVICE_COURSE_RETRY_ROUND2 = 0x271D,
-    ENKENDOJS_MSG_NOVICE_COURSE_PASS_ROUND2 = 0x271E,
-    ENKENDOJS_MSG_NOVICE_COURSE_RETRY_ROUND3 = 0x271F,
-    ENKENDOJS_MSG_NOVICE_COURSE_PASS_ROUND3 = 0x2720,
-    ENKENDOJS_MSG_NOVICE_COURSE_RETRY_ROUND4 = 0x2721,
-    ENKENDOJS_MSG_NOVICE_COURSE_PASS_ROUND4 = 0x2722,
-    ENKENDOJS_MSG_NOVICE_COURSE_RETRY_ROUND5 = 0x2723,
-    ENKENDOJS_MSG_NOVICE_COURSE_PASS_ROUND5 = 0x2724,
-    ENKENDOJS_MSG_NOVICE_COURSE_RETRY_ROUND6 = 0x2725,
-    ENKENDOJS_MSG_NOVICE_COURSE_PASS_ROUND6 = 0x2726,
-    ENKENDOJS_MSG_NOVICE_COURSE_RETRY_ROUND7 = 0x2727,
-    ENKENDOJS_MSG_NOVICE_COURSE_PASS_ROUND7 = 0x2728,
-    ENKENDOJS_MSG_NOVICE_COURSE_WRONG = 0x2729,
-    ENKENDOJS_MSG_NOVICE_COURSE_SHEATH_WEAPON = 0x272A,
-    ENKENDOJS_MSG_NOVICE_COURSE_NO_Z_TARGET = 0x272B,
-    ENKENDOJS_MSG_NOVICE_COURSE_NO_SWORD = 0x272C,
-    ENKENDOJS_MSG_EXPERT_COURSE_PERFECT = 0x272D,
-    ENKENDOJS_MSG_EXPERT_COURSE_INSUFFICIENT = 0x272E,
-    ENKENDOJS_MSG_EXPERT_COURSE_ACCEPT_HEART_PIECE = 0x272F,
-    ENKENDOJS_MSG_EXPERT_COURSE_ACCEPT_RED_RUPEE = 0x2730,
-    ENKENDOJS_MSG_DEKU_DAY1 = 0x2731,
-    ENKENDOJS_MSG_DEKU_DAY2 = 0x2732,
-    ENKENDOJS_MSG_DEKU_DAY3 = 0x2733,
-    ENKENDOJS_MSG_GORON_DAY1 = 0x2734,
-    ENKENDOJS_MSG_GORON_DAY2 = 0x2735,
-    ENKENDOJS_MSG_GORON_DAY3 = 0x2736,
-    ENKENDOJS_MSG_ZORA_DAY1 = 0x2737,
-    ENKENDOJS_MSG_ZORA_DAY2 = 0x2738,
-    ENKENDOJS_MSG_ZORA_DAY3 = 0x2739,
-    ENKENDOJS_MSG_EXPERT_COURSE_SELECTED = 0x273A,
-    ENKENDOJS_MSG_EXPERT_COURSE_RULES = 0x273B,
-    ENKENDOJS_MSG_DONT_WANT_TO_DIE = 0x273C,
-} EnKendoJsMessage;
-
 #define ENKENDOJS_MSG_MASK(play) Player_GetMask(play) + 0x273C
 
 #define ENKENDOJS_QUEUE_MSG(thisx, play, textId)       \
@@ -142,29 +94,22 @@ typedef enum EnKendoJsMessage {
     thisx->curTextId = textId;
 
 s16 sNonHumanMessages[][3] = {
-    { ENKENDOJS_MSG_DEKU_DAY1, ENKENDOJS_MSG_DEKU_DAY2, ENKENDOJS_MSG_DEKU_DAY3 },
-    { ENKENDOJS_MSG_GORON_DAY1, ENKENDOJS_MSG_GORON_DAY2, ENKENDOJS_MSG_GORON_DAY3 },
-    { ENKENDOJS_MSG_ZORA_DAY1, ENKENDOJS_MSG_ZORA_DAY2, ENKENDOJS_MSG_ZORA_DAY3 },
+    { 0x2731, 0x2732, 0x2733 },
+    { 0x2734, 0x2735, 0x2736 },
+    { 0x2737, 0x2738, 0x2739 },
 };
 
 s16 sHumanMessages[][3] = {
-    { ENKENDOJS_MSG_HUMAN_INTRO_DAY1, ENKENDOJS_MSG_HUMAN_INTRO_DAY2, ENKENDOJS_MSG_HUMAN_INTRO_DAY3 },
-    { ENKENDOJS_MSG_HUMAN_INTRO_SHORT_DAY1, ENKENDOJS_MSG_HUMAN_INTRO_SHORT_DAY2,
-      ENKENDOJS_MSG_HUMAN_INTRO_SHORT_DAY3 },
+    { 0x2710, 0x2712, 0x2714 },
+    { 0x2711, 0x2713, 0x2715 },
 };
 
 s16 sNoviceCourseProgressMessages[] = {
-    ENKENDOJS_MSG_NOVICE_COURSE_PASS_ROUND1, ENKENDOJS_MSG_NOVICE_COURSE_PASS_ROUND2,
-    ENKENDOJS_MSG_NOVICE_COURSE_PASS_ROUND3, ENKENDOJS_MSG_NOVICE_COURSE_PASS_ROUND4,
-    ENKENDOJS_MSG_NOVICE_COURSE_PASS_ROUND5, ENKENDOJS_MSG_NOVICE_COURSE_PASS_ROUND6,
-    ENKENDOJS_MSG_NOVICE_COURSE_PASS_ROUND7,
+    0x271C, 0x271E, 0x2720, 0x2722, 0x2724, 0x2726, 0x2728,
 };
 
 s16 sNoviceCourseTryAgainMessages[] = {
-    ENKENDOJS_MSG_NOVICE_COURSE_RETRY_ROUND1, ENKENDOJS_MSG_NOVICE_COURSE_RETRY_ROUND2,
-    ENKENDOJS_MSG_NOVICE_COURSE_RETRY_ROUND3, ENKENDOJS_MSG_NOVICE_COURSE_RETRY_ROUND4,
-    ENKENDOJS_MSG_NOVICE_COURSE_RETRY_ROUND5, ENKENDOJS_MSG_NOVICE_COURSE_RETRY_ROUND6,
-    ENKENDOJS_MSG_NOVICE_COURSE_RETRY_ROUND7,
+    0x271B, 0x271D, 0x271F, 0x2721, 0x2723, 0x2725, 0x2727,
 };
 
 typedef enum EnKendoJsCourseState {
@@ -258,7 +203,7 @@ void EnKendoJs_AwaitTalk(EnKendoJs* this, PlayState* play) {
         }
 
         if (ENKENDOJS_GET_LOCATION(&this->actor) == ENKENDOJS_IN_BACK_ROOM) {
-            ENKENDOJS_QUEUE_MSG(this, play, ENKENDOJS_MSG_DONT_WANT_TO_DIE);
+            ENKENDOJS_QUEUE_MSG(this, play, 0x273C);
         } else if (GET_PLAYER_FORM != PLAYER_FORM_HUMAN) {
             switch (GET_PLAYER_FORM) {
                 case PLAYER_FORM_DEKU:
@@ -303,41 +248,41 @@ void EnKendoJs_AwaitTalk(EnKendoJs* this, PlayState* play) {
 }
 
 void EnKendoJs_HandleCourseChoice(EnKendoJs* this, PlayState* play) {
-    if (Message_ShouldAdvance(play) && (this->curTextId == ENKENDOJS_MSG_WHICH_COURSE)) {
+    if (Message_ShouldAdvance(play) && (this->curTextId == 0x2716)) {
         switch (play->msgCtx.choiceIndex) {
             case 0:
                 if (GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SWORD) == EQUIP_VALUE_SWORD_NONE) {
                     Audio_PlaySfx(NA_SE_SY_ERROR);
-                    ENKENDOJS_QUEUE_MSG(this, play, ENKENDOJS_MSG_NOVICE_COURSE_NO_SWORD);
+                    ENKENDOJS_QUEUE_MSG(this, play, 0x272C);
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENKENDOJS_ANIM_FLAILING);
                 } else if (gSaveContext.save.saveInfo.playerData.rupees < play->msgCtx.unk1206C) {
                     Audio_PlaySfx(NA_SE_SY_ERROR);
-                    ENKENDOJS_QUEUE_MSG(this, play, ENKENDOJS_MSG_NOT_ENOUGH_RUPEES);
+                    ENKENDOJS_QUEUE_MSG(this, play, 0x2718);
                 } else {
                     Audio_PlaySfx_MessageDecide();
                     Rupees_ChangeBy(-play->msgCtx.unk1206C);
-                    ENKENDOJS_QUEUE_MSG(this, play, ENKENDOJS_MSG_NOVICE_COURSE_SELECTED);
+                    ENKENDOJS_QUEUE_MSG(this, play, 0x2719);
                 }
                 break;
 
             case 1:
                 if (GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SWORD) == EQUIP_VALUE_SWORD_NONE) {
                     Audio_PlaySfx(NA_SE_SY_ERROR);
-                    ENKENDOJS_QUEUE_MSG(this, play, ENKENDOJS_MSG_NOVICE_COURSE_NO_SWORD);
+                    ENKENDOJS_QUEUE_MSG(this, play, 0x272C);
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENKENDOJS_ANIM_FLAILING);
                 } else if (gSaveContext.save.saveInfo.playerData.rupees < play->msgCtx.unk12070) {
                     Audio_PlaySfx(NA_SE_SY_ERROR);
-                    ENKENDOJS_QUEUE_MSG(this, play, ENKENDOJS_MSG_NOT_ENOUGH_RUPEES);
+                    ENKENDOJS_QUEUE_MSG(this, play, 0x2718);
                 } else {
                     Audio_PlaySfx_MessageDecide();
                     Rupees_ChangeBy(-play->msgCtx.unk12070);
-                    ENKENDOJS_QUEUE_MSG(this, play, ENKENDOJS_MSG_EXPERT_COURSE_SELECTED);
+                    ENKENDOJS_QUEUE_MSG(this, play, 0x273A);
                 }
                 break;
 
             case 2:
                 Audio_PlaySfx_MessageCancel();
-                ENKENDOJS_QUEUE_MSG(this, play, ENKENDOJS_MSG_CANCEL);
+                ENKENDOJS_QUEUE_MSG(this, play, 0x2717);
                 break;
 
             default:
@@ -354,38 +299,38 @@ void EnKendoJs_HandleEvents(EnKendoJs* this, PlayState* play) {
     }
 
     switch (this->curTextId) {
-        case ENKENDOJS_MSG_HUMAN_INTRO_DAY1:
-        case ENKENDOJS_MSG_HUMAN_INTRO_SHORT_DAY1:
-        case ENKENDOJS_MSG_HUMAN_INTRO_DAY2:
-        case ENKENDOJS_MSG_HUMAN_INTRO_SHORT_DAY2:
-        case ENKENDOJS_MSG_HUMAN_INTRO_DAY3:
-        case ENKENDOJS_MSG_HUMAN_INTRO_SHORT_DAY3:
-            ENKENDOJS_QUEUE_MSG(this, play, ENKENDOJS_MSG_WHICH_COURSE);
+        case 0x2710:
+        case 0x2711:
+        case 0x2712:
+        case 0x2713:
+        case 0x2714:
+        case 0x2715:
+            ENKENDOJS_QUEUE_MSG(this, play, 0x2716);
             break;
 
-        case ENKENDOJS_MSG_NOVICE_COURSE_SELECTED:
+        case 0x2719:
             Message_CloseTextbox(play);
             player->stateFlags1 |= PLAYER_STATE1_20;
             EnKendoJs_SetupNoviceCourse(this);
             break;
 
-        case ENKENDOJS_MSG_NOVICE_COURSE_START:
+        case 0x271A:
             Message_CloseTextbox(play);
             EnKendoJs_StartNoviceCourse(this);
             break;
 
-        case ENKENDOJS_MSG_EXPERT_COURSE_SELECTED:
-            ENKENDOJS_QUEUE_MSG(this, play, ENKENDOJS_MSG_EXPERT_COURSE_RULES);
+        case 0x273A:
+            ENKENDOJS_QUEUE_MSG(this, play, 0x273B);
             break;
 
-        case ENKENDOJS_MSG_EXPERT_COURSE_RULES:
+        case 0x273B:
             Message_CloseTextbox(play);
             Interface_InitMinigame(play);
             player->stateFlags1 |= PLAYER_STATE1_20;
             EnKendoJs_SetupExpertCourse(this);
             break;
 
-        case ENKENDOJS_MSG_EXPERT_COURSE_PERFECT:
+        case 0x272D:
             Message_CloseTextbox(play);
             gSaveContext.minigameStatus = MINIGAME_STATUS_END;
             EnKendoJs_SetupPrize(this);
@@ -415,13 +360,11 @@ void EnKendoJs_HandleMessageState(EnKendoJs* this, PlayState* play) {
 
         case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
-                if (this->curTextId == ENKENDOJS_MSG_NOVICE_COURSE_NO_SWORD) {
+                if (this->curTextId == 0x272C) {
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENKENDOJS_ANIM_STOP_FLAILING);
                 }
 
-                if ((this->curTextId == ENKENDOJS_MSG_EXPERT_COURSE_INSUFFICIENT) ||
-                    (this->curTextId == ENKENDOJS_MSG_EXPERT_COURSE_ACCEPT_HEART_PIECE) ||
-                    (this->curTextId == ENKENDOJS_MSG_EXPERT_COURSE_ACCEPT_RED_RUPEE)) {
+                if ((this->curTextId == 0x272E) || (this->curTextId == 0x272F) || (this->curTextId == 0x2730)) {
                     gSaveContext.minigameStatus = MINIGAME_STATUS_END;
                 }
 
@@ -551,16 +494,16 @@ s32 EnKendoJs_HasMoreAdviceToTryAgain(EnKendoJs* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     switch (this->curTextId) {
-        case ENKENDOJS_MSG_NOVICE_COURSE_RETRY_ROUND2:
+        case 0x271D:
             if (Player_GetMeleeWeaponHeld(player) != PLAYER_MELEEWEAPON_NONE) {
-                ENKENDOJS_QUEUE_MSG(this, play, ENKENDOJS_MSG_NOVICE_COURSE_SHEATH_WEAPON);
+                ENKENDOJS_QUEUE_MSG(this, play, 0x272A);
                 return true;
             }
             break;
 
-        case ENKENDOJS_MSG_NOVICE_COURSE_RETRY_ROUND4:
+        case 0x2721:
             if (this->isPlayerLockedOn) {
-                ENKENDOJS_QUEUE_MSG(this, play, ENKENDOJS_MSG_NOVICE_COURSE_NO_Z_TARGET);
+                ENKENDOJS_QUEUE_MSG(this, play, 0x272B);
                 return true;
             }
             break;
@@ -587,7 +530,7 @@ void EnKendoJs_MovePlayerToStartNoviceCourse(EnKendoJs* this, PlayState* play) {
             this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
             player->stateFlags1 &= ~PLAYER_STATE1_20;
             EnKendoJs_SpawnLog(this, play, 0);
-            ENKENDOJS_QUEUE_MSG(this, play, ENKENDOJS_MSG_NOVICE_COURSE_START);
+            ENKENDOJS_QUEUE_MSG(this, play, 0x271A);
             EnKendoJs_SetupMessageStateHandler(this);
         } else {
             Actor_OfferTalk(&this->actor, play, 800.0f);
@@ -608,7 +551,7 @@ void EnKendoJs_NoviceCourse(EnKendoJs* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
-        if (this->curTextId == ENKENDOJS_MSG_NOVICE_COURSE_WRONG) {
+        if (this->curTextId == 0x2729) {
             EnKendoJs_NoviceCourseTryAgain(this, play);
         } else if (!EnKendoJs_HasMoreAdviceToTryAgain(this, play)) {
             if (this->skelAnime.animation == &gSwordmasterFlailingAnim) {
@@ -635,7 +578,7 @@ void EnKendoJs_NoviceCourse(EnKendoJs* this, PlayState* play) {
                 Actor_PlaySfx(&this->actor, NA_SE_SY_ERROR);
                 this->courseState = ENKENDOJS_COURSE_PAUSED;
                 player->stateFlags1 |= PLAYER_STATE1_20;
-                ENKENDOJS_QUEUE_MSG(this, play, ENKENDOJS_MSG_NOVICE_COURSE_WRONG);
+                ENKENDOJS_QUEUE_MSG(this, play, 0x2729);
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENKENDOJS_ANIM_FLAILING);
                 break;
 
@@ -689,9 +632,9 @@ void EnKendoJs_ExpertCourse(EnKendoJs* this, PlayState* play) {
     if (this->timer >= 140) {
         if (this->minigameRound == 5) {
             if (gSaveContext.minigameScore == 30) {
-                ENKENDOJS_QUEUE_MSG(this, play, ENKENDOJS_MSG_EXPERT_COURSE_PERFECT);
+                ENKENDOJS_QUEUE_MSG(this, play, 0x272D);
             } else {
-                ENKENDOJS_QUEUE_MSG(this, play, ENKENDOJS_MSG_EXPERT_COURSE_INSUFFICIENT);
+                ENKENDOJS_QUEUE_MSG(this, play, 0x272E);
             }
             player->stateFlags1 |= PLAYER_STATE1_20;
             CLEAR_WEEKEVENTREG(WEEKEVENTREG_PLAYING_SWORDSMAN_MINIGAME);
@@ -754,9 +697,9 @@ void EnKendoJs_AwaitFinalMessage(EnKendoJs* this, PlayState* play) {
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_SWORDSMANS_SCHOOL_HEART_PIECE)) {
             SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_SWORDSMANS_SCHOOL_HEART_PIECE);
-            ENKENDOJS_QUEUE_MSG(this, play, ENKENDOJS_MSG_EXPERT_COURSE_ACCEPT_HEART_PIECE);
+            ENKENDOJS_QUEUE_MSG(this, play, 0x272F);
         } else {
-            ENKENDOJS_QUEUE_MSG(this, play, ENKENDOJS_MSG_EXPERT_COURSE_ACCEPT_RED_RUPEE);
+            ENKENDOJS_QUEUE_MSG(this, play, 0x2730);
         }
         EnKendoJs_SetupMessageStateHandler(this);
         player->stateFlags1 &= ~PLAYER_STATE1_20;
