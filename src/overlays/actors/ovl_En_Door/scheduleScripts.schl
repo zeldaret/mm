@@ -406,7 +406,7 @@ sDoorSch_RomaniRanchBedroom {
 sDoorSch_IkanaCanyonMusicBoxHouse {
     not if_week_event_reg (WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE) {
         not if_week_event_reg (WEEKEVENTREG_75_20) {
-            not if_week_event_reg (WEEKEVENTREG_14_04) {
+            not if_week_event_reg (WEEKEVENTREG_IKANA_SPRING_RESTORED) {
                 return_s (0x1D)
             } else not if_week_event_reg (WEEKEVENTREG_59_01) {
                 if_week_event_reg (WEEKEVENTREG_61_02) {
