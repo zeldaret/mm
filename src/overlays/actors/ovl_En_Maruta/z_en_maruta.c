@@ -231,7 +231,7 @@ static DamageTable sDamageTable = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 8, 0, 0, 0, MASS_HEAVY };
 
-Vec3f sZeroVector = { 0.0f, 0.0f, 0.0f };
+Vec3f sZeroVec = { 0.0f, 0.0f, 0.0f };
 
 void EnMaruta_Init(Actor* thisx, PlayState* play) {
     s32 pad;
@@ -260,7 +260,7 @@ void EnMaruta_Init(Actor* thisx, PlayState* play) {
     this->recoilSpinAxis.z = 1.0f;
 
     for (i = 0; i < ARRAY_COUNT(this->hitboxPoints); i++) {
-        this->hitboxPoints[i] = sZeroVector;
+        this->hitboxPoints[i] = sZeroVec;
     }
 
     this->lowestPointIndex = -1;
@@ -428,7 +428,7 @@ void EnMaruta_SetupRecoilAfterCut(EnMaruta* this, PlayState* play) {
             break;
 
         default:
-            initialVelocity = sZeroVector;
+            initialVelocity = sZeroVec;
             break;
     }
 
