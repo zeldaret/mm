@@ -56,7 +56,7 @@ void Message_DrawTextCredits(PlayState* play, Gfx** gfxP) {
         msgCtx->textPosY = 48;
     }
 
-    if (msgCtx->textBoxType == TEXTBOX_TYPE_5) {
+    if (msgCtx->textBoxType == TEXTBOX_TYPE_CLEAR) {
         msgCtx->textColorR = msgCtx->textColorG = msgCtx->textColorB = 0;
     } else {
         msgCtx->textColorR = msgCtx->textColorG = msgCtx->textColorB = 255;
