@@ -57,6 +57,8 @@
 
 #include "overlays/actors/ovl_En_Horse/z_en_horse.h"
 
+#pragma increment_block_number "n64-us:128"
+
 void func_800DDFE0(Camera* camera);
 s32 Camera_ChangeMode(Camera* camera, s16 mode);
 s16 Camera_ChangeSettingFlags(Camera* camera, s16 setting, s16 flags);
