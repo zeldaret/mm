@@ -51,7 +51,8 @@ void BgIknvDoukutu_Init(Actor* thisx, PlayState* play) {
             this->actionFunc = func_80BD71BC;
             this->cueType = CS_CMD_ACTOR_CUE_516;
             this->unk_160 = 1.0f;
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_14_04) || CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_IKANA_SPRING_RESTORED) ||
+                CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE)) {
                 this->dyna.actor.draw = func_80BD7768;
                 this->actionFunc = func_80BD73D0;
                 play->envCtx.lightSettingOverride = 25;
@@ -67,7 +68,7 @@ void BgIknvDoukutu_Init(Actor* thisx, PlayState* play) {
             DynaPolyActor_Init(&this->dyna, 0);
             CollisionHeader_GetVirtual(&object_iknv_obj_Colheader_012788, &colHeader);
             this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
-            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_14_04)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_IKANA_SPRING_RESTORED)) {
                 Actor_Kill(&this->dyna.actor);
             }
             break;
@@ -78,7 +79,7 @@ void BgIknvDoukutu_Init(Actor* thisx, PlayState* play) {
             DynaPolyActor_Init(&this->dyna, 0);
             CollisionHeader_GetVirtual(&object_iknv_obj_Colheader_0117C8, &colHeader);
             this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_14_04)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_IKANA_SPRING_RESTORED)) {
                 this->unk_160 = 1.0f;
                 this->dyna.actor.world.pos.y += 68.0f;
             } else {
