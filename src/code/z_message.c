@@ -5225,12 +5225,12 @@ s16 sTextboxMidYPositions[] = {
 
 s16 D_801D0448[] = { 0x1C, 0x1D, 0x1E, 0x1F, 0x20, 0x21, 0x22, 0x23, 0x24, 0x25 };
 
-s16 sDoubleTimeSkipToNightMessageIDs[] = {
+s16 sDoubleTimeSkipToNightTextIds[] = {
     0x1B91, // Night of 1st day
     0x1B90, // Night of 2nd day
     0x1B8F, // Night of final day
 };
-s16 sDoubleTimeSkipToDayMessageIDs[] = {
+s16 sDoubleTimeSkipToDayTextIds[] = {
     0x1B92, // Dawn of 2nd day
     0x1B8E, // Dawn of final day
 };
@@ -5832,9 +5832,9 @@ void Message_Update(PlayState* play) {
                     if (interfaceCtx->restrictions.songOfDoubleTime == 0) {
                         if ((CURRENT_DAY != 3) || (gSaveContext.save.isNight == 0)) {
                             if (gSaveContext.save.isNight) {
-                                Message_StartTextbox(play, sDoubleTimeSkipToDayMessageIDs[CURRENT_DAY - 1], NULL);
+                                Message_StartTextbox(play, sDoubleTimeSkipToDayTextIds[CURRENT_DAY - 1], NULL);
                             } else {
-                                Message_StartTextbox(play, sDoubleTimeSkipToNightMessageIDs[CURRENT_DAY - 1], NULL);
+                                Message_StartTextbox(play, sDoubleTimeSkipToNightTextIds[CURRENT_DAY - 1], NULL);
                             }
                             play->msgCtx.ocarinaMode = OCARINA_MODE_PROCESS_DOUBLE_TIME;
                         } else {
