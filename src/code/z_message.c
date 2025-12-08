@@ -4540,7 +4540,7 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
                     msgCtx->ocarinaButtonsPosY[i] += sOcarinaButtonDropYOffset;
                 }
                 sOcarinaButtonDropYOffset += sOcarinaButtonDropYOffset;
-                if (sOcarinaButtonDropYOffset >= 0x226) {
+                if (sOcarinaButtonDropYOffset >= 550) {
                     Message_ResetOcarinaButtonAlphas();
                     if (msgCtx->msgMode == MSGMODE_SONG_PROMPT_NOTES_DROP) {
                         msgCtx->msgMode = MSGMODE_OCARINA_AWAIT_INPUT;
@@ -4976,7 +4976,7 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
                 }
 
                 sOcarinaButtonDropYOffset += sOcarinaButtonDropYOffset;
-                if (sOcarinaButtonDropYOffset >= 0x226) {
+                if (sOcarinaButtonDropYOffset >= 550) {
                     Message_ResetOcarinaButtonAlphas();
                     msgCtx->textBoxType = TEXTBOX_TYPE_BLACK;
                     msgCtx->textboxColorRed = msgCtx->textboxColorGreen = msgCtx->textboxColorBlue = 0;
