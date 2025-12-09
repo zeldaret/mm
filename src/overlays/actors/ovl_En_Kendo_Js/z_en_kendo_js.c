@@ -253,12 +253,13 @@ void EnKendoJs_HandleCourseChoice(EnKendoJs* this, PlayState* play) {
                     Audio_PlaySfx(NA_SE_SY_ERROR);
                     ENKENDOJS_START_MSG(this, play, 0x272C);
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENKENDOJS_ANIM_FLAILING);
-                } else if (gSaveContext.save.saveInfo.playerData.rupees < play->msgCtx.unk1206C) {
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENKENDOJS_ANIM_2);
+                } else if (gSaveContext.save.saveInfo.playerData.rupees < play->msgCtx.firstChoicePrice) {
                     Audio_PlaySfx(NA_SE_SY_ERROR);
                     ENKENDOJS_START_MSG(this, play, 0x2718);
                 } else {
                     Audio_PlaySfx_MessageDecide();
-                    Rupees_ChangeBy(-play->msgCtx.unk1206C);
+                    Rupees_ChangeBy(-play->msgCtx.firstChoicePrice);
                     ENKENDOJS_START_MSG(this, play, 0x2719);
                 }
                 break;
@@ -268,12 +269,12 @@ void EnKendoJs_HandleCourseChoice(EnKendoJs* this, PlayState* play) {
                     Audio_PlaySfx(NA_SE_SY_ERROR);
                     ENKENDOJS_START_MSG(this, play, 0x272C);
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENKENDOJS_ANIM_FLAILING);
-                } else if (gSaveContext.save.saveInfo.playerData.rupees < play->msgCtx.unk12070) {
+                } else if (gSaveContext.save.saveInfo.playerData.rupees < play->msgCtx.secondChoicePrice) {
                     Audio_PlaySfx(NA_SE_SY_ERROR);
                     ENKENDOJS_START_MSG(this, play, 0x2718);
                 } else {
                     Audio_PlaySfx_MessageDecide();
-                    Rupees_ChangeBy(-play->msgCtx.unk12070);
+                    Rupees_ChangeBy(-play->msgCtx.secondChoicePrice);
                     ENKENDOJS_START_MSG(this, play, 0x273A);
                 }
                 break;
