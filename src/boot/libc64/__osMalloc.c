@@ -26,25 +26,26 @@
 
 #define CHECK_ALLOC_FAILURE(arena, ptr) (void)0
 #else
-#define SET_DEBUG_INFO(node, f, l, a) \
-    { \
-        node->filename = (f); \
-        node->line = (l); \
+#define SET_DEBUG_INFO(node, f, l, a)         \
+    {                                         \
+        node->filename = (f);                 \
+        node->line = (l);                     \
         node->threadId = osGetThreadId(NULL); \
-        node->arena = (a); \
-        node->time = osGetTime(); \
-    } (void) 0
+        node->arena = (a);                    \
+        node->time = osGetTime();             \
+    }                                         \
+    (void)0
 
 #define CHECK_CORRECT_ARENA(node, arena) ((node)->arena == (arena))
 
 s32 gTotalAllocFailures = 0; // "Arena_failcnt"
 
 #define CHECK_ALLOC_FAILURE(arena, ptr) \
-    do { \
-        if ((ptr) == NULL) { \
-            gTotalAllocFailures++; \
-            (arena)->allocFailures++; \
-        } \
+    do {                                \
+        if ((ptr) == NULL) {            \
+            gTotalAllocFailures++;      \
+            (arena)->allocFailures++;   \
+        }                               \
     } while (0)
 #endif
 
@@ -157,10 +158,10 @@ u8 __osMallocIsInitialized(Arena* arena) {
 }
 
 #if MM_VERSION <= N64_JP_1_1
-void *__osMallocDebug(Arena *arena, size_t size, const char* file, int line) {
-    ArenaNode *iter;
-    ArenaNode *newNode;
-    void *alloc = NULL;
+void* __osMallocDebug(Arena* arena, size_t size, const char* file, int line) {
+    ArenaNode* iter;
+    ArenaNode* newNode;
+    void* alloc = NULL;
 
     ArenaImpl_Lock(arena);
 
@@ -207,11 +208,11 @@ void *__osMallocDebug(Arena *arena, size_t size, const char* file, int line) {
 #endif
 
 #if MM_VERSION <= N64_JP_1_1
-void *__osMallocRDebug(Arena *arena, size_t size, const char* file, int line) {
-    ArenaNode *iter;
-    ArenaNode *newNode;
+void* __osMallocRDebug(Arena* arena, size_t size, const char* file, int line) {
+    ArenaNode* iter;
+    ArenaNode* newNode;
     size_t blockSize;
-    void *alloc = NULL;
+    void* alloc = NULL;
 
     size = ALIGN16(size);
 
@@ -222,7 +223,7 @@ void *__osMallocRDebug(Arena *arena, size_t size, const char* file, int line) {
             blockSize = ALIGN16(size) + sizeof(ArenaNode);
 
             if (blockSize < iter->size) {
-                ArenaNode *next;
+                ArenaNode* next;
 
                 newNode = (ArenaNode*)(((uintptr_t)iter + iter->size) - size);
                 newNode->next = iter->next;
@@ -415,12 +416,14 @@ void __osFree(Arena* arena, void* ptr) {
 
     ArenaImpl_Lock(arena);
 
+#if MM_VERSION <= N64_JP_1_1
     // __osFree:Unauthorized release(%08x)\n
-    (void) "__osFree:不正解放(%08x)\n";
+    (void)"__osFree:不正解放(%08x)\n";
     // __osFree:Double release(%08x)\n
-    (void) "__osFree:二重解放(%08x)\n";
+    (void)"__osFree:二重解放(%08x)\n";
     // __osFree:arena(%08x) and __osMallocのarena(%08x) do not match\n
-    (void) "__osFree:arena(%08x)が__osMallocのarena(%08x)と一致しない\n";
+    (void)"__osFree:arena(%08x)が__osMallocのarena(%08x)と一致しない\n";
+#endif
 
     node = (ArenaNode*)((uintptr_t)ptr - sizeof(ArenaNode));
 
@@ -470,11 +473,11 @@ void __osFreeDebug(Arena* arena, void* ptr, const char* file, int line) {
     ArenaImpl_Lock(arena);
 
     // __osFree:Unauthorized release(%08x)\n
-    (void) "__osFree:不正解放(%08x)\n";
+    (void)"__osFree:不正解放(%08x)\n";
     // __osFree:Double release(%08x)\n
-    (void) "__osFree:二重解放(%08x)\n";
+    (void)"__osFree:二重解放(%08x)\n";
     // __osFree:arena(%08x) and __osMallocのarena(%08x) do not match\n
-    (void) "__osFree:arena(%08x)が__osMallocのarena(%08x)と一致しない\n";
+    (void)"__osFree:arena(%08x)が__osMallocのarena(%08x)と一致しない\n";
 
     node = (ArenaNode*)((uintptr_t)ptr - sizeof(ArenaNode));
 
@@ -566,7 +569,8 @@ void* __osRealloc(Arena* arena, void* ptr, size_t newSize) {
             diff = newSize - node->size;
             // Checks if the next node is contiguous to the current allocated node and it has enough space to fit the
             // new requested size
-            if (((uintptr_t)next == (uintptr_t)node + node->size + sizeof(ArenaNode)) && next->isFree && (next->size >= diff)) {
+            if (((uintptr_t)next == (uintptr_t)node + node->size + sizeof(ArenaNode)) && next->isFree &&
+                (next->size >= diff)) {
                 ArenaNode* next2 = next->next;
 
                 next->size = next->size - diff;
@@ -589,7 +593,6 @@ void* __osRealloc(Arena* arena, void* ptr, size_t newSize) {
                 ptr = newPtr;
             }
         } else if (newSize < node->size) {
-
         }
     }
 
@@ -601,7 +604,7 @@ void* __osRealloc(Arena* arena, void* ptr, size_t newSize) {
 }
 
 #if MM_VERSION <= N64_JP_1_1
-void *__osReallocDebug(Arena* arena, void* ptr, size_t newSize, const char* file, int line) {
+void* __osReallocDebug(Arena* arena, void* ptr, size_t newSize, const char* file, int line) {
     return __osRealloc(arena, ptr, newSize);
 }
 #endif
