@@ -5112,7 +5112,7 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
                         inputLineY = msgCtx->textPosYTarget + (msgCtx->lineHeight * lineNum);
                         func_80147F18(play, &gfx,
                                       msgCtx->lineIndent[lineNum] +
-                                          (s32)(16.0f * msgCtx->textCharScale * (MSGCTX_INPUT_DIGIT_INDEX + 5)) - 1,
+                                          (s32)(16.0f * msgCtx->textCharScale * (MSGCTX_INPUT_DIGIT_INDEX + 4)) - 6,
                                       inputLineY);
                         func_801496C8(play);
                         break;
