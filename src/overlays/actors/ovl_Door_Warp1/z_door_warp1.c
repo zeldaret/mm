@@ -71,7 +71,7 @@ void DoorWarp1_SetupAction(DoorWarp1* this, DoorWarp1ActionFunc actionFunc) {
 }
 
 /**
- * Returns the number of which remains are obtained inside this warp.
+ * Returns a number representing which remains was obtained inside this warp.
  * * 0: None (if it's not a boss or the remains were already obtained)
  * * 1: Odolwa
  * * 2: Goht
