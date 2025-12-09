@@ -2,6 +2,8 @@
  * ROM spec file
  */
 
+#include "include/versions.h"
+
 beginseg
     name "framebuffer_lo"
     address 0x80000500
@@ -229,7 +231,9 @@ beginseg
     include "$(BUILD_DIR)/src/boot/libc/memmove.o"
     include "$(BUILD_DIR)/src/boot/build.o"
     include "$(BUILD_DIR)/rsp/rspboot.o"
-
+#if MM_VERSION < N64_US
+    include "$(BUILD_DIR)/rsp/cic6105.o"
+#endif
 #ifdef COMPILER_GCC
     include "$(BUILD_DIR)/src/gcc_fix/missing_gcc_functions.o"
 #endif
@@ -675,6 +679,9 @@ beginseg
     include "$(BUILD_DIR)/src/code/z_snap.o"
     include "$(BUILD_DIR)/src/code/z_sub_s.o"
     include "$(BUILD_DIR)/src/code/z_circle_tex.o"
+#if MM_VERSION < N64_US
+    include "$(BUILD_DIR)/src/code/z_sram_JPN.o"
+#endif
     include "$(BUILD_DIR)/src/code/z_rumble.o"
     include "$(BUILD_DIR)/src/code/z_view.o"
     include "$(BUILD_DIR)/src/code/z_vimode.o"
@@ -684,9 +691,13 @@ beginseg
     include "$(BUILD_DIR)/src/code/z_viszbuf.o"
     include "$(BUILD_DIR)/src/code/z_vr_box.o"
     include "$(BUILD_DIR)/src/code/z_vr_box_draw.o"
+#if MM_VERSION >= N64_US
     include "$(BUILD_DIR)/src/code/z_sram_NES.o"
+#endif
     include "$(BUILD_DIR)/src/code/z_message.o"
+#if MM_VERSION >= N64_US
     include "$(BUILD_DIR)/src/code/z_message_nes.o"
+#endif
     include "$(BUILD_DIR)/src/code/z_message_staff.o"
     include "$(BUILD_DIR)/src/code/z_player_call.o"
     include "$(BUILD_DIR)/src/code/z_shrink_window.o"
@@ -765,6 +776,9 @@ beginseg
     include "$(BUILD_DIR)/src/audio/tables/sequence_table.o"
     include "$(BUILD_DIR)/src/audio/tables/samplebank_table.o"
     include "$(BUILD_DIR)/rsp/aspMain.o"
+#if MM_VERSION < N64_US
+    include "$(BUILD_DIR)/rsp/gspF3DZEX2.NoN.PosLight.fifo_legacy.o"
+#endif
     include "$(BUILD_DIR)/rsp/gspF3DZEX2.NoN.PosLight.fifo.o"
     include "$(BUILD_DIR)/rsp/gspS2DEX2.fifo.o"
     include "$(BUILD_DIR)/rsp/njpgdspMain.o"
@@ -814,8 +828,13 @@ beginseg
     compress
     include "$(BUILD_DIR)/src/overlays/gamestates/ovl_file_choose/z_file_nameset_data.o"
     include "$(BUILD_DIR)/src/overlays/gamestates/ovl_file_choose/z_file_copy_erase.o"
+#if MM_VERSION >= N64_US
     include "$(BUILD_DIR)/src/overlays/gamestates/ovl_file_choose/z_file_nameset_NES.o"
     include "$(BUILD_DIR)/src/overlays/gamestates/ovl_file_choose/z_file_choose_NES.o"
+#else
+    include "$(BUILD_DIR)/src/overlays/gamestates/ovl_file_choose/z_file_nameset_JPN.o"
+    include "$(BUILD_DIR)/src/overlays/gamestates/ovl_file_choose/z_file_choose_JPN.o"
+#endif
     include "$(BUILD_DIR)/src/overlays/gamestates/ovl_file_choose/ovl_file_choose_reloc.o"
 endseg
 
@@ -835,7 +854,11 @@ beginseg
     include "$(BUILD_DIR)/src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_map.o"
     include "$(BUILD_DIR)/src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_mask.o"
     include "$(BUILD_DIR)/src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_prompt.o"
+#if MM_VERSION >= N64_US
     include "$(BUILD_DIR)/src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.o"
+#else
+    include "$(BUILD_DIR)/src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_JPN.o"
+#endif
     include "$(BUILD_DIR)/src/overlays/kaleido_scope/ovl_kaleido_scope/ovl_kaleido_scope_reloc.o"
 endseg
 
@@ -1237,6 +1260,15 @@ beginseg
     include "$(BUILD_DIR)/src/overlays/actors/ovl_Bg_F40_Flift/z_bg_f40_flift.o"
     include "$(BUILD_DIR)/src/overlays/actors/ovl_Bg_F40_Flift/ovl_Bg_F40_Flift_reloc.o"
 endseg
+
+#if MM_VERSION < N64_US
+beginseg
+    name "ovl_Bg_Heavy_Block"
+    compress
+    include "$(BUILD_DIR)/src/overlays/actors/ovl_Bg_Heavy_Block/z_bg_heavy_block.o"
+    include "$(BUILD_DIR)/src/overlays/actors/ovl_Bg_Heavy_Block/ovl_Bg_Heavy_Block_reloc.o"
+endseg
+#endif
 
 beginseg
     name "ovl_Obj_Mure"
