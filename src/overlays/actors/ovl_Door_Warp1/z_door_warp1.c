@@ -510,7 +510,7 @@ void func_808B98A8(DoorWarp1* this, PlayState* play) {
 
 void func_808B9B30(DoorWarp1* this, PlayState* play) {
     if (fabsf(this->dyna.actor.xzDistToPlayer) >= 60.0f) {
-        if (DoorWarp1_GetRemains(this, play)) {
+        if (DoorWarp1_GetRemains(this, play) != 0) {
             this->unk_1A0 = (DmHina*)Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, ACTOR_DM_HINA,
                                                         this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
                                                         this->dyna.actor.world.pos.z, 0, 0, 0,
@@ -538,7 +538,7 @@ void func_808B9BE8(DoorWarp1* this, PlayState* play) {
     }
 
     this->dyna.actor.parent = NULL;
-    if (DoorWarp1_GetRemains(this, play)) {
+    if (DoorWarp1_GetRemains(this, play) != 0) {
         this->unk_202 = 1;
         DoorWarp1_SetupAction(this, func_808B9CE8);
     } else {
