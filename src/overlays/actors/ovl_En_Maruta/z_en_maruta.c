@@ -737,7 +737,7 @@ void EnMaruta_Draw(Actor* thisx, PlayState* play) {
 
     if (this->shape == ENMARUTA_SHAPE_WHOLE) {
         MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
-        gSPDisplayList(POLY_OPA_DISP++, gPracticeLogWhole);
+        gSPDisplayList(POLY_OPA_DISP++, gPracticeLogWholeDL);
     } else {
         translate = sTranslationVectorsToRecoilAxis[this->shape];
 
