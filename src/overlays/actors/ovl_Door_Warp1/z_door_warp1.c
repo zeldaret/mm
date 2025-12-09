@@ -553,7 +553,7 @@ void func_808B9CE8(DoorWarp1* this, PlayState* play) {
     }
 
     if (!Actor_HasParent(&this->dyna.actor, play)) {
-        Actor_OfferGetItem(&this->dyna.actor, play, (GI_REMAINS_ODOLWA - 1) + DoorWarp1_GetRemains(this, play), 30.0f,
+        Actor_OfferGetItem(&this->dyna.actor, play, DoorWarp1_GetRemains(this, play) + (GI_REMAINS_ODOLWA - 1), 30.0f,
                            80.0f);
         return;
     }
