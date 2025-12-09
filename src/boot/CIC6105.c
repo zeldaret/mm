@@ -75,22 +75,22 @@ void CIC6105_Destroy(void) {
 void CIC6105_ScheduleCICTask(void) {
     // TODO: do something with the hardcoded sizes
     static OSTask D_80097AA0_unknown = {
-        M_CICTASK, // type
-        0, // flags
-        rspbootTextStart, // ucode_boot
-        0x000003E8, // ucode_boot_size
-        cic6105TextStart, // ucode
-        0x00000020, // ucode_size
+        M_CICTASK,           // type
+        0,                   // flags
+        rspbootTextStart,    // ucode_boot
+        0x000003E8,          // ucode_boot_size
+        cic6105TextStart,    // ucode
+        0x00000020,          // ucode_size
         (u64*)gBuildCreator, // ucode_data
-        0x00000008, // ucode_data_size
-        NULL, // dram_stack
-        0x00000000, // dram_stack_size
-        NULL, // output_buff
-        NULL, // output_buff_size
-        NULL, // data_ptr
-        0x00000000, // data_size
-        NULL, // yield_data_ptr
-        0x00000000, // yield_data_size
+        0x00000008,          // ucode_data_size
+        NULL,                // dram_stack
+        0x00000000,          // dram_stack_size
+        NULL,                // output_buff
+        NULL,                // output_buff_size
+        NULL,                // data_ptr
+        0x00000000,          // data_size
+        NULL,                // yield_data_ptr
+        0x00000000,          // yield_data_size
     };
 
     OSScTask task;
