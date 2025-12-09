@@ -13,10 +13,6 @@
 extern u64 rspbootTextStart[];
 extern u64 rspbootTextEnd[];
 
-// TODO: maybe move to a different header, since this is not part of the vanilla ucode.h file
-extern u64 cic6105TextStart[];
-extern u64 cic6105TextEnd[];
-
 extern u64 aspMainTextStart[];
 extern u64 aspMainTextEnd[];
 extern u64 aspMainDataStart[];

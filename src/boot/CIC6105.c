@@ -6,7 +6,11 @@
 #include "regs.h"
 #include "scheduler.h"
 
-#pragma increment_block_number "n64-us:200"
+#pragma increment_block_number "n64-us:188"
+
+// TODO: Consider moving to a header file.
+extern u64 cic6105TextStart[];
+extern u64 cic6105TextEnd[];
 
 s32 gCICAddr1Val;
 s32 gCICAddr2Val;
