@@ -11,6 +11,6 @@
         <DList Name="gPracticeLogTopRightCornerChunkDL" Offset="0x2850" /> <!-- Original name is "parts_6_model" -->
         <DList Name="gPracticeLogTopLeftBigChunkDL" Offset="0x2948" /> <!-- Original name is "parts_7_model" -->
         <DList Name="gPracticeLogTopRightBigChunkDL" Offset="0x2AE0" /> <!-- Original name is "parts_8_model" -->
-        <DList Name="gPracticeLogWhole" Offset="0x2EC0" /> <!-- Original name is "kiretenaimaruta_model" -->
+        <DList Name="gPracticeLogWholeDL" Offset="0x2EC0" /> <!-- Original name is "kiretenaimaruta_model" -->
     </File>
 </Root>
