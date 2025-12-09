@@ -197,15 +197,15 @@ typedef struct MessageContext {
     /* 0x11F00 */ struct OcarinaStaff* ocarinaStaff;
     /* 0x11F04 */ u16 currentTextId;
     /* 0x11F06 */ u16 choiceTextId; // s16?
-    /* 0x11F08 */ u16 unk11F08;
+    /* 0x11F08 */ u16 textBoxProperties;
     /* 0x11F0A */ u8 textBoxType;
     /* 0x11F0B */ u8 textBoxPos;
     /* 0x11F0C */ u8 unk11F0C;
     /* 0x11F10 */ s32 msgLength;
     /* 0x11F14 */ u16 nextTextId;
     /* 0x11F16 */ u16 itemId;
-    /* 0x11F18 */ u8 unk11F18;
-    /* 0x11F1A */ s16 unk11F1A[3];
+    /* 0x11F18 */ u8 hasChoices;
+    /* 0x11F1A */ s16 lineIndent[3];
     /* 0x11F20 */ UNK_TYPE1 unk11F20[0x2];
     /* 0x11F22 */ u8 msgMode;
     /* 0x11F23 */ UNK_TYPE1 unk11F23;
@@ -219,9 +219,9 @@ typedef struct MessageContext {
     /* 0x11FF2 */ u16 textUnskippable;
     /* 0x11FF4 */ s16 textPosX;
     /* 0x11FF6 */ s16 textPosY;
-    /* 0x11FF8 */ s16 unk11FF8;
-    /* 0x11FFA */ s16 unk11FFA;
-    /* 0x11FFC */ s16 unk11FFC;
+    /* 0x11FF8 */ s16 textPosXTarget;
+    /* 0x11FFA */ s16 textPosYTarget;
+    /* 0x11FFC */ s16 lineHeight;
     /* 0x11FFE */ s16 choicePosY[0x3];
     /* 0x12004 */ s16 textboxXTarget;
     /* 0x12006 */ s16 textboxYTarget;
@@ -260,12 +260,12 @@ typedef struct MessageContext {
     /* 0x12046 */ s16 blockSunsSong;
     /* 0x12048 */ u8 ocarinaButtonIndex;
     /* 0x1204A */ s16 ocarinaButtonsPosY[5];
-    /* 0x12054 */ s16 unk12054[6]; // First, second and third digits in lottery code guess
+    /* 0x12054 */ s16 codeGuessDigits[6];
     /* 0x1205A */ UNK_TYPE1 unk12060[0x8];
     /* 0x12068 */ s16 textboxX;
     /* 0x1206A */ s16 textboxY;
-    /* 0x1206C */ s32 unk1206C;
-    /* 0x12070 */ s32 unk12070;
+    /* 0x1206C */ s32 firstChoicePrice;
+    /* 0x12070 */ s32 secondChoicePrice;
     /* 0x12074 */ s32 unk12074;
     /* 0x12078 */ s32 rupeesSelected; // Used for bank and doggy racetrack bet
     /* 0x1207C */ s32 rupeesTotal; // Used for bank and doggy racetrack bet
@@ -292,9 +292,9 @@ typedef struct MessageContext {
     /* 0x120B2 */ u8 bombersNotebookEventQueue[10];
     /* 0x120BC */ u16 hudVisibility;
 #if MM_VERSION >= N64_US
-    /* 0x120BE */ s16 unk120BE;
-    /* 0x120C0 */ s16 unk120C0;
-    /* 0x120C2 */ s16 unk120C2;
+    /* 0x120BE */ s16 inputLineNumber;
+    /* 0x120C0 */ s16 codeBufOffset;
+    /* 0x120C2 */ s16 inputDigitIndex;
     /* 0x120C4 */ s32 unk120C4;
     /* 0x120C8 */ s16 unk120C8;
     /* 0x120CA */ s16 unk120CA;
@@ -304,7 +304,7 @@ typedef struct MessageContext {
     /* 0x120D2 */ s16 unk120D2;
     /* 0x120D4 */ s16 unk120D4;
     /* 0x120D6 */ s16 unk120D6;
-    /* 0x120D8 */ s16 unk120D8;
+    /* 0x120D8 */ s16 lineCount;
     /* 0x120DA */ UNK_TYPE1 unk_120DA[0x6];
 #endif
 } MessageContext; // size = 0x120E0
