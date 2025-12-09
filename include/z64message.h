@@ -4,6 +4,8 @@
 #include "PR/ultratypes.h"
 #include "stdbool.h"
 
+#include "versions.h"
+
 #include "z64bombers_notebook.h"
 #include "z64font.h"
 #include "z64view.h"
@@ -15,24 +17,33 @@ struct OcarinaStaff;
 struct PlayState;
 
 typedef enum TextBoxType {
-    /* 0x00 */ TEXTBOX_TYPE_0,
-    /* 0x01 */ TEXTBOX_TYPE_1,
-    /* 0x02 */ TEXTBOX_TYPE_2,
-    /* 0x03 */ TEXTBOX_TYPE_3,
+    /* 0x00 */ TEXTBOX_TYPE_BLACK,
+    /* 0x01 */ TEXTBOX_TYPE_WOODEN,
+    /* 0x02 */ TEXTBOX_TYPE_BLUE_FADED,
+    /* 0x03 */ TEXTBOX_TYPE_OCARINA,
     /* 0x04 */ TEXTBOX_TYPE_4,
-    /* 0x05 */ TEXTBOX_TYPE_5,
-    /* 0x06 */ TEXTBOX_TYPE_6,
-    /* 0x07 */ TEXTBOX_TYPE_7,
-    /* 0x08 */ TEXTBOX_TYPE_8,
-    /* 0x09 */ TEXTBOX_TYPE_9,
+    /* 0x05 */ TEXTBOX_TYPE_CLEAR,
+    /* 0x06 */ TEXTBOX_TYPE_DISPLAY_ALL,
+    /* 0x07 */ TEXTBOX_TYPE_CLEAR_DISPLAY_ALL,
+    /* 0x08 */ TEXTBOX_TYPE_BLUE,
+    /* 0x09 */ TEXTBOX_TYPE_PAUSE_INFO,
     /* 0x0A */ TEXTBOX_TYPE_A,
     /* 0x0B */ TEXTBOX_TYPE_B,
-    /* 0x0C */ TEXTBOX_TYPE_C,
-    /* 0x0D */ TEXTBOX_TYPE_D,
-    /* 0x0E */ TEXTBOX_TYPE_E,
+    /* 0x0C */ TEXTBOX_TYPE_TITLE_CARD,
+    /* 0x0D */ TEXTBOX_TYPE_NOTEBOOK_NOTIFICATION,
+    /* 0x0E */ TEXTBOX_TYPE_OCARINA_FREE_PLAY,
     /* 0x0F */ TEXTBOX_TYPE_F,
     /* 0x10 */ TEXTBOX_TYPE_MAX
 } TextBoxType;
+
+typedef enum TextBoxBackground {
+    /* 0x0 */ TEXTBOX_BG_DEFAULT,
+    /* 0x1 */ TEXTBOX_BG_WOODEN,
+    /* 0x2 */ TEXTBOX_BG_OCARINA,
+    /* 0x3 */ TEXTBOX_BG_FADED,
+    /* 0x4 */ TEXTBOX_BG_NOTEBOOK,
+    /* 0xE */ TEXTBOX_BG_NONE = 14,
+} TextBoxBackground;
 
 #define TEXTBOX_ENDTYPE_DEFAULT    0x00
 
@@ -211,7 +222,7 @@ typedef struct MessageContext {
     /* 0x11FF8 */ s16 unk11FF8;
     /* 0x11FFA */ s16 unk11FFA;
     /* 0x11FFC */ s16 unk11FFC;
-    /* 0x11FFE */ s16 unk11FFE[0x3];
+    /* 0x11FFE */ s16 choicePosY[0x3];
     /* 0x12004 */ s16 textboxXTarget;
     /* 0x12006 */ s16 textboxYTarget;
     /* 0x12008 */ s16 unk12008;
@@ -260,7 +271,9 @@ typedef struct MessageContext {
     /* 0x1207C */ s32 rupeesTotal; // Used for bank and doggy racetrack bet
     /* 0x12080 */ struct MessageTableEntry* messageTable;
     /* 0x12084 */ struct MessageTableEntry* messageTableNES;
+#if MM_VERSION >= N64_US
     /* 0x12088 */ UNK_TYPE1 unk12088[0x4];
+#endif
     /* 0x1208C */ struct MessageTableEntry* messageTableCredits;
     /* 0x12090 */ s16 textIsCredits;
     /* 0x12092 */ s16 messageHasSetSfx;
@@ -278,6 +291,7 @@ typedef struct MessageContext {
     /* 0x120B1 */ u8 bombersNotebookEventQueueCount;
     /* 0x120B2 */ u8 bombersNotebookEventQueue[10];
     /* 0x120BC */ u16 hudVisibility;
+#if MM_VERSION >= N64_US
     /* 0x120BE */ s16 unk120BE;
     /* 0x120C0 */ s16 unk120C0;
     /* 0x120C2 */ s16 unk120C2;
@@ -292,6 +306,7 @@ typedef struct MessageContext {
     /* 0x120D6 */ s16 unk120D6;
     /* 0x120D8 */ s16 unk120D8;
     /* 0x120DA */ UNK_TYPE1 unk_120DA[0x6];
+#endif
 } MessageContext; // size = 0x120E0
 
 bool Message_ShouldAdvance(struct PlayState* play);

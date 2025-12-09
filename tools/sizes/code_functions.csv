@@ -2343,7 +2343,7 @@ asm/non_matchings/code/z_message/Message_DrawTextboxIcon.s,Message_DrawTextboxIc
 asm/non_matchings/code/z_message/func_80147F18.s,func_80147F18,0x80147F18,0x190
 asm/non_matchings/code/z_message/func_80148558.s,func_80148558,0x80148558,0x190
 asm/non_matchings/code/z_message/Message_HandleChoiceSelection.s,Message_HandleChoiceSelection,0x80148B98,0x49
-asm/non_matchings/code/z_message/func_80148CBC.s,func_80148CBC,0x80148CBC,0x2A
+asm/non_matchings/code/z_message/Message_DrawChoiceIcon.s,Message_DrawChoiceIcon,0x80148CBC,0x2A
 asm/non_matchings/code/z_message/func_80148D64.s,func_80148D64,0x80148D64,0xB9
 asm/non_matchings/code/z_message/func_80149048.s,func_80149048,0x80149048,0x65
 asm/non_matchings/code/z_message/func_801491DC.s,func_801491DC,0x801491DC,0x9E
@@ -2363,7 +2363,7 @@ asm/non_matchings/code/z_message/Message_DecodeHeader.s,Message_DecodeHeader,0x8
 asm/non_matchings/code/z_message/Message_LoadTime.s,Message_LoadTime,0x8014D304,0xCA
 asm/non_matchings/code/z_message/Message_LoadOwlWarpText.s,Message_LoadOwlWarpText,0x8014D62C,0x62
 asm/non_matchings/code/z_message/Message_Decode.s,Message_Decode,0x8014D7B4,0xCB4
-asm/non_matchings/code/z_message/func_80150A84.s,func_80150A84,0x80150A84,0xA1
+asm/non_matchings/code/z_message/Message_SetTextboxColor.s,Message_SetTextboxColor,0x80150A84,0xA1
 asm/non_matchings/code/z_message/Message_OpenText.s,Message_OpenText,0x80150D08,0x1EA
 asm/non_matchings/code/z_message/Message_PauseMenu_ShowDescription.s,Message_PauseMenu_ShowDescription,0x801514B0,0x100
 asm/non_matchings/code/z_message/Message_StartTextbox.s,Message_StartTextbox,0x801518B0,0x22
