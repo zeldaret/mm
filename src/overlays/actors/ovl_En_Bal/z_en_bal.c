@@ -821,9 +821,9 @@ void EnBal_TryPurchaseMap(EnBal* this, PlayState* play) {
         if (play->msgCtx.choiceIndex != TINGLE_MAPCHOICE_CANCEL) {
             // Get price depending on which map player wants to buy
             if (play->msgCtx.choiceIndex == TINGLE_MAPCHOICE_PROXIMAL) {
-                price = play->msgCtx.unk1206C;
+                price = play->msgCtx.firstChoicePrice;
             } else {
-                price = play->msgCtx.unk12070;
+                price = play->msgCtx.secondChoicePrice;
             }
 
             if (gSaveContext.save.saveInfo.playerData.rupees < price) {
