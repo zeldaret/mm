@@ -360,7 +360,7 @@ void Message_DrawTextboxIcon(PlayState* play, Gfx** gfxP, s16 x, s16 y) {
     }
 }
 
-void func_80147F18(PlayState* play, Gfx** gfxP, s16 arg2, s16 arg3) {
+void Message_HighlightInputDigitAtCursor(PlayState* play, Gfx** gfxP, s16 x, s16 y) {
     static Color_RGB16 D_801CFD10[] = {
         { 0, 80, 200 },
         { 50, 130, 255 },
@@ -449,8 +449,8 @@ void func_80147F18(PlayState* play, Gfx** gfxP, s16 arg2, s16 arg3) {
         gDPSetRenderMode(gfx++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
         gDPSetCombineMode(gfx++, G_CC_PRIMITIVE, G_CC_PRIMITIVE);
         gDPSetPrimColor(gfx++, 0, 0, D_801CFD28, D_801CFD2C, D_801CFD30, 120);
-        gDPFillRectangle(gfx++, arg2 + 3, arg3, arg2 + 17, arg3 + 11);
-        gDPFillRectangle(gfx++, arg2 + 6, arg3 - 2, arg2 + 14, arg3 + 13);
+        gDPFillRectangle(gfx++, x + 3, y, x + 17, y + 11);
+        gDPFillRectangle(gfx++, x + 6, y - 2, x + 14, y + 13);
         gDPPipeSync(gfx++);
 
         msgCtx->stateTimer++;
@@ -458,7 +458,7 @@ void func_80147F18(PlayState* play, Gfx** gfxP, s16 arg2, s16 arg3) {
     }
 }
 
-void func_80148558(PlayState* play, Gfx** gfxP, s16 arg2, s16 arg3) {
+void Message_HighlightAllInputDigits(PlayState* play, Gfx** gfxP, s16 x, s16 y) {
     static Color_RGB16 D_801CFD48[] = {
         { 0, 80, 200 },
         { 50, 130, 255 },
@@ -547,8 +547,8 @@ void func_80148558(PlayState* play, Gfx** gfxP, s16 arg2, s16 arg3) {
         gDPSetRenderMode(gfx++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
         gDPSetCombineMode(gfx++, G_CC_PRIMITIVE, G_CC_PRIMITIVE);
         gDPSetPrimColor(gfx++, 0, 0, D_801CFD60, D_801CFD64, D_801CFD68, 120);
-        gDPFillRectangle(gfx++, arg2 + 3, arg3, arg2 + 29, arg3 + 11);
-        gDPFillRectangle(gfx++, arg2 + 6, arg3 - 2, arg2 + 26, arg3 + 13);
+        gDPFillRectangle(gfx++, x + 3, y, x + 29, y + 11);
+        gDPFillRectangle(gfx++, x + 6, y - 2, x + 26, y + 13);
         gDPPipeSync(gfx++);
 
         msgCtx->stateTimer++;
@@ -597,7 +597,7 @@ void Message_DrawChoiceIcon(PlayState* play, Gfx** gfxP, u8 numChoices) {
     Message_DrawTextboxIcon(play, gfxP, msgCtx->textPosX, msgCtx->textPosY);
 }
 
-void func_80148D64(PlayState* play) {
+void Message_ControlBankInput(PlayState* play) {
     static s16 sAnalogStickHeld = false;
     MessageContext* msgCtx = &play->msgCtx;
 
@@ -642,7 +642,7 @@ void func_80148D64(PlayState* play) {
     msgCtx->rupeesSelected += msgCtx->decodedBuffer.schar[MSGCTX_CODE_BUFFER_OFFSET + 2] - '0';
 }
 
-void func_80149048(PlayState* play) {
+void Message_ControlDoggyRaceBetInput(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
 
     if (msgCtx->stickAdjY <= -30) {
@@ -666,7 +666,7 @@ void func_80149048(PlayState* play) {
     msgCtx->rupeesSelected = (msgCtx->decodedBuffer.schar[MSGCTX_CODE_BUFFER_OFFSET] - '0') * 10;
 }
 
-void func_801491DC(PlayState* play) {
+void Message_ControlBomberCodeInput(PlayState* play) {
     static s16 sAnalogStickHeld = false;
     MessageContext* msgCtx = &play->msgCtx;
 
@@ -711,7 +711,7 @@ void func_801491DC(PlayState* play) {
     }
 }
 
-void func_80149454(PlayState* play) {
+void Message_ControlLotteryCodeInput(PlayState* play) {
     static s16 sAnalogStickHeld = false;
     MessageContext* msgCtx = &play->msgCtx;
 
@@ -5071,49 +5071,53 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
                     case TEXTBOX_ENDTYPE_INPUT_BANK:
                         lineNum = MSGCTX_INPUT_LINE_NUMBER;
                         inputLineY = msgCtx->textPosYTarget + (msgCtx->lineHeight * lineNum);
-                        func_80147F18(play, &gfx,
-                                      msgCtx->lineIndent[lineNum] +
-                                          (s32)(16.0f * msgCtx->textCharScale * (MSGCTX_INPUT_DIGIT_INDEX + 5)) - 1,
-                                      inputLineY);
-                        func_80148D64(play);
+                        Message_HighlightInputDigitAtCursor(
+                            play, &gfx,
+                            msgCtx->lineIndent[lineNum] +
+                                (s32)(16.0f * msgCtx->textCharScale * (MSGCTX_INPUT_DIGIT_INDEX + 5)) - 1,
+                            inputLineY);
+                        Message_ControlBankInput(play);
                         break;
 
                     case TEXTBOX_ENDTYPE_INPUT_DOGGY_RACETRACK_BET:
                         lineNum = MSGCTX_INPUT_LINE_NUMBER;
                         inputLineY = msgCtx->textPosYTarget + (msgCtx->lineHeight * lineNum);
-                        func_80148558(play, &gfx,
-                                      msgCtx->lineIndent[lineNum] + (s32)(16.0f * msgCtx->textCharScale * 5.0f) - 1,
-                                      inputLineY);
-                        func_80149048(play);
+                        Message_HighlightAllInputDigits(
+                            play, &gfx, msgCtx->lineIndent[lineNum] + (s32)(16.0f * msgCtx->textCharScale * 5.0f) - 1,
+                            inputLineY);
+                        Message_ControlDoggyRaceBetInput(play);
                         break;
 
                     case TEXTBOX_ENDTYPE_INPUT_BOMBER_CODE:
                         lineNum = MSGCTX_INPUT_LINE_NUMBER;
                         inputLineY = msgCtx->textPosYTarget + (msgCtx->lineHeight * lineNum);
-                        func_80147F18(play, &gfx,
-                                      msgCtx->lineIndent[lineNum] +
-                                          (s32)(16.0f * msgCtx->textCharScale * (MSGCTX_INPUT_DIGIT_INDEX + 5)) - 1,
-                                      inputLineY);
-                        func_801491DC(play);
+                        Message_HighlightInputDigitAtCursor(
+                            play, &gfx,
+                            msgCtx->lineIndent[lineNum] +
+                                (s32)(16.0f * msgCtx->textCharScale * (MSGCTX_INPUT_DIGIT_INDEX + 5)) - 1,
+                            inputLineY);
+                        Message_ControlBomberCodeInput(play);
                         break;
 
                     case TEXTBOX_ENDTYPE_INPUT_LOTTERY_CODE:
                         lineNum = MSGCTX_INPUT_LINE_NUMBER;
                         inputLineY = msgCtx->textPosYTarget + (msgCtx->lineHeight * lineNum);
-                        func_80147F18(play, &gfx,
-                                      msgCtx->lineIndent[lineNum] +
-                                          (s32)(16.0f * msgCtx->textCharScale * (MSGCTX_INPUT_DIGIT_INDEX + 5)) - 1,
-                                      inputLineY);
-                        func_80149454(play);
+                        Message_HighlightInputDigitAtCursor(
+                            play, &gfx,
+                            msgCtx->lineIndent[lineNum] +
+                                (s32)(16.0f * msgCtx->textCharScale * (MSGCTX_INPUT_DIGIT_INDEX + 5)) - 1,
+                            inputLineY);
+                        Message_ControlLotteryCodeInput(play);
                         break;
 
                     case TEXTBOX_ENDTYPE_64:
                         lineNum = MSGCTX_INPUT_LINE_NUMBER;
                         inputLineY = msgCtx->textPosYTarget + (msgCtx->lineHeight * lineNum);
-                        func_80147F18(play, &gfx,
-                                      msgCtx->lineIndent[lineNum] +
-                                          (s32)(16.0f * msgCtx->textCharScale * (MSGCTX_INPUT_DIGIT_INDEX + 4)) - 6,
-                                      inputLineY);
+                        Message_HighlightInputDigitAtCursor(
+                            play, &gfx,
+                            msgCtx->lineIndent[lineNum] +
+                                (s32)(16.0f * msgCtx->textCharScale * (MSGCTX_INPUT_DIGIT_INDEX + 4)) - 6,
+                            inputLineY);
                         func_801496C8(play);
                         break;
 
