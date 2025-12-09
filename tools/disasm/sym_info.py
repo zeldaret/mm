@@ -34,10 +34,10 @@ def main():
         description="Print information on a symbol/address"
         " (and possibly surrounding symbols)"
         " from the spimdisasm disassembly context saved in"
-        " expected/build/VERSION/context.csv"
+        " expected/VERSION/asm/context.csv"
     )
     parser.add_argument("sym_or_vma")
-    default_version = "n64-us"
+    default_version = "n64-jp-1.1"
     parser.add_argument(
         "-v",
         "--version",
@@ -90,7 +90,7 @@ def main():
 
     syms_by_section_by_file = dict[str, dict[str, list[Sym]]]()
 
-    context_csv_p = Path(f"expected/build/{args.mm_version}/context.csv")
+    context_csv_p = Path(f"extracted/{args.mm_version}/asm/context.csv")
     if not context_csv_p.exists():
         print(f"Context file does not exist: {context_csv_p}")
         print(f"Hint: run `make VERSION={args.mm_version} disasm`")

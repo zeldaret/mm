@@ -790,7 +790,9 @@ typedef enum PlayerCsAction {
     /* 0x77 */ PLAYER_CSACTION_119,
     /* 0x78 */ PLAYER_CSACTION_120,
     /* 0x79 */ PLAYER_CSACTION_121,
+#if MM_VERSION >= N64_US
     /* 0x7A */ PLAYER_CSACTION_122,
+#endif
     /* 0x7B */ PLAYER_CSACTION_123,
     /* 0x7C */ PLAYER_CSACTION_124,
     /* 0x7D */ PLAYER_CSACTION_125,

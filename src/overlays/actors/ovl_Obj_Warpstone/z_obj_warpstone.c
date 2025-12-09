@@ -136,16 +136,20 @@ void ObjWarpstone_Update(Actor* thisx, PlayState* play) {
     if (this->isTalking) {
         if (Actor_TextboxIsClosing(&this->dyna.actor, play)) {
             this->isTalking = false;
-        } else if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
-            if (play->msgCtx.choiceIndex != 0) {
-                Audio_PlaySfx_MessageDecide();
-                play->msgCtx.msgMode = MSGMODE_OWL_SAVE_0;
-                play->msgCtx.unk120D6 = 0;
-                play->msgCtx.unk120D4 = 0;
-                gSaveContext.save.owlWarpId = OBJ_WARPSTONE_GET_OWL_WARP_ID(&this->dyna.actor);
-            } else {
-                Message_CloseTextbox(play);
+        } else {
+#if MM_VERSION >= N64_US
+            if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
+                if (play->msgCtx.choiceIndex != 0) {
+                    Audio_PlaySfx_MessageDecide();
+                    play->msgCtx.msgMode = MSGMODE_OWL_SAVE_0;
+                    play->msgCtx.unk120D6 = 0;
+                    play->msgCtx.unk120D4 = 0;
+                    gSaveContext.save.owlWarpId = OBJ_WARPSTONE_GET_OWL_WARP_ID(&this->dyna.actor);
+                } else {
+                    Message_CloseTextbox(play);
+                }
             }
+#endif
         }
     } else if (Actor_TalkOfferAccepted(&this->dyna.actor, &play->state)) {
         this->isTalking = true;

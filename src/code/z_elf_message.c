@@ -74,7 +74,7 @@ u16 QuestHint_GetTatlTextId(PlayState* play) {
         return 0x223;
     }
 
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_73_80)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_ENTERED_BOMBERS_CODE)) {
         return 0x222;
     }
 

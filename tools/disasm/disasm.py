@@ -6,13 +6,13 @@
 from __future__ import annotations
 
 import argparse
+import colorama
 from pathlib import Path
 from typing import BinaryIO
 
 import spimdisasm
 
 from file_addresses import DmaFile, parse_file_addresses, get_z_name_for_overlay
-
 
 def load_file_splits(
     context: spimdisasm.common.Context,
@@ -113,15 +113,11 @@ def main():
             file_splits = load_file_splits(context, args.config_dir, dma_file, f)
             all_file_splits.append(file_splits)
 
-    progress_str = ""
-
     print("Analyzing...")
     for i, file_splits in enumerate(all_file_splits):
         f = i / len(all_file_splits)
 
-        spimdisasm.common.Utils.printQuietless(f'{len(progress_str) * " "}\r', end="")
-        progress_str = f'{f*100:3.0f}% Analyzing {file_splits.name}\r'
-        spimdisasm.common.Utils.printQuietless(progress_str, end="", flush=True)
+        spimdisasm.common.Utils.printQuietless(f'{colorama.ansi.clear_line()}{f*100:3.0f}% Analyzing {file_splits.name}\r', end="", flush=True)
 
         file_splits.analyze()
     print()
@@ -136,9 +132,7 @@ def main():
     for i, file_splits in enumerate(all_file_splits):
         f = i / len(all_file_splits)
 
-        spimdisasm.common.Utils.printQuietless(f'{len(progress_str) * " "} \r', end="")
-        progress_str = f'{f*100:3.0f}% Writing {file_splits.name}\r'
-        spimdisasm.common.Utils.printQuietless(progress_str, end="", flush=True)
+        spimdisasm.common.Utils.printQuietless(f'{colorama.ansi.clear_line()}{f*100:3.0f}% Writing {file_splits.name}\r', end="", flush=True)
 
         for sectDict in file_splits.sectionsDict.values():
             for name, section in sectDict.items():
@@ -162,9 +156,7 @@ def main():
         for i, file_splits in enumerate(all_file_splits):
             f = i / len(all_file_splits)
 
-            spimdisasm.common.Utils.printQuietless(f'{len(progress_str) * " "} \r', end="")
-            progress_str = f'{f*100:3.0f}% Writing {file_splits.name}\r'
-            spimdisasm.common.Utils.printQuietless(progress_str, end="", flush=True)
+            spimdisasm.common.Utils.printQuietless(f'{colorama.ansi.clear_line()}{f*100:3.0f}% Writing {file_splits.name}\r', end="", flush=True)
 
             for section_name, text_section in file_splits.sectionsDict[
                 spimdisasm.common.FileSectionType.Text

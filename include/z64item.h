@@ -1,6 +1,8 @@
 #ifndef Z64ITEM_H
 #define Z64ITEM_H
 
+#include "versions.h"
+
 #define DROP_TABLE_SIZE 16
 #define DROP_TABLE_NUMBER 17
 
@@ -180,19 +182,57 @@ typedef enum ItemId {
     /* 0x21 */ ITEM_ZORA_EGG,
     /* 0x22 */ ITEM_GOLD_DUST,
     /* 0x23 */ ITEM_MUSHROOM,
+#if MM_VERSION < N64_US
+               ITEM_24_JP,
+               ITEM_25_JP,
+#endif
     /* 0x24 */ ITEM_SEAHORSE,
     /* 0x25 */ ITEM_CHATEAU,
     /* 0x26 */ ITEM_HYLIAN_LOACH,
+#if MM_VERSION < N64_US
+               ITEM_29_JP,
+               ITEM_2A_JP,
+               ITEM_2B_JP,
+               ITEM_2C_JP,
+               ITEM_2D_JP,
+               ITEM_2E_JP,
+#endif
     /* 0x27 */ ITEM_OBABA_DRINK,
     /* 0x28 */ ITEM_MOONS_TEAR,
     /* 0x29 */ ITEM_DEED_LAND,
     /* 0x2A */ ITEM_DEED_SWAMP,
     /* 0x2B */ ITEM_DEED_MOUNTAIN,
     /* 0x2C */ ITEM_DEED_OCEAN,
+#if MM_VERSION < N64_US
+               ITEM_35_JP,
+               ITEM_36_JP,
+               ITEM_37_JP,
+               ITEM_38_JP,
+               ITEM_39_JP,
+#endif
     /* 0x2D */ ITEM_ROOM_KEY,
     /* 0x2E */ ITEM_LETTER_MAMA,
+#if MM_VERSION < N64_US
+               ITEM_3C_JP,
+               ITEM_3D_JP,
+               ITEM_3E_JP,
+               ITEM_3F_JP,
+               ITEM_40_JP,
+               ITEM_41_JP,
+               ITEM_42_JP,
+               ITEM_43_JP,
+#endif
     /* 0x2F */ ITEM_LETTER_TO_KAFEI,
     /* 0x30 */ ITEM_PENDANT_OF_MEMORIES,
+#if MM_VERSION < N64_US
+               ITEM_46_JP,
+               ITEM_47_JP,
+               ITEM_48_JP,
+               ITEM_49_JP,
+               ITEM_4A_JP,
+               ITEM_4B_JP,
+               ITEM_4C_JP,
+#endif
     /* 0x31 */ ITEM_TINGLE_MAP,
     /* 0x32 */ ITEM_MASK_DEKU,
     /* 0x33 */ ITEM_MASK_GORON,
@@ -221,12 +261,20 @@ typedef enum ItemId {
     /* 0x4A */ ITEM_BOW_FIRE,
     /* 0x4B */ ITEM_BOW_ICE,
     /* 0x4C */ ITEM_BOW_LIGHT,
+#if MM_VERSION < N64_US
+               ITEM_69_JP,
+               ITEM_6A_JP,
+               ITEM_6B_JP,
+#endif
     /* 0x4D */ ITEM_SWORD_KOKIRI,
     /* 0x4E */ ITEM_SWORD_RAZOR,
     /* 0x4F */ ITEM_SWORD_GILDED,
     /* 0x50 */ ITEM_SWORD_DEITY,
     /* 0x51 */ ITEM_SHIELD_HERO,
     /* 0x52 */ ITEM_SHIELD_MIRROR,
+#if MM_VERSION < N64_US
+               ITEM_72_JP,
+#endif
     /* 0x53 */ ITEM_QUIVER_30,
     /* 0x54 */ ITEM_QUIVER_40,
     /* 0x55 */ ITEM_QUIVER_50,
@@ -326,7 +374,11 @@ typedef enum ItemId {
     /* 0xB1 */ ITEM_MAP_POINT_MOUNTAIN_VILLAGE,
     /* 0xB2 */ ITEM_MAP_POINT_MILK_ROAD,
     /* 0xB3 */ ITEM_MAP_POINT_ZORA_CAPE,
-    /* 0xB8 */ ITEM_B8 = 0xB8,
+    /* 0xB4 */ ITEM_B4,
+    /* 0xB5 */ ITEM_B5,
+    /* 0xB6 */ ITEM_B6,
+    /* 0xB7 */ ITEM_B7,
+    /* 0xB8 */ ITEM_B8,
     /* 0xB9 */ ITEM_B9,
     /* 0xBA */ ITEM_BA,
     /* 0xBB */ ITEM_BB,
