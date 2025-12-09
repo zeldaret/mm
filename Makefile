@@ -35,8 +35,9 @@ endif
 
 #### Defaults ####
 
-# Target game version. Currently only the following version is supported:
-#   n64-us   N64 USA (default)
+# Target game version. Currently only the following versions are supported:
+#   n64-jp-1.1 N64 Japan 1.1 (WIP)
+#   n64-us     N64 USA (default)
 VERSION ?= n64-us
 # If COMPARE is 1, check the output md5sum after building
 COMPARE ?= 1
@@ -76,7 +77,9 @@ export LANG := C
 CFLAGS :=
 CPPFLAGS :=
 
-ifeq ($(VERSION),n64-us)
+ifeq ($(VERSION),n64-jp-1.1)
+  COMPARE := 0
+else ifeq ($(VERSION),n64-us)
 # Intentionally blank for now
 else
 $(error Unsupported version $(VERSION))
@@ -100,6 +103,10 @@ BASEROM_DIR   := baseroms/$(VERSION)
 BUILD_DIR     := build/$(VERSION)
 EXTRACTED_DIR := extracted/$(VERSION)
 EXPECTED_DIR  := expected/$(BUILD_DIR)
+
+VERSION_MACRO := $(shell echo $(VERSION) | tr a-z-. A-Z__)
+GAME_VERSION := -DMM_VERSION=$(VERSION_MACRO)
+
 
 #### Tools ####
 ifneq ($(shell type $(MIPS_BINUTILS_PREFIX)ld >/dev/null 2>/dev/null; echo $$?), 0)
@@ -201,6 +208,8 @@ SFCFLAGS := --matching
 # We can't use the C preprocessor for this because it won't substitute inside string literals.
 BUILD_DIR_REPLACE := sed -e 's|$$(BUILD_DIR)|$(BUILD_DIR)|g'
 
+CPPFLAGS += $(GAME_VERSION)
+
 GBI_DEFINES := -DF3DEX_GBI_2 -DF3DEX_GBI_PL -DGBI_DOWHILE
 
 ifeq ($(COMPILER),gcc)
@@ -212,7 +221,7 @@ ifeq ($(COMPILER),gcc)
   WARNINGS         := $(CC_CHECK_WARNINGS)
   ASFLAGS          := -march=vr4300 -32 -G0 -no-pad-sections
   CCASFLAGS        := $(GBI_DEFINES) -G 0 -nostdinc -march=vr4300 -mfix4300 -mabi=32 -mno-abicalls -fno-PIC -fno-common -Wa,-no-pad-sections
-  COMMON_DEFINES   := $(GBI_DEFINES)
+  COMMON_DEFINES   := $(GBI_DEFINES) $(GAME_VERSION)
   AS_DEFINES       := $(COMMON_DEFINES) -DMIPSEB -D_LANGUAGE_ASSEMBLY -D_ULTRA64
   C_DEFINES        := $(COMMON_DEFINES) -D_LANGUAGE_C
   ENDIAN           :=
@@ -225,7 +234,7 @@ else
   WARNINGS         := -fullwarn -verbose -woff 624,649,838,712,516,513,596,564,594,807
   ASFLAGS          := -march=vr4300 -32 -G0 -no-pad-sections
   CCASFLAGS        := $(GBI_DEFINES) -G 0 -non_shared -Xcpluscomm -nostdinc -Wab,-r4300_mul $(WARNINGS) -o32
-  COMMON_DEFINES   := -D_MIPS_SZLONG=32 $(GBI_DEFINES)
+  COMMON_DEFINES   := -D_MIPS_SZLONG=32 $(GBI_DEFINES) $(GAME_VERSION)
   AS_DEFINES       := $(COMMON_DEFINES) -DMIPSEB -D_LANGUAGE_ASSEMBLY -D_ULTRA64
   C_DEFINES        := $(COMMON_DEFINES) -D_LANGUAGE_C
   ENDIAN           := -EB
@@ -558,9 +567,17 @@ setup:
 	$(PYTHON) tools/extract_yars.py $(EXTRACTED_DIR)/baserom -v $(VERSION)
 
 assets:
+ifeq ($(VERSION),n64-us)
 	$(PYTHON) tools/extract_assets.py $(EXTRACTED_DIR)/baserom $(EXTRACTED_DIR)/assets -j$(N_THREADS) -Z Wno-hardcoded-pointer -v $(VERSION)
 	$(PYTHON) tools/extract_text.py $(EXTRACTED_DIR)/baserom $(EXTRACTED_DIR)/text -v $(VERSION)
 	$(PYTHON) tools/extract_audio.py -b $(EXTRACTED_DIR)/baserom -o $(EXTRACTED_DIR) -v $(VERSION) --read-xml
+else
+# For non US versions just extract from the US rom
+	$(PYTHON) tools/extract_assets.py extracted/n64-us/baserom $(EXTRACTED_DIR)/assets -j$(N_THREADS) -Z Wno-hardcoded-pointer -v n64-us
+	$(PYTHON) tools/extract_text.py extracted/n64-us/baserom $(EXTRACTED_DIR)/text -v n64-us
+	$(PYTHON) tools/extract_audio.py -b extracted/n64-us/baserom -o $(EXTRACTED_DIR) -v n64-us --read-xml
+endif
+
 
 ## Assembly generation
 disasm:
@@ -570,7 +587,12 @@ disasm:
 diff-init: rom
 	$(RM) -r $(EXPECTED_DIR)
 	mkdir -p $(EXPECTED_DIR)
+ifneq ($(COMPARE),0)
+# If we could compare the rom successfully just copy from build
 	cp -r $(BUILD_DIR)/. $(EXPECTED_DIR)
+else
+	VERSION=$(VERSION) DISASM_DIR=$(EXTRACTED_DIR)/asm ASSEMBLE_DIR=$(EXPECTED_DIR) AS_CMD='$(AS) $(ASFLAGS) $(IINC)' LD=$(LD) ./tools/disasm/do_assemble.sh
+endif
 
 init: distclean
 	$(MAKE) venv
