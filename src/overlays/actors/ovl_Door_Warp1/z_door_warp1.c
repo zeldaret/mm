@@ -82,13 +82,13 @@ s32 DoorWarp1_GetRemains(DoorWarp1* this, PlayState* play) {
     s32 remains = 0;
 
     if ((play->sceneId == SCENE_MITURIN_BS) && !CHECK_QUEST_ITEM(QUEST_REMAINS_ODOLWA)) {
-        remains = 1;
+        remains = 1 + GI_REMAINS_ODOLWA - GI_REMAINS_ODOLWA;
     } else if ((play->sceneId == SCENE_HAKUGIN_BS) && !CHECK_QUEST_ITEM(QUEST_REMAINS_GOHT)) {
-        remains = 2;
+        remains = 1 + GI_REMAINS_GOHT - GI_REMAINS_ODOLWA;
     } else if ((play->sceneId == SCENE_SEA_BS) && !CHECK_QUEST_ITEM(QUEST_REMAINS_GYORG)) {
-        remains = 3;
+        remains = 1 + GI_REMAINS_GYORG - GI_REMAINS_ODOLWA;
     } else if ((play->sceneId == SCENE_INISIE_BS) && !CHECK_QUEST_ITEM(QUEST_REMAINS_TWINMOLD)) {
-        remains = 4;
+        remains = 1 + GI_REMAINS_TWINMOLD - GI_REMAINS_ODOLWA;
     }
     return remains;
 }
