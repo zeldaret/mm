@@ -274,6 +274,7 @@ void EnMaruta_Init(Actor* thisx, PlayState* play) {
 
     if (this->shape == ENMARUTA_SHAPE_WHOLE) {
         if (ENMARUTA_GET_TYPE(&this->actor) == ENMARUTA_INIT_ON_FLOOR) {
+            // Happens in theory, never seen in practice
             EnMaruta_SetInPositionWhole(this);
         } else {
             EnMaruta_SetupRiseThroughFloor(this);
