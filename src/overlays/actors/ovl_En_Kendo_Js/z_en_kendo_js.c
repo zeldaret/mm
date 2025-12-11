@@ -245,7 +245,7 @@ void EnKendoJs_AwaitTalk(EnKendoJs* this, PlayState* play) {
     }
 }
 
-void EnKendoJs_HandleCourseChoice(EnKendoJs* this, PlayState* play) {
+void EnKendoJs_HandleMessageChoices(EnKendoJs* this, PlayState* play) {
     if (Message_ShouldAdvance(play) && (this->curTextId == 0x2716)) {
         switch (play->msgCtx.choiceIndex) {
             case 0:
@@ -289,7 +289,7 @@ void EnKendoJs_HandleCourseChoice(EnKendoJs* this, PlayState* play) {
     }
 }
 
-void EnKendoJs_HandleEvents(EnKendoJs* this, PlayState* play) {
+void EnKendoJs_HandleMessageEvents(EnKendoJs* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (!Message_ShouldAdvance(play)) {
@@ -349,11 +349,11 @@ void EnKendoJs_HandleMessageState(EnKendoJs* this, PlayState* play) {
 
     switch (Message_GetState(&play->msgCtx)) {
         case TEXT_STATE_CHOICE:
-            EnKendoJs_HandleCourseChoice(this, play);
+            EnKendoJs_HandleMessageChoices(this, play);
             break;
 
         case TEXT_STATE_EVENT:
-            EnKendoJs_HandleEvents(this, play);
+            EnKendoJs_HandleMessageEvents(this, play);
             break;
 
         case TEXT_STATE_DONE:
