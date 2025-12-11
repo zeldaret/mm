@@ -8,9 +8,6 @@ struct EnPr2;
 
 typedef void (*EnPr2ActionFunc)(struct EnPr2*, PlayState*);
 
-// I wonder if they planned more for this actor, because there 
-// is room enough in params without using rotation of the parent
-
 #define ENPR2_GET_TYPE(thisx) ((thisx)->params & 0xF)
 // only used for type PR2_TYPE_RESIDENT (agro distance is 1/20th of final units) 
 #define ENPR2_GET_AGRO_DISTANCE(thisx) (((thisx)->params >> 4) & 0xFF)
