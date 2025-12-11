@@ -17,7 +17,7 @@ void EnMaruta_Draw(Actor* thisx, PlayState* play);
 
 void EnMaruta_SetInPositionWhole(EnMaruta* this);
 void EnMaruta_SittingWhole(EnMaruta* this, PlayState* play);
-void EnMaruta_StartUnderFloor(EnMaruta* this);
+void EnMaruta_SetupRiseThroughFloor(EnMaruta* this);
 void EnMaruta_RiseThroughFloor(EnMaruta* this, PlayState* play);
 void EnMaruta_StartRetracting(EnMaruta* this);
 void EnMaruta_RetractWhole(EnMaruta* this, PlayState* play);
@@ -276,7 +276,7 @@ void EnMaruta_Init(Actor* thisx, PlayState* play) {
         if (ENMARUTA_GET_TYPE(&this->actor) == ENMARUTA_INIT_ON_FLOOR) {
             EnMaruta_SetInPositionWhole(this);
         } else {
-            EnMaruta_StartUnderFloor(this);
+            EnMaruta_SetupRiseThroughFloor(this);
         }
     } else {
         EnMaruta_SetupRecoilAfterCut(this, play);
@@ -315,7 +315,7 @@ void EnMaruta_SittingWhole(EnMaruta* this, PlayState* play) {
     }
 }
 
-void EnMaruta_StartUnderFloor(EnMaruta* this) {
+void EnMaruta_SetupRiseThroughFloor(EnMaruta* this) {
     this->actor.world.pos.y = this->actor.home.pos.y - 630.0f;
     this->actionFunc = EnMaruta_RiseThroughFloor;
 }
