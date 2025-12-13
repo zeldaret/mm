@@ -3,6 +3,8 @@
 #include "alignment.h"
 #include "macros.h"
 
+#pragma increment_block_number "n64-us:188"
+
 u32 __osFlashID[4] ALIGNED(8);
 OSIoMesg __osFlashMsg ALIGNED(8);
 OSMesgQueue __osFlashMessageQ ALIGNED(8);

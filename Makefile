@@ -467,7 +467,7 @@ $(BUILD_DIR)/src/code/jpegdecoder.o: OPTFLAGS := -O2
 $(BUILD_DIR)/src/code/jpegutils.o: CC := $(CC_OLD)
 $(BUILD_DIR)/src/code/jpegutils.o: OPTFLAGS := -O2
 
-$(BUILD_DIR)/src/code/osFlash.o: CC := $(CC_OLD)
+$(BUILD_DIR)/src/code/osFlash.o: CC := ./tools/buildtools/preprocess.sh -v $(VERSION) -i $(ICONV) -- $(CC_OLD)
 $(BUILD_DIR)/src/code/osFlash.o: OPTFLAGS := -g
 $(BUILD_DIR)/src/code/osFlash.o: MIPS_VERSION := -mips1
 

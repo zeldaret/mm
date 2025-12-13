@@ -8,10 +8,6 @@
 
 #pragma increment_block_number "n64-us:188"
 
-// TODO: Consider moving to a header file.
-extern u64 cic6105TextStart[];
-extern u64 cic6105TextEnd[];
-
 s32 gCICAddr1Val;
 s32 gCICAddr2Val;
 FaultClient sRomInfoFaultClient;
@@ -24,13 +20,13 @@ s32 CIC6105_ILoveYou(void);
 
 void CIC6105_Noop1(void) {
 #if MM_VERSION < N64_US
-    SREG(20) = 1;
+    R_AUDIOMGR_DEBUG_LEVEL = 1;
 #endif
 }
 
 void CIC6105_Noop2(void) {
 #if MM_VERSION < N64_US
-    SREG(20) = 0;
+    R_AUDIOMGR_DEBUG_LEVEL = 0;
 #endif
 }
 
@@ -55,11 +51,6 @@ void CIC6105_PrintRomInfo(void) {
     FaultDrawer_Printf("[Date:%s]", gBuildDate);
     FaultDrawer_SetCursor(96, 32);
     FaultDrawer_Printf("I LOVE YOU %08x", CIC6105_ILoveYou());
-
-    {
-        // TODO: where to put this?
-        static const char unused[] = "flag:%08x data:%08x\n";
-    }
 #endif
 }
 
@@ -113,6 +104,8 @@ void CIC6105_ScheduleCICTask(void) {
     gCICValue1 = IO_READ(SP_DMEM_START + 0xFF4);
     gCICValue2 = IO_READ(SP_DMEM_START + 0xFFC);
     CIC6105_ILoveYou();
+
+    (void)"flag:%08x data:%08x\n";
 }
 
 s32 CIC6105_ILoveYou(void) {

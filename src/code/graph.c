@@ -236,7 +236,7 @@ retry:
 void Graph_UpdateGame(GameState* gameState) {
     GameState_GetInput(gameState);
     GameState_IncrementFrameCount(gameState);
-    if (SREG(20) < 3) {
+    if (R_AUDIOMGR_DEBUG_LEVEL < 3) {
         Audio_Update();
     }
 }
