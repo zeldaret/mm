@@ -22,7 +22,7 @@ void StackCheck_Init(StackEntry* entry, void* stackBottom, void* stackTop, u32 i
 
         for (iter = sStackInfoListStart; iter != NULL; iter = iter->next) {
             if (iter == entry) {
-#if MM_VERSION <= N64_JP_1_1
+#if MM_VERSION < N64_US
                 // is already in the list
                 osSyncPrintf("stackcheck_init: %08x は既にリスト中にある\n", entry);
 #endif
@@ -74,7 +74,7 @@ void StackCheck_Cleanup(StackEntry* entry) {
     }
 
     if (inconsistency) {
-#if MM_VERSION <= N64_JP_1_1
+#if MM_VERSION < N64_US
         // List is inconsistent
         osSyncPrintf("stackcheck_cleanup: %08x リスト不整合です\n", entry);
 #endif
@@ -104,7 +104,7 @@ StackStatus StackCheck_GetState(StackEntry* entry) {
         status = STACK_STATUS_OK;
     }
 
-#if MM_VERSION <= N64_JP_1_1
+#if MM_VERSION < N64_US
     osSyncPrintf("head=%08x tail=%08x last=%08x used=%08x free=%08x [%s]\n", entry->head, entry->tail, last, used, free,
                  (entry->name != NULL) ? entry->name : "(null)");
 #else
