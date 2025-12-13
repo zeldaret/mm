@@ -11,7 +11,7 @@
 s32 gCICAddr1Val;
 s32 gCICAddr2Val;
 FaultClient sRomInfoFaultClient;
-#if MM_VERSION <= N64_JP_1_1
+#if MM_VERSION < N64_US
 s32 gCICValue1;
 s32 gCICValue2;
 
@@ -62,7 +62,7 @@ void CIC6105_Destroy(void) {
     Fault_RemoveClient(&sRomInfoFaultClient);
 }
 
-#if MM_VERSION <= N64_JP_1_1
+#if MM_VERSION < N64_US
 void CIC6105_ScheduleCICTask(void) {
     // TODO: do something with the hardcoded sizes
     static OSTask D_80097AA0_unknown = {
