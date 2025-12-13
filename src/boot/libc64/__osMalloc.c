@@ -19,6 +19,8 @@
 #define BLOCK_FREE_MAGIC (0xEF)
 #define BLOCK_FREE_MAGIC_32 (0xEFEFEFEF)
 
+#define NODE_IS_VALID(node) ((node)->magic == NODE_MAGIC)
+
 #if MM_VERSION >= N64_US
 #define SET_DEBUG_INFO(node, f, l, a) ((void)0)
 
@@ -157,7 +159,7 @@ u8 __osMallocIsInitialized(Arena* arena) {
     return arena->isInit;
 }
 
-#if MM_VERSION <= N64_JP_1_1
+#if MM_VERSION < N64_US
 void* __osMallocDebug(Arena* arena, size_t size, const char* file, int line) {
     ArenaNode* iter;
     ArenaNode* newNode;
@@ -207,7 +209,7 @@ void* __osMallocDebug(Arena* arena, size_t size, const char* file, int line) {
 }
 #endif
 
-#if MM_VERSION <= N64_JP_1_1
+#if MM_VERSION < N64_US
 void* __osMallocRDebug(Arena* arena, size_t size, const char* file, int line) {
     ArenaNode* iter;
     ArenaNode* newNode;
@@ -422,7 +424,7 @@ void __osFree(Arena* arena, void* ptr) {
 
     node = (ArenaNode*)((uintptr_t)ptr - sizeof(ArenaNode));
 
-    if (node->magic != NODE_MAGIC) {
+    if (!NODE_IS_VALID(node)) {
 #if MM_VERSION < N64_US
         // __osFree:Unauthorized release(%08x)\n
         (void)"__osFree:不正解放(%08x)\n";
@@ -482,7 +484,7 @@ cleanup:
     ArenaImpl_Unlock(arena);
 }
 
-#if MM_VERSION <= N64_JP_1_1
+#if MM_VERSION < N64_US
 void __osFreeDebug(Arena* arena, void* ptr, const char* file, int line) {
     ArenaNode* node;
     ArenaNode* next;
@@ -496,7 +498,7 @@ void __osFreeDebug(Arena* arena, void* ptr, const char* file, int line) {
 
     node = (ArenaNode*)((uintptr_t)ptr - sizeof(ArenaNode));
 
-    if (node->magic != NODE_MAGIC) {
+    if (!NODE_IS_VALID(node)) {
         // __osFree:Unauthorized release(%08x)\n
         (void)"__osFree:不正解放(%08x)\n";
         goto cleanup;
@@ -635,7 +637,7 @@ void* __osRealloc(Arena* arena, void* ptr, size_t newSize) {
     return ptr;
 }
 
-#if MM_VERSION <= N64_JP_1_1
+#if MM_VERSION < N64_US
 void* __osReallocDebug(Arena* arena, void* ptr, size_t newSize, const char* file, int line) {
     return __osRealloc(arena, ptr, newSize);
 }
@@ -691,7 +693,7 @@ s32 __osCheckArena(Arena* arena) {
     (void)"アリーナの内容をチェックしています．．． (%08x)\n";
 
     for (iter = arena->head; iter != NULL; iter = iter->next) {
-        if (iter->magic != NODE_MAGIC) {
+        if (!NODE_IS_VALID(iter)) {
             // "Oops!!"
             (void)"おおっと！！ (%08x %08x)\n";
 
@@ -708,7 +710,7 @@ s32 __osCheckArena(Arena* arena) {
     return err;
 }
 
-#if MM_VERSION <= N64_JP_1_1
+#if MM_VERSION < N64_US
 u8 ArenaImpl_GetAllocFailures(Arena* arena) {
     return arena->allocFailures;
 }
