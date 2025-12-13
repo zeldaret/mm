@@ -416,51 +416,69 @@ void __osFree(Arena* arena, void* ptr) {
 
     ArenaImpl_Lock(arena);
 
-#if MM_VERSION <= N64_JP_1_1
-    // __osFree:Unauthorized release(%08x)\n
-    (void)"__osFree:不正解放(%08x)\n";
-    // __osFree:Double release(%08x)\n
-    (void)"__osFree:二重解放(%08x)\n";
-    // __osFree:arena(%08x) and __osMallocのarena(%08x) do not match\n
-    (void)"__osFree:arena(%08x)が__osMallocのarena(%08x)と一致しない\n";
-#endif
+    if (ptr == NULL) {
+        goto cleanup;
+    }
 
     node = (ArenaNode*)((uintptr_t)ptr - sizeof(ArenaNode));
 
-    if ((ptr != NULL) && (node->magic == NODE_MAGIC) && !node->isFree && CHECK_CORRECT_ARENA(node, arena)) {
-        next = node->next;
-        prev = node->prev;
-        node->isFree = true;
-
-        SET_DEBUG_INFO(node, NULL, 0, arena);
-
-        // Checks if the next node is contiguous to the current node and if it isn't currently allocated. Then merge the
-        // two nodes into one.
-        if (((uintptr_t)next == (uintptr_t)node + sizeof(ArenaNode) + node->size) && next->isFree) {
-            ArenaNode* newNext = next->next;
-
-            if (newNext != NULL) {
-                newNext->prev = node;
-            }
-
-            node->size += next->size + sizeof(ArenaNode);
-
-            node->next = newNext;
-            next = newNext;
-        }
-
-        // Checks if the previous node is contiguous to the current node and if it isn't currently allocated. Then merge
-        // the two nodes into one.
-        if ((prev != NULL) && prev->isFree && ((uintptr_t)node == (uintptr_t)prev + sizeof(ArenaNode) + prev->size)) {
-            if (next != NULL) {
-                next->prev = prev;
-            }
-
-            prev->next = next;
-            prev->size += node->size + sizeof(ArenaNode);
-        }
+    if (node->magic != NODE_MAGIC) {
+#if MM_VERSION < N64_US
+        // __osFree:Unauthorized release(%08x)\n
+        (void)"__osFree:不正解放(%08x)\n";
+#endif
+        goto cleanup;
     }
 
+    if (node->isFree) {
+#if MM_VERSION < N64_US
+        // __osFree:Double release(%08x)\n
+        (void)"__osFree:二重解放(%08x)\n";
+#endif
+        goto cleanup;
+    }
+
+    if (!CHECK_CORRECT_ARENA(node, arena)) {
+#if MM_VERSION < N64_US
+        // __osFree:arena(%08x) and __osMallocのarena(%08x) do not match\n
+        (void)"__osFree:arena(%08x)が__osMallocのarena(%08x)と一致しない\n";
+#endif
+        goto cleanup;
+    }
+
+    next = node->next;
+    prev = node->prev;
+    node->isFree = true;
+
+    SET_DEBUG_INFO(node, NULL, 0, arena);
+
+    // Checks if the next node is contiguous to the current node and if it isn't currently allocated. Then merge the
+    // two nodes into one.
+    if (((uintptr_t)next == (uintptr_t)node + sizeof(ArenaNode) + node->size) && next->isFree) {
+        ArenaNode* newNext = next->next;
+
+        if (newNext != NULL) {
+            newNext->prev = node;
+        }
+
+        node->size += next->size + sizeof(ArenaNode);
+
+        node->next = newNext;
+        next = newNext;
+    }
+
+    // Checks if the previous node is contiguous to the current node and if it isn't currently allocated. Then merge
+    // the two nodes into one.
+    if ((prev != NULL) && prev->isFree && ((uintptr_t)node == (uintptr_t)prev + sizeof(ArenaNode) + prev->size)) {
+        if (next != NULL) {
+            next->prev = prev;
+        }
+
+        prev->next = next;
+        prev->size += node->size + sizeof(ArenaNode);
+    }
+
+cleanup:
     ArenaImpl_Unlock(arena);
 }
 
@@ -472,49 +490,63 @@ void __osFreeDebug(Arena* arena, void* ptr, const char* file, int line) {
 
     ArenaImpl_Lock(arena);
 
-    // __osFree:Unauthorized release(%08x)\n
-    (void)"__osFree:不正解放(%08x)\n";
-    // __osFree:Double release(%08x)\n
-    (void)"__osFree:二重解放(%08x)\n";
-    // __osFree:arena(%08x) and __osMallocのarena(%08x) do not match\n
-    (void)"__osFree:arena(%08x)が__osMallocのarena(%08x)と一致しない\n";
+    if (ptr == NULL) {
+        goto cleanup;
+    }
 
     node = (ArenaNode*)((uintptr_t)ptr - sizeof(ArenaNode));
 
-    if ((ptr != NULL) && (node->magic == NODE_MAGIC) && !node->isFree && CHECK_CORRECT_ARENA(node, arena)) {
-        next = node->next;
-        prev = node->prev;
-        node->isFree = true;
-
-        SET_DEBUG_INFO(node, file, line, arena);
-
-        // Checks if the next node is contiguous to the current node and if it isn't currently allocated. Then merge the
-        // two nodes into one.
-        if (((uintptr_t)next == (uintptr_t)node + sizeof(ArenaNode) + node->size) && next->isFree) {
-            ArenaNode* newNext = next->next;
-
-            if (newNext != NULL) {
-                newNext->prev = node;
-            }
-
-            node->size += next->size + sizeof(ArenaNode);
-
-            node->next = newNext;
-            next = newNext;
-        }
-
-        // Checks if the previous node is contiguous to the current node and if it isn't currently allocated. Then merge
-        // the two nodes into one.
-        if ((prev != NULL) && prev->isFree && ((uintptr_t)node == (uintptr_t)prev + sizeof(ArenaNode) + prev->size)) {
-            if (next != NULL) {
-                next->prev = prev;
-            }
-
-            prev->next = next;
-            prev->size += node->size + sizeof(ArenaNode);
-        }
+    if (node->magic != NODE_MAGIC) {
+        // __osFree:Unauthorized release(%08x)\n
+        (void)"__osFree:不正解放(%08x)\n";
+        goto cleanup;
     }
 
+    if (node->isFree) {
+        // __osFree:Double release(%08x)\n
+        (void)"__osFree:二重解放(%08x)\n";
+        goto cleanup;
+    }
+
+    if (!CHECK_CORRECT_ARENA(node, arena)) {
+        // __osFree:arena(%08x) and __osMallocのarena(%08x) do not match\n
+        (void)"__osFree:arena(%08x)が__osMallocのarena(%08x)と一致しない\n";
+        goto cleanup;
+    }
+
+    next = node->next;
+    prev = node->prev;
+    node->isFree = true;
+
+    SET_DEBUG_INFO(node, file, line, arena);
+
+    // Checks if the next node is contiguous to the current node and if it isn't currently allocated. Then merge the
+    // two nodes into one.
+    if (((uintptr_t)next == (uintptr_t)node + sizeof(ArenaNode) + node->size) && next->isFree) {
+        ArenaNode* newNext = next->next;
+
+        if (newNext != NULL) {
+            newNext->prev = node;
+        }
+
+        node->size += next->size + sizeof(ArenaNode);
+
+        node->next = newNext;
+        next = newNext;
+    }
+
+    // Checks if the previous node is contiguous to the current node and if it isn't currently allocated. Then merge
+    // the two nodes into one.
+    if ((prev != NULL) && prev->isFree && ((uintptr_t)node == (uintptr_t)prev + sizeof(ArenaNode) + prev->size)) {
+        if (next != NULL) {
+            next->prev = prev;
+        }
+
+        prev->next = next;
+        prev->size += node->size + sizeof(ArenaNode);
+    }
+
+cleanup:
     ArenaImpl_Unlock(arena);
 }
 #endif
