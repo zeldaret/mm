@@ -763,7 +763,7 @@ void func_80B27A90(EnKendoJs* this, PlayState* play) {
 
     while (actor != NULL) {
         if (actor->id == ACTOR_EN_MARUTA) {
-            ((EnMaruta*)actor)->unk_220 = 1;
+            ((EnMaruta*)actor)->isRetracting = true;
         }
         actor = actor->next;
     }
