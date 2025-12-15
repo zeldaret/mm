@@ -5,7 +5,15 @@
 void GameAlloc_Log(GameAlloc* this) {
     GameAllocEntry* iter = this->base.next;
 
+#if MM_VERSION <= N64_JP_1_1
+    (void)"this = %08x\n";
+#endif
+
     while (iter != &this->base) {
+#if MM_VERSION <= N64_JP_1_1
+        (void)"ptr = %08x size = %d\n";
+#endif
+
         iter = iter->next;
     }
 }
