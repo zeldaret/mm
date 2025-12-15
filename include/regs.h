@@ -68,6 +68,7 @@ extern RegEditor* gRegEditor;
 #define R_RUN_SPEED_LIMIT                 REG(45)
 
 #define R_ENABLE_ARENA_DBG                SREG(0) // Same as OoT
+#define R_AUDIOMGR_DEBUG_LEVEL            SREG(20)
 #define R_ROOM_IMAGE_NODRAW_FLAGS         SREG(25)
 #define R_UPDATE_RATE                     SREG(30)
 #define R_VI_MODE_EDIT_STATE              SREG(48)
