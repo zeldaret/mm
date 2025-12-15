@@ -23,7 +23,7 @@
 #define MESSAGE_DRAW_TEXT(play, gfxP, drawPos) Message_DrawTextDefault(play, gfxP)
 #endif
 
-u8 D_801C6A70 = 0;
+u8 sMessageStartFrameCount = 0;
 s16 sOcarinaButtonIndexBufPos = 0;
 s16 sOcarinaButtonIndexBufLen = 0;
 s16 sLastPlayedSong = 0xFF;
@@ -69,7 +69,7 @@ s16 sOcarinaButtonStepG = 0;
 s16 sOcarinaButtonStepB = 0;
 s16 sOcarinaButtonFlashTimer = 12;
 s16 sOcarinaButtonFlashColorIndex = 1;
-s16 D_801C6A94 = 0;
+s16 sOcarinaButtonDropYOffset = 0;
 
 #if MM_VERSION >= N64_US
 #define MSGCTX_UNK120D4 msgCtx->unk120D4
@@ -360,7 +360,7 @@ void Message_DrawTextboxIcon(PlayState* play, Gfx** gfxP, s16 x, s16 y) {
     }
 }
 
-void func_80147F18(PlayState* play, Gfx** gfxP, s16 arg2, s16 arg3) {
+void Message_HighlightInputDigitAtCursor(PlayState* play, Gfx** gfxP, s16 x, s16 y) {
     static Color_RGB16 D_801CFD10[] = {
         { 0, 80, 200 },
         { 50, 130, 255 },
@@ -449,8 +449,8 @@ void func_80147F18(PlayState* play, Gfx** gfxP, s16 arg2, s16 arg3) {
         gDPSetRenderMode(gfx++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
         gDPSetCombineMode(gfx++, G_CC_PRIMITIVE, G_CC_PRIMITIVE);
         gDPSetPrimColor(gfx++, 0, 0, D_801CFD28, D_801CFD2C, D_801CFD30, 120);
-        gDPFillRectangle(gfx++, arg2 + 3, arg3, arg2 + 17, arg3 + 11);
-        gDPFillRectangle(gfx++, arg2 + 6, arg3 - 2, arg2 + 14, arg3 + 13);
+        gDPFillRectangle(gfx++, x + 3, y, x + 17, y + 11);
+        gDPFillRectangle(gfx++, x + 6, y - 2, x + 14, y + 13);
         gDPPipeSync(gfx++);
 
         msgCtx->stateTimer++;
@@ -458,7 +458,7 @@ void func_80147F18(PlayState* play, Gfx** gfxP, s16 arg2, s16 arg3) {
     }
 }
 
-void func_80148558(PlayState* play, Gfx** gfxP, s16 arg2, s16 arg3) {
+void Message_HighlightAllInputDigits(PlayState* play, Gfx** gfxP, s16 x, s16 y) {
     static Color_RGB16 D_801CFD48[] = {
         { 0, 80, 200 },
         { 50, 130, 255 },
@@ -547,8 +547,8 @@ void func_80148558(PlayState* play, Gfx** gfxP, s16 arg2, s16 arg3) {
         gDPSetRenderMode(gfx++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
         gDPSetCombineMode(gfx++, G_CC_PRIMITIVE, G_CC_PRIMITIVE);
         gDPSetPrimColor(gfx++, 0, 0, D_801CFD60, D_801CFD64, D_801CFD68, 120);
-        gDPFillRectangle(gfx++, arg2 + 3, arg3, arg2 + 29, arg3 + 11);
-        gDPFillRectangle(gfx++, arg2 + 6, arg3 - 2, arg2 + 26, arg3 + 13);
+        gDPFillRectangle(gfx++, x + 3, y, x + 29, y + 11);
+        gDPFillRectangle(gfx++, x + 6, y - 2, x + 26, y + 13);
         gDPPipeSync(gfx++);
 
         msgCtx->stateTimer++;
@@ -597,7 +597,7 @@ void Message_DrawChoiceIcon(PlayState* play, Gfx** gfxP, u8 numChoices) {
     Message_DrawTextboxIcon(play, gfxP, msgCtx->textPosX, msgCtx->textPosY);
 }
 
-void func_80148D64(PlayState* play) {
+void Message_ControlBankInput(PlayState* play) {
     static s16 sAnalogStickHeld = false;
     MessageContext* msgCtx = &play->msgCtx;
 
@@ -642,7 +642,7 @@ void func_80148D64(PlayState* play) {
     msgCtx->rupeesSelected += msgCtx->decodedBuffer.schar[MSGCTX_CODE_BUFFER_OFFSET + 2] - '0';
 }
 
-void func_80149048(PlayState* play) {
+void Message_ControlDoggyRaceBetInput(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
 
     if (msgCtx->stickAdjY <= -30) {
@@ -666,7 +666,7 @@ void func_80149048(PlayState* play) {
     msgCtx->rupeesSelected = (msgCtx->decodedBuffer.schar[MSGCTX_CODE_BUFFER_OFFSET] - '0') * 10;
 }
 
-void func_801491DC(PlayState* play) {
+void Message_ControlBomberCodeInput(PlayState* play) {
     static s16 sAnalogStickHeld = false;
     MessageContext* msgCtx = &play->msgCtx;
 
@@ -711,7 +711,7 @@ void func_801491DC(PlayState* play) {
     }
 }
 
-void func_80149454(PlayState* play) {
+void Message_ControlLotteryCodeInput(PlayState* play) {
     static s16 sAnalogStickHeld = false;
     MessageContext* msgCtx = &play->msgCtx;
 
@@ -3218,7 +3218,7 @@ void Message_OpenText(PlayState* play, u16 textId) {
     }
 
     msgCtx->messageHasSetSfx = false;
-    D_801C6A70 = 0;
+    sMessageStartFrameCount = 0;
     msgCtx->textboxSkipped = false;
     msgCtx->textIsCredits = false;
     var_fv0 = 1.0f;
@@ -3331,7 +3331,7 @@ void Message_PauseMenu_ShowDescription(PlayState* play, u16 textId, u8 textBoxPo
         gSaveContext.prevHudVisibility = gSaveContext.hudVisibility;
     }
     msgCtx->messageHasSetSfx = false;
-    D_801C6A70 = 0;
+    sMessageStartFrameCount = 0;
     msgCtx->textboxSkipped = false;
     msgCtx->textIsCredits = false;
 
@@ -4595,7 +4595,7 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
             case MSGMODE_OCARINA_FAIL_NO_TEXT:
                 msgCtx->stateTimer--;
                 if (msgCtx->stateTimer == 0) {
-                    D_801C6A94 = 1;
+                    sOcarinaButtonDropYOffset = 1;
                     if (msgCtx->msgMode == MSGMODE_SONG_PROMPT_FAIL) {
                         Message_ContinueTextbox(play, 0x1B89);
                         Message_Decode(play);
@@ -4609,10 +4609,10 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
             case MSGMODE_OCARINA_NOTES_DROP:
             case MSGMODE_SONG_PROMPT_NOTES_DROP:
                 for (i = 0; i < 5; i++) {
-                    msgCtx->ocarinaButtonsPosY[i] += D_801C6A94;
+                    msgCtx->ocarinaButtonsPosY[i] += sOcarinaButtonDropYOffset;
                 }
-                D_801C6A94 += D_801C6A94;
-                if (D_801C6A94 >= 0x226) {
+                sOcarinaButtonDropYOffset += sOcarinaButtonDropYOffset;
+                if (sOcarinaButtonDropYOffset >= 550) {
                     Message_ResetOcarinaButtonAlphas();
                     if (msgCtx->msgMode == MSGMODE_SONG_PROMPT_NOTES_DROP) {
                         msgCtx->msgMode = MSGMODE_OCARINA_AWAIT_INPUT;
@@ -5019,15 +5019,15 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
                     ocarinaError = func_8019B5AC();
                     if (ocarinaError == OCARINA_ERROR_2) {
                         Audio_PlaySfx(NA_SE_SY_OCARINA_ERROR);
-                        D_801C6A94 = 1;
+                        sOcarinaButtonDropYOffset = 1;
                         msgCtx->msgMode = MSGMODE_3B;
                     } else if (ocarinaError == OCARINA_ERROR_3) {
                         Audio_PlaySfx(NA_SE_SY_OCARINA_ERROR);
-                        D_801C6A94 = 1;
+                        sOcarinaButtonDropYOffset = 1;
                         msgCtx->msgMode = MSGMODE_3E;
                     } else {
                         Audio_PlaySfx(NA_SE_SY_OCARINA_ERROR);
-                        D_801C6A94 = 1;
+                        sOcarinaButtonDropYOffset = 1;
                         msgCtx->msgMode = MSGMODE_38;
                     }
                 }
@@ -5044,11 +5044,11 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
             case MSGMODE_3E:
                 // notes drop
                 for (i = 0; i < 5; i++) {
-                    msgCtx->ocarinaButtonsPosY[i] += D_801C6A94;
+                    msgCtx->ocarinaButtonsPosY[i] += sOcarinaButtonDropYOffset;
                 }
 
-                D_801C6A94 += D_801C6A94;
-                if (D_801C6A94 >= 0x226) {
+                sOcarinaButtonDropYOffset += sOcarinaButtonDropYOffset;
+                if (sOcarinaButtonDropYOffset >= 550) {
                     Message_ResetOcarinaButtonAlphas();
                     msgCtx->textBoxType = TEXTBOX_TYPE_BLACK;
                     msgCtx->textboxColorRed = msgCtx->textboxColorGreen = msgCtx->textboxColorBlue = 0;
@@ -5071,49 +5071,53 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
                     case TEXTBOX_ENDTYPE_INPUT_BANK:
                         lineNum = MSGCTX_INPUT_LINE_NUMBER;
                         inputLineY = msgCtx->textPosYTarget + (msgCtx->lineHeight * lineNum);
-                        func_80147F18(play, &gfx,
-                                      msgCtx->lineIndent[lineNum] +
-                                          (s32)(16.0f * msgCtx->textCharScale * (MSGCTX_INPUT_DIGIT_INDEX + 5)) - 1,
-                                      inputLineY);
-                        func_80148D64(play);
+                        Message_HighlightInputDigitAtCursor(
+                            play, &gfx,
+                            msgCtx->lineIndent[lineNum] +
+                                (s32)(16.0f * msgCtx->textCharScale * (MSGCTX_INPUT_DIGIT_INDEX + 5)) - 1,
+                            inputLineY);
+                        Message_ControlBankInput(play);
                         break;
 
                     case TEXTBOX_ENDTYPE_INPUT_DOGGY_RACETRACK_BET:
                         lineNum = MSGCTX_INPUT_LINE_NUMBER;
                         inputLineY = msgCtx->textPosYTarget + (msgCtx->lineHeight * lineNum);
-                        func_80148558(play, &gfx,
-                                      msgCtx->lineIndent[lineNum] + (s32)(16.0f * msgCtx->textCharScale * 5.0f) - 1,
-                                      inputLineY);
-                        func_80149048(play);
+                        Message_HighlightAllInputDigits(
+                            play, &gfx, msgCtx->lineIndent[lineNum] + (s32)(16.0f * msgCtx->textCharScale * 5.0f) - 1,
+                            inputLineY);
+                        Message_ControlDoggyRaceBetInput(play);
                         break;
 
                     case TEXTBOX_ENDTYPE_INPUT_BOMBER_CODE:
                         lineNum = MSGCTX_INPUT_LINE_NUMBER;
                         inputLineY = msgCtx->textPosYTarget + (msgCtx->lineHeight * lineNum);
-                        func_80147F18(play, &gfx,
-                                      msgCtx->lineIndent[lineNum] +
-                                          (s32)(16.0f * msgCtx->textCharScale * (MSGCTX_INPUT_DIGIT_INDEX + 5)) - 1,
-                                      inputLineY);
-                        func_801491DC(play);
+                        Message_HighlightInputDigitAtCursor(
+                            play, &gfx,
+                            msgCtx->lineIndent[lineNum] +
+                                (s32)(16.0f * msgCtx->textCharScale * (MSGCTX_INPUT_DIGIT_INDEX + 5)) - 1,
+                            inputLineY);
+                        Message_ControlBomberCodeInput(play);
                         break;
 
                     case TEXTBOX_ENDTYPE_INPUT_LOTTERY_CODE:
                         lineNum = MSGCTX_INPUT_LINE_NUMBER;
                         inputLineY = msgCtx->textPosYTarget + (msgCtx->lineHeight * lineNum);
-                        func_80147F18(play, &gfx,
-                                      msgCtx->lineIndent[lineNum] +
-                                          (s32)(16.0f * msgCtx->textCharScale * (MSGCTX_INPUT_DIGIT_INDEX + 5)) - 1,
-                                      inputLineY);
-                        func_80149454(play);
+                        Message_HighlightInputDigitAtCursor(
+                            play, &gfx,
+                            msgCtx->lineIndent[lineNum] +
+                                (s32)(16.0f * msgCtx->textCharScale * (MSGCTX_INPUT_DIGIT_INDEX + 5)) - 1,
+                            inputLineY);
+                        Message_ControlLotteryCodeInput(play);
                         break;
 
                     case TEXTBOX_ENDTYPE_64:
                         lineNum = MSGCTX_INPUT_LINE_NUMBER;
                         inputLineY = msgCtx->textPosYTarget + (msgCtx->lineHeight * lineNum);
-                        func_80147F18(play, &gfx,
-                                      msgCtx->lineIndent[lineNum] +
-                                          (s32)(16.0f * msgCtx->textCharScale * (MSGCTX_INPUT_DIGIT_INDEX + 4)) - 6,
-                                      inputLineY);
+                        Message_HighlightInputDigitAtCursor(
+                            play, &gfx,
+                            msgCtx->lineIndent[lineNum] +
+                                (s32)(16.0f * msgCtx->textCharScale * (MSGCTX_INPUT_DIGIT_INDEX + 4)) - 6,
+                            inputLineY);
                         func_801496C8(play);
                         break;
 
@@ -5297,14 +5301,14 @@ s16 sTextboxMidYPositions[] = {
 
 s16 D_801D0448[] = { 0x1C, 0x1D, 0x1E, 0x1F, 0x20, 0x21, 0x22, 0x23, 0x24, 0x25 };
 
-s16 D_801D045C[] = {
-    0x1B91,
-    0x1B90,
-    0x1B8F,
+s16 sDoubleTimeSkipToNightTextIds[] = {
+    0x1B91, // Night of 1st day
+    0x1B90, // Night of 2nd day
+    0x1B8F, // Night of final day
 };
-s16 D_801D0464[] = {
-    0x1B92,
-    0x1B8E,
+s16 sDoubleTimeSkipToDayTextIds[] = {
+    0x1B92, // Dawn of 2nd day
+    0x1B8E, // Dawn of final day
 };
 
 void Message_Update(PlayState* play) {
@@ -5407,10 +5411,10 @@ void Message_Update(PlayState* play) {
 
     switch (msgCtx->msgMode) {
         case MSGMODE_TEXT_START:
-            D_801C6A70++;
+            sMessageStartFrameCount++;
 
             temp = false;
-            if ((D_801C6A70 >= 4) || ((msgCtx->talkActor == NULL) && (D_801C6A70 >= 2))) {
+            if ((sMessageStartFrameCount >= 4) || ((msgCtx->talkActor == NULL) && (sMessageStartFrameCount >= 2))) {
                 temp = true;
             }
             if (temp) {
@@ -5904,9 +5908,9 @@ void Message_Update(PlayState* play) {
                     if (interfaceCtx->restrictions.songOfDoubleTime == 0) {
                         if ((CURRENT_DAY != 3) || (gSaveContext.save.isNight == 0)) {
                             if (gSaveContext.save.isNight) {
-                                Message_StartTextbox(play, D_801D0464[CURRENT_DAY - 1], NULL);
+                                Message_StartTextbox(play, sDoubleTimeSkipToDayTextIds[CURRENT_DAY - 1], NULL);
                             } else {
-                                Message_StartTextbox(play, D_801D045C[CURRENT_DAY - 1], NULL);
+                                Message_StartTextbox(play, sDoubleTimeSkipToNightTextIds[CURRENT_DAY - 1], NULL);
                             }
                             play->msgCtx.ocarinaMode = OCARINA_MODE_PROCESS_DOUBLE_TIME;
                         } else {
