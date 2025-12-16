@@ -118,17 +118,17 @@ static u8 sAnimationModes[ENBOMBERS_ANIM_MAX] = {
 
 #include "assets/overlays/ovl_En_Bombers/ovl_En_Bombers.c"
 
-Gfx* sBomberDisplayLists[] = {
+static Gfx* sBomberDisplayLists[] = {
     gBomberRedBandanaDL, gBomberBlueBandanaDL, gBomberBlueBandanaDL, gBomberBlueBandanaDL, gBomberBlueBandanaDL,
 };
 
-TexturePtr sEyeTextures[] = {
+static TexturePtr sEyeTextures[] = {
     gBomberEyeOpenTex,
     gBomberEyeHalfTex,
     gBomberEyeClosedTex,
 };
 
-TexturePtr sNumberTextures[] = {
+static TexturePtr sNumberTextures[] = {
     gBomberNumber1Tex, gBomberNumber2Tex, gBomberNumber3Tex, gBomberNumber4Tex, gBomberNumber5Tex,
 };
 
