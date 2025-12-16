@@ -17,8 +17,8 @@ typedef struct EnBombers2 {
     /* 0x288 */ s16 headRotZ;
     /* 0x28A */ s16 headRotX;
     /* 0x28C */ UNK_TYPE1 pad_28C[2];
-    /* 0x28E */ s16 unk_28E;
-    /* 0x290 */ s16 unk_290;
+    /* 0x28E */ s16 headRotTargetZ;
+    /* 0x290 */ s16 headRotTargetX;
     /* 0x292 */ UNK_TYPE1 pad_292[4];
     /* 0x296 */ s16 unk_296;
     /* 0x298 */ UNK_TYPE1 pad_298[4];
