@@ -56,81 +56,80 @@ static ColliderCylinderInit sCylinderInit = {
 
 typedef enum {
     /*   -1 */ ENBOMBERS_ANIM_NONE = -1,
-    /* 0x00 */ ENBOMBERS_ANIM_0,
-    /* 0x01 */ ENBOMBERS_ANIM_1,
-    /* 0x02 */ ENBOMBERS_ANIM_2,
-    /* 0x03 */ ENBOMBERS_ANIM_3,
-    /* 0x04 */ ENBOMBERS_ANIM_4,
-    /* 0x05 */ ENBOMBERS_ANIM_5,
-    /* 0x06 */ ENBOMBERS_ANIM_6,
-    /* 0x07 */ ENBOMBERS_ANIM_7,
-    /* 0x08 */ ENBOMBERS_ANIM_8,
-    /* 0x09 */ ENBOMBERS_ANIM_9,
-    /* 0x0A */ ENBOMBERS_ANIM_10,
-    /* 0x0B */ ENBOMBERS_ANIM_11,
-    /* 0x0C */ ENBOMBERS_ANIM_12,
-    /* 0x0D */ ENBOMBERS_ANIM_13,
-    /* 0x0E */ ENBOMBERS_ANIM_14,
-    /* 0x0F */ ENBOMBERS_ANIM_15,
-    /* 0x10 */ ENBOMBERS_ANIM_16,
+    /* 0x00 */ ENBOMBERS_ANIM_IDLE,
+    /* 0x01 */ ENBOMBERS_ANIM_TALK_HANDS_ON_HIPS,
+    /* 0x02 */ ENBOMBERS_ANIM_WALK,
+    /* 0x03 */ ENBOMBERS_ANIM_SURPRISE,
+    /* 0x04 */ ENBOMBERS_ANIM_HIDE_UNDER_BOX,
+    /* 0x05 */ ENBOMBERS_ANIM_KNOCK_BACK,
+    /* 0x06 */ ENBOMBERS_ANIM_SIT,
+    /* 0x07 */ ENBOMBERS_ANIM_HOLD_CUCCO,
+    /* 0x08 */ ENBOMBERS_ANIM_TURN_AROUND,
+    /* 0x09 */ ENBOMBERS_ANIM_SHOW_NUMBER,
+    /* 0x0A */ ENBOMBERS_ANIM_TALK_BACK_TURNED,
+    /* 0x0B */ ENBOMBERS_ANIM_FROLIC,
+    /* 0x0C */ ENBOMBERS_ANIM_JUMP,
+    /* 0x0D */ ENBOMBERS_ANIM_ARM_SWIPE,
+    /* 0x0E */ ENBOMBERS_ANIM_SALUTE,
+    /* 0x0F */ ENBOMBERS_ANIM_RUN,
+    /* 0x10 */ ENBOMBERS_ANIM_LOOK_AROUND,
     /* 0x11 */ ENBOMBERS_ANIM_MAX
 } EnBombersAnimation;
 
 static AnimationHeader* sAnimations[ENBOMBERS_ANIM_MAX] = {
-    &gBomberIdleAnim,       // ENBOMBERS_ANIM_0
-    &object_cs_Anim_0053F4, // ENBOMBERS_ANIM_1
-    &object_cs_Anim_01007C, // ENBOMBERS_ANIM_2
-    &object_cs_Anim_00349C, // ENBOMBERS_ANIM_3
-    &object_cs_Anim_004960, // ENBOMBERS_ANIM_4
-    &object_cs_Anim_005128, // ENBOMBERS_ANIM_5
-    &object_cs_Anim_004C1C, // ENBOMBERS_ANIM_6
-    &object_cs_Anim_001A1C, // ENBOMBERS_ANIM_7
-    &object_cs_Anim_003EE4, // ENBOMBERS_ANIM_8
-    &object_cs_Anim_00478C, // ENBOMBERS_ANIM_9
-    &object_cs_Anim_00433C, // ENBOMBERS_ANIM_10
-    &object_cs_Anim_0060E8, // ENBOMBERS_ANIM_11
-    &object_cs_Anim_001708, // ENBOMBERS_ANIM_12
-    &object_cs_Anim_005DC4, // ENBOMBERS_ANIM_13
-    &object_cs_Anim_0026B0, // ENBOMBERS_ANIM_14
-    &object_cs_Anim_0036B0, // ENBOMBERS_ANIM_15
-    &object_cs_Anim_0031C4, // ENBOMBERS_ANIM_16
+    &gBomberIdleAnim,            // ENBOMBERS_ANIM_IDLE
+    &gBomberTalkHandsOnHipsAnim, // ENBOMBERS_ANIM_TALK_HANDS_ON_HIPS
+    &gBomberWalkAnim,            // ENBOMBERS_ANIM_WALK
+    &gBomberSurpriseAnim,        // ENBOMBERS_ANIM_SURPRISE
+    &gBomberHideUnderBoxAnim,    // ENBOMBERS_ANIM_HIDE_UNDER_BOX
+    &gBomberKnockBackAnim,       // ENBOMBERS_ANIM_KNOCK_BACK
+    &gBomberSitAnim,             // ENBOMBERS_ANIM_SIT
+    &gBomberHoldCuccoAnim,       // ENBOMBERS_ANIM_HOLD_CUCCO
+    &gBomberTurnAroundAnim,      // ENBOMBERS_ANIM_TURN_AROUND
+    &gBomberShowNumberAnim,      // ENBOMBERS_ANIM_SHOW_NUMBER
+    &gBomberTalkBackTurnedAnim,  // ENBOMBERS_ANIM_TALK_BACK_TURNED
+    &gBomberFrolicAnim,          // ENBOMBERS_ANIM_FROLIC
+    &gBomberJumpAnim,            // ENBOMBERS_ANIM_JUMP
+    &gBomberArmSwipeAnim,        // ENBOMBERS_ANIM_ARM_SWIPE
+    &gBomberSaluteAnim,          // ENBOMBERS_ANIM_SALUTE
+    &gBomberRunAnim,             // ENBOMBERS_ANIM_RUN
+    &gBomberLookAroundAnim,      // ENBOMBERS_ANIM_LOOK_AROUND
 };
 
 static u8 sAnimationModes[ENBOMBERS_ANIM_MAX] = {
-    ANIMMODE_LOOP, // ENBOMBERS_ANIM_0
-    ANIMMODE_LOOP, // ENBOMBERS_ANIM_1
-    ANIMMODE_LOOP, // ENBOMBERS_ANIM_2
-    ANIMMODE_ONCE, // ENBOMBERS_ANIM_3
-    ANIMMODE_ONCE, // ENBOMBERS_ANIM_4
-    ANIMMODE_LOOP, // ENBOMBERS_ANIM_5
-    ANIMMODE_LOOP, // ENBOMBERS_ANIM_6
-    ANIMMODE_LOOP, // ENBOMBERS_ANIM_7
-    ANIMMODE_ONCE, // ENBOMBERS_ANIM_8
-    ANIMMODE_LOOP, // ENBOMBERS_ANIM_9
-    ANIMMODE_LOOP, // ENBOMBERS_ANIM_10
-    ANIMMODE_LOOP, // ENBOMBERS_ANIM_11
-    ANIMMODE_ONCE, // ENBOMBERS_ANIM_12
-    ANIMMODE_LOOP, // ENBOMBERS_ANIM_13
-    ANIMMODE_ONCE, // ENBOMBERS_ANIM_14
-    ANIMMODE_LOOP, // ENBOMBERS_ANIM_15
-    ANIMMODE_LOOP, // ENBOMBERS_ANIM_16
+    ANIMMODE_LOOP, // ENBOMBERS_ANIM_IDLE
+    ANIMMODE_LOOP, // ENBOMBERS_ANIM_TALK_HANDS_ON_HIPS
+    ANIMMODE_LOOP, // ENBOMBERS_ANIM_WALK
+    ANIMMODE_ONCE, // ENBOMBERS_ANIM_SURPRISE
+    ANIMMODE_ONCE, // ENBOMBERS_ANIM_HIDE_UNDER_BOX
+    ANIMMODE_LOOP, // ENBOMBERS_ANIM_KNOCK_BACK
+    ANIMMODE_LOOP, // ENBOMBERS_ANIM_SIT
+    ANIMMODE_LOOP, // ENBOMBERS_ANIM_HOLD_CUCCO
+    ANIMMODE_ONCE, // ENBOMBERS_ANIM_TURN_AROUND
+    ANIMMODE_LOOP, // ENBOMBERS_ANIM_SHOW_NUMBER
+    ANIMMODE_LOOP, // ENBOMBERS_ANIM_TALK_BACK_TURNED
+    ANIMMODE_LOOP, // ENBOMBERS_ANIM_FROLIC
+    ANIMMODE_ONCE, // ENBOMBERS_ANIM_JUMP
+    ANIMMODE_LOOP, // ENBOMBERS_ANIM_ARM_SWIPE
+    ANIMMODE_ONCE, // ENBOMBERS_ANIM_SALUTE
+    ANIMMODE_LOOP, // ENBOMBERS_ANIM_RUN
+    ANIMMODE_LOOP, // ENBOMBERS_ANIM_LOOK_AROUND
 };
 
 #include "assets/overlays/ovl_En_Bombers/ovl_En_Bombers.c"
 
-Gfx* D_80C04818[] = {
-    ovl_En_Bombers_DL_12C8, ovl_En_Bombers_DL_12D8, ovl_En_Bombers_DL_12D8,
-    ovl_En_Bombers_DL_12D8, ovl_En_Bombers_DL_12D8,
+Gfx* sBomberDisplayLists[] = {
+    gBomberRedBandanaDL, gBomberBlueBandanaDL, gBomberBlueBandanaDL, gBomberBlueBandanaDL, gBomberBlueBandanaDL,
 };
 
-TexturePtr D_80C0482C[] = {
-    object_cs_Tex_00C520,
-    object_cs_Tex_00CD20,
-    object_cs_Tex_00D520,
+TexturePtr sEyeTextures[] = {
+    gBomberEyeOpenTex,
+    gBomberEyeHalfTex,
+    gBomberEyeClosedTex,
 };
 
-TexturePtr D_80C04838[] = {
-    object_cs_Tex_00E620, object_cs_Tex_00EA20, object_cs_Tex_00EE20, object_cs_Tex_00DD20, object_cs_Tex_00F220,
+TexturePtr sNumberTextures[] = {
+    gBomberNumber1Tex, gBomberNumber2Tex, gBomberNumber3Tex, gBomberNumber4Tex, gBomberNumber5Tex,
 };
 
 void EnBombers_Init(Actor* thisx, PlayState* play) {
@@ -139,8 +138,8 @@ void EnBombers_Init(Actor* thisx, PlayState* play) {
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 19.0f);
     this->actor.gravity = -1.0f;
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_cs_Skel_00F82C, &gBomberIdleAnim, this->jointTable,
-                       this->morphTable, OBJECT_CS_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gBomberSkel, &gBomberIdleAnim, this->jointTable, this->morphTable,
+                       OBJECT_CS_LIMB_MAX);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->actor.attentionRangeType = ATTENTION_RANGE_0;
     Actor_SetScale(&this->actor, 0.01f);
@@ -207,13 +206,13 @@ void EnBombers_ChangeAnim(EnBombers* this, s32 animIndex, f32 playSpeed) {
 }
 
 void func_80C038B4(EnBombers* this) {
-    if ((this->animIndex == ENBOMBERS_ANIM_2) &&
+    if ((this->animIndex == ENBOMBERS_ANIM_WALK) &&
         (Animation_OnFrame(&this->skelAnime, 9.0f) || Animation_OnFrame(&this->skelAnime, 10.0f) ||
          Animation_OnFrame(&this->skelAnime, 17.0f) || Animation_OnFrame(&this->skelAnime, 18.0f))) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_BOMBERS_WALK);
     }
 
-    if ((this->animIndex == ENBOMBERS_ANIM_15) &&
+    if ((this->animIndex == ENBOMBERS_ANIM_RUN) &&
         (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 2.0f) ||
          Animation_OnFrame(&this->skelAnime, 4.0f) || Animation_OnFrame(&this->skelAnime, 6.0f))) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_BOMBERS_WALK);
@@ -290,7 +289,7 @@ void func_80C03AF4(EnBombers* this, PlayState* play) {
                 abs = ABS_ALT(BINANG_SUB(this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &sp60)));
                 if ((abs < 0x4000) && !BgCheck_EntityLineTest1(&play->colCtx, &this->actor.world.pos, &sp60, &sp6C,
                                                                &colPoly, true, false, false, true, &bgId)) {
-                    EnBombers_ChangeAnim(this, ENBOMBERS_ANIM_2, 1.0f);
+                    EnBombers_ChangeAnim(this, ENBOMBERS_ANIM_WALK, 1.0f);
                     Math_Vec3f_Copy(&this->unk_294, &sp60);
                     this->unk_2AA = Rand_S16Offset(30, 50);
                     this->unk_2A0++;
@@ -313,9 +312,9 @@ void func_80C03AF4(EnBombers* this, PlayState* play) {
                                             false, true, &bgId)) {
                     this->unk_2A8 = 0;
                     if (Rand_ZeroOne() < 0.5f) {
-                        EnBombers_ChangeAnim(this, ENBOMBERS_ANIM_16, 1.0f);
+                        EnBombers_ChangeAnim(this, ENBOMBERS_ANIM_LOOK_AROUND, 1.0f);
                     } else {
-                        EnBombers_ChangeAnim(this, ENBOMBERS_ANIM_0, 1.0f);
+                        EnBombers_ChangeAnim(this, ENBOMBERS_ANIM_IDLE, 1.0f);
                     }
                     this->unk_2A0 = 0;
                     this->unk_2B4 = 0.0f;
@@ -329,9 +328,9 @@ void func_80C03AF4(EnBombers* this, PlayState* play) {
             if ((this->unk_2AA == 0) || (sqrtf(SQ(x) + SQ(z)) < 4.0f)) {
                 this->unk_2A8 = Rand_S16Offset(20, 20);
                 if (!(this->unk_2A8 & 1)) {
-                    EnBombers_ChangeAnim(this, ENBOMBERS_ANIM_16, 1.0f);
+                    EnBombers_ChangeAnim(this, ENBOMBERS_ANIM_LOOK_AROUND, 1.0f);
                 } else {
-                    EnBombers_ChangeAnim(this, ENBOMBERS_ANIM_0, 1.0f);
+                    EnBombers_ChangeAnim(this, ENBOMBERS_ANIM_IDLE, 1.0f);
                 }
                 this->unk_2A0 = 0;
                 this->unk_2B4 = 0.0f;
@@ -365,7 +364,7 @@ void func_80C03AF4(EnBombers* this, PlayState* play) {
 
 void func_80C03F64(EnBombers* this) {
     this->unk_2A4 = this->actor.yawTowardsPlayer;
-    EnBombers_ChangeAnim(this, ENBOMBERS_ANIM_1, 1.0f);
+    EnBombers_ChangeAnim(this, ENBOMBERS_ANIM_TALK_HANDS_ON_HIPS, 1.0f);
     this->unk_2C0 = 1;
     this->actionFunc = func_80C03FAC;
 }
@@ -427,7 +426,7 @@ void func_80C03FAC(EnBombers* this, PlayState* play) {
             } else {
                 Audio_PlaySfx_MessageDecide();
                 this->actor.textId = 0x74D;
-                EnBombers_ChangeAnim(this, ENBOMBERS_ANIM_14, 1.0f);
+                EnBombers_ChangeAnim(this, ENBOMBERS_ANIM_SALUTE, 1.0f);
                 sp2A = 1;
             }
         } else if (this->actor.textId == 0x744) {
@@ -487,8 +486,8 @@ void func_80C03FAC(EnBombers* this, PlayState* play) {
 }
 
 void func_80C042F8(EnBombers* this) {
-    if (this->animIndex != ENBOMBERS_ANIM_6) {
-        EnBombers_ChangeAnim(this, ENBOMBERS_ANIM_6, 1.0f);
+    if (this->animIndex != ENBOMBERS_ANIM_SIT) {
+        EnBombers_ChangeAnim(this, ENBOMBERS_ANIM_SIT, 1.0f);
     }
     this->actor.textId = 0x72D;
     this->unk_28E = 0x1F40;
@@ -582,9 +581,9 @@ void EnBombers_Draw(Actor* thisx, PlayState* play) {
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80C0482C[this->unk_2B8]));
-    gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80C04838[this->unk_2BE]));
-    gSPSegment(POLY_OPA_DISP++, 0x0A, Lib_SegmentedToVirtual(D_80C04818[this->unk_2BE]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->unk_2B8]));
+    gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sNumberTextures[this->unk_2BE]));
+    gSPSegment(POLY_OPA_DISP++, 0x0A, Lib_SegmentedToVirtual(sBomberDisplayLists[this->unk_2BE]));
 
     Scene_SetRenderModeXlu(play, 0, 1);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
