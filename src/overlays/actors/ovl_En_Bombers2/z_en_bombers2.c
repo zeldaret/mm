@@ -57,35 +57,35 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 typedef enum {
-    /* -1 */ ENBOMBERS_ANIM_NONE = -1,
-    /*  0 */ ENBOMBERS_ANIM_0,
-    /*  1 */ ENBOMBERS_ANIM_1,
-    /*  2 */ ENBOMBERS_ANIM_2,
-    /*  3 */ ENBOMBERS_ANIM_3,
-    /*  4 */ ENBOMBERS_ANIM_4,
-    /*  5 */ ENBOMBERS_ANIM_5,
-    /*  6 */ ENBOMBERS_ANIM_6,
-    /*  7 */ ENBOMBERS_ANIM_MAX
-} EnBombersAnimation;
+    /* -1 */ ENBOMBERS2_ANIM_NONE = -1,
+    /*  0 */ ENBOMBERS2_ANIM_IDLE,
+    /*  1 */ ENBOMBERS2_ANIM_TALK_HANDS_ON_HIPS,
+    /*  2 */ ENBOMBERS2_ANIM_WALK,
+    /*  3 */ ENBOMBERS2_ANIM_SURPRISE,
+    /*  4 */ ENBOMBERS2_ANIM_FROLIC,
+    /*  5 */ ENBOMBERS2_ANIM_ARM_SWIPE,
+    /*  6 */ ENBOMBERS2_ANIM_SALUTE,
+    /*  7 */ ENBOMBERS2_ANIM_MAX
+} EnBombers2Animation;
 
-static AnimationHeader* sAnimations[ENBOMBERS_ANIM_MAX] = {
-    &gBomberIdleAnim,       // ENBOMBERS_ANIM_0
-    &object_cs_Anim_0053F4, // ENBOMBERS_ANIM_1
-    &object_cs_Anim_01007C, // ENBOMBERS_ANIM_2
-    &object_cs_Anim_00349C, // ENBOMBERS_ANIM_3
-    &object_cs_Anim_0060E8, // ENBOMBERS_ANIM_4
-    &object_cs_Anim_005DC4, // ENBOMBERS_ANIM_5
-    &object_cs_Anim_0026B0, // ENBOMBERS_ANIM_6
+static AnimationHeader* sAnimations[ENBOMBERS2_ANIM_MAX] = {
+    &gBomberIdleAnim,            // ENBOMBERS2_ANIM_IDLE
+    &gBomberTalkHandsOnHipsAnim, // ENBOMBERS2_ANIM_TALK_HANDS_ON_HIPS
+    &gBomberWalkAnim,            // ENBOMBERS2_ANIM_WALK
+    &gBomberSurpriseAnim,        // ENBOMBERS2_ANIM_SURPRISE
+    &gBomberFrolicAnim,          // ENBOMBERS2_ANIM_FROLIC
+    &gBomberArmSwipeAnim,        // ENBOMBERS2_ANIM_ARM_SWIPE
+    &gBomberSaluteAnim,          // ENBOMBERS2_ANIM_SALUTE
 };
 
-static u8 sAnimationModes[ENBOMBERS_ANIM_MAX] = {
-    ANIMMODE_LOOP, // ENBOMBERS_ANIM_0
-    ANIMMODE_LOOP, // ENBOMBERS_ANIM_1
-    ANIMMODE_LOOP, // ENBOMBERS_ANIM_2
-    ANIMMODE_ONCE, // ENBOMBERS_ANIM_3
-    ANIMMODE_LOOP, // ENBOMBERS_ANIM_4
-    ANIMMODE_LOOP, // ENBOMBERS_ANIM_5
-    ANIMMODE_ONCE, // ENBOMBERS_ANIM_6
+static u8 sAnimationModes[ENBOMBERS2_ANIM_MAX] = {
+    ANIMMODE_LOOP, // ENBOMBERS2_ANIM_IDLE
+    ANIMMODE_LOOP, // ENBOMBERS2_ANIM_TALK_HANDS_ON_HIPS
+    ANIMMODE_LOOP, // ENBOMBERS2_ANIM_WALK
+    ANIMMODE_ONCE, // ENBOMBERS2_ANIM_SURPRISE
+    ANIMMODE_LOOP, // ENBOMBERS2_ANIM_FROLIC
+    ANIMMODE_LOOP, // ENBOMBERS2_ANIM_ARM_SWIPE
+    ANIMMODE_ONCE, // ENBOMBERS2_ANIM_SALUTE
 };
 
 static Gfx sSetPrimColorDL[] = {
@@ -96,12 +96,12 @@ static Gfx sSetPrimColorDL[] = {
 static Gfx* sSetPrimColorDlPtr = sSetPrimColorDL;
 
 static TexturePtr sEyeTextures[] = {
-    object_cs_Tex_00C520,
-    object_cs_Tex_00CD20,
-    object_cs_Tex_00D520,
+    gBomberEyeOpenTex,
+    gBomberEyeHalfTex,
+    gBomberEyeClosedTex,
 };
 
-static TexturePtr D_80C05920 = object_cs_Tex_00E220;
+static TexturePtr sWhiteShirtBackTex = gBomberWhiteShirtBackTex;
 
 void EnBombers2_Init(Actor* thisx, PlayState* play) {
     f32 cos;
@@ -109,8 +109,8 @@ void EnBombers2_Init(Actor* thisx, PlayState* play) {
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 19.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_cs_Skel_00F82C, &gBomberIdleAnim, this->jointTable,
-                       this->morphTable, OBJECT_CS_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gBomberSkel, &gBomberIdleAnim, this->jointTable, this->morphTable,
+                       OBJECT_CS_LIMB_MAX);
     this->actor.attentionRangeType = ATTENTION_RANGE_6;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
 
@@ -146,9 +146,9 @@ void EnBombers2_ChangeAnim(EnBombers2* this, s32 animIndex, f32 playSpeed) {
 
 void func_80C04B40(EnBombers2* this) {
     if (!this->unk_2AC) {
-        EnBombers2_ChangeAnim(this, ENBOMBERS_ANIM_4, 1.0f);
+        EnBombers2_ChangeAnim(this, ENBOMBERS2_ANIM_FROLIC, 1.0f);
     } else {
-        EnBombers2_ChangeAnim(this, ENBOMBERS_ANIM_0, 1.0f);
+        EnBombers2_ChangeAnim(this, ENBOMBERS2_ANIM_IDLE, 1.0f);
     }
     this->unk_2C0 = 0;
     this->actionFunc = func_80C04BA0;
@@ -201,14 +201,14 @@ void func_80C04BA0(EnBombers2* this, PlayState* play) {
 
 void func_80C04D00(EnBombers2* this) {
     if ((this->textIdIndex == 0) || (this->textIdIndex == 1)) {
-        EnBombers2_ChangeAnim(this, ENBOMBERS_ANIM_5, 1.0f);
+        EnBombers2_ChangeAnim(this, ENBOMBERS2_ANIM_ARM_SWIPE, 1.0f);
     } else {
-        EnBombers2_ChangeAnim(this, ENBOMBERS_ANIM_1, 1.0f);
+        EnBombers2_ChangeAnim(this, ENBOMBERS2_ANIM_TALK_HANDS_ON_HIPS, 1.0f);
     }
 
     this->unk_2A8 = 0;
     if (this->unk_2AC) {
-        EnBombers2_ChangeAnim(this, ENBOMBERS_ANIM_6, 1.0f);
+        EnBombers2_ChangeAnim(this, ENBOMBERS2_ANIM_SALUTE, 1.0f);
     }
     this->unk_2C0 = 1;
     this->actionFunc = func_80C04D8C;
@@ -220,9 +220,9 @@ void func_80C04D8C(EnBombers2* this, PlayState* play) {
 
     if (!this->unk_2AC && (curFrame >= this->lastAnimFrame)) {
         if (!(this->unk_2A8 & 1)) {
-            EnBombers2_ChangeAnim(this, ENBOMBERS_ANIM_1, 1.0f);
+            EnBombers2_ChangeAnim(this, ENBOMBERS2_ANIM_TALK_HANDS_ON_HIPS, 1.0f);
         } else {
-            EnBombers2_ChangeAnim(this, ENBOMBERS_ANIM_5, 1.0f);
+            EnBombers2_ChangeAnim(this, ENBOMBERS2_ANIM_ARM_SWIPE, 1.0f);
         }
         this->unk_2A8++;
         this->unk_2A8 &= 1;
@@ -324,7 +324,7 @@ void func_80C050B8(EnBombers2* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s16 homeYawToPlayer;
 
-    EnBombers2_ChangeAnim(this, ENBOMBERS_ANIM_2, 1.0f);
+    EnBombers2_ChangeAnim(this, ENBOMBERS2_ANIM_WALK, 1.0f);
     this->unk_2A8 = 0;
     homeYawToPlayer = Math_Vec3f_Yaw(&this->actor.home.pos, &player->actor.world.pos);
     Math_Vec3f_Copy(&this->unk_29C, &this->actor.world.pos);
@@ -361,7 +361,7 @@ void func_80C0520C(EnBombers2* this, PlayState* play) {
                 Message_CloseTextbox(play);
                 this->talkState = TEXT_STATE_EVENT;
                 this->textIdIndex = 7;
-                EnBombers2_ChangeAnim(this, ENBOMBERS_ANIM_6, 1.0f);
+                EnBombers2_ChangeAnim(this, ENBOMBERS2_ANIM_SALUTE, 1.0f);
                 this->unk_2A8 = 0;
                 this->unk_2C0 = 1;
                 SET_WEEKEVENTREG(WEEKEVENTREG_ENTERED_BOMBERS_CODE);
@@ -388,7 +388,7 @@ void EnBombers2_Update(Actor* thisx, PlayState* play) {
     if (this->unk_2B2 != 0) {
         this->unk_2B2--;
     }
-    if ((this->animIndex == ENBOMBERS_ANIM_2) &&
+    if ((this->animIndex == ENBOMBERS2_ANIM_WALK) &&
         (Animation_OnFrame(&this->skelAnime, 9.0f) || Animation_OnFrame(&this->skelAnime, 10.0f) ||
          Animation_OnFrame(&this->skelAnime, 17.0f) || Animation_OnFrame(&this->skelAnime, 18.0f))) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_BOMBERS_WALK);
@@ -464,7 +464,7 @@ void EnBombers2_Draw(Actor* thisx, PlayState* play) {
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeIndex]));
-    gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80C05920));
+    gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sWhiteShirtBackTex));
     gSPSegment(POLY_OPA_DISP++, 0x0A, Lib_SegmentedToVirtual(sSetPrimColorDlPtr));
     Scene_SetRenderModeXlu(play, 0, 1);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
