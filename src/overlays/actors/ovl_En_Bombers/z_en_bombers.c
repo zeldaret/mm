@@ -248,12 +248,12 @@ void EnBombers_UpdateRegularTextId(EnBombers* this, PlayState* play) {
         case PLAYER_FORM_DEKU:
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_73_20)) {
                 this->actor.textId = 0x75A;
-            } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DEKU_LEARNED_WHERE_JIM_IS)) {
+            } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DEKU_LEARNED_WHERE_BOMBER_JIM_IS)) {
                 this->actor.textId = 0x749;
-                if (((this->number == ENBOMBERS_NO_2) && CHECK_WEEKEVENTREG(WEEKEVENTREG_74_01)) ||
-                    ((this->number == ENBOMBERS_NO_3) && CHECK_WEEKEVENTREG(WEEKEVENTREG_74_02)) ||
-                    ((this->number == ENBOMBERS_NO_4) && CHECK_WEEKEVENTREG(WEEKEVENTREG_74_04)) ||
-                    ((this->number == ENBOMBERS_NO_5) && CHECK_WEEKEVENTREG(WEEKEVENTREG_74_08))) {
+                if (((this->number == ENBOMBERS_NO_2) && CHECK_WEEKEVENTREG(WEEKEVENTREG_DEKU_TALKED_TO_BOMBER_2)) ||
+                    ((this->number == ENBOMBERS_NO_3) && CHECK_WEEKEVENTREG(WEEKEVENTREG_DEKU_TALKED_TO_BOMBER_3)) ||
+                    ((this->number == ENBOMBERS_NO_4) && CHECK_WEEKEVENTREG(WEEKEVENTREG_DEKU_TALKED_TO_BOMBER_4)) ||
+                    ((this->number == ENBOMBERS_NO_5) && CHECK_WEEKEVENTREG(WEEKEVENTREG_DEKU_TALKED_TO_BOMBER_5))) {
                     this->actor.textId = 0x74A;
                 }
             } else {
@@ -454,25 +454,25 @@ void EnBombers_UpdateTalk(EnBombers* this, PlayState* play) {
         } else if (this->actor.textId == 0x748) {
             switch (this->number) {
                 case ENBOMBERS_NO_2:
-                    SET_WEEKEVENTREG(WEEKEVENTREG_74_01);
+                    SET_WEEKEVENTREG(WEEKEVENTREG_DEKU_TALKED_TO_BOMBER_2);
                     break;
 
                 case ENBOMBERS_NO_3:
-                    SET_WEEKEVENTREG(WEEKEVENTREG_74_02);
+                    SET_WEEKEVENTREG(WEEKEVENTREG_DEKU_TALKED_TO_BOMBER_3);
                     break;
 
                 case ENBOMBERS_NO_4:
-                    SET_WEEKEVENTREG(WEEKEVENTREG_74_04);
+                    SET_WEEKEVENTREG(WEEKEVENTREG_DEKU_TALKED_TO_BOMBER_4);
                     break;
 
                 case ENBOMBERS_NO_5:
-                    SET_WEEKEVENTREG(WEEKEVENTREG_74_08);
+                    SET_WEEKEVENTREG(WEEKEVENTREG_DEKU_TALKED_TO_BOMBER_5);
                     break;
 
                 default:
                     break;
             }
-            SET_WEEKEVENTREG(WEEKEVENTREG_DEKU_LEARNED_WHERE_JIM_IS);
+            SET_WEEKEVENTREG(WEEKEVENTREG_DEKU_LEARNED_WHERE_BOMBER_JIM_IS);
         }
 
         switch (hasMoreText) {
