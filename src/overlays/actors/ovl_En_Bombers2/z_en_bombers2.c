@@ -20,10 +20,10 @@ void EnBombers2_Update(Actor* thisx, PlayState* play);
 void EnBombers2_Draw(Actor* thisx, PlayState* play);
 
 void EnBombers2_AwaitTalk(EnBombers2* this, PlayState* play);
-void EnBombers2_UpdateTalk(EnBombers2* this, PlayState* play);
-void EnBombers2_WalkToSide(EnBombers2* this, PlayState* play);
-void EnBombers2_SetupIdle(EnBombers2* this);
-void EnBombers2_StartTalking(EnBombers2* this);
+void EnBombers2_Talking(EnBombers2* this, PlayState* play);
+void EnBombers2_Walking(EnBombers2* this, PlayState* play);
+void EnBombers2_SetupAwaitTalk(EnBombers2* this);
+void EnBombers2_SetupTalking(EnBombers2* this);
 void EnBombers2_StartWalking(EnBombers2* this, PlayState* play);
 
 ActorProfile En_Bombers2_Profile = {
@@ -131,7 +131,7 @@ void EnBombers2_Init(Actor* thisx, PlayState* play) {
     if (this->csId == 0) {
         Actor_Kill(&this->actor);
     }
-    EnBombers2_SetupIdle(this);
+    EnBombers2_SetupAwaitTalk(this);
 }
 
 void EnBombers2_Destroy(Actor* thisx, PlayState* play) {
@@ -150,7 +150,7 @@ void EnBombers2_ChangeAnim(EnBombers2* this, s32 animIndex, f32 playSpeed) {
                      sAnimationModes[this->animIndex], -10.0f);
 }
 
-void EnBombers2_SetupIdle(EnBombers2* this) {
+void EnBombers2_SetupAwaitTalk(EnBombers2* this) {
     if (!this->hasMovedAside) {
         EnBombers2_ChangeAnim(this, ENBOMBERS_ANIM_4, 1.0f);
     } else {
@@ -197,7 +197,7 @@ void EnBombers2_AwaitTalk(EnBombers2* this, PlayState* play) {
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->bodyRotTargetAngle = this->actor.world.rot.y;
         SET_WEEKEVENTREG(WEEKEVENTREG_TALKED_TO_BOMBERS_GUARD);
-        EnBombers2_StartTalking(this);
+        EnBombers2_SetupTalking(this);
         return;
     }
     if (yawDiffAbs < 0x3BB5) {
@@ -205,7 +205,7 @@ void EnBombers2_AwaitTalk(EnBombers2* this, PlayState* play) {
     }
 }
 
-void EnBombers2_StartTalking(EnBombers2* this) {
+void EnBombers2_SetupTalking(EnBombers2* this) {
     if ((this->textIdIndex == 0) || (this->textIdIndex == 1)) {
         EnBombers2_ChangeAnim(this, ENBOMBERS_ANIM_5, 1.0f);
     } else {
@@ -217,10 +217,10 @@ void EnBombers2_StartTalking(EnBombers2* this) {
         EnBombers2_ChangeAnim(this, ENBOMBERS_ANIM_6, 1.0f);
     }
     this->action = ENBOMBERS2_ACTION_TALKING;
-    this->actionFunc = EnBombers2_UpdateTalk;
+    this->actionFunc = EnBombers2_Talking;
 }
 
-void EnBombers2_UpdateTalk(EnBombers2* this, PlayState* play) {
+void EnBombers2_Talking(EnBombers2* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     f32 curFrame = this->skelAnime.curFrame;
 
@@ -275,7 +275,7 @@ void EnBombers2_UpdateTalk(EnBombers2* this, PlayState* play) {
         if (Text_GetFaceReaction(play, FACE_REACTION_SET_BOMBERS_HIDEOUT_GUARD) != 0) {
             this->headRotTargetZ = 0;
             Message_CloseTextbox(play);
-            EnBombers2_SetupIdle(this);
+            EnBombers2_SetupAwaitTalk(this);
         } else {
             s32 j;
 
@@ -286,7 +286,7 @@ void EnBombers2_UpdateTalk(EnBombers2* this, PlayState* play) {
                 case 7:
                     this->headRotTargetZ = 0;
                     Message_CloseTextbox(play);
-                    EnBombers2_SetupIdle(this);
+                    EnBombers2_SetupAwaitTalk(this);
                     break;
 
                 case 2:
@@ -343,10 +343,10 @@ void EnBombers2_StartWalking(EnBombers2* this, PlayState* play) {
     }
     this->bodyRotTargetAngle = Math_Vec3f_Yaw(&this->actor.home.pos, &this->walkTarget);
     this->action = ENBOMBERS2_ACTION_WALKING;
-    this->actionFunc = EnBombers2_WalkToSide;
+    this->actionFunc = EnBombers2_Walking;
 }
 
-void EnBombers2_WalkToSide(EnBombers2* this, PlayState* play) {
+void EnBombers2_Walking(EnBombers2* this, PlayState* play) {
     if (this->animPhase == 0) {
         if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
             CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
@@ -375,7 +375,7 @@ void EnBombers2_WalkToSide(EnBombers2* this, PlayState* play) {
                 this->hasMovedAside = true;
                 this->actor.textId = sTextIds[this->textIdIndex];
                 Message_StartTextbox(play, this->actor.textId, &this->actor);
-                this->actionFunc = EnBombers2_UpdateTalk;
+                this->actionFunc = EnBombers2_Talking;
             }
         } else {
             Math_ApproachF(&this->actor.world.pos.x, this->walkTarget.x, 0.3f, 1.0f);
