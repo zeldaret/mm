@@ -33,7 +33,7 @@ typedef struct EnBombers {
     /* 0x28E */ s16 headRotTargetZ;
     /* 0x290 */ s16 headRotTargetX;
     /* 0x294 */ Vec3f walkTarget;
-    /* 0x2A0 */ s16 unk_2A0;
+    /* 0x2A0 */ s16 npcState;
     /* 0x2A2 */ UNK_TYPE1 unk2A2[2];
     /* 0x2A4 */ s16 targetYaw;
     /* 0x2A6 */ s16 talkState;
