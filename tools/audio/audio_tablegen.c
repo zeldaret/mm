@@ -302,12 +302,18 @@ read_seq_order(struct seq_order *order, const char *path)
 
     // We expect one entry per line, gather the total length
     size_t total_size = 0;
-    for (char *p = filedata; *p != '\0'; p++) {
+    for (char *p = filedata; *p != '\0';) {
         if (*p == '\n') {
             total_size++;
+            // Skip empty lines
+            while (*p == '\n') {
+                p++;
+            }
         } else if (isspace(*p)) {
             // There should be no whitespace in the input file besides newlines
             goto malformed;
+        } else {
+            p++;
         }
     }
 
@@ -334,6 +340,10 @@ read_seq_order(struct seq_order *order, const char *path)
 
     char *lstart = filedata;
     for (size_t i = 0; i < total_size; i++) {
+        // find next nonempty line
+        while (*lstart == '\n') {
+            lstart++;
+        }
         // find end of line
         char *p = lstart;
         while (*p != '\n') {
