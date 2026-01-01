@@ -300,9 +300,14 @@ read_seq_order(struct seq_order *order, const char *path)
     UNUSED size_t data_size;
     char *filedata = util_read_whole_file(path, &data_size);
 
-    // We expect one entry per line, gather the total length
+    // We expect one entry per line (with the exception of empty lines), gather the total length
     size_t total_size = 0;
-    for (char *p = filedata; *p != '\0';) {
+    char *p = filedata;
+    // Skip empty lines at the beginning of the file
+    while (*p == '\n') {
+        p++;
+    }
+    while (*p != '\0') {
         if (*p == '\n') {
             total_size++;
             // Skip empty lines
