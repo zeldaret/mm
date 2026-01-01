@@ -379,6 +379,7 @@ read_seq_order(struct seq_order *order, const char *path)
         lstart = lend + 1;
     }
     assert(*lstart == '\0');
+    regfree(&re);
 
     // Write results
     order->num_sequences = total_size;
@@ -389,9 +390,16 @@ malformed:
     error("Malformed %s?", path);
 }
 
+static void
+free_seq_order(struct seq_order *order)
+{
+    free(order->entries);
+    free(order->filedata);
+}
+
 struct seqdata {
-    const char *elf_path;
-    const char *name;
+    char *elf_path;
+    char *name;
     uint32_t font_section_offset;
     size_t font_section_size;
 };
@@ -576,6 +584,14 @@ tablegen_sequences(const char *seq_font_tbl_out, const char *seq_order_path, con
     fprintf(out, ".balign 16\n");
 
     fclose(out);
+    free(final_seqdata);
+    for (int i = 0; i < num_sequence_files; i++) {
+        free(file_data[i].name);
+        free(file_data[i].elf_path);
+    }
+    free(file_data);
+    free_seq_order(&order);
+
     return EXIT_SUCCESS;
 }
 
