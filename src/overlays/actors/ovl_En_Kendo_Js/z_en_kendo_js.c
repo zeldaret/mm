@@ -383,7 +383,7 @@ void EnKendoJs_HandleMessageState(EnKendoJs* this, PlayState* play) {
 s32 EnKendoJs_GetNoviceCourseActionResult(EnKendoJs* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    switch (this->minigameRound) {
+    switch (this->minigameRound.noviceRound) {
         case ENKENDOJS_NOVICE_SIDE_JUMP:
             if (Player_IsSideJumping(play)) {
                 return ENKENDOJS_RESULT_CORRECT;
@@ -480,12 +480,12 @@ s32 EnKendoJs_GetNoviceCourseActionResult(EnKendoJs* this, PlayState* play) {
 }
 
 void EnKendoJs_NoviceCourseProgress(EnKendoJs* this, PlayState* play) {
-    ENKENDOJS_START_MSG(this, play, sNoviceCourseProgressTextIds[this->minigameRound]);
-    this->minigameRound++;
+    ENKENDOJS_START_MSG(this, play, sNoviceCourseProgressTextIds[this->minigameRound.noviceRound]);
+    this->minigameRound.noviceRound++;
 }
 
 void EnKendoJs_NoviceCourseTryAgain(EnKendoJs* this, PlayState* play) {
-    ENKENDOJS_START_MSG(this, play, sNoviceCourseTryAgainTextIds[this->minigameRound]);
+    ENKENDOJS_START_MSG(this, play, sNoviceCourseTryAgainTextIds[this->minigameRound.noviceRound]);
 }
 
 s32 EnKendoJs_HasMoreAdviceToTryAgain(EnKendoJs* this, PlayState* play) {
@@ -540,7 +540,7 @@ void EnKendoJs_StartNoviceCourse(EnKendoJs* this) {
     SET_WEEKEVENTREG(WEEKEVENTREG_PLAYING_SWORDSMAN_MINIGAME);
     this->numLogs = 1;
     this->timer = 0;
-    this->minigameRound = ENKENDOJS_NOVICE_SIDE_JUMP;
+    this->minigameRound.noviceRound = ENKENDOJS_NOVICE_SIDE_JUMP;
     this->courseState = ENKENDOJS_COURSE_ACTIVE;
     this->actionFunc = EnKendoJs_NoviceCourse;
 }
@@ -596,7 +596,7 @@ void EnKendoJs_NoviceCourse(EnKendoJs* this, PlayState* play) {
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENKENDOJS_ANIM_DEFAULT);
         }
 
-        if (this->minigameRound == ENKENDOJS_NOVICE_FINISHED) {
+        if (this->minigameRound.noviceRound == ENKENDOJS_NOVICE_FINISHED) {
             CLEAR_WEEKEVENTREG(WEEKEVENTREG_PLAYING_SWORDSMAN_MINIGAME);
             EnKendoJs_SetupMessageStateHandler(this);
         }
@@ -606,7 +606,7 @@ void EnKendoJs_NoviceCourse(EnKendoJs* this, PlayState* play) {
 void EnKendoJs_SetupExpertCourse(EnKendoJs* this) {
     SET_WEEKEVENTREG(WEEKEVENTREG_PLAYING_SWORDSMAN_MINIGAME);
     this->timer = 120;
-    this->minigameRound = 0;
+    this->minigameRound.expertRound = 0;
     this->courseState = ENKENDOJS_COURSE_ACTIVE;
     this->actionFunc = EnKendoJs_MovePlayerToStartExpertCourse;
 }
@@ -628,7 +628,7 @@ void EnKendoJs_ExpertCourse(EnKendoJs* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (this->timer >= 140) {
-        if (this->minigameRound == 5) {
+        if (this->minigameRound.expertRound == 5) {
             if (gSaveContext.minigameScore == 30) {
                 ENKENDOJS_START_MSG(this, play, 0x272D);
             } else {
@@ -644,7 +644,7 @@ void EnKendoJs_ExpertCourse(EnKendoJs* this, PlayState* play) {
         EnKendoJs_SpawnLog(this, play, ((u8)Rand_Next() % 3) + 1);
         EnKendoJs_SpawnLog(this, play, ((u8)Rand_Next() % 3) + 4);
         this->timer = 0;
-        this->minigameRound++;
+        this->minigameRound.expertRound++;
     } else if (this->timer == 120) {
         EnKendoJs_RetractLogs(this, play);
         this->timer++;

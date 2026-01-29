@@ -23,7 +23,10 @@ typedef struct EnKendoJs {
     /* 0x274 */ Vec3s* pathPoints;
     /* 0x278 */ Vec3s headRot;
     /* 0x27E */ Vec3s torsoRot;
-    /* 0x284 */ s16 minigameRound;
+    /* 0x284 */ union {
+        s16 noviceRound;
+        s16 expertRound;
+    } minigameRound;
     /* 0x286 */ s16 courseState;
     /* 0x288 */ s16 curTextId;
     /* 0x28A */ s16 hasSpoken;
