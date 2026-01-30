@@ -33,8 +33,10 @@ ActorProfile Bg_F40_Switch_Profile = {
     /**/ BgF40Switch_Draw,
 };
 
+#if MM_VERSION >= N64_US
 s32 sBgF40SwitchGlobalsInitialized = false;
 u32 sBgF40SwitchLastUpdateFrame;
+#endif
 
 /*
  * Updates all instances of this actor in the current room, unless it's already been called this frame.
@@ -178,31 +180,30 @@ void BgF40Switch_Press(BgF40Switch* this, PlayState* play) {
 void BgF40Switch_WaitToPress(BgF40Switch* this, PlayState* play) {
 #if MM_VERSION >= N64_US
     if (!this->isInitiator || (this->dyna.actor.csId == CS_ID_NONE)) {
-        this->actionFunc = BgF40Switch_Press;
-        if (this->isInitiator) {
-            Flags_SetSwitch(play, BGF40SWITCH_GET_SWITCH_FLAG(&this->dyna.actor));
-        }
-    } else if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
-        CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
-        this->actionFunc = BgF40Switch_Press;
-        if (this->isInitiator) {
-            Flags_SetSwitch(play, BGF40SWITCH_GET_SWITCH_FLAG(&this->dyna.actor));
-        }
-    } else {
-        CutsceneManager_Queue(this->dyna.actor.csId);
-    }
 #else
     if (this->dyna.actor.csId == CS_ID_NONE) {
+#endif
         this->actionFunc = BgF40Switch_Press;
+#if MM_VERSION >= N64_US
+        if (this->isInitiator) {
+            Flags_SetSwitch(play, BGF40SWITCH_GET_SWITCH_FLAG(&this->dyna.actor));
+        }
+#else
         Flags_SetSwitch(play, BGF40SWITCH_GET_SWITCH_FLAG(&this->dyna.actor));
+#endif
     } else if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
         CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         this->actionFunc = BgF40Switch_Press;
+#if MM_VERSION >= N64_US
+        if (this->isInitiator) {
+            Flags_SetSwitch(play, BGF40SWITCH_GET_SWITCH_FLAG(&this->dyna.actor));
+        }
+#else
         Flags_SetSwitch(play, BGF40SWITCH_GET_SWITCH_FLAG(&this->dyna.actor));
+#endif
     } else {
         CutsceneManager_Queue(this->dyna.actor.csId);
     }
-#endif
 }
 
 void BgF40Switch_IdleUnpressed(BgF40Switch* this, PlayState* play) {
