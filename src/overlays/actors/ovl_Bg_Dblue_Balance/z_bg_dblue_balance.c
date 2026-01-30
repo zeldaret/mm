@@ -573,9 +573,9 @@ void func_80B833A8(BgDblueBalance* this) {
     this->actionFunc = func_80B833C4;
 }
 
-#if MM_VERSION >= N64_US
 void func_80B833C4(BgDblueBalance* this, PlayState* play) {
     Actor* thisx = &this->dyna.actor;
+#if MM_VERSION >= N64_US
     s32 sp28 = false;
     s16 sp26;
     s16 sp24;
@@ -620,11 +620,7 @@ void func_80B833C4(BgDblueBalance* this, PlayState* play) {
         thisx->shape.rot.x = this->unk_184;
         func_80B83344(this);
     }
-}
 #else
-void func_80B833C4(BgDblueBalance* this, PlayState* play) {
-    Actor* thisx = &this->dyna.actor;
-
     if (this->isSwitchFlagSet) {
         if (!this->isSwitchFlagSet2 && (this->unk_17F == 0)) {
             this->unk_17F = 1;
@@ -633,13 +629,11 @@ void func_80B833C4(BgDblueBalance* this, PlayState* play) {
         if (this->unk_178 >= 0x50) {
             this->unk_178 -= 5;
             this->unk_17E_jp = 0;
+        } else if (this->unk_17E_jp < 10) {
+            this->unk_178 -= 10;
+            this->unk_17E_jp++;
         } else {
-            if (this->unk_17E_jp < 10) {
-                this->unk_178 -= 10;
-                this->unk_17E_jp++;
-            } else {
-                func_80B83344(this);
-            }
+            func_80B83344(this);
         }
     } else {
         Math_StepToS(&this->unk_178, 0x1F4, 4);
@@ -647,8 +641,8 @@ void func_80B833C4(BgDblueBalance* this, PlayState* play) {
 
     thisx->shape.rot.x += this->unk_178;
     func_80B8264C(this);
-}
 #endif
+}
 
 void func_80B83518(Actor* thisx, PlayState* play) {
     BgDblueBalance* this = (BgDblueBalance*)thisx;
