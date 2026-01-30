@@ -157,7 +157,6 @@ void BgF40Switch_IdlePressed(BgF40Switch* this, PlayState* play) {
 #endif
 }
 
-// Struct diff, actionFunc needs to be 160 not 164
 void BgF40Switch_Press(BgF40Switch* this, PlayState* play) {
     this->dyna.actor.scale.y -= 0.0495f;
     if (this->dyna.actor.scale.y <= 0.0165f) {
