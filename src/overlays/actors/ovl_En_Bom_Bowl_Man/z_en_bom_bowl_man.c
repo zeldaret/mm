@@ -57,13 +57,13 @@ typedef enum {
     /* 0x05 */ ENBOMBOWLMAN_ANIM_WALK,
     /* 0x06 */ ENBOMBOWLMAN_ANIM_SURPRISE,
     /* 0x07 */ ENBOMBOWLMAN_ANIM_HIDE_UNDER_BOX,
-    /* 0x08 */ ENBOMBOWLMAN_ANIM_KNOCK_BACK,
+    /* 0x08 */ ENBOMBOWLMAN_ANIM_DAZED,
     /* 0x09 */ ENBOMBOWLMAN_ANIM_SIT,
     /* 0x0A */ ENBOMBOWLMAN_ANIM_HOLD_CUCCO,
     /* 0x0B */ ENBOMBOWLMAN_ANIM_TURN_AROUND,
     /* 0x0C */ ENBOMBOWLMAN_ANIM_SHOW_NUMBER,
-    /* 0x0D */ ENBOMBOWLMAN_ANIM_TALK_BACK_TURNED,
-    /* 0x0E */ ENBOMBOWLMAN_ANIM_FROLIC,
+    /* 0x0D */ ENBOMBOWLMAN_ANIM_TALK_SHOWING_NUMBER,
+    /* 0x0E */ ENBOMBOWLMAN_ANIM_TAUNT,
     /* 0x0F */ ENBOMBOWLMAN_ANIM_JUMP,
     /* 0x10 */ ENBOMBOWLMAN_ANIM_ARM_SWIPE,
     /* 0x11 */ ENBOMBOWLMAN_ANIM_SALUTE,
@@ -73,26 +73,26 @@ typedef enum {
 } EnBomBowlManAnimation;
 
 static AnimationHeader* sAnimations[ENBOMBOWLMAN_ANIM_MAX] = {
-    &gBomberIdleAnim,            // ENBOMBOWLMAN_ANIM_IDLE
-    &gBomberHandsOnHipsAnim,     // ENBOMBOWLMAN_ANIM_HANDS_ON_HIPS
-    &gBomberTalkNormalAnim,      // ENBOMBOWLMAN_ANIM_TALK_NORMAL
-    &gBomberTalkHandsOnHipsAnim, // ENBOMBOWLMAN_ANIM_TALK_HANDS_ON_HIPS
-    &gBomberBlowgunAnim,         // ENBOMBOWLMAN_ANIM_BLOWGUN
-    &gBomberWalkAnim,            // ENBOMBOWLMAN_ANIM_WALK
-    &gBomberSurpriseAnim,        // ENBOMBOWLMAN_ANIM_SURPRISE
-    &gBomberHideUnderBoxAnim,    // ENBOMBOWLMAN_ANIM_HIDE_UNDER_BOX
-    &gBomberKnockBackAnim,       // ENBOMBOWLMAN_ANIM_KNOCK_BACK
-    &gBomberSitAnim,             // ENBOMBOWLMAN_ANIM_SIT
-    &gBomberHoldCuccoAnim,       // ENBOMBOWLMAN_ANIM_HOLD_CUCCO
-    &gBomberTurnAroundAnim,      // ENBOMBOWLMAN_ANIM_TURN_AROUND
-    &gBomberShowNumberAnim,      // ENBOMBOWLMAN_ANIM_SHOW_NUMBER
-    &gBomberTalkBackTurnedAnim,  // ENBOMBOWLMAN_ANIM_TALK_BACK_TURNED
-    &gBomberFrolicAnim,          // ENBOMBOWLMAN_ANIM_FROLIC
-    &gBomberJumpAnim,            // ENBOMBOWLMAN_ANIM_JUMP
-    &gBomberArmSwipeAnim,        // ENBOMBOWLMAN_ANIM_ARM_SWIPE
-    &gBomberSaluteAnim,          // ENBOMBOWLMAN_ANIM_SALUTE
-    &gBomberRunAnim,             // ENBOMBOWLMAN_ANIM_RUN
-    &gBomberLookAroundAnim,      // ENBOMBOWLMAN_ANIM_LOOK_AROUND
+    &gBomberIdleAnim,              // ENBOMBOWLMAN_ANIM_IDLE
+    &gBomberHandsOnHipsAnim,       // ENBOMBOWLMAN_ANIM_HANDS_ON_HIPS
+    &gBomberTalkNormalAnim,        // ENBOMBOWLMAN_ANIM_TALK_NORMAL
+    &gBomberTalkHandsOnHipsAnim,   // ENBOMBOWLMAN_ANIM_TALK_HANDS_ON_HIPS
+    &gBomberBlowgunAnim,           // ENBOMBOWLMAN_ANIM_BLOWGUN
+    &gBomberWalkAnim,              // ENBOMBOWLMAN_ANIM_WALK
+    &gBomberSurpriseAnim,          // ENBOMBOWLMAN_ANIM_SURPRISE
+    &gBomberHideUnderBoxAnim,      // ENBOMBOWLMAN_ANIM_HIDE_UNDER_BOX
+    &gBomberDazedAnim,             // ENBOMBOWLMAN_ANIM_DAZED
+    &gBomberSitAnim,               // ENBOMBOWLMAN_ANIM_SIT
+    &gBomberHoldCuccoAnim,         // ENBOMBOWLMAN_ANIM_HOLD_CUCCO
+    &gBomberTurnAroundAnim,        // ENBOMBOWLMAN_ANIM_TURN_AROUND
+    &gBomberShowNumberAnim,        // ENBOMBOWLMAN_ANIM_SHOW_NUMBER
+    &gBomberTalkShowingNumberAnim, // ENBOMBOWLMAN_ANIM_TALK_SHOWING_NUMBER
+    &gBomberTauntAnim,             // ENBOMBOWLMAN_ANIM_TAUNT
+    &gBomberJumpAnim,              // ENBOMBOWLMAN_ANIM_JUMP
+    &gBomberArmSwipeAnim,          // ENBOMBOWLMAN_ANIM_ARM_SWIPE
+    &gBomberSaluteAnim,            // ENBOMBOWLMAN_ANIM_SALUTE
+    &gBomberRunAnim,               // ENBOMBOWLMAN_ANIM_RUN
+    &gBomberLookAroundAnim,        // ENBOMBOWLMAN_ANIM_LOOK_AROUND
 };
 
 static u8 sAnimationModes[ENBOMBOWLMAN_ANIM_MAX] = {
@@ -104,13 +104,13 @@ static u8 sAnimationModes[ENBOMBOWLMAN_ANIM_MAX] = {
     ANIMMODE_LOOP, // ENBOMBOWLMAN_ANIM_WALK
     ANIMMODE_ONCE, // ENBOMBOWLMAN_ANIM_SURPRISE
     ANIMMODE_ONCE, // ENBOMBOWLMAN_ANIM_HIDE_UNDER_BOX
-    ANIMMODE_LOOP, // ENBOMBOWLMAN_ANIM_KNOCK_BACK
+    ANIMMODE_LOOP, // ENBOMBOWLMAN_ANIM_DAZED
     ANIMMODE_LOOP, // ENBOMBOWLMAN_ANIM_SIT
     ANIMMODE_LOOP, // ENBOMBOWLMAN_ANIM_HOLD_CUCCO
     ANIMMODE_ONCE, // ENBOMBOWLMAN_ANIM_TURN_AROUND
     ANIMMODE_LOOP, // ENBOMBOWLMAN_ANIM_SHOW_NUMBER
-    ANIMMODE_LOOP, // ENBOMBOWLMAN_ANIM_TALK_BACK_TURNED
-    ANIMMODE_LOOP, // ENBOMBOWLMAN_ANIM_FROLIC
+    ANIMMODE_LOOP, // ENBOMBOWLMAN_ANIM_TALK_SHOWING_NUMBER
+    ANIMMODE_LOOP, // ENBOMBOWLMAN_ANIM_TAUNT
     ANIMMODE_ONCE, // ENBOMBOWLMAN_ANIM_JUMP
     ANIMMODE_LOOP, // ENBOMBOWLMAN_ANIM_ARM_SWIPE
     ANIMMODE_ONCE, // ENBOMBOWLMAN_ANIM_SALUTE
@@ -641,7 +641,7 @@ void func_809C5BF4(EnBomBowlMan* this, PlayState* play) {
 
                 Message_CloseTextbox(play);
                 Camera_SetTargetActor(subCam, &this->unk_2D8->actor);
-                EnBomBowlMan_ChangeAnim(this, ENBOMBOWLMAN_ANIM_TALK_BACK_TURNED, 1.0f);
+                EnBomBowlMan_ChangeAnim(this, ENBOMBOWLMAN_ANIM_TALK_SHOWING_NUMBER, 1.0f);
                 D_809C6100 = 0;
                 if (player->transformation == PLAYER_FORM_HUMAN) {
                     this->unk_2C0 = 5;

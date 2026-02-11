@@ -107,13 +107,13 @@ typedef enum {
     /* 0x05 */ ENBOMJIMA_ANIM_WALK,
     /* 0x06 */ ENBOMJIMA_ANIM_SURPRISE,
     /* 0x07 */ ENBOMJIMA_ANIM_HIDE_UNDER_BOX,
-    /* 0x08 */ ENBOMJIMA_ANIM_KNOCK_BACK,
+    /* 0x08 */ ENBOMJIMA_ANIM_DAZED,
     /* 0x09 */ ENBOMJIMA_ANIM_SIT,
     /* 0x0A */ ENBOMJIMA_ANIM_HOLD_CUCCO,
     /* 0x0B */ ENBOMJIMA_ANIM_TURN_AROUND,
     /* 0x0C */ ENBOMJIMA_ANIM_SHOW_NUMBER,
-    /* 0x0D */ ENBOMJIMA_ANIM_TALK_BACK_TURNED,
-    /* 0x0E */ ENBOMJIMA_ANIM_FROLIC,
+    /* 0x0D */ ENBOMJIMA_ANIM_TALK_SHOWING_NUMBER,
+    /* 0x0E */ ENBOMJIMA_ANIM_TAUNT,
     /* 0x0F */ ENBOMJIMA_ANIM_JUMP,
     /* 0x10 */ ENBOMJIMA_ANIM_ARM_SWIPE,
     /* 0x11 */ ENBOMJIMA_ANIM_SALUTE,
@@ -123,26 +123,26 @@ typedef enum {
 } EnBomjimaAnimation;
 
 static AnimationHeader* sAnimations[ENBOMJIMA_ANIM_MAX] = {
-    &gBomberIdleAnim,            // ENBOMJIMA_ANIM_IDLE
-    &gBomberHandsOnHipsAnim,     // ENBOMJIMA_ANIM_HANDS_ON_HIPS
-    &gBomberTalkNormalAnim,      // ENBOMJIMA_ANIM_TALK_NORMAL
-    &gBomberTalkHandsOnHipsAnim, // ENBOMJIMA_ANIM_TALK_HANDS_ON_HIPS
-    &gBomberBlowgunAnim,         // ENBOMJIMA_ANIM_BLOWGUN
-    &gBomberWalkAnim,            // ENBOMJIMA_ANIM_WALK
-    &gBomberSurpriseAnim,        // ENBOMJIMA_ANIM_SURPRISE
-    &gBomberHideUnderBoxAnim,    // ENBOMJIMA_ANIM_HIDE_UNDER_BOX
-    &gBomberKnockBackAnim,       // ENBOMJIMA_ANIM_KNOCK_BACK
-    &gBomberSitAnim,             // ENBOMJIMA_ANIM_SIT
-    &gBomberHoldCuccoAnim,       // ENBOMJIMA_ANIM_HOLD_CUCCO
-    &gBomberTurnAroundAnim,      // ENBOMJIMA_ANIM_TURN_AROUND
-    &gBomberShowNumberAnim,      // ENBOMJIMA_ANIM_SHOW_NUMBER
-    &gBomberTalkBackTurnedAnim,  // ENBOMJIMA_ANIM_TALK_BACK_TURNED
-    &gBomberFrolicAnim,          // ENBOMJIMA_ANIM_FROLIC
-    &gBomberJumpAnim,            // ENBOMJIMA_ANIM_JUMP
-    &gBomberArmSwipeAnim,        // ENBOMJIMA_ANIM_ARM_SWIPE
-    &gBomberSaluteAnim,          // ENBOMJIMA_ANIM_SALUTE
-    &gBomberRunAnim,             // ENBOMJIMA_ANIM_RUN
-    &gBomberLookAroundAnim,      // ENBOMJIMA_ANIM_LOOK_AROUND
+    &gBomberIdleAnim,              // ENBOMJIMA_ANIM_IDLE
+    &gBomberHandsOnHipsAnim,       // ENBOMJIMA_ANIM_HANDS_ON_HIPS
+    &gBomberTalkNormalAnim,        // ENBOMJIMA_ANIM_TALK_NORMAL
+    &gBomberTalkHandsOnHipsAnim,   // ENBOMJIMA_ANIM_TALK_HANDS_ON_HIPS
+    &gBomberBlowgunAnim,           // ENBOMJIMA_ANIM_BLOWGUN
+    &gBomberWalkAnim,              // ENBOMJIMA_ANIM_WALK
+    &gBomberSurpriseAnim,          // ENBOMJIMA_ANIM_SURPRISE
+    &gBomberHideUnderBoxAnim,      // ENBOMJIMA_ANIM_HIDE_UNDER_BOX
+    &gBomberDazedAnim,             // ENBOMJIMA_ANIM_DAZED
+    &gBomberSitAnim,               // ENBOMJIMA_ANIM_SIT
+    &gBomberHoldCuccoAnim,         // ENBOMJIMA_ANIM_HOLD_CUCCO
+    &gBomberTurnAroundAnim,        // ENBOMJIMA_ANIM_TURN_AROUND
+    &gBomberShowNumberAnim,        // ENBOMJIMA_ANIM_SHOW_NUMBER
+    &gBomberTalkShowingNumberAnim, // ENBOMJIMA_ANIM_TALK_SHOWING_NUMBER
+    &gBomberTauntAnim,             // ENBOMJIMA_ANIM_TAUNT
+    &gBomberJumpAnim,              // ENBOMJIMA_ANIM_JUMP
+    &gBomberArmSwipeAnim,          // ENBOMJIMA_ANIM_ARM_SWIPE
+    &gBomberSaluteAnim,            // ENBOMJIMA_ANIM_SALUTE
+    &gBomberRunAnim,               // ENBOMJIMA_ANIM_RUN
+    &gBomberLookAroundAnim,        // ENBOMJIMA_ANIM_LOOK_AROUND
 };
 
 static u8 sAnimationModes[ENBOMJIMA_ANIM_MAX] = {
@@ -154,13 +154,13 @@ static u8 sAnimationModes[ENBOMJIMA_ANIM_MAX] = {
     ANIMMODE_LOOP, // ENBOMJIMA_ANIM_WALK
     ANIMMODE_ONCE, // ENBOMJIMA_ANIM_SURPRISE
     ANIMMODE_ONCE, // ENBOMJIMA_ANIM_HIDE_UNDER_BOX
-    ANIMMODE_LOOP, // ENBOMJIMA_ANIM_KNOCK_BACK
+    ANIMMODE_LOOP, // ENBOMJIMA_ANIM_DAZED
     ANIMMODE_LOOP, // ENBOMJIMA_ANIM_SIT
     ANIMMODE_LOOP, // ENBOMJIMA_ANIM_HOLD_CUCCO
     ANIMMODE_ONCE, // ENBOMJIMA_ANIM_TURN_AROUND
     ANIMMODE_LOOP, // ENBOMJIMA_ANIM_SHOW_NUMBER
-    ANIMMODE_LOOP, // ENBOMJIMA_ANIM_TALK_BACK_TURNED
-    ANIMMODE_LOOP, // ENBOMJIMA_ANIM_FROLIC
+    ANIMMODE_LOOP, // ENBOMJIMA_ANIM_TALK_SHOWING_NUMBER
+    ANIMMODE_LOOP, // ENBOMJIMA_ANIM_TAUNT
     ANIMMODE_ONCE, // ENBOMJIMA_ANIM_JUMP
     ANIMMODE_LOOP, // ENBOMJIMA_ANIM_ARM_SWIPE
     ANIMMODE_ONCE, // ENBOMJIMA_ANIM_SALUTE
@@ -899,12 +899,12 @@ void func_80BFFF54(EnBomjima* this, PlayState* play) {
             D_80C009F0++;
             EnBomjima_ChangeAnim(this, ENBOMJIMA_ANIM_IDLE, 1.0f);
         }
-    } else if ((this->animIndex != ENBOMJIMA_ANIM_KNOCK_BACK) && (curFrame >= this->animEndFrame)) {
-        EnBomjima_ChangeAnim(this, ENBOMJIMA_ANIM_KNOCK_BACK, 1.0f);
+    } else if ((this->animIndex != ENBOMJIMA_ANIM_DAZED) && (curFrame >= this->animEndFrame)) {
+        EnBomjima_ChangeAnim(this, ENBOMJIMA_ANIM_DAZED, 1.0f);
         D_80C009F4 = 1;
     }
 
-    if (this->animIndex == ENBOMJIMA_ANIM_KNOCK_BACK) {
+    if (this->animIndex == ENBOMJIMA_ANIM_DAZED) {
         if ((D_80C009F4 == 1) && Animation_OnFrame(&this->skelAnime, 7.0f)) {
             Actor_PlaySfx(&this->actor, NA_SE_EV_HUMAN_BOUND);
             D_80C009F4 = 2;

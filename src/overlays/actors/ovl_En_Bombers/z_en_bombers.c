@@ -61,13 +61,13 @@ typedef enum {
     /* 0x02 */ ENBOMBERS_ANIM_WALK,
     /* 0x03 */ ENBOMBERS_ANIM_SURPRISE,
     /* 0x04 */ ENBOMBERS_ANIM_HIDE_UNDER_BOX,
-    /* 0x05 */ ENBOMBERS_ANIM_KNOCK_BACK,
+    /* 0x05 */ ENBOMBERS_ANIM_DAZED,
     /* 0x06 */ ENBOMBERS_ANIM_SIT,
     /* 0x07 */ ENBOMBERS_ANIM_HOLD_CUCCO,
     /* 0x08 */ ENBOMBERS_ANIM_TURN_AROUND,
     /* 0x09 */ ENBOMBERS_ANIM_SHOW_NUMBER,
-    /* 0x0A */ ENBOMBERS_ANIM_TALK_BACK_TURNED,
-    /* 0x0B */ ENBOMBERS_ANIM_FROLIC,
+    /* 0x0A */ ENBOMBERS_ANIM_TALK_SHOWING_NUMBER,
+    /* 0x0B */ ENBOMBERS_ANIM_TAUNT,
     /* 0x0C */ ENBOMBERS_ANIM_JUMP,
     /* 0x0D */ ENBOMBERS_ANIM_ARM_SWIPE,
     /* 0x0E */ ENBOMBERS_ANIM_SALUTE,
@@ -77,23 +77,23 @@ typedef enum {
 } EnBombersAnimation;
 
 static AnimationHeader* sAnimations[ENBOMBERS_ANIM_MAX] = {
-    &gBomberIdleAnim,            // ENBOMBERS_ANIM_IDLE
-    &gBomberTalkHandsOnHipsAnim, // ENBOMBERS_ANIM_TALK_HANDS_ON_HIPS
-    &gBomberWalkAnim,            // ENBOMBERS_ANIM_WALK
-    &gBomberSurpriseAnim,        // ENBOMBERS_ANIM_SURPRISE
-    &gBomberHideUnderBoxAnim,    // ENBOMBERS_ANIM_HIDE_UNDER_BOX
-    &gBomberKnockBackAnim,       // ENBOMBERS_ANIM_KNOCK_BACK
-    &gBomberSitAnim,             // ENBOMBERS_ANIM_SIT
-    &gBomberHoldCuccoAnim,       // ENBOMBERS_ANIM_HOLD_CUCCO
-    &gBomberTurnAroundAnim,      // ENBOMBERS_ANIM_TURN_AROUND
-    &gBomberShowNumberAnim,      // ENBOMBERS_ANIM_SHOW_NUMBER
-    &gBomberTalkBackTurnedAnim,  // ENBOMBERS_ANIM_TALK_BACK_TURNED
-    &gBomberFrolicAnim,          // ENBOMBERS_ANIM_FROLIC
-    &gBomberJumpAnim,            // ENBOMBERS_ANIM_JUMP
-    &gBomberArmSwipeAnim,        // ENBOMBERS_ANIM_ARM_SWIPE
-    &gBomberSaluteAnim,          // ENBOMBERS_ANIM_SALUTE
-    &gBomberRunAnim,             // ENBOMBERS_ANIM_RUN
-    &gBomberLookAroundAnim,      // ENBOMBERS_ANIM_LOOK_AROUND
+    &gBomberIdleAnim,              // ENBOMBERS_ANIM_IDLE
+    &gBomberTalkHandsOnHipsAnim,   // ENBOMBERS_ANIM_TALK_HANDS_ON_HIPS
+    &gBomberWalkAnim,              // ENBOMBERS_ANIM_WALK
+    &gBomberSurpriseAnim,          // ENBOMBERS_ANIM_SURPRISE
+    &gBomberHideUnderBoxAnim,      // ENBOMBERS_ANIM_HIDE_UNDER_BOX
+    &gBomberDazedAnim,             // ENBOMBERS_ANIM_DAZED
+    &gBomberSitAnim,               // ENBOMBERS_ANIM_SIT
+    &gBomberHoldCuccoAnim,         // ENBOMBERS_ANIM_HOLD_CUCCO
+    &gBomberTurnAroundAnim,        // ENBOMBERS_ANIM_TURN_AROUND
+    &gBomberShowNumberAnim,        // ENBOMBERS_ANIM_SHOW_NUMBER
+    &gBomberTalkShowingNumberAnim, // ENBOMBERS_ANIM_TALK_SHOWING_NUMBER
+    &gBomberTauntAnim,             // ENBOMBERS_ANIM_TAUNT
+    &gBomberJumpAnim,              // ENBOMBERS_ANIM_JUMP
+    &gBomberArmSwipeAnim,          // ENBOMBERS_ANIM_ARM_SWIPE
+    &gBomberSaluteAnim,            // ENBOMBERS_ANIM_SALUTE
+    &gBomberRunAnim,               // ENBOMBERS_ANIM_RUN
+    &gBomberLookAroundAnim,        // ENBOMBERS_ANIM_LOOK_AROUND
 };
 
 static u8 sAnimationModes[ENBOMBERS_ANIM_MAX] = {
@@ -102,13 +102,13 @@ static u8 sAnimationModes[ENBOMBERS_ANIM_MAX] = {
     ANIMMODE_LOOP, // ENBOMBERS_ANIM_WALK
     ANIMMODE_ONCE, // ENBOMBERS_ANIM_SURPRISE
     ANIMMODE_ONCE, // ENBOMBERS_ANIM_HIDE_UNDER_BOX
-    ANIMMODE_LOOP, // ENBOMBERS_ANIM_KNOCK_BACK
+    ANIMMODE_LOOP, // ENBOMBERS_ANIM_DAZED
     ANIMMODE_LOOP, // ENBOMBERS_ANIM_SIT
     ANIMMODE_LOOP, // ENBOMBERS_ANIM_HOLD_CUCCO
     ANIMMODE_ONCE, // ENBOMBERS_ANIM_TURN_AROUND
     ANIMMODE_LOOP, // ENBOMBERS_ANIM_SHOW_NUMBER
-    ANIMMODE_LOOP, // ENBOMBERS_ANIM_TALK_BACK_TURNED
-    ANIMMODE_LOOP, // ENBOMBERS_ANIM_FROLIC
+    ANIMMODE_LOOP, // ENBOMBERS_ANIM_TALK_SHOWING_NUMBER
+    ANIMMODE_LOOP, // ENBOMBERS_ANIM_TAUNT
     ANIMMODE_ONCE, // ENBOMBERS_ANIM_JUMP
     ANIMMODE_LOOP, // ENBOMBERS_ANIM_ARM_SWIPE
     ANIMMODE_ONCE, // ENBOMBERS_ANIM_SALUTE

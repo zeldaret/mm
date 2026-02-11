@@ -62,7 +62,7 @@ typedef enum {
     /*  1 */ ENBOMBERS2_ANIM_TALK_HANDS_ON_HIPS,
     /*  2 */ ENBOMBERS2_ANIM_WALK,
     /*  3 */ ENBOMBERS2_ANIM_SURPRISE,
-    /*  4 */ ENBOMBERS2_ANIM_FROLIC,
+    /*  4 */ ENBOMBERS2_ANIM_TAUNT,
     /*  5 */ ENBOMBERS2_ANIM_ARM_SWIPE,
     /*  6 */ ENBOMBERS2_ANIM_SALUTE,
     /*  7 */ ENBOMBERS2_ANIM_MAX
@@ -73,7 +73,7 @@ static AnimationHeader* sAnimations[ENBOMBERS2_ANIM_MAX] = {
     &gBomberTalkHandsOnHipsAnim, // ENBOMBERS2_ANIM_TALK_HANDS_ON_HIPS
     &gBomberWalkAnim,            // ENBOMBERS2_ANIM_WALK
     &gBomberSurpriseAnim,        // ENBOMBERS2_ANIM_SURPRISE
-    &gBomberFrolicAnim,          // ENBOMBERS2_ANIM_FROLIC
+    &gBomberTauntAnim,           // ENBOMBERS2_ANIM_TAUNT
     &gBomberArmSwipeAnim,        // ENBOMBERS2_ANIM_ARM_SWIPE
     &gBomberSaluteAnim,          // ENBOMBERS2_ANIM_SALUTE
 };
@@ -83,7 +83,7 @@ static u8 sAnimationModes[ENBOMBERS2_ANIM_MAX] = {
     ANIMMODE_LOOP, // ENBOMBERS2_ANIM_TALK_HANDS_ON_HIPS
     ANIMMODE_LOOP, // ENBOMBERS2_ANIM_WALK
     ANIMMODE_ONCE, // ENBOMBERS2_ANIM_SURPRISE
-    ANIMMODE_LOOP, // ENBOMBERS2_ANIM_FROLIC
+    ANIMMODE_LOOP, // ENBOMBERS2_ANIM_TAUNT
     ANIMMODE_LOOP, // ENBOMBERS2_ANIM_ARM_SWIPE
     ANIMMODE_ONCE, // ENBOMBERS2_ANIM_SALUTE
 };
@@ -146,7 +146,7 @@ void EnBombers2_ChangeAnim(EnBombers2* this, s32 animIndex, f32 playSpeed) {
 
 void func_80C04B40(EnBombers2* this) {
     if (!this->unk_2AC) {
-        EnBombers2_ChangeAnim(this, ENBOMBERS2_ANIM_FROLIC, 1.0f);
+        EnBombers2_ChangeAnim(this, ENBOMBERS2_ANIM_TAUNT, 1.0f);
     } else {
         EnBombers2_ChangeAnim(this, ENBOMBERS2_ANIM_IDLE, 1.0f);
     }

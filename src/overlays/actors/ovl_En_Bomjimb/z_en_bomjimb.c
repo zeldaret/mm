@@ -79,14 +79,14 @@ typedef enum {
     /* 0x05 */ ENBOMJIMB_ANIM_WALK,
     /* 0x06 */ ENBOMJIMB_ANIM_SURPRISE,
     /* 0x07 */ ENBOMJIMB_ANIM_HIDE_UNDER_BOX,
-    /* 0x08 */ ENBOMJIMB_ANIM_KNOCK_BACK,
+    /* 0x08 */ ENBOMJIMB_ANIM_DAZED,
     /* 0x09 */ ENBOMJIMB_ANIM_SIT,
     /* 0x0A */ ENBOMJIMB_ANIM_CLIMB,
     /* 0x0B */ ENBOMJIMB_ANIM_HOLD_CUCCO,
     /* 0x0C */ ENBOMJIMB_ANIM_TURN_AROUND,
     /* 0x0D */ ENBOMJIMB_ANIM_SHOW_NUMBER,
-    /* 0x0E */ ENBOMJIMB_ANIM_TALK_BACK_TURNED,
-    /* 0x0F */ ENBOMJIMB_ANIM_FROLIC,
+    /* 0x0E */ ENBOMJIMB_ANIM_TALK_SHOWING_NUMBER,
+    /* 0x0F */ ENBOMJIMB_ANIM_TAUNT,
     /* 0x10 */ ENBOMJIMB_ANIM_JUMP,
     /* 0x11 */ ENBOMJIMB_ANIM_ARM_SWIPE,
     /* 0x12 */ ENBOMJIMB_ANIM_SALUTE,
@@ -97,28 +97,28 @@ typedef enum {
 } EnBomjimbAnimation;
 
 static AnimationHeader* sAnimations[ENBOMJIMB_ANIM_MAX] = {
-    &gBomberIdleAnim,            // ENBOMJIMB_ANIM_IDLE
-    &gBomberHandsOnHipsAnim,     // ENBOMJIMB_ANIM_HANDS_ON_HIPS
-    &gBomberTalkNormalAnim,      // ENBOMJIMB_ANIM_TALK_NORMAL
-    &gBomberTalkHandsOnHipsAnim, // ENBOMJIMB_ANIM_TALK_HANDS_ON_HIPS
-    &gBomberBlowgunAnim,         // ENBOMJIMB_ANIM_BLOWGUN
-    &gBomberWalkAnim,            // ENBOMJIMB_ANIM_WALK
-    &gBomberSurpriseAnim,        // ENBOMJIMB_ANIM_SURPRISE
-    &gBomberHideUnderBoxAnim,    // ENBOMJIMB_ANIM_HIDE_UNDER_BOX
-    &gBomberKnockBackAnim,       // ENBOMJIMB_ANIM_KNOCK_BACK
-    &gBomberSitAnim,             // ENBOMJIMB_ANIM_SIT
-    &gBomberClimbAnim,           // ENBOMJIMB_ANIM_CLIMB
-    &gBomberHoldCuccoAnim,       // ENBOMJIMB_ANIM_HOLD_CUCCO
-    &gBomberTurnAroundAnim,      // ENBOMJIMB_ANIM_TURN_AROUND
-    &gBomberShowNumberAnim,      // ENBOMJIMB_ANIM_SHOW_NUMBER
-    &gBomberTalkBackTurnedAnim,  // ENBOMJIMB_ANIM_TALK_BACK_TURNED
-    &gBomberFrolicAnim,          // ENBOMJIMB_ANIM_FROLIC
-    &gBomberJumpAnim,            // ENBOMJIMB_ANIM_JUMP
-    &gBomberArmSwipeAnim,        // ENBOMJIMB_ANIM_ARM_SWIPE
-    &gBomberSaluteAnim,          // ENBOMJIMB_ANIM_SALUTE
-    &gBomberRunAnim,             // ENBOMJIMB_ANIM_RUN
-    &gBomberLookAroundAnim,      // ENBOMJIMB_ANIM_LOOK_AROUND
-    &gBomberCaughtAnim,          // ENBOMJIMB_ANIM_CAUGHT
+    &gBomberIdleAnim,              // ENBOMJIMB_ANIM_IDLE
+    &gBomberHandsOnHipsAnim,       // ENBOMJIMB_ANIM_HANDS_ON_HIPS
+    &gBomberTalkNormalAnim,        // ENBOMJIMB_ANIM_TALK_NORMAL
+    &gBomberTalkHandsOnHipsAnim,   // ENBOMJIMB_ANIM_TALK_HANDS_ON_HIPS
+    &gBomberBlowgunAnim,           // ENBOMJIMB_ANIM_BLOWGUN
+    &gBomberWalkAnim,              // ENBOMJIMB_ANIM_WALK
+    &gBomberSurpriseAnim,          // ENBOMJIMB_ANIM_SURPRISE
+    &gBomberHideUnderBoxAnim,      // ENBOMJIMB_ANIM_HIDE_UNDER_BOX
+    &gBomberDazedAnim,             // ENBOMJIMB_ANIM_DAZED
+    &gBomberSitAnim,               // ENBOMJIMB_ANIM_SIT
+    &gBomberClimbAnim,             // ENBOMJIMB_ANIM_CLIMB
+    &gBomberHoldCuccoAnim,         // ENBOMJIMB_ANIM_HOLD_CUCCO
+    &gBomberTurnAroundAnim,        // ENBOMJIMB_ANIM_TURN_AROUND
+    &gBomberShowNumberAnim,        // ENBOMJIMB_ANIM_SHOW_NUMBER
+    &gBomberTalkShowingNumberAnim, // ENBOMJIMB_ANIM_TALK_SHOWING_NUMBER
+    &gBomberTauntAnim,             // ENBOMJIMB_ANIM_TAUNT
+    &gBomberJumpAnim,              // ENBOMJIMB_ANIM_JUMP
+    &gBomberArmSwipeAnim,          // ENBOMJIMB_ANIM_ARM_SWIPE
+    &gBomberSaluteAnim,            // ENBOMJIMB_ANIM_SALUTE
+    &gBomberRunAnim,               // ENBOMJIMB_ANIM_RUN
+    &gBomberLookAroundAnim,        // ENBOMJIMB_ANIM_LOOK_AROUND
+    &gBomberCaughtAnim,            // ENBOMJIMB_ANIM_CAUGHT
 };
 
 static u8 sAnimationModes[ENBOMJIMB_ANIM_MAX] = {
@@ -130,14 +130,14 @@ static u8 sAnimationModes[ENBOMJIMB_ANIM_MAX] = {
     ANIMMODE_LOOP, // ENBOMJIMB_ANIM_WALK
     ANIMMODE_ONCE, // ENBOMJIMB_ANIM_SURPRISE
     ANIMMODE_ONCE, // ENBOMJIMB_ANIM_HIDE_UNDER_BOX
-    ANIMMODE_LOOP, // ENBOMJIMB_ANIM_KNOCK_BACK
+    ANIMMODE_LOOP, // ENBOMJIMB_ANIM_DAZED
     ANIMMODE_LOOP, // ENBOMJIMB_ANIM_SIT
     ANIMMODE_LOOP, // ENBOMJIMB_ANIM_CLIMB
     ANIMMODE_LOOP, // ENBOMJIMB_ANIM_HOLD_CUCCO
     ANIMMODE_ONCE, // ENBOMJIMB_ANIM_TURN_AROUND
     ANIMMODE_LOOP, // ENBOMJIMB_ANIM_SHOW_NUMBER
-    ANIMMODE_LOOP, // ENBOMJIMB_ANIM_TALK_BACK_TURNED
-    ANIMMODE_LOOP, // ENBOMJIMB_ANIM_FROLIC
+    ANIMMODE_LOOP, // ENBOMJIMB_ANIM_TALK_SHOWING_NUMBER
+    ANIMMODE_LOOP, // ENBOMJIMB_ANIM_TAUNT
     ANIMMODE_ONCE, // ENBOMJIMB_ANIM_JUMP
     ANIMMODE_LOOP, // ENBOMJIMB_ANIM_ARM_SWIPE
     ANIMMODE_ONCE, // ENBOMJIMB_ANIM_SALUTE
@@ -673,7 +673,7 @@ void func_80C0217C(EnBomjimb* this, PlayState* play) {
 }
 
 void func_80C0250C(EnBomjimb* this) {
-    EnBomjimb_ChangeAnim(this, ENBOMJIMB_ANIM_FROLIC, 1.0f);
+    EnBomjimb_ChangeAnim(this, ENBOMJIMB_ANIM_TAUNT, 1.0f);
     this->unk_2D4 = 0;
     this->actor.speed = 0.0f;
     this->unk_2D6 = BINANG_ROT180(this->actor.yawTowardsPlayer);
@@ -703,7 +703,7 @@ void func_80C02570(EnBomjimb* this, PlayState* play) {
 
 void func_80C0267C(EnBomjimb* this) {
     func_80C012E0(this);
-    EnBomjimb_ChangeAnim(this, ENBOMJIMB_ANIM_KNOCK_BACK, 1.0f);
+    EnBomjimb_ChangeAnim(this, ENBOMJIMB_ANIM_DAZED, 1.0f);
     this->actor.speed = 0.0f;
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
     this->unk_2AE = 40;
@@ -823,7 +823,7 @@ void func_80C02A14(EnBomjimb* this, PlayState* play) {
         }
     }
 
-    if ((this->animIndex == ENBOMJIMB_ANIM_FROLIC) && (this->unk_2CA == 8)) {
+    if ((this->animIndex == ENBOMJIMB_ANIM_TAUNT) && (this->unk_2CA == 8)) {
         player->actor.freezeTimer = 3;
     }
 

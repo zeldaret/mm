@@ -11,15 +11,15 @@
         <Animation Name="gBomberSurpriseAnim" Offset="0x349C" /> <!-- Original name is "csn_odoroku" ("surprise") -->
         <Animation Name="gBomberRunAnim" Offset="0x36B0" /> <!-- Original name is "csn_run03" -->
         <Animation Name="gBomberTurnAroundAnim" Offset="0x3EE4" /> <!-- Original name is "csn_senakamise" ("senaka" = "back (of the body)​", "mise" = "to show; to display​") -->
-        <Animation Name="gBomberTalkBackTurnedAnim" Offset="0x433C" /> <!-- Original name is "csn_senakatalk" -->
+        <Animation Name="gBomberTalkShowingNumberAnim" Offset="0x433C" /> <!-- Original name is "csn_senakatalk" -->
         <Animation Name="gBomberShowNumberAnim" Offset="0x478C" /> <!-- Original name is "csn_senakawait" -->
         <Animation Name="gBomberHideUnderBoxAnim" Offset="0x4960" /> <!-- Original name is "csn_shagamu" ("to squat; to crouch​") -->
         <Animation Name="gBomberSitAnim" Offset="0x4C1C" /> <!-- Original name is "csn_suwari" ("sitting") -->
-        <Animation Name="gBomberKnockBackAnim" Offset="0x5128" /> <!-- Original name is "csn_suwaripiyo" ("piyo" = "weakly moving") -->
+        <Animation Name="gBomberDazedAnim" Offset="0x5128" /> <!-- Original name is "csn_suwaripiyo" ("piyo" = "weakly moving") -->
         <Animation Name="gBomberTalkHandsOnHipsAnim" Offset="0x53F4" /> <!-- Original name is "csn_talk01" -->
         <Animation Name="gBomberTalkNormalAnim" Offset="0x57C8" /> <!-- Original name is "csn_talk02" -->
         <Animation Name="gBomberArmSwipeAnim" Offset="0x5DC4" /> <!-- Original name is "csn_talk03" -->
-        <Animation Name="gBomberFrolicAnim" Offset="0x60E8" /> <!-- Original name is "csn_tome" -->
+        <Animation Name="gBomberTauntAnim" Offset="0x60E8" /> <!-- Original name is "csn_tome" -->
         <Animation Name="gBomberIdleAnim" Offset="0x64B8" /> <!-- Original name is "csn_wait01" -->
         <DList Name="object_cs_DL_009130" Offset="0x9130" />
         <DList Name="object_cs_DL_009478" Offset="0x9478" />
