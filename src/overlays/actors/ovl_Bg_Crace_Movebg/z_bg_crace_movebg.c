@@ -333,7 +333,11 @@ void BgCraceMovebg_ClosingDoor_Close(BgCraceMovebg* this, PlayState* play) {
 
         BgCraceMovebg_ClosingDoor_SetupDoNothing(this, play);
     } else {
+#if MM_VERSION >= N64_US
         Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_STONEDOOR_CLOSE_S - SFX_FLAG);
+#else
+        Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_STONE_STATUE_OPEN - SFX_FLAG);
+#endif
     }
 }
 
