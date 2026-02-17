@@ -133,8 +133,8 @@ s32 func_80A68860(EnMushi2* this, PlayState* play) {
         return true;
     }
 
-    return BgCheck_GetWaterSurfaceNoBgId(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &waterSurface,
-                                         &waterBox);
+    return BgCheck_GetWaterSurfaceNoBgId(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
+                                         &waterSurface, &waterBox);
 }
 
 s32 func_80A68910(EnMushi2* this, PlayState* play) {
@@ -535,8 +535,8 @@ void func_80A697C4(EnMushi2* this, PlayState* play) {
             func_80A6969C(this, play);
         }
 
-        if (BgCheck_GetWaterSurfaceNoBgId(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &waterSurface,
-                                          &waterBox)) {
+        if (BgCheck_GetWaterSurfaceNoBgId(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
+                                          &waterSurface, &waterBox)) {
             this->actor.depthInWater = waterSurface - this->actor.world.pos.y;
             if (this->actor.depthInWater >= 1.0f) {
                 this->unk_30C |= 0x20;

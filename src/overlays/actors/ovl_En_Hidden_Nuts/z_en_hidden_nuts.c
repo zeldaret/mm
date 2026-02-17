@@ -358,8 +358,8 @@ void func_80BDBB48(EnHiddenNuts* this, PlayState* play) {
     s16 sp4E = false;
     Vec3f sp40;
 
-    if (BgCheck_GetWaterSurfaceNoBgIdAlt(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &waterSurface,
-                                         &waterBox) &&
+    if (BgCheck_GetWaterSurfaceNoBgIdAlt(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
+                                         &waterSurface, &waterBox) &&
         (this->actor.world.pos.y < waterSurface)) {
         this->actor.velocity.y = 0.0f;
         Math_Vec3f_Copy(&sp40, &this->actor.world.pos);

@@ -502,8 +502,8 @@ s32 func_8093F6F8(EnGoroiwa* this, PlayState* play) {
         WaterBox* waterBox;
         f32 waterSurface;
 
-        if (BgCheck_GetWaterSurfaceNoBgId(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &waterSurface,
-                                          &waterBox)) {
+        if (BgCheck_GetWaterSurfaceNoBgId(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
+                                          &waterSurface, &waterBox)) {
             if ((this->actor.world.pos.y + this->unk_1DC) <= waterSurface) {
                 this->unk_1E5 |= 0x20;
                 if (waterSurface < (this->unk_1DC + sp78)) {
