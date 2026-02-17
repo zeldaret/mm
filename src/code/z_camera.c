@@ -820,7 +820,7 @@ s32 Camera_GetWaterBoxBgCamSetting(Camera* camera, f32* waterY) {
     playerPosShape = Actor_GetWorldPosShapeRot(camera->focalActor);
     *waterY = playerPosShape.pos.y;
 
-    if (!WaterBox_GetSurfaceImpl(camera->play, &camera->play->colCtx, playerPosShape.pos.x, playerPosShape.pos.z,
+    if (!BgCheck_GetWaterSurface(camera->play, &camera->play->colCtx, playerPosShape.pos.x, playerPosShape.pos.z,
                                  waterY, &waterBox, &bgId)) {
         // player's position is not in a waterbox
         *waterY = playerPosShape.pos.y;
