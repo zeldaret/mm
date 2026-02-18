@@ -503,8 +503,8 @@ void func_80A74E90(EnPr2* this, PlayState* play) {
             Math_Vec3f_Copy(&this->unk_228, &this->actor.world.pos);
         }
 
-        if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &this->unk_200,
-                                 &waterBox)) {
+        if (BgCheck_GetWaterSurfaceNoBgIdAlt(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
+                                             &this->unk_200, &waterBox)) {
             if (this->unk_21C.y > (this->unk_200 - 40.0f)) {
                 this->unk_21C.y = this->unk_200 - 40.0f;
             }
@@ -589,8 +589,8 @@ void func_80A75310(EnPr2* this, PlayState* play) {
             this->unk_1D6 = true;
         }
 
-        if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &this->unk_200,
-                                 &waterBox)) {
+        if (BgCheck_GetWaterSurfaceNoBgIdAlt(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
+                                             &this->unk_200, &waterBox)) {
             if (this->actor.world.pos.y >= (this->unk_200 - 15.0f)) {
                 temp = true;
             } else {

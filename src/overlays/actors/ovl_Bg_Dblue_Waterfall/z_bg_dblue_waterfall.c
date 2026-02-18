@@ -271,14 +271,14 @@ void func_80B84568(BgDblueWaterfall* this, PlayState* play) {
     WaterBox* waterBox;
     s32 bgId;
     f32 sp34 = BgCheck_EntityRaycastFloor5(&play->colCtx, &sp40, &bgId, &this->actor, &this->actor.world.pos);
-    f32 sp30;
+    f32 waterSurface;
 
-    if (WaterBox_GetSurface1_2(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp30,
-                               &waterBox)) {
-        if (sp30 < sp34) {
+    if (BgCheck_GetWaterSurfaceNoBgId(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
+                                      &waterSurface, &waterBox)) {
+        if (waterSurface < sp34) {
             this->unk_198 = sp34;
         } else {
-            this->unk_198 = sp30;
+            this->unk_198 = waterSurface;
         }
     } else {
         this->unk_198 = sp34;
