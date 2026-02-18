@@ -1699,8 +1699,8 @@ asm/non_matchings/code/z_player_lib/func_80122D44.s,func_80122D44,0x80122D44,0x6
 asm/non_matchings/code/z_player_lib/Player_MaskIdToItemId.s,Player_MaskIdToItemId,0x80122ED8,0x5
 asm/non_matchings/code/z_player_lib/Player_GetCurMaskItemId.s,Player_GetCurMaskItemId,0x80122EEC,0xF
 asm/non_matchings/code/z_player_lib/func_80122F28.s,func_80122F28,0x80122F28,0x1D
-asm/non_matchings/code/z_player_lib/func_80122F9C.s,func_80122F9C,0x80122F9C,0xC
-asm/non_matchings/code/z_player_lib/func_80122FCC.s,func_80122FCC,0x80122FCC,0x10
+asm/non_matchings/code/z_player_lib/Player_IsBackJumping.s,Player_IsBackJumping,0x80122F9C,0xC
+asm/non_matchings/code/z_player_lib/Player_IsSideJumping.s,Player_IsSideJumping,0x80122FCC,0x10
 asm/non_matchings/code/z_player_lib/func_8012300C.s,func_8012300C,0x8012300C,0x4
 asm/non_matchings/code/z_player_lib/func_8012301C.s,func_8012301C,0x8012301C,0x49
 asm/non_matchings/code/z_player_lib/func_80123140.s,func_80123140,0x80123140,0x86
