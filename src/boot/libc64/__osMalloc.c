@@ -19,6 +19,38 @@
 #define BLOCK_FREE_MAGIC (0xEF)
 #define BLOCK_FREE_MAGIC_32 (0xEFEFEFEF)
 
+#define NODE_IS_VALID(node) ((node)->magic == NODE_MAGIC)
+
+#if MM_VERSION >= N64_US
+#define SET_DEBUG_INFO(node, f, l, a) ((void)0)
+
+#define CHECK_CORRECT_ARENA(node, arena) (true)
+
+#define CHECK_ALLOC_FAILURE(arena, ptr) (void)0
+#else
+#define SET_DEBUG_INFO(node, f, l, a)         \
+    {                                         \
+        node->filename = (f);                 \
+        node->line = (l);                     \
+        node->threadId = osGetThreadId(NULL); \
+        node->arena = (a);                    \
+        node->time = osGetTime();             \
+    }                                         \
+    (void)0
+
+#define CHECK_CORRECT_ARENA(node, arena) ((node)->arena == (arena))
+
+s32 gTotalAllocFailures = 0; // "Arena_failcnt"
+
+#define CHECK_ALLOC_FAILURE(arena, ptr) \
+    do {                                \
+        if ((ptr) == NULL) {            \
+            gTotalAllocFailures++;      \
+            (arena)->allocFailures++;   \
+        }                               \
+    } while (0)
+#endif
+
 OSMesg sArenaLockMsg[1];
 
 void __osMallocAddHeap(Arena* arena, void* heap, size_t size);
@@ -127,6 +159,107 @@ u8 __osMallocIsInitialized(Arena* arena) {
     return arena->isInit;
 }
 
+#if MM_VERSION < N64_US
+void* __osMallocDebug(Arena* arena, size_t size, const char* file, int line) {
+    ArenaNode* iter;
+    ArenaNode* newNode;
+    void* alloc = NULL;
+
+    ArenaImpl_Lock(arena);
+
+    size = ALIGN16(size);
+
+    for (iter = arena->head; iter != NULL; iter = iter->next) {
+        if (iter->isFree && (iter->size >= size)) {
+            size_t blockSize = ALIGN16(size) + sizeof(ArenaNode);
+
+            if (blockSize < iter->size) {
+                ArenaNode* next;
+
+                newNode = (ArenaNode*)((uintptr_t)iter + blockSize);
+                newNode->next = iter->next;
+                newNode->prev = iter;
+                newNode->size = iter->size - blockSize;
+                newNode->isFree = true;
+                newNode->magic = NODE_MAGIC;
+
+                iter->next = newNode;
+                iter->size = size;
+
+                next = newNode->next;
+                if (next != NULL) {
+                    next->prev = newNode;
+                }
+            }
+
+            iter->isFree = false;
+
+            SET_DEBUG_INFO(iter, file, line, arena);
+
+            alloc = (void*)((uintptr_t)iter + sizeof(ArenaNode));
+            break;
+        }
+    }
+
+    CHECK_ALLOC_FAILURE(arena, alloc);
+
+    ArenaImpl_Unlock(arena);
+
+    return alloc;
+}
+#endif
+
+#if MM_VERSION < N64_US
+void* __osMallocRDebug(Arena* arena, size_t size, const char* file, int line) {
+    ArenaNode* iter;
+    ArenaNode* newNode;
+    size_t blockSize;
+    void* alloc = NULL;
+
+    size = ALIGN16(size);
+
+    ArenaImpl_Lock(arena);
+
+    for (iter = ArenaImpl_GetLastBlock(arena); iter != NULL; iter = iter->prev) {
+        if (iter->isFree && (iter->size >= size)) {
+            blockSize = ALIGN16(size) + sizeof(ArenaNode);
+
+            if (blockSize < iter->size) {
+                ArenaNode* next;
+
+                newNode = (ArenaNode*)(((uintptr_t)iter + iter->size) - size);
+                newNode->next = iter->next;
+                newNode->prev = iter;
+                newNode->size = size;
+                newNode->magic = NODE_MAGIC;
+
+                iter->next = newNode;
+                iter->size -= blockSize;
+
+                next = newNode->next;
+                if (next != NULL) {
+                    next->prev = newNode;
+                }
+                iter = newNode;
+            }
+
+            iter->isFree = false;
+
+            SET_DEBUG_INFO(iter, file, line, arena);
+
+            alloc = (void*)((uintptr_t)iter + sizeof(ArenaNode));
+            break;
+        }
+    }
+
+    CHECK_ALLOC_FAILURE(arena, alloc);
+
+    ArenaImpl_Unlock(arena);
+
+    return alloc;
+}
+#endif
+
 /**
  * Allocates at least \p size bytes of memory using the given \p arena.
  * The block of memory will be allocated at the start of the first sufficiently large free block.
@@ -155,7 +288,7 @@ void* __osMalloc(Arena* arena, size_t size) {
 
     // Iterate over the arena looking for a big enough space of memory.
     while (iter != NULL) {
-        if (iter->isFree && iter->size >= size) {
+        if (iter->isFree && (iter->size >= size)) {
             size_t blockSize = ALIGN16(size) + sizeof(ArenaNode);
 
             // If the block is larger than the requested size, then split it and just use the required size of the
@@ -180,12 +313,17 @@ void* __osMalloc(Arena* arena, size_t size) {
             }
 
             iter->isFree = false;
+
+            SET_DEBUG_INFO(iter, NULL, 0, arena);
+
             alloc = (void*)((uintptr_t)iter + sizeof(ArenaNode));
             break;
         }
 
         iter = iter->next;
     }
+
+    CHECK_ALLOC_FAILURE(arena, alloc);
 
     ArenaImpl_Unlock(arena);
 
@@ -245,11 +383,16 @@ void* __osMallocR(Arena* arena, size_t size) {
             }
 
             iter->isFree = false;
+
+            SET_DEBUG_INFO(iter, NULL, 0, arena);
+
             alloc = (void*)((uintptr_t)iter + sizeof(ArenaNode));
             break;
         }
         iter = iter->prev;
     }
+
+    CHECK_ALLOC_FAILURE(arena, alloc);
 
     ArenaImpl_Unlock(arena);
 
@@ -275,42 +418,140 @@ void __osFree(Arena* arena, void* ptr) {
 
     ArenaImpl_Lock(arena);
 
-    node = (ArenaNode*)((uintptr_t)ptr - sizeof(ArenaNode));
-
-    if ((ptr != NULL) && (node->magic == NODE_MAGIC) && !node->isFree) {
-        next = node->next;
-        prev = node->prev;
-        node->isFree = true;
-
-        // Checks if the next node is contiguous to the current node and if it isn't currently allocated. Then merge the
-        // two nodes into one.
-        if ((uintptr_t)next == (uintptr_t)node + sizeof(ArenaNode) + node->size && next->isFree) {
-            ArenaNode* newNext = next->next;
-
-            if (newNext != NULL) {
-                newNext->prev = node;
-            }
-
-            node->size += next->size + sizeof(ArenaNode);
-
-            node->next = newNext;
-            next = newNext;
-        }
-
-        // Checks if the previous node is contiguous to the current node and if it isn't currently allocated. Then merge
-        // the two nodes into one.
-        if ((prev != NULL) && prev->isFree && ((uintptr_t)node == (uintptr_t)prev + sizeof(ArenaNode) + prev->size)) {
-            if (next != NULL) {
-                next->prev = prev;
-            }
-
-            prev->next = next;
-            prev->size += node->size + sizeof(ArenaNode);
-        }
+    if (ptr == NULL) {
+        goto cleanup;
     }
 
+    node = (ArenaNode*)((uintptr_t)ptr - sizeof(ArenaNode));
+
+    if (!NODE_IS_VALID(node)) {
+#if MM_VERSION < N64_US
+        // __osFree:Unauthorized release(%08x)\n
+        (void)"__osFree:不正解放(%08x)\n";
+#endif
+        goto cleanup;
+    }
+
+    if (node->isFree) {
+#if MM_VERSION < N64_US
+        // __osFree:Double release(%08x)\n
+        (void)"__osFree:二重解放(%08x)\n";
+#endif
+        goto cleanup;
+    }
+
+    if (!CHECK_CORRECT_ARENA(node, arena)) {
+#if MM_VERSION < N64_US
+        // __osFree:arena(%08x) and __osMallocのarena(%08x) do not match\n
+        (void)"__osFree:arena(%08x)が__osMallocのarena(%08x)と一致しない\n";
+#endif
+        goto cleanup;
+    }
+
+    next = node->next;
+    prev = node->prev;
+    node->isFree = true;
+
+    SET_DEBUG_INFO(node, NULL, 0, arena);
+
+    // Checks if the next node is contiguous to the current node and if it isn't currently allocated. Then merge the
+    // two nodes into one.
+    if (((uintptr_t)next == (uintptr_t)node + sizeof(ArenaNode) + node->size) && next->isFree) {
+        ArenaNode* newNext = next->next;
+
+        if (newNext != NULL) {
+            newNext->prev = node;
+        }
+
+        node->size += next->size + sizeof(ArenaNode);
+
+        node->next = newNext;
+        next = newNext;
+    }
+
+    // Checks if the previous node is contiguous to the current node and if it isn't currently allocated. Then merge
+    // the two nodes into one.
+    if ((prev != NULL) && prev->isFree && ((uintptr_t)node == (uintptr_t)prev + sizeof(ArenaNode) + prev->size)) {
+        if (next != NULL) {
+            next->prev = prev;
+        }
+
+        prev->next = next;
+        prev->size += node->size + sizeof(ArenaNode);
+    }
+
+cleanup:
     ArenaImpl_Unlock(arena);
 }
+
+#if MM_VERSION < N64_US
+void __osFreeDebug(Arena* arena, void* ptr, const char* file, int line) {
+    ArenaNode* node;
+    ArenaNode* next;
+    ArenaNode* prev;
+
+    ArenaImpl_Lock(arena);
+
+    if (ptr == NULL) {
+        goto cleanup;
+    }
+
+    node = (ArenaNode*)((uintptr_t)ptr - sizeof(ArenaNode));
+
+    if (!NODE_IS_VALID(node)) {
+        // __osFree:Unauthorized release(%08x)\n
+        (void)"__osFree:不正解放(%08x)\n";
+        goto cleanup;
+    }
+
+    if (node->isFree) {
+        // __osFree:Double release(%08x)\n
+        (void)"__osFree:二重解放(%08x)\n";
+        goto cleanup;
+    }
+
+    if (!CHECK_CORRECT_ARENA(node, arena)) {
+        // __osFree:arena(%08x) and __osMallocのarena(%08x) do not match\n
+        (void)"__osFree:arena(%08x)が__osMallocのarena(%08x)と一致しない\n";
+        goto cleanup;
+    }
+
+    next = node->next;
+    prev = node->prev;
+    node->isFree = true;
+
+    SET_DEBUG_INFO(node, file, line, arena);
+
+    // Checks if the next node is contiguous to the current node and if it isn't currently allocated. Then merge the
+    // two nodes into one.
+    if (((uintptr_t)next == (uintptr_t)node + sizeof(ArenaNode) + node->size) && next->isFree) {
+        ArenaNode* newNext = next->next;
+
+        if (newNext != NULL) {
+            newNext->prev = node;
+        }
+
+        node->size += next->size + sizeof(ArenaNode);
+
+        node->next = newNext;
+        next = newNext;
+    }
+
+    // Checks if the previous node is contiguous to the current node and if it isn't currently allocated. Then merge
+    // the two nodes into one.
+    if ((prev != NULL) && prev->isFree && ((uintptr_t)node == (uintptr_t)prev + sizeof(ArenaNode) + prev->size)) {
+        if (next != NULL) {
+            next->prev = prev;
+        }
+
+        prev->next = next;
+        prev->size += node->size + sizeof(ArenaNode);
+    }
+
+cleanup:
+    ArenaImpl_Unlock(arena);
+}
+#endif
 
 /**
  * Reallocates the pointer \p ptr.
@@ -354,18 +595,19 @@ void* __osRealloc(Arena* arena, void* ptr, size_t newSize) {
 
         newSize = ALIGN16(newSize);
 
-        // Only reallocate the memory if the new size isn't smaller than the actual node size
-        if ((newSize != node->size) && (node->size < newSize)) {
+        if (newSize == node->size) {
+            // Do nothing
+        } else if (node->size < newSize) {
             ArenaNode* next = node->next;
 
             diff = newSize - node->size;
             // Checks if the next node is contiguous to the current allocated node and it has enough space to fit the
             // new requested size
-            if (((uintptr_t)next == (uintptr_t)node + node->size + sizeof(ArenaNode)) && (next->isFree) &&
+            if (((uintptr_t)next == (uintptr_t)node + node->size + sizeof(ArenaNode)) && next->isFree &&
                 (next->size >= diff)) {
                 ArenaNode* next2 = next->next;
 
-                next->size = (next->size - diff);
+                next->size = next->size - diff;
                 if (next2 != NULL) {
                     // Update the previous element of the linked list
                     next2->prev = (void*)((uintptr_t)next + diff);
@@ -384,13 +626,22 @@ void* __osRealloc(Arena* arena, void* ptr, size_t newSize) {
                 }
                 ptr = newPtr;
             }
+        } else if (newSize < node->size) {
         }
     }
+
+    CHECK_ALLOC_FAILURE(arena, ptr);
 
     ArenaImpl_Unlock(arena);
 
     return ptr;
 }
+
+#if MM_VERSION < N64_US
+void* __osReallocDebug(Arena* arena, void* ptr, size_t newSize, const char* file, int line) {
+    return __osRealloc(arena, ptr, newSize);
+}
+#endif
 
 /**
  * Gets the size of the largest free block, the total free space and the total allocated space.
@@ -442,7 +693,7 @@ s32 __osCheckArena(Arena* arena) {
     (void)"アリーナの内容をチェックしています．．． (%08x)\n";
 
     for (iter = arena->head; iter != NULL; iter = iter->next) {
-        if (iter->magic != NODE_MAGIC) {
+        if (!NODE_IS_VALID(iter)) {
             // "Oops!!"
             (void)"おおっと！！ (%08x %08x)\n";
 
@@ -458,3 +709,9 @@ s32 __osCheckArena(Arena* arena) {
 
     return err;
 }
+
+#if MM_VERSION < N64_US
+u8 ArenaImpl_GetAllocFailures(Arena* arena) {
+    return arena->allocFailures;
+}
+#endif
