@@ -18,7 +18,7 @@ typedef void (*EnInsectActionFunc)(struct EnInsect*, PlayState*);
 #define INSECT_FLAG_7 (1 << 7)
 #define INSECT_FLAG_CRAWLING (1 << 8)
 
-#define ENINSECT_GET_1(thisx) ((thisx)->params & 1)
+#define ENINSECT_GET_INIT_FLAGS(thisx) ((thisx)->params & 1)
 
 #define ENINSECT_PARAMS(param) (param)
 

@@ -83,7 +83,7 @@ static InitChainEntry sInitChain[] = {
 static Vec3f accel = { 0.0f, 0.0f, 0.0f };
 
 void EnInsect_InitFlags(EnInsect* this) {
-    this->insectFlags = sInitInsectFlags[ENINSECT_GET_1(&this->actor)];
+    this->insectFlags = sInitInsectFlags[ENINSECT_GET_INIT_FLAGS(&this->actor)];
 }
 
 f32 EnInsect_XZDistanceSquared(Vec3f* arg0, Vec3f* arg1) {
