@@ -199,7 +199,8 @@ calc_tuning(float sample_rate, int basenote)
         /* 0x7F */ 0.099213f,   // PITCH_AF0
     };
 
-    return (sample_rate / playback_sample_rate) * pitch_frequencies[basenote];
+    // Due to the way the lookup table is arranged, the note needs to be reflected about middle C (z64 note value 39)
+    return (sample_rate / playback_sample_rate) * pitch_frequencies[(78u - (unsigned)basenote) % 128u];
 }
 
 void
@@ -1399,10 +1400,10 @@ emit_c_drums(FILE *out, soundfont *sf)
             ptr_table[ptr_offset].n = note_offset;
 
             // wrap note on overflow
-            int note = drum->base_note + note_offset;
-            if (note > 127)
-                note -= 128;
-
+            // drum frequencies increase with drum offset, corresponding to a decrease in note number
+            int note = drum->base_note - note_offset;
+            if (note < 0)
+                note += 128;
             float tuning = calc_tuning(drum->sample_rate, note);
 
             fprintf(out, "    SF%d_%s_ENTRY(" F32_FMT "f),\n", sf->info.index, drum->name, tuning);
