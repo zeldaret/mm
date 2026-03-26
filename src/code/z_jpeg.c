@@ -25,7 +25,7 @@ extern u64 njpgdspMainDataStart[];
  * Configures and schedules a JPEG decoder task and waits for it to finish.
  */
 void Jpeg_ScheduleDecoderTask(JpegContext* jpegCtx) {
-    static OSTask_t sJpegTask = {
+    static OSTask sJpegTask = {
         M_NJPEGTASK,                         // type
         0,                                   // flags
         NULL,                                // ucode_boot
@@ -54,18 +54,18 @@ void Jpeg_ScheduleDecoderTask(JpegContext* jpegCtx) {
     workBuf->taskData.qTableUPtr = &workBuf->qTableU;
     workBuf->taskData.qTableVPtr = &workBuf->qTableV;
 
-    sJpegTask.flags = 0;
-    sJpegTask.ucode_boot = SysUcode_GetUCodeBoot();
-    sJpegTask.ucode_boot_size = SysUcode_GetUCodeBootSize();
-    sJpegTask.yield_data_ptr = (u64*)&workBuf->yieldData;
-    sJpegTask.data_ptr = (u64*)&workBuf->taskData;
+    sJpegTask.t.flags = 0;
+    sJpegTask.t.ucode_boot = SysUcode_GetUCodeBoot();
+    sJpegTask.t.ucode_boot_size = SysUcode_GetUCodeBootSize();
+    sJpegTask.t.yield_data_ptr = (u64*)&workBuf->yieldData;
+    sJpegTask.t.data_ptr = (u64*)&workBuf->taskData;
 
     jpegCtx->scTask.next = NULL;
     jpegCtx->scTask.flags = OS_SC_NEEDS_RSP;
     jpegCtx->scTask.msgQ = &jpegCtx->mq;
     jpegCtx->scTask.msg = NULL;
     jpegCtx->scTask.framebuffer = NULL;
-    jpegCtx->scTask.list.t = sJpegTask;
+    jpegCtx->scTask.list = sJpegTask;
 
     osSendMesg(&gScheduler.cmdQueue, (OSMesg*)&jpegCtx->scTask, OS_MESG_BLOCK);
     Sched_SendNotifyMsg(&gScheduler); // osScKickEntryMsg
