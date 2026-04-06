@@ -16,7 +16,7 @@ void AudioMgr_HandleRetrace(AudioMgr* audioMgr) {
     OSTimer timer;
     s32 msg;
 
-    if (SREG(20) > 0) {
+    if (R_AUDIOMGR_DEBUG_LEVEL > 0) {
         audioMgr->rspTask = NULL;
     }
 
@@ -37,7 +37,7 @@ void AudioMgr_HandleRetrace(AudioMgr* audioMgr) {
         Sched_SendNotifyMsg(audioMgr->sched);
     }
 
-    if (SREG(20) >= 2) {
+    if (R_AUDIOMGR_DEBUG_LEVEL >= 2) {
         rspTask = NULL;
     } else {
         rspTask = AudioThread_Update();

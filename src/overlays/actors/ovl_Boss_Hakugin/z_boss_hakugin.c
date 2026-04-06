@@ -1804,7 +1804,9 @@ void BossHakugin_SetupIntroCutsceneRun(BossHakugin* this, PlayState* play) {
     this->timer = 0;
     this->actor.speed = 5.0f;
     Player_SetCsActionWithHaltedActors(play, &this->actor, PLAYER_CSACTION_END);
+#if MM_VERSION >= N64_US
     player->stateFlags1 |= PLAYER_STATE1_20;
+#endif
     play->actorCtx.isOverrideInputOn = true;
     this->actionFunc = BossHakugin_IntroCutsceneRun;
 }
@@ -1812,10 +1814,12 @@ void BossHakugin_SetupIntroCutsceneRun(BossHakugin* this, PlayState* play) {
 /**
  * Handles the final part of Goht's intro cutscene where Goht runs forward and smashes through the wall of stalactites
  * in front of it. This function manually overrides the control stick input to make the player run away from Goht, and
- * it manually knocks the player back when Goht collides with them to make it appear as if Goht is running them over.
+ * starting with the US version, it manually knocks the player back when Goht collides with them.
  */
 void BossHakugin_IntroCutsceneRun(BossHakugin* this, PlayState* play) {
+#if MM_VERSION >= N64_US
     Player* player = GET_PLAYER(play);
+#endif
     Camera* subCam = Play_GetCamera(play, this->subCamId);
     Vec3f subCamAt;
     f32 controlStickMagnitude;
@@ -1841,7 +1845,9 @@ void BossHakugin_IntroCutsceneRun(BossHakugin* this, PlayState* play) {
     } else if (this->timer == 62) {
         this->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
         CutsceneManager_Stop(this->actor.csId);
+#if MM_VERSION >= N64_US
         player->stateFlags1 &= ~PLAYER_STATE1_20;
+#endif
         SET_EVENTINF(EVENTINF_INTRO_CS_WATCHED_GOHT);
         Play_DisableMotionBlur();
         BossHakugin_SetupRun(this);
@@ -1861,11 +1867,15 @@ void BossHakugin_IntroCutsceneRun(BossHakugin* this, PlayState* play) {
         }
     }
 
+#if MM_VERSION >= N64_US
     if (this->bodyCollider.base.atFlags & AT_HIT) {
         func_800B8D50(play, &this->actor, 10.0f, 0, 6.0f, 0);
     } else {
         play->actorCtx.isOverrideInputOn = true;
     }
+#else
+    play->actorCtx.isOverrideInputOn = true;
+#endif
 
     if (this->timer > 4) {
         controlStickMagnitude = (this->timer - 4) * 5.0f;

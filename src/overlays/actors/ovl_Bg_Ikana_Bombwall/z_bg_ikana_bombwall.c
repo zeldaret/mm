@@ -330,7 +330,9 @@ void func_80BD503C(BgIkanaBombwall* this, PlayState* play) {
             func_80BD4A14(this, play);
         }
         this->dyna.actor.draw = NULL;
+#if MM_VERSION >= N64_US
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->dyna.actor.world.pos, 60, NA_SE_EV_WALL_BROKEN);
+#endif
         Flags_SetSwitch(play, BGIKANABOMBWALL_GET_SWITCH_FLAG(&this->dyna.actor));
         if (!BGIKANABOMBWALL_GET_100(&this->dyna.actor)) {
             DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);

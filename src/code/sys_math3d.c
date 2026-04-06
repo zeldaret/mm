@@ -6,7 +6,7 @@
 
 #include "macros.h"
 
-#pragma increment_block_number "n64-us:124"
+#pragma increment_block_number "n64-us:122"
 
 // The bss index at this point should be 184
 

@@ -14,9 +14,11 @@ typedef struct BgF40Switch {
     /* 0x15C */ s16 switchReleaseDelay; // frames until a pressed switch becomes released if nothing is still pressing it
     /* 0x15E */ s8 isPressed; // Logical state of the switch (pressed or unpressed). Animation state may lag behind this slightly.
     /* 0x15F */ s8 wasPressed; // used as temporary during update function
+#if MM_VERSION >= N64_US
     // true if this switch is the one that initiated a state change; false if this switch is changing as a result of another switch tied to the same flag.
     // this is a temporary flag related to something currently happening, not a permanent property of the switch.
     /* 0x160 */ s8 isInitiator;
+#endif
     /* 0x164 */ BgF40SwitchActionFunc actionFunc;
 } BgF40Switch; // size = 0x168
 

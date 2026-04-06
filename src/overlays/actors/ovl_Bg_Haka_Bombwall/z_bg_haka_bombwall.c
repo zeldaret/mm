@@ -200,7 +200,9 @@ void BgHakaBombwall_PlayCutscene(BgHakaBombwall* this, PlayState* play) {
         func_80BD5E6C(this, play);
         this->dyna.actor.draw = NULL;
         Flags_SetSwitch(play, BGHAKABOMBWALL_GET_SWITCH_FLAG(&this->dyna.actor));
-        SoundSource_PlaySfxAtFixedWorldPos(play, &this->dyna.actor.world.pos, 0x3C, NA_SE_EV_WALL_BROKEN);
+#if MM_VERSION >= N64_US
+        SoundSource_PlaySfxAtFixedWorldPos(play, &this->dyna.actor.world.pos, 60, NA_SE_EV_WALL_BROKEN);
+#endif
         DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         BgHakaBombwall_SetupEndCutscene(this);
     } else {

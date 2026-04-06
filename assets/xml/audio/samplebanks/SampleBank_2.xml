@@ -2,8 +2,8 @@
 <SampleBank Name="SampleBank_2" Index="2">
     <Sample Name="GoronDrum" FileName="goron_drum" SampleRate="16000" BaseNote="C4"/>
     <Sample Name="BassSlap" FileName="bass_slap" SampleRate="32000" BaseNote="C4"/>
-    <Sample Name="GoronOoh" FileName="goron_ooh" SampleRate="22050" BaseNote="BF4"/>
-    <Sample Name="GoronOohHigh" FileName="goron_ooh_high" SampleRate="16000" BaseNote="DF6"/>
-    <Sample Name="TomDrum" FileName="tom_drum" SampleRate="22050" BaseNote="B5"/>
-    <Sample Name="ResonantBassMarimba" FileName="resonant_bass_marimba" SampleRate="22050" BaseNote="A3"/>
+    <Sample Name="GoronOoh" FileName="goron_ooh" SampleRate="22050" BaseNote="D3"/>
+    <Sample Name="GoronOohHigh" FileName="goron_ooh_high" SampleRate="16000" BaseNote="B1"/>
+    <Sample Name="TomDrum" FileName="tom_drum" SampleRate="22050" BaseNote="DF2"/>
+    <Sample Name="ResonantBassMarimba" FileName="resonant_bass_marimba" SampleRate="22050" BaseNote="EF4"/>
 </SampleBank>
