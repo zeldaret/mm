@@ -222,9 +222,14 @@ static EffectTireMarkInit sTireMarkInit = {
 };
 
 static struct_80A40678 D_80A417E8[] = {
-    { func_80A3F080, func_80A3F09C }, { func_80A40098, func_80A40230 }, { func_80A3F62C, func_80A3F73C },
-    { func_80A3F8D4, func_80A3F9A4 }, { func_80A3F9E4, func_80A3FA58 }, { func_80A3FBCC, func_80A3FBE8 },
-    { EnTest3_SetupRunToTownCs, EnTest3_HandleRunToTownCs }, { func_80A3FF10, func_80A3FFD0 },
+    { func_80A3F080, func_80A3F09C },
+    { func_80A40098, func_80A40230 },
+    { func_80A3F62C, func_80A3F73C },
+    { func_80A3F8D4, func_80A3F9A4 },
+    { func_80A3F9E4, func_80A3FA58 },
+    { func_80A3FBCC, func_80A3FBE8 },
+    { EnTest3_SetupRunToTownCs, EnTest3_HandleRunToTownCs },
+    { func_80A3FF10, func_80A3FFD0 },
 };
 
 static struct_80A41828 D_80A41828[] = {
