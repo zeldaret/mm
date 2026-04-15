@@ -56,7 +56,7 @@ sDoorSch_PostOffice {
             // "Out delivering mail"
             return_s (0x8)
         } else if_day (2) {
-            if_week_event_reg (WEEKEVENTREG_28_08) {
+            if_week_event_reg (WEEKEVENTREG_LETTER_TO_KAFEI_SCHEDULED_DAY_2) {
                 // Related to letter to Kafei
 
                 if_before_time (13, 0) {
@@ -132,7 +132,7 @@ sDoorSch_CuriosityShop {
 // Laundry Pool
 sDoorSch_LaundryPool {
     if_day (2) {
-        not if_week_event_reg (WEEKEVENTREG_28_08) {
+        not if_week_event_reg (WEEKEVENTREG_LETTER_TO_KAFEI_SCHEDULED_DAY_2) {
             return_s (0xC)
         } else if_time_range (15, 10, 22, 0) {
             return_none
@@ -142,7 +142,7 @@ sDoorSch_LaundryPool {
     }
     if_day (3) {
         if_since_time (13, 0) {
-            not if_week_event_reg (WEEKEVENTREG_51_08) {
+            not if_week_event_reg (WEEKEVENTREG_KAFEI_ENTRUSTED_LINK) {
                 return_s (0xC)
             } else if_since_time (22, 0) {
                 return_s (0xC)

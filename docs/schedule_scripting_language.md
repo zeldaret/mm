@@ -721,7 +721,7 @@ A `not` must always be followed by a [conditional check command](#conditional-ch
 The following two scripts are equivalent:
 
 ```c
-if_week_event_reg (WEEKEVENTREG_51_08) {
+if_week_event_reg (WEEKEVENTREG_KAFEI_ENTRUSTED_LINK) {
     if_since_time (22, 0) {
         return_s (12)
     } else {
@@ -733,7 +733,7 @@ if_week_event_reg (WEEKEVENTREG_51_08) {
 ```
 
 ```c
-not if_week_event_reg (WEEKEVENTREG_51_08) {
+not if_week_event_reg (WEEKEVENTREG_KAFEI_ENTRUSTED_LINK) {
     return_s (12)
 } else {
     if_since_time (22, 0) {
