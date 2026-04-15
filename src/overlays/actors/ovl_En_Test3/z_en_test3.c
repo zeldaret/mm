@@ -29,7 +29,7 @@ typedef s32 (*EnTest3ProcessScheduleFunc)(EnTest3* this, PlayState* play, struct
 typedef struct {
     /* 0x0 */ EnTest3ProcessScheduleFunc processSchFunc;
     /* 0x4 */ EnTest3ActionFunc handleSchFunc;
-} EnTest3ScheduledActionData; // size = 0x8
+} EnTest3ScheduledAction; // size = 0x8
 
 typedef struct {
     /* 0x0 */ EnTest3ActionFunc unk_0; // might not actually be an action function
@@ -63,7 +63,7 @@ s32 func_80A3EBFC(EnTest3* this, PlayState* play);
 s32 func_80A3EC30(EnTest3* this, PlayState* play);
 s32 func_80A3EC44(EnTest3* this, PlayState* play);
 
-// Functions used in sScheduledActions. Purpose unclear, but related to Schedule
+// Scheduled action functions, including "process" and "handle" functions
 s32 func_80A3F080(EnTest3* this, PlayState* play, struct_80A41828* arg2, ScheduleOutput* scheduleOutput);
 s32 func_80A3F09C(EnTest3* this, PlayState* play);
 s32 func_80A3F62C(EnTest3* this, PlayState* play, struct_80A41828* arg2, ScheduleOutput* scheduleOutput);
@@ -222,7 +222,7 @@ static EffectTireMarkInit sTireMarkInit = {
     { 0, 0, 15, 100 },
 };
 
-static EnTest3ScheduledActionData sScheduledActions[] = {
+static EnTest3ScheduledAction sScheduledActions[] = {
     { func_80A3F080, func_80A3F09C },
     { func_80A40098, func_80A40230 },
     { func_80A3F62C, func_80A3F73C },
