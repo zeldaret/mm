@@ -71,4 +71,25 @@
     }                       \
     (void)0
 
+
+// IDO doesn't support variadic macros, but it merely throws a warning for the
+// number of arguments not matching the definition (warning 609) instead of
+// throwing an error. We suppress this warning and rely on GCC to catch macro
+// argument errors instead.
+// Note some tools define __sgi but preprocess with a modern cpp implementation,
+// ensure that these do not use the IDO workaround to avoid errors.
+#define IDO_PRINTF_WORKAROUND (__sgi && !__GNUC__ && !M2CTX)
+
+#if DEBUG_FEATURES
+    #define PRINTF osSyncPrintf
+#elif IDO_PRINTF_WORKAROUND
+    #if MM_VERSION >= N64_US
+        #define PRINTF(args) (void)0
+    #else
+        #define PRINTF(args) (void)(args)
+    #endif
+#else
+    #define PRINTF(format, ...) (void)0
+#endif
+
 #endif // MACROS_H
