@@ -254,7 +254,7 @@ s32 D_80A41D48;
 Vec3f D_80A41D50;
 s32 D_80A41D5C;
 s32 D_80A41D60;
-s32 sKafeiRunToTownPhase;
+EnTest3RunToTownPhase sKafeiRunToTownPhase;
 s32 D_80A41D68;
 Vec3f* sKafeiCurBodyPartPos;
 
