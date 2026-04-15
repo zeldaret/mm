@@ -25,11 +25,11 @@ typedef struct {
 
 typedef s32 (*EnTest3ProcessScheduleFunc)(EnTest3* this, PlayState* play, struct_80A41828* arg2,
                                           ScheduleOutput* scheduleOutput);
-typedef s32 (*EnTest3HandleScheduleFunc)(EnTest3* this, PlayState* play);
+typedef s32 (*EnTest3HandlerFunc)(EnTest3* this, PlayState* play);
 
 typedef struct {
     /* 0x0 */ EnTest3ProcessScheduleFunc processSchFunc;
-    /* 0x4 */ EnTest3HandleScheduleFunc handleSchFunc;
+    /* 0x4 */ EnTest3HandlerFunc handleSchFunc;
 } EnTest3ScheduledAction; // size = 0x8
 
 typedef struct {
@@ -109,12 +109,12 @@ static struct_80A4168C D_80A4168C[] = {
     { NULL, NULL },
 };
 
-static EnTest3ActionFunc D_80A4169C[] = {
+static EnTest3HandlerFunc D_80A4169C[] = {
     func_80A3E898, func_80A3E898, func_80A3E884, func_80A3E898, func_80A3E898,
     func_80A3EA30, func_80A3E898, func_80A3E960, func_80A3E870,
 };
 
-static EnTest3ActionFunc D_80A416C0[] = {
+static EnTest3HandlerFunc D_80A416C0[] = {
     func_80A3EAC4, func_80A3EAF8, func_80A3EBFC, func_80A3EC44,
     func_80A3EC30, func_80A3E9DC, func_80A3EB8C, func_80A3E97C,
 };
