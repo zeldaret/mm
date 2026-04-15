@@ -25,10 +25,11 @@ typedef struct {
 
 typedef s32 (*EnTest3ProcessScheduleFunc)(EnTest3* this, PlayState* play, struct_80A41828* arg2,
                                           ScheduleOutput* scheduleOutput);
+typedef s32 (*EnTest3HandleScheduleFunc)(EnTest3* this, PlayState* play);
 
 typedef struct {
     /* 0x0 */ EnTest3ProcessScheduleFunc processSchFunc;
-    /* 0x4 */ EnTest3ActionFunc handleSchFunc;
+    /* 0x4 */ EnTest3HandleScheduleFunc handleSchFunc;
 } EnTest3ScheduledAction; // size = 0x8
 
 typedef struct {
