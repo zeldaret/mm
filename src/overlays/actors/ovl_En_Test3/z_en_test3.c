@@ -23,13 +23,13 @@ typedef struct {
     /* 0x1 */ s8 unk_1_4 : 4;
 } struct_80A41828; // size = 0x2
 
-typedef s32 (*EnTest3UnkFunc2)(EnTest3* this, PlayState* play, struct_80A41828* arg2, ScheduleOutput* scheduleOutput);
-typedef s32 (*EnTest3UnkFunc)(EnTest3* this, PlayState* play);
+typedef s32 (*EnTest3ProcessScheduleFunc)(EnTest3* this, PlayState* play, struct_80A41828* arg2,
+                                          ScheduleOutput* scheduleOutput);
 
 typedef struct {
-    /* 0x0 */ EnTest3UnkFunc2 unk_0;
-    /* 0x4 */ EnTest3UnkFunc unk_4;
-} struct_80A40678; // size = 0x8
+    /* 0x0 */ EnTest3ProcessScheduleFunc processSchFunc;
+    /* 0x4 */ EnTest3ActionFunc handleSchFunc;
+} EnTest3ScheduledActionData; // size = 0x8
 
 typedef struct {
     /* 0x0 */ EnTest3ActionFunc unk_0; // might not actually be an action function
@@ -63,7 +63,7 @@ s32 func_80A3EBFC(EnTest3* this, PlayState* play);
 s32 func_80A3EC30(EnTest3* this, PlayState* play);
 s32 func_80A3EC44(EnTest3* this, PlayState* play);
 
-// Functions used in D_80A417E8. Purpose unclear, but related to Schedule
+// Functions used in sScheduledActions. Purpose unclear, but related to Schedule
 s32 func_80A3F080(EnTest3* this, PlayState* play, struct_80A41828* arg2, ScheduleOutput* scheduleOutput);
 s32 func_80A3F09C(EnTest3* this, PlayState* play);
 s32 func_80A3F62C(EnTest3* this, PlayState* play, struct_80A41828* arg2, ScheduleOutput* scheduleOutput);
@@ -74,15 +74,16 @@ s32 func_80A3F9E4(EnTest3* this, PlayState* play, struct_80A41828* arg2, Schedul
 s32 func_80A3FA58(EnTest3* this, PlayState* play);
 s32 func_80A3FBCC(EnTest3* this, PlayState* play, struct_80A41828* arg2, ScheduleOutput* scheduleOutput);
 s32 func_80A3FBE8(EnTest3* this, PlayState* play);
-s32 EnTest3_SetupRunToTownCs(EnTest3* this, PlayState* play, struct_80A41828* arg2, ScheduleOutput* scheduleOutput);
-s32 EnTest3_HandleRunToTownCs(EnTest3* this, PlayState* play);
+s32 EnTest3_ProcessSchedule_RunToTown(EnTest3* this, PlayState* play, struct_80A41828* arg2,
+                                      ScheduleOutput* scheduleOutput);
+s32 EnTest3_HandleSchedule_RunToTown(EnTest3* this, PlayState* play);
 s32 func_80A3FF10(EnTest3* this, PlayState* play, struct_80A41828* arg2, ScheduleOutput* scheduleOutput);
 s32 func_80A3FFD0(EnTest3* this, PlayState* play2);
 s32 func_80A40098(EnTest3* this, PlayState* play, struct_80A41828* arg2, ScheduleOutput* scheduleOutput);
 s32 func_80A40230(EnTest3* this, PlayState* play);
 
 // Action functions
-void func_80A40678(EnTest3* this, PlayState* play);
+void EnTest3_FollowSchedule(EnTest3* this, PlayState* play);
 void func_80A40824(EnTest3* this, PlayState* play);
 void func_80A4084C(EnTest3* this, PlayState* play);
 void func_80A40908(EnTest3* this, PlayState* play);
@@ -107,12 +108,12 @@ static struct_80A4168C D_80A4168C[] = {
     { NULL, NULL },
 };
 
-static EnTest3UnkFunc D_80A4169C[] = {
+static EnTest3ActionFunc D_80A4169C[] = {
     func_80A3E898, func_80A3E898, func_80A3E884, func_80A3E898, func_80A3E898,
     func_80A3EA30, func_80A3E898, func_80A3E960, func_80A3E870,
 };
 
-static EnTest3UnkFunc D_80A416C0[] = {
+static EnTest3ActionFunc D_80A416C0[] = {
     func_80A3EAC4, func_80A3EAF8, func_80A3EBFC, func_80A3EC44,
     func_80A3EC30, func_80A3E9DC, func_80A3EB8C, func_80A3E97C,
 };
@@ -221,14 +222,14 @@ static EffectTireMarkInit sTireMarkInit = {
     { 0, 0, 15, 100 },
 };
 
-static struct_80A40678 D_80A417E8[] = {
+static EnTest3ScheduledActionData sScheduledActions[] = {
     { func_80A3F080, func_80A3F09C },
     { func_80A40098, func_80A40230 },
     { func_80A3F62C, func_80A3F73C },
     { func_80A3F8D4, func_80A3F9A4 },
     { func_80A3F9E4, func_80A3FA58 },
     { func_80A3FBCC, func_80A3FBE8 },
-    { EnTest3_SetupRunToTownCs, EnTest3_HandleRunToTownCs },
+    { EnTest3_ProcessSchedule_RunToTown, EnTest3_HandleSchedule_RunToTown },
     { func_80A3FF10, func_80A3FFD0 },
 };
 
@@ -476,7 +477,7 @@ void EnTest3_Init(Actor* thisx, PlayState* play2) {
     if (KAFEI_GET_PARAM_1E0(&this->player.actor) == 0) {
         func_80A3E7E0(this, func_80A40824);
     } else {
-        func_80A3E7E0(this, func_80A40678);
+        func_80A3E7E0(this, EnTest3_FollowSchedule);
     }
 }
 
@@ -779,12 +780,13 @@ s32 func_80A3FBE8(EnTest3* this, PlayState* play) {
     return false;
 }
 
-s32 EnTest3_SetupRunToTownCs(EnTest3* this, PlayState* play, struct_80A41828* arg2, ScheduleOutput* scheduleOutput) {
+s32 EnTest3_ProcessSchedule_RunToTown(EnTest3* this, PlayState* play, struct_80A41828* arg2,
+                                      ScheduleOutput* scheduleOutput) {
     this->csId = CutsceneManager_GetAdditionalCsId(this->player.actor.csId);
     return true;
 }
 
-s32 EnTest3_HandleRunToTownCs(EnTest3* this, PlayState* play) {
+s32 EnTest3_HandleSchedule_RunToTown(EnTest3* this, PlayState* play) {
     struct_80A41828 sp2C;
     ScheduleOutput scheduleOutput;
 
@@ -949,7 +951,7 @@ s32 func_80A40230(EnTest3* this, PlayState* play) {
     return ret;
 }
 
-void func_80A40678(EnTest3* this, PlayState* play) {
+void EnTest3_FollowSchedule(EnTest3* this, PlayState* play) {
     struct_80A41828* sp3C;
     ScheduleOutput scheduleOutput;
 
@@ -964,7 +966,7 @@ void func_80A40678(EnTest3* this, PlayState* play) {
             if (sp3C->unk_0 != 4) {
                 CLEAR_WEEKEVENTREG(WEEKEVENTREG_51_04);
             }
-            if (!D_80A417E8[sp3C->unk_0].unk_0(this, play, sp3C, &scheduleOutput)) {
+            if (!sScheduledActions[sp3C->unk_0].processSchFunc(this, play, sp3C, &scheduleOutput)) {
                 return;
             }
             if (scheduleOutput.result == 6) {
@@ -978,7 +980,7 @@ void func_80A40678(EnTest3* this, PlayState* play) {
     }
     this->scheduleResult = scheduleOutput.result;
     sp3C = &D_80A41828[this->scheduleResult];
-    D_80A417E8[sp3C->unk_0].unk_4(this, play);
+    sScheduledActions[sp3C->unk_0].handleSchFunc(this, play);
 }
 
 void func_80A40824(EnTest3* this, PlayState* play) {
@@ -992,7 +994,7 @@ void func_80A4084C(EnTest3* this, PlayState* play) {
             if (KAFEI_GET_PARAM_1E0(&this->player.actor) == 0) {
                 func_80A3E7E0(this, func_80A40824);
             } else {
-                func_80A3E7E0(this, func_80A40678);
+                func_80A3E7E0(this, EnTest3_FollowSchedule);
             }
             this->player.focusActor = NULL;
         }
