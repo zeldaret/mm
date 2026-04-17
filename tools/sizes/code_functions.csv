@@ -594,11 +594,11 @@ asm/non_matchings/code/z_bgcheck/func_800C9DDC.s,func_800C9DDC,0x800C9DDC,0xF
 asm/non_matchings/code/z_bgcheck/SurfaceType_GetConveyorSpeed.s,SurfaceType_GetConveyorSpeed,0x800C9E18,0xA
 asm/non_matchings/code/z_bgcheck/SurfaceType_GetConveyorDirection.s,SurfaceType_GetConveyorDirection,0x800C9E40,0x12
 asm/non_matchings/code/z_bgcheck/SurfaceType_IsWallDamage.s,SurfaceType_IsWallDamage,0x800C9E88,0xD
-asm/non_matchings/code/z_bgcheck/WaterBox_GetSurfaceImpl.s,WaterBox_GetSurfaceImpl,0x800C9EBC,0xBC
-asm/non_matchings/code/z_bgcheck/WaterBox_GetSurface1.s,WaterBox_GetSurface1,0x800CA1AC,0xF
-asm/non_matchings/code/z_bgcheck/WaterBox_GetSurface1_2.s,WaterBox_GetSurface1_2,0x800CA1E8,0x11
-asm/non_matchings/code/z_bgcheck/WaterBox_GetSurface2.s,WaterBox_GetSurface2,0x800CA22C,0xCF
-asm/non_matchings/code/z_bgcheck/func_800CA568.s,func_800CA568,0x800CA568,0x33
+asm/non_matchings/code/z_bgcheck/BgCheck_GetWaterSurface.s,BgCheck_GetWaterSurface,0x800C9EBC,0xBC
+asm/non_matchings/code/z_bgcheck/BgCheck_GetWaterSurfaceNoBgIdAlt.s,BgCheck_GetWaterSurfaceNoBgIdAlt,0x800CA1AC,0xF
+asm/non_matchings/code/z_bgcheck/BgCheck_GetWaterSurfaceNoBgId.s,BgCheck_GetWaterSurfaceNoBgId,0x800CA1E8,0x11
+asm/non_matchings/code/z_bgcheck/BgCheck_FindWaterBox.s,BgCheck_FindWaterBox,0x800CA22C,0xCF
+asm/non_matchings/code/z_bgcheck/WaterBox_GetSurface.s,WaterBox_GetSurface,0x800CA568,0x33
 asm/non_matchings/code/z_bgcheck/func_800CA634.s,func_800CA634,0x800CA634,0x5
 asm/non_matchings/code/z_bgcheck/func_800CA648.s,func_800CA648,0x800CA648,0x1C
 asm/non_matchings/code/z_bgcheck/WaterBox_GetSceneBgCamSetting.s,WaterBox_GetSceneBgCamSetting,0x800CA6B8,0x8

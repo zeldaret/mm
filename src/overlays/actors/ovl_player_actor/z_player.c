@@ -7231,7 +7231,7 @@ s32 func_80837730(PlayState* play, Player* this, f32 arg2, s32 scale) {
 
         Math_Vec3f_Copy(&pos, &this->bodyPartsPos[PLAYER_BODYPART_WAIST]);
         pos.y += 20.0f;
-        if (WaterBox_GetSurface1(play, &play->colCtx, pos.x, pos.z, &pos.y, &waterBox)) {
+        if (BgCheck_GetWaterSurfaceNoBgIdAlt(play, &play->colCtx, pos.x, pos.z, &pos.y, &waterBox)) {
             sp34 = pos.y - this->bodyPartsPos[PLAYER_BODYPART_LEFT_FOOT].y;
             if ((sp34 > -2.0f) && (sp34 < 100.0f)) {
                 EffectSsGSplash_Spawn(play, &pos, NULL, NULL,
@@ -7548,7 +7548,8 @@ void func_8083827C(Player* this, PlayState* play) {
                                 sp48 = func_80835CD8(play, this, &D_8085D154, &sp4C, &sp60, &sp5C);
                                 sp44 = this->actor.world.pos.y;
 
-                                if (WaterBox_GetSurface1(play, &play->colCtx, sp4C.x, sp4C.z, &sp44, &waterBox) &&
+                                if (BgCheck_GetWaterSurfaceNoBgIdAlt(play, &play->colCtx, sp4C.x, sp4C.z, &sp44,
+                                                                     &waterBox) &&
                                     ((sp44 - sp48) > 50.0f)) {
                                     func_80834DB8(this, &gPlayerAnim_link_normal_run_jump_water_fall, 6.0f, play);
                                     Player_SetAction(play, this, Player_Action_27, 0);
@@ -8532,8 +8533,8 @@ s32 func_8083A878(PlayState* play, Player* this, f32 arg2) {
     WaterBox* waterBox;
     f32 ySurface = this->actor.world.pos.y;
 
-    if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &ySurface,
-                             &waterBox)) {
+    if (BgCheck_GetWaterSurfaceNoBgIdAlt(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
+                                         &ySurface, &waterBox)) {
         ySurface -= this->actor.world.pos.y;
         if (this->ageProperties->unk_24 <= ySurface) {
             Player_SetAction(play, this, Player_Action_55, 0);
