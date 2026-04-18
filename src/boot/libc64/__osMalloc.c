@@ -438,21 +438,18 @@ s32 __osCheckArena(Arena* arena) {
 
     ArenaImpl_Lock(arena);
 
-    // "Checking the contents of the arena..."
-    (void)"アリーナの内容をチェックしています．．． (%08x)\n";
+    (void)T("アリーナの内容をチェックしています．．． (%08x)\n", "Checking the contents of the arena... (%08x)\n");
 
     for (iter = arena->head; iter != NULL; iter = iter->next) {
         if (iter->magic != NODE_MAGIC) {
-            // "Oops!!"
-            (void)"おおっと！！ (%08x %08x)\n";
+            (void)T("おおっと！！ (%08x %08x)\n", "Oops!! (%08x %08x)\n");
 
             err = 1;
             break;
         }
     }
 
-    // "The arena still looks good"
-    (void)"アリーナはまだ、いけそうです\n";
+    (void)T("アリーナはまだ、いけそうです\n", "The arena still looks good\n");
 
     ArenaImpl_Unlock(arena);
 
