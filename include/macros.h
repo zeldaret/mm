@@ -2,6 +2,7 @@
 #define MACROS_H
 
 #include "PR/ultratypes.h"
+#include "versions.h"
 
 #define SCREEN_WIDTH  320
 #define SCREEN_HEIGHT 240
