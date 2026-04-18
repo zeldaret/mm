@@ -161,8 +161,7 @@ retry:
             Sched_SendGfxCancelMsg(&gScheduler);
             goto retry;
         } else {
-            // graph.c: No more! die!
-            osSyncPrintf("graph.c:もうダメ！死ぬ！\n");
+            osSyncPrintf(T("graph.c:もうダメ！死ぬ！\n", "graph.c: I can't go on! I'm dying!\n"));
             Fault_AddHungupAndCrashImpl("RCP is HUNG UP!!", "Oh! MY GOD!!");
         }
     }
