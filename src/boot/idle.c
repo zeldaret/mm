@@ -25,6 +25,7 @@ u8 gViConfigModeType;
 
 #include "idle.h"
 #include "irqmgr.h"
+#include "macros.h"
 
 u8 D_80096B20 = 1;
 vu8 gViConfigUseBlack = true;
@@ -94,6 +95,7 @@ void Main_ThreadEntry(void* arg) {
     DmaMgr_Init();
     Main_Init();
     Main(arg);
+    PRINTF(T("mainx 終了\n", "mainx terminated\n"));
     DmaMgr_Stop();
 }
 
@@ -126,6 +128,7 @@ void Idle_InitVideo(void) {
 }
 
 void Idle_ThreadEntry(void* arg) {
+    PRINTF(T("アイドルスレッド実行開始\n", "Idle thread execution started\n"));
     Idle_InitVideo();
     osCreatePiManager(OS_PRIORITY_PIMGR, &gPiMgrCmdQueue, sPiMgrCmdBuff, ARRAY_COUNT(sPiMgrCmdBuff));
     StackCheck_Init(&sMainStackInfo, sMainStack, STACK_TOP(sMainStack), 0, 0x400, "main");
