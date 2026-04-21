@@ -15,7 +15,7 @@ typedef struct ArenaNode {
     /* 0x4 */ size_t size;
     /* 0x8 */ struct ArenaNode* next;
     /* 0xC */ struct ArenaNode* prev;
-    #if MM_VERSION <= N64_JP_1_1
+    #if MM_VERSION < N64_US
     /* 0x10 */ const char* filename;
     /* 0x14 */ int line;
     /* 0x18 */ OSId threadId;
@@ -44,7 +44,7 @@ void* __osRealloc(Arena* arena, void* ptr, size_t newSize);
 void __osGetSizes(Arena* arena, size_t* outMaxFree, size_t* outFree, size_t* outAlloc);
 s32 __osCheckArena(Arena* arena);
 
-#if MM_VERSION <= N64_JP_1_1
+#if MM_VERSION < N64_US
 void *__osMallocDebug(Arena *arena, size_t size, const char* file, int line);
 void *__osMallocRDebug(Arena *arena, size_t size, const char* file, int line);
 void __osFreeDebug(Arena* arena, void* ptr, const char* file, int line);

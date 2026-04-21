@@ -56,7 +56,7 @@ void ArrowIce_Init(Actor* thisx, PlayState* play) {
 
 void ArrowIce_Destroy(Actor* thisx, PlayState* play) {
     Magic_Reset(play);
-    (void)"消滅"; // Unreferenced in retail, means "Disappearance"
+    (void)T("消滅", "Disappearance");
 }
 
 void ArrowIce_Charge(ArrowIce* this, PlayState* play) {

@@ -425,26 +425,18 @@ void __osFree(Arena* arena, void* ptr) {
     node = (ArenaNode*)((uintptr_t)ptr - sizeof(ArenaNode));
 
     if (!NODE_IS_VALID(node)) {
-#if MM_VERSION < N64_US
-        // __osFree:Unauthorized release(%08x)\n
-        (void)"__osFree:不正解放(%08x)\n";
-#endif
+        PRINTF(T("__osFree:不正解放(%08x)\n", "__osFree:Unauthorized release(%08x)\n"));
         goto cleanup;
     }
 
     if (node->isFree) {
-#if MM_VERSION < N64_US
-        // __osFree:Double release(%08x)\n
-        (void)"__osFree:二重解放(%08x)\n";
-#endif
+        PRINTF(T("__osFree:二重解放(%08x)\n", "__osFree:Double release(%08x)\n"));
         goto cleanup;
     }
 
     if (!CHECK_CORRECT_ARENA(node, arena)) {
-#if MM_VERSION < N64_US
-        // __osFree:arena(%08x) and __osMallocのarena(%08x) do not match\n
-        (void)"__osFree:arena(%08x)が__osMallocのarena(%08x)と一致しない\n";
-#endif
+        PRINTF(T("__osFree:arena(%08x)が__osMallocのarena(%08x)と一致しない\n",
+                 "__osFree:arena(%08x) and __osMallocのarena(%08x) do not match\n"));
         goto cleanup;
     }
 
@@ -499,20 +491,18 @@ void __osFreeDebug(Arena* arena, void* ptr, const char* file, int line) {
     node = (ArenaNode*)((uintptr_t)ptr - sizeof(ArenaNode));
 
     if (!NODE_IS_VALID(node)) {
-        // __osFree:Unauthorized release(%08x)\n
-        (void)"__osFree:不正解放(%08x)\n";
+        PRINTF(T("__osFree:不正解放(%08x)\n", "__osFree:Unauthorized release(%08x)\n"));
         goto cleanup;
     }
 
     if (node->isFree) {
-        // __osFree:Double release(%08x)\n
-        (void)"__osFree:二重解放(%08x)\n";
+        PRINTF(T("__osFree:二重解放(%08x)\n", "__osFree:Double release(%08x)\n"));
         goto cleanup;
     }
 
     if (!CHECK_CORRECT_ARENA(node, arena)) {
-        // __osFree:arena(%08x) and __osMallocのarena(%08x) do not match\n
-        (void)"__osFree:arena(%08x)が__osMallocのarena(%08x)と一致しない\n";
+        PRINTF(T("__osFree:arena(%08x)が__osMallocのarena(%08x)と一致しない\n",
+                 "__osFree:arena(%08x) and __osMallocのarena(%08x) do not match\n"));
         goto cleanup;
     }
 
@@ -689,21 +679,18 @@ s32 __osCheckArena(Arena* arena) {
 
     ArenaImpl_Lock(arena);
 
-    // "Checking the contents of the arena..."
-    (void)"アリーナの内容をチェックしています．．． (%08x)\n";
+    (void)T("アリーナの内容をチェックしています．．． (%08x)\n", "Checking the contents of the arena... (%08x)\n");
 
     for (iter = arena->head; iter != NULL; iter = iter->next) {
         if (!NODE_IS_VALID(iter)) {
-            // "Oops!!"
-            (void)"おおっと！！ (%08x %08x)\n";
+            (void)T("おおっと！！ (%08x %08x)\n", "Oops!! (%08x %08x)\n");
 
             err = 1;
             break;
         }
     }
 
-    // "The arena still looks good"
-    (void)"アリーナはまだ、いけそうです\n";
+    (void)T("アリーナはまだ、いけそうです\n", "The arena still looks good\n");
 
     ArenaImpl_Unlock(arena);
 

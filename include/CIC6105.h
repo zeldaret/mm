@@ -17,7 +17,7 @@ void CIC6105_AddRomInfoFaultPage(void);
 void CIC6105_Destroy(void);
 void CIC6105_Init(void);
 
-#if MM_VERSION <= N64_JP_1_1
+#if MM_VERSION < N64_US
 void CIC6105_ScheduleCICTask(void);
 #endif
 

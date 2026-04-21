@@ -1,18 +1,15 @@
 #include "gamealloc.h"
 
 #include "libc64/malloc.h"
+#include "macros.h"
 
 void GameAlloc_Log(GameAlloc* this) {
     GameAllocEntry* iter = this->base.next;
 
-#if MM_VERSION <= N64_JP_1_1
-    (void)"this = %08x\n";
-#endif
+    PRINTF("this = %08x\n");
 
     while (iter != &this->base) {
-#if MM_VERSION <= N64_JP_1_1
-        (void)"ptr = %08x size = %d\n";
-#endif
+        PRINTF("ptr = %08x size = %d\n");
 
         iter = iter->next;
     }

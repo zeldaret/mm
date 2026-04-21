@@ -1,3 +1,4 @@
+#include "macros.h"
 #include "fault.h"
 #include "libc64/sprintf.h"
 #include "libc64/sleep.h"
@@ -55,8 +56,7 @@ void* Yaz0_NextDMA(u8* curSrcPos) {
     } else {
         oldPri = osGetThreadPri(NULL);
         osSetThreadPri(NULL, OS_PRIORITY_APPMAX);
-        // Compression/decompression error
-        osSyncPrintf("圧縮展開異常\n");
+        osSyncPrintf(T("圧縮展開異常\n", "compression/decompression error\n"));
         osSetThreadPri(NULL, oldPri);
     }
 
