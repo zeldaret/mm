@@ -231,7 +231,7 @@ ifeq ($(COMPILER),gcc)
 else
   CFLAGS           += -G 0 -non_shared -Xcpluscomm -nostdinc -Wab,-r4300_mul
 
-  WARNINGS         := -fullwarn -verbose -woff 624,649,838,712,516,513,596,564,594,807
+  WARNINGS         := -fullwarn -verbose -woff 624,649,838,712,516,513,596,564,594,807,609
   ASFLAGS          := -march=vr4300 -32 -G0 -no-pad-sections
   CCASFLAGS        := $(GBI_DEFINES) -G 0 -non_shared -Xcpluscomm -nostdinc -Wab,-r4300_mul $(WARNINGS) -o32
   COMMON_DEFINES   := -D_MIPS_SZLONG=32 $(GBI_DEFINES) $(GAME_VERSION)
@@ -467,7 +467,7 @@ $(BUILD_DIR)/src/code/jpegdecoder.o: OPTFLAGS := -O2
 $(BUILD_DIR)/src/code/jpegutils.o: CC := $(CC_OLD)
 $(BUILD_DIR)/src/code/jpegutils.o: OPTFLAGS := -O2
 
-$(BUILD_DIR)/src/code/osFlash.o: CC := $(CC_OLD)
+$(BUILD_DIR)/src/code/osFlash.o: CC := ./tools/buildtools/preprocess.sh -v $(VERSION) -i $(ICONV) -- $(CC_OLD)
 $(BUILD_DIR)/src/code/osFlash.o: OPTFLAGS := -g
 $(BUILD_DIR)/src/code/osFlash.o: MIPS_VERSION := -mips1
 

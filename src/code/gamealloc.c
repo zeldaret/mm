@@ -1,11 +1,16 @@
 #include "gamealloc.h"
 
 #include "libc64/malloc.h"
+#include "macros.h"
 
 void GameAlloc_Log(GameAlloc* this) {
     GameAllocEntry* iter = this->base.next;
 
+    PRINTF("this = %08x\n");
+
     while (iter != &this->base) {
+        PRINTF("ptr = %08x size = %d\n");
+
         iter = iter->next;
     }
 }

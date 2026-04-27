@@ -79,7 +79,7 @@ void func_80A40678(EnTest3* this, PlayState* play);
 void func_80A40824(EnTest3* this, PlayState* play);
 void func_80A4084C(EnTest3* this, PlayState* play);
 void func_80A40908(EnTest3* this, PlayState* play);
-void func_80A40A6C(EnTest3* this, PlayState* play);
+void EnTest3_EnablePeephole(EnTest3* this, PlayState* play);
 
 #include "src/overlays/actors/ovl_En_Test3/scheduleScripts.schl.inc"
 
@@ -96,7 +96,7 @@ ActorProfile En_Test3_Profile = {
 };
 
 static struct_80A4168C D_80A4168C[] = {
-    { func_80A40A6C, NULL },
+    { EnTest3_EnablePeephole, NULL },
     { NULL, NULL },
 };
 
@@ -1014,8 +1014,8 @@ void func_80A409D4(EnTest3* this, PlayState* play) {
     }
 }
 
-void func_80A40A6C(EnTest3* this, PlayState* play) {
-    SET_WEEKEVENTREG(WEEKEVENTREG_64_20);
+void EnTest3_EnablePeephole(EnTest3* this, PlayState* play) {
+    SET_WEEKEVENTREG(WEEKEVENTREG_CAN_USE_CURIOSITY_SHOP_PEEPHOLE);
 }
 
 void EnTest3_Update(Actor* thisx, PlayState* play2) {

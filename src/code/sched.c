@@ -87,30 +87,26 @@ void Sched_HandleNMI(Scheduler* sched) {
 void Sched_HandleAudioCancel(Scheduler* sched) {
     s32 i;
 
-    // AUDIO SP Cancel
-    osSyncPrintf("AUDIO SP キャンセルします\n");
+    osSyncPrintf(T("AUDIO SP キャンセルします\n", "I am canceling the AUDIO SP\n"));
 
     if ((sched->curRSPTask != NULL) && (sched->curRSPTask->list.t.type == M_AUDTASK)) {
         if (!(IO_READ(SP_STATUS_REG) & SP_STATUS_HALT)) {
-            // Attempts to stop AUDIO SP
-            osSyncPrintf("AUDIO SP止めようとします\n");
+            osSyncPrintf(T("AUDIO SP止めようとします\n", "Attempting to stop AUDIO SP\n"));
 
             IO_WRITE(SP_STATUS_REG, SP_SET_HALT);
 
             i = 0;
             while (!(IO_READ(SP_STATUS_REG) & SP_STATUS_HALT)) {
                 if (i++ > 100) {
-                    // AUDIO SP did not stop (10ms timeout)
-                    osSyncPrintf("AUDIO SP止まりませんでした(10msタイムアウト)\n");
+                    osSyncPrintf(
+                        T("AUDIO SP止まりませんでした(10msタイムアウト)\n", "AUDIO SP did not stop (10ms timeout)\n"));
                     goto send_mesg;
                 }
                 usleep(100);
             }
-            // AUDIO SP stopped (% d * 100us)
-            osSyncPrintf("AUDIO SP止まりました(%d * 100us)\n", i);
+            osSyncPrintf(T("AUDIO SP止まりました(%d * 100us)\n", "AUDIO SP stopped (%d * 100us)\n"), i);
         } else {
-            // AUDIO SP seems to be stopped
-            osSyncPrintf("AUDIO SP止まっているようです\n");
+            osSyncPrintf(T("AUDIO SP止まっているようです\n", "AUDIO SP seems to be stopped\n"));
         }
 
     send_mesg:
@@ -129,13 +125,12 @@ void Sched_HandleAudioCancel(Scheduler* sched) {
         if (cur->msgQ != NULL) {
             osSendMesg(cur->msgQ, cur->msg, OS_MESG_BLOCK);
         }
-        // Removed AUDIO SP task from pending list
-        osSyncPrintf("AUDIO SP タスクを実行待ちリストから削除しました\n");
+        osSyncPrintf(T("AUDIO SP タスクを実行待ちリストから削除しました\n",
+                       "The AUDIO SP task has been removed from the pending list\n"));
         return;
     }
 
-    // There are no AUDIO SP tasks to cancel
-    osSyncPrintf("キャンセルすべき AUDIO SP タスクがありません\n");
+    osSyncPrintf(T("キャンセルすべき AUDIO SP タスクがありません\n", "There are no AUDIO SP tasks to cancel\n"));
 }
 
 /**
@@ -150,30 +145,26 @@ void Sched_HandleAudioCancel(Scheduler* sched) {
 void Sched_HandleGfxCancel(Scheduler* sched) {
     s32 i;
 
-    // GRAPH SP Cancel
-    osSyncPrintf("GRAPH SP キャンセルします\n");
+    osSyncPrintf(T("GRAPH SP キャンセルします\n", "I am canceling the GRAPH SP\n"));
 
     if ((sched->curRSPTask != NULL) && (sched->curRSPTask->list.t.type == M_GFXTASK)) {
         if (!(IO_READ(SP_STATUS_REG) & SP_STATUS_HALT)) {
-            // GRAPH SP tries to stop
-            osSyncPrintf("GRAPH SP止めようとします\n");
+            osSyncPrintf(T("GRAPH SP止めようとします\n", "Attempting to stop GRAPH SP\n"));
 
             IO_WRITE(SP_STATUS_REG, SP_SET_HALT);
 
             i = 0;
             while (!(IO_READ(SP_STATUS_REG) & SP_STATUS_HALT)) {
                 if (i++ > 100) {
-                    // GRAPH SP did not stop (10ms timeout)
-                    osSyncPrintf("GRAPH SP止まりませんでした(10msタイムアウト)\n");
+                    osSyncPrintf(
+                        T("GRAPH SP止まりませんでした(10msタイムアウト)\n", "GRAPH SP did not stop (10ms timeout)\n"));
                     goto send_mesg;
                 }
                 usleep(100);
             }
-            // GRAPH SP stopped (%d * 100us)
-            osSyncPrintf("GRAPH SP止まりました(%d * 100us)\n", i);
+            osSyncPrintf(T("GRAPH SP止まりました(%d * 100us)\n", "GRAPH SP stopped (%d * 100us)\n"), i);
         } else {
-            // GRAPH SP seems to be stopped
-            osSyncPrintf("GRAPH SP止まっているようです\n");
+            osSyncPrintf(T("GRAPH SP止まっているようです\n", "GRAPH SP seems to be stopped\n"));
         }
 
     send_mesg:
@@ -195,16 +186,14 @@ void Sched_HandleGfxCancel(Scheduler* sched) {
         goto halt_rdp;
     }
 
-    // There are no GRAPH SP tasks to cancel
-    osSyncPrintf("キャンセルすべき GRAPH SP タスクがありません\n");
+    osSyncPrintf(T("キャンセルすべき GRAPH SP タスクがありません\n", "There are no GRAPH SP tasks to cancel\n"));
 
 halt_rdp:
     if (sched->curRDPTask != NULL) {
         OSTask_t* dpTask = &sched->curRDPTask->list.t;
 
         if (dpTask->type == M_GFXTASK) {
-            // Try to stop DP
-            osSyncPrintf("DP止めようとします\n");
+            osSyncPrintf(T("DP止めようとします\n", "Attempting to stop DP\n"));
             bzero(dpTask->output_buff, (uintptr_t)dpTask->output_buff_size - (uintptr_t)dpTask->output_buff);
             osSendMesg(&sched->interruptQueue, (OSMesg)RDP_DONE_MSG, OS_MESG_NOBLOCK);
         }
@@ -239,8 +228,9 @@ void Sched_QueueTask(Scheduler* sched, OSScTask* task) {
 void Sched_Yield(Scheduler* sched) {
     // Don't yield audio tasks
     if (sched->curRSPTask->list.t.type == M_AUDTASK) {
-        // A new audio task has been entered even though the previous audio task has not been completed yet
-        osSyncPrintf("まだ前回のオーディオタスクが完了していないのに新たなオーディオタスクがエントリされた\n");
+        osSyncPrintf(
+            T("まだ前回のオーディオタスクが完了していないのに新たなオーディオタスクがエントリされた\n",
+              "A new audio task has been entered, even though the previous audio task has not yet been completed\n"));
     } else if (!(sched->curRSPTask->state & OS_SC_YIELD)) {
         sched->curRSPTask->state |= OS_SC_YIELD;
         osSpTaskYield();
