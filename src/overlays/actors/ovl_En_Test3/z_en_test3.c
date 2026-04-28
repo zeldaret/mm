@@ -23,18 +23,26 @@ typedef struct {
     /* 0x1 */ s8 unk_1_4 : 4;
 } struct_80A41828; // size = 0x2
 
-typedef s32 (*EnTest3UnkFunc2)(EnTest3* this, PlayState* play, struct_80A41828* arg2, ScheduleOutput* scheduleOutput);
-typedef s32 (*EnTest3UnkFunc)(EnTest3* this, PlayState* play);
+typedef s32 (*EnTest3ProcessScheduleFunc)(EnTest3* this, PlayState* play, struct_80A41828* arg2,
+                                          ScheduleOutput* scheduleOutput);
+typedef s32 (*EnTest3HandlerFunc)(EnTest3* this, PlayState* play);
 
 typedef struct {
-    /* 0x0 */ EnTest3UnkFunc2 unk_0;
-    /* 0x4 */ EnTest3UnkFunc unk_4;
-} struct_80A40678; // size = 0x8
+    /* 0x0 */ EnTest3ProcessScheduleFunc processSchFunc;
+    /* 0x4 */ EnTest3HandlerFunc handleSchFunc;
+} EnTest3ScheduledAction; // size = 0x8
 
 typedef struct {
     /* 0x0 */ EnTest3ActionFunc unk_0; // might not actually be an action function
     /* 0x4 */ EnTest3ActionFunc actionFunc;
 } struct_80A4168C; // size = 0x8
+
+typedef enum EnTest3RunToTownPhase {
+    /* 0 */ ENTEST3_RUN_TO_TOWN_WAITING,
+    /* 1 */ ENTEST3_RUN_TO_TOWN_RUNNING,
+    /* 2 */ ENTEST3_RUN_TO_TOWN_END,
+    /* 3 */ ENTEST3_RUN_TO_TOWN_CLEARED,
+} EnTest3RunToTownPhase;
 
 void EnTest3_Init(Actor* thisx, PlayState* play2);
 void EnTest3_Destroy(Actor* thisx, PlayState* play2);
@@ -56,7 +64,7 @@ s32 func_80A3EBFC(EnTest3* this, PlayState* play);
 s32 func_80A3EC30(EnTest3* this, PlayState* play);
 s32 func_80A3EC44(EnTest3* this, PlayState* play);
 
-// Functions used in D_80A417E8. Purpose unclear, but related to Schedule
+// Scheduled action functions, including "process" and "handle" functions
 s32 func_80A3F080(EnTest3* this, PlayState* play, struct_80A41828* arg2, ScheduleOutput* scheduleOutput);
 s32 func_80A3F09C(EnTest3* this, PlayState* play);
 s32 func_80A3F62C(EnTest3* this, PlayState* play, struct_80A41828* arg2, ScheduleOutput* scheduleOutput);
@@ -67,15 +75,16 @@ s32 func_80A3F9E4(EnTest3* this, PlayState* play, struct_80A41828* arg2, Schedul
 s32 func_80A3FA58(EnTest3* this, PlayState* play);
 s32 func_80A3FBCC(EnTest3* this, PlayState* play, struct_80A41828* arg2, ScheduleOutput* scheduleOutput);
 s32 func_80A3FBE8(EnTest3* this, PlayState* play);
-s32 func_80A3FDE4(EnTest3* this, PlayState* play, struct_80A41828* arg2, ScheduleOutput* scheduleOutput);
-s32 func_80A3FE20(EnTest3* this, PlayState* play);
+s32 EnTest3_ProcessSchedule_RunToTown(EnTest3* this, PlayState* play, struct_80A41828* arg2,
+                                      ScheduleOutput* scheduleOutput);
+s32 EnTest3_HandleSchedule_RunToTown(EnTest3* this, PlayState* play);
 s32 func_80A3FF10(EnTest3* this, PlayState* play, struct_80A41828* arg2, ScheduleOutput* scheduleOutput);
 s32 func_80A3FFD0(EnTest3* this, PlayState* play2);
 s32 func_80A40098(EnTest3* this, PlayState* play, struct_80A41828* arg2, ScheduleOutput* scheduleOutput);
 s32 func_80A40230(EnTest3* this, PlayState* play);
 
 // Action functions
-void func_80A40678(EnTest3* this, PlayState* play);
+void EnTest3_FollowSchedule(EnTest3* this, PlayState* play);
 void func_80A40824(EnTest3* this, PlayState* play);
 void func_80A4084C(EnTest3* this, PlayState* play);
 void func_80A40908(EnTest3* this, PlayState* play);
@@ -100,12 +109,12 @@ static struct_80A4168C D_80A4168C[] = {
     { NULL, NULL },
 };
 
-static EnTest3UnkFunc D_80A4169C[] = {
+static EnTest3HandlerFunc D_80A4169C[] = {
     func_80A3E898, func_80A3E898, func_80A3E884, func_80A3E898, func_80A3E898,
     func_80A3EA30, func_80A3E898, func_80A3E960, func_80A3E870,
 };
 
-static EnTest3UnkFunc D_80A416C0[] = {
+static EnTest3HandlerFunc D_80A416C0[] = {
     func_80A3EAC4, func_80A3EAF8, func_80A3EBFC, func_80A3EC44,
     func_80A3EC30, func_80A3E9DC, func_80A3EB8C, func_80A3E97C,
 };
@@ -214,10 +223,15 @@ static EffectTireMarkInit sTireMarkInit = {
     { 0, 0, 15, 100 },
 };
 
-static struct_80A40678 D_80A417E8[] = {
-    { func_80A3F080, func_80A3F09C }, { func_80A40098, func_80A40230 }, { func_80A3F62C, func_80A3F73C },
-    { func_80A3F8D4, func_80A3F9A4 }, { func_80A3F9E4, func_80A3FA58 }, { func_80A3FBCC, func_80A3FBE8 },
-    { func_80A3FDE4, func_80A3FE20 }, { func_80A3FF10, func_80A3FFD0 },
+static EnTest3ScheduledAction sScheduledActions[] = {
+    { func_80A3F080, func_80A3F09C },
+    { func_80A40098, func_80A40230 },
+    { func_80A3F62C, func_80A3F73C },
+    { func_80A3F8D4, func_80A3F9A4 },
+    { func_80A3F9E4, func_80A3FA58 },
+    { func_80A3FBCC, func_80A3FBE8 },
+    { EnTest3_ProcessSchedule_RunToTown, EnTest3_HandleSchedule_RunToTown },
+    { func_80A3FF10, func_80A3FFD0 },
 };
 
 static struct_80A41828 D_80A41828[] = {
@@ -242,7 +256,7 @@ s32 D_80A41D48;
 Vec3f D_80A41D50;
 s32 D_80A41D5C;
 s32 D_80A41D60;
-s32 D_80A41D64;
+EnTest3RunToTownPhase sKafeiRunToTownPhase;
 s32 D_80A41D68;
 Vec3f* sKafeiCurBodyPartPos;
 
@@ -464,7 +478,7 @@ void EnTest3_Init(Actor* thisx, PlayState* play2) {
     if (KAFEI_GET_PARAM_1E0(&this->player.actor) == 0) {
         func_80A3E7E0(this, func_80A40824);
     } else {
-        func_80A3E7E0(this, func_80A40678);
+        func_80A3E7E0(this, EnTest3_FollowSchedule);
     }
 }
 
@@ -767,30 +781,31 @@ s32 func_80A3FBE8(EnTest3* this, PlayState* play) {
     return false;
 }
 
-s32 func_80A3FDE4(EnTest3* this, PlayState* play, struct_80A41828* arg2, ScheduleOutput* scheduleOutput) {
+s32 EnTest3_ProcessSchedule_RunToTown(EnTest3* this, PlayState* play, struct_80A41828* arg2,
+                                      ScheduleOutput* scheduleOutput) {
     this->csId = CutsceneManager_GetAdditionalCsId(this->player.actor.csId);
     return true;
 }
 
-s32 func_80A3FE20(EnTest3* this, PlayState* play) {
+s32 EnTest3_HandleSchedule_RunToTown(EnTest3* this, PlayState* play) {
     struct_80A41828 sp2C;
     ScheduleOutput scheduleOutput;
 
-    if (D_80A41D64 == 0) {
+    if (sKafeiRunToTownPhase == ENTEST3_RUN_TO_TOWN_WAITING) {
         if (func_80A3E9DC(this, play)) {
             sp2C.unk_1_0 = 2;
             scheduleOutput.time0 = (u16)SCRIPT_TIME_NOW;
             scheduleOutput.time1 = (u16)(scheduleOutput.time0 + 1000);
             func_80A40098(this, play, &sp2C, &scheduleOutput);
-            D_80A41D64 = 1;
+            sKafeiRunToTownPhase = ENTEST3_RUN_TO_TOWN_RUNNING;
             return false;
         }
-    } else if (D_80A41D64 == 1) {
+    } else if (sKafeiRunToTownPhase == ENTEST3_RUN_TO_TOWN_RUNNING) {
         func_80A40230(this, play);
-    } else if (D_80A41D64 == 2) {
+    } else if (sKafeiRunToTownPhase == ENTEST3_RUN_TO_TOWN_END) {
         CutsceneManager_Stop(this->csId);
         SET_WEEKEVENTREG(WEEKEVENTREG_90_02);
-        D_80A41D64 = 3;
+        sKafeiRunToTownPhase = ENTEST3_RUN_TO_TOWN_CLEARED;
     }
     return false;
 }
@@ -902,7 +917,7 @@ s32 func_80A40230(EnTest3* this, PlayState* play) {
             CLEAR_WEEKEVENTREG(WEEKEVENTREG_58_80);
             this->player.actor.draw = NULL;
         } else if (this->scheduleResult == 9) {
-            D_80A41D64 = 2;
+            sKafeiRunToTownPhase = ENTEST3_RUN_TO_TOWN_END;
         }
         ret = true;
     } else {
@@ -937,7 +952,7 @@ s32 func_80A40230(EnTest3* this, PlayState* play) {
     return ret;
 }
 
-void func_80A40678(EnTest3* this, PlayState* play) {
+void EnTest3_FollowSchedule(EnTest3* this, PlayState* play) {
     struct_80A41828* sp3C;
     ScheduleOutput scheduleOutput;
 
@@ -952,7 +967,7 @@ void func_80A40678(EnTest3* this, PlayState* play) {
             if (sp3C->unk_0 != 4) {
                 CLEAR_WEEKEVENTREG(WEEKEVENTREG_51_04);
             }
-            if (!D_80A417E8[sp3C->unk_0].unk_0(this, play, sp3C, &scheduleOutput)) {
+            if (!sScheduledActions[sp3C->unk_0].processSchFunc(this, play, sp3C, &scheduleOutput)) {
                 return;
             }
             if (scheduleOutput.result == 6) {
@@ -966,7 +981,7 @@ void func_80A40678(EnTest3* this, PlayState* play) {
     }
     this->scheduleResult = scheduleOutput.result;
     sp3C = &D_80A41828[this->scheduleResult];
-    D_80A417E8[sp3C->unk_0].unk_4(this, play);
+    sScheduledActions[sp3C->unk_0].handleSchFunc(this, play);
 }
 
 void func_80A40824(EnTest3* this, PlayState* play) {
@@ -980,7 +995,7 @@ void func_80A4084C(EnTest3* this, PlayState* play) {
             if (KAFEI_GET_PARAM_1E0(&this->player.actor) == 0) {
                 func_80A3E7E0(this, func_80A40824);
             } else {
-                func_80A3E7E0(this, func_80A40678);
+                func_80A3E7E0(this, EnTest3_FollowSchedule);
             }
             this->player.focusActor = NULL;
         }
