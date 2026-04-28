@@ -10,7 +10,6 @@ void AudioMgr_NotifyTaskDone(AudioMgr* audioMgr) {
 }
 
 void AudioMgr_HandleRetrace(AudioMgr* audioMgr) {
-    static s32 sRetryCount = 10;
     AudioTask* rspTask;
     s32 timerMsgVal = 666;
     OSTimer timer;
@@ -20,9 +19,11 @@ void AudioMgr_HandleRetrace(AudioMgr* audioMgr) {
         audioMgr->rspTask = NULL;
     }
 
+#if MM_VERSION >= N64_US
     while (!MQ_IS_EMPTY(&audioMgr->cmdQueue)) {
         osRecvMesg(&audioMgr->cmdQueue, NULL, OS_MESG_NOBLOCK);
     }
+#endif
 
     if (audioMgr->rspTask != NULL) {
         audioMgr->audioTask.next = NULL;
@@ -44,6 +45,8 @@ void AudioMgr_HandleRetrace(AudioMgr* audioMgr) {
     }
 
     if (audioMgr->rspTask != NULL) {
+#if MM_VERSION >= N64_US
+        static s32 sRetryCount = 10;
         while (true) {
             osSetTimer(&timer, OS_USEC_TO_CYCLES(32000), 0, &audioMgr->cmdQueue, (OSMesg)timerMsgVal);
             osRecvMesg(&audioMgr->cmdQueue, (OSMesg*)&msg, OS_MESG_BLOCK);
@@ -62,8 +65,20 @@ void AudioMgr_HandleRetrace(AudioMgr* audioMgr) {
                 break;
             }
         }
-
         AudioMgr_NotifyTaskDone(audioMgr);
+#else
+        // Wait for the audio rsp task scheduled on the previous retrace to complete. This looks like it should wait
+        // for the task scheduled on the current retrace, earlier in this function, but since the queue is initially
+        // filled in AudioMgr_Init this osRecvMesg call doesn't wait for the task scheduler to post a message for the
+        // most recent task as there is already a message waiting.
+        osRecvMesg(&audioMgr->cmdQueue, NULL, OS_MESG_BLOCK);
+        // Report task done
+        //! @bug As the above osRecvMesg is waiting for the previous task to complete rather than the current task,
+        //! the task done notification is sent to the task done queue for the current task as soon as the previous task
+        //! is completed, without waiting for the current task.
+        //! In practice, task done notifications are not used by the audio driver so this is inconsequential.
+        AudioMgr_NotifyTaskDone(audioMgr);
+#endif
     }
 
     audioMgr->rspTask = rspTask;
@@ -78,6 +93,8 @@ void AudioMgr_ThreadEntry(void* arg) {
     IrqMgrClient irqClient;
     s16* msg = NULL;
     s32 exit;
+
+    PRINTF(T("オーディオマネージャスレッド実行開始\n", "Start running audio manager thread\n"));
 
     Audio_Init();
     AudioLoad_SetDmaHandler(DmaMgr_AudioDmaHandler);
@@ -119,6 +136,8 @@ void AudioMgr_ThreadEntry(void* arg) {
     }
 
     IrqMgr_RemoveClient(audioMgr->irqMgr, &irqClient);
+
+    PRINTF(T("オーディオマネージャスレッド実行終了\n", "Audio thread manager thread execution end\n"));
 }
 
 void AudioMgr_Unlock(AudioMgr* audioMgr) {
@@ -132,9 +151,18 @@ void AudioMgr_Init(AudioMgr* audioMgr, void* stack, OSPri pri, OSId id, Schedule
     audioMgr->irqMgr = irqMgr;
     audioMgr->rspTask = NULL;
 
+#if MM_VERSION < N64_US
+    R_AUDIOMGR_DEBUG_LEVEL = 1;
+#endif
+
     osCreateMesgQueue(&audioMgr->cmdQueue, audioMgr->cmdMsgBuf, ARRAY_COUNT(audioMgr->cmdMsgBuf));
     osCreateMesgQueue(&audioMgr->interruptQueue, audioMgr->interruptMsgBuf, ARRAY_COUNT(audioMgr->interruptMsgBuf));
     osCreateMesgQueue(&audioMgr->lockQueue, audioMgr->lockMsgBuf, ARRAY_COUNT(audioMgr->lockMsgBuf));
+
+#if MM_VERSION < N64_US
+    // Send a message to the task done queue so it is initially full
+    osSendMesg(&audioMgr->cmdQueue, NULL, OS_MESG_BLOCK);
+#endif
 
     osCreateThread(&audioMgr->thread, id, AudioMgr_ThreadEntry, audioMgr, stack, pri);
     osStartThread(&audioMgr->thread);
