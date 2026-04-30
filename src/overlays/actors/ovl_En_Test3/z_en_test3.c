@@ -538,7 +538,6 @@ s32 EnTest3_HandleTalk_EndOfMessage(EnTest3* this, PlayState* play) {
     return 0;
 }
 
-// ...Can you keep a secret?
 s32 EnTest3_HandleTalk_Choice(EnTest3* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
         if (play->msgCtx.choiceIndex != 0) {
