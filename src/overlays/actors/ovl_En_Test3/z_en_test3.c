@@ -18,7 +18,7 @@
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED | ACTOR_FLAG_CAN_PRESS_SWITCHES)
 
 typedef struct {
-    /* 0x0 */ s8 schActionIndex;
+    /* 0x0 */ s8 schActionIndex; // KafeiScheduledActionIndex
     /* 0x1 */ s8 pathIndexAndDirection : 4;
     /* 0x1 */ s8 speakDataIndex : 4;
 } EnTest3ScheduleResultData; // size = 0x2

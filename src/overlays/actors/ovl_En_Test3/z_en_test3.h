@@ -11,7 +11,7 @@ typedef void (*EnTest3ActionFunc)(struct EnTest3*, PlayState*);
 #define KAFEI_GET_PARAM_1E0(thisx) (((thisx)->params >> 5) & 0xF)
 
 typedef struct {
-    /* 0x0 */ u8 talkActionIndex;
+    /* 0x0 */ u8 talkActionIndex; // EnTest3TalkState
     /* 0x1 */ u8 argument; // used for various purposes, including a timer; 0 means no next message
     /* 0x2 */ u16 textId;
 } EnTest3SpeakData; // size = 0x4
