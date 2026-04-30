@@ -364,29 +364,28 @@ static EnTest3ScheduleResultData sKafeiScheduledResultData[] = {
 };
 
 static EnTest3SpeakData sSpeakData[] = {
-    { 4, 0, 0x2B25 }, // "Oh, that's too bad." Unused?
-    { 1, 0, 0x2969 }, // "Green hat... Green clothes..."
-    { 3, 1, 0x296A }, // "...Can you keep a secret? -> Yes -> No"
-    { 1, 0, 0x296B }, // "...Listen, when someone asks you that, you say yes."
-    { 5, 1, 0x0000 }, // Starts the face reveal cutscene
+    { 4, 0, 0x2B25 }, // Unused? NTSC message: "Oh, that's too bad."
+    { 1, 0, 0x2969 }, // First thing Kafei says when he meets Link
+    { 3, 1, 0x296A }, // Asking Link to keep a secret
+    { 1, 0, 0x296B }, // If Link said no
+    { 5, 1, 0x0000 }, // Starts the face reveal cutscene, regardless of what Link chose
     { 8, 0, 0x0000 }, // Sets Kafei's next action as GivePendant
-    { 4, 0, 0x2976 }, // "Keep what we just talked about a secret from everyone."
-    { 6, 0, 0x2977 }, // "Things that get stolen in this town always make their way to the Curiosity Shop."
-    { 7, 10,
-      0x2978 }, // "Stand on that crate and peek into that hole." Delayed by 10 frames as Kafei turns to look at it.
+    { 4, 0, 0x2976 }, // Last message after giving Link the pendant
+    { 6, 0, 0x2977 }, // Talking to Kafei after he gave Link the pendant
+    { 7, 10, 0x2978 }, // 10-frame delay as Kafei turns to look at the peephole on the wall
     { 4, 1, 0x0000 }, // Displays the previous message once 10 frames have passed
-    { 4, 0, 0x2968 }, // "........."
-    { 4, 0, 0x297A }, // "That guy will definitely appear. I'll be waiting when it happens."
-    { 1, 0, 0x145D }, // "I found him, green hat boy..."
-    { 1, 0, 0x145E }, // "He's using this place as his safe house for keeping his stolen goods."
+    { 4, 0, 0x2968 }, // Kafei doesn't recognize Link in Curiosity Shop; long silence
+    { 4, 0, 0x297A }, // Kafei says Sakon will definitely appear
+    { 1, 0, 0x145D }, // Talking to Kafei outside Sakon's Hideout; first message
+    { 1, 0, 0x145E }, // Talking to Kafei outside Sakon's Hideout; second message
     { 5, 1, 0x145F }, // Starts cutscene where Kafei looks at the hideout door. The text ID is necessary to tell Kafei
                       // to look at it.
-    { 1, 0, 0x145F }, // "His storage for the things he's stolen is on the other side of this rock door."
+    { 1, 0, 0x145F }, // Third message, spoken while looking at the hideout door
     { 5, 0, 0x0000 }, // Ends cutscene where Kafei looks at the hideout door
-    { 4, 0, 0x1460 }, // "I'll wait...I've made a promise to Anju. He will show up."
-    { 4, 0, 0x145C }, // "......"
-    { 4, 0, 0x2913 }, // "Isn't her bridal dress lovely?"
-    { 4, 0, 0x1465 }, // "Step on that switch!!!"
+    { 4, 0, 0x1460 }, // Last message in this conversation; in subsequent talks, he only says this
+    { 4, 0, 0x145C }, // Kafei doesn't recognize Link at Ikana Canyon; medium silence
+    { 4, 0, 0x2913 }, // Talking to Kafei at inn with Anju absent (Link didn't give her the pendant)
+    { 4, 0, 0x1465 }, // Kafei tells Link to step on the switch
 };
 
 s32 sSakonHideoutPhase;
@@ -750,13 +749,10 @@ bool EnTest3_RecognizesLink(PlayState* play) {
 
 void EnTest3_GetSpeakDataAtShop(EnTest3* this, PlayState* play) {
     if (!EnTest3_RecognizesLink(play)) {
-        // .........
         this->speakData = &sSpeakData[10];
     } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_KAFEI_ENTRUSTED_LINK)) {
-        // Things that get stolen in this town always make their way to the Curiosity Shop.
         this->speakData = &sSpeakData[7];
     } else {
-        // Green hat... Green clothes...
         this->speakData = &sSpeakData[1];
     }
     this->csId = this->player.actor.csId;
@@ -764,14 +760,11 @@ void EnTest3_GetSpeakDataAtShop(EnTest3* this, PlayState* play) {
 
 void EnTest3_GetSpeakDataAtIkana(EnTest3* this, PlayState* play) {
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_KAFEI_ENTRUSTED_LINK) || !EnTest3_RecognizesLink(play)) {
-        // ......
         this->speakData = &sSpeakData[18];
         sMetAtIkana = false;
     } else if (sMetAtIkana) {
-        // I'll wait...I've made a promise to Anju. He will show up.
         this->speakData = &sSpeakData[17];
     } else {
-        // I found him, green hat boy...
         this->speakData = &sSpeakData[12];
     }
     this->csId = this->player.actor.csId;
@@ -910,7 +903,6 @@ s32 EnTest3_HandleSchedule_SakonHideout(EnTest3* this, PlayState* play) {
     if (sSakonHideoutPhase == 0) {
         if (!Play_InCsMode(play)) {
             sSakonHideoutPhase = 1;
-            // Step on that switch!!!
             this->speakData = &sSpeakData[20];
             this->csId = this->player.actor.csId;
             this->player.actor.textId = this->speakData->textId;
@@ -1162,7 +1154,6 @@ void EnTest3_Action_FollowSchedule(EnTest3* this, PlayState* play) {
 // Apparently unused as Kafei normally follows a schedule, but this function sets him up as a generic speakable NPC
 // with one line of dialogue.
 void EnTest3_Action_Unused(EnTest3* this, PlayState* play) {
-    // Oh, that's too bad.
     this->speakData = &sSpeakData[0];
     EnTest3_HandleSchedule_CanTalk(this, play);
 }
@@ -1192,7 +1183,6 @@ void EnTest3_Action_GivePendant(EnTest3* this, PlayState* play) {
         Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_KAFEI);
     } else {
         Actor_OfferTalkExchange(&this->player.actor, play, 9999.9f, 9999.9f, PLAYER_IA_MINUS1);
-        // Keep what we just talked about a secret from everyone.
         this->speakData = &sSpeakData[6];
         this->player.actor.textId = this->speakData->textId;
         this->player.actor.flags |= (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
