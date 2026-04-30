@@ -438,7 +438,7 @@ s32 EnTest3_SetupTalk_DoNothing(EnTest3* this, PlayState* play) {
 s32 EnTest3_SetupTalk_NextMessage(EnTest3* this, PlayState* play) {
     u16 textId = this->speakData->textId;
 
-    if ((this->speakData->talkActionIndex == 4) && CHECK_WEEKEVENTREG(WEEKEVENTREG_KAFEI_ENTRUSTED_LINK)) {
+    if ((this->speakData->talkActionIndex == ENTEST3_TALK_END) && CHECK_WEEKEVENTREG(WEEKEVENTREG_KAFEI_ENTRUSTED_LINK)) {
         Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_KAFEI);
     }
     if (textId == 0xFFFF) {
@@ -807,7 +807,7 @@ s32 EnTest3_HandleSchedule_CanTalk(EnTest3* this, PlayState* play) {
         this->player.focusActor = &GET_PLAYER(play)->actor;
         this->player.stateFlags2 &= ~PLAYER_STATE2_40000;
         sMetAtIkana = true;
-        if ((this->speakData->talkActionIndex == 4) && CHECK_WEEKEVENTREG(WEEKEVENTREG_KAFEI_ENTRUSTED_LINK)) {
+        if ((this->speakData->talkActionIndex == ENTEST3_TALK_END) && CHECK_WEEKEVENTREG(WEEKEVENTREG_KAFEI_ENTRUSTED_LINK)) {
             Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_KAFEI);
         }
     } else {
@@ -1139,7 +1139,7 @@ void EnTest3_Action_FollowSchedule(EnTest3* this, PlayState* play) {
         if (this->scheduleResult != scheduleOutput.result) {
             sp3C = &sKafeiScheduledResultData[scheduleOutput.result];
             EnTest3_EndCsAction(this, play);
-            if (sp3C->schActionIndex != 4) {
+            if (sp3C->schActionIndex != KAFEI_SCH_ACTION_BELL_RUNG) {
                 CLEAR_WEEKEVENTREG(WEEKEVENTREG_HIT_LAUNDRY_POOL_BELL);
             }
             if (!sScheduledActions[sp3C->schActionIndex].processSchFunc(this, play, sp3C, &scheduleOutput)) {
