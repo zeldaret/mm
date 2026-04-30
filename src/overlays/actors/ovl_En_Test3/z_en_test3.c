@@ -1125,7 +1125,7 @@ s32 EnTest3_HandleSchedule_MoveToWaypoint(EnTest3* this, PlayState* play) {
 }
 
 void EnTest3_Action_FollowSchedule(EnTest3* this, PlayState* play) {
-    EnTest3ScheduleResultData* sp3C;
+    EnTest3ScheduleResultData* schResultData;
     ScheduleOutput scheduleOutput;
 
     this->timeSpeed =
@@ -1137,12 +1137,12 @@ void EnTest3_Action_FollowSchedule(EnTest3* this, PlayState* play) {
 
     if (Schedule_RunScript(play, sScheduleScript, &scheduleOutput)) {
         if (this->scheduleResult != scheduleOutput.result) {
-            sp3C = &sKafeiScheduledResultData[scheduleOutput.result];
+            schResultData = &sKafeiScheduledResultData[scheduleOutput.result];
             EnTest3_EndCsAction(this, play);
-            if (sp3C->schActionIndex != KAFEI_SCH_ACTION_BELL_RUNG) {
+            if (schResultData->schActionIndex != KAFEI_SCH_ACTION_BELL_RUNG) {
                 CLEAR_WEEKEVENTREG(WEEKEVENTREG_HIT_LAUNDRY_POOL_BELL);
             }
-            if (!sScheduledActions[sp3C->schActionIndex].processSchFunc(this, play, sp3C, &scheduleOutput)) {
+            if (!sScheduledActions[schResultData->schActionIndex].processSchFunc(this, play, schResultData, &scheduleOutput)) {
                 return;
             }
             if (scheduleOutput.result == 6) {
@@ -1155,8 +1155,8 @@ void EnTest3_Action_FollowSchedule(EnTest3* this, PlayState* play) {
         scheduleOutput.result = 0;
     }
     this->scheduleResult = scheduleOutput.result;
-    sp3C = &sKafeiScheduledResultData[this->scheduleResult];
-    sScheduledActions[sp3C->schActionIndex].handleSchFunc(this, play);
+    schResultData = &sKafeiScheduledResultData[this->scheduleResult];
+    sScheduledActions[schResultData->schActionIndex].handleSchFunc(this, play);
 }
 
 // Apparently unused as Kafei normally follows a schedule, but this function sets him up as a generic speakable NPC
