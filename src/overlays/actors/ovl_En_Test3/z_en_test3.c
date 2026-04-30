@@ -364,28 +364,28 @@ static EnTest3ScheduleResultData sKafeiScheduledResultData[] = {
 };
 
 static EnTest3SpeakData sSpeakData[] = {
-    { 4, 0, 0x2B25 }, // Unused? NTSC message: "Oh, that's too bad."
-    { 1, 0, 0x2969 }, // First thing Kafei says when he meets Link
-    { 3, 1, 0x296A }, // Asking Link to keep a secret
-    { 1, 0, 0x296B }, // If Link said no
-    { 5, 1, 0x0000 }, // Starts the face reveal cutscene, regardless of what Link chose
-    { 8, 0, 0x0000 }, // Sets Kafei's next action as GivePendant
-    { 4, 0, 0x2976 }, // Last message after giving Link the pendant
-    { 6, 0, 0x2977 }, // Talking to Kafei after he gave Link the pendant
+    { 4, 0, 0x2B25 },  // Unused? NTSC message: "Oh, that's too bad."
+    { 1, 0, 0x2969 },  // First thing Kafei says when he meets Link
+    { 3, 1, 0x296A },  // Asking Link to keep a secret
+    { 1, 0, 0x296B },  // If Link said no
+    { 5, 1, 0x0000 },  // Starts the face reveal cutscene, regardless of what Link chose
+    { 8, 0, 0x0000 },  // Sets Kafei's next action as GivePendant
+    { 4, 0, 0x2976 },  // Last message after giving Link the pendant
+    { 6, 0, 0x2977 },  // Talking to Kafei after he gave Link the pendant
     { 7, 10, 0x2978 }, // 10-frame delay as Kafei turns to look at the peephole on the wall
-    { 4, 1, 0x0000 }, // Displays the previous message once 10 frames have passed
-    { 4, 0, 0x2968 }, // Kafei doesn't recognize Link in Curiosity Shop; long silence
-    { 4, 0, 0x297A }, // Kafei says Sakon will definitely appear
-    { 1, 0, 0x145D }, // Talking to Kafei outside Sakon's Hideout; first message
-    { 1, 0, 0x145E }, // Talking to Kafei outside Sakon's Hideout; second message
-    { 5, 1, 0x145F }, // Starts cutscene where Kafei looks at the hideout door. The text ID is necessary to tell Kafei
-                      // to look at it.
-    { 1, 0, 0x145F }, // Third message, spoken while looking at the hideout door
-    { 5, 0, 0x0000 }, // Ends cutscene where Kafei looks at the hideout door
-    { 4, 0, 0x1460 }, // Last message in this conversation; in subsequent talks, he only says this
-    { 4, 0, 0x145C }, // Kafei doesn't recognize Link at Ikana Canyon; medium silence
-    { 4, 0, 0x2913 }, // Talking to Kafei at inn with Anju absent (Link didn't give her the pendant)
-    { 4, 0, 0x1465 }, // Kafei tells Link to step on the switch
+    { 4, 1, 0x0000 },  // Displays the previous message once 10 frames have passed
+    { 4, 0, 0x2968 },  // Kafei doesn't recognize Link in Curiosity Shop; long silence
+    { 4, 0, 0x297A },  // Kafei says Sakon will definitely appear
+    { 1, 0, 0x145D },  // Talking to Kafei outside Sakon's Hideout; first message
+    { 1, 0, 0x145E },  // Talking to Kafei outside Sakon's Hideout; second message
+    { 5, 1, 0x145F },  // Starts cutscene where Kafei looks at the hideout door. The text ID is necessary to tell Kafei
+                       // to look at it.
+    { 1, 0, 0x145F },  // Third message, spoken while looking at the hideout door
+    { 5, 0, 0x0000 },  // Ends cutscene where Kafei looks at the hideout door
+    { 4, 0, 0x1460 },  // Last message in this conversation; in subsequent talks, he only says this
+    { 4, 0, 0x145C },  // Kafei doesn't recognize Link at Ikana Canyon; medium silence
+    { 4, 0, 0x2913 },  // Talking to Kafei at inn with Anju absent (Link didn't give her the pendant)
+    { 4, 0, 0x1465 },  // Kafei tells Link to step on the switch
 };
 
 s32 sSakonHideoutPhase;
@@ -437,7 +437,8 @@ s32 EnTest3_SetupTalk_DoNothing(EnTest3* this, PlayState* play) {
 s32 EnTest3_SetupTalk_NextMessage(EnTest3* this, PlayState* play) {
     u16 textId = this->speakData->textId;
 
-    if ((this->speakData->talkActionIndex == ENTEST3_TALK_END) && CHECK_WEEKEVENTREG(WEEKEVENTREG_KAFEI_ENTRUSTED_LINK)) {
+    if ((this->speakData->talkActionIndex == ENTEST3_TALK_END) &&
+        CHECK_WEEKEVENTREG(WEEKEVENTREG_KAFEI_ENTRUSTED_LINK)) {
         Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_KAFEI);
     }
     if (textId == 0xFFFF) {
@@ -800,7 +801,8 @@ s32 EnTest3_HandleSchedule_CanTalk(EnTest3* this, PlayState* play) {
         this->player.focusActor = &GET_PLAYER(play)->actor;
         this->player.stateFlags2 &= ~PLAYER_STATE2_40000;
         sMetAtIkana = true;
-        if ((this->speakData->talkActionIndex == ENTEST3_TALK_END) && CHECK_WEEKEVENTREG(WEEKEVENTREG_KAFEI_ENTRUSTED_LINK)) {
+        if ((this->speakData->talkActionIndex == ENTEST3_TALK_END) &&
+            CHECK_WEEKEVENTREG(WEEKEVENTREG_KAFEI_ENTRUSTED_LINK)) {
             Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_KAFEI);
         }
     } else {
@@ -1134,7 +1136,8 @@ void EnTest3_Action_FollowSchedule(EnTest3* this, PlayState* play) {
             if (schResultData->schActionIndex != KAFEI_SCH_ACTION_BELL_RUNG) {
                 CLEAR_WEEKEVENTREG(WEEKEVENTREG_HIT_LAUNDRY_POOL_BELL);
             }
-            if (!sScheduledActions[schResultData->schActionIndex].processSchFunc(this, play, schResultData, &scheduleOutput)) {
+            if (!sScheduledActions[schResultData->schActionIndex].processSchFunc(this, play, schResultData,
+                                                                                 &scheduleOutput)) {
                 return;
             }
             if (scheduleOutput.result == 6) {
