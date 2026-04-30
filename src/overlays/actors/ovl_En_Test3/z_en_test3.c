@@ -320,13 +320,21 @@ typedef enum KafeiScheduledActionIndex {
 } KafeiScheduledActionIndex;
 
 static EnTest3ScheduledAction sScheduledActions[] = {
+    // KAFEI_SCH_ACTION_STOP_DRAWING
     { EnTest3_ProcessSchedule_StopDrawing, EnTest3_HandleSchedule_StopDrawing },
+    // KAFEI_SCH_ACTION_COMPUTE_WAYPOINT
     { EnTest3_ProcessSchedule_ComputeWaypoint, EnTest3_HandleSchedule_MoveToWaypoint },
+    // KAFEI_SCH_ACTION_CAN_TALK
     { EnTest3_ProcessSchedule_CanTalk, EnTest3_HandleSchedule_CanTalk },
+    // KAFEI_SCH_ACTION_FIND_MAIL_CARRIER
     { EnTest3_ProcessSchedule_FindMailCarrier, EnTest3_HandleSchedule_TurnToMailCarrier },
+    // KAFEI_SCH_ACTION_BELL_RUNG
     { EnTest3_ProcessSchedule_BellRung, EnTest3_HandleSchedule_BellRung },
+    // KAFEI_SCH_ACTION_SAKON_HIDEOUT
     { EnTest3_ProcessSchedule_SakonHideout, EnTest3_HandleSchedule_SakonHideout },
+    // KAFEI_SCH_ACTION_RUN_TO_TOWN_CS
     { EnTest3_ProcessSchedule_RunToTownCs, EnTest3_HandleSchedule_RunToTownCs },
+    // KAFEI_SCH_ACTION_COUPLE_CS
     { EnTest3_ProcessSchedule_CouplesMaskCs, EnTest3_HandleSchedule_CouplesMaskCs },
 };
 
