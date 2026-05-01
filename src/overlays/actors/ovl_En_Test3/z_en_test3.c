@@ -503,7 +503,6 @@ s32 EnTest3_HandleTalk_Done(EnTest3* this, PlayState* play) {
 s32 EnTest3_HandleTalk_Event(EnTest3* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         if (this->speakData->textId == 0x145F) {
-            // Only Sakon can open it. The only way in is to wait for Sakon to arrive.
             CutsceneManager_Stop(this->csId);
             this->csId = CS_ID_GLOBAL_TALK;
             CutsceneManager_Queue(this->csId);
