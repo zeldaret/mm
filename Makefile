@@ -36,8 +36,10 @@ endif
 #### Defaults ####
 
 # Target game version. Currently only the following versions are supported:
+#   n64-jp-1.0 N64 Japan 1.0 (WIP)
 #   n64-jp-1.1 N64 Japan 1.1 (WIP)
 #   n64-us     N64 USA (default)
+#   n64-jp-us  N64 USA ROM with JP text/font assets (WIP)
 VERSION ?= n64-us
 # If COMPARE is 1, check the output md5sum after building
 COMPARE ?= 1
@@ -77,10 +79,14 @@ export LANG := C
 CFLAGS :=
 CPPFLAGS :=
 
-ifeq ($(VERSION),n64-jp-1.1)
+ifeq ($(VERSION),n64-jp-1.0)
+  COMPARE := 0
+else ifeq ($(VERSION),n64-jp-1.1)
   COMPARE := 0
 else ifeq ($(VERSION),n64-us)
 # Intentionally blank for now
+else ifeq ($(VERSION),n64-jp-us)
+  COMPARE := 0
 else
 $(error Unsupported version $(VERSION))
 endif
@@ -705,6 +711,12 @@ $(BUILD_DIR)/assets/text/message_data_staff.enc.h: assets/text/message_data_staf
 $(BUILD_DIR)/assets/text/message_data_static.o: $(BUILD_DIR)/assets/text/message_data.enc.h
 $(BUILD_DIR)/assets/text/staff_message_data_static.o: $(BUILD_DIR)/assets/text/message_data_staff.enc.h
 $(BUILD_DIR)/src/code/z_message.o: $(BUILD_DIR)/assets/text/message_data.enc.h $(BUILD_DIR)/assets/text/message_data_staff.enc.h
+
+$(BUILD_DIR)/assets/text/jpn_message_data_static.o: $(EXTRACTED_DIR)/text/jpn_message_data_static.bin
+	$(OBJCOPY) -I binary -O elf32-big $< $@
+
+$(BUILD_DIR)/assets/text/kanji_font_kor.o: $(EXTRACTED_DIR)/text/kanji_font_kor.bin
+	$(OBJCOPY) -I binary -O elf32-big $< $@
 
 $(BUILD_DIR)/src/overlays/%_reloc.o: $(BUILD_DIR)/spec
 	$(FADO) $$(tools/buildtools/reloc_prereq $< $(*F)) -n $(*F) -o $(@:.o=.s) -M $(@:.o=.d)

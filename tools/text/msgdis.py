@@ -3017,6 +3017,87 @@ class MessageDecoderCredits(MessageDecoder):
             7 : "BLACK",
         }[c1]
 
+class MessageDecoderJPN(MessageDecoder):
+    def __init__(self) -> None:
+        control_end = 0x05
+        control_codes = {
+            0x00: ("COLOR_DEFAULT", "", None),
+            0x01: ("COLOR_RED", "", None),
+            0x02: ("BOX_BREAK", "", None),
+            0x03: ("CONTINUE", "", None),
+            0x04: ("COLOR_YELLOW", "", None),
+            # 0x05 = END (control_end); also appears as interior COLOR_LIGHTBLUE
+            0x05: ("COLOR_LIGHTBLUE", "", None),
+            0x06: ("COLOR_PINK", "", None),
+            0x07: ("COLOR_SILVER", "", None),
+            0x08: ("COLOR_ORANGE", "", None),
+            0x09: ("TEXT_SPEED", "", None),
+            0x0A: ("NEWLINE", "", None),
+            0x0B: ("BOX_BREAK2", "", None),
+            0x0C: ("CARRIAGE_RETURN", "", None),
+            0x0D: ("SHIFT", "b", (self.format_decimal,)),
+            0x0E: ("NAME", "", None),
+            0x0F: ("QUICKTEXT_ENABLE", "", None),
+            0x10: ("QUICKTEXT_DISABLE", "", None),
+            0x11: ("EVENT", "", None),
+            0x12: ("PERSISTENT", "", None),
+            0x13: ("AWAIT_END", "", None),
+            0x14: ("SFX", "", None),
+            0x15: ("DELAY_FRAMES", "", None),
+            0x16: ("FADE", "", None),
+            0x17: ("FADE_SKIPPABLE", "", None),
+            0x18: ("BOX_BREAK_DELAYED", "", None),
+            0x19: ("TWO_CHOICE", "", None),
+            0x1A: ("THREE_CHOICE", "", None),
+            0x1B: ("TIMER_POSTMAN", "", None),
+            0x1C: ("TIMER_MINIGAME_1", "", None),
+            0x1D: ("TIMER_2", "", None),
+            0x1E: ("TIMER_MOON_CRASH", "", None),
+            0x1F: ("TIMER_MINIGAME_2", "", None),
+            # 0x30 appears at end of messages before END (auto-advance/fade marker)
+            0x30: ("AWAIT_BUTTON_PROMPT", "", None),
+        }
+        control_header = (
+            "HEADER", "hhhhhh",
+            (
+                self.format_2byte_hex, self.format_2byte_hex, self.format_2byte_hex,
+                self.format_2byte_hex, self.format_2byte_hex, self.format_2byte_hex,
+            )
+        )
+        extraction_charmap = {}
+        super().__init__(control_end, control_codes, control_header, extraction_charmap)
+        self.pop_char_end = self.pop_byte_end
+
+    def pop_char(self) -> int:
+        c = self.pop_byte()
+        if 0x81 <= c <= 0x9F or 0xE0 <= c <= 0xFC:
+            trail = self.pop_byte()
+            return (c << 8) | trail
+        return c
+
+    def decode_char(self, c: int) -> str:
+        if c > 0xFF:
+            try:
+                decoded = bytes([(c >> 8) & 0xFF, c & 0xFF]).decode('shift-jis')
+                if decoded == '"':
+                    decoded = '\\"'
+                return decoded
+            except UnicodeDecodeError:
+                return f'\\x{(c >> 8) & 0xFF:02X}\\x{c & 0xFF:02X}'
+        elif 0xA1 <= c <= 0xDF:
+            # Half-width katakana (single-byte Shift-JIS)
+            try:
+                return bytes([c]).decode('shift-jis')
+            except UnicodeDecodeError:
+                return f'\\x{c:02X}'
+        elif 0x20 <= c <= 0x7E:
+            decoded = chr(c)
+            if decoded == '"':
+                decoded = '\\"'
+            return decoded
+        else:
+            return f'\\x{c:02X}'
+
 class MessageTableDesc:
     def __init__(self, table_name : str, seg_name : str, decoder : MessageDecoder, parent : Optional[int]) -> None:
         self.table_name : str = table_name
@@ -3139,12 +3220,16 @@ def extract(version_info: GameVersionInfo, baserom_segments_dir : Path, output_d
     code_bin = (baserom_segments_dir / "code").read_bytes()
 
     nes_decoder = MessageDecoderNES()
+    jpn_decoder = MessageDecoderJPN()
     credits_decoder = MessageDecoderCredits()
 
-    message_tables : MessageTableDesc = [None for _ in range(1)] # EN
+    message_tables : MessageTableDesc = [None for _ in range(1)] # EN or JPN
     message_table_staff : MessageTableDesc = None
 
-    message_tables[0]  = MessageTableDesc("sMessageTableNES", "message_data_static", nes_decoder, None)
+    if "sMessageTableJPN" in version_info.variables:
+        message_tables[0]  = MessageTableDesc("sMessageTableJPN", "jpn_message_data_static", jpn_decoder, None)
+    else:
+        message_tables[0]  = MessageTableDesc("sMessageTableNES", "message_data_static", nes_decoder, None)
     message_table_staff = MessageTableDesc("sMessageTableCredits", "staff_message_data_static", credits_decoder, None)
 
     messages = collect_messages(message_tables, baserom_segments_dir, version_info, code_vram, code_bin)

@@ -427,7 +427,11 @@ endseg
 
 beginseg
     name "kanji"
+#if MM_VERSION < N64_US
+    include "$(BUILD_DIR)/assets/text/kanji_font_kor.o"
+#else
     include "$(BUILD_DIR)/assets/interface/kanji/kanji.o"
+#endif
 endseg
 
 beginseg
@@ -580,6 +584,14 @@ beginseg
     romalign 0x1000
     include "$(BUILD_DIR)/assets/interface/nes_font_static/nes_font_static.o"
 endseg
+
+#if MM_VERSION < N64_US
+beginseg
+    name "jpn_message_data_static"
+    romalign 0x1000
+    include "$(BUILD_DIR)/assets/text/jpn_message_data_static.o"
+endseg
+#endif
 
 beginseg
     name "message_data_static"
