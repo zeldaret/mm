@@ -939,34 +939,36 @@ void func_80AF8AC8(EnPm* this) {
 }
 
 void func_80AF8BA8(s32 arg0) {
-    static u16 D_80AFB8D4[] = {
+    static u16 sLetterToKafeiDepositedWeekEventReg[] = {
         WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_SOUTH_UPPER_CLOCKTOWN,
         WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_NORTH_CLOCKTOWN,
         WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_EAST_UPPER_CLOCKTOWN,
         WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_EAST_LOWER_CLOCKTOWN,
         WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_SOUTH_LOWER_CLOCKTOWN,
     };
-    static u16 D_80AFB8E0[] = {
-        WEEKEVENTREG_27_40, WEEKEVENTREG_27_80, WEEKEVENTREG_28_01, WEEKEVENTREG_28_02, WEEKEVENTREG_28_04,
+    static u16 sPostboxCheckedWeekEventReg[] = {
+        WEEKEVENTREG_POSTMAN_CHECKED_SOUTH_UPPER_CLOCKTOWN, WEEKEVENTREG_POSTMAN_CHECKED_NORTH_CLOCKTOWN,
+        WEEKEVENTREG_POSTMAN_CHECKED_EAST_UPPER_CLOCKTOWN,  WEEKEVENTREG_POSTMAN_CHECKED_EAST_LOWER_CLOCKTOWN,
+        WEEKEVENTREG_POSTMAN_CHECKED_SOUTH_LOWER_CLOCKTOWN,
     };
 
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_88_02)) {
-        if (CHECK_WEEKEVENTREG(D_80AFB8D4[arg0])) {
+        if (CHECK_WEEKEVENTREG(sLetterToKafeiDepositedWeekEventReg[arg0])) {
             switch (gSaveContext.save.day) {
                 case 2:
-                    SET_WEEKEVENTREG(WEEKEVENTREG_28_08);
+                    SET_WEEKEVENTREG(WEEKEVENTREG_LETTER_TO_KAFEI_SCHEDULED_DAY_2);
                     break;
 
                 case 3:
-                    SET_WEEKEVENTREG(WEEKEVENTREG_28_10);
+                    SET_WEEKEVENTREG(WEEKEVENTREG_LETTER_TO_KAFEI_SCHEDULED_DAY_3);
                     break;
             }
-            SET_WEEKEVENTREG(WEEKEVENTREG_51_02);
-            SET_WEEKEVENTREG(WEEKEVENTREG_90_08);
+            SET_WEEKEVENTREG(WEEKEVENTREG_LETTER_TO_KAFEI_SCHEDULED_TODAY);
+            SET_WEEKEVENTREG(WEEKEVENTREG_POSTMAN_RECEIVED_LETTER_TO_KAFEI);
         }
     }
 
-    SET_WEEKEVENTREG(D_80AFB8E0[arg0]);
+    SET_WEEKEVENTREG(sPostboxCheckedWeekEventReg[arg0]);
 }
 
 void func_80AF8C68(EnPm* this, PlayState* play) {
@@ -1103,7 +1105,7 @@ s32 func_80AF9008(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             this->unk_36C = scheduleOutput->time1 - scheduleOutput->time0;
             this->unk_36E = sp56 - scheduleOutput->time0;
             this->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_90_08)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_POSTMAN_RECEIVED_LETTER_TO_KAFEI)) {
                 this->unk_356 |= 0x800;
             }
             this->unk_356 |= 0x9000;
@@ -1183,7 +1185,7 @@ s32 func_80AF91E8(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             default:
                 SubS_SetOfferMode(&this->unk_356, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
                 EnPm_ChangeAnim(this, ENPM_ANIM_0);
-                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_90_08)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_POSTMAN_RECEIVED_LETTER_TO_KAFEI)) {
                     this->unk_356 |= 0x800;
                 }
                 this->unk_356 |= 0x9000;
@@ -1299,7 +1301,7 @@ s32 func_80AF95E8(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
                 break;
 
             case 23:
-                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_90_08)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_POSTMAN_RECEIVED_LETTER_TO_KAFEI)) {
                     this->unk_356 |= 0x800;
                 }
                 SET_WEEKEVENTREG(WEEKEVENTREG_60_04);
