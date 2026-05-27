@@ -1,5 +1,6 @@
 #include "libu64/gfxprint.h"
 #include "attributes.h"
+#include "macros.h"
 
 #define GFXP_FLAG_HIRAGANA (1 << 0)
 #define GFXP_FLAG_RAINBOW (1 << 1)
@@ -7,6 +8,14 @@
 #define GFXP_FLAG_UPDATE (1 << 3)
 #define GFXP_FLAG_ENLARGE (1 << 6)
 #define GFXP_FLAG_OPEN (1 << 7)
+
+#if MM_VERSION < N64_US || DEBUG_FEATURES
+#define GFXPRINT_PRINTF osSyncPrintf
+#elif IDO_PRINTF_WORKAROUND
+#define GFXPRINT_PRINTF(args) (void)0
+#else
+#define GFXPRINT_PRINTF(format, ...) (void)0
+#endif
 
 u64 sGfxPrintFontTLUT[] = {
 #include "assets/boot/gfxprint/gfx_print_font_tlut.rgba16.inc.c"
@@ -225,6 +234,8 @@ void GfxPrint_Open(GfxPrint* this, Gfx* dList) {
         this->flags |= GFXP_FLAG_OPEN;
         this->dList = dList;
         GfxPrint_Setup(this);
+    } else {
+        GFXPRINT_PRINTF(T("gfxprint_open:２重オープンです\n", "gfxprint_open: Double open\n"));
     }
 }
 
