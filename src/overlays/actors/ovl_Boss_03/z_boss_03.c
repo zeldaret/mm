@@ -123,7 +123,6 @@ GyorgEffect sGyorgEffects[GYORG_EFFECT_COUNT];
 Boss03* sGyorgBossInstance;
 
 void Boss03_PlayUnderwaterSfx(Vec3f* projectedPos, u16 sfxId) {
-    PRINTF(VT_FGCOL(CYAN) T(" ☆ ボス１発生 ☆ \n", " ☆ Boss 1 appears ☆ \n") VT_RST);
     Audio_PlaySfx_Underwater(projectedPos, sfxId);
 }
 
@@ -132,8 +131,6 @@ void Boss03_PlayUnderwaterSfx(Vec3f* projectedPos, u16 sfxId) {
 void Boss03_SpawnEffectWetSpot(PlayState* play, Vec3f* pos) {
     s16 i;
     GyorgEffect* eff = play->specialEffects;
-
-    PRINTF("FISH COUNT %d\n");
 
     for (i = 0; i < GYORG_EFFECT_COUNT; i++) {
         if ((eff->type == GYORG_EFFECT_NONE) || (eff->type == GYORG_EFFECT_BUBBLE)) {
@@ -484,14 +481,16 @@ void Boss03_Init(Actor* thisx, PlayState* play2) {
         return;
     }
 
-    this->actor.world.pos = sGyorgInitialPos;
-
-    // Since Boss03_RandZeroOne is only used on this Init function, the resulting values end up being deterministic
-    Boss03_InitRand(1, 29093, 9786);
+    PRINTF(VT_FGCOL(CYAN) T(" ☆ ボス１発生 ☆ \n", " ☆ Boss 1 appears ☆ \n") VT_RST);
 
 #if MM_VERSION < N64_US
     if (1) {}
 #endif
+
+    this->actor.world.pos = sGyorgInitialPos;
+
+    // Since Boss03_RandZeroOne is only used on this Init function, the resulting values end up being deterministic
+    Boss03_InitRand(1, 29093, 9786);
 
     for (i = 0; i < 5; i++) {
         f32 rand;
@@ -630,16 +629,19 @@ void func_809E34B8(Boss03* this, PlayState* play) {
         // Player is above water && Player is standing on ground
         if ((this->waterHeight < player->actor.world.pos.y) && (player->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
             Boss03_SetupPrepareCharge(this, play);
+            return;
+        }
+
 #if MM_VERSION >= N64_US
-        } else if ((player->transformation != PLAYER_FORM_GORON) && (player->transformation != PLAYER_FORM_DEKU)) {
-#else
-        } else {
+        if ((player->transformation == PLAYER_FORM_GORON) || (player->transformation == PLAYER_FORM_DEKU)) {
+            return;
+        }
 #endif
-            if (KREG(70) == 0) {
-                Boss03_SetupChasePlayer(this, play);
-            } else if (this->numSpawnedSmallFish <= 0) {
-                Boss03_SetupChasePlayer(this, play);
-            }
+
+        if (KREG(70) == 0) {
+            Boss03_SetupChasePlayer(this, play);
+        } else if (this->numSpawnedSmallFish <= 0) {
+            Boss03_SetupChasePlayer(this, play);
         }
     }
 }
@@ -1967,6 +1969,8 @@ void Boss03_Update(Actor* thisx, PlayState* play2) {
     Vec3f dropletPos;
     s16 j;
     f32 yRot;
+
+    PRINTF("FISH COUNT %d\n", this->numSpawnedSmallFish);
 
 #if MM_VERSION < N64_US
     if (1) {}
