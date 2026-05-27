@@ -2,6 +2,7 @@
 
 #include "libc64/malloc.h"
 #include "color.h"
+#include "versions.h"
 #include "yaz0.h"
 #include "z64dma.h"
 
@@ -116,6 +117,8 @@ void CmpDma_LoadAllFiles(uintptr_t segmentVrom, void* dst, size_t size) {
 
     for (i = 0; i < end; i++) {
         CmpDma_LoadFileImpl(rom, i, nextDst, 0);
+#if MM_VERSION >= N64_US
         nextDst = gYaz0DecompressDstEnd;
+#endif
     }
 }
