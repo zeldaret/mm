@@ -86,7 +86,8 @@ s32 Yaz0_DecompressImpl(u8* src, u8* dst) {
 
     if (magic != YAZ0_MAGIC) {
         PRINTF(T("slidstart_szs IDが違います (%02x %02x %02x %02x %08x)\n",
-                 "The slidstart_szs ID is incorrect (%02x %02x %02x %02x %08x)\n"));
+                 "The slidstart_szs ID is incorrect (%02x %02x %02x %02x %08x)\n"),
+               src[0], src[1], src[2], src[3], magic);
         return -1;
     }
 
