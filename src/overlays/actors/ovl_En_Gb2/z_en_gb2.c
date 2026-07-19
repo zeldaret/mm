@@ -782,17 +782,21 @@ void func_80B10E98(EnGb2* this, PlayState* play) {
                 this->actionFunc = func_80B10DAC;
             }
         } else {
-            s32 temp;
-
             this->textId = func_80B0FB24(this);
             Message_StartTextbox(play, this->textId, &this->actor);
-            temp = this->textId;
-            if ((temp == 0x14E7) || (temp == 0x14E9) || (temp == 0x14EC) || (temp == 0x14F0)) {
-                CutsceneManager_Stop(this->csIdList[this->csIdIndex]);
-                this->csIdIndex = 1;
-                CutsceneManager_Queue(this->csIdList[this->csIdIndex]);
-                this->actionFunc = func_80B10DAC;
-            }
+            switch (this->textId) {
+                case 0x14E7:
+                case 0x14E9:
+                case 0x14EC:
+                case 0x14F0:
+                    CutsceneManager_Stop(this->csIdList[this->csIdIndex]);
+                    this->csIdIndex = 1;
+                    CutsceneManager_Queue(this->csIdList[this->csIdIndex]);
+                    this->actionFunc = func_80B10DAC;
+                    break;
+                
+                default:
+                    break;
         }
     }
 }
