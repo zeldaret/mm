@@ -1,8 +1,18 @@
 #include "libu64/stackcheck.h"
+
+#include "macros.h"
 #include "stdbool.h"
 #include "stdint.h"
 
 #include "versions.h"
+
+#if MM_VERSION < N64_US || DEBUG_FEATURES
+#define STACKCHECK_PRINTF osSyncPrintf
+#elif IDO_PRINTF_WORKAROUND
+#define STACKCHECK_PRINTF(args) (void)0
+#else
+#define STACKCHECK_PRINTF(format, ...) (void)0
+#endif
 
 StackEntry* sStackInfoListStart = NULL;
 StackEntry* sStackInfoListEnd = NULL;
@@ -22,10 +32,9 @@ void StackCheck_Init(StackEntry* entry, void* stackBottom, void* stackTop, u32 i
 
         for (iter = sStackInfoListStart; iter != NULL; iter = iter->next) {
             if (iter == entry) {
-#if MM_VERSION < N64_US
-                // is already in the list
-                osSyncPrintf("stackcheck_init: %08x は既にリスト中にある\n", entry);
-#endif
+                STACKCHECK_PRINTF(
+                    T("stackcheck_init: %08x は既にリスト中にある\n", "stackcheck_init: %08x is already in the list\n"),
+                    entry);
                 return;
             }
         }
@@ -74,10 +83,8 @@ void StackCheck_Cleanup(StackEntry* entry) {
     }
 
     if (inconsistency) {
-#if MM_VERSION < N64_US
-        // List is inconsistent
-        osSyncPrintf("stackcheck_cleanup: %08x リスト不整合です\n", entry);
-#endif
+        STACKCHECK_PRINTF(
+            T("stackcheck_cleanup: %08x リスト不整合です\n", "stackcheck_cleanup: %08x list inconsistency\n"), entry);
     }
 }
 
@@ -104,10 +111,10 @@ StackStatus StackCheck_GetState(StackEntry* entry) {
         status = STACK_STATUS_OK;
     }
 
-#if MM_VERSION < N64_US
-    osSyncPrintf("head=%08x tail=%08x last=%08x used=%08x free=%08x [%s]\n", entry->head, entry->tail, last, used, free,
-                 (entry->name != NULL) ? entry->name : "(null)");
-#else
+    STACKCHECK_PRINTF("head=%08x tail=%08x last=%08x used=%08x free=%08x [%s]\n", entry->head, entry->tail, last, used,
+                      free, (entry->name != NULL) ? entry->name : "(null)");
+
+#if MM_VERSION >= N64_US
     (void)"(null)";
 #endif
 
