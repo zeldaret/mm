@@ -89,7 +89,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_U8(attentionRangeType, ATTENTION_RANGE_1, ICHAIN_STOP),
 };
 
-static EnTotoText D_80BA502C[] = {
+static EnTotoSpeakData D_80BA502C[] = {
     { 0, 0, 0x2B21 },               // "Are you going to play for us again?"
     { 3, 2, 0 },                    // Unused
     { 0, 0, 0x2B23 },               // "We were scheduled to do a show..."      (Sound Check, first time)
@@ -126,7 +126,7 @@ static AnimationHeader* sAnimations[ENTOTO_ANIM_MAX] = {
     &object_zm_Anim_00BC08, // ENTOTO_ANIM_3
 };
 
-static EnTotoText D_80BA5088[] = {
+static EnTotoSpeakData D_80BA5088[] = {
     { 5, 0, 0 },  { 6, 20, 0 }, { 7, 0, 0 },  { 8, 9, 0 },  { 9, 10, 0 },       { 1, 0, 0 },  { 10, 0, 0 },
     { 11, 0, 0 }, { 12, 0, 0 }, { 13, 0, 0 }, { 15, 0, 0 }, { 17, 1, 0 },       { 17, 0, 0 }, { 5, 0, 0 },
     { 6, 20, 0 }, { 8, 5, 0 },  { 12, 0, 0 }, { 13, 0, 0 }, { 14, 20, 0x2B22 }, { 1, 0, 0 },  { 17, 0, 0 },

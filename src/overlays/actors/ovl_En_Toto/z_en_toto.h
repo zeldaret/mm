@@ -14,11 +14,11 @@ typedef s32 (*EnTotoUnkFunc)(struct EnToto*, PlayState*);
 #define ENTOTO_GET_SWITCH_FLAG_2(thisx) (((thisx)->params >> 7) & 0x7F)
 #define ENTOTO_GET_SWITCH_FLAG_3(thisx) ((thisx)->home.rot.x)
 
-typedef struct EnTotoText {
+typedef struct EnTotoSpeakData {
     /* 0x0 */ u8 unk0;      // Set to 4 if Toto not in notebook
     /* 0x1 */ u8 unk1;      // Action func index
     /* 0x2 */ u16 textId;
-} EnTotoText; // size = 0x4
+} EnTotoSpeakData; // size = 0x4
 
 typedef struct EnTotoSpotlight {
     /* 0x0 */ u16 promptTextId;
@@ -42,7 +42,7 @@ typedef struct EnToto {
     /* 0x2B5 */ u8 cueId;
     /* 0x2B6 */ u8 isPlayerCancelingSoundCheck;          // Only ever set to 1 before canceling spotlight scene
     /* 0x2B7 */ u8 unk2B7;
-    /* 0x2B8 */ EnTotoText* text;
+    /* 0x2B8 */ EnTotoSpeakData* text;
     /* 0x2BC */ PlayerOverrideInputEntry overrideInputEntry;
     /* 0x2C4 */ Actor* spotlights;
     /* 0x2C8 */ s32 pad2C8;
