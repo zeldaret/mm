@@ -16,7 +16,7 @@ typedef s32 (*EnTotoUnkFunc)(struct EnToto*, PlayState*);
 
 typedef struct EnTotoText {
     /* 0x0 */ u8 unk0;      // Set to 4 if Toto not in notebook
-    /* 0x1 */ u8 unk1;
+    /* 0x1 */ u8 unk1;      // Action func index
     /* 0x2 */ u16 textId;
 } EnTotoText; // size = 0x4
 
@@ -40,7 +40,7 @@ typedef struct EnToto {
     /* 0x2B3 */ u8 windFishFormsPlayed;
     /* 0x2B4 */ u8 animIndex;
     /* 0x2B5 */ u8 cueId;
-    /* 0x2B6 */ u8 unk2B6;          // Only ever set to 1 before canceling spotlight scene
+    /* 0x2B6 */ u8 isPlayerCancelingSoundCheck;          // Only ever set to 1 before canceling spotlight scene
     /* 0x2B7 */ u8 unk2B7;
     /* 0x2B8 */ EnTotoText* text;
     /* 0x2BC */ PlayerOverrideInputEntry overrideInputEntry;

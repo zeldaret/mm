@@ -235,11 +235,11 @@ void func_80BA3930(EnToto* this, PlayState* play) {     // Start animation loop?
     Animation_MorphToLoop(&this->skelAnime, anim, -4.0f);
 }
 
-s32 func_80BA397C(EnToto* this, s16 arg1) {
+s32 EnToto_IsFacingPlayer(EnToto* this, s16 angle) {
     s16 diff;
 
     diff = this->actor.yawTowardsPlayer - this->actor.home.rot.y;
-    if (ABS_ALT(diff) < arg1) {
+    if (ABS_ALT(diff) < angle) {
         return 1;
     }
     return 0;
@@ -260,16 +260,17 @@ void func_80BA39C8(EnToto* this, PlayState* play) {
         } else if (player->transformation == PLAYER_FORM_DEKU) {
             Flags_SetSwitch(play, ENTOTO_GET_SWITCH_FLAG_3(&this->actor));
         }
-        this->unk2B6 = 0;
+        this->isPlayerCancelingSoundCheck = 0;
         return;
     }
 
-    // If (in Milk Bar from 6 AM - 10:13 PM) or (not in Milk Bar and ??rotation??)
+    // If (in Milk Bar before 10:13 PM) or (not in Milk Bar and is facing player)
     if (((play->sceneId == SCENE_MILK_BAR) &&
          !((CURRENT_TIME >= CLOCK_TIME(6, 0)) && (CURRENT_TIME <= (CLOCK_TIME(22, 13) + 7)))) ||    // Toto refuses to talk to you until 10:13 PM + 7 ticks ( = 0xED02)
-        ((play->sceneId != SCENE_MILK_BAR) && func_80BA397C(this, 0x2000))) {
-        if (this->unk2B6 != 0) {            // Never set in this context.
-            this->text = &D_80BA502C[6];    // "Oh, that's too bad."
+        ((play->sceneId != SCENE_MILK_BAR) && EnToto_IsFacingPlayer(this, 0x2000))) {
+        // If left stage, auto-talk with "Oh, that's too bad" message
+        if (this->isPlayerCancelingSoundCheck != 0) {
+            this->text = &D_80BA502C[6];
             this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
             Actor_OfferTalkExchange(&this->actor, play, 9999.9f, 9999.9f, PLAYER_IA_NONE);
         } else {
@@ -547,7 +548,7 @@ s32 EnToto_WaitForPlayerToEnterSpotlight(EnToto* this, PlayState* play) {
         if (this->spotlights != NULL) {
             Actor_Kill(this->spotlights);
         }
-        this->unk2B6 = 1;
+        this->isPlayerCancelingSoundCheck = 1;
         return this->text->unk1;        // "Oh, that's too bad."
     }
     if (player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
