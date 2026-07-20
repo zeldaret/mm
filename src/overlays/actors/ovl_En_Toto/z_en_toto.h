@@ -15,17 +15,17 @@ typedef s32 (*EnTotoUnkFunc)(struct EnToto*, PlayState*);
 #define ENTOTO_GET_SWITCH_FLAG_3(thisx) ((thisx)->home.rot.x)
 
 typedef struct EnTotoText {
-    /* 0x0 */ u8 unk0;
+    /* 0x0 */ u8 unk0;      // Set to 4 if Toto not in notebook
     /* 0x1 */ u8 unk1;
     /* 0x2 */ u16 textId;
 } EnTotoText; // size = 0x4
 
-typedef struct EnTotoUnkStruct2 {
-    /* 0x0 */ u16 unk0;
-    /* 0x2 */ u16 unk2;
-    /* 0x4 */ u16 unk4;
-    /* 0x6 */ Vec3s unk6;
-} EnTotoUnkStruct2; // size = 0xC
+typedef struct EnTotoSpotlight {
+    /* 0x0 */ u16 promptTextId;
+    /* 0x2 */ u16 wrongLightTextId;
+    /* 0x4 */ u16 rightLightTextId;
+    /* 0x6 */ Vec3s pos;
+} EnTotoSpotlight; // size = 0xC
 
 typedef struct EnToto {
     /* 0x000 */ Actor actor;
@@ -35,12 +35,12 @@ typedef struct EnToto {
     /* 0x260 */ FaceChange faceChange;
     /* 0x264 */ ColliderCylinder collider;
     /* 0x2B0 */ u8 actionFuncIndex;
-    /* 0x2B1 */ u8 unk2B1;
+    /* 0x2B1 */ u8 timer;          // Used for various timers?
     /* 0x2B2 */ s8 csId;
-    /* 0x2B3 */ u8 unk2B3;
+    /* 0x2B3 */ u8 windFishFormsPlayed;
     /* 0x2B4 */ u8 animIndex;
     /* 0x2B5 */ u8 cueId;
-    /* 0x2B6 */ u8 unk2B6;
+    /* 0x2B6 */ u8 unk2B6;          // Only ever set to 1 before canceling spotlight scene
     /* 0x2B7 */ u8 unk2B7;
     /* 0x2B8 */ EnTotoText* text;
     /* 0x2BC */ PlayerOverrideInputEntry overrideInputEntry;

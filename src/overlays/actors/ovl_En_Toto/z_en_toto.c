@@ -8,7 +8,7 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
-#define ENTOTO_WEEK_EVENT_FLAGS (CHECK_WEEKEVENTREG(WEEKEVENTREG_50_01) || CHECK_WEEKEVENTREG(WEEKEVENTREG_51_80))
+#define ENTOTO_FINISHED_WIND_FISH (CHECK_WEEKEVENTREG(WEEKEVENTREG_HELPED_GORMAN_DAY_1) || CHECK_WEEKEVENTREG(WEEKEVENTREG_HELPED_GORMAN_DAY_2))
 
 void EnToto_Init(Actor* thisx, PlayState* play);
 void EnToto_Destroy(Actor* thisx, PlayState* play);
@@ -33,16 +33,16 @@ s32 func_80BA40D4(EnToto* this, PlayState* play);
 s32 func_80BA4128(EnToto* this, PlayState* play);
 s32 func_80BA415C(EnToto* this, PlayState* play);
 s32 func_80BA4204(EnToto* this, PlayState* play);
-s32 func_80BA42BC(EnToto* this, PlayState* play);
+s32 EnToto_SoundCheckSetup(EnToto* this, PlayState* play);
 s32 func_80BA43F4(EnToto* this, PlayState* play);
 s32 func_80BA445C(EnToto* this, PlayState* play);
 s32 func_80BA44A0(EnToto* this, PlayState* play);
-s32 func_80BA4530(EnToto* this, PlayState* play);
+s32 EnToto_WaitForPlayerToEnterSpotlight(EnToto* this, PlayState* play);
 s32 func_80BA46D8(EnToto* this, PlayState* play);
-s32 func_80BA4740(EnToto* this, PlayState* play);
+s32 EnToto_SetPlayedWindFishFlags(EnToto* this, PlayState* play);
 s32 func_80BA47E0(EnToto* this, PlayState* play);
 s32 func_80BA49A4(EnToto* this, PlayState* play);
-s32 func_80BA4A00(EnToto* this, PlayState* play);
+s32 EnToto_WindFishCutsceneEnd(EnToto* this, PlayState* play);
 s32 func_80BA4B24(EnToto* this, PlayState* play);
 s32 func_80BA4C0C(EnToto* this, PlayState* play);
 s32 func_80BA4C44(EnToto* this, PlayState* play);
@@ -90,10 +90,25 @@ static InitChainEntry sInitChain[] = {
 };
 
 static EnTotoText D_80BA502C[] = {
-    { 0, 0, 0x2B21 }, { 3, 2, 0 },      { 0, 0, 0x2B23 },  { 2, 1, 0x2B24 }, { 4, 0, 0x2B25 },
-    { 3, 2, 0 },      { 4, 0, 0x2B25 }, { 16, 0, 0x2A94 }, { 0, 0, 0x2A95 }, { 4, 0, 0x2A96 },
-    { 4, 0, 0x2A97 }, { 0, 0, 0x2A98 }, { 0, 0, 0x2A99 },  { 4, 0, 0x2A9A }, { 4, 0, 0x2A9B },
-    { 0, 0, 0x2AE1 }, { 0, 0, 0x2AE2 }, { 4, 0, 0x2AE3 },  { 4, 0, 0x2AE4 },
+    { 0, 0, 0x2B21 },               // "Are you going to play for us again?"
+    { 3, 2, 0 },                    // Unused
+    { 0, 0, 0x2B23 },               // "We were scheduled to do a show..."      (Sound Check, first time)
+    { 2, 1, 0x2B24 },               // "Could you help me with a performance?"
+    { 4, 0, 0x2B25 },               // "Oh, that's too bad."
+    { 3, 2, 0 },                    // Unused
+    { 4, 0, 0x2B25 },               // "Oh, that's too bad."
+    { 16, 0, 0x2A94 },              // "Are the fins damp lately?"
+    { 0, 0, 0x2A95 },               // "What? Mikau???"                     (Mayor's Residence as Zora, first time)
+    { 4, 0, 0x2A96 },               // "You look so much like him..."       (Mayor's Residence as Zora, first time)
+    { 4, 0, 0x2A97 },               // "With the ocean the way it is..."    (Mayor's Residence as Zora)
+    { 0, 0, 0x2A98 },               // "That's the greeting used among us Zoras."
+    { 0, 0, 0x2A99 },               // "I am Toto, manager of the band..."
+    { 4, 0, 0x2A9A },               // "The Indigo-Go's is..."
+    { 4, 0, 0x2A9B },               // "Canceling the show isn't something I want to do at all..."
+    { 0, 0, 0x2AE1 },               // "Are the fins damp lately?"          (Mayor's Residence as Deku)
+    { 0, 0, 0x2AE2 },               // Oh. That's the greeting used among us Zora." (          ...Deku)
+    { 4, 0, 0x2AE3 },               // "Where's your momma, sonny? Huh?"    (Mayor's Residence as Deku)
+    { 4, 0, 0x2AE4 },               // "Once you get older, come see us perform!"   (          ...Deku)
 };
 
 typedef enum EnTotoAnimation {
@@ -117,7 +132,13 @@ static EnTotoText D_80BA5088[] = {
     { 6, 20, 0 }, { 8, 5, 0 },  { 12, 0, 0 }, { 13, 0, 0 }, { 14, 20, 0x2B22 }, { 1, 0, 0 },  { 17, 0, 0 },
 };
 
-static EnTotoUnkStruct2 D_80BA50DC[] = {
+/*
+    0: Goron
+    1: Zora
+    2: Deku
+    3: Human
+*/
+static EnTotoSpotlight sSpotlightList[] = {
     { 0x2B2F, 0x2B30, 0x2B31, { 0xFF96, 0x0016, 0xFE16 } },
     { 0x2B26, 0x2B27, 0x2B28, { 0x0072, 0x0016, 0xFE3C } },
     { 0x2B29, 0x2B2A, 0x2B2B, { 0xFF67, 0x0016, 0xFE6E } },
@@ -141,14 +162,14 @@ static u8 D_80BA5128[] = { 8, 4, 2, 1 };
 
 static EnTotoUnkFunc D_80BA512C[] = {
     func_80BA3F2C, func_80BA3ED4, func_80BA3F2C, func_80BA3F2C, func_80BA3F2C, func_80BA3ED4,
-    func_80BA42BC, func_80BA3ED4, func_80BA44A0, func_80BA3FB0, func_80BA402C, func_80BA46D8,
+    EnToto_SoundCheckSetup, func_80BA3ED4, func_80BA44A0, func_80BA3FB0, func_80BA402C, func_80BA46D8,
     func_80BA47E0, func_80BA49A4, func_80BA3FB0, func_80BA402C, func_80BA3F2C, func_80BA3EC0,
 };
 
 static EnTotoUnkFunc D_80BA5174[] = {
     func_80BA40D4, func_80BA4128, func_80BA415C, func_80BA3EE8, func_80BA3EE8, func_80BA407C,
-    func_80BA43F4, func_80BA445C, func_80BA4530, func_80BA4204, func_80BA407C, func_80BA4740,
-    func_80BA407C, func_80BA4A00, func_80BA3FCC, func_80BA407C, func_80BA4B24,
+    func_80BA43F4, func_80BA445C, EnToto_WaitForPlayerToEnterSpotlight, func_80BA4204, func_80BA407C, EnToto_SetPlayedWindFishFlags,
+    func_80BA407C, EnToto_WindFishCutsceneEnd, func_80BA3FCC, func_80BA407C, func_80BA4B24,
 };
 
 static EnTotoActionFunc D_80BA51B8[] = {
@@ -156,6 +177,10 @@ static EnTotoActionFunc D_80BA51B8[] = {
     func_80BA3CC4,
     func_80BA3DBC,
 };
+
+/*
+    Reset unkB27 and set up next action (of certain subset)
+*/
 
 void func_80BA36C0(EnToto* this, PlayState* play, s32 index) {
     this->unk2B7 = false;
@@ -201,7 +226,7 @@ void func_80BA383C(EnToto* this, PlayState* play) {
     FaceChange_UpdateBlinkingNonHuman(&this->faceChange, 20, 80, 3);
 }
 
-void func_80BA3930(EnToto* this, PlayState* play) {
+void func_80BA3930(EnToto* this, PlayState* play) {     // Start animation loop?
     AnimationHeader* anim = &object_zm_Anim_00C880;
 
     if (play->sceneId == SCENE_SONCHONOIE) {
@@ -220,12 +245,16 @@ s32 func_80BA397C(EnToto* this, s16 arg1) {
     return 0;
 }
 
+/*
+    Wait for player to talk
+*/
 void func_80BA39C8(EnToto* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    func_80BA383C(this, play);
+    func_80BA383C(this, play); // Update idle animation, I think
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         func_80BA36C0(this, play, 1);
+
         if (play->sceneId != SCENE_SONCHONOIE) {
             Flags_SetSwitch(play, ENTOTO_GET_SWITCH_FLAG_1(&this->actor));
         } else if (player->transformation == PLAYER_FORM_DEKU) {
@@ -235,11 +264,12 @@ void func_80BA39C8(EnToto* this, PlayState* play) {
         return;
     }
 
+    // If (in Milk Bar from 6 AM - 10:13 PM) or (not in Milk Bar and ??rotation??)
     if (((play->sceneId == SCENE_MILK_BAR) &&
-         !((CURRENT_TIME >= CLOCK_TIME(6, 0)) && (CURRENT_TIME <= (CLOCK_TIME(22, 13) + 7)))) ||
+         !((CURRENT_TIME >= CLOCK_TIME(6, 0)) && (CURRENT_TIME <= (CLOCK_TIME(22, 13) + 7)))) ||    // Toto refuses to talk to you until 10:13 PM + 7 ticks ( = 0xED02)
         ((play->sceneId != SCENE_MILK_BAR) && func_80BA397C(this, 0x2000))) {
-        if (this->unk2B6 != 0) {
-            this->text = &D_80BA502C[6];
+        if (this->unk2B6 != 0) {            // Never set in this context.
+            this->text = &D_80BA502C[6];    // "Oh, that's too bad."
             this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
             Actor_OfferTalkExchange(&this->actor, play, 9999.9f, 9999.9f, PLAYER_IA_NONE);
         } else {
@@ -255,7 +285,7 @@ void func_80BA39C8(EnToto* this, PlayState* play) {
                 } else {
                     this->text = &D_80BA502C[7];
                 }
-            } else if (ENTOTO_WEEK_EVENT_FLAGS) {
+            } else if (ENTOTO_FINISHED_WIND_FISH) {
                 this->text = &D_80BA502C[0];
             } else if (!Flags_GetSwitch(play, ENTOTO_GET_SWITCH_FLAG_1(&this->actor))) {
                 this->text = &D_80BA502C[2];
@@ -267,7 +297,10 @@ void func_80BA39C8(EnToto* this, PlayState* play) {
         this->actor.textId = this->text->textId;
     }
 }
-
+/*
+    Triggered by player speaking to Toto. Animation handler?
+    Triggers notebook event in Milk Bar only
+*/
 void func_80BA3BFC(EnToto* this, PlayState* play) {
     if (play->sceneId == SCENE_SONCHONOIE) {
         Animation_MorphToPlayOnce(&this->skelAnime, &object_zm_Anim_000C80, -4.0f);
@@ -280,13 +313,13 @@ void func_80BA3BFC(EnToto* this, PlayState* play) {
     }
 }
 
-void func_80BA3C88(EnToto* this) {
+void EnToto_TurnTowardsPlayer(EnToto* this) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 0xFA0, 0x320);
 }
 
 void func_80BA3CC4(EnToto* this, PlayState* play) {
     func_80BA383C(this, play);
-    func_80BA3C88(this);
+    EnToto_TurnTowardsPlayer(this);
     if (Actor_TextboxIsClosing(&this->actor, play)) {
         func_80BA36C0(this, play, this->text->unk1);
     } else {
@@ -296,7 +329,7 @@ void func_80BA3CC4(EnToto* this, PlayState* play) {
 
 void func_80BA3D38(EnToto* this, PlayState* play) {
     this->csId = this->actor.csId;
-    this->text = ENTOTO_WEEK_EVENT_FLAGS ? &D_80BA5088[13] : &D_80BA5088[0];
+    this->text = ENTOTO_FINISHED_WIND_FISH ? &D_80BA5088[13] : &D_80BA5088[0];
     func_80BA4C0C(this, play);
     play->actorCtx.flags |= ACTORCTX_FLAG_5;
     this->faceChange.face = 0;
@@ -310,7 +343,7 @@ void func_80BA3DBC(EnToto* this, PlayState* play) {
         if (!func_80BA4C44(this, play)) {
             return;
         }
-        if ((this->text->unk1 != 0) && ENTOTO_WEEK_EVENT_FLAGS) {
+        if ((this->text->unk1 != 0) && ENTOTO_FINISHED_WIND_FISH) {
             this->unk2B7 = true;
             return;
         }
@@ -330,10 +363,16 @@ void func_80BA3DBC(EnToto* this, PlayState* play) {
     play->actorCtx.flags &= ~ACTORCTX_FLAG_5;
 }
 
+/*
+    Just returns true
+*/
 s32 func_80BA3EC0(EnToto* this, PlayState* play) {
     return 1;
 }
 
+/*
+    Just returns false
+*/
 s32 func_80BA3ED4(EnToto* this, PlayState* play) {
     return 0;
 }
@@ -359,12 +398,12 @@ s32 func_80BA3F2C(EnToto* this, PlayState* play) {
 }
 
 s32 func_80BA3FB0(EnToto* this, PlayState* play) {
-    this->unk2B1 = this->text->unk1;
+    this->timer = this->text->unk1;
     return 0;
 }
 
 s32 func_80BA3FCC(EnToto* this, PlayState* play) {
-    if (DECR(this->unk2B1) == 0) {
+    if (DECR(this->timer) == 0) {
         Message_StartTextbox(play, this->text->textId, NULL);
         return 1;
     }
@@ -404,6 +443,9 @@ s32 func_80BA4128(EnToto* this, PlayState* play) {
     return 0;
 }
 
+/*
+    Wait for player to make choice on sound check start prompt
+*/
 s32 func_80BA415C(EnToto* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
         if (play->msgCtx.choiceIndex != 0) {
@@ -417,19 +459,23 @@ s32 func_80BA415C(EnToto* this, PlayState* play) {
 }
 
 s32 func_80BA4204(EnToto* this, PlayState* play) {
-    EnTotoUnkStruct2* temp_v1_2;
+    EnTotoSpotlight* temp_v1_2;
 
-    if (DECR(this->unk2B1) == 0) {
-        if (!ENTOTO_WEEK_EVENT_FLAGS) {
-            temp_v1_2 = &D_80BA50DC[gSaveContext.save.playerForm - 1];
-            Message_StartTextbox(play, (this->text->unk0 == 6) ? temp_v1_2->unk0 : temp_v1_2->unk4, NULL);
+    if (DECR(this->timer) == 0) {
+        if (!ENTOTO_FINISHED_WIND_FISH) {
+            temp_v1_2 = &sSpotlightList[gSaveContext.save.playerForm - 1];
+            Message_StartTextbox(play, (this->text->unk0 == 6) ? temp_v1_2->promptTextId : temp_v1_2->rightLightTextId, NULL);
         }
         return 1;
     }
     return 0;
 }
 
-s32 func_80BA42BC(EnToto* this, PlayState* play) {
+/*
+    Start moving Link to the stairs in front of the stage, and spawn the spotlights.
+    Omits points based on initial distance to end point.
+*/
+s32 EnToto_SoundCheckSetup(EnToto* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     u32 numPoints = 0;
     Vec3s* endPosListPtr = &sPlayerOverrideInputPosList[ARRAY_COUNT(sPlayerOverrideInputPosList)];
@@ -450,8 +496,11 @@ s32 func_80BA42BC(EnToto* this, PlayState* play) {
     return 0;
 }
 
+/*
+    Move player to stage stairs
+*/
 s32 func_80BA43F4(EnToto* this, PlayState* play) {
-    func_80BA3C88(this);
+    EnToto_TurnTowardsPlayer(this);
     if (Player_UpdateOverrideInput(play, &this->overrideInputEntry, 60.0f)) {
         Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_19);
         return func_80BA4204(this, play);
@@ -469,127 +518,145 @@ s32 func_80BA445C(EnToto* this, PlayState* play) {
 
 s32 func_80BA44A0(EnToto* this, PlayState* play) {
     CutsceneManager_Stop(this->csId);
-    this->unk2B1 = 0;
+    this->timer = 0;
     return 0;
 }
 
-s32 func_80BA44D4(EnTotoUnkStruct2* arg0, Player* player) {
-    Vec3f unk6;
+/*
+    Returns true if distance to spotlight point is less than 10 units
+*/
+s32 EnToto_CheckIfPlayerInSpotlight(EnTotoSpotlight* arg0, Player* player) {
+    Vec3f pos;
 
-    Math_Vec3s_ToVec3f(&unk6, &arg0->unk6);
-    if (Math_Vec3f_DistXZ(&player->actor.world.pos, &unk6) < 10.0f) {
+    Math_Vec3s_ToVec3f(&pos, &arg0->pos);
+    if (Math_Vec3f_DistXZ(&player->actor.world.pos, &pos) < 10.0f) {
         return 1;
     }
     return 0;
 }
 
-s32 func_80BA4530(EnToto* this, PlayState* play) {
+s32 EnToto_WaitForPlayerToEnterSpotlight(EnToto* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    EnTotoUnkStruct2* temp_s0;
+    EnTotoSpotlight* targetSpotlight;
     s32 i;
 
-    func_80BA3C88(this);
+    EnToto_TurnTowardsPlayer(this);
+
+    // Player leaves the stage area
     if (player->actor.world.pos.z > -270.0f) {
         if (this->spotlights != NULL) {
             Actor_Kill(this->spotlights);
         }
         this->unk2B6 = 1;
-        return this->text->unk1;
+        return this->text->unk1;        // "Oh, that's too bad."
     }
     if (player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
-        temp_s0 = &D_80BA50DC[gSaveContext.save.playerForm - 1];
-        if (func_80BA44D4(temp_s0, player)) {
-            Math_Vec3s_ToVec3f(&player->actor.world.pos, &temp_s0->unk6);
+        targetSpotlight = &sSpotlightList[gSaveContext.save.playerForm - 1];
+        
+        // Player is in correct spotlight
+        if (EnToto_CheckIfPlayerInSpotlight(targetSpotlight, player)) {
+            Math_Vec3s_ToVec3f(&player->actor.world.pos, &targetSpotlight->pos);
             player->actor.shape.rot.y = 0;
             player->yaw = 0;
-            return func_80BA407C(this, play);
+            return func_80BA407C(this, play);       // Return next Wind Fish cutscene ID?
         }
-        if (!ENTOTO_WEEK_EVENT_FLAGS) {
-            for (i = 0; i < ARRAY_COUNT(D_80BA50DC); i++) {
-                if (func_80BA44D4(&D_80BA50DC[i], player)) {
-                    if (this->unk2B1 < 10) {
-                        this->unk2B1++;
-                        if (this->unk2B1 >= 10) {
-                            Message_StartTextbox(play, D_80BA50DC[GET_PLAYER_FORM - 1].unk2, NULL);
+        if (!ENTOTO_FINISHED_WIND_FISH) {
+            for (i = 0; i < ARRAY_COUNT(sSpotlightList); i++) {
+                
+                // Player is in incorrect spotlight
+                if (EnToto_CheckIfPlayerInSpotlight(&sSpotlightList[i], player)) {
+                    if (this->timer < 10) {
+                        this->timer++;
+                        if (this->timer >= 10) {
+                            Message_StartTextbox(play, sSpotlightList[GET_PLAYER_FORM - 1].wrongLightTextId, NULL);
                         }
                     }
                     return 0;
                 }
             }
-            this->unk2B1 = 0;
+            this->timer = 0;
         }
     }
     return 0;
 }
 
+/*
+    Prompt player with Wind Fish staff for their current form
+*/
 s32 func_80BA46D8(EnToto* this, PlayState* play) {
     Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_68);
     Message_DisplayOcarinaStaff(play, sOcarinaActionWindFishPrompts[CUR_FORM]);
     return 0;
 }
 
-s32 func_80BA4740(EnToto* this, PlayState* play) {
+s32 EnToto_SetPlayedWindFishFlags(EnToto* this, PlayState* play) {
     if (play->msgCtx.ocarinaMode == OCARINA_MODE_END) {
         if (GET_PLAYER_FORM == PLAYER_FORM_HUMAN) {
-            SET_WEEKEVENTREG(WEEKEVENTREG_56_10);
+            SET_WEEKEVENTREG(WEEKEVENTREG_PLAYED_WIND_FISH_AS_HUMAN);
         }
         if (GET_PLAYER_FORM == PLAYER_FORM_DEKU) {
-            SET_WEEKEVENTREG(WEEKEVENTREG_56_20);
+            SET_WEEKEVENTREG(WEEKEVENTREG_PLAYED_WIND_FISH_AS_DEKU);
         }
         if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
-            SET_WEEKEVENTREG(WEEKEVENTREG_56_40);
+            SET_WEEKEVENTREG(WEEKEVENTREG_PLAYED_WIND_FISH_AS_ZORA);
         }
         if (GET_PLAYER_FORM == PLAYER_FORM_GORON) {
-            SET_WEEKEVENTREG(WEEKEVENTREG_56_80);
+            SET_WEEKEVENTREG(WEEKEVENTREG_PLAYED_WIND_FISH_AS_GORON);
         }
         return 1;
     }
     return 0;
 }
 
+/*
+    Something about setting up the right Wind Fish prompts
+*/
 s32 func_80BA47E0(EnToto* this, PlayState* play) {
     Vec3f spawnPos;
     s32 i;
 
-    this->unk2B3 = 0;
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_56_10)) {
-        this->unk2B3 += 1;
+    this->windFishFormsPlayed = 0;
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_PLAYED_WIND_FISH_AS_HUMAN)) {
+        this->windFishFormsPlayed += 1;
     }
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_56_20)) {
-        this->unk2B3 += 2;
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_PLAYED_WIND_FISH_AS_DEKU)) {
+        this->windFishFormsPlayed += 2;
     }
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_56_40)) {
-        this->unk2B3 += 4;
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_PLAYED_WIND_FISH_AS_ZORA)) {
+        this->windFishFormsPlayed += 4;
     }
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_56_80)) {
-        this->unk2B3 += 8;
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_PLAYED_WIND_FISH_AS_GORON)) {
+        this->windFishFormsPlayed += 8;
     }
-    for (i = 0; i < ARRAY_COUNT(D_80BA50DC); i++) {
-        if ((GET_PLAYER_FORM != (i + 1)) && (D_80BA5128[i] & this->unk2B3)) {
-            Math_Vec3s_ToVec3f(&spawnPos, &D_80BA50DC[i].unk6);
+    for (i = 0; i < ARRAY_COUNT(sSpotlightList); i++) {
+        if ((GET_PLAYER_FORM != (i + 1)) && (D_80BA5128[i] & this->windFishFormsPlayed)) {
+            Math_Vec3s_ToVec3f(&spawnPos, &sSpotlightList[i].pos);
 
             Actor_Spawn(&play->actorCtx, play, ACTOR_PLAYER, spawnPos.x, spawnPos.y, spawnPos.z, i + 2, 0, 0,
                         PLAYER_PARAMS(0xFF, PLAYER_START_MODE_F) | 0xFFFFF000);
         }
     }
     func_80BA402C(this, play);
-    if (ENTOTO_WEEK_EVENT_FLAGS) {
+    if (ENTOTO_FINISHED_WIND_FISH) {
         func_80BA402C(this, play);
     }
     return 0;
 }
 
+/*
+    Play back Ballad of the Wind Fish for all forms played
+*/
 s32 func_80BA49A4(EnToto* this, PlayState* play) {
     Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_68);
-    Audio_PlayFanfareWithPlayerIOCustomPort(NA_BGM_BALLAD_OF_THE_WIND_FISH, 4, this->unk2B3 ^ 0xF);
-    this->unk2B1 = 4;
+    Audio_PlayFanfareWithPlayerIOCustomPort(NA_BGM_BALLAD_OF_THE_WIND_FISH, 4, this->windFishFormsPlayed ^ 0xF);
+    this->timer = 4;
     return 0;
 }
 
-s32 func_80BA4A00(EnToto* this, PlayState* play) {
+s32 EnToto_WindFishCutsceneEnd(EnToto* this, PlayState* play) {
     Actor* actor;
 
-    if (DECR(this->unk2B1) == 0) {
+    if (DECR(this->timer) == 0) {
         if (!Audio_IsSequencePlaying(NA_BGM_BALLAD_OF_THE_WIND_FISH)) {
             actor = &GET_PLAYER(play)->actor;
             actor = actor->next;
@@ -601,11 +668,11 @@ s32 func_80BA4A00(EnToto* this, PlayState* play) {
                 Actor_Kill(this->spotlights);
             }
             Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_69);
-            if (this->unk2B3 == 0xF) {
+            if (this->windFishFormsPlayed == 0xF) {
                 if (CURRENT_DAY == 1) {
-                    SET_WEEKEVENTREG(WEEKEVENTREG_50_01);
+                    SET_WEEKEVENTREG(WEEKEVENTREG_HELPED_GORMAN_DAY_1);
                 } else {
-                    SET_WEEKEVENTREG(WEEKEVENTREG_51_80);
+                    SET_WEEKEVENTREG(WEEKEVENTREG_HELPED_GORMAN_DAY_2);
                 }
             } else {
                 func_80BA402C(this, play);
@@ -641,6 +708,9 @@ s32 func_80BA4B24(EnToto* this, PlayState* play) {
     return 0;
 }
 
+/*
+    
+*/
 s32 func_80BA4C0C(EnToto* this, PlayState* play) {
     return D_80BA512C[this->text->unk0](this, play);
 }
@@ -655,6 +725,9 @@ s32 func_80BA4C44(EnToto* this, PlayState* play) {
     return 0;
 }
 
+/*
+    Finish Wind Fish minigame?
+*/
 void func_80BA4CB4(EnToto* this, PlayState* play) {
     CsCmdActorCue* cue = play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_525)];
 
@@ -666,7 +739,7 @@ void func_80BA4CB4(EnToto* this, PlayState* play) {
             } else {
                 Animation_PlayOnce(&this->skelAnime,
                                    (this->cueId == 1) ? &object_zm_Anim_0016A4 : &object_zm_Anim_0022C8);
-                if ((this->cueId == 2) && (this->unk2B3 != 0xF)) {
+                if ((this->cueId == 2) && (this->windFishFormsPlayed != 0xF)) {
                     Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_TOTO);
                     Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN);
                 }
