@@ -55,7 +55,7 @@ void ArrowLight_Init(Actor* thisx, PlayState* play) {
 
 void ArrowLight_Destroy(Actor* thisx, PlayState* play) {
     Magic_Reset(play);
-    (void)"消滅"; // Unreferenced in retail, means "Disappearance"
+    (void)T("消滅", "Disappearance");
 }
 
 void ArrowLight_Charge(ArrowLight* this, PlayState* play) {

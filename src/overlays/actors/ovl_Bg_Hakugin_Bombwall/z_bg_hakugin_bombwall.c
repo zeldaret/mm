@@ -347,7 +347,9 @@ s32 func_80ABCB5C(BgHakuginBombwall* this, PlayState* play) {
 
             if (Math3D_Vec3fDistSq(&thisx->world.pos, &this->collider.base.ac->world.pos) <
                 D_80ABCFC0[BGHAKUGIN_BOMBWALL_100(thisx)].unk_1C) {
+#if MM_VERSION >= N64_US
                 SoundSource_PlaySfxAtFixedWorldPos(play, &thisx->world.pos, 60, NA_SE_EV_WALL_BROKEN);
+#endif
                 return true;
             }
         }

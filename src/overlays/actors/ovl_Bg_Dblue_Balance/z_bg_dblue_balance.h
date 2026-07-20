@@ -31,15 +31,20 @@ typedef struct BgDblueBalance {
     /* 0x17A */ s16 unk_17A;
     /* 0x17C */ s8 unk_17C;
     /* 0x17D */ s8 unk_17D;
+#if MM_VERSION < N64_US
+    /* 0x17E */ s8 unk_17E_jp;
+#endif
     /* 0x17E */ s8 unk_17E;
     /* 0x17F */ s8 unk_17F;
     /* 0x180 */ s8 isSwitchPressed;
     /* 0x181 */ s8 isHeavySwitchPressed;
     /* 0x182 */ s8 unk_182;
     /* 0x183 */ u8 unk_183;
+#if MM_VERSION >= N64_US
     /* 0x184 */ s16 unk_184;
     /* 0x186 */ s8 unk_186;
     /* 0x187 */ s8 unk_187;
+#endif
     /* 0x188 */ BgDblueBalanceStruct unk_188[8];
     /* 0x228 */ f32 unk_228;
 } BgDblueBalance; // size = 0x22C

@@ -161,8 +161,7 @@ retry:
             Sched_SendGfxCancelMsg(&gScheduler);
             goto retry;
         } else {
-            // graph.c: No more! die!
-            osSyncPrintf("graph.c:もうダメ！死ぬ！\n");
+            osSyncPrintf(T("graph.c:もうダメ！死ぬ！\n", "graph.c: I can't go on! I'm dying!\n"));
             Fault_AddHungupAndCrashImpl("RCP is HUNG UP!!", "Oh! MY GOD!!");
         }
     }
@@ -236,7 +235,7 @@ retry:
 void Graph_UpdateGame(GameState* gameState) {
     GameState_GetInput(gameState);
     GameState_IncrementFrameCount(gameState);
-    if (SREG(20) < 3) {
+    if (R_AUDIOMGR_DEBUG_LEVEL < 3) {
         Audio_Update();
     }
 }

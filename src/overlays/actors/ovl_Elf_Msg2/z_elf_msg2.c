@@ -40,7 +40,7 @@ void ElfMsg2_SetupAction(ElfMsg2* this, ElfMsg2ActionFunc actionFunc) {
 s32 func_8096EC4C(ElfMsg2* this, PlayState* play) {
     if ((this->actor.home.rot.y > 0) && (this->actor.home.rot.y <= 0x80) &&
         Flags_GetSwitch(play, this->actor.home.rot.y - 1)) {
-        (void)"共倒れ"; // "Collapse together"
+        (void)T("共倒れ", "Mutual destruction");
         if (ELFMSG2_GET_SWITCH_FLAG(&this->actor) != 0x7F) {
             Flags_SetSwitch(play, ELFMSG2_GET_SWITCH_FLAG(&this->actor));
         }
@@ -50,7 +50,7 @@ s32 func_8096EC4C(ElfMsg2* this, PlayState* play) {
     if (this->actor.home.rot.y == 129) {
 
         if (Flags_GetClear(play, this->actor.room)) {
-            (void)"共倒れ２"; // "Collapse 2"
+            (void)T("共倒れ２", "Mutual destruction 2");
             if (ELFMSG2_GET_SWITCH_FLAG(&this->actor) != 0x7F) {
                 Flags_SetSwitch(play, ELFMSG2_GET_SWITCH_FLAG(&this->actor));
             }
@@ -62,7 +62,7 @@ s32 func_8096EC4C(ElfMsg2* this, PlayState* play) {
         return false;
     }
     if (Flags_GetSwitch(play, ELFMSG2_GET_SWITCH_FLAG(&this->actor))) {
-        (void)"共倒れ"; // "Collapse together"
+        (void)T("共倒れ", "Mutual destruction");
         Actor_Kill(&this->actor);
         return true;
     }
