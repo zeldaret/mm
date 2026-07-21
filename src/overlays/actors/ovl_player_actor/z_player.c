@@ -16421,7 +16421,7 @@ void Player_Action_50(Player* this, PlayState* play) {
                         }
 
                         Player_SetupDismountLadder(this, this->ageProperties->dismountLadderDownAnim[this->av2.actionVar2], play);
-                        this->av2.actionVar2 = 1;
+                        this->av2.dismountDown = true;
                     }
                 } else {
                     sp78 ^= 1;
