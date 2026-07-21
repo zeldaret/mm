@@ -16406,7 +16406,8 @@ void Player_Action_50(Player* this, PlayState* play) {
                             func_808381A0(this, &gPlayerAnim_link_normal_jump_climb_up_free, play);
                             this->stateFlags1 |= PLAYER_STATE1_4000;
                         } else {
-                            Player_SetupDismountLadder(this, this->ageProperties->dismountLadderUpAnim[this->av2.actionVar2], play);
+                            Player_SetupDismountLadder(
+                                this, this->ageProperties->dismountLadderUpAnim[this->av2.actionVar2], play);
                         }
                     } else {
                         this->skelAnime.prevTransl = this->ageProperties->unk_4A[sp78];
@@ -16420,7 +16421,8 @@ void Player_Action_50(Player* this, PlayState* play) {
                             this->skelAnime.prevTransl = this->ageProperties->unk_44;
                         }
 
-                        Player_SetupDismountLadder(this, this->ageProperties->dismountLadderDownAnim[this->av2.actionVar2], play);
+                        Player_SetupDismountLadder(
+                            this, this->ageProperties->dismountLadderDownAnim[this->av2.actionVar2], play);
                         this->av2.dismountDown = true;
                     }
                 } else {
@@ -16503,8 +16505,7 @@ void Player_Action_DismountLadder(Player* this, PlayState* play) {
         frame = sDownDismountLadderFrames;
     }
 
-    if (PlayerAnimation_OnFrame(&this->skelAnime, frame[0]) ||
-        PlayerAnimation_OnFrame(&this->skelAnime, frame[1])) {
+    if (PlayerAnimation_OnFrame(&this->skelAnime, frame[0]) || PlayerAnimation_OnFrame(&this->skelAnime, frame[1])) {
         CollisionPoly* poly;
         s32 bgId;
         Vec3f raycastPos;
