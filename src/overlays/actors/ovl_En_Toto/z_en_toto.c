@@ -22,17 +22,17 @@ void func_80BA3BFC(EnToto* this, PlayState* play);
 void func_80BA3CC4(EnToto* this, PlayState* play);
 void func_80BA3D38(EnToto* this, PlayState* play);
 s32 func_80BA3EC0(EnToto* this, PlayState* play);
-s32 func_80BA3ED4(EnToto* this, PlayState* play);
+s32 EnToto_SetupTalk_DoNothing(EnToto* this, PlayState* play);
 s32 func_80BA3EE8(EnToto* this, PlayState* play);
-s32 func_80BA3F2C(EnToto* this, PlayState* play);
-s32 func_80BA3FB0(EnToto* this, PlayState* play);
-s32 func_80BA3FCC(EnToto* this, PlayState* play);
+s32 EnToto_SetupTalk_NextMessage(EnToto* this, PlayState* play);
+s32 EnToto_SetupTalk_SetNextMessageTimer(EnToto* this, PlayState* play);
+s32 EnToto_HandleTalk_Wait(EnToto* this, PlayState* play);
 s32 func_80BA402C(EnToto* this, PlayState* play);
-s32 func_80BA407C(EnToto* this, PlayState* play);
-s32 func_80BA40D4(EnToto* this, PlayState* play);
-s32 func_80BA4128(EnToto* this, PlayState* play);
-s32 func_80BA415C(EnToto* this, PlayState* play);
-s32 func_80BA4204(EnToto* this, PlayState* play);
+s32 EnToto_StartCutscene(EnToto* this, PlayState* play);
+s32 EnToto_HandleTalk_Event(EnToto* this, PlayState* play);
+s32 EnToto_HandleTalk_Closing(EnToto* this, PlayState* play);
+s32 EnToto_HandleTalk_Choice(EnToto* this, PlayState* play);
+s32 EnToto_ShouldAdvanceSoundCheckState(EnToto* this, PlayState* play);
 s32 EnToto_SoundCheckSetup(EnToto* this, PlayState* play);
 s32 func_80BA43F4(EnToto* this, PlayState* play);
 s32 func_80BA445C(EnToto* this, PlayState* play);
@@ -91,11 +91,11 @@ static InitChainEntry sInitChain[] = {
 
 static EnTotoSpeakData D_80BA502C[] = {
     { 0, 0, 0x2B21 },               // "Are you going to play for us again?"
-    { 3, 2, 0 },                    // Unused
+    { 3, 2, 0 },                    // 
     { 0, 0, 0x2B23 },               // "We were scheduled to do a show..."      (Sound Check, first time)
     { 2, 1, 0x2B24 },               // "Could you help me with a performance?"
     { 4, 0, 0x2B25 },               // "Oh, that's too bad."
-    { 3, 2, 0 },                    // Unused
+    { 3, 2, 0 },                    // 
     { 4, 0, 0x2B25 },               // "Oh, that's too bad."
     { 16, 0, 0x2A94 },              // "Are the fins damp lately?"
     { 0, 0, 0x2A95 },               // "What? Mikau???"                     (Mayor's Residence as Zora, first time)
@@ -127,9 +127,27 @@ static AnimationHeader* sAnimations[ENTOTO_ANIM_MAX] = {
 };
 
 static EnTotoSpeakData D_80BA5088[] = {
-    { 5, 0, 0 },  { 6, 20, 0 }, { 7, 0, 0 },  { 8, 9, 0 },  { 9, 10, 0 },       { 1, 0, 0 },  { 10, 0, 0 },
-    { 11, 0, 0 }, { 12, 0, 0 }, { 13, 0, 0 }, { 15, 0, 0 }, { 17, 1, 0 },       { 17, 0, 0 }, { 5, 0, 0 },
-    { 6, 20, 0 }, { 8, 5, 0 },  { 12, 0, 0 }, { 13, 0, 0 }, { 14, 20, 0x2B22 }, { 1, 0, 0 },  { 17, 0, 0 },
+    { 5,  0, 0 },  
+    { 6, 20, 0 }, 
+    { 7,  0, 0 },  
+    { 8,  9, 0 },  
+    { 9, 10, 0 },
+    { 1,  0, 0 },
+    { 10, 0, 0 },
+    { 11, 0, 0 },
+    { 12, 0, 0 }, 
+    { 13, 0, 0 }, 
+    { 15, 0, 0 }, 
+    { 17, 1, 0 },
+    { 17, 0, 0 },
+    { 5,  0, 0 },
+    { 6, 20, 0 }, 
+    { 8,  5, 0 },  
+    { 12, 0, 0 }, 
+    { 13, 0, 0 }, 
+    { 14, 20, 0x2B22 },             // "I wanted you, too, to hear Lulu's voice on this stage."
+    { 1,  0, 0 },  
+    { 17, 0, 0 },
 };
 
 /*
@@ -160,16 +178,52 @@ static u16 sOcarinaActionWindFishPrompts[] = {
 
 static u8 D_80BA5128[] = { 8, 4, 2, 1 };
 
+/* 
+    Functions called once
+*/
 static EnTotoUnkFunc D_80BA512C[] = {
-    func_80BA3F2C, func_80BA3ED4, func_80BA3F2C, func_80BA3F2C, func_80BA3F2C, func_80BA3ED4,
-    EnToto_SoundCheckSetup, func_80BA3ED4, func_80BA44A0, func_80BA3FB0, func_80BA402C, func_80BA46D8,
-    func_80BA47E0, func_80BA49A4, func_80BA3FB0, func_80BA402C, func_80BA3F2C, func_80BA3EC0,
+    EnToto_SetupTalk_NextMessage, 
+    EnToto_SetupTalk_DoNothing, 
+    EnToto_SetupTalk_NextMessage, 
+    EnToto_SetupTalk_NextMessage, 
+    EnToto_SetupTalk_NextMessage, 
+    EnToto_SetupTalk_DoNothing,
+    EnToto_SoundCheckSetup,
+    EnToto_SetupTalk_DoNothing,
+    func_80BA44A0,
+    EnToto_SetupTalk_SetNextMessageTimer, 
+    func_80BA402C, 
+    func_80BA46D8,
+    func_80BA47E0, 
+    func_80BA49A4, 
+    EnToto_SetupTalk_SetNextMessageTimer, 
+    func_80BA402C, 
+    EnToto_SetupTalk_NextMessage, 
+    func_80BA3EC0,
 };
 
+/*
+    Functions called repeatedly until text pointer changed
+    Similar to EnTest3 (Kafei)'s sTalkStateHandlerFuncs
+*/
 static EnTotoUnkFunc D_80BA5174[] = {
-    func_80BA40D4, func_80BA4128, func_80BA415C, func_80BA3EE8, func_80BA3EE8, func_80BA407C,
-    func_80BA43F4, func_80BA445C, EnToto_WaitForPlayerToEnterSpotlight, func_80BA4204, func_80BA407C, EnToto_SetPlayedWindFishFlags,
-    func_80BA407C, EnToto_WindFishCutsceneEnd, func_80BA3FCC, func_80BA407C, func_80BA4B24,
+    EnToto_HandleTalk_Event, 
+    EnToto_HandleTalk_Closing, 
+    EnToto_HandleTalk_Choice, 
+    func_80BA3EE8, 
+    func_80BA3EE8, 
+    EnToto_StartCutscene,
+    func_80BA43F4, 
+    func_80BA445C, 
+    EnToto_WaitForPlayerToEnterSpotlight, 
+    EnToto_ShouldAdvanceSoundCheckState, 
+    EnToto_StartCutscene, 
+    EnToto_SetPlayedWindFishFlags,
+    EnToto_StartCutscene, 
+    EnToto_WindFishCutsceneEnd, 
+    EnToto_HandleTalk_Wait, 
+    EnToto_StartCutscene, 
+    func_80BA4B24,
 };
 
 static EnTotoActionFunc D_80BA51B8[] = {
@@ -307,7 +361,7 @@ void func_80BA3BFC(EnToto* this, PlayState* play) {
         Animation_MorphToPlayOnce(&this->skelAnime, &object_zm_Anim_000C80, -4.0f);
         this->animIndex = ENTOTO_ANIM_0;
     } else {
-        if (this->text->unk0 == 4) {
+        if (this->text->talkActionIndex == 4) {
             Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_TOTO);
         }
         Animation_MorphToLoop(&this->skelAnime, &object_zm_Anim_00B3E0, -4.0f);
@@ -322,7 +376,7 @@ void func_80BA3CC4(EnToto* this, PlayState* play) {
     func_80BA383C(this, play);
     EnToto_TurnTowardsPlayer(this);
     if (Actor_TextboxIsClosing(&this->actor, play)) {
-        func_80BA36C0(this, play, this->text->unk1);
+        func_80BA36C0(this, play, this->text->argument);
     } else {
         func_80BA4C44(this, play);
     }
@@ -344,7 +398,7 @@ void func_80BA3DBC(EnToto* this, PlayState* play) {
         if (!func_80BA4C44(this, play)) {
             return;
         }
-        if ((this->text->unk1 != 0) && ENTOTO_FINISHED_WIND_FISH) {
+        if ((this->text->argument != 0) && ENTOTO_FINISHED_WIND_FISH) {
             this->unk2B7 = true;
             return;
         }
@@ -371,39 +425,48 @@ s32 func_80BA3EC0(EnToto* this, PlayState* play) {
     return 1;
 }
 
-/*
-    Just returns false
-*/
-s32 func_80BA3ED4(EnToto* this, PlayState* play) {
+s32 EnToto_SetupTalk_DoNothing(EnToto* this, PlayState* play) {
     return 0;
 }
 
+/*
+    Flow:
+        Repeat:
+            Always
+        
+*/
 s32 func_80BA3EE8(EnToto* this, PlayState* play) {
-    if (this->text->unk1 == 2) {
+    if (this->text->argument == 2) {
         Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_WAIT);
     }
     return 0;
 }
 
-s32 func_80BA3F2C(EnToto* this, PlayState* play) {
+/*
+    Adds Toto to notebook when text ends
+*/
+s32 EnToto_SetupTalk_NextMessage(EnToto* this, PlayState* play) {
     if (this->text->textId != 0) {
         Message_ContinueTextbox(play, this->text->textId);
     } else {
         Message_CloseTextbox(play);
         func_80BA3EE8(this, play);
     }
-    if (this->text->unk0 == 4) {
+    if (this->text->talkActionIndex == 4) {
         Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_TOTO);
     }
     return 0;
 }
 
-s32 func_80BA3FB0(EnToto* this, PlayState* play) {
-    this->timer = this->text->unk1;
+/*
+    Sets up timer from EnTotoSpeakData
+*/
+s32 EnToto_SetupTalk_SetNextMessageTimer(EnToto* this, PlayState* play) {
+    this->timer = this->text->argument;
     return 0;
 }
 
-s32 func_80BA3FCC(EnToto* this, PlayState* play) {
+s32 EnToto_HandleTalk_Wait(EnToto* this, PlayState* play) {
     if (DECR(this->timer) == 0) {
         Message_StartTextbox(play, this->text->textId, NULL);
         return 1;
@@ -420,7 +483,16 @@ s32 func_80BA402C(EnToto* this, PlayState* play) {
     return 0;
 }
 
-s32 func_80BA407C(EnToto* this, PlayState* play) {
+/*
+    Start or queue cutscene
+
+    Flow:
+        Repeat:
+            cutscene csId is not queued
+        func_80BA43F4:
+            cutscene csId is queued
+*/
+s32 EnToto_StartCutscene(EnToto* this, PlayState* play) {
     if (CutsceneManager_IsNext(this->csId)) {
         CutsceneManager_StartWithPlayerCs(this->csId, &GET_PLAYER(play)->actor);
         return 1;
@@ -430,14 +502,35 @@ s32 func_80BA407C(EnToto* this, PlayState* play) {
     return 0;
 }
 
-s32 func_80BA40D4(EnToto* this, PlayState* play) {
+/* 
+    First function in D_80BA5174 (repeating functions).
+
+    Flow:
+        Repeat:
+            - Message state is not EVENT or message should not advance
+        EnToto_HandleTalk_Closing:
+            - Message state is EVENT and message should advance.
+*/
+s32 EnToto_HandleTalk_Event(EnToto* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         return 1;
     }
     return 0;
 }
 
-s32 func_80BA4128(EnToto* this, PlayState* play) {
+/*
+    Wait for player to advance text
+
+    Flow:
+        Repeat:
+            - Message state is not CLOSING
+        EnToto_HandleTalk_Choice:
+            - Message state is CLOSING (Called from func_80BA4C44)
+        EnToto_WaitForPlayerToEnterSpotlight:
+            - Message state is CLOSING (Called from func_80BA445C)
+        
+*/
+s32 EnToto_HandleTalk_Closing(EnToto* this, PlayState* play) {
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING) {
         return 1;
     }
@@ -446,26 +539,42 @@ s32 func_80BA4128(EnToto* this, PlayState* play) {
 
 /*
     Wait for player to make choice on sound check start prompt
+
+    Flow:
+        Repeat:
+            - Message state is not CHOICE or message should not advance
+            - Player chooses option > 0 ("No", presumably)
+        (Depends on argument):
+            - Player chooses option 0 ("Yes", presumably)
 */
-s32 func_80BA415C(EnToto* this, PlayState* play) {
+s32 EnToto_HandleTalk_Choice(EnToto* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
         if (play->msgCtx.choiceIndex != 0) {
             Audio_PlaySfx_MessageCancel();
         } else {
             Audio_PlaySfx_MessageDecide();
         }
-        return ((play->msgCtx.choiceIndex != 0) ? 0 : this->text->unk1) + 1;
+        return ((play->msgCtx.choiceIndex != 0) ? 0 : this->text->argument) + 1;
     }
     return 0;
 }
 
-s32 func_80BA4204(EnToto* this, PlayState* play) {
-    EnTotoSpotlight* temp_v1_2;
+/*
+    Set up prompt for target spotlight
+
+    Flow:
+        Repeat:
+            Timer is not finished counting down
+        EnToto_StartCutscene:
+            Timer is finished counting down
+*/
+s32 EnToto_ShouldAdvanceSoundCheckState(EnToto* this, PlayState* play) {
+    EnTotoSpotlight* targetSpotlight;
 
     if (DECR(this->timer) == 0) {
         if (!ENTOTO_FINISHED_WIND_FISH) {
-            temp_v1_2 = &sSpotlightList[gSaveContext.save.playerForm - 1];
-            Message_StartTextbox(play, (this->text->unk0 == 6) ? temp_v1_2->promptTextId : temp_v1_2->rightLightTextId, NULL);
+            targetSpotlight = &sSpotlightList[gSaveContext.save.playerForm - 1];
+            Message_StartTextbox(play, (this->text->talkActionIndex == 6) ? targetSpotlight->promptTextId : targetSpotlight->rightLightTextId, NULL);
         }
         return 1;
     }
@@ -481,7 +590,7 @@ s32 EnToto_SoundCheckSetup(EnToto* this, PlayState* play) {
     u32 numPoints = 0;
     Vec3s* endPosListPtr = &sPlayerOverrideInputPosList[ARRAY_COUNT(sPlayerOverrideInputPosList)];
 
-    func_80BA3FB0(this, play);
+    EnToto_SetupTalk_SetNextMessageTimer(this, play);
     Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_END);
     if (player->actor.world.pos.z > -310.0f) {
         if ((player->actor.world.pos.x > -150.0f) || (player->actor.world.pos.z > -172.0f)) {
@@ -498,19 +607,34 @@ s32 EnToto_SoundCheckSetup(EnToto* this, PlayState* play) {
 }
 
 /*
-    Move player to stage stairs
+    Move player to stage stairs, then wait for cue to advance (player enters right spotlight)
+    
+    Flow:
+        Repeat:
+            Player move is not complete
+            EnToto_ShouldAdvanceSoundCheckState returns false
+        func_80BA445C:
+            EnToto_ShouldAdvanceSoundCheckState returns true
+        
 */
 s32 func_80BA43F4(EnToto* this, PlayState* play) {
     EnToto_TurnTowardsPlayer(this);
     if (Player_UpdateOverrideInput(play, &this->overrideInputEntry, 60.0f)) {
         Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_19);
-        return func_80BA4204(this, play);
+        return EnToto_ShouldAdvanceSoundCheckState(this, play);
     }
     return 0;
 }
 
+/*
+    Flow:
+        Repeat:
+            EnToto_HandleTalk_Closing returns false
+        EnToto_WaitForPlayerToEnterSpotlight:
+            EnToto_HandleTalk_Closing returns true
+*/
 s32 func_80BA445C(EnToto* this, PlayState* play) {
-    if (func_80BA4128(this, play)) {
+    if (EnToto_HandleTalk_Closing(this, play)) {
         Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_END);
         return 1;
     }
@@ -549,7 +673,7 @@ s32 EnToto_WaitForPlayerToEnterSpotlight(EnToto* this, PlayState* play) {
             Actor_Kill(this->spotlights);
         }
         this->isPlayerCancelingSoundCheck = 1;
-        return this->text->unk1;        // "Oh, that's too bad."
+        return this->text->argument;        // "Oh, that's too bad."
     }
     if (player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         targetSpotlight = &sSpotlightList[gSaveContext.save.playerForm - 1];
@@ -559,7 +683,7 @@ s32 EnToto_WaitForPlayerToEnterSpotlight(EnToto* this, PlayState* play) {
             Math_Vec3s_ToVec3f(&player->actor.world.pos, &targetSpotlight->pos);
             player->actor.shape.rot.y = 0;
             player->yaw = 0;
-            return func_80BA407C(this, play);       // Return next Wind Fish cutscene ID?
+            return EnToto_StartCutscene(this, play);       // Return next Wind Fish cutscene ID?
         }
         if (!ENTOTO_FINISHED_WIND_FISH) {
             for (i = 0; i < ARRAY_COUNT(sSpotlightList); i++) {
@@ -687,7 +811,7 @@ s32 EnToto_WindFishCutsceneEnd(EnToto* this, PlayState* play) {
 s32 func_80BA4B24(EnToto* this, PlayState* play) {
     Player* player;
 
-    if (func_80BA40D4(this, play)) {
+    if (EnToto_HandleTalk_Event(this, play)) {
         player = GET_PLAYER(play);
         Animation_MorphToPlayOnce(&this->skelAnime, &object_zm_Anim_0028B8, -4.0f);
         if (player->transformation == PLAYER_FORM_ZORA) {
@@ -713,11 +837,16 @@ s32 func_80BA4B24(EnToto* this, PlayState* play) {
     
 */
 s32 func_80BA4C0C(EnToto* this, PlayState* play) {
-    return D_80BA512C[this->text->unk0](this, play);
+    return D_80BA512C[this->text->talkActionIndex](this, play);
 }
 
+/*
+    Update actionFunc (possibly stage/wind fish related actions?)
+    These functions repeat until returning a nonzero value, at which point the actionFunc
+    pointer increments to the next one in D_80BA5174, and also calls an actionFunc from D_80BA512C once
+*/
 s32 func_80BA4C44(EnToto* this, PlayState* play) {
-    s32 ret = D_80BA5174[this->text->unk0](this, play);
+    s32 ret = D_80BA5174[this->text->talkActionIndex](this, play);
 
     if (ret != 0) {
         this->text += ret;
