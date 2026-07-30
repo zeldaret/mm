@@ -22,6 +22,23 @@ func_names = list()
 func_definitions = list()
 line_numbers_of_functions = list()
 
+INTEGER_TYPES = {
+    "int",
+    "u8",
+    "s8",
+    "u8_t",
+    "s8_t",
+    "u16",
+    "s16",
+    "u16_t",
+    "s16_t",
+    "u32",
+    "s32",
+    "u32_t",
+    "s32_t",
+    "uintptr_t"
+}
+
 # Make actor source file path from actor name
 def actor_src_path(name):
     filename = "src/overlays/actors/ovl_"
@@ -114,6 +131,22 @@ def get_code_body(content, funcname) -> str:
             code += raw_line
     return code
 
+# Get the arguments of the function
+def get_func_args(func_name, contents) -> list[str, str]:
+    line_num = line_numbers_of_functions[index_of_func(func_name)] - 1
+    if line_num <= 0:
+        return ""
+    
+    all_lines = contents.splitlines(True)
+    raw_line = all_lines[line_num]
+
+    args_raw = str.split(raw_line, "(")[1].replace(")", "").replace(",", "")
+    args_split = str.split(args_raw, " ")
+    
+    args = [(args_split[i-1], args_split[i]) for i in range(len(args_split)) if i % 2 == 1]
+
+    return args
+
 def getMacrosDefinitions(contents):
     macrosDefs = dict()
     for x in re.finditer(macrosRegexpr, contents):
@@ -182,9 +215,29 @@ def action_var_setups_in_func(content, func_name, action_var):
         return None
     return [x.group() for x in re.finditer(r'(' + action_var + r' = (.)*)', code_body)]
 
-def action_var_values_in_func(code_body, action_var, macros, enums):
+def find_action_vars_in_func_calls(func_name, arg_idx, contents):
+    indices = []
+    all_calls = capture_calls(contents)
+
+    calls = [i for i in all_calls if str.split(i, "(")[0] == func_name]
+    for call in calls:
+        params_raw = str.split(call, "(")[1]
+        params_split = str.split(params_raw, " ")
+        
+        if len(params_split) -1 >= arg_idx:
+            indices.append(params_split[arg_idx].replace(")", "").replace(",", ""))
+        else:
+            continue
+
+    return indices
+
+def action_var_values_in_func(code_body, action_var, func_name, contents, macros, enums):
     if action_var not in code_body:
         return list()
+    
+    func_args = get_func_args(func_name, contents)
+    
+    arg_names = [i[1] for i in func_args]
 
     regex = re.compile(r'(' + action_var + r' = (.)*)')
     transition = []
@@ -198,7 +251,13 @@ def action_var_values_in_func(code_body, action_var, macros, enums):
             index = str(enums[index])
 
         if index not in transition:
-            transition.append(index)
+            if index.isnumeric():
+                transition.append(index)
+            else:
+                if index in arg_names:
+                    if not func_args[arg_names.index(index)][0] in INTEGER_TYPES:
+                        continue
+                    transition += find_action_vars_in_func_calls(func_name, arg_names.index(index), contents)
     return transition
 
 def setup_line_numbers(content, func_names):
@@ -407,13 +466,13 @@ def main():
             """
             Create all edges for ActorFunc array-based actors
             """
-            transitionIndexes = action_var_values_in_func(code_body, action_var, macros, enums)
+            transitionIndexes = action_var_values_in_func(code_body, action_var, func_name, contents, macros, enums)
             transitionList = [action_functions[int(index, 0)] for index in transitionIndexes]
         elif rawActorFunc:
             """
             Create all edges for raw ActorFunc-based actors
             """
-            transitionList = action_var_values_in_func(code_body, actionIdentifier, macros, enums)
+            transitionList = action_var_values_in_func(code_body, actionIdentifier, func_name, contents, macros, enums)
 
         # Remove functions calls
         transitionList = [x for x in transitionList if x not in removeList]

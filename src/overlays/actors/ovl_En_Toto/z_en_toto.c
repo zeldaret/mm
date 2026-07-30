@@ -89,7 +89,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_U8(attentionRangeType, ATTENTION_RANGE_1, ICHAIN_STOP),
 };
 
-static EnTotoSpeakData D_80BA502C[] = {
+static EnTotoSpeakData sEnTotoSpeakData1[] = {
     { 0, 0, 0x2B21 },               // "Are you going to play for us again?"
     { 3, 2, 0 },                    // Unused
     { 0, 0, 0x2B23 },               // "We were scheduled to do a show..."      (Sound Check, first time)
@@ -270,7 +270,7 @@ void func_80BA39C8(EnToto* this, PlayState* play) {
         ((play->sceneId != SCENE_MILK_BAR) && EnToto_IsFacingPlayer(this, 0x2000))) {
         // If left stage, auto-talk with "Oh, that's too bad" message
         if (this->isPlayerCancelingSoundCheck != 0) {
-            this->text = &D_80BA502C[6];
+            this->text = &sEnTotoSpeakData1[6];
             this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
             Actor_OfferTalkExchange(&this->actor, play, 9999.9f, 9999.9f, PLAYER_IA_NONE);
         } else {
@@ -279,19 +279,19 @@ void func_80BA39C8(EnToto* this, PlayState* play) {
             if (play->sceneId == SCENE_SONCHONOIE) {
                 if (player->transformation == PLAYER_FORM_DEKU) {
                     if (!Flags_GetSwitch(play, ENTOTO_GET_SWITCH_FLAG_3(&this->actor))) {
-                        this->text = &D_80BA502C[15];
+                        this->text = &sEnTotoSpeakData1[15];
                     } else {
-                        this->text = &D_80BA502C[18];
+                        this->text = &sEnTotoSpeakData1[18];
                     }
                 } else {
-                    this->text = &D_80BA502C[7];
+                    this->text = &sEnTotoSpeakData1[7];
                 }
             } else if (ENTOTO_FINISHED_WIND_FISH) {
-                this->text = &D_80BA502C[0];
+                this->text = &sEnTotoSpeakData1[0];
             } else if (!Flags_GetSwitch(play, ENTOTO_GET_SWITCH_FLAG_1(&this->actor))) {
-                this->text = &D_80BA502C[2];
+                this->text = &sEnTotoSpeakData1[2];
             } else {
-                this->text = &D_80BA502C[3];
+                this->text = &sEnTotoSpeakData1[3];
             }
         }
 
