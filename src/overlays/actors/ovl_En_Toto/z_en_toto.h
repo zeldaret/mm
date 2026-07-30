@@ -15,8 +15,8 @@ typedef s32 (*EnTotoUnkFunc)(struct EnToto*, PlayState*);
 #define ENTOTO_GET_SWITCH_FLAG_3(thisx) ((thisx)->home.rot.x)
 
 typedef struct EnTotoSpeakData {
-    /* 0x0 */ u8 unk0;      // Set to 4 if Toto not in notebook
-    /* 0x1 */ u8 unk1;      // Action func index
+    /* 0x0 */ u8 talkActionIndex;
+    /* 0x1 */ u8 argument;
     /* 0x2 */ u16 textId;
 } EnTotoSpeakData; // size = 0x4
 
