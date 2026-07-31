@@ -63,8 +63,14 @@ jobs:
       - name: Check setup warnings
         run: ./tools/warnings_count/compare_warnings.sh setup
 
+      # WIP versions do not have asset extraction properly set up yet.
+      # Instead we rely on the assets from the US version for now.
       - name: Assets
+        if: matrix.non_matching != 1
         run: make -j $(nproc) VERSION=${{ matrix.version }} assets 2> >(tee tools/warnings_count/warnings_assets_new.txt)
+      - name: Assets US for WIP versions
+        if: matrix.non_matching == 1
+        run: make -j $(nproc) VERSION=n64-us assets 2> >(tee tools/warnings_count/warnings_assets_new.txt)
 
       - name: Check assets warnings
         run: ./tools/warnings_count/compare_warnings.sh assets
