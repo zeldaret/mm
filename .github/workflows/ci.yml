@@ -46,7 +46,9 @@ jobs:
 
       # The compiler archives are embedded in the runner image, to avoid downloading them from GitHub (during make setup), which occasionally fails.
       - name: Provide compiler archives
-        run: ln -s /compiler_archives tools/compiler_archives/archives
+        run: |
+          mkdir -p tools/compiler_archives/
+          ln -s /compiler_archives tools/compiler_archives/archives
 
       - name: venv
         run: make -j $(nproc) VERSION=${{ matrix.version }} venv
