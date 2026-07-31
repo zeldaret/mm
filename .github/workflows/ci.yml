@@ -74,7 +74,7 @@ jobs:
         run: |
           ln -s /orig/n64-us/baserom.z64 baseroms/n64-us/baserom.z64
           make -j $(nproc) VERSION=n64-us setup
-          make -j $(nproc) VERSION=n64-us assets 2> >(tee tools/warnings_count/warnings_assets_new.txt)
+          make -j $(nproc) VERSION=${{ matrix.version }} assets 2> >(tee tools/warnings_count/warnings_assets_new.txt)
 
       - name: Check assets warnings
         run: ./tools/warnings_count/compare_warnings.sh assets
