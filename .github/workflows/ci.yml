@@ -54,19 +54,19 @@ jobs:
         run: make -j $(nproc) VERSION=${{ matrix.version }} venv
 
       - name: Setup
-        run: make -j $(nproc) VERSION=${{ matrix.version }} setup 2> >(tee tools/warnings_count/warnings_setup_new.txt)"
+        run: make -j $(nproc) VERSION=${{ matrix.version }} setup 2> >(tee tools/warnings_count/warnings_setup_new.txt)
 
       - name: Check setup warnings
         run: ./tools/warnings_count/compare_warnings.sh setup
 
       - name: Assets
-        run: make -j $(nproc) VERSION=${{ matrix.version }} assets 2> >(tee tools/warnings_count/warnings_assets_new.txt)"
+        run: make -j $(nproc) VERSION=${{ matrix.version }} assets 2> >(tee tools/warnings_count/warnings_assets_new.txt)
 
       - name: Check assets warnings
         run: ./tools/warnings_count/compare_warnings.sh assets
 
       - name: Disasm
-        run: make -j $(nproc) VERSION=${{ matrix.version }} disasm 2> >(tee tools/warnings_count/warnings_disasm_new.txt)"
+        run: make -j $(nproc) VERSION=${{ matrix.version }} disasm 2> >(tee tools/warnings_count/warnings_disasm_new.txt)
 
       - name: Check disasm warnings
         run: ./tools/warnings_count/compare_warnings.sh disasm
