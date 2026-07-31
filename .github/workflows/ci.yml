@@ -77,7 +77,6 @@ jobs:
         run: ./tools/warnings_count/compare_warnings.sh build
 
       - name: Compress ${{ matrix.version }}
-        id: build
         run: make -j $(nproc) VERSION=${{ matrix.version }} compress 2> >(tee tools/warnings_count/warnings_compress_new.txt)
 
       - name: Check compress warnings
