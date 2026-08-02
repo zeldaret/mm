@@ -10,7 +10,7 @@ struct EnToto;
 typedef void (*EnTotoActionFunc)(struct EnToto*, PlayState*);
 typedef s32 (*EnTotoTalkFunc)(struct EnToto*, PlayState*);
 
-#define ENTOTO_GET_SWITCH_FLAG_1(thisx) ((thisx)->params & 0x7F)
+#define ENTOTO_GET_SWITCH_FLAG_1(thisx) ((thisx)->params & 0x7F)            // Set to 1 if talk to Toto in Milk Bar, or if... *something* as Zora?
 #define ENTOTO_GET_SWITCH_FLAG_2(thisx) (((thisx)->params >> 7) & 0x7F)
 #define ENTOTO_GET_SWITCH_FLAG_3(thisx) ((thisx)->home.rot.x)
 

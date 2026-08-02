@@ -35,3 +35,6 @@ graphs/
 # - or edit `.git/info/exclude`
 *.yml
 *.plist
+baseroms/*
+tools/*
+Makefile
