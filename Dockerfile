@@ -5,6 +5,13 @@ ENV LANG=C.UTF-8
 
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
+# Add source from practicerom-dev install
+# PracticeRom installation instructions: https://github.com/PracticeROM/packages 
+
+RUN apt-get update && apt-get install -y curl && \
+ curl -O https://practicerom.com/public/packages/debian/dists/stable/practicerom-repository_latest_$(dpkg --print-architecture).deb && \
+dpkg -i practicerom-repository_latest_$(dpkg --print-architecture).deb
+
 # Install Required Dependencies
 RUN apt-get update && apt-get install -y \
     build-essential \
@@ -22,13 +29,8 @@ RUN apt-get update && apt-get install -y \
     clang-tidy-14 \
     clang-format-14 \
     libpng-dev \
-    curl
-
-# Add source for practicerom-dev install
-
-RUN curl -O https://practicerom.com/public/packages/debian/dists/stable/practicerom-repository_latest_$(dpkg --print-architecture).deb && \
-dpkg -i practicerom-repository_latest_$(dpkg --print-architecture).deb && \
-apt update
+    sudo \
+    practicerom-dev
 
 # Post dependencies cleanup
 RUN apt-get clean && \
