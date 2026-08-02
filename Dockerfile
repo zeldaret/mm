@@ -22,13 +22,13 @@ RUN apt-get update && apt-get install -y \
     clang-tidy-14 \
     clang-format-14 \
     libpng-dev \
-    sudo \
     curl
 
 # Add source for practicerom-dev install
 
-RUN sudo sh -c "$(curl -fsSL https://raw.githubusercontent.com/PracticeROM/packages/HEAD/scripts/install-debian_amd64.sh)" && \
-    apt-get install -y practicerom-dev
+RUN curl -O https://practicerom.com/public/packages/debian/dists/stable/practicerom-repository_latest_$(dpkg --print-architecture).deb && \
+dpkg -i practicerom-repository_latest_$(dpkg --print-architecture).deb && \
+apt update
 
 # Post dependencies cleanup
 RUN apt-get clean && \
