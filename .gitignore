@@ -37,4 +37,5 @@ graphs/
 *.plist
 baseroms/*
 tools/*
+!tools/*.txt
 Makefile
