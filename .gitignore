@@ -39,3 +39,4 @@ baseroms/*
 tools/*
 !tools/*.txt
 Makefile
+Makefile
