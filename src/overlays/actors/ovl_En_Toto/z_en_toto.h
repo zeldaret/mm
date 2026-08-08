@@ -49,3 +49,9 @@ typedef struct EnToto {
 } EnToto; // size = 0x2CC
 
 #endif // Z_EN_TOTO_H
+
+/*
+    Cue 3:       "Okay! That feels good!"
+    Cue 2:        Turn around to look at Gorman
+    Cue 1:        Turn back around to stage
+*/

@@ -15,8 +15,8 @@ void EnToto_Destroy(Actor* thisx, PlayState* play);
 void EnToto_Update(Actor* thisx, PlayState* play);
 void EnToto_Draw(Actor* thisx, PlayState* play);
 
-void func_80BA3930(EnToto* this, PlayState* play);
-void func_80BA39C8(EnToto* this, PlayState* play);
+void EnToto_SetupIdle(EnToto* this, PlayState* play);
+void EnToto_Action_WaitForTalk(EnToto* this, PlayState* play);
 void func_80BA3DBC(EnToto* this, PlayState* play);
 void func_80BA3BFC(EnToto* this, PlayState* play);
 void func_80BA3CC4(EnToto* this, PlayState* play);
@@ -80,7 +80,7 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 static EnTotoActionFunc D_80BA501C[] = {
-    func_80BA3930,
+    EnToto_SetupIdle,
     func_80BA3BFC,
     func_80BA3D38,
 };
@@ -112,18 +112,18 @@ static EnTotoSpeakData sSpeakData1[] = {
 };
 
 typedef enum EnTotoAnimation {
-    /* 0 */ ENTOTO_ANIM_0,
-    /* 1 */ ENTOTO_ANIM_1,
-    /* 2 */ ENTOTO_ANIM_2,
-    /* 3 */ ENTOTO_ANIM_3,
+    /* 0 */ ENTOTO_ANIM_TALK_SITTING,      // Sit idle
+    /* 1 */ ENTOTO_ANIM_MOVE_CANE_BEHIND_HEAD,      // Move cane up behind head
+    /* 2 */ ENTOTO_ANIM_TAP_HEAD_WITH_CANE,      // Tap head with cane
+    /* 3 */ ENTOTO_ANIM_MOVE_CANE_TO_FLOOR,      // Move cane back down
     /* 4 */ ENTOTO_ANIM_MAX
 } EnTotoAnimation;
 
 static AnimationHeader* sAnimations[ENTOTO_ANIM_MAX] = {
-    &object_zm_Anim_0028B8, // ENTOTO_ANIM_0
-    &object_zm_Anim_00B894, // ENTOTO_ANIM_1
-    &object_zm_Anim_002F20, // ENTOTO_ANIM_2
-    &object_zm_Anim_00BC08, // ENTOTO_ANIM_3
+    &gTotoTalkSittingAnim, // ENTOTO_ANIM_TALK_SITTING
+    &gTotoMoveCaneBehindHeadAnim, // ENTOTO_ANIM_MOVE_CANE_BEHIND_HEAD
+    &gTotoTapHeadWithCaneAnim, // ENTOTO_ANIM_TAP_HEAD_WITH_CANE
+    &gTotoMoveCaneBackDownAnim, // ENTOTO_ANIM_MOVE_CANE_TO_FLOOR
 };
 
 static EnTotoSpeakData sSpeakData2[] = {
@@ -176,7 +176,7 @@ static u16 sOcarinaActionWindFishPrompts[] = {
     OCARINA_ACTION_PROMPT_WIND_FISH_DEKU,
 };
 
-static u8 D_80BA5128[] = { 8, 4, 2, 1 };
+static u8 D_80BA5128[] = { 8, 4, 2, 1 }; // Spotlight index to form flag
 
 /* 
     Functions called once
@@ -227,16 +227,16 @@ static EnTotoTalkFunc sTalkStateHandlerFuncs[] = {
 };
 
 static EnTotoActionFunc D_80BA51B8[] = {
-    func_80BA39C8,
+    EnToto_Action_WaitForTalk,
     func_80BA3CC4,
     func_80BA3DBC,
 };
 
 /*
-    Reset unkB27 and set up next action (of certain subset)
+
 */
 
-void func_80BA36C0(EnToto* this, PlayState* play, s32 index) {
+void EnToto_SetMainAction(EnToto* this, PlayState* play, s32 index) {
     this->unk2B7 = false;
     this->actionFuncIndex = index;
     D_80BA501C[this->actionFuncIndex](this, play);
@@ -255,9 +255,9 @@ void EnToto_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 30.0f);
     this->actor.bgCheckFlags |= BGCHECKFLAG_PLAYER_400;
     SkelAnime_InitFlex(play, &this->skelAnime, &object_zm_Skel_00A978,
-                       ((play->sceneId == SCENE_SONCHONOIE) ? &object_zm_Anim_003AA8 : &object_zm_Anim_00C880),
+                       ((play->sceneId == SCENE_SONCHONOIE) ? &gTotoIdleSittingAnim : &gTotoIdleStandingAnim),
                        this->jointTable, this->morphTable, OBJECT_ZM_LIMB_MAX);
-    func_80BA36C0(this, play, 0);
+    EnToto_SetMainAction(this, play, 0);
     this->actor.shape.rot.x = 0;
 }
 
@@ -267,12 +267,12 @@ void EnToto_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-void func_80BA383C(EnToto* this, PlayState* play) {
-    if (SkelAnime_Update(&this->skelAnime) && (this->actionFuncIndex == 1) &&
-        (this->skelAnime.animation != &object_zm_Anim_000C80)) {
-        if ((play->msgCtx.currentTextId != 0x2A98) && (play->msgCtx.currentTextId != 0x2A99)) {
+void func_80BA383C(EnToto* this, PlayState* play) {     // Update Animation
+    if (SkelAnime_Update(&this->skelAnime) && (this->actionFuncIndex == 1) &&   // If animation is finished and is talking to player
+        (this->skelAnime.animation != &object_zm_Anim_000C80)) {                // And animation is not Greeting Link
+        if ((play->msgCtx.currentTextId != 0x2A98) && (play->msgCtx.currentTextId != 0x2A99)) { // First 2 text boxes after Mayor's Residence greeting ("That's the greeting used among us...", "Oh, forgive me...")
             if ((this->animIndex & 1) || (Rand_ZeroOne() > 0.5f)) {
-                this->animIndex = (this->animIndex + 1) & 3;
+                this->animIndex = (this->animIndex + 1) & 3;        // Tap on head with cane (50% chance)
             }
         }
         Animation_PlayOnce(&this->skelAnime, sAnimations[this->animIndex]);
@@ -280,11 +280,11 @@ void func_80BA383C(EnToto* this, PlayState* play) {
     FaceChange_UpdateBlinkingNonHuman(&this->faceChange, 20, 80, 3);
 }
 
-void func_80BA3930(EnToto* this, PlayState* play) {     // Start animation loop?
-    AnimationHeader* anim = &object_zm_Anim_00C880;
+void EnToto_SetupIdle(EnToto* this, PlayState* play) {
+    AnimationHeader* anim = &gTotoIdleStandingAnim;
 
     if (play->sceneId == SCENE_SONCHONOIE) {
-        anim = &object_zm_Anim_003AA8;
+        anim = &gTotoIdleSittingAnim;
     }
     Animation_MorphToLoop(&this->skelAnime, anim, -4.0f);
 }
@@ -302,12 +302,12 @@ s32 EnToto_IsFacingPlayer(EnToto* this, s16 angle) {
 /*
     Wait for player to talk
 */
-void func_80BA39C8(EnToto* this, PlayState* play) {
+void EnToto_Action_WaitForTalk(EnToto* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    func_80BA383C(this, play); // Update idle animation, I think
+    func_80BA383C(this, play); // Update animation
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
-        func_80BA36C0(this, play, 1);
+        EnToto_SetMainAction(this, play, 1);
 
         if (play->sceneId != SCENE_SONCHONOIE) {
             Flags_SetSwitch(play, ENTOTO_GET_SWITCH_FLAG_1(&this->actor));
@@ -358,8 +358,8 @@ void func_80BA39C8(EnToto* this, PlayState* play) {
 */
 void func_80BA3BFC(EnToto* this, PlayState* play) {
     if (play->sceneId == SCENE_SONCHONOIE) {
-        Animation_MorphToPlayOnce(&this->skelAnime, &object_zm_Anim_000C80, -4.0f);
-        this->animIndex = ENTOTO_ANIM_0;
+        Animation_MorphToPlayOnce(&this->skelAnime, &object_zm_Anim_000C80, -4.0f); // Hold hand up while talking
+        this->animIndex = ENTOTO_ANIM_TALK_SITTING;
     } else {
         if (this->text->talkActionIndex == 4) {
             Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_TOTO);
@@ -372,11 +372,11 @@ void EnToto_TurnTowardsPlayer(EnToto* this) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 0xFA0, 0x320);
 }
 
-void func_80BA3CC4(EnToto* this, PlayState* play) {
+void func_80BA3CC4(EnToto* this, PlayState* play) {     // Talk?
     func_80BA383C(this, play);
     EnToto_TurnTowardsPlayer(this);
     if (Actor_TextboxIsClosing(&this->actor, play)) {
-        func_80BA36C0(this, play, this->text->argument);
+        EnToto_SetMainAction(this, play, this->text->argument);
     } else {
         EnToto_NextTalkStateTriggersCutscene(this, play);
     }
@@ -413,7 +413,7 @@ void func_80BA3DBC(EnToto* this, PlayState* play) {
         }
     }
 
-    func_80BA36C0(this, play, 0);
+    EnToto_SetMainAction(this, play, 0);
     CutsceneManager_Stop(this->csId);
     play->actorCtx.flags &= ~ACTORCTX_FLAG_5;
 }
@@ -428,7 +428,7 @@ s32 EnToto_SetupTalk_DoNothing(EnToto* this, PlayState* play) {
 
 /*
     Sets up Link's "Wait" animation/cutscene if text argument is 2
-    Need to figure out what context triggers this argument
+    Argument is 2 if select "Yes" (should init sound check)
 */
 s32 func_80BA3EE8(EnToto* this, PlayState* play) {
     if (this->text->argument == 2) {
@@ -436,7 +436,6 @@ s32 func_80BA3EE8(EnToto* this, PlayState* play) {
     }
     return 0;
 }
-
 /*
     NextMessage should never trigger a cutscene, so always returns false
 */
@@ -501,13 +500,13 @@ s32 EnToto_HandleTalk_StartCutscene(EnToto* this, PlayState* play) {
 }
 
 /* 
-    First function in sTalkStateHandlerFuncs (repeating functions).
+    
 
-    Flow:
-        Repeat:
-            - Message state is not EVENT or message should not advance
-        EnToto_HandleTalk_Closing:
-            - Message state is EVENT and message should advance.
+    
+    
+    
+    
+    Return true if at end of text sequence (i.e. text_done sound plays)
 */
 s32 EnToto_HandleTalk_Event(EnToto* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
@@ -810,12 +809,12 @@ s32 EnToto_HandleTalk_SoundCheck_EndWindFishCutscene(EnToto* this, PlayState* pl
     return 0;
 }
 
-s32 func_80BA4B24(EnToto* this, PlayState* play) {
+s32 func_80BA4B24(EnToto* this, PlayState* play) {      // Handle Mayor's Residence talk
     Player* player;
 
     if (EnToto_HandleTalk_Event(this, play)) {
         player = GET_PLAYER(play);
-        Animation_MorphToPlayOnce(&this->skelAnime, &object_zm_Anim_0028B8, -4.0f);
+        Animation_MorphToPlayOnce(&this->skelAnime, &gTotoTalkSittingAnim, -4.0f);
         if (player->transformation == PLAYER_FORM_ZORA) {
             if (!Flags_GetSwitch(play, ENTOTO_GET_SWITCH_FLAG_1(&this->actor))) {
                 Flags_SetSwitch(play, ENTOTO_GET_SWITCH_FLAG_1(&this->actor));
@@ -867,9 +866,9 @@ void func_80BA4CB4(EnToto* this, PlayState* play) {
     if (this->cueId != cue->id) {
         this->cueId = cue->id;
         if (this->cueId != 4) {
-            if (this->cueId == 3) {
+            if (this->cueId == 3) {     /* cueId 3 == "Alright! That feels good!" */
                 Animation_MorphToPlayOnce(&this->skelAnime, &object_zm_Anim_001DF0, -4.0f);
-            } else {
+            } else {                    /* cueId 2 == Turn to look at Gorman*/
                 Animation_PlayOnce(&this->skelAnime,
                                    (this->cueId == 1) ? &object_zm_Anim_0016A4 : &object_zm_Anim_0022C8);
                 if ((this->cueId == 2) && (this->windFishFormsPlayed != 0xF)) {
@@ -879,10 +878,10 @@ void func_80BA4CB4(EnToto* this, PlayState* play) {
             }
         }
     }
-    Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 0x320);
+    Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 0x320); // Turn him towards the cs' requested direction
     if (SkelAnime_Update(&this->skelAnime)) {
         if (this->cueId != 3) {
-            Animation_PlayLoop(&this->skelAnime, (this->cueId == 1) ? &object_zm_Anim_00C880 : &object_zm_Anim_001324);
+            Animation_PlayLoop(&this->skelAnime, (this->cueId == 1) ? &gTotoIdleStandingAnim : &object_zm_Anim_001324);
         }
     }
     if ((this->cueId == 4) && !Actor_HasParent(&this->actor, play)) {
@@ -895,7 +894,7 @@ void EnToto_Update(Actor* thisx, PlayState* play) {
     s32 pad;
 
     if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_525)) {
-        func_80BA4CB4(this, play);
+        func_80BA4CB4(this, play);          // Update cutscene. Gorman interaction only? Or any?
     } else {
         D_80BA51B8[this->actionFuncIndex](this, play);
     }
