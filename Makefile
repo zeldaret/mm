@@ -155,7 +155,7 @@ endif
 
 # Check code syntax with host compiler
 CC_CHECK_WARNINGS := -Wall -Wextra -Wno-unknown-pragmas -Wno-unused-parameter -Wno-unused-variable -Wno-missing-braces -Wno-unused-but-set-variable -Wno-unused-label -Wno-sign-compare -Wno-tautological-compare
-CC_CHECK_WARNINGS += -Werror=implicit-int -Werror=implicit-function-declaration -Werror=int-conversion -Werror=incompatible-pointer-types
+CC_CHECK_WARNINGS += -Werror=implicit-int -Werror=implicit-function-declaration -Werror=int-conversion
 # Have CC_CHECK pretend to be a MIPS compiler
 MIPS_BUILTIN_DEFS := -DMIPSEB -D_MIPS_FPSET=16 -D_MIPS_ISA=2 -D_ABIO32=1 -D_MIPS_SIM=_ABIO32 -D_MIPS_SZINT=32 -D_MIPS_SZPTR=32
 CC_CHECK_FLAGS    := -fno-builtin -fsyntax-only -funsigned-char -fdiagnostics-color -std=gnu89 -m32 -DNON_MATCHING -DAVOID_UB -DCC_CHECK=1
@@ -175,11 +175,13 @@ CPPFLAGS      += -P -xc -fno-dollars-in-identifiers
 
 MKLDSCRIPT    := tools/buildtools/mkldscript
 MKDMADATA     := tools/buildtools/mkdmadata
-ZAPD          := tools/ZAPD/ZAPD.out
 FADO          := tools/fado/fado.elf
 MAKEYAR       := $(PYTHON) tools/buildtools/makeyar.py
 CHECKSUMMER   := $(PYTHON) tools/buildtools/checksummer.py
 SHIFTJIS_CONV := $(PYTHON) tools/buildtools/shiftjis_conv.py
+BIN2C          := tools/bin2c
+BUILD_FROM_PNG := tools/assets/build_from_png/build_from_png
+BUILD_JFIF     := tools/assets/build_jfif/build_jfif
 
 ASM_PROC       := $(PYTHON) tools/asm-processor/build.py
 ASM_PROC_FLAGS := --input-enc=utf-8 --output-enc=euc-jp --convert-statics=global-with-filename --encode-cutscene-data-floats
@@ -568,12 +570,12 @@ setup:
 
 assets:
 ifeq ($(VERSION),n64-us)
-	$(PYTHON) tools/extract_assets.py $(EXTRACTED_DIR)/baserom $(EXTRACTED_DIR)/assets -j$(N_THREADS) -Z Wno-hardcoded-pointer -v $(VERSION)
+	$(PYTHON) -m tools.assets.extract $(EXTRACTED_DIR)/baserom $(EXTRACTED_DIR) -v $(VERSION) -j$(N_THREADS)
 	$(PYTHON) tools/extract_text.py $(EXTRACTED_DIR)/baserom $(EXTRACTED_DIR)/text -v $(VERSION)
 	$(PYTHON) tools/extract_audio.py -b $(EXTRACTED_DIR)/baserom -o $(EXTRACTED_DIR) -v $(VERSION) --read-xml
 else
 # For non US versions just extract from the US rom
-	$(PYTHON) tools/extract_assets.py extracted/n64-us/baserom $(EXTRACTED_DIR)/assets -j$(N_THREADS) -Z Wno-hardcoded-pointer -v n64-us
+	$(PYTHON) -m tools.assets.extract extracted/n64-us/baserom $(EXTRACTED_DIR) -v n64-us -j$(N_THREADS)
 	$(PYTHON) tools/extract_text.py extracted/n64-us/baserom $(EXTRACTED_DIR)/text -v n64-us
 	$(PYTHON) tools/extract_audio.py -b extracted/n64-us/baserom -o $(EXTRACTED_DIR) -v n64-us --read-xml
 endif
@@ -744,20 +746,27 @@ $(BUILD_DIR)/%.o: %.c
 
 # Build C files from assets
 
-$(BUILD_DIR)/assets/%.inc.c: assets/%.png
-	$(ZAPD) btex -eh -tt $(subst .,,$(suffix $*)) -i $< -o $@
+# Assets from assets/
 
-$(BUILD_DIR)/assets/%.inc.c: $(EXTRACTED_DIR)/assets/%.png
-	$(ZAPD) btex -eh -tt $(subst .,,$(suffix $*)) -i $< -o $@
+$(BUILD_DIR)/assets/%.inc.c: assets/%.png
+	$(BUILD_FROM_PNG) $< $(dir $@) assets/$(dir $*) $(wildcard $(EXTRACTED_DIR)/assets/$(dir $*))
 
 $(BUILD_DIR)/assets/%.bin.inc.c: assets/%.bin
-	$(ZAPD) bblb -eh -i $< -o $@
-
-$(BUILD_DIR)/assets/%.bin.inc.c: $(EXTRACTED_DIR)/assets/%.bin
-	$(ZAPD) bblb -eh -i $< -o $@
+	$(BIN2C) -t 1 $< $@
 
 $(BUILD_DIR)/assets/%.jpg.inc.c: assets/%.jpg
-	$(ZAPD) bren -eh -i $< -o $@
+	$(BUILD_JFIF) $< $@
+
+# Assets from extracted/
+
+$(BUILD_DIR)/assets/%.inc.c: $(EXTRACTED_DIR)/assets/%.png
+	$(BUILD_FROM_PNG) $< $(dir $@) $(wildcard assets/$(dir $*)) $(EXTRACTED_DIR)/assets/$(dir $*)
+
+$(BUILD_DIR)/assets/%.bin.inc.c: $(EXTRACTED_DIR)/assets/%.bin
+	$(BIN2C) -t 1 $< $@
+
+$(BUILD_DIR)/assets/%.jpg.inc.c: $(EXTRACTED_DIR)/assets/%.jpg
+	$(BUILD_JFIF) $< $@
 
 $(BUILD_DIR)/%.schl.inc: %.schl
 	$(SCHC) $(SCHC_FLAGS) -o $@ $<

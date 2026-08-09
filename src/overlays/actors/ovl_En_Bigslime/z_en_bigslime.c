@@ -130,22 +130,22 @@ void EnBigslime_DrawShatteringEffects(EnBigslime* this, PlayState* play);
 
 // Reference data: used to store the original vertices
 static Vtx sBigslimeStaticVtx[BIGSLIME_NUM_VTX] = {
-#include "assets/overlays/ovl_En_Bigslime/sBigslimeStaticVtx.vtx.inc"
+#include "assets/overlays/ovl_En_Bigslime/sBigslimeStaticVtx.inc.c"
 };
 
 // Dynamic data: used to draw the real shape and has 2 states
 static Vtx sBigslimeDynamicVtx[2][BIGSLIME_NUM_VTX] = {
     {
-#include "assets/overlays/ovl_En_Bigslime/sBigslimeDynamicState0Vtx.vtx.inc"
+#include "assets/overlays/ovl_En_Bigslime/sBigslimeDynamicState0Vtx.inc.c"
     },
     {
-#include "assets/overlays/ovl_En_Bigslime/sBigslimeDynamicState1Vtx.vtx.inc"
+#include "assets/overlays/ovl_En_Bigslime/sBigslimeDynamicState1Vtx.inc.c"
     },
 };
 
 // Target data: used to define the shape the dynamic vertices morph to
 static Vtx sBigslimeTargetVtx[BIGSLIME_NUM_VTX] = {
-#include "assets/overlays/ovl_En_Bigslime/sBigslimeTargetVtx.vtx.inc"
+#include "assets/overlays/ovl_En_Bigslime/sBigslimeTargetVtx.inc.c"
 };
 
 /*

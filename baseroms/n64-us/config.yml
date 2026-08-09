@@ -60,3 +60,1425 @@ incbins:
     vram: 0x801D6200
     size: 0x400
 assets:
+  - name: code/circle_tex
+    xml_path: assets/xml/code/circle_tex.xml
+    start_offset: 0x138DD0
+    end_offset: 0x1395D0
+  - name: code/eff_footmark
+    xml_path: assets/xml/code/eff_footmark.xml
+    start_offset: 0x116750
+    end_offset: 0x1167E0
+  - name: code/debug_display
+    xml_path: assets/xml/code/debug_display.xml
+    start_offset: 0x114A90
+    end_offset: 0x115550
+  - name: code/z_map_disp
+    xml_path: assets/xml/code/z_map_disp.xml
+    start_offset: 0x119078
+    end_offset: 0x1190F8
+  - name: code/sub_s
+    xml_path: assets/xml/code/sub_s.xml
+    start_offset: 0x120260
+    end_offset: 0x1202F0
+  - name: code/eff_shield_particle
+    xml_path: assets/xml/code/eff_shield_particle.xml
+    start_offset: 0x108830
+    end_offset: 0x108870
+  - name: misc/esp_daytelop_static
+    xml_path: assets/xml/misc/esp_daytelop_static.xml
+  - name: misc/locerrmsg
+    xml_path: assets/xml/misc/locerrmsg.xml
+  - name: misc/skyboxes
+    xml_path: assets/xml/misc/skyboxes.xml
+  - name: misc/link_animetion
+    xml_path: assets/xml/misc/link_animetion.xml
+  - name: misc/scene_texture_06
+    xml_path: assets/xml/misc/scene_texture_06.xml
+  - name: misc/scene_texture_02
+    xml_path: assets/xml/misc/scene_texture_02.xml
+  - name: misc/story_static
+    xml_path: assets/xml/misc/story_static.xml
+  - name: misc/scene_texture_03
+    xml_path: assets/xml/misc/scene_texture_03.xml
+  - name: misc/scene_texture_01
+    xml_path: assets/xml/misc/scene_texture_01.xml
+  - name: misc/scene_texture_05
+    xml_path: assets/xml/misc/scene_texture_05.xml
+  - name: misc/title_static
+    xml_path: assets/xml/misc/title_static.xml
+  - name: misc/nintendo_rogo_static
+    xml_path: assets/xml/misc/nintendo_rogo_static.xml
+  - name: misc/ger_daytelop_static
+    xml_path: assets/xml/misc/ger_daytelop_static.xml
+  - name: misc/daytelop_static
+    xml_path: assets/xml/misc/daytelop_static.xml
+  - name: misc/scene_texture_08
+    xml_path: assets/xml/misc/scene_texture_08.xml
+  - name: misc/scene_texture_04
+    xml_path: assets/xml/misc/scene_texture_04.xml
+  - name: misc/fra_daytelop_static
+    xml_path: assets/xml/misc/fra_daytelop_static.xml
+  - name: misc/scene_texture_07
+    xml_path: assets/xml/misc/scene_texture_07.xml
+  - name: misc/memerrmsg
+    xml_path: assets/xml/misc/memerrmsg.xml
+  - name: objects/object_market_obj
+    xml_path: assets/xml/objects/object_market_obj.xml
+  - name: objects/object_zov
+    xml_path: assets/xml/objects/object_zov.xml
+  - name: objects/object_gi_fish
+    xml_path: assets/xml/objects/object_gi_fish.xml
+  - name: objects/object_zl1
+    xml_path: assets/xml/objects/object_zl1.xml
+  - name: objects/object_dnt
+    xml_path: assets/xml/objects/object_dnt.xml
+  - name: objects/object_tab
+    xml_path: assets/xml/objects/object_tab.xml
+  - name: objects/object_wdor02
+    xml_path: assets/xml/objects/object_wdor02.xml
+  - name: objects/object_tokei_turret
+    xml_path: assets/xml/objects/object_tokei_turret.xml
+  - name: objects/object_kz
+    xml_path: assets/xml/objects/object_kz.xml
+  - name: objects/object_gi_mask15
+    xml_path: assets/xml/objects/object_gi_mask15.xml
+  - name: objects/object_mamenoki
+    xml_path: assets/xml/objects/object_mamenoki.xml
+  - name: objects/object_gi_nuts
+    xml_path: assets/xml/objects/object_gi_nuts.xml
+  - name: objects/object_bee
+    xml_path: assets/xml/objects/object_bee.xml
+  - name: objects/object_water_effect
+    xml_path: assets/xml/objects/object_water_effect.xml
+  - name: objects/object_ot
+    xml_path: assets/xml/objects/object_ot.xml
+  - name: objects/object_boss02
+    xml_path: assets/xml/objects/object_boss02.xml
+  - name: objects/object_skb
+    xml_path: assets/xml/objects/object_skb.xml
+  - name: objects/object_lightblock
+    xml_path: assets/xml/objects/object_lightblock.xml
+  - name: objects/object_gi_insect
+    xml_path: assets/xml/objects/object_gi_insect.xml
+  - name: objects/object_mir_ray
+    xml_path: assets/xml/objects/object_mir_ray.xml
+  - name: objects/object_warp1
+    xml_path: assets/xml/objects/object_warp1.xml
+  - name: objects/object_gi_stick
+    xml_path: assets/xml/objects/object_gi_stick.xml
+  - name: objects/object_mask_ki_tan
+    xml_path: assets/xml/objects/object_mask_ki_tan.xml
+  - name: objects/object_numa_obj
+    xml_path: assets/xml/objects/object_numa_obj.xml
+  - name: objects/object_omoya_obj
+    xml_path: assets/xml/objects/object_omoya_obj.xml
+  - name: objects/object_fu_kaiten
+    xml_path: assets/xml/objects/object_fu_kaiten.xml
+  - name: objects/object_oF1d_map
+    xml_path: assets/xml/objects/object_oF1d_map.xml
+  - name: objects/object_bigicicle
+    xml_path: assets/xml/objects/object_bigicicle.xml
+  - name: objects/object_gi_glasses
+    xml_path: assets/xml/objects/object_gi_glasses.xml
+  - name: objects/object_gi_ghost
+    xml_path: assets/xml/objects/object_gi_ghost.xml
+  - name: objects/object_raillift
+    xml_path: assets/xml/objects/object_raillift.xml
+  - name: objects/object_ishi
+    xml_path: assets/xml/objects/object_ishi.xml
+  - name: objects/object_dmask
+    xml_path: assets/xml/objects/object_dmask.xml
+  - name: objects/object_obj_danpeilift
+    xml_path: assets/xml/objects/object_obj_danpeilift.xml
+  - name: objects/object_gi_mask12
+    xml_path: assets/xml/objects/object_gi_mask12.xml
+  - name: objects/object_gi_mask05
+    xml_path: assets/xml/objects/object_gi_mask05.xml
+  - name: objects/object_keikoku_demo
+    xml_path: assets/xml/objects/object_keikoku_demo.xml
+  - name: objects/object_giant
+    xml_path: assets/xml/objects/object_giant.xml
+  - name: objects/object_an1
+    xml_path: assets/xml/objects/object_an1.xml
+  - name: objects/object_stk
+    xml_path: assets/xml/objects/object_stk.xml
+  - name: objects/object_tk
+    xml_path: assets/xml/objects/object_tk.xml
+  - name: objects/object_goronswitch
+    xml_path: assets/xml/objects/object_goronswitch.xml
+  - name: objects/object_dkjail_obj
+    xml_path: assets/xml/objects/object_dkjail_obj.xml
+  - name: objects/object_icefloe
+    xml_path: assets/xml/objects/object_icefloe.xml
+  - name: objects/object_ms
+    xml_path: assets/xml/objects/object_ms.xml
+  - name: objects/object_gi_longsword
+    xml_path: assets/xml/objects/object_gi_longsword.xml
+  - name: objects/object_gi_bow
+    xml_path: assets/xml/objects/object_gi_bow.xml
+  - name: objects/object_cow
+    xml_path: assets/xml/objects/object_cow.xml
+  - name: objects/object_cne
+    xml_path: assets/xml/objects/object_cne.xml
+  - name: objects/object_an2
+    xml_path: assets/xml/objects/object_an2.xml
+  - name: objects/object_gi_mask14
+    xml_path: assets/xml/objects/object_gi_mask14.xml
+  - name: objects/object_wood02
+    xml_path: assets/xml/objects/object_wood02.xml
+  - name: objects/object_boj
+    xml_path: assets/xml/objects/object_boj.xml
+  - name: objects/object_jso
+    xml_path: assets/xml/objects/object_jso.xml
+  - name: objects/object_bigpo
+    xml_path: assets/xml/objects/object_bigpo.xml
+  - name: objects/object_zm
+    xml_path: assets/xml/objects/object_zm.xml
+  - name: objects/object_ru2
+    xml_path: assets/xml/objects/object_ru2.xml
+  - name: objects/object_goroiwa
+    xml_path: assets/xml/objects/object_goroiwa.xml
+  - name: objects/object_rotlift
+    xml_path: assets/xml/objects/object_rotlift.xml
+  - name: objects/object_gi_mask20
+    xml_path: assets/xml/objects/object_gi_mask20.xml
+  - name: objects/object_link_zora
+    xml_path: assets/xml/objects/object_link_zora.xml
+  - name: objects/object_kujiya
+    xml_path: assets/xml/objects/object_kujiya.xml
+  - name: objects/object_racetsubo
+    xml_path: assets/xml/objects/object_racetsubo.xml
+  - name: objects/object_gla
+    xml_path: assets/xml/objects/object_gla.xml
+  - name: objects/object_az
+    xml_path: assets/xml/objects/object_az.xml
+  - name: objects/object_gi_sword_3
+    xml_path: assets/xml/objects/object_gi_sword_3.xml
+  - name: objects/object_pst
+    xml_path: assets/xml/objects/object_pst.xml
+  - name: objects/gameplay_keep
+    xml_path: assets/xml/objects/gameplay_keep.xml
+  - name: objects/object_tite
+    xml_path: assets/xml/objects/object_tite.xml
+  - name: objects/object_mask_kerfay
+    xml_path: assets/xml/objects/object_mask_kerfay.xml
+  - name: objects/object_haka_obj
+    xml_path: assets/xml/objects/object_haka_obj.xml
+  - name: objects/object_random_obj
+    xml_path: assets/xml/objects/object_random_obj.xml
+  - name: objects/object_yado_obj
+    xml_path: assets/xml/objects/object_yado_obj.xml
+  - name: objects/object_boss07
+    xml_path: assets/xml/objects/object_boss07.xml
+  - name: objects/object_tsn
+    xml_path: assets/xml/objects/object_tsn.xml
+  - name: objects/object_gi_mask06
+    xml_path: assets/xml/objects/object_gi_mask06.xml
+  - name: objects/object_shn
+    xml_path: assets/xml/objects/object_shn.xml
+  - name: objects/object_eg
+    xml_path: assets/xml/objects/object_eg.xml
+  - name: objects/object_gi_milk
+    xml_path: assets/xml/objects/object_gi_milk.xml
+  - name: objects/object_niw
+    xml_path: assets/xml/objects/object_niw.xml
+  - name: objects/object_hs
+    xml_path: assets/xml/objects/object_hs.xml
+  - name: objects/object_ph
+    xml_path: assets/xml/objects/object_ph.xml
+  - name: objects/object_link_goron
+    xml_path: assets/xml/objects/object_link_goron.xml
+  - name: objects/object_snowwd
+    xml_path: assets/xml/objects/object_snowwd.xml
+  - name: objects/object_fall
+    xml_path: assets/xml/objects/object_fall.xml
+  - name: objects/object_tanron5
+    xml_path: assets/xml/objects/object_tanron5.xml
+  - name: objects/object_dns
+    xml_path: assets/xml/objects/object_dns.xml
+  - name: objects/object_wdhand
+    xml_path: assets/xml/objects/object_wdhand.xml
+  - name: objects/object_mu
+    xml_path: assets/xml/objects/object_mu.xml
+  - name: objects/object_gi_mask09
+    xml_path: assets/xml/objects/object_gi_mask09.xml
+  - name: objects/object_link_boy
+    xml_path: assets/xml/objects/object_link_boy.xml
+  - name: objects/object_fu
+    xml_path: assets/xml/objects/object_fu.xml
+  - name: objects/object_stk2
+    xml_path: assets/xml/objects/object_stk2.xml
+  - name: objects/object_mtoride
+    xml_path: assets/xml/objects/object_mtoride.xml
+  - name: objects/object_gk
+    xml_path: assets/xml/objects/object_gk.xml
+  - name: objects/object_gi_seahorse
+    xml_path: assets/xml/objects/object_gi_seahorse.xml
+  - name: objects/object_kbt
+    xml_path: assets/xml/objects/object_kbt.xml
+  - name: objects/object_dnq
+    xml_path: assets/xml/objects/object_dnq.xml
+  - name: objects/object_um
+    xml_path: assets/xml/objects/object_um.xml
+  - name: objects/object_obj_usiyane
+    xml_path: assets/xml/objects/object_obj_usiyane.xml
+  - name: objects/object_mask_yofukasi
+    xml_path: assets/xml/objects/object_mask_yofukasi.xml
+  - name: objects/object_dog
+    xml_path: assets/xml/objects/object_dog.xml
+  - name: objects/object_d_lift
+    xml_path: assets/xml/objects/object_d_lift.xml
+  - name: objects/object_dblue_object
+    xml_path: assets/xml/objects/object_dblue_object.xml
+  - name: objects/object_mask_dancer
+    xml_path: assets/xml/objects/object_mask_dancer.xml
+  - name: objects/object_in2
+    xml_path: assets/xml/objects/object_in2.xml
+  - name: objects/object_gi_rabit_mask
+    xml_path: assets/xml/objects/object_gi_rabit_mask.xml
+  - name: objects/object_syoten
+    xml_path: assets/xml/objects/object_syoten.xml
+  - name: objects/object_osn
+    xml_path: assets/xml/objects/object_osn.xml
+  - name: objects/object_gi_bottle_22
+    xml_path: assets/xml/objects/object_gi_bottle_22.xml
+  - name: objects/object_gi_bottle_red
+    xml_path: assets/xml/objects/object_gi_bottle_red.xml
+  - name: objects/object_zo
+    xml_path: assets/xml/objects/object_zo.xml
+  - name: objects/object_dor04
+    xml_path: assets/xml/objects/object_dor04.xml
+  - name: objects/object_fall2
+    xml_path: assets/xml/objects/object_fall2.xml
+  - name: objects/object_bigokuta
+    xml_path: assets/xml/objects/object_bigokuta.xml
+  - name: objects/object_zoraegg
+    xml_path: assets/xml/objects/object_zoraegg.xml
+  - name: objects/object_gi_mssa
+    xml_path: assets/xml/objects/object_gi_mssa.xml
+  - name: objects/object_tanron3
+    xml_path: assets/xml/objects/object_tanron3.xml
+  - name: objects/object_sb
+    xml_path: assets/xml/objects/object_sb.xml
+  - name: objects/object_kamejima
+    xml_path: assets/xml/objects/object_kamejima.xml
+  - name: objects/object_tru
+    xml_path: assets/xml/objects/object_tru.xml
+  - name: objects/object_f53_obj
+    xml_path: assets/xml/objects/object_f53_obj.xml
+  - name: objects/object_tro
+    xml_path: assets/xml/objects/object_tro.xml
+  - name: objects/object_ikn_demo
+    xml_path: assets/xml/objects/object_ikn_demo.xml
+  - name: objects/object_gi_mask11
+    xml_path: assets/xml/objects/object_gi_mask11.xml
+  - name: objects/object_wdor05
+    xml_path: assets/xml/objects/object_wdor05.xml
+  - name: objects/object_obj_chan
+    xml_path: assets/xml/objects/object_obj_chan.xml
+  - name: objects/object_gi_rupy
+    xml_path: assets/xml/objects/object_gi_rupy.xml
+  - name: objects/object_ge1
+    xml_path: assets/xml/objects/object_ge1.xml
+  - name: objects/object_kzsaku
+    xml_path: assets/xml/objects/object_kzsaku.xml
+  - name: objects/object_lbfshot
+    xml_path: assets/xml/objects/object_lbfshot.xml
+  - name: objects/object_js
+    xml_path: assets/xml/objects/object_js.xml
+  - name: objects/object_ik
+    xml_path: assets/xml/objects/object_ik.xml
+  - name: objects/object_gi_key
+    xml_path: assets/xml/objects/object_gi_key.xml
+  - name: objects/object_zob
+    xml_path: assets/xml/objects/object_zob.xml
+  - name: objects/object_gi_m_arrow
+    xml_path: assets/xml/objects/object_gi_m_arrow.xml
+  - name: objects/object_open_obj
+    xml_path: assets/xml/objects/object_open_obj.xml
+  - name: objects/object_gi_reserve_c_00
+    xml_path: assets/xml/objects/object_gi_reserve_c_00.xml
+  - name: objects/object_bba
+    xml_path: assets/xml/objects/object_bba.xml
+  - name: objects/object_spidertent
+    xml_path: assets/xml/objects/object_spidertent.xml
+  - name: objects/gameplay_dangeon_keep
+    xml_path: assets/xml/objects/gameplay_dangeon_keep.xml
+  - name: objects/object_boyo
+    xml_path: assets/xml/objects/object_boyo.xml
+  - name: objects/object_ps
+    xml_path: assets/xml/objects/object_ps.xml
+  - name: objects/object_ds2
+    xml_path: assets/xml/objects/object_ds2.xml
+  - name: objects/object_an3
+    xml_path: assets/xml/objects/object_an3.xml
+  - name: objects/object_mask_romerny
+    xml_path: assets/xml/objects/object_mask_romerny.xml
+  - name: objects/object_tokei_tobira
+    xml_path: assets/xml/objects/object_tokei_tobira.xml
+  - name: objects/object_dno
+    xml_path: assets/xml/objects/object_dno.xml
+  - name: objects/object_hana
+    xml_path: assets/xml/objects/object_hana.xml
+  - name: objects/object_gi_arrow
+    xml_path: assets/xml/objects/object_gi_arrow.xml
+  - name: objects/object_ladder
+    xml_path: assets/xml/objects/object_ladder.xml
+  - name: objects/object_al
+    xml_path: assets/xml/objects/object_al.xml
+  - name: objects/object_nb
+    xml_path: assets/xml/objects/object_nb.xml
+  - name: objects/object_mag
+    xml_path: assets/xml/objects/object_mag.xml
+  - name: objects/object_stk3
+    xml_path: assets/xml/objects/object_stk3.xml
+  - name: objects/object_hakaisi
+    xml_path: assets/xml/objects/object_hakaisi.xml
+  - name: objects/object_tree
+    xml_path: assets/xml/objects/object_tree.xml
+  - name: objects/object_sekihil
+    xml_path: assets/xml/objects/object_sekihil.xml
+  - name: objects/object_fu_mato
+    xml_path: assets/xml/objects/object_fu_mato.xml
+  - name: objects/object_efc_star_field
+    xml_path: assets/xml/objects/object_efc_star_field.xml
+  - name: objects/object_maruta
+    xml_path: assets/xml/objects/object_maruta.xml
+  - name: objects/object_gi_mask22
+    xml_path: assets/xml/objects/object_gi_mask22.xml
+  - name: objects/object_bsb
+    xml_path: assets/xml/objects/object_bsb.xml
+  - name: objects/object_trap
+    xml_path: assets/xml/objects/object_trap.xml
+  - name: objects/object_flowerpot
+    xml_path: assets/xml/objects/object_flowerpot.xml
+  - name: objects/object_in
+    xml_path: assets/xml/objects/object_in.xml
+  - name: objects/object_gg
+    xml_path: assets/xml/objects/object_gg.xml
+  - name: objects/object_mask_meoto
+    xml_path: assets/xml/objects/object_mask_meoto.xml
+  - name: objects/gameplay_field_keep
+    xml_path: assets/xml/objects/gameplay_field_keep.xml
+  - name: objects/object_tl
+    xml_path: assets/xml/objects/object_tl.xml
+  - name: objects/object_an4
+    xml_path: assets/xml/objects/object_an4.xml
+  - name: objects/object_iknv_obj
+    xml_path: assets/xml/objects/object_iknv_obj.xml
+  - name: objects/object_tsubo
+    xml_path: assets/xml/objects/object_tsubo.xml
+  - name: objects/object_gi_hearts
+    xml_path: assets/xml/objects/object_gi_hearts.xml
+  - name: objects/object_rr
+    xml_path: assets/xml/objects/object_rr.xml
+  - name: objects/object_gi_bottle_21
+    xml_path: assets/xml/objects/object_gi_bottle_21.xml
+  - name: objects/object_d_hsblock
+    xml_path: assets/xml/objects/object_d_hsblock.xml
+  - name: objects/object_gi_mask23
+    xml_path: assets/xml/objects/object_gi_mask23.xml
+  - name: objects/object_gi_sword_4
+    xml_path: assets/xml/objects/object_gi_sword_4.xml
+  - name: objects/object_gm
+    xml_path: assets/xml/objects/object_gm.xml
+  - name: objects/object_gi_map
+    xml_path: assets/xml/objects/object_gi_map.xml
+  - name: objects/object_rb
+    xml_path: assets/xml/objects/object_rb.xml
+  - name: objects/object_moonston
+    xml_path: assets/xml/objects/object_moonston.xml
+  - name: objects/object_mask_posthat
+    xml_path: assets/xml/objects/object_mask_posthat.xml
+  - name: objects/object_gi_reserve_c_01
+    xml_path: assets/xml/objects/object_gi_reserve_c_01.xml
+  - name: objects/object_ka
+    xml_path: assets/xml/objects/object_ka.xml
+  - name: objects/object_mask_gibudo
+    xml_path: assets/xml/objects/object_mask_gibudo.xml
+  - name: objects/object_lightswitch
+    xml_path: assets/xml/objects/object_lightswitch.xml
+  - name: objects/object_gi_reserve_b_00
+    xml_path: assets/xml/objects/object_gi_reserve_b_00.xml
+  - name: objects/object_taisou
+    xml_path: assets/xml/objects/object_taisou.xml
+  - name: objects/object_mask_zacho
+    xml_path: assets/xml/objects/object_mask_zacho.xml
+  - name: objects/object_bh
+    xml_path: assets/xml/objects/object_bh.xml
+  - name: objects/object_gi_bottle_04
+    xml_path: assets/xml/objects/object_gi_bottle_04.xml
+  - name: objects/object_ghaka
+    xml_path: assets/xml/objects/object_ghaka.xml
+  - name: objects/object_zog
+    xml_path: assets/xml/objects/object_zog.xml
+  - name: objects/object_mask_truth
+    xml_path: assets/xml/objects/object_mask_truth.xml
+  - name: objects/object_hanareyama_obj
+    xml_path: assets/xml/objects/object_hanareyama_obj.xml
+  - name: objects/object_wdor04
+    xml_path: assets/xml/objects/object_wdor04.xml
+  - name: objects/object_fsn
+    xml_path: assets/xml/objects/object_fsn.xml
+  - name: objects/object_bal
+    xml_path: assets/xml/objects/object_bal.xml
+  - name: objects/object_gi_gold_dust
+    xml_path: assets/xml/objects/object_gi_gold_dust.xml
+  - name: objects/object_famos
+    xml_path: assets/xml/objects/object_famos.xml
+  - name: objects/object_f52_obj
+    xml_path: assets/xml/objects/object_f52_obj.xml
+  - name: objects/object_gi_magicmushroom
+    xml_path: assets/xml/objects/object_gi_magicmushroom.xml
+  - name: objects/object_bob
+    xml_path: assets/xml/objects/object_bob.xml
+  - name: objects/object_tanron1
+    xml_path: assets/xml/objects/object_tanron1.xml
+  - name: objects/object_botihasira
+    xml_path: assets/xml/objects/object_botihasira.xml
+  - name: objects/object_aob
+    xml_path: assets/xml/objects/object_aob.xml
+  - name: objects/object_danpei_object
+    xml_path: assets/xml/objects/object_danpei_object.xml
+  - name: objects/object_boss03
+    xml_path: assets/xml/objects/object_boss03.xml
+  - name: objects/object_horse_link_child
+    xml_path: assets/xml/objects/object_horse_link_child.xml
+  - name: objects/object_tanron4
+    xml_path: assets/xml/objects/object_tanron4.xml
+  - name: objects/object_astr_obj
+    xml_path: assets/xml/objects/object_astr_obj.xml
+  - name: objects/object_wdor01
+    xml_path: assets/xml/objects/object_wdor01.xml
+  - name: objects/object_okuta
+    xml_path: assets/xml/objects/object_okuta.xml
+  - name: objects/object_snowman
+    xml_path: assets/xml/objects/object_snowman.xml
+  - name: objects/object_boss04
+    xml_path: assets/xml/objects/object_boss04.xml
+  - name: objects/object_spinyroll
+    xml_path: assets/xml/objects/object_spinyroll.xml
+  - name: objects/object_rz
+    xml_path: assets/xml/objects/object_rz.xml
+  - name: objects/object_and
+    xml_path: assets/xml/objects/object_and.xml
+  - name: objects/object_link_child
+    xml_path: assets/xml/objects/object_link_child.xml
+  - name: objects/object_sichitai_obj
+    xml_path: assets/xml/objects/object_sichitai_obj.xml
+  - name: objects/object_hakugin_obj
+    xml_path: assets/xml/objects/object_hakugin_obj.xml
+  - name: objects/object_oyu
+    xml_path: assets/xml/objects/object_oyu.xml
+  - name: objects/object_last_obj
+    xml_path: assets/xml/objects/object_last_obj.xml
+  - name: objects/object_gi_ki_tan_mask
+    xml_path: assets/xml/objects/object_gi_ki_tan_mask.xml
+  - name: objects/object_bsmask
+    xml_path: assets/xml/objects/object_bsmask.xml
+  - name: objects/object_dekucity_ana_obj
+    xml_path: assets/xml/objects/object_dekucity_ana_obj.xml
+  - name: objects/object_mask_skj
+    xml_path: assets/xml/objects/object_mask_skj.xml
+  - name: objects/object_zos
+    xml_path: assets/xml/objects/object_zos.xml
+  - name: objects/object_gi_purse
+    xml_path: assets/xml/objects/object_gi_purse.xml
+  - name: objects/object_smtower
+    xml_path: assets/xml/objects/object_smtower.xml
+  - name: objects/object_crow
+    xml_path: assets/xml/objects/object_crow.xml
+  - name: objects/object_delf
+    xml_path: assets/xml/objects/object_delf.xml
+  - name: objects/object_gi_bottle
+    xml_path: assets/xml/objects/object_gi_bottle.xml
+  - name: objects/object_po_sisters
+    xml_path: assets/xml/objects/object_po_sisters.xml
+  - name: objects/object_fusen
+    xml_path: assets/xml/objects/object_fusen.xml
+  - name: objects/object_cha
+    xml_path: assets/xml/objects/object_cha.xml
+  - name: objects/object_rat
+    xml_path: assets/xml/objects/object_rat.xml
+  - name: objects/object_warp_uzu
+    xml_path: assets/xml/objects/object_warp_uzu.xml
+  - name: objects/object_firefly
+    xml_path: assets/xml/objects/object_firefly.xml
+  - name: objects/object_lotus
+    xml_path: assets/xml/objects/object_lotus.xml
+  - name: objects/object_zg
+    xml_path: assets/xml/objects/object_zg.xml
+  - name: objects/object_mastergolon
+    xml_path: assets/xml/objects/object_mastergolon.xml
+  - name: objects/object_dor01
+    xml_path: assets/xml/objects/object_dor01.xml
+  - name: objects/object_slime
+    xml_path: assets/xml/objects/object_slime.xml
+  - name: objects/object_mask_kyojin
+    xml_path: assets/xml/objects/object_mask_kyojin.xml
+  - name: objects/object_twig
+    xml_path: assets/xml/objects/object_twig.xml
+  - name: objects/object_pamera
+    xml_path: assets/xml/objects/object_pamera.xml
+  - name: objects/object_gi_mask13
+    xml_path: assets/xml/objects/object_gi_mask13.xml
+  - name: objects/object_funen
+    xml_path: assets/xml/objects/object_funen.xml
+  - name: objects/object_ending_obj
+    xml_path: assets/xml/objects/object_ending_obj.xml
+  - name: objects/object_redead_obj
+    xml_path: assets/xml/objects/object_redead_obj.xml
+  - name: objects/object_taru
+    xml_path: assets/xml/objects/object_taru.xml
+  - name: objects/object_kibako2
+    xml_path: assets/xml/objects/object_kibako2.xml
+  - name: objects/object_secom_obj
+    xml_path: assets/xml/objects/object_secom_obj.xml
+  - name: objects/object_fb
+    xml_path: assets/xml/objects/object_fb.xml
+  - name: objects/object_wdor03
+    xml_path: assets/xml/objects/object_wdor03.xml
+  - name: objects/object_inibs_object
+    xml_path: assets/xml/objects/object_inibs_object.xml
+  - name: objects/object_death
+    xml_path: assets/xml/objects/object_death.xml
+  - name: objects/object_boss05
+    xml_path: assets/xml/objects/object_boss05.xml
+  - name: objects/object_bai
+    xml_path: assets/xml/objects/object_bai.xml
+  - name: objects/object_po_composer
+    xml_path: assets/xml/objects/object_po_composer.xml
+  - name: objects/object_obj_dinner
+    xml_path: assets/xml/objects/object_obj_dinner.xml
+  - name: objects/object_dor03
+    xml_path: assets/xml/objects/object_dor03.xml
+  - name: objects/object_nwc
+    xml_path: assets/xml/objects/object_nwc.xml
+  - name: objects/object_spdweb
+    xml_path: assets/xml/objects/object_spdweb.xml
+  - name: objects/object_mask_json
+    xml_path: assets/xml/objects/object_mask_json.xml
+  - name: objects/object_ani
+    xml_path: assets/xml/objects/object_ani.xml
+  - name: objects/object_gi_soul
+    xml_path: assets/xml/objects/object_gi_soul.xml
+  - name: objects/object_crace_object
+    xml_path: assets/xml/objects/object_crace_object.xml
+  - name: objects/object_gi_melody
+    xml_path: assets/xml/objects/object_gi_melody.xml
+  - name: objects/object_gi_reserve00
+    xml_path: assets/xml/objects/object_gi_reserve00.xml
+  - name: objects/object_bb
+    xml_path: assets/xml/objects/object_bb.xml
+  - name: objects/object_sekihiz
+    xml_path: assets/xml/objects/object_sekihiz.xml
+  - name: objects/object_gi_sword_1
+    xml_path: assets/xml/objects/object_gi_sword_1.xml
+  - name: objects/object_dora
+    xml_path: assets/xml/objects/object_dora.xml
+  - name: objects/object_kitan
+    xml_path: assets/xml/objects/object_kitan.xml
+  - name: objects/object_comb
+    xml_path: assets/xml/objects/object_comb.xml
+  - name: objects/object_gi_sutaru
+    xml_path: assets/xml/objects/object_gi_sutaru.xml
+  - name: objects/object_trt
+    xml_path: assets/xml/objects/object_trt.xml
+  - name: objects/object_gs
+    xml_path: assets/xml/objects/object_gs.xml
+  - name: objects/object_lodmoon
+    xml_path: assets/xml/objects/object_lodmoon.xml
+  - name: objects/object_f40_obj
+    xml_path: assets/xml/objects/object_f40_obj.xml
+  - name: objects/object_cs
+    xml_path: assets/xml/objects/object_cs.xml
+  - name: objects/object_po_fusen
+    xml_path: assets/xml/objects/object_po_fusen.xml
+  - name: objects/object_ah
+    xml_path: assets/xml/objects/object_ah.xml
+  - name: objects/object_boss01
+    xml_path: assets/xml/objects/object_boss01.xml
+  - name: objects/object_hariko
+    xml_path: assets/xml/objects/object_hariko.xml
+  - name: objects/object_fwall
+    xml_path: assets/xml/objects/object_fwall.xml
+  - name: objects/object_daiku
+    xml_path: assets/xml/objects/object_daiku.xml
+  - name: objects/object_geldb
+    xml_path: assets/xml/objects/object_geldb.xml
+  - name: objects/object_mk
+    xml_path: assets/xml/objects/object_mk.xml
+  - name: objects/object_gi_loach
+    xml_path: assets/xml/objects/object_gi_loach.xml
+  - name: objects/object_bg
+    xml_path: assets/xml/objects/object_bg.xml
+  - name: objects/object_dai
+    xml_path: assets/xml/objects/object_dai.xml
+  - name: objects/object_pp
+    xml_path: assets/xml/objects/object_pp.xml
+  - name: objects/object_mm
+    xml_path: assets/xml/objects/object_mm.xml
+  - name: objects/object_gi_bottle_15
+    xml_path: assets/xml/objects/object_gi_bottle_15.xml
+  - name: objects/object_icicle
+    xml_path: assets/xml/objects/object_icicle.xml
+  - name: objects/object_kin2_obj
+    xml_path: assets/xml/objects/object_kin2_obj.xml
+  - name: objects/object_dor02
+    xml_path: assets/xml/objects/object_dor02.xml
+  - name: objects/object_dodongo
+    xml_path: assets/xml/objects/object_dodongo.xml
+  - name: objects/object_rd
+    xml_path: assets/xml/objects/object_rd.xml
+  - name: objects/object_gi_reserve01
+    xml_path: assets/xml/objects/object_gi_reserve01.xml
+  - name: objects/object_gi_sword_2
+    xml_path: assets/xml/objects/object_gi_sword_2.xml
+  - name: objects/object_yukiyama
+    xml_path: assets/xml/objects/object_yukiyama.xml
+  - name: objects/object_dnj
+    xml_path: assets/xml/objects/object_dnj.xml
+  - name: objects/object_mask_nuts
+    xml_path: assets/xml/objects/object_mask_nuts.xml
+  - name: objects/object_meganeana_obj
+    xml_path: assets/xml/objects/object_meganeana_obj.xml
+  - name: objects/object_zod
+    xml_path: assets/xml/objects/object_zod.xml
+  - name: objects/object_rsn
+    xml_path: assets/xml/objects/object_rsn.xml
+  - name: objects/object_bombf
+    xml_path: assets/xml/objects/object_bombf.xml
+  - name: objects/object_gi_schedule
+    xml_path: assets/xml/objects/object_gi_schedule.xml
+  - name: objects/object_milkbar
+    xml_path: assets/xml/objects/object_milkbar.xml
+  - name: objects/object_ny
+    xml_path: assets/xml/objects/object_ny.xml
+  - name: objects/object_kinsta2_obj
+    xml_path: assets/xml/objects/object_kinsta2_obj.xml
+  - name: objects/object_zoraband
+    xml_path: assets/xml/objects/object_zoraband.xml
+  - name: objects/object_spot11_obj
+    xml_path: assets/xml/objects/object_spot11_obj.xml
+  - name: objects/object_grasshopper
+    xml_path: assets/xml/objects/object_grasshopper.xml
+  - name: objects/object_gi_mask18
+    xml_path: assets/xml/objects/object_gi_mask18.xml
+  - name: objects/object_moonend
+    xml_path: assets/xml/objects/object_moonend.xml
+  - name: objects/object_gi_bigbomb
+    xml_path: assets/xml/objects/object_gi_bigbomb.xml
+  - name: objects/object_visiblock
+    xml_path: assets/xml/objects/object_visiblock.xml
+  - name: objects/object_dt
+    xml_path: assets/xml/objects/object_dt.xml
+  - name: objects/object_thiefbird
+    xml_path: assets/xml/objects/object_thiefbird.xml
+  - name: objects/object_gi_heart
+    xml_path: assets/xml/objects/object_gi_heart.xml
+  - name: objects/object_ob
+    xml_path: assets/xml/objects/object_ob.xml
+  - name: objects/object_f40_switch
+    xml_path: assets/xml/objects/object_f40_switch.xml
+  - name: objects/object_drs
+    xml_path: assets/xml/objects/object_drs.xml
+  - name: objects/object_bdoor
+    xml_path: assets/xml/objects/object_bdoor.xml
+  - name: objects/object_obj_milk_bin
+    xml_path: assets/xml/objects/object_obj_milk_bin.xml
+  - name: objects/object_kepn_koya
+    xml_path: assets/xml/objects/object_kepn_koya.xml
+  - name: objects/object_hgdoor
+    xml_path: assets/xml/objects/object_hgdoor.xml
+  - name: objects/object_dekubaba
+    xml_path: assets/xml/objects/object_dekubaba.xml
+  - name: objects/object_sek
+    xml_path: assets/xml/objects/object_sek.xml
+  - name: objects/object_gi_soldout
+    xml_path: assets/xml/objects/object_gi_soldout.xml
+  - name: objects/object_yukimura_obj
+    xml_path: assets/xml/objects/object_yukimura_obj.xml
+  - name: objects/object_hakugin_demo
+    xml_path: assets/xml/objects/object_hakugin_demo.xml
+  - name: objects/object_ds2n
+    xml_path: assets/xml/objects/object_ds2n.xml
+  - name: objects/object_mkk
+    xml_path: assets/xml/objects/object_mkk.xml
+  - name: objects/object_msmo
+    xml_path: assets/xml/objects/object_msmo.xml
+  - name: objects/object_hsstump
+    xml_path: assets/xml/objects/object_hsstump.xml
+  - name: objects/object_am
+    xml_path: assets/xml/objects/object_am.xml
+  - name: objects/object_mnk
+    xml_path: assets/xml/objects/object_mnk.xml
+  - name: objects/object_horse_game_check
+    xml_path: assets/xml/objects/object_horse_game_check.xml
+  - name: objects/object_mask_goron
+    xml_path: assets/xml/objects/object_mask_goron.xml
+  - name: objects/object_gi_bottle_16
+    xml_path: assets/xml/objects/object_gi_bottle_16.xml
+  - name: objects/object_yb
+    xml_path: assets/xml/objects/object_yb.xml
+  - name: objects/object_ssh
+    xml_path: assets/xml/objects/object_ssh.xml
+  - name: objects/object_knight
+    xml_path: assets/xml/objects/object_knight.xml
+  - name: objects/object_stream
+    xml_path: assets/xml/objects/object_stream.xml
+  - name: objects/object_kumo30
+    xml_path: assets/xml/objects/object_kumo30.xml
+  - name: objects/object_utubo
+    xml_path: assets/xml/objects/object_utubo.xml
+  - name: objects/object_dinofos
+    xml_path: assets/xml/objects/object_dinofos.xml
+  - name: objects/object_po
+    xml_path: assets/xml/objects/object_po.xml
+  - name: objects/object_gi_mask10
+    xml_path: assets/xml/objects/object_gi_mask10.xml
+  - name: objects/object_fz
+    xml_path: assets/xml/objects/object_fz.xml
+  - name: objects/object_sdn
+    xml_path: assets/xml/objects/object_sdn.xml
+  - name: objects/object_vm
+    xml_path: assets/xml/objects/object_vm.xml
+  - name: objects/object_gi_bean
+    xml_path: assets/xml/objects/object_gi_bean.xml
+  - name: objects/object_harfgibud
+    xml_path: assets/xml/objects/object_harfgibud.xml
+  - name: objects/object_bji
+    xml_path: assets/xml/objects/object_bji.xml
+  - name: objects/object_test3
+    xml_path: assets/xml/objects/object_test3.xml
+  - name: objects/object_mask_bu_san
+    xml_path: assets/xml/objects/object_mask_bu_san.xml
+  - name: objects/object_gi_arrowcase
+    xml_path: assets/xml/objects/object_gi_arrowcase.xml
+  - name: objects/object_gi_mask16
+    xml_path: assets/xml/objects/object_gi_mask16.xml
+  - name: objects/object_ice_block
+    xml_path: assets/xml/objects/object_ice_block.xml
+  - name: objects/object_ikana_obj
+    xml_path: assets/xml/objects/object_ikana_obj.xml
+  - name: objects/object_wallmaster
+    xml_path: assets/xml/objects/object_wallmaster.xml
+  - name: objects/object_b_heart
+    xml_path: assets/xml/objects/object_b_heart.xml
+  - name: objects/object_ahg
+    xml_path: assets/xml/objects/object_ahg.xml
+  - name: objects/object_sth
+    xml_path: assets/xml/objects/object_sth.xml
+  - name: objects/object_tanron2
+    xml_path: assets/xml/objects/object_tanron2.xml
+  - name: objects/object_takaraya_objects
+    xml_path: assets/xml/objects/object_takaraya_objects.xml
+  - name: objects/object_kinsta1_obj
+    xml_path: assets/xml/objects/object_kinsta1_obj.xml
+  - name: objects/object_gi_liquid
+    xml_path: assets/xml/objects/object_gi_liquid.xml
+  - name: objects/object_raf
+    xml_path: assets/xml/objects/object_raf.xml
+  - name: objects/object_st
+    xml_path: assets/xml/objects/object_st.xml
+  - name: objects/object_lastday
+    xml_path: assets/xml/objects/object_lastday.xml
+  - name: objects/object_obj_yasi
+    xml_path: assets/xml/objects/object_obj_yasi.xml
+  - name: objects/object_dekunuts
+    xml_path: assets/xml/objects/object_dekunuts.xml
+  - name: objects/object_hata
+    xml_path: assets/xml/objects/object_hata.xml
+  - name: objects/object_posthouse_obj
+    xml_path: assets/xml/objects/object_posthouse_obj.xml
+  - name: objects/object_gi_shield_2
+    xml_path: assets/xml/objects/object_gi_shield_2.xml
+  - name: objects/object_sinkai_kabe
+    xml_path: assets/xml/objects/object_sinkai_kabe.xml
+  - name: objects/object_hunsui
+    xml_path: assets/xml/objects/object_hunsui.xml
+  - name: objects/object_ha
+    xml_path: assets/xml/objects/object_ha.xml
+  - name: objects/object_link_nuts
+    xml_path: assets/xml/objects/object_link_nuts.xml
+  - name: objects/object_masterzoora
+    xml_path: assets/xml/objects/object_masterzoora.xml
+  - name: objects/object_gi_bomb_1
+    xml_path: assets/xml/objects/object_gi_bomb_1.xml
+  - name: objects/object_yabusame_point
+    xml_path: assets/xml/objects/object_yabusame_point.xml
+  - name: objects/object_big_fwall
+    xml_path: assets/xml/objects/object_big_fwall.xml
+  - name: objects/object_mask_bakuretu
+    xml_path: assets/xml/objects/object_mask_bakuretu.xml
+  - name: objects/object_bjt
+    xml_path: assets/xml/objects/object_bjt.xml
+  - name: objects/object_tokei_step
+    xml_path: assets/xml/objects/object_tokei_step.xml
+  - name: objects/object_kaizoku_obj
+    xml_path: assets/xml/objects/object_kaizoku_obj.xml
+  - name: objects/object_sekihig
+    xml_path: assets/xml/objects/object_sekihig.xml
+  - name: objects/object_efc_tw
+    xml_path: assets/xml/objects/object_efc_tw.xml
+  - name: objects/object_gi_shield_3
+    xml_path: assets/xml/objects/object_gi_shield_3.xml
+  - name: objects/object_nnh
+    xml_path: assets/xml/objects/object_nnh.xml
+  - name: objects/object_owl
+    xml_path: assets/xml/objects/object_owl.xml
+  - name: objects/object_mask_bigelf
+    xml_path: assets/xml/objects/object_mask_bigelf.xml
+  - name: objects/object_mask_gero
+    xml_path: assets/xml/objects/object_mask_gero.xml
+  - name: objects/object_gmo
+    xml_path: assets/xml/objects/object_gmo.xml
+  - name: objects/object_gi_nutsmask
+    xml_path: assets/xml/objects/object_gi_nutsmask.xml
+  - name: objects/object_bombiwa
+    xml_path: assets/xml/objects/object_bombiwa.xml
+  - name: objects/object_uch
+    xml_path: assets/xml/objects/object_uch.xml
+  - name: objects/object_toryo
+    xml_path: assets/xml/objects/object_toryo.xml
+  - name: objects/object_gi_stonemask
+    xml_path: assets/xml/objects/object_gi_stonemask.xml
+  - name: objects/object_gi_ocarina
+    xml_path: assets/xml/objects/object_gi_ocarina.xml
+  - name: objects/object_gi_hookshot
+    xml_path: assets/xml/objects/object_gi_hookshot.xml
+  - name: objects/object_ikninside_obj
+    xml_path: assets/xml/objects/object_ikninside_obj.xml
+  - name: objects/object_pr
+    xml_path: assets/xml/objects/object_pr.xml
+  - name: objects/object_gi_truth_mask
+    xml_path: assets/xml/objects/object_gi_truth_mask.xml
+  - name: objects/object_kanban
+    xml_path: assets/xml/objects/object_kanban.xml
+  - name: objects/object_umajump
+    xml_path: assets/xml/objects/object_umajump.xml
+  - name: objects/object_sekihin
+    xml_path: assets/xml/objects/object_sekihin.xml
+  - name: objects/object_wiz
+    xml_path: assets/xml/objects/object_wiz.xml
+  - name: objects/object_syokudai
+    xml_path: assets/xml/objects/object_syokudai.xml
+  - name: objects/object_gi_compass
+    xml_path: assets/xml/objects/object_gi_compass.xml
+  - name: objects/object_box
+    xml_path: assets/xml/objects/object_box.xml
+  - name: objects/object_gi_mask17
+    xml_path: assets/xml/objects/object_gi_mask17.xml
+  - name: objects/object_gi_bombpouch
+    xml_path: assets/xml/objects/object_gi_bombpouch.xml
+  - name: objects/object_dnk
+    xml_path: assets/xml/objects/object_dnk.xml
+  - name: objects/object_gi_bomb_2
+    xml_path: assets/xml/objects/object_gi_bomb_2.xml
+  - name: objects/object_gi_bosskey
+    xml_path: assets/xml/objects/object_gi_bosskey.xml
+  - name: objects/object_dy_obj
+    xml_path: assets/xml/objects/object_dy_obj.xml
+  - name: objects/object_bat
+    xml_path: assets/xml/objects/object_bat.xml
+  - name: objects/object_gi_camera
+    xml_path: assets/xml/objects/object_gi_camera.xml
+  - name: objects/object_os_anime
+    xml_path: assets/xml/objects/object_os_anime.xml
+  - name: objects/object_dekucity_obj
+    xml_path: assets/xml/objects/object_dekucity_obj.xml
+  - name: objects/object_mask_stone
+    xml_path: assets/xml/objects/object_mask_stone.xml
+  - name: objects/object_wf
+    xml_path: assets/xml/objects/object_wf.xml
+  - name: objects/object_bigslime
+    xml_path: assets/xml/objects/object_bigslime.xml
+  - name: objects/object_fish
+    xml_path: assets/xml/objects/object_fish.xml
+  - name: objects/object_mask_bree
+    xml_path: assets/xml/objects/object_mask_bree.xml
+  - name: objects/object_jg
+    xml_path: assets/xml/objects/object_jg.xml
+  - name: objects/object_fr
+    xml_path: assets/xml/objects/object_fr.xml
+  - name: objects/object_driftice
+    xml_path: assets/xml/objects/object_driftice.xml
+  - name: objects/object_gi_reserve_b_01
+    xml_path: assets/xml/objects/object_gi_reserve_b_01.xml
+  - name: objects/object_kgy
+    xml_path: assets/xml/objects/object_kgy.xml
+  - name: objects/object_mask_zora
+    xml_path: assets/xml/objects/object_mask_zora.xml
+  - name: objects/object_mbar_obj
+    xml_path: assets/xml/objects/object_mbar_obj.xml
+  - name: objects/object_ma2
+    xml_path: assets/xml/objects/object_ma2.xml
+  - name: objects/object_gi_golonmask
+    xml_path: assets/xml/objects/object_gi_golonmask.xml
+  - name: objects/object_kusa
+    xml_path: assets/xml/objects/object_kusa.xml
+  - name: objects/object_gi_magicpot
+    xml_path: assets/xml/objects/object_gi_magicpot.xml
+  - name: objects/object_mask_boy
+    xml_path: assets/xml/objects/object_mask_boy.xml
+  - name: objects/object_ma1
+    xml_path: assets/xml/objects/object_ma1.xml
+  - name: objects/object_zl4
+    xml_path: assets/xml/objects/object_zl4.xml
+  - name: objects/object_hintnuts
+    xml_path: assets/xml/objects/object_hintnuts.xml
+  - name: objects/object_keikoku_obj
+    xml_path: assets/xml/objects/object_keikoku_obj.xml
+  - name: objects/object_gi_zoramask
+    xml_path: assets/xml/objects/object_gi_zoramask.xml
+  - name: objects/object_gi_mask03
+    xml_path: assets/xml/objects/object_gi_mask03.xml
+  - name: objects/object_obj_tokeidai
+    xml_path: assets/xml/objects/object_obj_tokeidai.xml
+  - name: objects/object_gi_mask21
+    xml_path: assets/xml/objects/object_gi_mask21.xml
+  - name: objects/object_ctower_rot
+    xml_path: assets/xml/objects/object_ctower_rot.xml
+  - name: objects/object_gi_fieldmap
+    xml_path: assets/xml/objects/object_gi_fieldmap.xml
+  - name: objects/object_dhouse
+    xml_path: assets/xml/objects/object_dhouse.xml
+  - name: objects/object_mask_rabit
+    xml_path: assets/xml/objects/object_mask_rabit.xml
+  - name: objects/object_kibako
+    xml_path: assets/xml/objects/object_kibako.xml
+  - name: objects/object_boss_hakugin
+    xml_path: assets/xml/objects/object_boss_hakugin.xml
+  - name: objects/object_bubble
+    xml_path: assets/xml/objects/object_bubble.xml
+  - name: boot/fault_drawer
+    xml_path: assets/xml/boot/fault_drawer.xml
+    start_offset: 0x18BF0
+    end_offset: 0x18FF0
+  - name: boot/gfxprint
+    xml_path: assets/xml/boot/gfxprint.xml
+    start_offset: 0x16BF0
+    end_offset: 0x174A0
+  - name: overlays/ovl_Boss_05
+    xml_path: assets/xml/overlays/ovl_Boss_05.xml
+    start_offset: 0x3540
+    end_offset: 0x364C
+  - name: overlays/ovl_Oceff_Wipe2
+    xml_path: assets/xml/overlays/ovl_Oceff_Wipe2.xml
+    start_offset: 0x420
+    end_offset: 0x1688
+  - name: overlays/ovl_Obj_Jgame_Light
+    xml_path: assets/xml/overlays/ovl_Obj_Jgame_Light.xml
+    start_offset: 0x8FC
+    end_offset: 0xE40
+  - name: overlays/ovl_En_Holl
+    xml_path: assets/xml/overlays/ovl_En_Holl.xml
+    start_offset: 0x0BF0
+    end_offset: 0x0C58
+  - name: overlays/ovl_En_Mm3
+    xml_path: assets/xml/overlays/ovl_En_Mm3.xml
+    start_offset: 0x1448
+    end_offset: 0x1450
+  - name: overlays/ovl_Obj_Smork
+    xml_path: assets/xml/overlays/ovl_Obj_Smork.xml
+    start_offset: 0x0C10
+    end_offset: 0x0C80
+  - name: overlays/ovl_Obj_Entotu
+    xml_path: assets/xml/overlays/ovl_Obj_Entotu.xml
+    start_offset: 0x0D10
+    end_offset: 0x0D80
+  - name: overlays/ovl_Dm_Char08
+    xml_path: assets/xml/overlays/ovl_Dm_Char08.xml
+    start_offset: 0x2340
+    end_offset: 0x266C
+  - name: overlays/ovl_file_choose
+    xml_path: assets/xml/overlays/ovl_file_choose.xml
+    start_offset: 0xFDE0
+    end_offset: 0x101E0
+  - name: overlays/ovl_En_Tanron1
+    xml_path: assets/xml/overlays/ovl_En_Tanron1.xml
+    start_offset: 0x1028
+    end_offset: 0x1918
+  - name: overlays/ovl_Oceff_Wipe
+    xml_path: assets/xml/overlays/ovl_Oceff_Wipe.xml
+    start_offset: 0x4F0
+    end_offset: 0xCB0
+  - name: overlays/ovl_En_Kanban
+    xml_path: assets/xml/overlays/ovl_En_Kanban.xml
+    start_offset: 0x3440
+    end_offset: 0x3500
+  - name: overlays/ovl_En_Sth2
+    xml_path: assets/xml/overlays/ovl_En_Sth2.xml
+    start_offset: 0x460
+    end_offset: 0x2B30
+  - name: overlays/ovl_Oceff_Spot
+    xml_path: assets/xml/overlays/ovl_Oceff_Spot.xml
+    start_offset: 0x720
+    end_offset: 0xDF8
+  - name: overlays/ovl_Arrow_Ice
+    xml_path: assets/xml/overlays/ovl_Arrow_Ice.xml
+    start_offset: 0x980
+    end_offset: 0x1DA0
+  - name: overlays/ovl_Arrow_Fire
+    xml_path: assets/xml/overlays/ovl_Arrow_Fire.xml
+    start_offset: 0xAB0
+    end_offset: 0x1ED0
+  - name: overlays/ovl_fbdemo_triforce
+    xml_path: assets/xml/overlays/ovl_fbdemo_triforce.xml
+    start_offset: 0x5C0
+    end_offset: 0x690
+  - name: overlays/ovl_fbdemo_wipe1
+    xml_path: assets/xml/overlays/ovl_fbdemo_wipe1.xml
+    start_offset: 0x470
+    end_offset: 0xEF8
+  - name: overlays/ovl_En_Bom
+    xml_path: assets/xml/overlays/ovl_En_Bom.xml
+    start_offset: 0x2160
+    end_offset: 0x3610
+  - name: overlays/ovl_En_Gakufu
+    xml_path: assets/xml/overlays/ovl_En_Gakufu.xml
+    start_offset: 0x8D0
+    end_offset: 0x950
+  - name: overlays/ovl_Dm_Char01
+    xml_path: assets/xml/overlays/ovl_Dm_Char01.xml
+    start_offset: 0x1BE0
+    end_offset: 0x28B0
+  - name: overlays/ovl_Oceff_Wipe7
+    xml_path: assets/xml/overlays/ovl_Oceff_Wipe7.xml
+    start_offset: 0x330
+    end_offset: 0xDB8
+  - name: overlays/ovl_En_Bigslime
+    xml_path: assets/xml/overlays/ovl_En_Bigslime.xml
+    start_offset: 0x8680
+    end_offset: 0xAF00
+  - name: overlays/ovl_En_Syateki_Okuta
+    xml_path: assets/xml/overlays/ovl_En_Syateki_Okuta.xml
+    start_offset: 0x1640
+    end_offset: 0x1B98
+  - name: overlays/ovl_En_Horse_Game_Check
+    xml_path: assets/xml/overlays/ovl_En_Horse_Game_Check.xml
+    start_offset: 0x1080
+    end_offset: 0x10F4
+  - name: overlays/ovl_En_Bomjima
+    xml_path: assets/xml/overlays/ovl_En_Bomjima.xml
+    start_offset: 0x2998
+    end_offset: 0x29B8
+  - name: overlays/ovl_Oceff_Wipe6
+    xml_path: assets/xml/overlays/ovl_Oceff_Wipe6.xml
+    start_offset: 0x330
+    end_offset: 0x5B8
+  - name: overlays/ovl_En_Clear_Tag
+    xml_path: assets/xml/overlays/ovl_En_Clear_Tag.xml
+    start_offset: 0x2F00
+    end_offset: 0x5D00
+  - name: overlays/ovl_En_Bomjimb
+    xml_path: assets/xml/overlays/ovl_En_Bomjimb.xml
+    start_offset: 0x23A0
+    end_offset: 0x23C0
+  - name: overlays/ovl_En_Okuta
+    xml_path: assets/xml/overlays/ovl_En_Okuta.xml
+    start_offset: 0x2A50
+    end_offset: 0x2A60
+  - name: overlays/ovl_En_Bombers
+    xml_path: assets/xml/overlays/ovl_En_Bombers.xml
+    start_offset: 0x12C8
+    end_offset: 0x12E8
+  - name: overlays/ovl_Arrow_Light
+    xml_path: assets/xml/overlays/ovl_Arrow_Light.xml
+    start_offset: 0x960
+    end_offset: 0x1D80
+  - name: overlays/ovl_Oceff_Wipe4
+    xml_path: assets/xml/overlays/ovl_Oceff_Wipe4.xml
+    start_offset: 0x430
+    end_offset: 0xF18
+  - name: overlays/ovl_Oceff_Storm
+    xml_path: assets/xml/overlays/ovl_Oceff_Storm.xml
+    start_offset: 0x830
+    end_offset: 0x1BC0
+  - name: overlays/ovl_En_Bom_Bowl_Man
+    xml_path: assets/xml/overlays/ovl_En_Bom_Bowl_Man.xml
+    start_offset: 0x1A50
+    end_offset: 0x1A70
+  - name: overlays/ovl_Oceff_Wipe5
+    xml_path: assets/xml/overlays/ovl_Oceff_Wipe5.xml
+    start_offset: 0x440
+    end_offset: 0x16B8
+  - name: overlays/ovl_Oceff_Wipe3
+    xml_path: assets/xml/overlays/ovl_Oceff_Wipe3.xml
+    start_offset: 0x430
+    end_offset: 0x1678
+  - name: overlays/ovl_fbdemo_wipe3
+    xml_path: assets/xml/overlays/ovl_fbdemo_wipe3.xml
+    start_offset: 0x520
+    end_offset: 0x1C10
+  - name: overlays/ovl_En_Tru
+    xml_path: assets/xml/overlays/ovl_En_Tru.xml
+    start_offset: 0x33B0
+    end_offset: 0x5C30
+  - name: overlays/ovl_En_Sth
+    xml_path: assets/xml/overlays/ovl_En_Sth.xml
+    start_offset: 0x1890
+    end_offset: 0x646C
+  - name: overlays/ovl_Obj_Toudai
+    xml_path: assets/xml/overlays/ovl_Obj_Toudai.xml
+    start_offset: 0xA90
+    end_offset: 0xB70
+  - name: overlays/ovl_Obj_Grass
+    xml_path: assets/xml/overlays/ovl_Obj_Grass.xml
+    start_offset: 0x18E0
+    end_offset: 0x19F0
+  - name: overlays/ovl_En_Sda
+    xml_path: assets/xml/overlays/ovl_En_Sda.xml
+    start_offset: 0x1458
+    end_offset: 0x14E8
+  - name: overlays/ovl_En_Mm2
+    xml_path: assets/xml/overlays/ovl_En_Mm2.xml
+    start_offset: 0x240
+    end_offset: 0xAD0
+  - name: overlays/ovl_Effect_Ss_Fhg_Flash
+    xml_path: assets/xml/overlays/ovl_Effect_Ss_Fhg_Flash.xml
+    start_offset: 0x550
+    end_offset: 0xA08
+  - name: interface/do_action_static
+    xml_path: assets/xml/interface/do_action_static.xml
+  - name: interface/week_static
+    xml_path: assets/xml/interface/week_static.xml
+  - name: interface/icon_item_field_static
+    xml_path: assets/xml/interface/icon_item_field_static.xml
+  - name: interface/nes_font_static
+    xml_path: assets/xml/interface/nes_font_static.xml
+  - name: interface/message_texture_static
+    xml_path: assets/xml/interface/message_texture_static.xml
+  - name: interface/icon_item_jpn_static
+    xml_path: assets/xml/interface/icon_item_jpn_static.xml
+  - name: interface/icon_item_dungeon_static
+    xml_path: assets/xml/interface/icon_item_dungeon_static.xml
+  - name: interface/icon_item_vtx_static
+    xml_path: assets/xml/interface/icon_item_vtx_static.xml
+  - name: interface/icon_item_gameover_static
+    xml_path: assets/xml/interface/icon_item_gameover_static.xml
+  - name: interface/parameter_static
+    xml_path: assets/xml/interface/parameter_static.xml
+  - name: interface/kanji
+    xml_path: assets/xml/interface/kanji.xml
+  - name: interface/message_static
+    xml_path: assets/xml/interface/message_static.xml
+  - name: interface/schedule_static
+    xml_path: assets/xml/interface/schedule_static.xml
+  - name: scenes/Z2_12HAKUGINMAE
+    xml_path: assets/xml/scenes/Z2_12HAKUGINMAE/Z2_12HAKUGINMAE.xml
+  - name: scenes/Z2_INSIDETOWER
+    xml_path: assets/xml/scenes/Z2_INSIDETOWER/Z2_INSIDETOWER.xml
+  - name: scenes/Z2_30GYOSON
+    xml_path: assets/xml/scenes/Z2_30GYOSON/Z2_30GYOSON.xml
+  - name: scenes/Z2_BOTI
+    xml_path: assets/xml/scenes/Z2_BOTI/Z2_BOTI.xml
+  - name: scenes/Z2_22DEKUCITY
+    xml_path: assets/xml/scenes/Z2_22DEKUCITY/Z2_22DEKUCITY.xml
+  - name: scenes/Z2_KAJIYA
+    xml_path: assets/xml/scenes/Z2_KAJIYA/Z2_KAJIYA.xml
+  - name: scenes/Z2_KONPEKI_ENT
+    xml_path: assets/xml/scenes/Z2_KONPEKI_ENT/Z2_KONPEKI_ENT.xml
+  - name: scenes/Z2_GORON_HAKA
+    xml_path: assets/xml/scenes/Z2_GORON_HAKA/Z2_GORON_HAKA.xml
+  - name: scenes/Z2_TAKARAYA
+    xml_path: assets/xml/scenes/Z2_TAKARAYA/Z2_TAKARAYA.xml
+  - name: scenes/Z2_F41
+    xml_path: assets/xml/scenes/Z2_F41/Z2_F41.xml
+  - name: scenes/Z2_24KEMONOMITI
+    xml_path: assets/xml/scenes/Z2_24KEMONOMITI/Z2_24KEMONOMITI.xml
+  - name: scenes/Z2_OMOYA
+    xml_path: assets/xml/scenes/Z2_OMOYA/Z2_OMOYA.xml
+  - name: scenes/Z2_GORONSHOP
+    xml_path: assets/xml/scenes/Z2_GORONSHOP/Z2_GORONSHOP.xml
+  - name: scenes/Z2_DANPEI
+    xml_path: assets/xml/scenes/Z2_DANPEI/Z2_DANPEI.xml
+  - name: scenes/Z2_20SICHITAI2
+    xml_path: assets/xml/scenes/Z2_20SICHITAI2/Z2_20SICHITAI2.xml
+  - name: scenes/Z2_SEA_BS
+    xml_path: assets/xml/scenes/Z2_SEA_BS/Z2_SEA_BS.xml
+  - name: scenes/Z2_SYATEKI_MORI
+    xml_path: assets/xml/scenes/Z2_SYATEKI_MORI/Z2_SYATEKI_MORI.xml
+  - name: scenes/Z2_BOMYA
+    xml_path: assets/xml/scenes/Z2_BOMYA/Z2_BOMYA.xml
+  - name: scenes/Z2_HAKUGIN
+    xml_path: assets/xml/scenes/Z2_HAKUGIN/Z2_HAKUGIN.xml
+  - name: scenes/Z2_LAST_LINK
+    xml_path: assets/xml/scenes/Z2_LAST_LINK/Z2_LAST_LINK.xml
+  - name: scenes/Z2_WITCH_SHOP
+    xml_path: assets/xml/scenes/Z2_WITCH_SHOP/Z2_WITCH_SHOP.xml
+  - name: scenes/Z2_AYASHIISHOP
+    xml_path: assets/xml/scenes/Z2_AYASHIISHOP/Z2_AYASHIISHOP.xml
+  - name: scenes/Z2_35TAKI
+    xml_path: assets/xml/scenes/Z2_35TAKI/Z2_35TAKI.xml
+  - name: scenes/Z2_00KEIKOKU
+    xml_path: assets/xml/scenes/Z2_00KEIKOKU/Z2_00KEIKOKU.xml
+  - name: scenes/Z2_INISIE_R
+    xml_path: assets/xml/scenes/Z2_INISIE_R/Z2_INISIE_R.xml
+  - name: scenes/Z2_10YUKIYAMANOMURA2
+    xml_path: assets/xml/scenes/Z2_10YUKIYAMANOMURA2/Z2_10YUKIYAMANOMURA2.xml
+  - name: scenes/Z2_17SETUGEN2
+    xml_path: assets/xml/scenes/Z2_17SETUGEN2/Z2_17SETUGEN2.xml
+  - name: scenes/Z2_ROMANYMAE
+    xml_path: assets/xml/scenes/Z2_ROMANYMAE/Z2_ROMANYMAE.xml
+  - name: scenes/SPOT00
+    xml_path: assets/xml/scenes/SPOT00/SPOT00.xml
+  - name: scenes/Z2_11GORONNOSATO
+    xml_path: assets/xml/scenes/Z2_11GORONNOSATO/Z2_11GORONNOSATO.xml
+  - name: scenes/Z2_SONCHONOIE
+    xml_path: assets/xml/scenes/Z2_SONCHONOIE/Z2_SONCHONOIE.xml
+  - name: scenes/Z2_OKUJOU
+    xml_path: assets/xml/scenes/Z2_OKUJOU/Z2_OKUJOU.xml
+  - name: scenes/Z2_POSTHOUSE
+    xml_path: assets/xml/scenes/Z2_POSTHOUSE/Z2_POSTHOUSE.xml
+  - name: scenes/Z2_REDEAD
+    xml_path: assets/xml/scenes/Z2_REDEAD/Z2_REDEAD.xml
+  - name: scenes/Z2_MILK_BAR
+    xml_path: assets/xml/scenes/Z2_MILK_BAR/Z2_MILK_BAR.xml
+  - name: scenes/Z2_RANDOM
+    xml_path: assets/xml/scenes/Z2_RANDOM/Z2_RANDOM.xml
+  - name: scenes/KAKUSIANA
+    xml_path: assets/xml/scenes/KAKUSIANA/KAKUSIANA.xml
+  - name: scenes/Z2_LOST_WOODS
+    xml_path: assets/xml/scenes/Z2_LOST_WOODS/Z2_LOST_WOODS.xml
+  - name: scenes/Z2_HAKASHITA
+    xml_path: assets/xml/scenes/Z2_HAKASHITA/Z2_HAKASHITA.xml
+  - name: scenes/Z2_KAIZOKU
+    xml_path: assets/xml/scenes/Z2_KAIZOKU/Z2_KAIZOKU.xml
+  - name: scenes/Z2_IKANA
+    xml_path: assets/xml/scenes/Z2_IKANA/Z2_IKANA.xml
+  - name: scenes/Z2_21MITURINMAE
+    xml_path: assets/xml/scenes/Z2_21MITURINMAE/Z2_21MITURINMAE.xml
+  - name: scenes/Z2_KYOJINNOMA
+    xml_path: assets/xml/scenes/Z2_KYOJINNOMA/Z2_KYOJINNOMA.xml
+  - name: scenes/Z2_SINKAI
+    xml_path: assets/xml/scenes/Z2_SINKAI/Z2_SINKAI.xml
+  - name: scenes/Z2_LAST_BS
+    xml_path: assets/xml/scenes/Z2_LAST_BS/Z2_LAST_BS.xml
+  - name: scenes/Z2_10YUKIYAMANOMURA
+    xml_path: assets/xml/scenes/Z2_10YUKIYAMANOMURA/Z2_10YUKIYAMANOMURA.xml
+  - name: scenes/Z2_SYATEKI_MIZU
+    xml_path: assets/xml/scenes/Z2_SYATEKI_MIZU/Z2_SYATEKI_MIZU.xml
+  - name: scenes/Z2_11GORONNOSATO2
+    xml_path: assets/xml/scenes/Z2_11GORONNOSATO2/Z2_11GORONNOSATO2.xml
+  - name: scenes/Z2_MUSICHOUSE
+    xml_path: assets/xml/scenes/Z2_MUSICHOUSE/Z2_MUSICHOUSE.xml
+  - name: scenes/Z2_LAST_GORON
+    xml_path: assets/xml/scenes/Z2_LAST_GORON/Z2_LAST_GORON.xml
+  - name: scenes/Z2_ICHIBA
+    xml_path: assets/xml/scenes/Z2_ICHIBA/Z2_ICHIBA.xml
+  - name: scenes/Z2_DOUJOU
+    xml_path: assets/xml/scenes/Z2_DOUJOU/Z2_DOUJOU.xml
+  - name: scenes/Z2_F01_B
+    xml_path: assets/xml/scenes/Z2_F01_B/Z2_F01_B.xml
+  - name: scenes/Z2_YADOYA
+    xml_path: assets/xml/scenes/Z2_YADOYA/Z2_YADOYA.xml
+  - name: scenes/Z2_LAST_DEKU
+    xml_path: assets/xml/scenes/Z2_LAST_DEKU/Z2_LAST_DEKU.xml
+  - name: scenes/Z2_TAKARAKUJI
+    xml_path: assets/xml/scenes/Z2_TAKARAKUJI/Z2_TAKARAKUJI.xml
+  - name: scenes/Z2_ALLEY
+    xml_path: assets/xml/scenes/Z2_ALLEY/Z2_ALLEY.xml
+  - name: scenes/Z2_16GORON_HOUSE
+    xml_path: assets/xml/scenes/Z2_16GORON_HOUSE/Z2_16GORON_HOUSE.xml
+  - name: scenes/Z2_33ZORACITY
+    xml_path: assets/xml/scenes/Z2_33ZORACITY/Z2_33ZORACITY.xml
+  - name: scenes/Z2_DEKUTES
+    xml_path: assets/xml/scenes/Z2_DEKUTES/Z2_DEKUTES.xml
+  - name: scenes/Z2_F01
+    xml_path: assets/xml/scenes/Z2_F01/Z2_F01.xml
+  - name: scenes/Z2_17SETUGEN
+    xml_path: assets/xml/scenes/Z2_17SETUGEN/Z2_17SETUGEN.xml
+  - name: scenes/Z2_DEKU_KING
+    xml_path: assets/xml/scenes/Z2_DEKU_KING/Z2_DEKU_KING.xml
+  - name: scenes/Z2_14YUKIDAMANOMITI
+    xml_path: assets/xml/scenes/Z2_14YUKIDAMANOMITI/Z2_14YUKIDAMANOMITI.xml
+  - name: scenes/Z2_KINDAN2
+    xml_path: assets/xml/scenes/Z2_KINDAN2/Z2_KINDAN2.xml
+  - name: scenes/Z2_KINSTA1
+    xml_path: assets/xml/scenes/Z2_KINSTA1/Z2_KINSTA1.xml
+  - name: scenes/Z2_31MISAKI
+    xml_path: assets/xml/scenes/Z2_31MISAKI/Z2_31MISAKI.xml
+  - name: scenes/Z2_F01C
+    xml_path: assets/xml/scenes/Z2_F01C/Z2_F01C.xml
+  - name: scenes/Z2_26SARUNOMORI
+    xml_path: assets/xml/scenes/Z2_26SARUNOMORI/Z2_26SARUNOMORI.xml
+  - name: scenes/Z2_8ITEMSHOP
+    xml_path: assets/xml/scenes/Z2_8ITEMSHOP/Z2_8ITEMSHOP.xml
+  - name: scenes/Z2_13HUBUKINOMITI
+    xml_path: assets/xml/scenes/Z2_13HUBUKINOMITI/Z2_13HUBUKINOMITI.xml
+  - name: scenes/Z2_KOEPONARACE
+    xml_path: assets/xml/scenes/Z2_KOEPONARACE/Z2_KOEPONARACE.xml
+  - name: scenes/Z2_SEA
+    xml_path: assets/xml/scenes/Z2_SEA/Z2_SEA.xml
+  - name: scenes/Z2_INISIE_BS
+    xml_path: assets/xml/scenes/Z2_INISIE_BS/Z2_INISIE_BS.xml
+  - name: scenes/Z2_BANDROOM
+    xml_path: assets/xml/scenes/Z2_BANDROOM/Z2_BANDROOM.xml
+  - name: scenes/Z2_YOUSEI_IZUMI
+    xml_path: assets/xml/scenes/Z2_YOUSEI_IZUMI/Z2_YOUSEI_IZUMI.xml
+  - name: scenes/Z2_TENMON_DAI
+    xml_path: assets/xml/scenes/Z2_TENMON_DAI/Z2_TENMON_DAI.xml
+  - name: scenes/Z2_PIRATE
+    xml_path: assets/xml/scenes/Z2_PIRATE/Z2_PIRATE.xml
+  - name: scenes/Z2_BOWLING
+    xml_path: assets/xml/scenes/Z2_BOWLING/Z2_BOWLING.xml
+  - name: scenes/Z2_F40
+    xml_path: assets/xml/scenes/Z2_F40/Z2_F40.xml
+  - name: scenes/Z2_BACKTOWN
+    xml_path: assets/xml/scenes/Z2_BACKTOWN/Z2_BACKTOWN.xml
+  - name: scenes/Z2_CASTLE
+    xml_path: assets/xml/scenes/Z2_CASTLE/Z2_CASTLE.xml
+  - name: scenes/Z2_SECOM
+    xml_path: assets/xml/scenes/Z2_SECOM/Z2_SECOM.xml
+  - name: scenes/Z2_DANPEI2TEST
+    xml_path: assets/xml/scenes/Z2_DANPEI2TEST/Z2_DANPEI2TEST.xml
+  - name: scenes/Z2_LAST_ZORA
+    xml_path: assets/xml/scenes/Z2_LAST_ZORA/Z2_LAST_ZORA.xml
+  - name: scenes/Z2_FISHERMAN
+    xml_path: assets/xml/scenes/Z2_FISHERMAN/Z2_FISHERMAN.xml
+  - name: scenes/Z2_INISIE_N
+    xml_path: assets/xml/scenes/Z2_INISIE_N/Z2_INISIE_N.xml
+  - name: scenes/Z2_SOUGEN
+    xml_path: assets/xml/scenes/Z2_SOUGEN/Z2_SOUGEN.xml
+  - name: scenes/Z2_HAKUGIN_BS
+    xml_path: assets/xml/scenes/Z2_HAKUGIN_BS/Z2_HAKUGIN_BS.xml
+  - name: scenes/Z2_TORIDE
+    xml_path: assets/xml/scenes/Z2_TORIDE/Z2_TORIDE.xml
+  - name: scenes/Z2_CLOCKTOWER
+    xml_path: assets/xml/scenes/Z2_CLOCKTOWER/Z2_CLOCKTOWER.xml
+  - name: scenes/Z2_LABO
+    xml_path: assets/xml/scenes/Z2_LABO/Z2_LABO.xml
+  - name: scenes/Z2_IKANAMAE
+    xml_path: assets/xml/scenes/Z2_IKANAMAE/Z2_IKANAMAE.xml
+  - name: scenes/Z2_TOWN
+    xml_path: assets/xml/scenes/Z2_TOWN/Z2_TOWN.xml
+  - name: scenes/Z2_MAP_SHOP
+    xml_path: assets/xml/scenes/Z2_MAP_SHOP/Z2_MAP_SHOP.xml
+  - name: scenes/Z2_GORONRACE
+    xml_path: assets/xml/scenes/Z2_GORONRACE/Z2_GORONRACE.xml
+  - name: scenes/Z2_MITURIN
+    xml_path: assets/xml/scenes/Z2_MITURIN/Z2_MITURIN.xml
+  - name: scenes/Z2_IKNINSIDE
+    xml_path: assets/xml/scenes/Z2_IKNINSIDE/Z2_IKNINSIDE.xml
+  - name: scenes/Z2_MITURIN_BS
+    xml_path: assets/xml/scenes/Z2_MITURIN_BS/Z2_MITURIN_BS.xml
+  - name: scenes/Z2_20SICHITAI
+    xml_path: assets/xml/scenes/Z2_20SICHITAI/Z2_20SICHITAI.xml
+  - name: scenes/Z2_OPENINGDAN
+    xml_path: assets/xml/scenes/Z2_OPENINGDAN/Z2_OPENINGDAN.xml
+  - name: scenes/Z2_TOUGITES
+    xml_path: assets/xml/scenes/Z2_TOUGITES/Z2_TOUGITES.xml
+  - name: archives/icon_item_24_static
+    xml_path: assets/xml/archives/icon_item_24_static.xml
+  - name: archives/item_name_static
+    xml_path: assets/xml/archives/item_name_static.xml
+  - name: archives/map_name_static
+    xml_path: assets/xml/archives/map_name_static.xml
+  - name: archives/map_grand_static
+    xml_path: assets/xml/archives/map_grand_static.xml
+  - name: archives/map_i_static
+    xml_path: assets/xml/archives/map_i_static.xml
+  - name: archives/schedule_dma_static
+    xml_path: assets/xml/archives/schedule_dma_static.xml
+  - name: archives/icon_item_static
+    xml_path: assets/xml/archives/icon_item_static.xml

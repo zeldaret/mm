@@ -9,11 +9,11 @@
 #define GFXP_FLAG_OPEN (1 << 7)
 
 u64 sGfxPrintFontTLUT[] = {
-#include "assets/boot/gfxprint/gfx_print_font_tlut.rgba16.inc.c"
+#include "assets/boot/gfxprint/sGfxPrintFontTLUT.rgba16.inc.c"
 };
 
 u64 sGfxPrintRainbowTLUT[] = {
-#include "assets/boot/gfxprint/gfx_print_rainbow_tlut.rgba16.inc.c"
+#include "assets/boot/gfxprint/sGfxPrintRainbowTLUT.rgba16.inc.c"
 };
 
 u8 sGfxPrintRainbowFont[] = {

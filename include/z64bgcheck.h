@@ -55,11 +55,15 @@ struct DynaPolyActor;
 #define BGCHECK_IGNORE_WALL (1 << 1)
 #define BGCHECK_IGNORE_FLOOR (1 << 2)
 
+// flags for flags_vIA
 // xpFlags (poly exclusion flags)
 #define COLPOLY_IGNORE_NONE 0
 #define COLPOLY_IGNORE_CAMERA (1 << 0)
 #define COLPOLY_IGNORE_ENTITY (1 << 1)
 #define COLPOLY_IGNORE_PROJECTILES (1 << 2)
+
+// flags for flags_vIB
+#define COLPOLY_IS_FLOOR_CONVEYOR (1 << 0)
 
 // CollisionContext flags
 #define BGCHECK_FLAG_REVERSE_CONVEYOR_FLOW 1

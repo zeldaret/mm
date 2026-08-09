@@ -1,5 +1,6 @@
 # Output files
 *.exe
+bin2c
 mkdmadata
 mkldscript
 reloc_prereq
