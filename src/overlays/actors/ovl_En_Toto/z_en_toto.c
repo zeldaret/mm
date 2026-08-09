@@ -23,7 +23,7 @@ void EnToto_Action_Talk(EnToto* this, PlayState* play);
 void EnToto_SetupAction_SoundCheck(EnToto* this, PlayState* play);
 s32 EnToto_SetupTalk_ReturnTrue(EnToto* this, PlayState* play);
 s32 EnToto_SetupTalk_DoNothing(EnToto* this, PlayState* play);
-s32 func_80BA3EE8(EnToto* this, PlayState* play);
+s32 EnToto_HandleTalk_AfterChoice(EnToto* this, PlayState* play);
 s32 EnToto_SetupTalk_NextMessage(EnToto* this, PlayState* play);
 s32 EnToto_SetupTalk_SetNextMessageTimer(EnToto* this, PlayState* play);
 s32 EnToto_HandleTalk_Wait(EnToto* this, PlayState* play);
@@ -119,7 +119,7 @@ typedef enum EnTotoAnimation {
     /* 4 */ ENTOTO_ANIM_MAX
 } EnTotoAnimation;
 
-static AnimationHeader* sAnimations[ENTOTO_ANIM_MAX] = {
+static AnimationHeader* sTalkSittingAnimations[ENTOTO_ANIM_MAX] = {
     &gTotoTalkSittingAnim, // ENTOTO_ANIM_TALK_SITTING
     &gTotoMoveCaneBehindHeadAnim, // ENTOTO_ANIM_MOVE_CANE_BEHIND_HEAD
     &gTotoTapHeadWithCaneAnim, // ENTOTO_ANIM_TAP_HEAD_WITH_CANE
@@ -210,8 +210,8 @@ static EnTotoTalkFunc sTalkStateHandlerFuncs[] = {
     EnToto_HandleTalk_Event, 
     EnToto_HandleTalk_Closing, 
     EnToto_HandleTalk_Choice, 
-    func_80BA3EE8, 
-    func_80BA3EE8, 
+    EnToto_HandleTalk_AfterChoice, 
+    EnToto_HandleTalk_AfterChoice, 
     EnToto_HandleTalk_StartCutscene,
     EnToto_HandleTalk_SoundCheck_MovePlayerToStage, 
     EnToto_HandleTalk_SoundCheck_WaitForPromptTextbox,
@@ -237,7 +237,7 @@ static EnTotoActionFunc sActionHandlerFuncs[] = {
 */
 
 void EnToto_SetMainAction(EnToto* this, PlayState* play, s32 index) {
-    this->unk2B7 = false;
+    this->shouldPlaySoundCheckCompleteCutscene = false;
     this->actionFuncIndex = index;
     sActionSetupFuncs[this->actionFuncIndex](this, play);
 }
@@ -254,7 +254,7 @@ void EnToto_Init(Actor* thisx, PlayState* play) {
     }
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 30.0f);
     this->actor.bgCheckFlags |= BGCHECKFLAG_PLAYER_400;
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_zm_Skel_00A978,
+    SkelAnime_InitFlex(play, &this->skelAnime, &gTotoSkel,
                        ((play->sceneId == SCENE_SONCHONOIE) ? &gTotoIdleSittingAnim : &gTotoIdleStandingAnim),
                        this->jointTable, this->morphTable, OBJECT_ZM_LIMB_MAX);
     EnToto_SetMainAction(this, play, 0);
@@ -267,15 +267,15 @@ void EnToto_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-void func_80BA383C(EnToto* this, PlayState* play) {     // Update Animation
+void EnToto_UpdateAnimation(EnToto* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime) && (this->actionFuncIndex == 1) &&   // If animation is finished and is talking to player
-        (this->skelAnime.animation != &object_zm_Anim_000C80)) {                // And animation is not Greeting Link
+        (this->skelAnime.animation != &gTotoWaveHelloAnim)) {                // And animation is not Greeting Link
         if ((play->msgCtx.currentTextId != 0x2A98) && (play->msgCtx.currentTextId != 0x2A99)) { // First 2 text boxes after Mayor's Residence greeting ("That's the greeting used among us...", "Oh, forgive me...")
             if ((this->animIndex & 1) || (Rand_ZeroOne() > 0.5f)) {
                 this->animIndex = (this->animIndex + 1) & 3;        // Tap on head with cane (50% chance)
             }
         }
-        Animation_PlayOnce(&this->skelAnime, sAnimations[this->animIndex]);
+        Animation_PlayOnce(&this->skelAnime, sTalkSittingAnimations[this->animIndex]);
     }
     FaceChange_UpdateBlinkingNonHuman(&this->faceChange, 20, 80, 3);
 }
@@ -305,7 +305,7 @@ s32 EnToto_IsFacingPlayer(EnToto* this, s16 angle) {
 void EnToto_Action_Idle(EnToto* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    func_80BA383C(this, play); // Update animation
+    EnToto_UpdateAnimation(this, play); // Update animation
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         EnToto_SetMainAction(this, play, 1);
 
@@ -314,17 +314,17 @@ void EnToto_Action_Idle(EnToto* this, PlayState* play) {
         } else if (player->transformation == PLAYER_FORM_DEKU) {
             Flags_SetSwitch(play, ENTOTO_GET_DEKU_SPOKEN_FLAG(&this->actor));
         }
-        this->isPlayerCancelingSoundCheck = 0;
+        this->shouldCancelSoundCheck = 0;
         return;
     }
 
-    // If (in Milk Bar before 10:13 PM) or (not in Milk Bar and is facing player)
+    // If (in Milk Bar and it is not between 6 AM and 10:13 PM) or (not in Milk Bar and is facing player), offer talk
     if (((play->sceneId == SCENE_MILK_BAR) &&
          !((CURRENT_TIME >= CLOCK_TIME(6, 0)) && (CURRENT_TIME <= (CLOCK_TIME(22, 13) + 7)))) ||    // Toto refuses to talk to you until 10:13 PM + 7 ticks ( = 0xED02)
         ((play->sceneId != SCENE_MILK_BAR) && EnToto_IsFacingPlayer(this, 0x2000))) {
-        // If left stage, auto-talk with "Oh, that's too bad" message
-        if (this->isPlayerCancelingSoundCheck != 0) {
-            this->text = &sSpeakData1[6];
+
+        if (this->shouldCancelSoundCheck != 0) { // If player left stage during last frame
+            this->text = &sSpeakData1[6];               // "Oh, that's too bad."
             this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
             Actor_OfferTalkExchange(&this->actor, play, 9999.9f, 9999.9f, PLAYER_IA_NONE);
         } else {
@@ -358,13 +358,13 @@ void EnToto_Action_Idle(EnToto* this, PlayState* play) {
 */
 void EnToto_SetupAction_Talk(EnToto* this, PlayState* play) {
     if (play->sceneId == SCENE_SONCHONOIE) {
-        Animation_MorphToPlayOnce(&this->skelAnime, &object_zm_Anim_000C80, -4.0f); // Hold hand up while talking
+        Animation_MorphToPlayOnce(&this->skelAnime, &gTotoWaveHelloAnim, -4.0f); // Hold hand up while talking
         this->animIndex = ENTOTO_ANIM_TALK_SITTING;
     } else {
         if (this->text->talkActionIndex == 4) {
             Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_TOTO);
         }
-        Animation_MorphToLoop(&this->skelAnime, &object_zm_Anim_00B3E0, -4.0f);
+        Animation_MorphToLoop(&this->skelAnime, &gTotoTalkStandingAnim, -4.0f);
     }
 }
 
@@ -373,7 +373,7 @@ void EnToto_TurnTowardsPlayer(EnToto* this) {
 }
 
 void EnToto_Action_Talk(EnToto* this, PlayState* play) {     // Talk?
-    func_80BA383C(this, play);
+    EnToto_UpdateAnimation(this, play);
     EnToto_TurnTowardsPlayer(this);
     if (Actor_TextboxIsClosing(&this->actor, play)) {
         EnToto_SetMainAction(this, play, this->text->argument);
@@ -393,13 +393,13 @@ void EnToto_SetupAction_SoundCheck(EnToto* this, PlayState* play) {
 void EnToto_Action_SoundCheck(EnToto* this, PlayState* play) {
     Player* player;
 
-    func_80BA383C(this, play);
-    if (!this->unk2B7) {
+    EnToto_UpdateAnimation(this, play);
+    if (!this->shouldPlaySoundCheckCompleteCutscene) {
         if (!EnToto_NextTalkStateTriggersCutscene(this, play)) {
             return;
         }
         if ((this->text->argument != 0) && ENTOTO_FINISHED_WIND_FISH) {
-            this->unk2B7 = true;
+            this->shouldPlaySoundCheckCompleteCutscene = true;
             return;
         }
     } else {
@@ -430,7 +430,7 @@ s32 EnToto_SetupTalk_DoNothing(EnToto* this, PlayState* play) {
     Sets up Link's "Wait" animation/cutscene if text argument is 2
     Argument is 2 if select "Yes" (should init sound check)
 */
-s32 func_80BA3EE8(EnToto* this, PlayState* play) {
+s32 EnToto_HandleTalk_AfterChoice(EnToto* this, PlayState* play) {
     if (this->text->argument == 2) {
         Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_WAIT);
     }
@@ -444,7 +444,7 @@ s32 EnToto_SetupTalk_NextMessage(EnToto* this, PlayState* play) {
         Message_ContinueTextbox(play, this->text->textId);
     } else {
         Message_CloseTextbox(play);
-        func_80BA3EE8(this, play);
+        EnToto_HandleTalk_AfterChoice(this, play);
     }
     if (this->text->talkActionIndex == 4) {
         Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_TOTO);
@@ -672,7 +672,7 @@ s32 EnToto_HandleTalk_SoundCheck_WaitForPlayerToEnterSpotlight(EnToto* this, Pla
         if (this->spotlights != NULL) {
             Actor_Kill(this->spotlights);
         }
-        this->isPlayerCancelingSoundCheck = 1;
+        this->shouldCancelSoundCheck = 1;
         return this->text->argument;        // "Oh, that's too bad."
     }
     if (player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
@@ -858,19 +858,19 @@ s32 EnToto_NextTalkStateTriggersCutscene(EnToto* this, PlayState* play) {
 }
 
 /*
-    Finish Wind Fish minigame?
+    
 */
-void func_80BA4CB4(EnToto* this, PlayState* play) {
+void EnToto_HandleGormanCutscene(EnToto* this, PlayState* play) {
     CsCmdActorCue* cue = play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_525)];
 
     if (this->cueId != cue->id) {
         this->cueId = cue->id;
         if (this->cueId != 4) {
             if (this->cueId == 3) {     /* cueId 3 == "Alright! That feels good!" */
-                Animation_MorphToPlayOnce(&this->skelAnime, &object_zm_Anim_001DF0, -4.0f);
+                Animation_MorphToPlayOnce(&this->skelAnime, &gTotoCheerAnim, -4.0f);
             } else {                    /* cueId 2 == Turn to look at Gorman*/
                 Animation_PlayOnce(&this->skelAnime,
-                                   (this->cueId == 1) ? &object_zm_Anim_0016A4 : &object_zm_Anim_0022C8);
+                                   (this->cueId == 1) ? &gTotoTurnLookAtStageAnim : &gTotoTurnLookAtGormanAnim);
                 if ((this->cueId == 2) && (this->windFishFormsPlayed != 0xF)) {
                     Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_TOTO);
                     Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN);
@@ -878,10 +878,10 @@ void func_80BA4CB4(EnToto* this, PlayState* play) {
             }
         }
     }
-    Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 0x320); // Turn him towards the cs' requested direction
+    Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 0x320);
     if (SkelAnime_Update(&this->skelAnime)) {
         if (this->cueId != 3) {
-            Animation_PlayLoop(&this->skelAnime, (this->cueId == 1) ? &gTotoIdleStandingAnim : &object_zm_Anim_001324);
+            Animation_PlayLoop(&this->skelAnime, (this->cueId == 1) ? &gTotoIdleStandingAnim : &gTotoIdleLookAtGormanAnim);
         }
     }
     if ((this->cueId == 4) && !Actor_HasParent(&this->actor, play)) {
@@ -894,7 +894,7 @@ void EnToto_Update(Actor* thisx, PlayState* play) {
     s32 pad;
 
     if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_525)) {
-        func_80BA4CB4(this, play);          // Update cutscene. Gorman interaction only? Or any?
+        EnToto_HandleGormanCutscene(this, play);          // Update cutscene. Gorman interaction only? Or any?
     } else {
         sActionHandlerFuncs[this->actionFuncIndex](this, play);
     }

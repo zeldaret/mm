@@ -39,9 +39,9 @@ typedef struct EnToto {
     /* 0x2B2 */ s8 csId;
     /* 0x2B3 */ u8 windFishFormsPlayed;
     /* 0x2B4 */ u8 animIndex;
-    /* 0x2B5 */ u8 cueId;
-    /* 0x2B6 */ u8 isPlayerCancelingSoundCheck;          // Only ever set to 1 before canceling spotlight scene
-    /* 0x2B7 */ u8 unk2B7;
+    /* 0x2B5 */ u8 cueId;     /* Cue 4: Give Circus Leader's Mask // Cue 3: "Okay! That feels good!" // Cue 2: Turn around to look at Gorman // Cue 1: Turn back around to stage*/
+    /* 0x2B6 */ u8 shouldCancelSoundCheck;
+    /* 0x2B7 */ u8 shouldPlaySoundCheckCompleteCutscene;
     /* 0x2B8 */ EnTotoSpeakData* text;
     /* 0x2BC */ PlayerOverrideInputEntry overrideInputEntry;
     /* 0x2C4 */ Actor* spotlights;
@@ -49,9 +49,3 @@ typedef struct EnToto {
 } EnToto; // size = 0x2CC
 
 #endif // Z_EN_TOTO_H
-
-/*
-    Cue 3:       "Okay! That feels good!"
-    Cue 2:        Turn around to look at Gorman
-    Cue 1:        Turn back around to stage
-*/
