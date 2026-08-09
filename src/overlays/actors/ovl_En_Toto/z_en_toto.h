@@ -16,7 +16,7 @@ typedef s32 (*EnTotoTalkFunc)(struct EnToto*, PlayState*);
 
 typedef struct EnTotoSpeakData {
     /* 0x0 */ u8 talkActionIndex;
-    /* 0x1 */ u8 argument;
+    /* 0x1 */ u8 argument;              // Used for various functions, including as a timer
     /* 0x2 */ u16 textId;
 } EnTotoSpeakData; // size = 0x4
 
