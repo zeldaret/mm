@@ -40,6 +40,7 @@ BEST_EFFORT = True
 
 VERBOSE_ColorIndexedTexturesManager = False
 VERBOSE_BEST_EFFORT_TLUT_NO_REAL_USER = True
+VERBOSE_REFERENCE_TLUT = True
 
 EXPLICIT_DL_AND_TEX_SIZES = True
 TEXS_SHORTER_NAMES = True
@@ -254,8 +255,8 @@ class TextureResource(Resource):
         self.height = height
 
         # For handling color-indexed textures:
-        self.resource_tlut: Optional[TextureResource] = None
-        """For CI textures, the TLUT used"""
+        self.resources_tlut_list: list[TextureResource] = []
+        """For CI textures, the TLUT(s) used"""
         self.resources_ci_list: list[TextureResource] = []
         """For TLUT "textures", the CI textures using it"""
 
@@ -278,10 +279,9 @@ class TextureResource(Resource):
         self.height_name = f"{self.symbol_name}_HEIGHT"
 
     def get_as_xml(self):
+        resource_tlut = self.get_reference_tlut()
         tlut_offset_attr = (
-            f' TlutOffset="0x{self.resource_tlut.range_start:X}"'
-            if self.resource_tlut
-            else ""
+            f' TlutOffset="0x{resource_tlut.range_start:X}"' if resource_tlut else ""
         )
         return f"""\
         <Texture Name="{self.symbol_name}" Format="{self.fmt.name.lower()}{self.siz.bpp}" Width="{self.width}" Height="{self.height}" Offset="0x{self.range_start:X}"{tlut_offset_attr}/>"""
@@ -371,40 +371,37 @@ class TextureResource(Resource):
 
     def set_tlut(self, resource_tlut: "TextureResource"):
         assert self.fmt == G_IM_FMT.CI, (self, resource_tlut)
-        if self.resource_tlut is not None:
-            HACK_NO_FAIL_MULTIPLE_TLUTS = self.name in {
-                # TODO check those once extraction works
-                "scene_texture_02_Tex_000000",
-                "scene_texture_02_Tex_000400",
-                "scene_texture_02_Tex_000600",
-                "scene_texture_02_Tex_000700",
-                "scene_texture_02_Tex_000B00",
-                "scene_texture_02_Tex_000F00",
-                "scene_texture_02_Tex_001300",
-                "scene_texture_02_Tex_001700",
-                "scene_texture_02_Tex_001800",
-                "scene_texture_02_Tex_001C00",
-                "object_um_Tex_006CD0",
-                "object_um_Tex_006D10",
-            }
-            if self.file.name.startswith("scene_texture_"):
-                # TODO this seems like a common scene_texture_ files textures pattern?
-                HACK_NO_FAIL_MULTIPLE_TLUTS = True
-            if self.resource_tlut != resource_tlut:
-                if not HACK_NO_FAIL_MULTIPLE_TLUTS:
-                    # Technically not impossible so NotImplementedError
-                    raise NotImplementedError(
-                        "Color-indexed texture using two different TLUTs",
-                        self,
-                        resource_tlut,
-                    )
-                else:
-                    # TODO depending on who becomes self.resource_tlut first, the tlut name associated to a texture will differ
-                    # For now solve this by using the tlut with "least" name
-                    if self.resource_tlut.name < resource_tlut.name:
-                        return
-            else:
-                return
+
+        if resource_tlut in self.resources_tlut_list:
+            return
+
+        HACK_NO_FAIL_MULTIPLE_TLUTS = self.name in {
+            # TODO check those once extraction works
+            "scene_texture_02_Tex_000000",
+            "scene_texture_02_Tex_000400",
+            "scene_texture_02_Tex_000600",
+            "scene_texture_02_Tex_000700",
+            "scene_texture_02_Tex_000B00",
+            "scene_texture_02_Tex_000F00",
+            "scene_texture_02_Tex_001300",
+            "scene_texture_02_Tex_001700",
+            "scene_texture_02_Tex_001800",
+            "scene_texture_02_Tex_001C00",
+            "object_um_Tex_006CD0",
+            "object_um_Tex_006D10",
+        }
+        if self.file.name.startswith("scene_texture_"):
+            # TODO this seems like a common scene_texture_ files textures pattern?
+            HACK_NO_FAIL_MULTIPLE_TLUTS = True
+
+        if self.resources_tlut_list:
+            if not HACK_NO_FAIL_MULTIPLE_TLUTS:
+                # Technically not impossible so NotImplementedError
+                raise NotImplementedError(
+                    "Color-indexed texture using two different TLUTs",
+                    self,
+                    resource_tlut,
+                )
 
         # Assert resource_tlut is rgba16.
         # Note it could be ia16, but that's not implemented
@@ -412,28 +409,52 @@ class TextureResource(Resource):
             resource_tlut.fmt == G_IM_FMT.RGBA and resource_tlut.siz == G_IM_SIZ._16b
         ), resource_tlut
 
-        prev_resource_tlut = self.resource_tlut
-
-        self.resource_tlut = resource_tlut
+        self.resources_tlut_list.append(resource_tlut)
         assert self not in resource_tlut.resources_ci_list
         resource_tlut.resources_ci_list_append(self)
 
-        if prev_resource_tlut is not None:
-            # see above
-            # make sure all textures reference the same tlut
-            for citexres in prev_resource_tlut.resources_ci_list:
-                citexres.set_tlut(resource_tlut)
-            prev_resource_tlut.resources_ci_list.clear()
+    def get_reference_tlut(self):
+        assert self.resources_tlut_list
+        if len(self.resources_tlut_list) == 1:
+            return self.resources_tlut_list[0]
+        # HACK this logic makes the referenced TLUT name (ie the one in the tlut_* suffix of the ci png) consistent
+        # the second part of the hack is in set_paths, hardcoding the paths to the tluts chosen here for the duplicated tluts
+        next_resources_tluts: set[TextureResource] = set(self.resources_tlut_list)
+        seen_resources_tluts: set[TextureResource] = set()
+        seen_resources_ci_textures: set[TextureResource] = set()
+        while next_resources_tluts:
+            seen_resources_tluts.update(next_resources_tluts)
+            next_resources_ci_textures: set[TextureResource] = set()
+            for resource_tlut in next_resources_tluts:
+                next_resources_ci_textures.update(
+                    set(resource_tlut.resources_ci_list) - seen_resources_ci_textures
+                )
+            next_resources_tluts.clear()
+            for resource_ci in next_resources_ci_textures:
+                next_resources_tluts.update(
+                    set(resource_ci.resources_tlut_list) - seen_resources_tluts
+                )
+            seen_resources_ci_textures.update(next_resources_ci_textures)
+        resource_tlut = min(
+            seen_resources_tluts,
+            key=lambda resource_tlut: resource_tlut.symbol_name,
+        )
+        if VERBOSE_REFERENCE_TLUT:
+            print("get_reference_tlut:")
+            print(self.symbol_name)
+            print("->")
+            print(resource_tlut.symbol_name)
+        return resource_tlut
 
     def try_parse_data(self, memory_context):
         if self.fmt != G_IM_FMT.CI:
             # Nothing to do
             return RESOURCE_PARSE_SUCCESS
         else:
-            if self.resource_tlut is None:
+            if not self.resources_tlut_list:
                 # TODO restore raise when all assets declare tluts
                 return RESOURCE_PARSE_SUCCESS
-                raise ResourceParseWaiting(waiting_for=["self.resource_tlut"])
+                raise ResourceParseWaiting(waiting_for=["self.resources_tluts"])
             return RESOURCE_PARSE_SUCCESS
 
     def is_tlut(self):
@@ -466,14 +487,15 @@ class TextureResource(Resource):
             elem_type_suffix = ""
 
         if self.fmt == G_IM_FMT.CI:
-            if self.resource_tlut is None:
+            if not self.resources_tlut_list:
                 # FIXME hack until all ci resources declare a tlut
                 return f"{self.name}.i{self.siz.bpp}{elem_type_suffix}"
-            assert self.resource_tlut is not None
-            tlut_info = f"tlut_{self.resource_tlut.name}"
-            if self.resource_tlut.elem_type != "u64":
-                tlut_info += f"_{self.resource_tlut.elem_type}"
-            if not self.resource_tlut.tlut_can_omit_tlut_info_from_users():
+            assert self.resources_tlut_list
+            resource_tlut = self.get_reference_tlut()
+            tlut_info = f"tlut_{resource_tlut.name}"
+            if resource_tlut.elem_type != "u64":
+                tlut_info += f"_{resource_tlut.elem_type}"
+            if not resource_tlut.tlut_can_omit_tlut_info_from_users():
                 return f"{self.name}.{format_name}.{tlut_info}{elem_type_suffix}"
             else:
                 return f"{self.name}.{format_name}{elem_type_suffix}"
@@ -491,10 +513,15 @@ class TextureResource(Resource):
         # TODO somehow do better than this
         # may just have to wait for source to be committed :shrug:
         overrides = {
+            "object_um_Tex_003F00": "assets/objects/object_um/object_um_TLUT_006AD0.tlut.rgba16.inc.c",
+            "Z2_AYASHIISHOP_000030A0_TLUT": "assets/misc/scene_texture_02/Z2_AYASHIISHOP_000030A0_TLUT.tlut.rgba16.inc.c",
             "Z2_SONCHONOIE_00006F00_TLUT": "assets/misc/scene_texture_01/Z2_SONCHONOIE_00006F00_TLUT.tlut.rgba16.inc.c",
             "Z2_SONCHONOIE_00007100_TLUT": "assets/misc/scene_texture_01/Z2_SONCHONOIE_00007100_TLUT.tlut.rgba16.inc.c",
             "Z2_SONCHONOIE_00007300_TLUT": "assets/misc/scene_texture_01/Z2_SONCHONOIE_00007300_TLUT.tlut.rgba16.inc.c",
-            "Z2_AYASHIISHOP_000030A0_TLUT": "assets/misc/scene_texture_02/Z2_AYASHIISHOP_000030A0_TLUT.tlut.rgba16.inc.c",
+            "Z2_KAJIYA_000075D0_TLUT": "build/n64-us/assets/misc/scene_texture_02/Z2_AYASHIISHOP_000030A0_TLUT.tlut.rgba16.inc.c",
+            "Z2_YADOYA_0000EA80_TLUT": "assets/misc/scene_texture_01/Z2_SONCHONOIE_00006F00_TLUT.tlut.rgba16.inc.c",
+            "Z2_YADOYA_0000EC80_TLUT": "assets/misc/scene_texture_01/Z2_SONCHONOIE_00007100_TLUT.tlut.rgba16.inc.c",
+            "Z2_YADOYA_0000EE80_TLUT": "assets/misc/scene_texture_01/Z2_SONCHONOIE_00007300_TLUT.tlut.rgba16.inc.c",
         }
         if self.symbol_name in overrides:
             self.inc_c_path = Path(overrides[self.symbol_name])
@@ -555,7 +582,7 @@ class TextureResource(Resource):
         data = self.file.data[self.range_start : self.range_end]
         assert len(data) == self.range_end - self.range_start
         if self.fmt == G_IM_FMT.CI:
-            if self.resource_tlut is None:
+            if not self.resources_tlut_list:
                 # FIXME temporary hack for extracting until all assets declare TLUTs
                 write_n64_image_to_png(
                     self.extract_to_path,
@@ -566,11 +593,13 @@ class TextureResource(Resource):
                     data,
                 )
                 return
-            tlut_data = self.resource_tlut.file.data[
-                self.resource_tlut.range_start : self.resource_tlut.range_end
+            resource_tlut = self.get_reference_tlut()
+            assert resource_tlut.file.data is not None
+            tlut_data = resource_tlut.file.data[
+                resource_tlut.range_start : resource_tlut.range_end
             ]
-            tlut_count = self.resource_tlut.tlut_get_count()
-            tlut_fmt = self.resource_tlut.fmt
+            tlut_count = resource_tlut.tlut_get_count()
+            tlut_fmt = resource_tlut.fmt
             write_n64_image_to_png_color_indexed(
                 self.extract_to_path,
                 self.width,
@@ -614,7 +643,7 @@ class TextureResource(Resource):
             f", fmt={self.fmt}, siz={self.siz}"
             f", width={self.width}, height={self.height}"
             f", elem_type={self.elem_type}"
-            f", resource_tlut={self.resource_tlut}, resources_ci_list={self.resources_ci_list}"
+            f", resources_tlut_list={self.resources_tlut_list}, resources_ci_list={self.resources_ci_list}"
             ")"
         )
 
@@ -625,7 +654,7 @@ class TextureResource(Resource):
         yield "width", self.width
         yield "height", self.height
         yield "elem_type", self.elem_type
-        yield "resource_tlut", self.resource_tlut
+        yield "resources_tlut_list", self.resources_tlut_list
         yield "resources_ci_list", self.resources_ci_list
 
     __rich_repr__.angular = True
@@ -729,10 +758,12 @@ class TextureSplitTlutResource(TextureResource):
         self.lo_half = lo_half
 
     def get_filename_stem(self):
-        assert self.elem_type == "u64"
-        assert self.resource_tlut.elem_type == "u64"
+        resource_tlut = self.get_reference_tlut()
 
-        return f"{self.name}.ci8.split_{'lo' if self.lo_half else 'hi'}.tlut_{self.resource_tlut.name}"
+        assert self.elem_type == "u64"
+        assert resource_tlut.elem_type == "u64"
+
+        return f"{self.name}.ci8.split_{'lo' if self.lo_half else 'hi'}.tlut_{resource_tlut.name}"
 
     def write_extracted(self, memory_context):
         assert self.file.data is not None
@@ -745,11 +776,14 @@ class TextureSplitTlutResource(TextureResource):
             assert all(_b >= 128 for _b in data)
             data = memoryview(bytes(_b - 128 for _b in data))
 
-        tlut_data = self.resource_tlut.file.data[
-            self.resource_tlut.range_start : self.resource_tlut.range_end
+        resource_tlut = self.get_reference_tlut()
+
+        assert resource_tlut.file.data is not None
+        tlut_data = resource_tlut.file.data[
+            resource_tlut.range_start : resource_tlut.range_end
         ]
 
-        assert self.resource_tlut.tlut_get_count() == 128
+        assert resource_tlut.tlut_get_count() == 128
 
         write_n64_image_to_png_color_indexed(
             self.extract_to_path,
@@ -760,7 +794,7 @@ class TextureSplitTlutResource(TextureResource):
             data,
             tlut_data,
             128,
-            self.resource_tlut.fmt,
+            resource_tlut.fmt,
         )
 
 
