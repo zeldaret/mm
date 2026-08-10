@@ -518,7 +518,7 @@ class TextureResource(Resource):
             "Z2_SONCHONOIE_00006F00_TLUT": "assets/misc/scene_texture_01/Z2_SONCHONOIE_00006F00_TLUT.tlut.rgba16.inc.c",
             "Z2_SONCHONOIE_00007100_TLUT": "assets/misc/scene_texture_01/Z2_SONCHONOIE_00007100_TLUT.tlut.rgba16.inc.c",
             "Z2_SONCHONOIE_00007300_TLUT": "assets/misc/scene_texture_01/Z2_SONCHONOIE_00007300_TLUT.tlut.rgba16.inc.c",
-            "Z2_KAJIYA_000075D0_TLUT": "build/n64-us/assets/misc/scene_texture_02/Z2_AYASHIISHOP_000030A0_TLUT.tlut.rgba16.inc.c",
+            "Z2_KAJIYA_000075D0_TLUT": "assets/misc/scene_texture_02/Z2_AYASHIISHOP_000030A0_TLUT.tlut.rgba16.inc.c",
             "Z2_YADOYA_0000EA80_TLUT": "assets/misc/scene_texture_01/Z2_SONCHONOIE_00006F00_TLUT.tlut.rgba16.inc.c",
             "Z2_YADOYA_0000EC80_TLUT": "assets/misc/scene_texture_01/Z2_SONCHONOIE_00007100_TLUT.tlut.rgba16.inc.c",
             "Z2_YADOYA_0000EE80_TLUT": "assets/misc/scene_texture_01/Z2_SONCHONOIE_00007300_TLUT.tlut.rgba16.inc.c",
