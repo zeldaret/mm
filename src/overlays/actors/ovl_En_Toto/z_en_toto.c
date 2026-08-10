@@ -8,7 +8,8 @@
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)
 
-#define ENTOTO_FINISHED_WIND_FISH (CHECK_WEEKEVENTREG(WEEKEVENTREG_HELPED_GORMAN_DAY_1) || CHECK_WEEKEVENTREG(WEEKEVENTREG_HELPED_GORMAN_DAY_2))
+#define ENTOTO_FINISHED_WIND_FISH \
+    (CHECK_WEEKEVENTREG(WEEKEVENTREG_HELPED_GORMAN_DAY_1) || CHECK_WEEKEVENTREG(WEEKEVENTREG_HELPED_GORMAN_DAY_2))
 
 void EnToto_Init(Actor* thisx, PlayState* play);
 void EnToto_Destroy(Actor* thisx, PlayState* play);
@@ -90,27 +91,28 @@ static InitChainEntry sInitChain[] = {
 };
 
 static EnTotoSpeakData sDialogSpeakData[] = {
-                                                                     /* Milk Bar*/
-    { 0, 0, 0x2B21 },               // EnToto_SetupTalk_NextMessage                 EnToto_HandleTalk_Event                 "Are you going to play for us again?"
-    { 3, 2, 0 },                    // EnToto_SetupTalk_NextMessage                 EnToto_HandleTalk_AfterChoice       
-    { 0, 0, 0x2B23 },               // EnToto_SetupTalk_NextMessage                 EnToto_HandleTalk_Event                 "We were scheduled to do a show, but..." (Sound Check, first time)
-    { 2, 1, 0x2B24 },               // EnToto_SetupTalk_NextMessage                 EnToto_HandleTalk_Choice                "Could you help me with a performance?"
-    { 4, 0, 0x2B25 },               // EnToto_SetupTalk_NextMessage                 EnToto_HandleTalk_AfterChoice           "Oh, that's too bad."
-    { 3, 2, 0 },                    // EnToto_SetupTalk_NextMessage                 EnToto_HandleTalk_AfterChoice       
-    { 4, 0, 0x2B25 },               // EnToto_SetupTalk_NextMessage                 EnToto_HandleTalk_AfterChoice           "Oh, that's too bad."
-                                                                /* Mayor's Residence */
-    { 16, 0, 0x2A94 },              // EnToto_SetupTalk_NextMessage                 EnToto_HandleTalk_SetupMayorsResidence  "Are the fins damp lately?"
-    { 0, 0, 0x2A95 },               // EnToto_SetupTalk_NextMessage                 EnToto_HandleTalk_Event                 "What? Mikau???"                     (Mayor's Residence as Zora, first time)
-    { 4, 0, 0x2A96 },               // EnToto_SetupTalk_NextMessage                 EnToto_HandleTalk_AfterChoice           "You look so much like him..."       (Mayor's Residence as Zora, first time)
-    { 4, 0, 0x2A97 },               // EnToto_SetupTalk_NextMessage                 EnToto_HandleTalk_AfterChoice           "With the ocean the way it is..."    (Mayor's Residence as Zora)
-    { 0, 0, 0x2A98 },               // EnToto_SetupTalk_NextMessage                 EnToto_HandleTalk_Event                 "That's the greeting used among us Zoras."
-    { 0, 0, 0x2A99 },               // EnToto_SetupTalk_NextMessage                 EnToto_HandleTalk_Event                 "I am Toto, manager of the band..."
-    { 4, 0, 0x2A9A },               // EnToto_SetupTalk_NextMessage                 EnToto_HandleTalk_AfterChoice           "The Indigo-Go's is..."
-    { 4, 0, 0x2A9B },               // EnToto_SetupTalk_NextMessage                 EnToto_HandleTalk_AfterChoice           "Canceling the show isn't something I want to do at all..."
-    { 0, 0, 0x2AE1 },               // EnToto_SetupTalk_NextMessage                 EnToto_HandleTalk_Event                 "Are the fins damp lately?"          (Mayor's Residence as Deku)
-    { 0, 0, 0x2AE2 },               // EnToto_SetupTalk_NextMessage                 EnToto_HandleTalk_Event                 "Oh. That's the greeting used among us Zora." (         ...Deku)
-    { 4, 0, 0x2AE3 },               // EnToto_SetupTalk_NextMessage                 EnToto_HandleTalk_AfterChoice           "Where's your momma, sonny? Huh?"    (Mayor's Residence as Deku)
-    { 4, 0, 0x2AE4 },               // EnToto_SetupTalk_NextMessage                 EnToto_HandleTalk_AfterChoice           "Once you get older, come see us perform!"   (          ...Deku)
+    //                    SetupTalk func              HandleTalk func       Text
+    /* Milk Bar */
+    { 0, 0, 0x2B21 }, // NextMessage                 Event                 "Play for us again?"
+    { 3, 2, 0 },      // NextMessage                 AfterChoice           (No text)
+    { 0, 0, 0x2B23 }, // NextMessage                 Event                 "scheduled to do a show"
+    { 2, 1, 0x2B24 }, // NextMessage                 Choice                "Help me with a performance?"
+    { 4, 0, 0x2B25 }, // NextMessage                 AfterChoice           "Oh, that's too bad."
+    { 3, 2, 0 },      // NextMessage                 AfterChoice           (No text)
+    { 4, 0, 0x2B25 }, // NextMessage                 AfterChoice           "Oh, that's too bad."
+    /* Mayor's Residence */
+    { 16, 0, 0x2A94 }, // NextMessage                 SetupMayorsResidence  "Are the fins damp lately?"
+    { 0, 0, 0x2A95 },  // NextMessage                 Event                 "What? Mikau???"
+    { 4, 0, 0x2A96 },  // NextMessage                 AfterChoice           "You look so much like him..."
+    { 4, 0, 0x2A97 },  // NextMessage                 AfterChoice           "With the ocean the way it is"
+    { 0, 0, 0x2A98 },  // NextMessage                 Event                 "That's the greeting..."
+    { 0, 0, 0x2A99 },  // NextMessage                 Event                 "I am Toto..."
+    { 4, 0, 0x2A9A },  // NextMessage                 AfterChoice           "The Indigo-Go's is..."
+    { 4, 0, 0x2A9B },  // NextMessage                 AfterChoice           "Canceling the show..."
+    { 0, 0, 0x2AE1 },  // NextMessage                 Event                 "Are the fins damp?" (Deku)
+    { 0, 0, 0x2AE2 },  // NextMessage                 Event                 "That's the greeting" (Deku)
+    { 4, 0, 0x2AE3 },  // NextMessage                 AfterChoice           "Where's your momma?"
+    { 4, 0, 0x2AE4 },  // NextMessage                 AfterChoice           "Once you get older..."
 };
 
 typedef enum EnTotoAnimation {
@@ -122,36 +124,37 @@ typedef enum EnTotoAnimation {
 } EnTotoAnimation;
 
 static AnimationHeader* sTalkSittingAnimations[ENTOTO_ANIM_MAX] = {
-    &gTotoTalkSittingAnim,          // ENTOTO_ANIM_TALK_SITTING
-    &gTotoMoveCaneBehindHeadAnim,   // ENTOTO_ANIM_MOVE_CANE_BEHIND_HEAD
-    &gTotoTapHeadWithCaneAnim,      // ENTOTO_ANIM_TAP_HEAD_WITH_CANE
-    &gTotoMoveCaneBackDownAnim,     // ENTOTO_ANIM_MOVE_CANE_TO_FLOOR
+    &gTotoTalkSittingAnim,        // ENTOTO_ANIM_TALK_SITTING
+    &gTotoMoveCaneBehindHeadAnim, // ENTOTO_ANIM_MOVE_CANE_BEHIND_HEAD
+    &gTotoTapHeadWithCaneAnim,    // ENTOTO_ANIM_TAP_HEAD_WITH_CANE
+    &gTotoMoveCaneBackDownAnim,   // ENTOTO_ANIM_MOVE_CANE_TO_FLOOR
 };
 
 static EnTotoSpeakData sSoundCheckSpeakData[] = {
-                                                        /* Sound Check Before Completion */
-    { 5,  0, 0 },                   // EnToto_SetupTalk_DoNothing                   EnToto_HandleTalk_StartCutscene
-    { 6, 20, 0 },                   // EnToto_SetupTalk_InitSoundCheck              EnToto_HandleTalk_SoundCheck_MovePlayerToStage
-    { 7,  0, 0 },                   // EnToto_SetupTalk_DoNothing                   EnToto_HandleTalk_SoundCheck_WaitForPromptTextbox
-    { 8,  9, 0 },                   // EnToto_SetupTalk_StopCutsceneAndResetTimer   EnToto_HandleTalk_SoundCheck_WaitForPlayerToEnterSpotlight
-    { 9, 10, 0 },                   // EnToto_SetupTalk_SetNextMessageTimer         EnToto_HandleTalk_SoundCheck_WaitForPlayerToEnterSpotlight
-    { 1,  0, 0 },                   // EnToto_SetupTalk_DoNothing                   EnToto_HandleTalk_Closing
-    { 10, 0, 0 },                   // EnToto_SetupTalk_StartAdditionalCutscene     EnToto_HandleTalk_StartCutscene
-    { 11, 0, 0 },                   // EnToto_SetupTalk_InitWindFishOcarinaStaff    EnToto_HandleTalk_SoundCheck_SetPlayedFlags
-    { 12, 0, 0 },                   // EnToto_SetupTalk_InitWindFishPlayback        EnToto_HandleTalk_StartCutscene
-    { 13, 0, 0 },                   // EnToto_SetupTalk_StartWindFishPlayback       EnToto_HandleTalk_SoundCheck_EndWindFishCutscene
-    { 15, 0, 0 },                   // EnToto_SetupTalk_StartAdditionalCutscene     EnToto_HandleTalk_StartCutscene
-    { 17, 1, 0 },                   // EnToto_SetupTalk_ReturnTrue
-    { 17, 0, 0 },                   // EnToto_SetupTalk_ReturnTrue
-                                                        /* Sound Check After Completion */
-    { 5,  0, 0 },                   // EnToto_SetupTalk_DoNothing                   EnToto_HandleTalk_StartCutscene
-    { 6, 20, 0 },                   // EnToto_SetupTalk_InitSoundCheck              EnToto_HandleTalk_SoundCheck_MovePlayerToStage
-    { 8,  5, 0 },                   // EnToto_SetupTalk_StopCutsceneAndResetTimer   EnToto_HandleTalk_SoundCheck_WaitForPlayerToEnterSpotlight
-    { 12, 0, 0 },                   // EnToto_SetupTalk_InitWindFishPlayback        EnToto_HandleTalk_StartCutscene
-    { 13, 0, 0 },                   // EnToto_SetupTalk_StartWindFishPlayback       EnToto_HandleTalk_SoundCheck_EndWindFishCutscene
-    { 14, 20, 0x2B22 },             // EnToto_SetupTalk_SetNextMessageTimer         EnToto_HandleTalk_Wait                                      "I wanted you, too, to hear Lulu's voice on this stage."
-    { 1,  0, 0 },                   // EnToto_SetupTalk_DoNothing                   EnToto_HandleTalk_Closing
-    { 17, 0, 0 },                   // EnToto_SetupTalk_ReturnTrue
+    //                     SetupTalk func              HandleTalk func                          Text
+    /* Sound Check Before Completion */
+    { 5, 0, 0 },        // DoNothing                   StartCutscene                            (No text)
+    { 6, 20, 0 },       // InitSoundCheck              SoundCheck_MovePlayerToStage             (No text)
+    { 7, 0, 0 },        // DoNothing                   SoundCheck_WaitForPromptTextbox          (No text)
+    { 8, 9, 0 },        // StopCutsceneAndResetTimer   SoundCheck_WaitForPlayerToEnterSpotlight (No text)
+    { 9, 10, 0 },       // SetNextMessageTimer         SoundCheck_WaitForPlayerToEnterSpotlight (No text)
+    { 1, 0, 0 },        // DoNothing                   Closing                                  (No text)
+    { 10, 0, 0 },       // StartAdditionalCutscene     StartCutscene                            (No text)
+    { 11, 0, 0 },       // InitWindFishOcarinaStaff    SoundCheck_SetPlayedFlags                (No text)
+    { 12, 0, 0 },       // InitWindFishPlayback        StartCutscene                            (No text)
+    { 13, 0, 0 },       // StartWindFishPlayback       SoundCheck_EndWindFishCutscene           (No text)
+    { 15, 0, 0 },       // StartAdditionalCutscene     StartCutscene                            (No text)
+    { 17, 1, 0 },       // ReturnTrue                  (None)                                   (No text)
+    { 17, 0, 0 },       // ReturnTrue                  (None)                                   (No text)
+                        /* Sound Check After Completion */
+    { 5, 0, 0 },        // DoNothing                   StartCutscene                            (No text)
+    { 6, 20, 0 },       // InitSoundCheck              SoundCheck_MovePlayerToStage             (No text)
+    { 8, 5, 0 },        // StopCutsceneAndResetTimer   SoundCheck_WaitForPlayerToEnterSpotlight (No text)
+    { 12, 0, 0 },       // InitWindFishPlayback        StartCutscene                            (No text)
+    { 13, 0, 0 },       // StartWindFishPlayback       SoundCheck_EndWindFishCutscene           (No text)
+    { 14, 20, 0x2B22 }, // SetNextMessageTimer         Wait                                  "Lulu's voice"
+    { 1, 0, 0 },        // DoNothing                   Closing                                  (No text)
+    { 17, 0, 0 },       // ReturnTrue                  (None)                                   (No text)
 };
 
 static EnTotoSpotlight sSpotlightList[] = {
@@ -177,23 +180,23 @@ static u16 sOcarinaActionWindFishPrompts[] = {
 static u8 sSpotlightIndexToForm[] = { 8, 4, 2, 1 }; // Spotlight index to form flag
 
 static EnTotoTalkFunc sTalkStateSetupFuncs[] = {
-    /* 0  */ EnToto_SetupTalk_NextMessage, 
-    /* 1  */ EnToto_SetupTalk_DoNothing, 
-    /* 2  */ EnToto_SetupTalk_NextMessage, 
-    /* 3  */ EnToto_SetupTalk_NextMessage, 
-    /* 4  */ EnToto_SetupTalk_NextMessage, 
+    /* 0  */ EnToto_SetupTalk_NextMessage,
+    /* 1  */ EnToto_SetupTalk_DoNothing,
+    /* 2  */ EnToto_SetupTalk_NextMessage,
+    /* 3  */ EnToto_SetupTalk_NextMessage,
+    /* 4  */ EnToto_SetupTalk_NextMessage,
     /* 5  */ EnToto_SetupTalk_DoNothing,
     /* 6  */ EnToto_SetupTalk_InitSoundCheck,
     /* 7  */ EnToto_SetupTalk_DoNothing,
     /* 8  */ EnToto_SetupTalk_StopCutsceneAndResetTimer,
-    /* 9  */ EnToto_SetupTalk_SetNextMessageTimer, 
-    /* 10 */ EnToto_SetupTalk_StartAdditionalCutscene, 
+    /* 9  */ EnToto_SetupTalk_SetNextMessageTimer,
+    /* 10 */ EnToto_SetupTalk_StartAdditionalCutscene,
     /* 11 */ EnToto_SetupTalk_InitWindFishOcarinaStaff,
-    /* 12 */ EnToto_SetupTalk_InitWindFishPlayback, 
-    /* 13 */ EnToto_SetupTalk_StartWindFishPlayback, 
-    /* 14 */ EnToto_SetupTalk_SetNextMessageTimer, 
-    /* 15 */ EnToto_SetupTalk_StartAdditionalCutscene, 
-    /* 16 */ EnToto_SetupTalk_NextMessage, 
+    /* 12 */ EnToto_SetupTalk_InitWindFishPlayback,
+    /* 13 */ EnToto_SetupTalk_StartWindFishPlayback,
+    /* 14 */ EnToto_SetupTalk_SetNextMessageTimer,
+    /* 15 */ EnToto_SetupTalk_StartAdditionalCutscene,
+    /* 16 */ EnToto_SetupTalk_NextMessage,
     /* 17 */ EnToto_SetupTalk_ReturnTrue,
 };
 
@@ -202,22 +205,22 @@ static EnTotoTalkFunc sTalkStateSetupFuncs[] = {
     Similar to EnTest3 (Kafei)'s sTalkStateHandlerFuncs
 */
 static EnTotoTalkFunc sTalkStateHandlerFuncs[] = {
-    /* 0  */ EnToto_HandleTalk_Event, 
-    /* 1  */ EnToto_HandleTalk_Closing, 
-    /* 2  */ EnToto_HandleTalk_Choice, 
-    /* 3  */ EnToto_HandleTalk_AfterChoice, 
-    /* 4  */ EnToto_HandleTalk_AfterChoice, 
+    /* 0  */ EnToto_HandleTalk_Event,
+    /* 1  */ EnToto_HandleTalk_Closing,
+    /* 2  */ EnToto_HandleTalk_Choice,
+    /* 3  */ EnToto_HandleTalk_AfterChoice,
+    /* 4  */ EnToto_HandleTalk_AfterChoice,
     /* 5  */ EnToto_HandleTalk_StartCutscene,
-    /* 6  */ EnToto_HandleTalk_SoundCheck_MovePlayerToStage, 
+    /* 6  */ EnToto_HandleTalk_SoundCheck_MovePlayerToStage,
     /* 7  */ EnToto_HandleTalk_SoundCheck_WaitForPromptTextbox,
-    /* 8  */ EnToto_HandleTalk_SoundCheck_WaitForPlayerToEnterSpotlight, 
-    /* 9  */ EnToto_HandleTalk_SoundCheck_WaitAdvanceText, 
-    /* 10 */ EnToto_HandleTalk_StartCutscene, 
+    /* 8  */ EnToto_HandleTalk_SoundCheck_WaitForPlayerToEnterSpotlight,
+    /* 9  */ EnToto_HandleTalk_SoundCheck_WaitAdvanceText,
+    /* 10 */ EnToto_HandleTalk_StartCutscene,
     /* 11 */ EnToto_HandleTalk_SoundCheck_SetPlayedFlags,
-    /* 12 */ EnToto_HandleTalk_StartCutscene, 
-    /* 13 */ EnToto_HandleTalk_SoundCheck_EndWindFishCutscene, 
-    /* 14 */ EnToto_HandleTalk_Wait, 
-    /* 15 */ EnToto_HandleTalk_StartCutscene, 
+    /* 12 */ EnToto_HandleTalk_StartCutscene,
+    /* 13 */ EnToto_HandleTalk_SoundCheck_EndWindFishCutscene,
+    /* 14 */ EnToto_HandleTalk_Wait,
+    /* 15 */ EnToto_HandleTalk_StartCutscene,
     /* 16 */ EnToto_HandleTalk_SetupMayorsResidence,
 };
 
@@ -259,12 +262,14 @@ void EnToto_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnToto_UpdateAnimation(EnToto* this, PlayState* play) {
-    if (SkelAnime_Update(&this->skelAnime) && (this->actionFuncIndex == 1) &&   // If animation is finished and is talking to player
-        (this->skelAnime.animation != &gTotoWaveHelloAnim)) {                   // and not currently waving to Link
-            
-        if ((play->msgCtx.currentTextId != 0x2A98) && (play->msgCtx.currentTextId != 0x2A99)) {     // If not first 2 text boxes after Mayor's Residence greeting
-            if ((this->animIndex & 1) || (Rand_ZeroOne() > 0.5f)) {                                 // 50% chance
-                this->animIndex = (this->animIndex + 1) & 3;                                        // Tap on head with cane
+    if (SkelAnime_Update(&this->skelAnime) &&                 // Animation is complete
+        (this->actionFuncIndex == 1) &&                       // Is talking to player
+        (this->skelAnime.animation != &gTotoWaveHelloAnim)) { // Not currently waving to Link
+
+        if ((play->msgCtx.currentTextId != 0x2A98) &&
+            (play->msgCtx.currentTextId != 0x2A99)) { // If not first 2 text boxes after Mayor's Residence greeting
+            if ((this->animIndex & 1) || (Rand_ZeroOne() > 0.5f)) { // 50% chance
+                this->animIndex = (this->animIndex + 1) & 3;        // Tap on head with cane
             }
         }
         Animation_PlayOnce(&this->skelAnime, sTalkSittingAnimations[this->animIndex]);
@@ -307,13 +312,12 @@ void EnToto_Action_Idle(EnToto* this, PlayState* play) {
         return;
     }
 
-                                                                                                    // Offer talk conditions:
-    if (((play->sceneId == SCENE_MILK_BAR) &&                                                       // In milk bar, and
-         !((CURRENT_TIME >= CLOCK_TIME(6, 0)) && (CURRENT_TIME <= (CLOCK_TIME(22, 13) + 7)))) ||    // time is not between 6 AM and 10:13 PM + 7 ticks (0xED02) (weird), or
-        ((play->sceneId != SCENE_MILK_BAR) && EnToto_IsFacingPlayer(this, 0x2000))) {               // in Mayor's Residence, and is facing player 
+    if (((play->sceneId == SCENE_MILK_BAR) &&
+         !((CURRENT_TIME >= CLOCK_TIME(6, 0)) && (CURRENT_TIME <= (CLOCK_TIME(22, 13) + 7)))) || // 10:13 PM + 7 ticks
+        ((play->sceneId != SCENE_MILK_BAR) && EnToto_IsFacingPlayer(this, 0x2000))) {
 
         if (this->shouldCancelSoundCheck != 0) {
-            this->text = &sDialogSpeakData[6];                   // "Oh, that's too bad."
+            this->text = &sDialogSpeakData[6]; // "Oh, that's too bad."
             this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
             Actor_OfferTalkExchange(&this->actor, play, 9999.9f, 9999.9f, PLAYER_IA_NONE);
         } else {
@@ -322,19 +326,19 @@ void EnToto_Action_Idle(EnToto* this, PlayState* play) {
             if (play->sceneId == SCENE_SONCHONOIE) {
                 if (player->transformation == PLAYER_FORM_DEKU) {
                     if (!Flags_GetSwitch(play, ENTOTO_GET_DEKU_SPOKEN_FLAG(&this->actor))) {
-                        this->text = &sDialogSpeakData[15];      // "Are the fins damp lately?" (as Deku)
+                        this->text = &sDialogSpeakData[15]; // "Are the fins damp lately?" (as Deku)
                     } else {
-                        this->text = &sDialogSpeakData[18];      // "Once you get older, come see us perform!"
+                        this->text = &sDialogSpeakData[18]; // "Once you get older, come see us perform!"
                     }
                 } else {
-                    this->text = &sDialogSpeakData[7];           // "Are the fins damp lately?" (non-Deku)
+                    this->text = &sDialogSpeakData[7]; // "Are the fins damp lately?" (non-Deku)
                 }
             } else if (ENTOTO_FINISHED_WIND_FISH) {
-                this->text = &sDialogSpeakData[0];               // "Are you going to play for us again?"
+                this->text = &sDialogSpeakData[0]; // "Are you going to play for us again?"
             } else if (!Flags_GetSwitch(play, ENTOTO_GET_ZORA_SPOKEN_FLAG(&this->actor))) {
-                this->text = &sDialogSpeakData[2];               // "We were scheduled to do a show, but..."
+                this->text = &sDialogSpeakData[2]; // "We were scheduled to do a show, but..."
             } else {
-                this->text = &sDialogSpeakData[3];               // "Could you help me with a performance?"
+                this->text = &sDialogSpeakData[3]; // "Could you help me with a performance?"
             }
         }
 
@@ -496,7 +500,10 @@ s32 EnToto_HandleTalk_SoundCheck_WaitAdvanceText(EnToto* this, PlayState* play) 
     if (DECR(this->timer) == 0) {
         if (!ENTOTO_FINISHED_WIND_FISH) {
             targetSpotlight = &sSpotlightList[gSaveContext.save.playerForm - 1];
-            Message_StartTextbox(play, (this->text->talkActionIndex == 6) ? targetSpotlight->promptTextId : targetSpotlight->rightLightTextId, NULL);
+            Message_StartTextbox(play,
+                                 (this->text->talkActionIndex == 6) ? targetSpotlight->promptTextId
+                                                                    : targetSpotlight->rightLightTextId,
+                                 NULL);
         }
         return 1;
     }
@@ -578,7 +585,7 @@ s32 EnToto_HandleTalk_SoundCheck_WaitForPlayerToEnterSpotlight(EnToto* this, Pla
     }
     if (player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         targetSpotlight = &sSpotlightList[gSaveContext.save.playerForm - 1];
-        
+
         // Player is in correct spotlight
         if (EnToto_CheckIfPlayerInSpotlight(targetSpotlight, player)) {
             Math_Vec3s_ToVec3f(&player->actor.world.pos, &targetSpotlight->pos);
@@ -588,7 +595,7 @@ s32 EnToto_HandleTalk_SoundCheck_WaitForPlayerToEnterSpotlight(EnToto* this, Pla
         }
         if (!ENTOTO_FINISHED_WIND_FISH) {
             for (i = 0; i < ARRAY_COUNT(sSpotlightList); i++) {
-                
+
                 // Player is in incorrect spotlight
                 if (EnToto_CheckIfPlayerInSpotlight(&sSpotlightList[i], player)) {
                     if (this->timer < 10) {
@@ -688,7 +695,7 @@ s32 EnToto_HandleTalk_SoundCheck_EndWindFishCutscene(EnToto* this, PlayState* pl
             }
 
             Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_69);
-            
+
             if (this->windFishFormsPlayed == 0xF) {
                 if (CURRENT_DAY == 1) {
                     SET_WEEKEVENTREG(WEEKEVENTREG_HELPED_GORMAN_DAY_1);
@@ -696,7 +703,7 @@ s32 EnToto_HandleTalk_SoundCheck_EndWindFishCutscene(EnToto* this, PlayState* pl
                     SET_WEEKEVENTREG(WEEKEVENTREG_HELPED_GORMAN_DAY_2);
                 }
             } else {
-                EnToto_SetupTalk_StartAdditionalCutscene(this, play);           // Set up "What feels good?!? That wretched, senseless racket?!"
+                EnToto_SetupTalk_StartAdditionalCutscene(this, play); // Set up Gorman booing cutscene
             }
             return 1;
         }
@@ -730,14 +737,15 @@ s32 EnToto_HandleTalk_SetupMayorsResidence(EnToto* this, PlayState* play) {
 }
 
 /*
-    
+
 */
 s32 EnToto_RunTalkStateSetupFunc(EnToto* this, PlayState* play) {
     return sTalkStateSetupFuncs[this->text->talkActionIndex](this, play);
 }
 
 /*
-    These functions generally stay in the same state until one of them returns something nonzero, then it sets up the next one.
+    These functions generally stay in the same state until one of them returns
+    something nonzero, then it sets up the next one.
 */
 s32 EnToto_RunTalkStateHandlerFunc(EnToto* this, PlayState* play) {
     s32 nextOffset = sTalkStateHandlerFuncs[this->text->talkActionIndex](this, play);
@@ -770,7 +778,8 @@ void EnToto_HandleGormanCutscene(EnToto* this, PlayState* play) {
     Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 0x320);
     if (SkelAnime_Update(&this->skelAnime)) {
         if (this->cueId != 3) {
-            Animation_PlayLoop(&this->skelAnime, (this->cueId == 1) ? &gTotoIdleStandingAnim : &gTotoIdleLookAtGormanAnim);
+            Animation_PlayLoop(&this->skelAnime,
+                               (this->cueId == 1) ? &gTotoIdleStandingAnim : &gTotoIdleLookAtGormanAnim);
         }
     }
     if ((this->cueId == 4) && !Actor_HasParent(&this->actor, play)) {

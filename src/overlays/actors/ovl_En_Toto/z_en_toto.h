@@ -10,7 +10,7 @@ struct EnToto;
 typedef void (*EnTotoActionFunc)(struct EnToto*, PlayState*);
 typedef s32 (*EnTotoTalkFunc)(struct EnToto*, PlayState*);
 
-#define ENTOTO_GET_ZORA_SPOKEN_FLAG(thisx) ((thisx)->params & 0x7F)            // Set to 1 if talk to Toto in Milk Bar, or if have met him as Zora
+#define ENTOTO_GET_ZORA_SPOKEN_FLAG(thisx) ((thisx)->params & 0x7F)
 #define ENTOTO_GET_OTHER_SPOKEN_FLAG(thisx) (((thisx)->params >> 7) & 0x7F)
 #define ENTOTO_GET_DEKU_SPOKEN_FLAG(thisx) ((thisx)->home.rot.x)
 

@@ -758,8 +758,8 @@ s32 func_8094EB1C(Actor* thisx, PlayState* play) {
 
     switch (this->unk_3E0) {
         case 0:
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_HELPED_GORMAN_DAY_1) || CHECK_WEEKEVENTREG(WEEKEVENTREG_HELPED_GORMAN_DAY_2) ||
-                CHECK_WEEKEVENTREG(WEEKEVENTREG_75_02)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_HELPED_GORMAN_DAY_1) ||
+                CHECK_WEEKEVENTREG(WEEKEVENTREG_HELPED_GORMAN_DAY_2) || CHECK_WEEKEVENTREG(WEEKEVENTREG_75_02)) {
                 ret = true;
                 break;
             }

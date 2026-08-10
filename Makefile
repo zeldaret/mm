@@ -214,7 +214,7 @@ GBI_DEFINES := -DF3DEX_GBI_2 -DF3DEX_GBI_PL -DGBI_DOWHILE
 
 ifeq ($(COMPILER),gcc)
   # MIPS options
-  CFLAGS           += -g -G 0 -march=vr4300 -mtune=vr4300 -mfix4300 -mabi=32 -mno-abicalls -mdivide-breaks
+  CFLAGS           += -G 0 -march=vr4300 -mtune=vr4300 -mfix4300 -mabi=32 -mno-abicalls -mdivide-breaks
   # C dialect options
   CFLAGS           += -nostdinc -fno-PIC -fno-common -ffreestanding -fbuiltin -fno-builtin-sinf -fno-builtin-cosf -funsigned-char
 
@@ -226,7 +226,7 @@ ifeq ($(COMPILER),gcc)
   C_DEFINES        := $(COMMON_DEFINES) -D_LANGUAGE_C
   ENDIAN           :=
 
-  OPTFLAGS         := -g -Os -ffast-math -ftrapping-math -fno-associative-math
+  OPTFLAGS         := -Os -ffast-math -ftrapping-math -fno-associative-math
   MIPS_VERSION     := -mips3
 else
   CFLAGS           += -G 0 -non_shared -Xcpluscomm -nostdinc -Wab,-r4300_mul
