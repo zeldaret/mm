@@ -55,7 +55,7 @@
         <Texture Name="gIronKnuckleRivet1Tex" OutName="iron_knuckle_rivet_1" Format="ia16" Width="16" Height="16" Offset="0x10C30" />
         <Texture Name="gIronKnuckleHair1Tex" OutName="iron_knuckle_hair_1" Format="ci8" Width="16" Height="16" Offset="0x10E30" />
         <Texture Name="gIronKnuckleAxePomelJewel1Tex" OutName="iron_knuckle_axe_pomel_1_jewel" Format="ci8" Width="16" Height="16" Offset="0x10F30" />
-        <Texture Name="gIronKnuckleAxeTLUT" OutName="iron_knuckle_axe_tlut" Format="rgba16" Width="4" Height="4" Offset="0x11030" />
+        <Texture Name="gIronKnuckleAxeTLUT" OutName="iron_knuckle_axe_tlut" Format="rgba16" Width="8" Height="23" Offset="0x11030" />
         <Texture Name="gIronKnuckleFireTex" OutName="iron_knuckle_fire" Format="i4" Width="32" Height="64" Offset="0x111A0" />
         <Texture Name="gIronKnuckleRivet2Tex" OutName="iron_knuckle_rivet_2" Format="ia8" Width="32" Height="32" Offset="0x115A0" />
         <Texture Name="gIronKnuckleBlockPatternTex" OutName="iron_knuckle_block_pattern" Format="rgba16" Width="16" Height="16" Offset="0x119A0" />
@@ -64,7 +64,7 @@
         <Texture Name="gIronKnuckleGerudoEyeTex" OutName="iron_knuckle_gerudo_eye" Format="rgba16" Width="32" Height="32" Offset="0x125A0" />
         <Texture Name="gIronKnuckleChestJewelTex" OutName="iron_knuckle_chest_jewel" Format="ci8" Width="16" Height="16" Offset="0x12DA0" />
         <Texture Name="gIronKnuckleArmorRivet2Tex" OutName="iron_knuckle_armor_rivet_2" Format="ia8" Width="16" Height="16" Offset="0x12EA0" />
-        <Texture Name="gIronKnuckleArmorTLUT" OutName="iron_knuckle_armor_tlut" Format="rgba16" Width="4" Height="4" Offset="0x12FA0" />
+        <Texture Name="gIronKnuckleArmorTLUT" OutName="iron_knuckle_armor_tlut" Format="rgba16" Width="8" Height="15" Offset="0x12FA0" />
         <Texture Name="gIronKnuckleForeheadJewelTex" OutName="iron_knuckle_forehead_jewel" Format="ci8" Width="16" Height="16" Offset="0x13090" />
         <Texture Name="gIronKnuckleGerudoSkinTex" OutName="iron_knuckle_gerudo_skin" Format="ci8" Width="8" Height="8" Offset="0x13190" />
         <Texture Name="gIronKnuckleHair2Tex" OutName="iron_knuckle_hair_2" Format="ci8" Width="16" Height="16" Offset="0x131D0" />
