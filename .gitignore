@@ -33,12 +33,3 @@ graphs/
 # If you want to use your own gitignore rules without modifying this file:
 # - use `git config core.excludesFile path/to/my_gitignore_file`
 # - or edit `.git/info/exclude`
-*.yml
-*.plist
-baseroms/*
-tools/*
-!tools/*.txt
-Makefile
-Makefile
-.gdbinit
-gdb_load_overlay.py
