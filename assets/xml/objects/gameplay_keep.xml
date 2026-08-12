@@ -868,7 +868,7 @@
         <Limb Name="gameplay_keep_Lodlimb_014520" LimbType="LOD" EnumName="ARROW_LIMB_2" Offset="0x14520" />
         <Limb Name="gameplay_keep_Lodlimb_014530" LimbType="LOD" EnumName="ARROW_LIMB_3" Offset="0x14530" />
         <Limb Name="gameplay_keep_Lodlimb_014540" LimbType="LOD" EnumName="ARROW_LIMB_4" Offset="0x14540" />
-        <Skeleton Name="gameplay_keep_Skel_014560" Type="Normal" LimbType="Standard" LimbNone="ARROW_LIMB_NONE" LimbMax="ARROW_LIMB_MAX" EnumName="ArrowLimb" Offset="0x14560" />
+        <Skeleton Name="gameplay_keep_Skel_014560" Type="Normal" LimbType="LOD" LimbNone="ARROW_LIMB_NONE" LimbMax="ARROW_LIMB_MAX" EnumName="ArrowLimb" Offset="0x14560" />
         <Texture Name="gameplay_keep_Tex_014570" OutName="tex_014570" Format="rgba32" Width="16" Height="32" Offset="0x14570" />
 
         <!-- Bomb -->
