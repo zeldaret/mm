@@ -83,6 +83,6 @@
         <Limb Name="gKafeiTorsoLimb" Type="LOD" EnumName="KAFEI_LIMB_TORSO" Offset="0xF788" />
 
         <!-- Kafei Skeleton -->
-        <Skeleton Name="gKafeiSkel" Type="Flex" LimbType="Standard" LimbNone="KAFEI_LIMB_NONE" LimbMax="KAFEI_LIMB_MAX" EnumName="KafeiLimb" Offset="0xF7EC" />
+        <Skeleton Name="gKafeiSkel" Type="Flex" LimbType="LOD" LimbNone="KAFEI_LIMB_NONE" LimbMax="KAFEI_LIMB_MAX" EnumName="KafeiLimb" Offset="0xF7EC" />
     </File>
 </Root>
