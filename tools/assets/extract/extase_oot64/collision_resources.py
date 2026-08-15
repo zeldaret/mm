@@ -568,8 +568,12 @@ class CollisionResource(CDataResource):
         wctx: CDataExtWriteContext,
     ):
         assert isinstance(v, int)
+        address = v
         wctx.f.write(wctx.line_prefix)
-        wctx.f.write(memory_context.get_c_reference_at_segmented(v))
+        if address != 0:
+            wctx.f.write(memory_context.get_c_reference_at_segmented(address))
+        else:
+            wctx.f.write("NULL")
         return True
 
     def write_numPolygons(
@@ -624,7 +628,10 @@ class CollisionResource(CDataResource):
         assert isinstance(v, int)
         address = v
         wctx.f.write(wctx.line_prefix)
-        wctx.f.write(memory_context.get_c_reference_at_segmented(address))
+        if address != 0:
+            wctx.f.write(memory_context.get_c_reference_at_segmented(address))
+        else:
+            wctx.f.write("NULL")
         return True
 
     def write_numWaterBoxes(
@@ -679,8 +686,12 @@ class CollisionResource(CDataResource):
         wctx: CDataExtWriteContext,
     ):
         assert isinstance(v, int)
+        address = v
         wctx.f.write(wctx.line_prefix)
-        wctx.f.write(memory_context.get_c_reference_at_segmented(v))
+        if address != 0:
+            wctx.f.write(memory_context.get_c_reference_at_segmented(address))
+        else:
+            wctx.f.write("NULL")
         return True
 
     def write_bgCamList(
