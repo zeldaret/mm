@@ -18,9 +18,9 @@
         <Texture Name="gLinkHumanMouthTLUT" OutName="mouth_tlut" Format="rgba16" Width="16" Height="16" Offset="0x5200" />
 
         <Texture Name="object_link_child_Tex_005400" OutName="tex_005400" Format="rgba16" Width="8" Height="16" Offset="0x5400" />
-        <Texture Name="object_link_child_Tex_005500" OutName="tex_005500" Format="ci8" Width="8" Height="8" Offset="0x5500" />
-        <Texture Name="object_link_child_Tex_005540" OutName="tex_005540" Format="ci8" Width="16" Height="16" Offset="0x5540" />
-        <Texture Name="gLinkHumanEarTex" OutName="ear" Format="ci8" Width="16" Height="16" Offset="0x5640" />
+        <Texture Name="object_link_child_Tex_005500" OutName="tex_005500" Format="ci8" Width="8" Height="8" Offset="0x5500" TlutOffset="0x5000"/>
+        <Texture Name="object_link_child_Tex_005540" OutName="tex_005540" Format="ci8" Width="16" Height="16" Offset="0x5540" TlutOffset="0x5000"/>
+        <Texture Name="gLinkHumanEarTex" OutName="ear" Format="ci8" Width="16" Height="16" Offset="0x5640" TlutOffset="0x5000"/>
         <Texture Name="gLinkHumanBeltClaspTex" OutName="belt_clasp" Format="rgba16" Width="32" Height="16" Offset="0x5740" />
         <Texture Name="gLinkHumanBeltTex" OutName="belt" Format="rgba16" Width="8" Height="16" Offset="0x5B40" />
         <Texture Name="object_link_child_Tex_005C40" OutName="tex_005C40" Format="i8" Width="16" Height="16" Offset="0x5C40" />
@@ -28,7 +28,7 @@
         <Texture Name="object_link_child_Tex_005D80" OutName="tex_005D80" Format="i8" Width="8" Height="16" Offset="0x5D80" />
         <Texture Name="object_link_child_Tex_005E00" OutName="tex_005E00" Format="rgba16" Width="16" Height="32" Offset="0x5E00" />
         <Texture Name="object_link_child_Tex_006200" OutName="tex_006200" Format="rgba16" Width="32" Height="32" Offset="0x6200" />
-        <Texture Name="object_link_child_Tex_006A00" OutName="tex_006A00" Format="ci8" Width="16" Height="16" Offset="0x6A00" />
+        <Texture Name="object_link_child_Tex_006A00" OutName="tex_006A00" Format="ci8" Width="16" Height="16" Offset="0x6A00" TlutOffset="0x5000"/>
         <Texture Name="object_link_child_Tex_006B00" OutName="tex_006B00" Format="rgba16" Width="16" Height="16" Offset="0x6B00" />
         <!-- <Blob Name="object_link_child_Blob_006D00" Size="0xA00" Offset="0x6D00" /> -->
         <Texture Name="object_link_child_Tex_007700" OutName="tex_007700" Format="rgba16" Width="16" Height="16" Offset="0x7700" />
@@ -55,7 +55,7 @@
 
         <Texture Name="gLinkHumanOcarinaTex" OutName="ocarina" Format="rgba16" Width="32" Height="16" Offset="0xD680" />
         <Texture Name="object_link_child_TLUT_00DA80" OutName="tlut_00DA80" Format="rgba16" Width="68" Height="1" Offset="0xDA80"/>
-        <Texture Name="object_link_child_Tex_00DB08" OutName="tex_00DB08" Format="ci8" Width="16" Height="16" Offset="0xDB08" />
+        <Texture Name="object_link_child_Tex_00DB08" OutName="tex_00DB08" Format="ci8" Width="16" Height="16" Offset="0xDB08" TlutOffset="0xDA80"/>
 
         <!-- <Blob Name="object_link_child_Blob_00DC08" Size="0x360" Offset="0xDC08" /> -->
         <DList Name="gLinkHumanLeftHandClosedDL" Offset="0xE1C8" />
@@ -113,12 +113,12 @@
         <Texture Name="gLinkHumanHerosShieldFrontTLUT" OutName="hylian_shield_front_tlut" Format="rgba16" Width="16" Height="16" Offset="0x18C40" />
         <Texture Name="gLinkHumanHerosShieldBackTLUT" OutName="hylian_shield_back_tlut" Format="rgba16" Width="16" Height="16" Offset="0x18E40" />
         <Texture Name="gLinkHumanShieldHandleTLUT" OutName="shield_handle_tlut" Format="rgba16" Width="16" Height="16" Offset="0x19040" />
-        <Texture Name="object_link_child_Tex_019240" OutName="tex_019240" Format="ci8" Width="8" Height="8" Offset="0x19240" />
+        <Texture Name="object_link_child_Tex_019240" OutName="tex_019240" Format="ci8" Width="8" Height="8" Offset="0x19240" TlutOffset="0x18A40"/>
         <Texture Name="gLinkHumanHerosShieldFrontUpperTex" OutName="hylian_shield_front_upper" Format="ci8" Width="64" Height="32" Offset="0x19280" TlutOffset="0x18C40" />
-        <Texture Name="object_link_child_Tex_019A80" OutName="tex_019A80" Format="ci8" Width="32" Height="64" Offset="0x19A80" />
-        <Texture Name="object_link_child_Tex_01A280" OutName="tex_01A280" Format="ci8" Width="16" Height="16" Offset="0x1A280" />
+        <Texture Name="object_link_child_Tex_019A80" OutName="tex_019A80" Format="ci8" Width="32" Height="64" Offset="0x19A80" TlutOffset="0x18A40"/>
+        <Texture Name="object_link_child_Tex_01A280" OutName="tex_01A280" Format="ci8" Width="16" Height="16" Offset="0x1A280" TlutOffset="0x18A40"/>
         <Texture Name="object_link_child_Tex_01A380" OutName="tex_01A380" Format="rgba16" Width="64" Height="32" Offset="0x1A380" />
-        <Texture Name="object_link_child_Tex_01B380" OutName="tex_01B380" Format="ci8" Width="16" Height="16" Offset="0x1B380" />
+        <Texture Name="object_link_child_Tex_01B380" OutName="tex_01B380" Format="ci8" Width="16" Height="16" Offset="0x1B380" TlutOffset="0x18A40"/>
         <Texture Name="gLinkHumanHerosShieldFrontLowerTex" OutName="hylian_shield_front_lower" Format="ci8" Width="64" Height="32" Offset="0x1B480" TlutOffset="0x18C40" />
         <Texture Name="gLinkHumanHerosShieldBackTex" OutName="hylian_shield_back" Format="ci8" Width="16" Height="32" Offset="0x1BC80" TlutOffset="0x18E40" />
         <Texture Name="gLinkHumanShieldHandleTex" OutName="shield_handle" Format="ci8" Width="8" Height="16" Offset="0x1BE80" TlutOffset="0x19040" />

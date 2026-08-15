@@ -7,4 +7,5 @@ reloc_prereq
 preprocess_pragmas
 vtxdis
 
+compiler_archives/archives/
 ido_recomp/
