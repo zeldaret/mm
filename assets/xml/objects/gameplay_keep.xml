@@ -84,8 +84,8 @@
         <Texture Name="gFierceDeityMaskEarTex" OutName="fierce_deity_mask_ear" Format="ci8" Width="16" Height="16" Offset="0xC6B0" TlutOffset="0xB6B0"/>
         <Texture Name="gFierceDeityMaskHatTex" OutName="fierce_deity_mask_hat" Format="rgba16" Width="8" Height="8" Offset="0xC7B0" />
 
-        <Texture Name="gameplay_keep_Tex_00C830" OutName="tex_00C830" Format="rgba16" Width="16" Height="16" Offset="0xC830" />
-        <Texture Name="gameplay_keep_Tex_00CA30" OutName="tex_00CA30" Format="rgba16" Width="16" Height="16" Offset="0xCA30" />
+        <Texture Name="gHilite1Tex" OutName="hilite_1" Format="rgba16" Width="16" Height="16" Offset="0xC830" />
+        <Texture Name="gHilite2Tex" OutName="hilite_2" Format="rgba16" Width="16" Height="16" Offset="0xCA30" />
 
         <Texture Name="gDekuStickTex" OutName="deku_stick" Format="i8" Width="8" Height="8" Offset="0xCC30" />
 
