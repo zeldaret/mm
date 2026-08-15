@@ -313,7 +313,7 @@ void EnToto_Action_Idle(EnToto* this, PlayState* play) {
     }
 
     if (((play->sceneId == SCENE_MILK_BAR) &&
-         !((CURRENT_TIME >= CLOCK_TIME(6, 0)) && (CURRENT_TIME <= (CLOCK_TIME(22, 13) + 7)))) || // 10:13 PM + 7 ticks
+         !((CURRENT_TIME >= CLOCK_TIME(6, 0)) && (CURRENT_TIME <= (CLOCK_TIME(22, 13) + 7)))) ||
         ((play->sceneId != SCENE_MILK_BAR) && EnToto_IsFacingPlayer(this, 0x2000))) {
 
         if (this->shouldCancelSoundCheck != 0) {
