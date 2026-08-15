@@ -10,7 +10,7 @@
         <Texture Name="object_ny_Tex_0003C0" OutName="tex_0003C0" Format="rgba16" Width="32" Height="32" Offset="0x3C0" />
         <Texture Name="object_ny_Tex_000BC0" OutName="tex_000BC0" Format="rgba16" Width="32" Height="32" Offset="0xBC0" />
         <DList Name="object_ny_DL_001F90" Offset="0x1F90" />
-        <DList Name="object_ny_DL_002068" Offset="0x2068" />
-        <DList Name="object_ny_DL_002188" Offset="0x2188" />
+        <DList Name="object_ny_DL_002068" Offset="0x2068" RawPointers="0x07000000"/>
+        <DList Name="object_ny_DL_002188" Offset="0x2188" RawPointers="0x07000000"/>
     </File>
 </Root>
