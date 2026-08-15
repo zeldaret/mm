@@ -1,5 +1,7 @@
 ﻿<Root>
+    <!-- Dependencies -->
     <ExternalFile XmlPath="misc/link_animetion.xml" OutPath="assets/misc/link_animetion/"/>
+
     <File Name="gameplay_keep" Segment="4">
         <!-- Bottles -->
         <Texture Name="gBottleTex" OutName="bottle" Format="i4" Width="16" Height="16" Offset="0x0" />
