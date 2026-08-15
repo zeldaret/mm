@@ -42,7 +42,7 @@
         <DList Name="object_boj_DL_009448" Offset="0x9448" />
         <DList Name="object_boj_DL_009558" Offset="0x9558" />
         <DList Name="object_boj_DL_009660" Offset="0x9660" />
-        <!-- <Blob Name="object_boj_Blob_009848" Size="0x1F8" Offset="0x9848" /> -->
+        <Texture Name="object_boj_TLUT_009848" OutName="tlut_009848" Format="rgba16" Width="252" Height="1" Offset="0x9848" />
         <Texture Name="object_boj_Tex_009A40" OutName="tex_009A40" Format="ci8" Width="8" Height="8" Offset="0x9A40" TlutOffset="0x9848"/>
         <Texture Name="object_boj_Tex_009A80" OutName="tex_009A80" Format="ci8" Width="16" Height="16" Offset="0x9A80" TlutOffset="0x9848"/>
         <Texture Name="object_boj_Tex_009B80" OutName="tex_009B80" Format="ci8" Width="16" Height="16" Offset="0x9B80" TlutOffset="0x9848"/>
