@@ -1093,7 +1093,7 @@
         <Texture Name="gEffHitmarkRed8Tex" OutName="eff_hitmark_red_8" Format="i4" Width="32" Height="24" Offset="0x35590" />
         <DList Name="gEffHitmarkDL" Offset="0x35710" />
         <Texture Name="gameplay_keep_Tex_0357B0" OutName="tex_0357B0" Format="ia8" Width="32" Height="64" Offset="0x357B0" />
-        <Texture Name="gameplay_keep_Tex_035FB0" OutName="tex_035FB0" Format="ia8" Width="32" Height="64" Offset="0x35FB0" />
+        <Texture Name="gEffFleckTex" OutName="eff_tex" Format="i4" Width="64" Height="64" Offset="0x35FB0" />
         <Texture Name="gEffWaterRippleTex" OutName="eff_water_ripple" Format="i8" Width="64" Height="64" Offset="0x367B0" />
         <DList Name="gEffWaterRippleDL" Offset="0x377B0" />
         <DList Name="gEffSparkDL" Offset="0x37850" />
