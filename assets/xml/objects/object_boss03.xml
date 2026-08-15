@@ -1,4 +1,7 @@
 ﻿<Root>
+    <!-- Dependencies -->
+    <ExternalFile XmlPath="objects/gameplay_keep.xml" OutPath="assets/objects/gameplay_keep/"/>
+
     <!-- 
         Gyorg, his title card, the small fishes he summons, the seaweed in his boss arena,
         and the bubbles in his intro cutscene. Also contains an unused copy of Majora's Wrath's
