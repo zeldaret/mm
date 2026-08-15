@@ -1030,7 +1030,7 @@
         <Skeleton Name="gStrayFairySkel" Type="Flex" LimbType="Standard" LimbNone="STRAY_FAIRY_LIMB_NONE" LimbMax="STRAY_FAIRY_LIMB_MAX" EnumName="StrayFairyLimb" Offset="0x2CA98" />
 
         <Texture Name="gameplay_keep_Tex_02CAB0" OutName="tex_02CAB0" Format="i4" Width="16" Height="16" Offset="0x2CAB0" />
-        <Texture Name="gameplay_keep_Tex_02CB30" OutName="tex_02CB30" Format="i8" Width="16" Height="16" Offset="0x2CB30" />
+        <Texture Name="gUnknownCircle4Tex" OutName="unknown_circle_4" Format="i8" Width="16" Height="16" Offset="0x2CB30" />
         <Texture Name="gameplay_keep_Tex_02CC30" OutName="tex_02CC30" Format="rgba16" Width="32" Height="32" Offset="0x2CC30" />
         <Texture Name="gameplay_keep_Tex_02D430" OutName="tex_02D430" Format="i8" Width="32" Height="64" Offset="0x2D430" />
         <Texture Name="gameplay_keep_Tex_02DC30" OutName="tex_02DC30" Format="i8" Width="32" Height="64" Offset="0x2DC30" />
