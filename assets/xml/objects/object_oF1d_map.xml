@@ -102,10 +102,10 @@
         <Texture Name="gGoronBottomTex" OutName="goron_bottom" Format="ci8" Width="8" Height="16" Offset="0xFAB8" TlutOffset="0xEA78"/>
         <Texture Name="gGoronsRocksTex" OutName="goron_rocks" Format="ci8" Width="32" Height="64" Offset="0xFB38" TlutOffset="0xEA78"/>
         <Texture Name="gGoronHairTex" OutName="goron_hair" Format="ci8" Width="16" Height="16" Offset="0x10338" TlutOffset="0xEA78"/>
-        <Texture Name="gGoronEyeOpenTex" OutName="goron_eye_open" Format="ci8" Width="32" Height="32" Offset="0x10438" />
-        <Texture Name="gGoronEyeClosed2Tex" OutName="goron_eye_closed2" Format="ci8" Width="32" Height="32" Offset="0x10838" />
-        <Texture Name="gGoronEyeHalfTex" OutName="goron_eye_half" Format="ci8" Width="32" Height="32" Offset="0x10C38" />
-        <Texture Name="gGoronEyeClosedTex" OutName="goron_eye_closed" Format="ci8" Width="32" Height="32" Offset="0x11038" />
+        <Texture Name="gGoronEyeOpenTex" OutName="goron_eye_open" Format="ci8" Width="32" Height="32" Offset="0x10438" TlutOffset="0xEC78"/>
+        <Texture Name="gGoronEyeClosed2Tex" OutName="goron_eye_closed2" Format="ci8" Width="32" Height="32" Offset="0x10838" TlutOffset="0xEC78"/>
+        <Texture Name="gGoronEyeHalfTex" OutName="goron_eye_half" Format="ci8" Width="32" Height="32" Offset="0x10C38" TlutOffset="0xEC78"/>
+        <Texture Name="gGoronEyeClosedTex" OutName="goron_eye_closed" Format="ci8" Width="32" Height="32" Offset="0x11038" TlutOffset="0xEC78"/>
         <Texture Name="gGoronLipsTex" OutName="goron_lips" Format="rgba16" Width="8" Height="8" Offset="0x11438" />
         <Texture Name="gGoronDimpleTex" OutName="goron_dimple" Format="ci8" Width="16" Height="16" Offset="0x114B8" TlutOffset="0xEA78"/>
         <Texture Name="gGoronBeardTex" OutName="goron_beard" Format="rgba16" Width="32" Height="16" Offset="0x115B8" />
