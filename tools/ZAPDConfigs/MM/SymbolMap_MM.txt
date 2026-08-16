@@ -1,2 +1,2 @@
 801D1DE0 gIdentityMtx
-801AEFA0 gActorEmptyDL
+801AEFA0 gActorSetupOpaDL

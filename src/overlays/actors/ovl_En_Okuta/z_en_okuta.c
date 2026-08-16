@@ -1107,7 +1107,7 @@ void EnOkuta_Draw(Actor* thisx, PlayState* play) {
 
     if (EN_OKUTA_GET_TYPE(&this->actor) < EN_OKUTA_TYPE_PROJECTILE_BASE) {
         if (EN_OKUTA_GET_TYPE(&this->actor) == EN_OKUTA_TYPE_RED_OCTOROK) {
-            gSPSegment(&gfx[1], 0x08, gActorEmptyDL);
+            gSPSegment(&gfx[1], 0x08, gActorSetupOpaDL);
         } else {
             gSPSegment(&gfx[1], 0x08, gOctorokBlueMaterialDL);
         }

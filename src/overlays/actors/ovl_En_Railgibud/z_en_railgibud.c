@@ -1082,7 +1082,7 @@ void EnRailgibud_Draw(Actor* thisx, PlayState* play) {
         Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, this->actor.shape.shadowAlpha);
-        gSPSegment(POLY_OPA_DISP++, 0x08, gActorEmptyDL);
+        gSPSegment(POLY_OPA_DISP++, 0x08, gActorSetupOpaDL);
 
         POLY_OPA_DISP =
             SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
