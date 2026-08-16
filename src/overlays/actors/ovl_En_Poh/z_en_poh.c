@@ -950,7 +950,7 @@ void EnPoh_Draw(Actor* thisx, PlayState* play) {
 
         gSPDisplayList(&gfx[0], gSetupDLs[SETUPDL_25]);
         gDPSetEnvColor(&gfx[1], this->unk_194, this->unk_195, this->unk_196, this->unk_197);
-        gSPSegment(&gfx[2], 0x08, D_801AEFA0);
+        gSPSegment(&gfx[2], 0x08, gActorEmptyDL);
 
         gfx = SkelAnime_Draw(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnPoh_OverrideLimbDraw,
                              EnPoh_PostLimbDraw, &this->actor, &gfx[3]);
