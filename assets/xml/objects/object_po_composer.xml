@@ -1,4 +1,5 @@
 ﻿<Root>
+    <!-- Dependencies -->
     <ExternalFile XmlPath="objects/gameplay_keep.xml" OutPath="assets/objects/gameplay_keep/"/>
 
     <!-- Assets for the composer brothers Flat and Sharp -->

@@ -25,10 +25,10 @@
         <Texture Name="gBartenMouthTex" OutName="barten_mouth" Format="ci8" Width="8" Height="8" Offset="0x6328" TlutOffset="0x5CA8"/>
         <Texture Name="gBartenHairTex" OutName="barten_hair" Format="ci8" Width="8" Height="16" Offset="0x6368" TlutOffset="0x5CA8"/>
         <Texture Name="gBartenEarTex" OutName="barten_ear" Format="ci8" Width="8" Height="8" Offset="0x63E8" TlutOffset="0x5CA8"/>
-        <Texture Name="gBartenEyeOpenTex" OutName="barten_eye_open" Format="ci8" Width="32" Height="32" Offset="0x6428" />
+        <Texture Name="gBartenEyeOpenTex" OutName="barten_eye_open" Format="ci8" Width="32" Height="32" Offset="0x6428" TlutOffset="0x5EA8"/>
         <Texture Name="gBartenHandTex" OutName="barten_hand" Format="ci8" Width="16" Height="16" Offset="0x6828" TlutOffset="0x5CA8"/>
-        <Texture Name="gBartenEyeHalfOpenTex" OutName="barten_eye_half_open" Format="ci8" Width="32" Height="32" Offset="0x6928" />
-        <Texture Name="gBartenEyeClosedTex" OutName="barten_eye_closed" Format="ci8" Width="32" Height="32" Offset="0x6D28" />
+        <Texture Name="gBartenEyeHalfOpenTex" OutName="barten_eye_half_open" Format="ci8" Width="32" Height="32" Offset="0x6928" TlutOffset="0x5EA8"/>
+        <Texture Name="gBartenEyeClosedTex" OutName="barten_eye_closed" Format="ci8" Width="32" Height="32" Offset="0x6D28" TlutOffset="0x5EA8"/>
         <Texture Name="gBartenBroomTex" OutName="barten_broom" Format="ci8" Width="16" Height="16" Offset="0x7128" TlutOffset="0x5CA8"/>
         <Texture Name="gBartenBroomHeadTex" OutName="barten_broom_head" Format="ci8" Width="16" Height="16" Offset="0x7228" TlutOffset="0x5CA8"/>
         <Texture Name="gBartenPantsTex" OutName="barten_pants" Format="i8" Width="32" Height="32" Offset="0x7328" />
