@@ -762,7 +762,7 @@ typedef struct NpcInteractInfo {
 extern AttentionRangeParams gAttentionRanges[ATTENTION_RANGE_MAX];
 extern s16 D_801AED48[8];
 extern Gfx D_801AEF88[];
-extern Gfx D_801AEFA0[];
+extern Gfx gActorEmptyDL[];
 
 extern Actor* gCameraDriftActor;
 
