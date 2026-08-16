@@ -600,7 +600,7 @@ void BgDblueWaterfall_Draw(Actor* thisx, PlayState* play) {
 
     if (this->unk_19F > 0) {
         if (this->unk_19F < 255) {
-            gSPSegment(POLY_XLU_DISP++, 0x09, D_801AEF88);
+            gSPSegment(POLY_XLU_DISP++, 0x09, gActorSetupXluDL);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x9B, 255, 255, 255, this->unk_19F);
             gSPDisplayList(POLY_XLU_DISP++, gGreatBayTempleObjectIceStalactiteDL);
         } else {
