@@ -559,7 +559,7 @@ void EnSyatekiOkuta_Draw(Actor* thisx, PlayState* play) {
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     if (this->type == SG_OCTO_TYPE_RED) {
-        gSPSegment(POLY_OPA_DISP++, 0x08, gActorEmptyDL);
+        gSPSegment(POLY_OPA_DISP++, 0x08, gActorSetupOpaDL);
     } else {
         gSPSegment(POLY_OPA_DISP++, 0x08, gShootingGalleryOctorokBlueMaterialDL);
     }

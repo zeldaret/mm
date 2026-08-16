@@ -524,7 +524,7 @@ void EnMkk_Draw(Actor* thisx, PlayState* play) {
             gfx = POLY_OPA_DISP;
             gSPDisplayList(&gfx[0], gSetupDLs[SETUPDL_25]);
             gDPSetPrimColor(&gfx[1], 0, 0xFF, primColors->r, primColors->g, primColors->b, primColors->a);
-            gSPSegment(&gfx[2], 0x08, gActorEmptyDL);
+            gSPSegment(&gfx[2], 0x08, gActorSetupOpaDL);
 
             MATRIX_FINALIZE_AND_LOAD(&gfx[3], play->state.gfxCtx);
             gSPDisplayList(&gfx[4], modelInfo->eyesDL);

@@ -606,7 +606,7 @@ void BgDblueWaterfall_Draw(Actor* thisx, PlayState* play) {
         } else {
             Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
-            gSPSegment(POLY_OPA_DISP++, 0x09, gActorEmptyDL);
+            gSPSegment(POLY_OPA_DISP++, 0x09, gActorSetupOpaDL);
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x9B, 255, 255, 255, 255);
             MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
             gSPDisplayList(POLY_OPA_DISP++, gGreatBayTempleObjectIceStalactiteDL);

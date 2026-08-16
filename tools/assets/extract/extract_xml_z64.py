@@ -388,7 +388,7 @@ def main():
 
     version_memctx_base = MemoryContext(dmadata_table_rom_file_name_by_vrom)
 
-    from .extase_oot64.dlist_resources import MtxResource
+    from .extase_oot64.dlist_resources import MtxResource, DListResource
 
     if 0:
         file_gIdentityMtx = File("sys_matrix__gIdentityMtx", size=0x40)
@@ -398,6 +398,15 @@ def main():
         version_memctx_base.set_direct_file(
             vc.variables["gIdentityMtx"], file_gIdentityMtx
         )
+
+    # HACK object_yukimura_obj makes use of gActorSetupOpaDL located in z_actor.c
+    file_gActorSetupOpaDL = File("z_actor__gActorSetupOpaDL", size=8)
+    file_gActorSetupOpaDL.add_resource(
+        DListResource(
+            file_gActorSetupOpaDL, 0, "gActorSetupOpaDL", target_ucode=None
+        )
+    )
+    version_memctx_base.set_direct_file(vc.variables["gActorSetupOpaDL"], file_gActorSetupOpaDL)
 
     extraction_ctx = ExtractionContext(
         args.oot_version,

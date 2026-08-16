@@ -1301,7 +1301,7 @@ void EnBigpo_DrawMainBigpo(Actor* thisx, PlayState* play) {
         // fully visible OR fully transparent
         gfx = POLY_OPA_DISP;
         gSPDisplayList(gfx, gSetupDLs[SETUPDL_25]);
-        gSPSegment(&gfx[1], 0x0C, gActorEmptyDL); // empty display list for no transparency
+        gSPSegment(&gfx[1], 0x0C, gActorSetupOpaDL);
         gSPSegment(&gfx[2], 0x08,
                    Gfx_EnvColor(play->state.gfxCtx, this->mainColor.r, this->mainColor.g, this->mainColor.b,
                                 this->mainColor.a));
