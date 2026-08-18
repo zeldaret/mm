@@ -97,7 +97,7 @@ typedef enum EnTotoTalkState {
     /* 2  */ ENTOTO_TALK_CHOICE,
     /* 3  */ ENTOTO_TALK_AFTER_CHOICE,
     /* 4  */ ENTOTO_TALK_NEXT_MESSAGE, // Also used for declining Sound Check request
-    // 5 - 15: Sound Check Actions
+                                       // 5 - 15: Sound Check Actions
     /* 5  */ ENTOTO_TALK_START_CUTSCENE,
     /* 6  */ ENTOTO_TALK_MOVE_PLAYER_TO_STAGE,
     /* 7  */ ENTOTO_TALK_SPOTLIGHT_PROMPT,
@@ -116,26 +116,26 @@ typedef enum EnTotoTalkState {
 
 static EnTotoSpeakData sDialogSpeakData[] = {
     /* Milk Bar */
-    { ENTOTO_TALK_EVENT,                    0, 0x2B21 }, // "...play for us again?"
-    { ENTOTO_TALK_AFTER_CHOICE,             2, 0      },
-    { ENTOTO_TALK_EVENT,                    0, 0x2B23 }, // "...scheduled to do a show..."
-    { ENTOTO_TALK_CHOICE,                   1, 0x2B24 }, // "...help me with a performance?"
-    { ENTOTO_TALK_NEXT_MESSAGE,             0, 0x2B25 }, // "Oh, that's too bad."
-    { ENTOTO_TALK_AFTER_CHOICE,             2, 0      },
-    { ENTOTO_TALK_NEXT_MESSAGE,             0, 0x2B25 }, // "Oh, that's too bad."
+    { ENTOTO_TALK_EVENT, 0, 0x2B21 }, // "...play for us again?"
+    { ENTOTO_TALK_AFTER_CHOICE, 2, 0 },
+    { ENTOTO_TALK_EVENT, 0, 0x2B23 },        // "...scheduled to do a show..."
+    { ENTOTO_TALK_CHOICE, 1, 0x2B24 },       // "...help me with a performance?"
+    { ENTOTO_TALK_NEXT_MESSAGE, 0, 0x2B25 }, // "Oh, that's too bad."
+    { ENTOTO_TALK_AFTER_CHOICE, 2, 0 },
+    { ENTOTO_TALK_NEXT_MESSAGE, 0, 0x2B25 }, // "Oh, that's too bad."
     /* Mayor's Residence */
-    { ENTOTO_TALK_SET_UP_MAYORS_RESIDENCE,  0, 0x2A94 }, // "Are the fins damp lately?"
-    { ENTOTO_TALK_EVENT,                    0, 0x2A95 },  // "What? Mikau???"
-    { ENTOTO_TALK_NEXT_MESSAGE,             0, 0x2A96 },  // "You look so much like him..."
-    { ENTOTO_TALK_NEXT_MESSAGE,             0, 0x2A97 },  // "With the ocean the way it is..."
-    { ENTOTO_TALK_EVENT,                    0, 0x2A98 },  // "That's the greeting..."
-    { ENTOTO_TALK_EVENT,                    0, 0x2A99 },  // "I am Toto..."
-    { ENTOTO_TALK_NEXT_MESSAGE,             0, 0x2A9A },  // "The Indigo-Go's is..."
-    { ENTOTO_TALK_NEXT_MESSAGE,             0, 0x2A9B },  // "Canceling the show..."
-    { ENTOTO_TALK_EVENT,                    0, 0x2AE1 },  // "Are the fins damp?"  (Deku)
-    { ENTOTO_TALK_EVENT,                    0, 0x2AE2 },  // "That's the greeting" (Deku)
-    { ENTOTO_TALK_NEXT_MESSAGE,             0, 0x2AE3 },  // "Where's your momma?"
-    { ENTOTO_TALK_NEXT_MESSAGE,             0, 0x2AE4 },  // "Once you get older..."
+    { ENTOTO_TALK_SET_UP_MAYORS_RESIDENCE, 0, 0x2A94 }, // "Are the fins damp lately?"
+    { ENTOTO_TALK_EVENT, 0, 0x2A95 },                   // "What? Mikau???"
+    { ENTOTO_TALK_NEXT_MESSAGE, 0, 0x2A96 },            // "You look so much like him..."
+    { ENTOTO_TALK_NEXT_MESSAGE, 0, 0x2A97 },            // "With the ocean the way it is..."
+    { ENTOTO_TALK_EVENT, 0, 0x2A98 },                   // "That's the greeting..."
+    { ENTOTO_TALK_EVENT, 0, 0x2A99 },                   // "I am Toto..."
+    { ENTOTO_TALK_NEXT_MESSAGE, 0, 0x2A9A },            // "The Indigo-Go's is..."
+    { ENTOTO_TALK_NEXT_MESSAGE, 0, 0x2A9B },            // "Canceling the show..."
+    { ENTOTO_TALK_EVENT, 0, 0x2AE1 },                   // "Are the fins damp?"  (Deku)
+    { ENTOTO_TALK_EVENT, 0, 0x2AE2 },                   // "That's the greeting" (Deku)
+    { ENTOTO_TALK_NEXT_MESSAGE, 0, 0x2AE3 },            // "Where's your momma?"
+    { ENTOTO_TALK_NEXT_MESSAGE, 0, 0x2AE4 },            // "Once you get older..."
 };
 
 typedef enum EnTotoAnimation {
@@ -155,28 +155,28 @@ static AnimationHeader* sTalkSittingAnimations[ENTOTO_ANIM_MAX] = {
 
 static EnTotoSpeakData sSoundCheckSpeakData[] = {
     /* Sound Check Before Completion */
-    { ENTOTO_TALK_START_CUTSCENE,               0,  0 },
-    { ENTOTO_TALK_MOVE_PLAYER_TO_STAGE,         20, 0 },
-    { ENTOTO_TALK_SPOTLIGHT_PROMPT,             0,  0 },
-    { ENTOTO_TALK_WAIT_PLAYER_ENTER_SPOTLIGHT,  9,  0 },
-    { ENTOTO_TALK_WAIT_ADVANCE_TEXT,            10, 0 },
-    { ENTOTO_TALK_CLOSING,                      0,  0 },
-    { ENTOTO_TALK_START_CUTSCENE_ON_STAGE,      0,  0 },
-    { ENTOTO_TALK_WIND_FISH_OCARINA_STAFF,      0,  0 },
-    { ENTOTO_TALK_START_CUTSCENE_WIND_FISH,     0,  0 },
-    { ENTOTO_TALK_WAIT_WIND_FISH_CUTSCENE,      0,  0 },
-    { ENTOTO_TALK_START_GORMAN_CUTSCENE,        0,  0 },
-    { ENTOTO_TALK_RETURN_TRUE,                  1,  0 },
-    { ENTOTO_TALK_RETURN_TRUE,                  0,  0 },
+    { ENTOTO_TALK_START_CUTSCENE, 0, 0 },
+    { ENTOTO_TALK_MOVE_PLAYER_TO_STAGE, 20, 0 },
+    { ENTOTO_TALK_SPOTLIGHT_PROMPT, 0, 0 },
+    { ENTOTO_TALK_WAIT_PLAYER_ENTER_SPOTLIGHT, 9, 0 },
+    { ENTOTO_TALK_WAIT_ADVANCE_TEXT, 10, 0 },
+    { ENTOTO_TALK_CLOSING, 0, 0 },
+    { ENTOTO_TALK_START_CUTSCENE_ON_STAGE, 0, 0 },
+    { ENTOTO_TALK_WIND_FISH_OCARINA_STAFF, 0, 0 },
+    { ENTOTO_TALK_START_CUTSCENE_WIND_FISH, 0, 0 },
+    { ENTOTO_TALK_WAIT_WIND_FISH_CUTSCENE, 0, 0 },
+    { ENTOTO_TALK_START_GORMAN_CUTSCENE, 0, 0 },
+    { ENTOTO_TALK_RETURN_TRUE, 1, 0 },
+    { ENTOTO_TALK_RETURN_TRUE, 0, 0 },
     /* Sound Check After Completion */
-    { ENTOTO_TALK_START_CUTSCENE,               0,  0 },
-    { ENTOTO_TALK_MOVE_PLAYER_TO_STAGE,         20, 0 },
-    { ENTOTO_TALK_WAIT_PLAYER_ENTER_SPOTLIGHT,  5,  0 },
-    { ENTOTO_TALK_START_CUTSCENE_WIND_FISH,     0,  0 },
-    { ENTOTO_TALK_WAIT_WIND_FISH_CUTSCENE,      0,  0 },
-    { ENTOTO_TALK_WAIT_AFTER_WIND_FISH,         20, 0x2B22 }, // "I wanted you to hear Lulu's voice"
-    { ENTOTO_TALK_CLOSING,                      0,  0 },
-    { ENTOTO_TALK_RETURN_TRUE,                  0,  0 }
+    { ENTOTO_TALK_START_CUTSCENE, 0, 0 },
+    { ENTOTO_TALK_MOVE_PLAYER_TO_STAGE, 20, 0 },
+    { ENTOTO_TALK_WAIT_PLAYER_ENTER_SPOTLIGHT, 5, 0 },
+    { ENTOTO_TALK_START_CUTSCENE_WIND_FISH, 0, 0 },
+    { ENTOTO_TALK_WAIT_WIND_FISH_CUTSCENE, 0, 0 },
+    { ENTOTO_TALK_WAIT_AFTER_WIND_FISH, 20, 0x2B22 }, // "I wanted you to hear Lulu's voice"
+    { ENTOTO_TALK_CLOSING, 0, 0 },
+    { ENTOTO_TALK_RETURN_TRUE, 0, 0 }
 };
 
 static EnTotoSpotlight sSpotlightList[] = {
