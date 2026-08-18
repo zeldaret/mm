@@ -90,6 +90,30 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_U8(attentionRangeType, ATTENTION_RANGE_1, ICHAIN_STOP),
 };
 
+typedef enum EnTotoTalkState {
+    // 0 - 4: Milk Bar Dialog
+    /* 0  */ ENTOTO_TALK_EVENT,
+    /* 1  */ ENTOTO_TALK_CLOSING,
+    /* 2  */ ENTOTO_TALK_CHOICE,
+    /* 3  */ ENTOTO_TALK_AFTER_CHOICE,
+    /* 4  */ ENTOTO_TALK_NEXT_MESSAGE, // Also used for declining Sound Check request
+    // 5 - 15: Sound Check Actions
+    /* 5  */ ENTOTO_TALK_START_CUTSCENE,
+    /* 6  */ ENTOTO_TALK_MOVE_PLAYER_TO_STAGE,
+    /* 7  */ ENTOTO_TALK_SPOTLIGHT_PROMPT,
+    /* 8  */ ENTOTO_TALK_WAIT_PLAYER_ENTER_SPOTLIGHT,
+    /* 9  */ ENTOTO_TALK_WAIT_ADVANCE_TEXT,
+    /* 10 */ ENTOTO_TALK_START_CUTSCENE_ON_STAGE,
+    /* 11 */ ENTOTO_TALK_WIND_FISH_OCARINA_STAFF,
+    /* 12 */ ENTOTO_TALK_START_CUTSCENE_WIND_FISH,
+    /* 13 */ ENTOTO_TALK_WAIT_WIND_FISH_CUTSCENE,
+    /* 14 */ ENTOTO_TALK_WAIT_AFTER_WIND_FISH,
+    /* 15 */ ENTOTO_TALK_START_GORMAN_CUTSCENE,
+    // 16 - 17: Mayor's Residence Dialog
+    /* 16 */ ENTOTO_TALK_SET_UP_MAYORS_RESIDENCE,
+    /* 17 */ ENTOTO_TALK_RETURN_TRUE // Only in SetupFuncs
+} EnTotoTalkState;
+
 static EnTotoSpeakData sDialogSpeakData[] = {
     /* Milk Bar */
     { ENTOTO_TALK_EVENT,                    0, 0x2B21 }, // "...play for us again?"
@@ -176,30 +200,6 @@ static u16 sOcarinaActionWindFishPrompts[] = {
 };
 
 static u8 sSpotlightIndexToForm[] = { 8, 4, 2, 1 }; // Spotlight index to form flag
-
-typedef enum EnTotoTalkState {
-    // 0 - 4: Milk Bar Dialog
-    /* 0  */ ENTOTO_TALK_EVENT,
-    /* 1  */ ENTOTO_TALK_CLOSING,
-    /* 2  */ ENTOTO_TALK_CHOICE,
-    /* 3  */ ENTOTO_TALK_AFTER_CHOICE,
-    /* 4  */ ENTOTO_TALK_NEXT_MESSAGE, // Also used for declining Sound Check request
-    // 5 - 15: Sound Check Actions
-    /* 5  */ ENTOTO_TALK_START_CUTSCENE,
-    /* 6  */ ENTOTO_TALK_MOVE_PLAYER_TO_STAGE,
-    /* 7  */ ENTOTO_TALK_SPOTLIGHT_PROMPT,
-    /* 8  */ ENTOTO_TALK_WAIT_PLAYER_ENTER_SPOTLIGHT,
-    /* 9  */ ENTOTO_TALK_WAIT_ADVANCE_TEXT,
-    /* 10 */ ENTOTO_TALK_START_CUTSCENE_ON_STAGE,
-    /* 11 */ ENTOTO_TALK_WIND_FISH_OCARINA_STAFF,
-    /* 12 */ ENTOTO_TALK_START_CUTSCENE_WIND_FISH,
-    /* 13 */ ENTOTO_TALK_WAIT_WIND_FISH_CUTSCENE,
-    /* 14 */ ENTOTO_TALK_WAIT_AFTER_WIND_FISH,
-    /* 15 */ ENTOTO_TALK_START_GORMAN_CUTSCENE,
-    // 16 - 17: Mayor's Residence Dialog
-    /* 16 */ ENTOTO_TALK_SET_UP_MAYORS_RESIDENCE,
-    /* 17 */ ENTOTO_TALK_RETURN_TRUE // Only in SetupFuncs
-} EnTotoTalkState;
 
 static EnTotoTalkFunc sTalkStateSetupFuncs[] = {
     /* 0  */ EnToto_SetupTalk_NextMessage,
