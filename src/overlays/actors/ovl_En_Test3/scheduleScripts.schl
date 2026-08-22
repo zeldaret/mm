@@ -2,21 +2,21 @@ sScheduleScript {
     if_day (1) {
         if_scene (SCENE_ALLEY) {
             if_time_range (6, 50, 7, 20) {
-                return_time (6, 50, 7, 20, 15)
+                return_time (6, 50, 7, 20, KAFEI_SCH_RETURNING_TO_CURIOSITY_SHOP_DAY_1)
             } else if_before_time (7, 30) {
                 return_none
-            } else if_week_event_reg (WEEKEVENTREG_51_04) {
-                return_s (10)
+            } else if_week_event_reg (WEEKEVENTREG_HIT_LAUNDRY_POOL_BELL) {
+                return_s (KAFEI_SCH_HEARD_BELL_RING)
             } else {
                 return_none
             }
         } else if_scene (SCENE_CLOCKTOWER) {
             if_time_range (6, 0, 6, 30) {
-                return_time (6, 0, 6, 30, 13)
+                return_time (6, 0, 6, 30, KAFEI_SCH_GOING_TO_POSTBOX)
             } else if_time_range (6, 30, 6, 35) {
-                return_s (1)
+                return_s (KAFEI_SCH_HANDLING_LETTER)
             } else if_time_range (6, 35, 6, 50) {
-                return_time (6, 35, 6, 50, 14)
+                return_time (6, 35, 6, 50, KAFEI_SCH_RETURNING_TO_LAUNDRY_POOL)
             } else {
                 return_none
             }
@@ -24,24 +24,24 @@ sScheduleScript {
             return_none
         }
     } else if_day (2) {
-        if_week_event_reg (WEEKEVENTREG_51_02) {
+        if_week_event_reg (WEEKEVENTREG_LETTER_TO_KAFEI_SCHEDULED_TODAY) {
             if_scene (SCENE_ALLEY) {
                 if_before_time (13, 0) {
                     branch (label_0x050)
                 } else if_time_range (15, 5, 15, 25) {
-                    return_time (15, 5, 15, 25, 16)
+                    return_time (15, 5, 15, 25, KAFEI_SCH_RUNNING_TO_POSTMAN)
                 } else if_time_range (15, 25, 15, 40) {
-                    return_s (1)
+                    return_s (KAFEI_SCH_HANDLING_LETTER)
                 } else if_time_range (15, 40, 16, 0) {
-                    return_time (15, 40, 16, 0, 17)
+                    return_time (15, 40, 16, 0, KAFEI_SCH_RUNNING_BACK_TO_DOOR_WITH_LETTER)
                 } else {
                     return_none
                 }
             } else if_scene (SCENE_AYASHIISHOP) {
                 if_time_range (15, 55, 16, 10) {
-                    return_time (15, 55, 16, 10, 12)
+                    return_time (15, 55, 16, 10, KAFEI_SCH_RETURNING_TO_CURIOSITY_SHOP_DAY_2)
                 } else if_time_range (16, 10, 22, 10) {
-                    return_s (3)
+                    return_s (KAFEI_SCH_MEETING_LINK_IN_CURIOSITY_SHOP)
                 } else {
                     return_none
                 }
@@ -52,8 +52,8 @@ sScheduleScript {
             branch (label_0x050)
 
         label_0x050:
-            if_week_event_reg (WEEKEVENTREG_51_04) {
-                return_l (10)
+            if_week_event_reg (WEEKEVENTREG_HIT_LAUNDRY_POOL_BELL) {
+                return_l (KAFEI_SCH_HEARD_BELL_RING)
             } else {
                 return_none
             }
@@ -62,8 +62,8 @@ sScheduleScript {
         if_week_event_reg (WEEKEVENTREG_RECOVERED_STOLEN_BOMB_BAG) {
         label_0x12C:
             if_scene (SCENE_AYASHIISHOP) {
-                if_week_event_reg (WEEKEVENTREG_51_08) {
-                    return_s (4)
+                if_week_event_reg (WEEKEVENTREG_KAFEI_ENTRUSTED_LINK) {
+                    return_s (KAFEI_SCH_WAITING_AT_CURIOSITY_SHOP)
                 } else {
                     return_none
                 }
@@ -74,33 +74,33 @@ sScheduleScript {
             if_week_event_reg (WEEKEVENTREG_SAKON_DEAD) {
                 branch (label_0x12C)
             } else if_scene (SCENE_SECOM) {
-                return_s (7)
+                return_s (KAFEI_SCH_INSIDE_SAKONS_HIDEOUT)
             } else if_week_event_reg (WEEKEVENTREG_ESCAPED_SAKONS_HIDEOUT) {
                 if_scene (SCENE_IKANA) {
                     if_week_event_reg (WEEKEVENTREG_90_02) {
                         return_none
                     } else {
-                        return_s (9)
+                        return_s (KAFEI_SCH_RUNNING_TO_TOWN)
                     }
                 } else if_scene (SCENE_TOWN) {
                     if_time_range (4, 0, 4, 10) {
-                        return_time (4, 0, 4, 10, 11)
+                        return_time (4, 0, 4, 10, KAFEI_SCH_ENTERING_CLOCK_TOWN_EAST)
                     } else {
                         return_none
                     }
                 } else if_scene (SCENE_YADOYA) {
                     if_time_range (4, 10, 4, 30) {
-                        return_time (4, 10, 4, 30, 18)
+                        return_time (4, 10, 4, 30, KAFEI_SCH_ENTERING_STOCK_POT_INN)
                     } else if_week_event_reg (WEEKEVENTREG_DELIVERED_PENDANT_OF_MEMORIES) {
                         if_time_range (4, 30, 6, 0) {
-                            return_s (8)
+                            return_s (KAFEI_SCH_BECOMING_A_COUPLE)
                         } else {
                             return_none
                         }
                     } else if_time_range (4, 30, 4, 45) {
-                        return_time (4, 30, 4, 45, 19)
+                        return_time (4, 30, 4, 45, KAFEI_SCH_WALKING_TO_BRIDAL_DRESS)
                     } else if_time_range (4, 45, 6, 0) {
-                        return_s (6)
+                        return_s (KAFEI_SCH_COULDNT_KEEP_PROMISE)
                     } else {
                         return_none
                     }
@@ -108,18 +108,18 @@ sScheduleScript {
                     return_none
                 }
             } else if_scene (SCENE_IKANA) {
-                not if_week_event_reg (WEEKEVENTREG_51_08) {
-                    return_s (5)
+                not if_week_event_reg (WEEKEVENTREG_KAFEI_ENTRUSTED_LINK) {
+                    return_s (KAFEI_SCH_WAITING_OUTSIDE_SAKONS_HIDEOUT)
                 } else if_week_event_reg (WEEKEVENTREG_61_08) {
-                    return_s (5)
+                    return_s (KAFEI_SCH_WAITING_OUTSIDE_SAKONS_HIDEOUT)
                 } else if_week_event_reg (WEEKEVENTREG_51_10) {
                     if_time_range (19, 0, 19, 10) {
-                        return_time (19, 0, 19, 10, 20)
+                        return_time (19, 0, 19, 10, KAFEI_SCH_ENTERING_SAKONS_HIDEOUT)
                     } else {
                         return_none
                     }
                 } else if_before_time (19, 0) {
-                    return_s (5)
+                    return_s (KAFEI_SCH_WAITING_OUTSIDE_SAKONS_HIDEOUT)
                 } else {
                     return_none
                 }
