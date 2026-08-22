@@ -5,6 +5,7 @@
 #   Element 3: For credits text.
 {
     '\n'            : (0x11, 0x000A, 0x01),
+    ' '             : (0x20, 0x0020, 0x20),
 
     '[A]'           : (0xB0, 0x839F, None),
     '[B]'           : (0xB1, 0x83A0, None),

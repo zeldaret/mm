@@ -36,9 +36,9 @@ It currently builds the following ROM and compressed ROM:
 
 ### Japanese N64 1.1 research in this fork
 
-This fork contains a non-matching research path for the Japanese Rev A / `n64-jp-1.1` ROM. It can reproducibly extract the verified 4529-message Japanese table, the 155-entry item-name archive, boss title cards, and known Japanese title-screen layout differences without committing ROM-derived assets. See [N64 Japanese 1.1 research extraction](docs/jp_rev1_research.md).
+This fork contains an expanding Japanese Rev A / `n64-jp-1.1` path. It can reproducibly extract the verified 4529-message Japanese table, rebuild all 4529 messages byte-exact through the native text pipeline, extract the 155-entry item-name archive, inspect boss title cards, and use version-specific ZAPD XML for the verified Japanese title-screen resources without committing ROM-derived assets. See [N64 Japanese 1.1 research extraction](docs/jp_rev1_research.md).
 
-The normal `assets` target is still US-oriented for non-US versions; the research path is kept separate until each Japanese asset layout is promoted into version-aware XML/build definitions.
+Most graphics and audio extraction is still US-oriented for the Japanese target; those layouts are being promoted into version-aware definitions only after they are verified against the JP retail ROM.
 
 Please refer to the following for more information:
 

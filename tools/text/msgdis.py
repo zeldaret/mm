@@ -2955,6 +2955,186 @@ class MessageDecoderNES(MessageDecoder):
             decoded = "\\\""
         return decoded
 
+class MessageDecoderJPN(MessageDecoder):
+    """Decoder for the 16-bit Japanese message stream used by N64 JP 1.1."""
+
+    def __init__(self) -> None:
+        control_end = 0x0500
+        control_codes = {
+            0x0009: ("BOX_BREAK", "", None),
+            0x000A: ("NEWLINE", "", None),
+            0x000B: ("BOX_BREAK2", "", None),
+            0x000C: ("CARRIAGE_RETURN", "", None),
+            0x001F: ("SHIFT", "h", (self.format_decimal,)),
+            0x0100: ("NAME", "", None),
+            0x0101: ("QUICKTEXT_ENABLE", "", None),
+            0x0102: ("QUICKTEXT_DISABLE", "", None),
+            0x0103: ("EVENT", "", None),
+            0x0104: ("PERSISTENT", "", None),
+            0x0110: ("BOX_BREAK_DELAYED", "h", (self.format_decimal,)),
+            0x0111: ("FADE", "h", (self.format_decimal,)),
+            0x0112: ("FADE_SKIPPABLE", "h", (self.format_decimal,)),
+            0x0120: ("SFX", "h", (self.format_sfx_id,)),
+            0x0128: ("DELAY", "h", (self.format_decimal,)),
+            0x0130: ("TEXT_SPEED_0", "", None),
+            0x0131: ("TEXT_SPEED_1", "", None),
+            0x0132: ("TEXT_SPEED_2", "", None),
+            0x0133: ("TEXT_SPEED_3", "", None),
+            0x0134: ("TEXT_SPEED_4", "", None),
+            0x0135: ("TEXT_SPEED_5", "", None),
+            0x0136: ("TEXT_SPEED_6", "", None),
+            0x0201: ("BACKGROUND", "", None),
+            0x0202: ("TWO_CHOICE", "", None),
+            0x0203: ("THREE_CHOICE", "", None),
+            0x0204: ("TIMER_POSTMAN", "", None),
+            0x0205: ("TIMER_MINIGAME_1", "", None),
+            0x0206: ("TIMER_2", "", None),
+            0x0207: ("TIMER_MOON_CRASH", "", None),
+            0x0208: ("TIMER_MINIGAME_2", "", None),
+            0x0209: ("TIMER_ENV_HAZARD", "", None),
+            0x020A: ("TIME", "", None),
+            0x020B: ("CHEST_FLAGS", "", None),
+            0x020C: ("INPUT_BANK", "", None),
+            0x020D: ("RUPEES_SELECTED", "", None),
+            0x020E: ("RUPEES_TOTAL", "", None),
+            0x020F: ("TIME_UNTIL_MOON_CRASH", "", None),
+            0x021C: ("STRAY_FAIRIES", "", None),
+            0x021D: ("TOKENS", "", None),
+            0x021E: ("POINTS_TENS", "", None),
+            0x021F: ("POINTS_THOUSANDS", "", None),
+            0x0220: ("INPUT_DOGGY_RACETRACK_BET", "", None),
+            0x0221: ("INPUT_BOMBER_CODE", "", None),
+            0x0222: ("PAUSE_MENU", "", None),
+            0x0223: ("TIME_SPEED", "", None),
+            0x0224: ("OWL_WARP", "", None),
+            0x0225: ("INPUT_LOTTERY_CODE", "", None),
+            0x0226: ("SPIDER_HOUSE_MASK_CODE", "", None),
+            0x0227: ("STRAY_FAIRIES_LEFT_WOODFALL", "", None),
+            0x0228: ("STRAY_FAIRIES_LEFT_SNOWHEAD", "", None),
+            0x0229: ("STRAY_FAIRIES_LEFT_GREAT_BAY", "", None),
+            0x022A: ("STRAY_FAIRIES_LEFT_STONE_TOWER", "", None),
+            0x022B: ("POINTS_BOAT_ARCHERY", "", None),
+            0x022C: ("LOTTERY_CODE", "", None),
+            0x022D: ("LOTTERY_CODE_GUESS", "", None),
+            0x022E: ("HELD_ITEM_PRICE", "", None),
+            0x022F: ("BOMBER_CODE", "", None),
+            0x0230: ("EVENT2", "", None),
+            0x0231: ("SPIDER_HOUSE_MASK_CODE_1", "", None),
+            0x0232: ("SPIDER_HOUSE_MASK_CODE_2", "", None),
+            0x0233: ("SPIDER_HOUSE_MASK_CODE_3", "", None),
+            0x0234: ("SPIDER_HOUSE_MASK_CODE_4", "", None),
+            0x0235: ("SPIDER_HOUSE_MASK_CODE_5", "", None),
+            0x0236: ("SPIDER_HOUSE_MASK_CODE_6", "", None),
+            0x0237: ("HOURS_UNTIL_MOON_CRASH", "", None),
+            0x0238: ("TIME_UNTIL_NEW_DAY", "", None),
+            0x0240: ("END_ALT", "", None),
+            0x0300: ("HS_POINTS_BANK_RUPEES", "", None),
+            0x0301: ("HS_POINTS_UNK_1", "", None),
+            0x0302: ("HS_POINTS_FISHING", "", None),
+            0x0303: ("HS_TIME_BOAT_ARCHERY", "", None),
+            0x0304: ("HS_TIME_HORSE_BACK_BALLOON", "", None),
+            0x0305: ("HS_TIME_LOTTERY_GUESS", "", None),
+            0x0306: ("HS_TOWN_SHOOTING_GALLERY", "", None),
+            0x0307: ("HS_UNK_1", "", None),
+            0x0308: ("HS_UNK_3_LOWER", "", None),
+            0x0309: ("HS_HORSE_BACK_BALLOON", "", None),
+            0x030A: ("HS_DEKU_PLAYGROUND_DAY_1", "", None),
+            0x030B: ("HS_DEKU_PLAYGROUND_DAY_2", "", None),
+            0x030C: ("HS_DEKU_PLAYGROUND_DAY_3", "", None),
+            0x030D: ("DEKU_PLAYGROUND_NAME_DAY_1", "", None),
+            0x030E: ("DEKU_PLAYGROUND_NAME_DAY_2", "", None),
+            0x030F: ("DEKU_PLAYGROUND_NAME_DAY_3", "", None),
+            0x0310: ("HS_BOAT_ARCHERY", "", None),
+            0x037E: ("UNKNOWN_037E", "", None),
+            0x0500: ("END", "", None),
+            0x2000: ("COLOR_DEFAULT", "", None),
+            0x2001: ("COLOR_RED", "", None),
+            0x2002: ("COLOR_GREEN", "", None),
+            0x2003: ("COLOR_BLUE", "", None),
+            0x2004: ("COLOR_YELLOW", "", None),
+            0x2005: ("COLOR_LIGHTBLUE", "", None),
+            0x2006: ("COLOR_PINK", "", None),
+            0x2007: ("COLOR_SILVER", "", None),
+            0x2008: ("COLOR_ORANGE", "", None),
+        }
+        control_header = (
+            "HEADER", "hbhhhhb",
+            (
+                self.format_2byte_hex, self.format_byte_hex, self.format_text_id,
+                self.format_2byte_hex, self.format_2byte_hex, self.format_2byte_hex,
+                self.format_byte_hex,
+            )
+        )
+        extraction_charmap = {
+            0x839F: '[A]',
+            0x83A0: '[B]',
+            0x83A1: '[C]',
+            0x83A2: '[L]',
+            0x83A3: '[R]',
+            0x83A4: '[Z]',
+            0x83A5: '[C-Up]',
+            0x83A6: '[C-Down]',
+            0x83A7: '[C-Left]',
+            0x83A8: '[C-Right]',
+            0x83A9: '▼',
+            0x83AA: '[Control-Pad]',
+        }
+        super().__init__(control_end, control_codes, control_header, extraction_charmap)
+        self.pop_char = self.pop_2byte
+        self.pop_char_end = self.pop_2byte_end
+
+    def decode_char(self, c : int) -> str:
+        if c == 0x20:
+            return " "
+        decoded = bytes([(c >> 8) & 0xFF, c & 0xFF]).decode("SHIFT-JIS")
+        if decoded == "\"":
+            decoded = "\\\""
+        return decoded
+
+    def decode(self, msg : bytes) -> str:
+        if len(msg) == 0:
+            return "None"
+        if len(msg) % 2 != 0:
+            raise ValueError("Japanese message has an odd byte size")
+
+        padding_words = 0
+        while len(msg) >= 4 and msg[-2:] == b"\x00\x00":
+            msg = msg[:-2]
+            padding_words += 1
+
+        self.msg = msg
+        assert self.pop_char_end() == self.control_end, msg
+
+        tokens : List[Tuple[str, str]] = []
+        token_run = ""
+
+        def flush_text():
+            nonlocal tokens, token_run
+            if token_run != "":
+                tokens.append(("TEXT", token_run))
+                token_run = ""
+
+        tokens.append(("HEADER", self.decode_ctrl(*self.control_header)))
+
+        while len(self.msg) != 0:
+            c = self.pop_char()
+            if c in self.control_codes:
+                flush_text()
+                tokens.append((self.control_codes[c][0], self.decode_ctrl(*self.control_codes[c])))
+            else:
+                if c in self.extraction_charmap:
+                    token_run += self.extraction_charmap[c]
+                else:
+                    token_run += self.decode_char(c)
+
+        flush_text()
+        tokens.append(("END", "END"))
+        for _ in range(padding_words):
+            tokens.append(("PAD", "PAD"))
+
+        self.msg = None
+        return self.emit_tokens(tokens)
+
 class MessageDecoderCredits(MessageDecoder):
     def __init__(self) -> None:
         control_end = 0x2
@@ -3138,13 +3318,17 @@ def extract(version_info: GameVersionInfo, baserom_segments_dir : Path, output_d
 
     code_bin = (baserom_segments_dir / "code").read_bytes()
 
-    nes_decoder = MessageDecoderNES()
+    is_jpn = "sMessageTableJPN" in version_info.variables
+    message_decoder = MessageDecoderJPN() if is_jpn else MessageDecoderNES()
     credits_decoder = MessageDecoderCredits()
 
-    message_tables : MessageTableDesc = [None for _ in range(1)] # EN
+    message_tables : MessageTableDesc = [None for _ in range(1)]
     message_table_staff : MessageTableDesc = None
 
-    message_tables[0]  = MessageTableDesc("sMessageTableNES", "message_data_static", nes_decoder, None)
+    if is_jpn:
+        message_tables[0] = MessageTableDesc("sMessageTableJPN", "jpn_message_data_static", message_decoder, None)
+    else:
+        message_tables[0] = MessageTableDesc("sMessageTableNES", "message_data_static", message_decoder, None)
     message_table_staff = MessageTableDesc("sMessageTableCredits", "staff_message_data_static", credits_decoder, None)
 
     messages = collect_messages(message_tables, baserom_segments_dir, version_info, code_vram, code_bin)
@@ -3153,8 +3337,8 @@ def extract(version_info: GameVersionInfo, baserom_segments_dir : Path, output_d
     message_data = []
 
     for text_id in sorted(messages.keys()):
-        if text_id in (0xFFFC,0xFFFD):
-            # Skip committed text ids
+        if not is_jpn and text_id in (0xFFFC,0xFFFD):
+            # The US build keeps these debugger/font messages committed below assets/text/message_data.h.
             continue
         message_data.append(messages[text_id].decode())
 

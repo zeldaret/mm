@@ -79,8 +79,9 @@ CPPFLAGS :=
 
 ifeq ($(VERSION),n64-jp-1.1)
   COMPARE := 0
+  MESSAGE_ENCODING := jpn
 else ifeq ($(VERSION),n64-us)
-# Intentionally blank for now
+  MESSAGE_ENCODING := nes
 else
 $(error Unsupported version $(VERSION))
 endif
@@ -572,9 +573,11 @@ ifeq ($(VERSION),n64-us)
 	$(PYTHON) tools/extract_text.py $(EXTRACTED_DIR)/baserom $(EXTRACTED_DIR)/text -v $(VERSION)
 	$(PYTHON) tools/extract_audio.py -b $(EXTRACTED_DIR)/baserom -o $(EXTRACTED_DIR) -v $(VERSION) --read-xml
 else
-# For non US versions just extract from the US rom
+# Japanese asset/audio XML coverage is still incomplete, so those continue to
+# reuse the US extraction. Text now has a native Japanese 1.1 decoder and is
+# extracted from the Japanese baserom segments directly.
 	$(PYTHON) tools/extract_assets.py extracted/n64-us/baserom $(EXTRACTED_DIR)/assets -j$(N_THREADS) -Z Wno-hardcoded-pointer -v n64-us
-	$(PYTHON) tools/extract_text.py extracted/n64-us/baserom $(EXTRACTED_DIR)/text -v n64-us
+	$(PYTHON) tools/extract_text.py $(EXTRACTED_DIR)/baserom $(EXTRACTED_DIR)/text -v $(VERSION)
 	$(PYTHON) tools/extract_audio.py -b extracted/n64-us/baserom -o $(EXTRACTED_DIR) -v n64-us --read-xml
 endif
 
@@ -589,7 +592,30 @@ else
 	$(error jp-rev1-research requires VERSION=n64-jp-1.1)
 endif
 
-.PHONY: jp-rev1-research
+jp-rev1-object-mag:
+ifeq ($(VERSION),n64-jp-1.1)
+	test -d $(EXTRACTED_DIR)/baserom || { echo "Run 'make setup VERSION=n64-jp-1.1' first."; false; }
+	test -x $(ZAPD) || { echo "Build tools first with 'make -C tools'."; false; }
+	$(PYTHON) tools/extract_assets.py $(EXTRACTED_DIR)/baserom $(EXTRACTED_DIR)/assets-jp-verified \
+		-s n64-jp-1.1/objects/object_mag -Z Wno-hardcoded-pointer -v $(VERSION)
+else
+	$(error jp-rev1-object-mag requires VERSION=n64-jp-1.1)
+endif
+
+jp-rev1-text-roundtrip:
+ifeq ($(VERSION),n64-jp-1.1)
+	test -d $(EXTRACTED_DIR)/baserom || { echo "Run 'make setup VERSION=n64-jp-1.1' first."; false; }
+	$(PYTHON) tools/extract_text.py $(EXTRACTED_DIR)/baserom $(EXTRACTED_DIR)/text -v $(VERSION)
+	$(RM) $(BUILD_DIR)/assets/text/message_data.enc.h $(BUILD_DIR)/assets/text/message_data_static.c \
+		$(BUILD_DIR)/assets/text/message_data_static.o
+	$(MAKE) $(BUILD_DIR)/assets/text/message_data_static.o VERSION=$(VERSION)
+	$(PYTHON) tools/jp_rev1/verify_text_roundtrip.py --baserom-dir $(EXTRACTED_DIR)/baserom \
+		--object $(BUILD_DIR)/assets/text/message_data_static.o --report $(EXTRACTED_DIR)/research/text_roundtrip_report.json
+else
+	$(error jp-rev1-text-roundtrip requires VERSION=n64-jp-1.1)
+endif
+
+.PHONY: jp-rev1-research jp-rev1-object-mag jp-rev1-text-roundtrip
 
 
 ## Assembly generation
@@ -710,7 +736,7 @@ $(BUILD_DIR)/baserom/%.o: $(EXTRACTED_DIR)/baserom/%
 	$(OBJCOPY) -I binary -O elf32-big $< $@
 
 $(BUILD_DIR)/assets/text/message_data.enc.h: assets/text/message_data.h assets/text/charmap.txt
-	$(CPP) $(CPPFLAGS) -I$(EXTRACTED_DIR) $< | $(PYTHON) tools/text/msgenc.py --encoding nes --charmap assets/text/charmap.txt - $@
+	$(CPP) $(CPPFLAGS) -Iinclude -I$(EXTRACTED_DIR) $< | $(PYTHON) tools/text/msgenc.py --encoding $(MESSAGE_ENCODING) --charmap assets/text/charmap.txt - $@
 
 $(BUILD_DIR)/assets/text/message_data_staff.enc.h: assets/text/message_data_staff.h assets/text/charmap.txt
 	$(CPP) $(CPPFLAGS) -I$(EXTRACTED_DIR) $< | $(PYTHON) tools/text/msgenc.py --encoding credits --charmap assets/text/charmap.txt - $@

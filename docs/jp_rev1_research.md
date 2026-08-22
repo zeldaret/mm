@@ -1,6 +1,6 @@
 # N64 Japanese 1.1 research extraction
 
-The `n64-jp-1.1` target is still a work in progress. The normal `assets` target currently reuses the US baserom for non-US assets, text, and audio because the shared XML and text tooling do not yet describe every Japanese-layout difference.
+The `n64-jp-1.1` target is still a work in progress. Japanese message text is now extracted and rebuilt natively from the JP 1.1 baserom, while most graphics and audio still reuse the US extraction because their version-specific layouts are not yet fully described.
 
 This document records Japanese Rev A / Japan 1.1 resources whose layout has been independently verified against the retail ROM. The associated extractor reads only the user's baserom-derived segments and writes generated data under `extracted/`, so no retail ROM data is committed to the repository.
 
@@ -34,7 +34,16 @@ Then run the verified research extractor:
 make jp-rev1-research VERSION=n64-jp-1.1
 ```
 
-The direct equivalent is:
+Two additional verification targets exercise the native Japanese paths:
+
+```sh
+make jp-rev1-text-roundtrip VERSION=n64-jp-1.1
+make jp-rev1-object-mag VERSION=n64-jp-1.1
+```
+
+`jp-rev1-text-roundtrip` extracts all Japanese messages, encodes and compiles them with the normal build tools, then verifies the resulting `.rodata` against the retail `jpn_message_data_static` segment. `jp-rev1-object-mag` runs ZAPD against the version-specific Japanese title-screen XML.
+
+The direct research-extractor equivalent is:
 
 ```sh
 .venv/bin/python3 tools/jp_rev1/extract_research.py
@@ -48,7 +57,7 @@ extracted/n64-jp-1.1/research/
 
 ## Japanese message format
 
-The Japanese Rev A message system is not the NES/US byte-oriented format currently hardcoded in `tools/text/msgdis.py`.
+The Japanese Rev A message system is not the NES/US byte-oriented format. `tools/text/msgdis.py` now selects a native `MessageDecoderJPN` for versions that define `sMessageTableJPN`, and the normal message build selects the `jpn` encoder for `n64-jp-1.1`.
 
 Verified properties:
 
@@ -73,6 +82,16 @@ The extractor preserves, for every message:
 - exact raw bytes
 
 The extracted 4529 entries were byte-compared with the independent localization research dataset: text IDs, message headers, and raw message bytes matched 4529/4529. Display-string differences in that older dataset were limited to later editorial Unicode normalization such as wave-dash/fullwidth-tilde substitutions; the research extractor keeps the retail Shift-JIS decoding.
+
+The native decomp round-trip is also byte-exact. `make jp-rev1-text-roundtrip VERSION=n64-jp-1.1` regenerates `message_data_static.o` and verifies:
+
+- retail and built `.rodata` are both 409,840 bytes;
+- both SHA-256 hashes are `90c872f3f76aad47d83bbc1acb247a96f51cf09a489a237f65bfdac2ad71fed9`;
+- all **4529** `_message_0xNNNN` symbols exist;
+- all **4529** symbol offsets match the retail `sMessageTableJPN` addresses;
+- all **4529** message byte ranges match retail exactly.
+
+Japanese retail messages `0xFFFC` and `0xFFFD` are preserved from ROM instead of using the US committed debugger placeholders. In JP 1.1, `0xFFFC` contains the ordered-font character test and `0xFFFD` contains `おしまい！！！`.
 
 One uncommon `0x037E` word remains intentionally labeled as an unknown control in message `0x08CA` rather than assigning an unsupported semantic name.
 
@@ -125,7 +144,9 @@ The Japanese source labels visible in these cards are:
 | `gTitleScreenMajorasMaskSubtitleMaskTex` | I8 `120x16` | `0x16690` | I8 `104x16`, offset `0x9680` |
 | `gTitleScreenTheLegendOfTextTex` | I8 `80x16` | `0x16E10` | I8 `72x8`, offset `0x9D00` |
 
-For this reason the normal Japanese `assets` target must not simply point all existing XML at the Japanese baserom. Version-specific XML coverage needs to be introduced resource-by-resource after each layout is verified.
+These five resources now have a version-specific XML at `assets/xml/n64-jp-1.1/objects/object_mag.xml`. `make jp-rev1-object-mag VERSION=n64-jp-1.1` extracts them directly from the Japanese baserom with ZAPD. The three I8 outputs matched the independently extracted pixels exactly; the two I4 outputs repack byte-exact after accounting for ZAPD's preview scaling of 4-bit intensity values.
+
+The rest of the normal Japanese `assets` target must not simply point all existing XML at the Japanese baserom. Version-specific XML coverage still needs to be introduced resource-by-resource after each layout is verified.
 
 ## Research manifest
 
@@ -139,11 +160,11 @@ The extractor validates every declared offset against the extracted segment size
 
 ## Scope and next steps
 
-This first stage is deliberately non-invasive: it adds reproducible Japanese-source analysis without replacing the US-oriented build assets. The next migration steps are:
+The first two migration milestones are now implemented: Japanese messages use the native text pipeline and the verified Japanese `object_mag` subset has version-specific XML. Remaining work is broader version coverage rather than message-format discovery:
 
-1. add a native Japanese message decoder/encoder to the normal text pipeline;
-2. introduce version-specific `object_mag` XML instead of reusing the US layout;
-3. promote verified Japanese UI archives (`title_static`, `memerrmsg`, `locerrmsg`, `parameter_static`, `jpn_daytelop_static`, `do_action_static`) into version-aware asset definitions;
-4. extend `tools/filelists` and matching support for `n64-jp-1.1` as coverage increases.
+1. promote verified Japanese UI archives (`title_static`, `memerrmsg`, `locerrmsg`, `parameter_static`, `jpn_daytelop_static`, `do_action_static`) into version-aware asset definitions;
+2. expand Japanese XML coverage for assets whose layouts differ from US;
+3. extend `tools/filelists`, code/data matching, and full-ROM build support for `n64-jp-1.1`;
+4. remove the remaining dependency on a US baserom for Japanese asset/audio setup as each subsystem becomes native.
 
-Keeping the research extractor separate makes each of those changes reviewable while preserving the current US matching target.
+The research extractor remains useful as an independent readback oracle while those pieces are migrated into the normal build.

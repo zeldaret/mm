@@ -115,7 +115,11 @@ u16 gBombersNotebookWeekEventFlags[BOMBERS_NOTEBOOK_EVENT_MAX] = {
 
 #define DEFINE_MESSAGE(textId, type, yPos, msg) { textId, (((type)&0xF) << 4) | ((yPos)&0xF), _message_##textId },
 
+#if MM_VERSION < N64_US
+MessageTableEntry sMessageTableJPN[] = {
+#else
 MessageTableEntry sMessageTableNES[] = {
+#endif
 #include "assets/text/message_data.h"
     { 0xFFFF, 0, NULL },
 };
@@ -6103,7 +6107,11 @@ void Message_Update(PlayState* play) {
 }
 
 void Message_SetTables(PlayState* play) {
+#if MM_VERSION < N64_US
+    play->msgCtx.messageTable = sMessageTableJPN;
+#else
     play->msgCtx.messageTableNES = sMessageTableNES;
+#endif
     play->msgCtx.messageTableCredits = sMessageTableCredits;
 }
 

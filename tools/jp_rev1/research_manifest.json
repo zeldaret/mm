@@ -106,7 +106,7 @@
     {
       "name": "gTitleScreenControllerNotConnectedTextTex",
       "segment": "object_mag",
-      "xml": "assets/xml/objects/object_mag.xml",
+      "xml": "assets/xml/n64-jp-1.1/objects/object_mag.xml",
       "offset": "0x00000",
       "format": "i4",
       "width": 256,
@@ -116,7 +116,7 @@
     {
       "name": "gTitleScreenInsertControllerTextTex",
       "segment": "object_mag",
-      "xml": "assets/xml/objects/object_mag.xml",
+      "xml": "assets/xml/n64-jp-1.1/objects/object_mag.xml",
       "offset": "0x00480",
       "format": "i4",
       "width": 144,
@@ -126,7 +126,7 @@
     {
       "name": "gTitleScreenMajorasMaskSubtitleTex",
       "segment": "object_mag",
-      "xml": "assets/xml/objects/object_mag.xml",
+      "xml": "assets/xml/n64-jp-1.1/objects/object_mag.xml",
       "offset": "0x15F10",
       "format": "i8",
       "width": 120,
@@ -136,7 +136,7 @@
     {
       "name": "gTitleScreenMajorasMaskSubtitleMaskTex",
       "segment": "object_mag",
-      "xml": "assets/xml/objects/object_mag.xml",
+      "xml": "assets/xml/n64-jp-1.1/objects/object_mag.xml",
       "offset": "0x16690",
       "format": "i8",
       "width": 120,
@@ -146,7 +146,7 @@
     {
       "name": "gTitleScreenTheLegendOfTextTex",
       "segment": "object_mag",
-      "xml": "assets/xml/objects/object_mag.xml",
+      "xml": "assets/xml/n64-jp-1.1/objects/object_mag.xml",
       "offset": "0x16E10",
       "format": "i8",
       "width": 80,

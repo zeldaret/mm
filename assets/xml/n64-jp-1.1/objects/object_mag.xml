@@ -1,0 +1,18 @@
+﻿<Root>
+    <!--
+        Japanese N64 1.1 (Rev A) title-screen resources whose layout has been
+        independently verified against the retail object_mag segment.
+
+        Keep this version-specific XML separate from assets/xml/objects/object_mag.xml:
+        the shared file currently describes the US layout, whose offsets and even
+        some texture dimensions differ substantially from Japanese 1.1.
+    -->
+    <File Name="object_mag" Segment="6">
+        <Texture Name="gTitleScreenControllerNotConnectedTextTex" OutName="title_screen_controller_not_connected_text" Format="i4" Width="256" Height="9" Offset="0x00000"/>
+        <Texture Name="gTitleScreenInsertControllerTextTex" OutName="title_screen_insert_controller_text" Format="i4" Width="144" Height="9" Offset="0x00480"/>
+
+        <Texture Name="gTitleScreenMajorasMaskSubtitleTex" OutName="title_screen_majoras_mask_subtitle" Format="i8" Width="120" Height="16" Offset="0x15F10"/>
+        <Texture Name="gTitleScreenMajorasMaskSubtitleMaskTex" OutName="title_screen_majoras_mask_subtitle_mask" Format="i8" Width="120" Height="16" Offset="0x16690"/>
+        <Texture Name="gTitleScreenTheLegendOfTextTex" OutName="title_screen_the_legend_of_text" Format="i8" Width="80" Height="16" Offset="0x16E10"/>
+    </File>
+</Root>
