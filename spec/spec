@@ -8978,6 +8978,15 @@ beginseg
     number 9
 endseg
 
+#if MM_VERSION < N64_US
+beginseg
+    name "jpn_daytelop_static"
+    compress
+    romalign 0x1000
+    include "$(BUILD_DIR)/assets/misc/jpn_daytelop_static/jpn_daytelop_static.o"
+    number 9
+endseg
+#else
 beginseg
     name "daytelop_static"
     compress
@@ -9009,6 +9018,7 @@ beginseg
     include "$(BUILD_DIR)/assets/misc/esp_daytelop_static/esp_daytelop_static.o"
     number 9
 endseg
+#endif
 
 beginseg
     name "d2_fine_static"

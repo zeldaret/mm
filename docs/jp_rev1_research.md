@@ -34,14 +34,15 @@ Then run the verified research extractor:
 make jp-rev1-research VERSION=n64-jp-1.1
 ```
 
-Two additional verification targets exercise the native Japanese paths:
+Additional verification targets exercise the native Japanese paths:
 
 ```sh
 make jp-rev1-text-roundtrip VERSION=n64-jp-1.1
+make jp-rev1-ui-roundtrip VERSION=n64-jp-1.1
 make jp-rev1-object-mag VERSION=n64-jp-1.1
 ```
 
-`jp-rev1-text-roundtrip` extracts all Japanese messages, encodes and compiles them with the normal build tools, then verifies the resulting `.rodata` against the retail `jpn_message_data_static` segment. `jp-rev1-object-mag` runs ZAPD against the version-specific Japanese title-screen XML.
+`jp-rev1-text-roundtrip` extracts all Japanese messages, encodes and compiles them with the normal build tools, then verifies the resulting `.rodata` against the retail `jpn_message_data_static` segment. `jp-rev1-ui-roundtrip` extracts the fully modeled JP UI segments and runs every PNG back through ZAPD `btex` before comparing the reconstructed segments byte-for-byte with retail. `jp-rev1-object-mag` remains a research-only partial extraction of the verified title-screen resources because the complete JP `object_mag` layout has not yet been modeled.
 
 The direct research-extractor equivalent is:
 
@@ -94,6 +95,21 @@ The native decomp round-trip is also byte-exact. `make jp-rev1-text-roundtrip VE
 Japanese retail messages `0xFFFC` and `0xFFFD` are preserved from ROM instead of using the US committed debugger placeholders. In JP 1.1, `0xFFFC` contains the ordered-font character test and `0xFFFD` contains `おしまい！！！`.
 
 One uncommon `0x037E` word remains intentionally labeled as an unknown control in message `0x08CA` rather than assigning an unsupported semantic name.
+
+## Fully modeled Japanese UI segments
+
+Four Japanese UI segments are now complete enough to participate in the normal JP asset extraction path. `make jp-rev1-ui-roundtrip VERSION=n64-jp-1.1` extracts each one, re-encodes every PNG with ZAPD `btex`, reconstructs the complete segment from its XML offsets, and requires a byte-exact match with retail.
+
+| Segment | XML | Textures | Bytes | Retail SHA-256 |
+| --- | --- | ---: | ---: | --- |
+| `memerrmsg` | shared `misc/memerrmsg.xml` | 2 | 4,736 | `a334f9656e07a090342ca66555e26bbba91039048712adcfd06c9aa63f0d49a3` |
+| `locerrmsg` | shared `misc/locerrmsg.xml` | 1 | 1,664 | `1d972c31291fe7d1c207fc186613c82a7a87d5a49015c2baf8090ef6ce392e9c` |
+| `do_action_static` | shared `interface/do_action_static.xml` | 42 | 16,128 | `f84b53aa3b77777cc952e7b12c6f3b5d695e14a8ef28b723a5d5785cb935df87` |
+| `jpn_daytelop_static` | JP-specific `n64-jp-1.1/misc/jpn_daytelop_static.xml` | 11 | 39,680 | `2eede8825620189331ff563475c944d714ab90239325182d5cbe020bee8d2a94` |
+
+For `n64-jp-1.1`, the normal `assets` target still begins with the US fallback extraction, then overwrites these verified full segments from the Japanese baserom. The spec, ROM-segment declarations, DayTelop include, and DayTelop DMA source are version-split so JP uses the retail `jpn_daytelop_static` segment while the US target retains its original `daytelop_static` plus GER/FRA/ESP segments.
+
+Version-specific XML directories are filtered by `tools/extract_assets.py`: shared XML remains available to every version, while `assets/xml/n64-jp-1.1/...` is ignored for a US extraction. This prevents partial JP research XML such as `object_mag` from contaminating the US asset pass.
 
 ## Item-name archive
 
@@ -160,10 +176,10 @@ The extractor validates every declared offset against the extracted segment size
 
 ## Scope and next steps
 
-The first two migration milestones are now implemented: Japanese messages use the native text pipeline and the verified Japanese `object_mag` subset has version-specific XML. Remaining work is broader version coverage rather than message-format discovery:
+The native Japanese message pipeline and four complete UI segments are now promoted into the JP build path, while the verified `object_mag` subset remains research-only because it is not a complete object definition. Remaining work is broader version coverage rather than message-format discovery:
 
-1. promote verified Japanese UI archives (`title_static`, `memerrmsg`, `locerrmsg`, `parameter_static`, `jpn_daytelop_static`, `do_action_static`) into version-aware asset definitions;
-2. expand Japanese XML coverage for assets whose layouts differ from US;
+1. reconstruct the complete Japanese `title_static` layout and model the currently unaccounted tail/layout differences in `parameter_static`;
+2. complete JP `object_mag` and expand Japanese XML coverage for other assets whose layouts differ from US;
 3. extend `tools/filelists`, code/data matching, and full-ROM build support for `n64-jp-1.1`;
 4. remove the remaining dependency on a US baserom for Japanese asset/audio setup as each subsystem becomes native.
 

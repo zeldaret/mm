@@ -6,6 +6,7 @@
 #include "PR/ultratypes.h"
 
 #include "romfile.h"
+#include "versions.h"
 
 #define DECLARE_SEGMENT(name)          \
     extern u8 _##name##SegmentStart[]; \
@@ -99,10 +100,14 @@ DECLARE_SEGMENT(locerrmsg)
 DECLARE_ROM_SEGMENT(locerrmsg)
 DECLARE_ROM_SEGMENT(parameter_static)
 DECLARE_ROM_SEGMENT(week_static)
+#if MM_VERSION < N64_US
+DECLARE_ROM_SEGMENT(jpn_daytelop_static)
+#else
 DECLARE_ROM_SEGMENT(daytelop_static)
 DECLARE_ROM_SEGMENT(ger_daytelop_static)
 DECLARE_ROM_SEGMENT(fra_daytelop_static)
 DECLARE_ROM_SEGMENT(esp_daytelop_static)
+#endif
 DECLARE_ROM_SEGMENT(d2_fine_static)
 DECLARE_ROM_SEGMENT(d2_cloud_static)
 DECLARE_ROM_SEGMENT(d2_fine_pal_static)

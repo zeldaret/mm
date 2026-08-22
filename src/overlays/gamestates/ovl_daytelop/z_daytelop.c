@@ -8,7 +8,11 @@
 #include "z_daytelop.h"
 #include "z64save.h"
 #include "z64shrink_window.h"
+#if MM_VERSION < N64_US
+#include "assets/misc/jpn_daytelop_static/jpn_daytelop_static.h"
+#else
 #include "assets/misc/daytelop_static/daytelop_static.h"
+#endif
 #include "assets/interface/icon_item_gameover_static/icon_item_gameover_static.h"
 
 // unused
@@ -213,10 +217,18 @@ void DayTelop_Noop(DayTelopState* this) {
 }
 
 void DayTelop_LoadGraphics(DayTelopState* this) {
+#if MM_VERSION < N64_US
+    size_t segmentSize = SEGMENT_ROM_SIZE(jpn_daytelop_static);
+#else
     size_t segmentSize = SEGMENT_ROM_SIZE(daytelop_static);
+#endif
 
     this->daytelopStaticFile = THA_AllocTailAlign16(&this->state.tha, segmentSize);
+#if MM_VERSION < N64_US
+    DmaMgr_RequestSync(this->daytelopStaticFile, SEGMENT_ROM_START(jpn_daytelop_static), segmentSize);
+#else
     DmaMgr_RequestSync(this->daytelopStaticFile, SEGMENT_ROM_START(daytelop_static), segmentSize);
+#endif
 
     segmentSize = SEGMENT_ROM_SIZE(icon_item_gameover_static);
     this->gameoverStaticFile = THA_AllocTailAlign16(&this->state.tha, segmentSize);

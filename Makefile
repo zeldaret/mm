@@ -573,10 +573,11 @@ ifeq ($(VERSION),n64-us)
 	$(PYTHON) tools/extract_text.py $(EXTRACTED_DIR)/baserom $(EXTRACTED_DIR)/text -v $(VERSION)
 	$(PYTHON) tools/extract_audio.py -b $(EXTRACTED_DIR)/baserom -o $(EXTRACTED_DIR) -v $(VERSION) --read-xml
 else
-# Japanese asset/audio XML coverage is still incomplete, so those continue to
-# reuse the US extraction. Text now has a native Japanese 1.1 decoder and is
-# extracted from the Japanese baserom segments directly.
+# Japanese asset/audio XML coverage is still incomplete, so the shared US
+# extraction remains the fallback. Fully verified Japanese segments are then
+# overlaid into the normal asset output before compilation. Text is native JP.
 	$(PYTHON) tools/extract_assets.py extracted/n64-us/baserom $(EXTRACTED_DIR)/assets -j$(N_THREADS) -Z Wno-hardcoded-pointer -v n64-us
+	$(MAKE) jp-rev1-ui-assets VERSION=$(VERSION)
 	$(PYTHON) tools/extract_text.py $(EXTRACTED_DIR)/baserom $(EXTRACTED_DIR)/text -v $(VERSION)
 	$(PYTHON) tools/extract_audio.py -b extracted/n64-us/baserom -o $(EXTRACTED_DIR) -v n64-us --read-xml
 endif
@@ -602,6 +603,44 @@ else
 	$(error jp-rev1-object-mag requires VERSION=n64-jp-1.1)
 endif
 
+jp-rev1-ui-assets:
+ifeq ($(VERSION),n64-jp-1.1)
+	test -d $(EXTRACTED_DIR)/baserom || { echo "Run 'make setup VERSION=n64-jp-1.1' first."; false; }
+	test -x $(ZAPD) || { echo "Build tools first with 'make -C tools'."; false; }
+	$(PYTHON) tools/extract_assets.py $(EXTRACTED_DIR)/baserom $(EXTRACTED_DIR)/assets \
+		-s misc/memerrmsg -Z Wno-hardcoded-pointer -v $(VERSION)
+	$(PYTHON) tools/extract_assets.py $(EXTRACTED_DIR)/baserom $(EXTRACTED_DIR)/assets \
+		-s misc/locerrmsg -Z Wno-hardcoded-pointer -v $(VERSION)
+	$(PYTHON) tools/extract_assets.py $(EXTRACTED_DIR)/baserom $(EXTRACTED_DIR)/assets \
+		-s interface/do_action_static -Z Wno-hardcoded-pointer -v $(VERSION)
+	mkdir -p $(EXTRACTED_DIR)/assets/misc/jpn_daytelop_static
+	$(ZAPD) e -eh -i assets/xml/n64-jp-1.1/misc/jpn_daytelop_static.xml \
+		-b $(EXTRACTED_DIR)/baserom -o $(EXTRACTED_DIR)/assets/misc/jpn_daytelop_static \
+		-osf $(EXTRACTED_DIR)/assets/misc/jpn_daytelop_static -gsf 1 \
+		-rconf tools/ZAPDConfigs/MM/Config.xml --cs-float both -Wno-hardcoded-pointer
+else
+	$(error jp-rev1-ui-assets requires VERSION=n64-jp-1.1)
+endif
+
+jp-rev1-ui-roundtrip: jp-rev1-ui-assets
+ifeq ($(VERSION),n64-jp-1.1)
+	$(PYTHON) tools/jp_rev1/verify_asset_roundtrip.py --segment memerrmsg \
+		--xml assets/xml/misc/memerrmsg.xml --asset-dir $(EXTRACTED_DIR)/assets/misc/memerrmsg \
+		--report $(EXTRACTED_DIR)/research/memerrmsg_roundtrip_report.json
+	$(PYTHON) tools/jp_rev1/verify_asset_roundtrip.py --segment locerrmsg \
+		--xml assets/xml/misc/locerrmsg.xml --asset-dir $(EXTRACTED_DIR)/assets/misc/locerrmsg \
+		--report $(EXTRACTED_DIR)/research/locerrmsg_roundtrip_report.json
+	$(PYTHON) tools/jp_rev1/verify_asset_roundtrip.py --segment do_action_static \
+		--xml assets/xml/interface/do_action_static.xml --asset-dir $(EXTRACTED_DIR)/assets/interface/do_action_static \
+		--report $(EXTRACTED_DIR)/research/do_action_static_roundtrip_report.json
+	$(PYTHON) tools/jp_rev1/verify_asset_roundtrip.py --segment jpn_daytelop_static \
+		--xml assets/xml/n64-jp-1.1/misc/jpn_daytelop_static.xml \
+		--asset-dir $(EXTRACTED_DIR)/assets/misc/jpn_daytelop_static \
+		--report $(EXTRACTED_DIR)/research/jpn_daytelop_static_roundtrip_report.json
+else
+	$(error jp-rev1-ui-roundtrip requires VERSION=n64-jp-1.1)
+endif
+
 jp-rev1-text-roundtrip:
 ifeq ($(VERSION),n64-jp-1.1)
 	test -d $(EXTRACTED_DIR)/baserom || { echo "Run 'make setup VERSION=n64-jp-1.1' first."; false; }
@@ -615,7 +654,7 @@ else
 	$(error jp-rev1-text-roundtrip requires VERSION=n64-jp-1.1)
 endif
 
-.PHONY: jp-rev1-research jp-rev1-object-mag jp-rev1-text-roundtrip
+.PHONY: jp-rev1-research jp-rev1-object-mag jp-rev1-ui-assets jp-rev1-ui-roundtrip jp-rev1-text-roundtrip
 
 
 ## Assembly generation

@@ -39,6 +39,36 @@
     "decoded_bytes_per_entry": 1024,
     "compression": "Yaz0-per-entry"
   },
+  "verified_full_texture_segments": [
+    {
+      "segment": "memerrmsg",
+      "xml": "assets/xml/misc/memerrmsg.xml",
+      "bytes": 4736,
+      "texture_count": 2,
+      "sha256": "a334f9656e07a090342ca66555e26bbba91039048712adcfd06c9aa63f0d49a3"
+    },
+    {
+      "segment": "locerrmsg",
+      "xml": "assets/xml/misc/locerrmsg.xml",
+      "bytes": 1664,
+      "texture_count": 1,
+      "sha256": "1d972c31291fe7d1c207fc186613c82a7a87d5a49015c2baf8090ef6ce392e9c"
+    },
+    {
+      "segment": "do_action_static",
+      "xml": "assets/xml/interface/do_action_static.xml",
+      "bytes": 16128,
+      "texture_count": 42,
+      "sha256": "f84b53aa3b77777cc952e7b12c6f3b5d695e14a8ef28b723a5d5785cb935df87"
+    },
+    {
+      "segment": "jpn_daytelop_static",
+      "xml": "assets/xml/n64-jp-1.1/misc/jpn_daytelop_static.xml",
+      "bytes": 39680,
+      "texture_count": 11,
+      "sha256": "2eede8825620189331ff563475c944d714ab90239325182d5cbe020bee8d2a94"
+    }
+  ],
   "textures": [
     {
       "name": "gOdolwaTitleCardTex",

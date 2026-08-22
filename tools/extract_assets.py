@@ -15,6 +15,25 @@ def SignalHandler(sig, frame):
     mainAbort.set()
     # Don't exit immediately to update the extracted assets file.
 
+
+def XmlMatchesVersion(fullPath: str, version: str) -> bool:
+    """Return whether an XML is shared or belongs to the selected baserom version."""
+    try:
+        rel = Path(fullPath).relative_to(Path("assets") / "xml")
+    except ValueError:
+        return True
+
+    if not rel.parts:
+        return True
+
+    version_dir = rel.parts[0]
+    # A top-level XML directory is treated as version-specific only when it is
+    # also a real baserom configuration. Shared groups such as `objects`,
+    # `interface`, and `misc` therefore continue to apply to every version.
+    if (Path("baseroms") / version_dir / "config.yml").is_file():
+        return version_dir == version
+    return True
+
 def ExtractFile(xmlPath, outputPath, outputSourcePath):
     if globalAbort.is_set():
         # Don't extract if another file wasn't extracted properly.
@@ -141,6 +160,9 @@ def main():
         if not os.path.exists(fullPath):
             print(f"Error. File {fullPath} does not exist.", file=os.sys.stderr)
             exit(1)
+        if not XmlMatchesVersion(fullPath, args.version):
+            print(f"Error. File {fullPath} does not apply to version {args.version}.", file=os.sys.stderr)
+            exit(1)
 
         initializeWorker(mainAbort, args.unaccounted, extractedAssetsTracker, manager, baseromSegmentsDir, outputDir)
         # Always extract if -s is used.
@@ -152,8 +174,13 @@ def main():
         for currentPath, _, files in os.walk(os.path.join("assets", "xml")):
             for file in files:
                 fullPath = os.path.join(currentPath, file)
-                # ZAPD can't handle audio, skip those XMLs.
-                if file.endswith(".xml") and (fullPath.find("audio") == -1):
+                # ZAPD can't handle audio. Version-specific XML directories are
+                # considered only for the selected baserom version.
+                if (
+                    file.endswith(".xml")
+                    and (fullPath.find("audio") == -1)
+                    and XmlMatchesVersion(fullPath, args.version)
+                ):
                     xmlFiles.append(fullPath)
 
         try:
