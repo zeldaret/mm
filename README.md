@@ -34,6 +34,12 @@ It currently builds the following ROM and compressed ROM:
 
 **This repo does not include any assets or assembly code necessary for compiling the ROM. A prior copy of the game is required to extract the required assets.**
 
+### Japanese N64 1.1 research in this fork
+
+This fork contains a non-matching research path for the Japanese Rev A / `n64-jp-1.1` ROM. It can reproducibly extract the verified 4529-message Japanese table, the 155-entry item-name archive, boss title cards, and known Japanese title-screen layout differences without committing ROM-derived assets. See [N64 Japanese 1.1 research extraction](docs/jp_rev1_research.md).
+
+The normal `assets` target is still US-oriented for non-US versions; the research path is kept separate until each Japanese asset layout is promoted into version-aware XML/build definitions.
+
 Please refer to the following for more information:
 
 - [Website](https://zelda.deco.mp/)

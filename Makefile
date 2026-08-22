@@ -578,6 +578,19 @@ else
 	$(PYTHON) tools/extract_audio.py -b extracted/n64-us/baserom -o $(EXTRACTED_DIR) -v n64-us --read-xml
 endif
 
+# Extract only Japanese 1.1 resources whose ROM layout has been independently
+# verified. This is intentionally separate from `assets`, which still reuses
+# the US layout for non-US versions while Japanese XML coverage is incomplete.
+jp-rev1-research:
+ifeq ($(VERSION),n64-jp-1.1)
+	test -d $(EXTRACTED_DIR)/baserom || { echo "Run 'make setup VERSION=n64-jp-1.1' first."; false; }
+	$(PYTHON) tools/jp_rev1/extract_research.py --baserom-dir $(EXTRACTED_DIR)/baserom --output-dir $(EXTRACTED_DIR)/research
+else
+	$(error jp-rev1-research requires VERSION=n64-jp-1.1)
+endif
+
+.PHONY: jp-rev1-research
+
 
 ## Assembly generation
 disasm:

@@ -1,0 +1,157 @@
+{
+  "format": "mm-n64-jp-1.1-research-v1",
+  "version": "n64-jp-1.1",
+  "notes": "Offsets below were verified against the Japanese Rev A / Japan 1.1 ROM while researching the Korean localization. Generated extraction output belongs under extracted/ and is not committed.",
+  "segment_inventory": [
+    "code",
+    "jpn_message_data_static",
+    "item_name_static",
+    "do_action_static",
+    "object_mag",
+    "object_boss01",
+    "object_boss02",
+    "object_boss03",
+    "object_boss07",
+    "object_boss_hakugin",
+    "nintendo_rogo_static",
+    "title_static",
+    "memerrmsg",
+    "locerrmsg",
+    "parameter_static",
+    "jpn_daytelop_static"
+  ],
+  "message_data": {
+    "code_segment": "code",
+    "data_segment": "jpn_message_data_static",
+    "table_variable": "sMessageTableJPN",
+    "entry_size": 8,
+    "header_size": 12,
+    "encoding": "shift_jis-wide-16bit",
+    "expected_message_count": 4529
+  },
+  "item_name_archive": {
+    "segment": "item_name_static",
+    "entry_count": 155,
+    "data_base": "0x270",
+    "decoded_format": "ia4",
+    "width": 128,
+    "height": 16,
+    "decoded_bytes_per_entry": 1024,
+    "compression": "Yaz0-per-entry"
+  },
+  "textures": [
+    {
+      "name": "gOdolwaTitleCardTex",
+      "segment": "object_boss01",
+      "xml": "assets/xml/objects/object_boss01.xml",
+      "offset": "0xC7F8",
+      "format": "ia8",
+      "width": 128,
+      "height": 40
+    },
+    {
+      "name": "gTwinmoldTitleCardTex",
+      "segment": "object_boss02",
+      "xml": "assets/xml/objects/object_boss02.xml",
+      "offset": "0x8650",
+      "format": "ia8",
+      "width": 128,
+      "height": 40
+    },
+    {
+      "name": "gGyorgTitleCardTex",
+      "segment": "object_boss03",
+      "xml": "assets/xml/objects/object_boss03.xml",
+      "offset": "0x7EC8",
+      "format": "ia8",
+      "width": 128,
+      "height": 40
+    },
+    {
+      "name": "gMajorasMaskTitleCardTex",
+      "segment": "object_boss07",
+      "xml": "assets/xml/objects/object_boss07.xml",
+      "offset": "0x2F840",
+      "format": "ia8",
+      "width": 128,
+      "height": 40
+    },
+    {
+      "name": "gMajorasIncarnationTitleCardTex",
+      "segment": "object_boss07",
+      "xml": "assets/xml/objects/object_boss07.xml",
+      "offset": "0x30C40",
+      "format": "ia8",
+      "width": 128,
+      "height": 40
+    },
+    {
+      "name": "gMajorasWrathTitleCardTex",
+      "segment": "object_boss07",
+      "xml": "assets/xml/objects/object_boss07.xml",
+      "offset": "0x32040",
+      "format": "ia8",
+      "width": 128,
+      "height": 40
+    },
+    {
+      "name": "gGohtTitleCardTex",
+      "segment": "object_boss_hakugin",
+      "xml": "assets/xml/objects/object_boss_hakugin.xml",
+      "offset": "0x14040",
+      "format": "ia8",
+      "width": 128,
+      "height": 40
+    },
+    {
+      "name": "gTitleScreenControllerNotConnectedTextTex",
+      "segment": "object_mag",
+      "xml": "assets/xml/objects/object_mag.xml",
+      "offset": "0x00000",
+      "format": "i4",
+      "width": 256,
+      "height": 9,
+      "version_note": "JP 1.1 offset; the shared XML currently describes the US layout."
+    },
+    {
+      "name": "gTitleScreenInsertControllerTextTex",
+      "segment": "object_mag",
+      "xml": "assets/xml/objects/object_mag.xml",
+      "offset": "0x00480",
+      "format": "i4",
+      "width": 144,
+      "height": 9,
+      "version_note": "JP 1.1 offset; the shared XML currently describes the US layout."
+    },
+    {
+      "name": "gTitleScreenMajorasMaskSubtitleTex",
+      "segment": "object_mag",
+      "xml": "assets/xml/objects/object_mag.xml",
+      "offset": "0x15F10",
+      "format": "i8",
+      "width": 120,
+      "height": 16,
+      "version_note": "JP 1.1 is 120x16; the shared US XML is 104x16 at a different offset."
+    },
+    {
+      "name": "gTitleScreenMajorasMaskSubtitleMaskTex",
+      "segment": "object_mag",
+      "xml": "assets/xml/objects/object_mag.xml",
+      "offset": "0x16690",
+      "format": "i8",
+      "width": 120,
+      "height": 16,
+      "version_note": "JP 1.1 effect mask paired with the 120x16 subtitle."
+    },
+    {
+      "name": "gTitleScreenTheLegendOfTextTex",
+      "segment": "object_mag",
+      "xml": "assets/xml/objects/object_mag.xml",
+      "offset": "0x16E10",
+      "format": "i8",
+      "width": 80,
+      "height": 16,
+      "version_note": "JP 1.1 is 80x16; the shared US XML is 72x8 at a different offset."
+    }
+  ]
+}
