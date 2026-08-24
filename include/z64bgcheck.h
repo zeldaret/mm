@@ -13,8 +13,9 @@ struct DynaPolyActor;
 
 #define COLPOLY_SNORMAL(x) ((s16)((x) * SHRT_MAX))
 #define COLPOLY_GET_NORMAL(n) ((n) * (1.0f / SHRT_MAX))
-#define COLPOLY_VIA_FLAG_TEST(vIA, flags) ((vIA) & (((flags)&7) << 13))
-#define COLPOLY_VTX_INDEX(vI) ((vI)&0x1FFF)
+#define COLPOLY_VTX_CHECK_FLAGS_ANY(vI, flags) ((vI) & (((flags) & 7) << 13))
+#define COLPOLY_VTX_FLAGS_MASKED(vI) ((vI) & 0xE000)
+#define COLPOLY_VTX_INDEX(vI) ((vI) & 0x1FFF)
 #define COLPOLY_VTX(vtxId, flags) ((((flags) & 7) << 13) | ((vtxId) & 0x1FFF))
 
 #define DYNAPOLY_INVALIDATE_LOOKUP (1 << 0)
@@ -36,12 +37,12 @@ struct DynaPolyActor;
      (((roomIndex)  & 0x3F) << 13) | \
      (((isDisabled) &    1) << 19))
 
-#define WATERBOX_LIGHT_INDEX_NONE 0x1F // Generates warning when built for debug and defaults to 0
+#define WATERBOX_LIGHT_INDEX_NONE 0x1F // Generates a printf warning when built for debug (OOT only) and defaults to 0
 #define WATERBOX_ROOM(properties) (((properties) >> 13) & 0x3F) // retrieves the room the waterbox is active in
 #define WATERBOX_ROOM_ALL 0x3F // value for "roomIndex" indicating "all rooms"
 
-/* The true purpose of the flag is unknown. The state is never enabled on any waterbox, and functions that
- * pass on flag enabled are never called, so there is no direct usecase context. */
+// The original intended purpose of this flag may not be disabling a waterbox. See func_800CA6F0 (unused) which by
+// contrast only considers waterboxes with this flag set.
 #define WATERBOX_IS_DISABLED (1 << 19) // Disables collision for the WaterBox
 
 // bccFlags (bgcheck check flags)
@@ -59,11 +60,17 @@ struct DynaPolyActor;
 #define BGCHECK_IGNORE_WALL (1 << 1)
 #define BGCHECK_IGNORE_FLOOR (1 << 2)
 
+// flags for flags_vIA
 // xpFlags (poly exclusion flags)
 #define COLPOLY_IGNORE_NONE 0
 #define COLPOLY_IGNORE_CAMERA (1 << 0)
 #define COLPOLY_IGNORE_ENTITY (1 << 1)
 #define COLPOLY_IGNORE_PROJECTILES (1 << 2)
+
+// flags for flags_vIB
+#define COLPOLY_IS_FLOOR_CONVEYOR (1 << 0)
+#define COLPOLY_IS_FLOOR_DEKU_FLOWER (1 << 1)
+#define COLPOLY_VIB_FLAG_4 (1 << 2)
 
 // CollisionContext flags
 #define BGCHECK_FLAG_REVERSE_CONVEYOR_FLOW 1
@@ -291,7 +298,7 @@ typedef struct CollisionHeader {
     /* 0x1C */ SurfaceType* surfaceTypeList;
     /* 0x20 */ BgCamInfo* bgCamList;
     /* 0x24 */ u16 numWaterBoxes;
-    /* 0x28 */ WaterBox* waterBoxes;
+    /* 0x28 */ WaterBox* waterBoxes; // an unsorted list of non-overlapping waterboxes
 } CollisionHeader; // size = 0x2C
 
 typedef struct {
@@ -608,7 +615,7 @@ u32 SurfaceType_IsHookshotSurface(CollisionContext* colCtx, CollisionPoly* poly,
 s32 SurfaceType_IsIgnoredByEntities(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
 s32 SurfaceType_IsIgnoredByProjectiles(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
 s32 SurfaceType_IsFloorConveyor(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
-s32 func_800C9DDC(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
+s32 SurfaceType_IsFloorDekuFlower(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
 ConveyorSpeed SurfaceType_GetConveyorSpeed(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
 u32 SurfaceType_GetConveyorDirection(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
 u32 SurfaceType_IsWallDamage(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);

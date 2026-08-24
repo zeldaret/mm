@@ -6977,7 +6977,7 @@ void func_80836D8C(Player* this) {
 }
 
 s32 func_80836DC0(PlayState* play, Player* this) {
-    if ((MREG(48) != 0) || func_800C9DDC(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId)) {
+    if ((MREG(48) != 0) || SurfaceType_IsFloorDekuFlower(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId)) {
         Player_SetAction(play, this, Player_Action_93, 0);
         this->stateFlags1 &= ~(PLAYER_STATE1_PARALLEL | PLAYER_STATE1_LOCK_ON_FORCED_TO_RELEASE);
         Player_Anim_PlayOnceMorph(play, this, &gPlayerAnim_pn_attack);
@@ -11551,7 +11551,7 @@ void Player_UpdateInterface(PlayState* play, Player* this) {
                     (sp38 || ((this->stateFlags1 & PLAYER_STATE1_8000000) &&
                               !(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)))) ||
                    ((this->transformation == PLAYER_FORM_DEKU) && (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) &&
-                    func_800C9DDC(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId))) {
+                    SurfaceType_IsFloorDekuFlower(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId))) {
             doActionA = (this->transformation == PLAYER_FORM_ZORA) ? DO_ACTION_SWIM
                         : ((this->stateFlags1 & PLAYER_STATE1_8000000) && (interactRangeActor != NULL) &&
                            (interactRangeActor->id == ACTOR_EN_ZOG))

@@ -590,7 +590,7 @@ asm/non_matchings/code/z_bgcheck/SurfaceType_IsHookshotSurface.s,SurfaceType_IsH
 asm/non_matchings/code/z_bgcheck/SurfaceType_IsIgnoredByEntities.s,SurfaceType_IsIgnoredByEntities,0x800C9D14,0xF
 asm/non_matchings/code/z_bgcheck/SurfaceType_IsIgnoredByProjectiles.s,SurfaceType_IsIgnoredByProjectiles,0x800C9D50,0xF
 asm/non_matchings/code/z_bgcheck/SurfaceType_IsFloorConveyor.s,SurfaceType_IsFloorConveyor,0x800C9D8C,0x14
-asm/non_matchings/code/z_bgcheck/func_800C9DDC.s,func_800C9DDC,0x800C9DDC,0xF
+asm/non_matchings/code/z_bgcheck/SurfaceType_IsFloorDekuFlower.s,SurfaceType_IsFloorDekuFlower,0x800C9DDC,0xF
 asm/non_matchings/code/z_bgcheck/SurfaceType_GetConveyorSpeed.s,SurfaceType_GetConveyorSpeed,0x800C9E18,0xA
 asm/non_matchings/code/z_bgcheck/SurfaceType_GetConveyorDirection.s,SurfaceType_GetConveyorDirection,0x800C9E40,0x12
 asm/non_matchings/code/z_bgcheck/SurfaceType_IsWallDamage.s,SurfaceType_IsWallDamage,0x800C9E88,0xD

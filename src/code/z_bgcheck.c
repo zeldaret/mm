@@ -561,8 +561,8 @@ f32 BgCheck_RaycastFloorStaticList(CollisionContext* colCtx, u16 xpFlags, SSList
 
         if (((flags & 1) && (colPoly->normal.y < 0)) ||
             ((arg9 & 0x20) && ((colCtx->colHeader->surfaceTypeList[colPoly->type].data[0] >> 0x1E) & 1)) ||
-            COLPOLY_VIA_FLAG_TEST(colPoly->flags_vIA, xpFlags) ||
-            (COLPOLY_VIA_FLAG_TEST(colPoly->flags_vIB, 4) &&
+            COLPOLY_VTX_CHECK_FLAGS_ANY(colPoly->flags_vIA, xpFlags) ||
+            (COLPOLY_VTX_CHECK_FLAGS_ANY(colPoly->flags_vIB, COLPOLY_VIB_FLAG_4) &&
              (((actor != NULL) && (actor->category != ACTORCAT_PLAYER)) ||
               ((actor == NULL) && (xpFlags != COLPOLY_IGNORE_CAMERA))))) {
             if (curNode->next == SS_NULL) {
@@ -712,8 +712,8 @@ s32 BgCheck_SphVsStaticWall(StaticLookup* lookup, CollisionContext* colCtx, u16 
         nz = COLPOLY_GET_NORMAL(curPoly->normal.z);
         normalXZ = sqrtf(SQ(nx) + SQ(nz));
         planeDist = Math3D_DistPlaneToPos(nx, ny, nz, curPoly->dist, &resultPos);
-        if (radius < fabsf(planeDist) || COLPOLY_VIA_FLAG_TEST(curPoly->flags_vIA, xpFlags) ||
-            (COLPOLY_VIA_FLAG_TEST(curPoly->flags_vIB, 4) &&
+        if (radius < fabsf(planeDist) || COLPOLY_VTX_CHECK_FLAGS_ANY(curPoly->flags_vIA, xpFlags) ||
+            (COLPOLY_VTX_CHECK_FLAGS_ANY(curPoly->flags_vIB, COLPOLY_VIB_FLAG_4) &&
              (((actor != NULL) && (actor->category != ACTORCAT_PLAYER)) ||
               ((actor == NULL) && (xpFlags != COLPOLY_IGNORE_CAMERA))))) {
             if (curNode->next == SS_NULL) {
@@ -800,8 +800,8 @@ s32 BgCheck_SphVsStaticWall(StaticLookup* lookup, CollisionContext* colCtx, u16 
         nz = COLPOLY_GET_NORMAL(curPoly->normal.z);
         normalXZ = sqrtf(SQ(nx) + SQ(nz));
         planeDist = Math3D_DistPlaneToPos(nx, ny, nz, curPoly->dist, &resultPos);
-        if (radius < fabsf(planeDist) || COLPOLY_VIA_FLAG_TEST(curPoly->flags_vIA, xpFlags) ||
-            (COLPOLY_VIA_FLAG_TEST(curPoly->flags_vIB, 4) &&
+        if (radius < fabsf(planeDist) || COLPOLY_VTX_CHECK_FLAGS_ANY(curPoly->flags_vIA, xpFlags) ||
+            (COLPOLY_VTX_CHECK_FLAGS_ANY(curPoly->flags_vIB, COLPOLY_VIB_FLAG_4) &&
              (((actor != NULL) && (actor->category != ACTORCAT_PLAYER)) ||
               ((actor == NULL) && (xpFlags != COLPOLY_IGNORE_CAMERA))))) {
             if (curNode->next == SS_NULL) {
@@ -907,8 +907,8 @@ s32 BgCheck_CheckStaticCeiling(StaticLookup* lookup, u16 xpFlags, CollisionConte
 
         curPolyId = curNode->polyId;
         curPoly = &polyList[curPolyId];
-        if (COLPOLY_VIA_FLAG_TEST(colCtx->colHeader->polyList[curPolyId].flags_vIA, xpFlags) ||
-            (COLPOLY_VIA_FLAG_TEST(colCtx->colHeader->polyList[curPolyId].flags_vIB, 4) &&
+        if (COLPOLY_VTX_CHECK_FLAGS_ANY(colCtx->colHeader->polyList[curPolyId].flags_vIA, xpFlags) ||
+            (COLPOLY_VTX_CHECK_FLAGS_ANY(colCtx->colHeader->polyList[curPolyId].flags_vIB, COLPOLY_VIB_FLAG_4) &&
              (((actor != NULL) && (actor->category != ACTORCAT_PLAYER)) ||
               ((actor == NULL) && (xpFlags != COLPOLY_IGNORE_CAMERA))))) {
             if (curNode->next == SS_NULL) {
@@ -976,9 +976,9 @@ s32 BgCheck_CheckLineAgainstSSList(StaticLineTest* arg0) {
         checkedPoly = &arg0->colCtx->polyNodes.polyCheckTbl[polyId];
 
         if ((*checkedPoly == true) ||
-            ((arg0->xpFlags2 != 0) && !COLPOLY_VIA_FLAG_TEST(test.poly->flags_vIA, arg0->xpFlags2)) ||
-            COLPOLY_VIA_FLAG_TEST(test.poly->flags_vIA, arg0->xpFlags1) ||
-            (COLPOLY_VIA_FLAG_TEST(test.poly->flags_vIB, 4) &&
+            ((arg0->xpFlags2 != 0) && !COLPOLY_VTX_CHECK_FLAGS_ANY(test.poly->flags_vIA, arg0->xpFlags2)) ||
+            COLPOLY_VTX_CHECK_FLAGS_ANY(test.poly->flags_vIA, arg0->xpFlags1) ||
+            (COLPOLY_VTX_CHECK_FLAGS_ANY(test.poly->flags_vIB, COLPOLY_VIB_FLAG_4) &&
              (((arg0->actor != NULL) && (arg0->actor->category != ACTORCAT_PLAYER)) ||
               ((arg0->actor == NULL) && (arg0->xpFlags1 != COLPOLY_IGNORE_CAMERA))))) {
             if (curNode->next == SS_NULL) {
@@ -1063,8 +1063,8 @@ s32 BgCheck_SphVsFirstStaticPolyList(SSNode* node, u16 xpFlags, CollisionContext
     while (true) {
         curPolyId = node->polyId;
         curPoly = &polyList[curPolyId];
-        if (COLPOLY_VIA_FLAG_TEST(colCtx->colHeader->polyList[curPolyId].flags_vIA, xpFlags) ||
-            (COLPOLY_VIA_FLAG_TEST(colCtx->colHeader->polyList[curPolyId].flags_vIB, 4) &&
+        if (COLPOLY_VTX_CHECK_FLAGS_ANY(colCtx->colHeader->polyList[curPolyId].flags_vIA, xpFlags) ||
+            (COLPOLY_VTX_CHECK_FLAGS_ANY(colCtx->colHeader->polyList[curPolyId].flags_vIB, COLPOLY_VIB_FLAG_4) &&
              (((actor != NULL) && (actor->category != ACTORCAT_PLAYER)) ||
               ((actor == NULL) && (xpFlags != COLPOLY_IGNORE_CAMERA))))) {
             if (node->next != SS_NULL) {
@@ -2999,8 +2999,8 @@ void DynaPoly_AddBgActorToLookup(PlayState* play, DynaCollisionContext* dyna, s3
             vIB = (COLPOLY_VTX_INDEX(newPoly->flags_vIB) + *vtxStartIndex);
             vIC = newPoly->vIC + *vtxStartIndex;
 
-            newPoly->flags_vIA = vIA | (newPoly->flags_vIA & 0xE000);
-            newPoly->flags_vIB = vIB | (newPoly->flags_vIB & 0xE000);
+            newPoly->flags_vIA = vIA | COLPOLY_VTX_FLAGS_MASKED(newPoly->flags_vIA);
+            newPoly->flags_vIB = vIB | COLPOLY_VTX_FLAGS_MASKED(newPoly->flags_vIB);
             newPoly->vIC = vIC;
             dVtxList = dyna->vtxList;
             vtxA.x = dVtxList[vIA].x;
@@ -3187,8 +3187,8 @@ f32 BgCheck_RaycastFloorDynaList(DynaRaycast* dynaRaycast, u32 listType) {
 
     while (true) {
         id = curNode->polyId;
-        if (COLPOLY_VIA_FLAG_TEST(polyList[id].flags_vIA, dynaRaycast->xpFlags) ||
-            (COLPOLY_VIA_FLAG_TEST(polyList[id].flags_vIB, 4) &&
+        if (COLPOLY_VTX_CHECK_FLAGS_ANY(polyList[id].flags_vIA, dynaRaycast->xpFlags) ||
+            (COLPOLY_VTX_CHECK_FLAGS_ANY(polyList[id].flags_vIB, COLPOLY_VIB_FLAG_4) &&
              (((dynaRaycast->actor != NULL) && (dynaRaycast->actor->category != ACTORCAT_PLAYER)) ||
               ((dynaRaycast->actor == NULL) && (dynaRaycast->xpFlags != COLPOLY_IGNORE_CAMERA)))) ||
             ((dynaRaycast->unk_24 & 0x20) &&
@@ -3394,9 +3394,10 @@ s32 BgCheck_SphVsDynaWallInBgActor(CollisionContext* colCtx, u16 xpFlags, DynaCo
         normalXZ = sqrtf(SQ(nx) + SQ(nz));
 
         planeDist = Math3D_DistPlaneToPos(nx, ny, nz, poly->dist, &resultPos);
-        if (radius < fabsf(planeDist) || COLPOLY_VIA_FLAG_TEST(poly->flags_vIA, xpFlags) ||
-            (COLPOLY_VIA_FLAG_TEST(poly->flags_vIB, 4) && (((actor != NULL) && (actor->category != ACTORCAT_PLAYER)) ||
-                                                           ((actor == NULL) && (xpFlags != COLPOLY_IGNORE_CAMERA))))) {
+        if (radius < fabsf(planeDist) || COLPOLY_VTX_CHECK_FLAGS_ANY(poly->flags_vIA, xpFlags) ||
+            (COLPOLY_VTX_CHECK_FLAGS_ANY(poly->flags_vIB, COLPOLY_VIB_FLAG_4) &&
+             (((actor != NULL) && (actor->category != ACTORCAT_PLAYER)) ||
+              ((actor == NULL) && (xpFlags != COLPOLY_IGNORE_CAMERA))))) {
             if (curNode->next == SS_NULL) {
                 break;
             } else {
@@ -3470,9 +3471,10 @@ s32 BgCheck_SphVsDynaWallInBgActor(CollisionContext* colCtx, u16 xpFlags, DynaCo
         normalXZ = sqrtf(SQ(nx) + SQ(nz));
 
         planeDist = Math3D_DistPlaneToPos(nx, ny, nz, poly->dist, &resultPos);
-        if (radius < fabsf(planeDist) || COLPOLY_VIA_FLAG_TEST(poly->flags_vIA, xpFlags) ||
-            (COLPOLY_VIA_FLAG_TEST(poly->flags_vIB, 4) && (((actor != NULL) && (actor->category != ACTORCAT_PLAYER)) ||
-                                                           ((actor == NULL) && (xpFlags != COLPOLY_IGNORE_CAMERA))))) {
+        if (radius < fabsf(planeDist) || COLPOLY_VTX_CHECK_FLAGS_ANY(poly->flags_vIA, xpFlags) ||
+            (COLPOLY_VTX_CHECK_FLAGS_ANY(poly->flags_vIB, COLPOLY_VIB_FLAG_4) &&
+             (((actor != NULL) && (actor->category != ACTORCAT_PLAYER)) ||
+              ((actor == NULL) && (xpFlags != COLPOLY_IGNORE_CAMERA))))) {
             if (curNode->next == SS_NULL) {
                 break;
             } else {
@@ -3630,9 +3632,10 @@ s32 BgCheck_CheckDynaCeilingList(CollisionContext* colCtx, u16 xpFlags, DynaColl
     while (true) {
         polyId = curNode->polyId;
         poly = &dyna->polyList[polyId];
-        if (COLPOLY_VIA_FLAG_TEST(poly->flags_vIA, xpFlags) ||
-            (COLPOLY_VIA_FLAG_TEST(poly->flags_vIB, 4) && (((actor != NULL) && (actor->category != ACTORCAT_PLAYER)) ||
-                                                           ((actor == NULL) && (xpFlags != COLPOLY_IGNORE_CAMERA))))) {
+        if (COLPOLY_VTX_CHECK_FLAGS_ANY(poly->flags_vIA, xpFlags) ||
+            (COLPOLY_VTX_CHECK_FLAGS_ANY(poly->flags_vIB, COLPOLY_VIB_FLAG_4) &&
+             (((actor != NULL) && (actor->category != ACTORCAT_PLAYER)) ||
+              ((actor == NULL) && (xpFlags != COLPOLY_IGNORE_CAMERA))))) {
             if (curNode->next == SS_NULL) {
                 break;
             } else {
@@ -3738,8 +3741,8 @@ s32 BgCheck_CheckLineAgainstBgActorSSList(DynaLineTest* dynaLineTest) {
     while (true) {
         polyId = curNode->polyId;
         test.poly = &dynaLineTest->dyna->polyList[polyId];
-        if (COLPOLY_VIA_FLAG_TEST(test.poly->flags_vIA, dynaLineTest->xpFlags) ||
-            (COLPOLY_VIA_FLAG_TEST(test.poly->flags_vIB, 4) &&
+        if (COLPOLY_VTX_CHECK_FLAGS_ANY(test.poly->flags_vIA, dynaLineTest->xpFlags) ||
+            (COLPOLY_VTX_CHECK_FLAGS_ANY(test.poly->flags_vIB, COLPOLY_VIB_FLAG_4) &&
              (((dynaLineTest->actor != NULL) && (dynaLineTest->actor->category != ACTORCAT_PLAYER)) ||
               ((dynaLineTest->actor == NULL) && (dynaLineTest->xpFlags != COLPOLY_IGNORE_CAMERA))))) {
             if (curNode->next == SS_NULL) {
@@ -3878,8 +3881,8 @@ s32 BgCheck_SphVsFirstDynaPolyList(CollisionContext* colCtx, u16 xpFlags, Collis
     while (true) {
         curPolyId = curNode->polyId;
         curPoly = &dyna->polyList[curPolyId];
-        if (COLPOLY_VIA_FLAG_TEST(curPoly->flags_vIA, xpFlags) ||
-            (COLPOLY_VIA_FLAG_TEST(curPoly->flags_vIB, 4) &&
+        if (COLPOLY_VTX_CHECK_FLAGS_ANY(curPoly->flags_vIA, xpFlags) ||
+            (COLPOLY_VTX_CHECK_FLAGS_ANY(curPoly->flags_vIB, COLPOLY_VIB_FLAG_4) &&
              (((actor != NULL) && (actor->category != ACTORCAT_PLAYER)) ||
               ((actor == NULL) && (xpFlags != COLPOLY_IGNORE_CAMERA))))) {
             if (curNode->next == SS_NULL) {
@@ -4308,17 +4311,17 @@ s32 SurfaceType_IsFloorConveyor(CollisionContext* colCtx, CollisionPoly* poly, s
     if (poly == NULL) {
         return false;
     }
-    flags = poly->flags_vIB & 0x2000;
+    flags = COLPOLY_VTX_CHECK_FLAGS_ANY(poly->flags_vIB, COLPOLY_IS_FLOOR_CONVEYOR);
     return !!flags;
 }
 
-s32 func_800C9DDC(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+s32 SurfaceType_IsFloorDekuFlower(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     u32 flags;
 
     if (BgCheck_GetCollisionHeader(colCtx, bgId) == NULL) {
         return true;
     }
-    flags = poly->flags_vIB & 0x4000;
+    flags = COLPOLY_VTX_CHECK_FLAGS_ANY(poly->flags_vIB, COLPOLY_IS_FLOOR_DEKU_FLOWER);
     return !!flags;
 }
 
@@ -4374,9 +4377,9 @@ s32 BgCheck_GetWaterSurface(PlayState* play, CollisionContext* colCtx, f32 x, f3
             if (curWaterBox->properties & WATERBOX_IS_DISABLED) {
                 continue;
             }
-            //! @bug: WaterBox bounds check issue. By not checking for <=, positions exactly on the border of the
-            //! WaterBox will not pass the check. This means that if two waterboxes are perfectly flush with each
-            //! other, there will be a minuscule gap between them that won't be not detected as water.
+            //! @bug: WaterBox bounds check issue. This range check excludes all points falling exactly on the border of
+            //! the WaterBox. Thus, when two waterboxes are flush against each other, a seam will exist between them
+            //! where no water is detected.
             if ((curWaterBox->minPos.x < x) && (x < curWaterBox->minPos.x + curWaterBox->xLength)) {
                 if ((curWaterBox->minPos.z < z) && (z < curWaterBox->minPos.z + curWaterBox->zLength)) {
                     *outWaterBox = curWaterBox;
