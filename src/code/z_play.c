@@ -864,8 +864,7 @@ void Play_UpdateTransition(PlayState* this) {
                 this->envCtx.sandstormPrimA = 255;
                 this->envCtx.sandstormEnvA = 255;
 
-                // "It's here!!!!!!!!!"
-                (void)"来た!!!!!!!!!!!!!!!!!!!!!";
+                (void)T("来た!!!!!!!!!!!!!!!!!!!!!", "It's here!!!!!!!!!!!!!!!!!!!!!");
 
                 this->transitionMode = TRANS_MODE_SANDSTORM_END;
             } else {

@@ -237,8 +237,6 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(cullingVolumeDownward, 1000, ICHAIN_STOP),
 };
 
-const char D_808E3DD0[] = "反射光 発生失敗";
-
 void MirRay_SetupCollider(MirRay* this) {
     MirRayDataEntry* dataEntry = &sMirRayData[MIRRAY_LOCATION(&this->actor)];
     f32 x = (this->poolPt.x - this->sourcePt.x) * dataEntry->unk_10;
@@ -294,6 +292,7 @@ void MirRay_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
 
     if (MIRRAY_LOCATION(&this->actor) >= MIRRAY_MAX) {
+        (void)T("反射光 発生失敗", "Reflected light failed to spawn");
         Actor_Kill(&this->actor);
     }
 

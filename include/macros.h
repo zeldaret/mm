@@ -2,6 +2,7 @@
 #define MACROS_H
 
 #include "PR/ultratypes.h"
+#include "versions.h"
 
 #define SCREEN_WIDTH  320
 #define SCREEN_HEIGHT 240
@@ -70,5 +71,36 @@
         (b) = _temp;        \
     }                       \
     (void)0
+
+/**
+ * The T macro holds translations in English for original debug strings written in Japanese.
+ * The translated strings match the original debug strings, they are only direct translations.
+ * For example, any original name is left as is rather than being replaced with the name in the codebase.
+ */
+#define T(jp, en) jp
+
+// IDO doesn't support variadic macros, but it merely throws a warning for the
+// number of arguments not matching the definition (warning 609) instead of
+// throwing an error. We suppress this warning and rely on GCC to catch macro
+// argument errors instead.
+// Note some tools define __sgi but preprocess with a modern cpp implementation,
+// ensure that these do not use the IDO workaround to avoid errors.
+#define IDO_PRINTF_WORKAROUND (__sgi && !__GNUC__ && !M2CTX && !PERMUTER)
+
+#if DEBUG_FEATURES
+    #define PRINTF osSyncPrintf
+#elif IDO_PRINTF_WORKAROUND
+    #if MM_VERSION >= N64_US
+        #define PRINTF(args) (void)0
+    #else
+        #define PRINTF(args) (void)(args)
+    #endif
+#else
+    #if MM_VERSION >= N64_US
+        #define PRINTF(format, ...) (void)0
+    #else
+        #define PRINTF(format, ...) (void)(format)
+    #endif
+#endif
 
 #endif // MACROS_H

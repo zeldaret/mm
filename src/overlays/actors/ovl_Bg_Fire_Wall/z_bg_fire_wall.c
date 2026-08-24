@@ -131,7 +131,11 @@ void func_809AC760(BgFireWall* this, PlayState* play) {
     } else {
         phi_a3 = (this->actor.shape.rot.y + 0x8000);
     }
+#if MM_VERSION >= N64_US
     func_800B8D98(play, &this->actor, BREG(48) + 10.0f, phi_a3, BREG(49) + 5.0f);
+#else
+    func_800B8D98(play, &this->actor, 10.0f, phi_a3, 3.0f);
+#endif
 }
 
 void func_809AC7F8(BgFireWall* this, PlayState* play) {

@@ -583,8 +583,9 @@ void PadMgr_UpdateConnections(void) {
                     // Other/Unrecognized
                     if (sPadMgrInstance->ctrlrType[i] == PADMGR_CONT_NONE) {
                         sPadMgrInstance->ctrlrType[i] = PADMGR_CONT_UNK;
-                        // "Recognized an unknown type of controller (%04x)"
-                        sprintf(msg, "知らない種類のコントローラ(%04x)を認識しました",
+                        sprintf(msg,
+                                T("知らない種類のコントローラ(%04x)を認識しました",
+                                  "Recognized an unknown type of controller (%04x)"),
                                 sPadMgrInstance->padStatus[i].type);
                     }
                     // Missing break required for matching

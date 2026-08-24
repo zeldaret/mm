@@ -108,7 +108,13 @@ end:
  * @return 0 if the IO Message was successfully put on the OS PI command queue, < 0 otherwise
  */
 s32 DmaMgr_AudioDmaHandler(OSPiHandle* pihandle, OSIoMesg* mb, s32 direction) {
-    return osEPiStartDma(pihandle, mb, direction);
+    s32 ret = osEPiStartDma(pihandle, mb, direction);
+
+    if (ret != 0) {
+        PRINTF("OOPS!!\n");
+    }
+
+    return ret;
 }
 
 DmaEntry* DmaMgr_FindDmaEntry(uintptr_t vrom) {
@@ -171,7 +177,11 @@ void DmaMgr_ProcessRequest(DmaRequest* req) {
             // only part of their content loaded into RAM, so DMA only the requested region.
             if (entry->file.vromEnd < (vrom + size)) {
                 // Error, vrom + size ends up in a different file than it started in
+#if MM_VERSION >= N64_US
                 Fault_AddHungupAndCrash("../z_std_dma.c", 499);
+#else
+                Fault_AddHungupAndCrash("../z_std_dma.c", 496);
+#endif
             }
             DmaMgr_DmaRomToRam((entry->romStart + vrom) - entry->file.vromStart, ram, size);
         } else {
@@ -182,12 +192,20 @@ void DmaMgr_ProcessRequest(DmaRequest* req) {
 
             if (vrom != entry->file.vromStart) {
                 // Error, requested vrom is not the start of a file
+#if MM_VERSION >= N64_US
                 Fault_AddHungupAndCrash("../z_std_dma.c", 518);
+#else
+                Fault_AddHungupAndCrash("../z_std_dma.c", 515);
+#endif
             }
 
             if (size != (entry->file.vromEnd - entry->file.vromStart)) {
                 // Error, only part of the file was requested
+#if MM_VERSION >= N64_US
                 Fault_AddHungupAndCrash("../z_std_dma.c", 525);
+#else
+                Fault_AddHungupAndCrash("../z_std_dma.c", 522);
+#endif
             }
 
             // Reduce the thread priority and decompress the file, the decompression routine handles the DMA
@@ -198,13 +216,19 @@ void DmaMgr_ProcessRequest(DmaRequest* req) {
         }
     } else {
         // Error, invalid index
+#if MM_VERSION >= N64_US
         Fault_AddHungupAndCrash("../z_std_dma.c", 558);
+#else
+        Fault_AddHungupAndCrash("../z_std_dma.c", 555);
+#endif
     }
 }
 
 void DmaMgr_ThreadEntry(void* arg) {
     OSMesg msg;
     DmaRequest* req;
+
+    PRINTF(T("ＤＭＡマネージャスレッド実行開始\n", "DMA manager thread execution start\n"));
 
     while (true) {
         // Wait for DMA Requests to arrive from other threads
@@ -223,6 +247,8 @@ void DmaMgr_ThreadEntry(void* arg) {
             osSendMesg(req->notifyQueue, req->notifyMsg, OS_MESG_NOBLOCK);
         }
     }
+
+    PRINTF(T("ＤＭＡマネージャスレッド実行終了\n", "DMA manager thread execution end\n"));
 }
 
 /**

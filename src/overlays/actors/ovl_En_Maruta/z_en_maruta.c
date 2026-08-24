@@ -312,7 +312,7 @@ void EnMaruta_SittingWhole(EnMaruta* this, PlayState* play) {
     if ((this->actor.parent != NULL) && (this->actor.parent->id == ACTOR_EN_KENDO_JS)) {
         EnKendoJs* kendoJs = (EnKendoJs*)this->actor.parent;
 
-        kendoJs->unk_292 = this->actor.isLockedOn;
+        kendoJs->isPlayerLockedOn = this->actor.isLockedOn;
     }
 }
 
@@ -342,7 +342,7 @@ void EnMaruta_RetractWhole(EnMaruta* this, PlayState* play) {
         if ((this->actor.parent != NULL) && (this->actor.parent->id == ACTOR_EN_KENDO_JS)) {
             EnKendoJs* kendoJs = (EnKendoJs*)this->actor.parent;
 
-            kendoJs->unk_28C--;
+            kendoJs->numLogs--;
         }
         Actor_Kill(&this->actor);
     }
@@ -579,8 +579,8 @@ void EnMaruta_UpdateCollider(EnMaruta* this, PlayState* play) {
                 if ((this->actor.parent != NULL) && (this->actor.parent->id == ACTOR_EN_KENDO_JS)) {
                     EnKendoJs* kendoJs = (EnKendoJs*)this->actor.parent;
 
-                    kendoJs->unk_28E = 1;
-                    kendoJs->unk_28C--;
+                    kendoJs->isSlashingLog = true;
+                    kendoJs->numLogs--;
                 }
                 return;
             }

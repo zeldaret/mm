@@ -1,4 +1,7 @@
 ﻿<Root>
+    <!-- Dependencies -->
+    <ExternalFile XmlPath="objects/gameplay_keep.xml" OutPath="assets/objects/gameplay_keep/"/>
+
     <File Name="object_fz" Segment="6">
         <DList Name="gFreezardBodyIntactDL" Offset="0x1130" />
         <DList Name="gFreezardBodyHornBrokenDL" Offset="0x21A0" />
