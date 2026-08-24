@@ -90,7 +90,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_U8(attentionRangeType, ATTENTION_RANGE_1, ICHAIN_STOP),
 };
 
-typedef enum EnTotoTalkState {
+typedef enum EnTotoTalkActionIndex {
     // 0 - 4: Milk Bar Dialog
     /* 0  */ ENTOTO_TALK_EVENT,
     /* 1  */ ENTOTO_TALK_CLOSING,
@@ -112,7 +112,17 @@ typedef enum EnTotoTalkState {
     // 16 - 17: Mayor's Residence Dialog
     /* 16 */ ENTOTO_TALK_SET_UP_MAYORS_RESIDENCE,
     /* 17 */ ENTOTO_TALK_RETURN_TRUE // Only in SetupFuncs
-} EnTotoTalkState;
+} EnTotoTalkActionIndex;
+
+typedef enum EnTotoSpeakDataIndex {
+    /*  0 */ ENTOTO_SPEAKDATA_SOUND_CHECK_REPLAY = 0,
+    /*  2 */ ENTOTO_SPEAKDATA_SOUND_CHECK_INTRO = 2,
+    /*  3 */ ENTOTO_SPEAKDATA_SOUND_CHECK_ASK_FOR_HELP = 3,
+    /*  6 */ ENTOTO_SPEAKDATA_SOUND_CHECK_CANCEL = 6,
+    /*  7 */ ENTOTO_SPEAKDATA_MAYORS_RESIDENCE_GREET_NON_DEKU = 7,
+    /* 15 */ ENTOTO_SPEAKDATA_MAYORS_RESIDENCE_GREET_DEKU = 15,
+    /* 18 */ ENTOTO_SPEAKDATA_MAYORS_RESIDENCE_REPEAT_DEKU = 18
+} EnTotoSpeakDataIndex;
 
 static EnTotoSpeakData sDialogSpeakData[] = {
     /* Milk Bar */
