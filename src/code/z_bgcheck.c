@@ -4315,6 +4315,11 @@ s32 SurfaceType_IsFloorConveyor(CollisionContext* colCtx, CollisionPoly* poly, s
     return !!flags;
 }
 
+/**
+ * Checks if poly is a dive spot for Deku Link
+ *
+ * Returns true if the floor is a dive spot, else false
+ */
 s32 SurfaceType_IsFloorDekuFlower(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     u32 flags;
 
