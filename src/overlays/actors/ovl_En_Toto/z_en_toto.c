@@ -350,7 +350,7 @@ void EnToto_Idle(EnToto* this, PlayState* play) {
         ((play->sceneId != SCENE_MILK_BAR) && EnToto_IsFacingPlayer(this, 0x2000))) {
 
         if (this->shouldCancelSoundCheck) {
-            this->text = &sDialogSpeakData[6]; // "Oh, that's too bad."
+            this->text = &sDialogSpeakData[ENTOTO_SPEAKDATA_SOUND_CHECK_CANCEL];
             this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
             Actor_OfferTalkExchange(&this->actor, play, 9999.9f, 9999.9f, PLAYER_IA_NONE);
         } else {
@@ -359,19 +359,24 @@ void EnToto_Idle(EnToto* this, PlayState* play) {
             if (play->sceneId == SCENE_SONCHONOIE) {
                 if (player->transformation == PLAYER_FORM_DEKU) {
                     if (!Flags_GetSwitch(play, ENTOTO_GET_DEKU_SPOKEN_FLAG(&this->actor))) {
-                        this->text = &sDialogSpeakData[15]; // "Are the fins damp lately?" (as Deku)
+                        this->text = &sDialogSpeakData[ENTOTO_SPEAKDATA_MAYORS_RESIDENCE_GREET_DEKU];
                     } else {
-                        this->text = &sDialogSpeakData[18]; // "Once you get older, come see us perform!"
+                        this->text = &sDialogSpeakData[ENTOTO_SPEAKDATA_MAYORS_RESIDENCE_REPEAT_DEKU];
                     }
                 } else {
-                    this->text = &sDialogSpeakData[7]; // "Are the fins damp lately?" (non-Deku)
+                    this->text =
+                        &sDialogSpeakData[ENTOTO_SPEAKDATA_MAYORS_RESIDENCE_GREET_NON_DEKU]; // "Are the fins damp
+                                                                                             // lately?" (non-Deku)
                 }
             } else if (ENTOTO_FINISHED_WIND_FISH) {
-                this->text = &sDialogSpeakData[0]; // "Are you going to play for us again?"
+                this->text =
+                    &sDialogSpeakData[ENTOTO_SPEAKDATA_SOUND_CHECK_REPLAY]; // "Are you going to play for us again?"
             } else if (!Flags_GetSwitch(play, ENTOTO_GET_ZORA_SPOKEN_FLAG(&this->actor))) {
-                this->text = &sDialogSpeakData[2]; // "We were scheduled to do a show, but..."
+                this->text =
+                    &sDialogSpeakData[ENTOTO_SPEAKDATA_SOUND_CHECK_INTRO]; // "We were scheduled to do a show, but..."
             } else {
-                this->text = &sDialogSpeakData[3]; // "Could you help me with a performance?"
+                this->text = &sDialogSpeakData[ENTOTO_SPEAKDATA_SOUND_CHECK_ASK_FOR_HELP]; // "Could you help me with a
+                                                                                           // performance?"
             }
         }
 
@@ -407,7 +412,8 @@ void EnToto_Talk(EnToto* this, PlayState* play) {
 
 void EnToto_SetupSoundCheck(EnToto* this, PlayState* play) {
     this->csId = this->actor.csId;
-    this->text = ENTOTO_FINISHED_WIND_FISH ? &sSoundCheckSpeakData[13] : &sSoundCheckSpeakData[0];
+    this->text = ENTOTO_FINISHED_WIND_FISH ? &sSoundCheckSpeakData[ENTOTO_SPEAKDATA_WIND_FISH_PROMPT]
+                                           : &sSoundCheckSpeakData[ENTOTO_SPEAKDATA_SOUND_CHECK_REPLAY];
     EnToto_RunTalkStateSetupFunc(this, play);
     play->actorCtx.flags |= ACTORCTX_FLAG_5;
     this->faceChange.face = 0;
