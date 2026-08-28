@@ -50,6 +50,7 @@
  */
 
 #include "z_boss_03.h"
+#include "vt.h"
 #include "overlays/actors/ovl_Door_Warp1/z_door_warp1.h"
 #include "overlays/actors/ovl_En_Water_Effect/z_en_water_effect.h"
 #include "overlays/actors/ovl_Item_B_Heart/z_item_b_heart.h"
@@ -480,6 +481,12 @@ void Boss03_Init(Actor* thisx, PlayState* play2) {
         return;
     }
 
+    PRINTF(VT_FGCOL(CYAN) T(" ☆ ボス１発生 ☆ \n", " ☆ Boss 1 appears ☆ \n") VT_RST);
+
+#if MM_VERSION < N64_US
+    if (1) {}
+#endif
+
     this->actor.world.pos = sGyorgInitialPos;
 
     // Since Boss03_RandZeroOne is only used on this Init function, the resulting values end up being deterministic
@@ -622,12 +629,19 @@ void func_809E34B8(Boss03* this, PlayState* play) {
         // Player is above water && Player is standing on ground
         if ((this->waterHeight < player->actor.world.pos.y) && (player->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
             Boss03_SetupPrepareCharge(this, play);
-        } else if ((player->transformation != PLAYER_FORM_GORON) && (player->transformation != PLAYER_FORM_DEKU)) {
-            if (KREG(70) == 0) {
-                Boss03_SetupChasePlayer(this, play);
-            } else if (this->numSpawnedSmallFish <= 0) {
-                Boss03_SetupChasePlayer(this, play);
-            }
+            return;
+        }
+
+#if MM_VERSION >= N64_US
+        if ((player->transformation == PLAYER_FORM_GORON) || (player->transformation == PLAYER_FORM_DEKU)) {
+            return;
+        }
+#endif
+
+        if (KREG(70) == 0) {
+            Boss03_SetupChasePlayer(this, play);
+        } else if (this->numSpawnedSmallFish <= 0) {
+            Boss03_SetupChasePlayer(this, play);
         }
     }
 }
@@ -1955,6 +1969,12 @@ void Boss03_Update(Actor* thisx, PlayState* play2) {
     Vec3f dropletPos;
     s16 j;
     f32 yRot;
+
+    PRINTF("FISH COUNT %d\n", this->numSpawnedSmallFish);
+
+#if MM_VERSION < N64_US
+    if (1) {}
+#endif
 
     this->actor.hintId = TATL_HINT_ID_GYORG;
 

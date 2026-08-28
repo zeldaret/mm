@@ -4724,16 +4724,13 @@ void Npc_TrackPoint(Actor* actor, NpcInteractInfo* interactInfo, s16 presetIndex
                              rotLimits.rotateYaw);
 }
 
-Gfx D_801AEF88[] = {
-    gsDPSetRenderMode(AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
-                          G_RM_FOG_SHADE_A,
-                      AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
-                          GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA)),
+Gfx gActorSetupXluDL[] = {
+    gsDPSetRenderMode(G_RM_FOG_SHADE_A, G_RM_AA_ZB_XLU_SURF2 | Z_UPD),
     gsDPSetAlphaCompare(G_AC_THRESHOLD),
     gsSPEndDisplayList(),
 };
 
-Gfx D_801AEFA0[] = {
+Gfx gActorSetupOpaDL[] = {
     gsSPEndDisplayList(),
 };
 

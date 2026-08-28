@@ -267,7 +267,7 @@ void ObjHamishi_Draw(Actor* thisx, PlayState* play) {
         thisx->shape.shadowAlpha = 160;
         Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
-        gSPSegment(POLY_OPA_DISP++, 0x08, D_801AEFA0);
+        gSPSegment(POLY_OPA_DISP++, 0x08, gActorSetupOpaDL);
         MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 170, 130, 255);
         gSPDisplayList(POLY_OPA_DISP++, gFieldSilverBoulderDL);
@@ -277,7 +277,7 @@ void ObjHamishi_Draw(Actor* thisx, PlayState* play) {
         thisx->shape.shadowAlpha = sp20 * 0.627451f;
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
-        gSPSegment(POLY_XLU_DISP++, 0x08, D_801AEF88);
+        gSPSegment(POLY_XLU_DISP++, 0x08, gActorSetupXluDL);
         MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 170, 130, (s32)sp20);
         gSPDisplayList(POLY_XLU_DISP++, gFieldSilverBoulderDL);
