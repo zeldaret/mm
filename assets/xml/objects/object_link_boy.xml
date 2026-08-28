@@ -59,9 +59,7 @@
         <Texture Name="object_link_boy_Tex_00AF08" OutName="tex_00AF08" Format="ci4" Width="32" Height="32" Offset="0xAF08" TlutOffset="0x81A8"/>
         <Texture Name="gLinkFierceDeityHandTex" OutName="hand" Format="ci4" Width="16" Height="16" Offset="0xB108" TlutOffset="0x81C8" />
         <Texture Name="object_link_boy_Tex_00B188" OutName="tex_00B188" Format="ci4" Width="64" Height="64" Offset="0xB188" TlutOffset="0x81E8"/>
-
-        <!-- TODO this texture should be 50x75 but the u64 type of textures makes this not match currently -->
-        <Texture Name="object_link_boy_Tex_00B988" OutName="tex_00B988" Format="rgba16" Width="50" Height="74" Offset="0xB988" />
+        <Texture Name="object_link_boy_Tex_00B988" OutName="tex_00B988" Format="rgba16" Width="50" Height="75" Offset="0xB988" />
 
         <Limb Name="gLinkFierceDeityRootLimb" Type="LOD" EnumName="LINK_FIERCE_DEITY_LIMB_ROOT" Offset="0xD6D4" />
         <Limb Name="gLinkFierceDeityWaistLimb" Type="LOD" EnumName="LINK_FIERCE_DEITY_LIMB_WAIST" Offset="0xD6E4" />

@@ -6,6 +6,7 @@ variables:
   gSequenceFontTable: 0x801E1420
   gSequenceTable:  0x801E1630
   gSampleBankTable: 0x801E1E40
+  gActorSetupOpaDL: 0x801AEFA0
 archives:
   - map_i_static
   - map_grand_static
