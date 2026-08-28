@@ -1362,6 +1362,8 @@ wordReplace = {
     "D_801D1DE0": "gIdentityMtx",
     "D_801D1E20": "gIdentityMtxF",
     "sSetupDL": "gSetupDLs",
+    "D_801AEFA0": "gActorSetupOpaDL",
+    "D_801AEF88": "gActorSetupXluDL",
 
     "gFaultStruct": "gFaultMgr",
 
