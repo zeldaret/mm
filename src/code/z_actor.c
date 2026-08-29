@@ -4724,12 +4724,24 @@ void Npc_TrackPoint(Actor* actor, NpcInteractInfo* interactInfo, s16 presetIndex
                              rotLimits.rotateYaw);
 }
 
+/**
+ * A display list setting up for translucent drawing when a fading actor is partially faded,
+ * overriding the opaque render mode from the calling display list.
+ * Typically this DL is assigned to a segment that is called by the display lists from the assets.
+ * @see gActorSetupOpaDL
+ */
 Gfx gActorSetupXluDL[] = {
     gsDPSetRenderMode(G_RM_FOG_SHADE_A, G_RM_AA_ZB_XLU_SURF2 | Z_UPD),
     gsDPSetAlphaCompare(G_AC_THRESHOLD),
     gsSPEndDisplayList(),
 };
 
+/**
+ * A no-op display list to use when a fading actor is fully opaque,
+ * retaining the opaque render mode from the calling display list.
+ * Typically this DL is assigned to a segment that is called by the display lists from the assets.
+ * @see gActorSetupXluDL
+ */
 Gfx gActorSetupOpaDL[] = {
     gsSPEndDisplayList(),
 };
