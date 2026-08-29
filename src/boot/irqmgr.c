@@ -53,30 +53,6 @@ s32 sIrqMgrRetraceCount = 0;
 #define IRQ_PRENMI480_MSG 672
 #define IRQ_PRENMI500_MSG 673
 
-#if DEBUG_FEATURES
-#define IRQMGR_PRINTF osSyncPrintf
-#elif IDO_PRINTF_WORKAROUND
-#if MM_VERSION < N64_US
-#define IRQMGR_PRINTF(args) \
-    do {                    \
-        if (1)              \
-            (void)args;     \
-    } while (0)
-#else
-#define IRQMGR_PRINTF(args) (void)0
-#endif
-#else
-#if MM_VERSION < N64_US
-#define IRQMGR_PRINTF(format, ...) \
-    do {                           \
-        if (1)                     \
-            (void)format;          \
-    } while (0)
-#else
-#define IRQMGR_PRINTF(format, ...) (void)0
-#endif
-#endif
-
 /**
  * Registers a client and an associated message queue with the IRQ manager. When an
  * interrupt event is received by the IRQ manager, these clients will be notified of
@@ -151,9 +127,9 @@ void IrqMgr_JamMesgToClients(IrqMgr* irqMgr, OSMesg msg) {
 
     while (client != NULL) {
         if (MQ_IS_FULL(client->queue)) {
-            IRQMGR_PRINTF(T("irqmgr_JamMesgForClient:メッセージキューがあふれています mq=%08x cnt=%d\n",
-                            "irqmgr_JamMesgForClient: Message queue is overflowing mq=%08x cnt=%d"),
-                          client->queue, MQ_GET_COUNT(client->queue));
+            PRINTF(T("irqmgr_JamMesgForClient:メッセージキューがあふれています mq=%08x cnt=%d\n",
+                     "irqmgr_JamMesgForClient: Message queue is overflowing mq=%08x cnt=%d"),
+                   client->queue, MQ_GET_COUNT(client->queue));
         } else {
             //! @bug The function's name suggests this would use osJamMesg rather than osSendMesg, using the
             //! latter makes this function no different than IrqMgr_SendMesgToClients.
@@ -181,14 +157,14 @@ void IrqMgr_HandlePreNMI(IrqMgr* irqMgr) {
 }
 
 void IrqMgr_CheckStacks(void) {
-    IRQMGR_PRINTF(T("irqmgr.c: PRENMIから0.5秒経過\n", "irqmgr.c: 0.5 seconds after PRENMI\n"));
+    PRINTF(T("irqmgr.c: PRENMIから0.5秒経過\n", "irqmgr.c: 0.5 seconds after PRENMI\n"));
 
     if (StackCheck_Check(NULL) == STACK_STATUS_OK) {
-        IRQMGR_PRINTF(T("スタックは大丈夫みたいです\n", "The stack looks ok\n"));
+        PRINTF(T("スタックは大丈夫みたいです\n", "The stack looks ok\n"));
     } else {
-        IRQMGR_PRINTF(T("スタックがオーバーフローしたか危険な状態です\n", "Stack overflow or dangerous\n"));
-        IRQMGR_PRINTF(T("早々にスタックサイズを増やすか、スタックを消費しないようにしてください\n",
-                        "Increase stack size early or don't consume stack\n"));
+        PRINTF(T("スタックがオーバーフローしたか危険な状態です\n", "Stack overflow or dangerous\n"));
+        PRINTF(T("早々にスタックサイズを増やすか、スタックを消費しないようにしてください\n",
+                 "Increase stack size early or don't consume stack\n"));
     }
 }
 
@@ -209,9 +185,9 @@ void IrqMgr_HandlePRENMI480(IrqMgr* irqMgr) {
 
     result = osAfterPreNMI();
     if (result != 0) {
-        IRQMGR_PRINTF(T("osAfterPreNMIが %d を返しました！？\n", "osAfterPreNMI returned %d !?\n"), result);
+        PRINTF(T("osAfterPreNMIが %d を返しました！？\n", "osAfterPreNMI returned %d !?\n"), result);
     } else {
-        IRQMGR_PRINTF(T("RSPが停止していません\n", "RSP is not stopped\n"));
+        PRINTF(T("RSPが停止していません\n", "RSP is not stopped\n"));
     }
 }
 
@@ -237,7 +213,7 @@ void IrqMgr_ThreadEntry(void* arg) {
     IrqMgr* irqMgr = (IrqMgr*)arg;
     s32 exit;
 
-    IRQMGR_PRINTF(T("ＩＲＱマネージャスレッド実行開始\n", "Start IRQ manager thread execution\n"));
+    PRINTF(T("ＩＲＱマネージャスレッド実行開始\n", "Start IRQ manager thread execution\n"));
     exit = false;
 
     while (!exit) {
@@ -249,41 +225,44 @@ void IrqMgr_ThreadEntry(void* arg) {
                 break;
 
             case IRQ_PRENMI_MSG:
-                IRQMGR_PRINTF("PRE_NMI_MSG\n");
-                IRQMGR_PRINTF(T("スケジューラ：PRE_NMIメッセージを受信\n", "Scheduler: Receives PRE_NMI message\n"));
+                PRINTF("PRE_NMI_MSG\n");
+                PRINTF(T("スケジューラ：PRE_NMIメッセージを受信\n", "Scheduler: Receives PRE_NMI message\n"));
                 IrqMgr_HandlePreNMI(irqMgr);
                 break;
 
             case IRQ_PRENMI450_MSG:
-                IRQMGR_PRINTF("PRENMI450_MSG\n");
-                IRQMGR_PRINTF(
-                    T("スケジューラ：PRENMI450メッセージを受信\n", "Scheduler: Receives PRENMI450 message\n"));
+                PRINTF("PRENMI450_MSG\n");
+                PRINTF(T("スケジューラ：PRENMI450メッセージを受信\n", "Scheduler: Receives PRENMI450 message\n"));
                 IrqMgr_HandlePRENMI450(irqMgr);
                 break;
 
             case IRQ_PRENMI480_MSG:
-                IRQMGR_PRINTF("PRENMI480_MSG\n");
-                IRQMGR_PRINTF(
-                    T("スケジューラ：PRENMI480メッセージを受信\n", "Scheduler: Receives PRENMI480 message\n"));
+                PRINTF("PRENMI480_MSG\n");
+                PRINTF(T("スケジューラ：PRENMI480メッセージを受信\n", "Scheduler: Receives PRENMI480 message\n"));
                 IrqMgr_HandlePRENMI480(irqMgr);
                 break;
 
             case IRQ_PRENMI500_MSG:
-                IRQMGR_PRINTF("PRENMI500_MSG\n");
-                IRQMGR_PRINTF(
-                    T("スケジューラ：PRENMI500メッセージを受信\n", "Scheduler: Receives PRENMI500 message\n"));
+                PRINTF("PRENMI500_MSG\n");
+                PRINTF(T("スケジューラ：PRENMI500メッセージを受信\n", "Scheduler: Receives PRENMI500 message\n"));
                 IrqMgr_HandlePRENMI500(irqMgr);
                 break;
 
             default:
-                IRQMGR_PRINTF(T("irqmgr.c:予期しないメッセージを受け取りました(%08x)\n",
-                                "irqmgr.c: Unexpected message received (%08x)\n"),
-                              msg);
+                PRINTF(T("irqmgr.c:予期しないメッセージを受け取りました(%08x)\n",
+                         "irqmgr.c: Unexpected message received (%08x)\n"),
+                       msg);
                 break;
         }
     }
 
-    IRQMGR_PRINTF(T("ＩＲＱマネージャスレッド実行終了\n", "End of IRQ manager thread execution\n"));
+    PRINTF(T("ＩＲＱマネージャスレッド実行終了\n", "End of IRQ manager thread execution\n"));
+
+#if MM_VERSION < N64_US
+    if (1) {}
+    if (1) {}
+    if (1) {}
+#endif
 }
 
 void IrqMgr_Init(IrqMgr* irqMgr, void* stack, OSPri pri, u8 retraceCount) {

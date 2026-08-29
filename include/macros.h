@@ -93,13 +93,13 @@
     #if MM_VERSION >= N64_US
         #define PRINTF(args) (void)0
     #else
-        #define PRINTF(args) (void)(args)
+        #define PRINTF(args) do { (void)(args); } while (0)
     #endif
 #else
     #if MM_VERSION >= N64_US
         #define PRINTF(format, ...) (void)0
     #else
-        #define PRINTF(format, ...) (void)(format)
+        #define PRINTF(format, ...) do { (void)(format); } while (0)
     #endif
 #endif
 
