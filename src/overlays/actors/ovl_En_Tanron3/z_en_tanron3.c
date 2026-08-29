@@ -5,6 +5,7 @@
  */
 
 #include "z_en_tanron3.h"
+#include "z_en_item00.h"
 #include "overlays/actors/ovl_Boss_03/z_boss_03.h"
 #include "assets/objects/object_boss03/object_boss03.h"
 

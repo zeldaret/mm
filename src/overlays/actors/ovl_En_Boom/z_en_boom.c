@@ -5,6 +5,7 @@
  */
 
 #include "z_en_boom.h"
+#include "z_en_item00.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)

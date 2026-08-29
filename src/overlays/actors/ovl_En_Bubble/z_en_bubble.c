@@ -5,6 +5,7 @@
  */
 
 #include "z_en_bubble.h"
+#include "z_en_item00.h"
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED)
 

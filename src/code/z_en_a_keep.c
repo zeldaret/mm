@@ -1,4 +1,5 @@
 #include "global.h"
+#include "z_en_a_keep.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)

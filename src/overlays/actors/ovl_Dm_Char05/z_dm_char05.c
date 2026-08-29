@@ -5,6 +5,8 @@
  */
 
 #include "z_dm_char05.h"
+
+#include "z64draw.h"
 #include "assets/objects/object_dmask/object_dmask.h"
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)

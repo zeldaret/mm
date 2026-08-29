@@ -5,6 +5,7 @@
  */
 
 #include "z_en_dragon.h"
+#include "z_en_item00.h"
 #include "overlays/actors/ovl_En_Ot/z_en_ot.h"
 
 #define FLAGS                                                                                 \

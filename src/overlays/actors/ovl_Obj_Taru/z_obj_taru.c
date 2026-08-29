@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_taru.h"
+#include "z_en_item00.h"
 #include "overlays/actors/ovl_En_Sw/z_en_sw.h"
 #include "overlays/effects/ovl_Effect_Ss_Kakera/z_eff_ss_kakera.h"
 #include "overlays/actors/ovl_Obj_Tsubo/z_obj_tsubo.h"
