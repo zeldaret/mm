@@ -1,27 +1,24 @@
 #include "ultra64.h"
 #include "macros.h"
 
-#if MM_VERSION < N64_US || DEBUG_FEATURES
-#define RCP_UTILS_PRINTF osSyncPrintf
-#elif IDO_PRINTF_WORKAROUND
-#define RCP_UTILS_PRINTF(args) (void)0
-#else
-#define RCP_UTILS_PRINTF(format, ...) (void)0
+#if MM_VERSION < N64_US
+#undef PRINTF
+#define PRINTF osSyncPrintf
 #endif
 
 #define printSpStatus(x, name) \
     if (x & SP_STATUS_##name)  \
-    RCP_UTILS_PRINTF(#name " ")
+    PRINTF(#name " ")
 
 #define printDpStatus(x, name) \
     if (x & DPC_STATUS_##name) \
-    RCP_UTILS_PRINTF(#name " ")
+    PRINTF(#name " ")
 
 void RcpUtils_PrintRegisterStatus(void) {
     u32 spStatus = __osSpGetStatus();
     u32 dpStatus = osDpGetStatus();
 
-    RCP_UTILS_PRINTF("osSpGetStatus=%08x: ", spStatus);
+    PRINTF("osSpGetStatus=%08x: ", spStatus);
     printSpStatus(spStatus, HALT);
     printSpStatus(spStatus, BROKE);
     printSpStatus(spStatus, DMA_BUSY);
@@ -37,9 +34,9 @@ void RcpUtils_PrintRegisterStatus(void) {
     printSpStatus(spStatus, SIG5);
     printSpStatus(spStatus, SIG6);
     printSpStatus(spStatus, SIG7);
-    RCP_UTILS_PRINTF("\n");
+    PRINTF("\n");
 
-    RCP_UTILS_PRINTF("osDpGetStatus=%08x:", dpStatus);
+    PRINTF("osDpGetStatus=%08x:", dpStatus);
     printDpStatus(dpStatus, XBUS_DMEM_DMA);
     printDpStatus(dpStatus, FREEZE);
     printDpStatus(dpStatus, FLUSH);
@@ -51,7 +48,7 @@ void RcpUtils_PrintRegisterStatus(void) {
     printDpStatus(dpStatus, DMA_BUSY);
     printDpStatus(dpStatus, END_VALID);
     printDpStatus(dpStatus, START_VALID);
-    RCP_UTILS_PRINTF("\n");
+    PRINTF("\n");
 }
 
 void RcpUtils_Reset(void) {

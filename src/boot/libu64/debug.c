@@ -1,12 +1,9 @@
 #include "global.h"
 #include "fault.h"
 
-#if MM_VERSION < N64_US || DEBUG_FEATURES
-#define DEBUG_PRINTF osSyncPrintf
-#elif IDO_PRINTF_WORKAROUND
-#define DEBUG_PRINTF(args) (void)0
-#else
-#define DEBUG_PRINTF(format, ...) (void)0
+#if MM_VERSION < N64_US
+#undef PRINTF
+#define PRINTF osSyncPrintf
 #endif
 
 #if MM_VERSION < N64_US
@@ -23,11 +20,11 @@ f32 LogUtils_CheckFloatRange(const char* exp, int line, const char* valueName, f
 NORETURN void _dbg_hungup(const char* file, int lineNum) {
     OSId threadId = osGetThreadId(NULL);
 
-    DEBUG_PRINTF("*** HungUp in thread %d, [%s:%d] ***\n", threadId, file, lineNum);
+    PRINTF("*** HungUp in thread %d, [%s:%d] ***\n", threadId, file, lineNum);
     Fault_AddHungupAndCrash(file, lineNum);
 }
 
 NORETURN void Reset(void) {
-    DEBUG_PRINTF("*** Reset ***\n");
+    PRINTF("*** Reset ***\n");
     Fault_AddHungupAndCrash("Reset", 0);
 }
