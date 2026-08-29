@@ -1343,7 +1343,7 @@
         <Texture Name="gameplay_keep_Tex_06E350" OutName="tex_06E350" Format="i4" Width="64" Height="64" Offset="0x6E350" />
         <KeyFrameSkel Name="gameplay_keep_KFSkel_06EB70" LimbType="Flex" Offset="0x6EB70"/>
         <Texture Name="gameplay_keep_Tex_06EB80" OutName="tex_06EB80" Format="i4" Width="64" Height="64" Offset="0x6EB80" />
-        <DList Name="gameplay_keep_DL_06F380" Offset="0x6F380" />
+        <DList Name="gameplay_keep_DL_06F380" Offset="0x6F380" RawPointers="0x0F000000"/>
         <DList Name="gameplay_keep_DL_06F9F0" Offset="0x6F9F0" />
         <DList Name="gameplay_keep_DL_06FAE0" Offset="0x6FAE0" />
         <DList Name="gameplay_keep_DL_06FE20" Offset="0x6FE20" />

@@ -2,6 +2,7 @@
 #define Z64SCENE_H
 
 #include "ultra64.h"
+#include "command_macros_base.h"
 #include "z64cutscene.h"
 #include "z64dma.h"
 #include "z64path.h"

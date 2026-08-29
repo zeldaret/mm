@@ -15,7 +15,7 @@ void MapDisp_InitMapI(PlayState* play);
 static UNK_TYPE4 D_801BEB30[2] = { 0, 0 };
 
 static u64 sWhiteSquareTex[] = {
-#include "assets/code/z_map_disp/white_square.i4.inc.c"
+#include "assets/code/z_map_disp/sWhiteSquareTex.i4.inc.c"
 };
 static MapDisp sMapDisp = {
     NULL, -1, 210, 140, 0, 0,    NULL, -1, NULL, 0,    0, 0, 0,    NULL, NULL, 0,

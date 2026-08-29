@@ -1,6 +1,6 @@
 CC := gcc
-CFLAGS := -Wall -Wextra -pedantic -std=c99 -g -O2
-PROGRAMS := vtxdis
+CFLAGS := -Wall -Wextra -pedantic -std=gnu99 -g -O2
+PROGRAMS := bin2c vtxdis
 
 UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Linux)
@@ -16,7 +16,7 @@ IDO_RECOMP_5_3_DIR := ido_recomp/$(DETECTED_OS)/5.3
 IDO_RECOMP_7_1_DIR := ido_recomp/$(DETECTED_OS)/7.1
 
 all: $(PROGRAMS) $(IDO_RECOMP_5_3_DIR) $(IDO_RECOMP_7_1_DIR)
-	$(MAKE) -C ZAPD
+	$(MAKE) -C assets
 	$(MAKE) -C fado
 	$(MAKE) -C buildtools
 	$(MAKE) -C audio
@@ -24,7 +24,7 @@ all: $(PROGRAMS) $(IDO_RECOMP_5_3_DIR) $(IDO_RECOMP_7_1_DIR)
 clean:
 	$(RM) $(PROGRAMS)
 	$(RM) -r ido_recomp
-	$(MAKE) -C ZAPD clean
+	$(MAKE) -C assets clean
 	$(MAKE) -C fado clean
 	$(MAKE) -C buildtools clean
 	$(MAKE) -C audio clean
@@ -34,6 +34,7 @@ distclean: clean
 
 .PHONY: all clean distclean
 
+bin2c_SOURCES	   := bin2c.c
 vtxdis_SOURCES	   := vtxdis.c
 
 define COMPILE =
