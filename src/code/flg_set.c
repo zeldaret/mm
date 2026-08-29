@@ -256,6 +256,9 @@ void FlagSet_Update(GameState* gameState) {
     if (CHECK_BTN_ALL(input->cur.button, BTN_START)) {
         if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
             s16 i;
+
+            PRINTF(T("クリアー！！！！", "clear!!!!"));
+
             for (i = 0; i < ARRAY_COUNT(gSaveContext.save.saveInfo.weekEventReg); i++) {
                 gSaveContext.save.saveInfo.weekEventReg[i] = 0;
             }
