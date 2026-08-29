@@ -791,7 +791,7 @@ void EnIshi_DrawGameplayKeepBoulder(EnIshi* this, PlayState* play) {
 
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
-        gSPSegment(POLY_XLU_DISP++, 0x08, D_801AEF88); // in z_actor, transparency dl I think
+        gSPSegment(POLY_XLU_DISP++, 0x08, gActorSetupXluDL);
         MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (s32)alpha);
         gSPDisplayList(POLY_XLU_DISP++, gFieldSilverBoulderDL);

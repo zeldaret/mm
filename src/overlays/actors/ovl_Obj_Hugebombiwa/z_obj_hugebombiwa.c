@@ -653,7 +653,7 @@ void ObjHugebombiwa_Draw(Actor* thisx, PlayState* play) {
             sp38 = (4500.0f - this->actor.projectedPos.z) * 1.275f;
             Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
-            gSPSegment(POLY_XLU_DISP++, 0x08, D_801AEF88);
+            gSPSegment(POLY_XLU_DISP++, 0x08, gActorSetupXluDL);
             MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0xFF, 255, 255, 255, (s32)sp38);
             gSPDisplayList(POLY_XLU_DISP++, object_bombiwa_DL_002F60);

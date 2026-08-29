@@ -277,7 +277,7 @@ void ObjHamishi_Draw(Actor* thisx, PlayState* play) {
         thisx->shape.shadowAlpha = sp20 * 0.627451f;
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
-        gSPSegment(POLY_XLU_DISP++, 0x08, D_801AEF88);
+        gSPSegment(POLY_XLU_DISP++, 0x08, gActorSetupXluDL);
         MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 170, 130, (s32)sp20);
         gSPDisplayList(POLY_XLU_DISP++, gFieldSilverBoulderDL);

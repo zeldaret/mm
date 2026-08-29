@@ -1213,7 +1213,7 @@ void EnPoSisters_Draw(Actor* thisx, PlayState* play) {
                            EnPoSisters_PostLimbDraw, &this->actor, POLY_OPA_DISP);
     } else {
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, this->color.a);
-        gSPSegment(POLY_XLU_DISP++, 0x09, D_801AEF88); // XLU only DL
+        gSPSegment(POLY_XLU_DISP++, 0x09, gActorSetupXluDL);
         POLY_XLU_DISP =
             SkelAnime_Draw(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnPoSisters_OverrideLimbDraw,
                            EnPoSisters_PostLimbDraw, &this->actor, POLY_XLU_DISP);

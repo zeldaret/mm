@@ -407,7 +407,7 @@ void ObjLightSwitch_DrawXlu(ObjLightswitch* this, PlayState* play) {
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     gDPSetEnvColor(POLY_XLU_DISP++, (u8)(this->colorR >> 6), (u8)(this->colorG >> 6),
                    ((void)0, (u8)(this->colorB >> 6)), (u8)(this->colorAlpha >> 6));
-    gSPSegment(POLY_XLU_DISP++, 0x09, D_801AEF88);
+    gSPSegment(POLY_XLU_DISP++, 0x09, gActorSetupXluDL);
 
     tempPos.x = this->actor.world.pos.x;
     tempPos.y = this->actor.world.pos.y + (this->actor.shape.yOffset * this->actor.scale.y);
