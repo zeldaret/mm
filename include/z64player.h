@@ -636,8 +636,8 @@ typedef struct PlayerAgeProperties {
     /* 0xB0 */ PlayerAnimationHeader* unk_B0;
     /* 0xB4 */ PlayerAnimationHeader* unk_B4[4];
     /* 0xC4 */ PlayerAnimationHeader* unk_C4[2];
-    /* 0xCC */ PlayerAnimationHeader* unk_CC[2];
-    /* 0xD4 */ PlayerAnimationHeader* unk_D4[2];
+    /* 0xCC */ PlayerAnimationHeader* dismountLadderDownAnim[2];
+    /* 0xD4 */ PlayerAnimationHeader* dismountLadderUpAnim[2];
 } PlayerAgeProperties; // size = 0xDC
 
 typedef struct {
@@ -1279,6 +1279,7 @@ typedef struct Player {
         s16 animDelayTimer; // Player_Action_TimeTravelEnd: Delays playing animation until finished counting down
         s16 csDelayTimer; // Player_Action_WaitForCutscene: Number of frames to wait before responding to a cutscene
         s16 playedLandingSfx; // Player_Action_BlueWarpArrive: Played sfx when landing on the ground
+        s16 dismountDown; // Player_Action_DismountLadder: True if player is dismounting the ladder downwards
     } av2; // "Action Variable 2": context dependent variable that has different meanings depending on what action is currently running
     /* 0xAEC */ f32 unk_AEC;
     /* 0xAF0 */ union {

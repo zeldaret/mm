@@ -1662,7 +1662,7 @@ void EnJso_Draw(Actor* thisx, PlayState* play) {
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
-    gSPSegment(POLY_OPA_DISP++, 0x0C, D_801AEFA0);
+    gSPSegment(POLY_OPA_DISP++, 0x0C, gActorSetupOpaDL);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnJso_OverrideLimbDraw, EnJso_PostLimbDraw, &this->actor);
 

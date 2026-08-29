@@ -192,13 +192,13 @@ void ObjLightblock_Draw(Actor* thisx, PlayState* play) {
 
     if (this->alpha < 255) {
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
-        gSPSegment(POLY_XLU_DISP++, 0x08, D_801AEF88);
+        gSPSegment(POLY_XLU_DISP++, 0x08, gActorSetupXluDL);
         MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, this->alpha);
         gSPDisplayList(POLY_XLU_DISP++, gSunBlockDL);
     } else {
         Gfx_SetupDL25_Opa(play->state.gfxCtx);
-        gSPSegment(POLY_OPA_DISP++, 0x08, D_801AEFA0);
+        gSPSegment(POLY_OPA_DISP++, 0x08, gActorSetupOpaDL);
         MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, 255, 255, 255, 255);
         gSPDisplayList(POLY_OPA_DISP++, gSunBlockDL);

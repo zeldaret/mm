@@ -43,10 +43,18 @@ endef
 
 $(foreach p,$(PROGRAMS),$(eval $(call COMPILE,$(p))))
 
-$(IDO_RECOMP_5_3_DIR):
-	mkdir -p $@
-	curl -sL https://github.com/decompals/ido-static-recomp/releases/download/$(IDO_RECOMP_VERSION)/ido-5.3-recomp-$(DETECTED_OS).tar.gz | tar xz -C $@
+compiler_archives/archives/ido-5.3-recomp-$(DETECTED_OS).tar.gz:
+	mkdir -p $(@D)
+	curl -sL https://github.com/decompals/ido-static-recomp/releases/download/$(IDO_RECOMP_VERSION)/ido-5.3-recomp-$(DETECTED_OS).tar.gz -o $@
 
-$(IDO_RECOMP_7_1_DIR):
+$(IDO_RECOMP_5_3_DIR): compiler_archives/archives/ido-5.3-recomp-$(DETECTED_OS).tar.gz
 	mkdir -p $@
-	curl -sL https://github.com/decompals/ido-static-recomp/releases/download/$(IDO_RECOMP_VERSION)/ido-7.1-recomp-$(DETECTED_OS).tar.gz | tar xz -C $@
+	tar xzf $< -C $@
+
+compiler_archives/archives/ido-7.1-recomp-$(DETECTED_OS).tar.gz:
+	mkdir -p $(@D)
+	curl -sL https://github.com/decompals/ido-static-recomp/releases/download/$(IDO_RECOMP_VERSION)/ido-7.1-recomp-$(DETECTED_OS).tar.gz -o $@
+
+$(IDO_RECOMP_7_1_DIR): compiler_archives/archives/ido-7.1-recomp-$(DETECTED_OS).tar.gz
+	mkdir -p $@
+	tar xzf $< -C $@

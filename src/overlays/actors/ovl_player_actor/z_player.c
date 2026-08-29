@@ -167,7 +167,7 @@ void Player_Action_47(Player* this, PlayState* play);
 void Player_Action_48(Player* this, PlayState* play);
 void Player_Action_49(Player* this, PlayState* play);
 void Player_Action_50(Player* this, PlayState* play);
-void Player_Action_51(Player* this, PlayState* play);
+void Player_Action_DismountLadder(Player* this, PlayState* play);
 void Player_Action_52(Player* this, PlayState* play);
 void Player_Action_53(Player* this, PlayState* play);
 void Player_Action_54(Player* this, PlayState* play);
@@ -9716,8 +9716,8 @@ s32 func_8083D860(Player* this, PlayState* play) {
     return false;
 }
 
-void func_8083DCC4(Player* this, PlayerAnimationHeader* anim, PlayState* play) {
-    Player_SetAction_PreserveMoveFlags(play, this, Player_Action_51, 0);
+void Player_SetupDismountLadder(Player* this, PlayerAnimationHeader* anim, PlayState* play) {
+    Player_SetAction_PreserveMoveFlags(play, this, Player_Action_DismountLadder, 0);
     PlayerAnimation_PlayOnceSetSpeed(play, &this->skelAnime, anim, 4.0f / 3.0f);
 }
 
@@ -16406,7 +16406,8 @@ void Player_Action_50(Player* this, PlayState* play) {
                             func_808381A0(this, &gPlayerAnim_link_normal_jump_climb_up_free, play);
                             this->stateFlags1 |= PLAYER_STATE1_4000;
                         } else {
-                            func_8083DCC4(this, this->ageProperties->unk_D4[this->av2.actionVar2], play);
+                            Player_SetupDismountLadder(
+                                this, this->ageProperties->dismountLadderUpAnim[this->av2.actionVar2], play);
                         }
                     } else {
                         this->skelAnime.prevTransl = this->ageProperties->unk_4A[sp78];
@@ -16420,8 +16421,9 @@ void Player_Action_50(Player* this, PlayState* play) {
                             this->skelAnime.prevTransl = this->ageProperties->unk_44;
                         }
 
-                        func_8083DCC4(this, this->ageProperties->unk_CC[this->av2.actionVar2], play);
-                        this->av2.actionVar2 = 1;
+                        Player_SetupDismountLadder(
+                            this, this->ageProperties->dismountLadderDownAnim[this->av2.actionVar2], play);
+                        this->av2.dismountDown = true;
                     }
                 } else {
                     sp78 ^= 1;
@@ -16464,17 +16466,22 @@ void Player_Action_50(Player* this, PlayState* play) {
     }
 }
 
-f32 D_8085D66C[] = { 11.0f, 21.0f };
-f32 D_8085D674[] = { 40.0f, 50.0f };
+f32 sUpDismountLadderFrames[] = { 11.0f, 21.0f };
+f32 sDownDismountLadderFrames[] = { 40.0f, 50.0f };
 
-AnimSfxEntry D_8085D67C[] = {
+AnimSfxEntry sDownDismountLadderAnimSfx[] = {
     ANIMSFX(ANIMSFX_TYPE_SURFACE, 10, NA_SE_PL_WALK_LADDER, CONTINUE),
     ANIMSFX(ANIMSFX_TYPE_SURFACE, 20, NA_SE_PL_WALK_LADDER, CONTINUE),
     ANIMSFX(ANIMSFX_TYPE_SURFACE, 30, NA_SE_PL_WALK_LADDER, STOP),
 };
 
-void Player_Action_51(Player* this, PlayState* play) {
+/**
+ * Dismounting ladders, both upwards and downwards.
+ * actionVar2 (dismountDown) true if dismounting down
+ */
+void Player_Action_DismountLadder(Player* this, PlayState* play) {
     PlayerActionInterruptResult interruptResult;
+    f32* frame;
 
     this->stateFlags2 |= PLAYER_STATE2_40;
 
@@ -16482,30 +16489,33 @@ void Player_Action_51(Player* this, PlayState* play) {
 
     if (interruptResult == PLAYER_INTERRUPT_NEW_ACTION) {
         this->stateFlags1 &= ~PLAYER_STATE1_200000;
-    } else if ((interruptResult >= PLAYER_INTERRUPT_MOVE) || PlayerAnimation_Update(play, &this->skelAnime)) {
+        return;
+    }
+
+    if ((interruptResult >= PLAYER_INTERRUPT_MOVE) || PlayerAnimation_Update(play, &this->skelAnime)) {
         func_80839E74(this, play);
         this->stateFlags1 &= ~PLAYER_STATE1_200000;
-    } else {
-        f32* var_v1 = D_8085D66C;
+        return;
+    }
 
-        if (this->av2.actionVar2 != 0) {
-            Player_PlayAnimSfx(this, D_8085D67C);
-            var_v1 = D_8085D674;
-        }
+    frame = sUpDismountLadderFrames;
 
-        if (PlayerAnimation_OnFrame(&this->skelAnime, var_v1[0]) ||
-            PlayerAnimation_OnFrame(&this->skelAnime, var_v1[1])) {
-            CollisionPoly* poly;
-            s32 bgId;
-            Vec3f pos;
+    if (this->av2.dismountDown) {
+        Player_PlayAnimSfx(this, sDownDismountLadderAnimSfx);
+        frame = sDownDismountLadderFrames;
+    }
 
-            pos.x = this->actor.world.pos.x;
-            pos.y = this->actor.world.pos.y + 20.0f;
-            pos.z = this->actor.world.pos.z;
-            if (BgCheck_EntityRaycastFloor5(&play->colCtx, &poly, &bgId, &this->actor, &pos) != 0.0f) {
-                this->floorSfxOffset = SurfaceType_GetSfxOffset(&play->colCtx, poly, bgId);
-                Player_AnimSfx_PlayFloorLand(this);
-            }
+    if (PlayerAnimation_OnFrame(&this->skelAnime, frame[0]) || PlayerAnimation_OnFrame(&this->skelAnime, frame[1])) {
+        CollisionPoly* poly;
+        s32 bgId;
+        Vec3f raycastPos;
+
+        raycastPos.x = this->actor.world.pos.x;
+        raycastPos.y = this->actor.world.pos.y + 20.0f;
+        raycastPos.z = this->actor.world.pos.z;
+        if (BgCheck_EntityRaycastFloor5(&play->colCtx, &poly, &bgId, &this->actor, &raycastPos) != 0.0f) {
+            this->floorSfxOffset = SurfaceType_GetSfxOffset(&play->colCtx, poly, bgId);
+            Player_AnimSfx_PlayFloorLand(this);
         }
     }
 }

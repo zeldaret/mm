@@ -691,7 +691,7 @@ void EnPoComposer_Draw(Actor* thisx, PlayState* play) {
         gSPSegment(POLY_OPA_DISP++, 0x0B,
                    Gfx_EnvColor(play->state.gfxCtx, clothingColor2->r, clothingColor2->g, clothingColor2->b,
                                 this->mainAlpha.a));
-        gSPSegment(POLY_OPA_DISP++, 0x0C, D_801AEFA0); // empty DL
+        gSPSegment(POLY_OPA_DISP++, 0x0C, gActorSetupOpaDL);
 
         POLY_OPA_DISP =
             SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
@@ -709,7 +709,7 @@ void EnPoComposer_Draw(Actor* thisx, PlayState* play) {
         gSPSegment(POLY_XLU_DISP++, 0x0B,
                    Gfx_EnvColor(play->state.gfxCtx, clothingColor2->r, clothingColor2->g, clothingColor2->b,
                                 this->mainAlpha.a));
-        gSPSegment(POLY_XLU_DISP++, 0x0C, D_801AEF88); // transparency DL
+        gSPSegment(POLY_XLU_DISP++, 0x0C, gActorSetupXluDL);
 
         POLY_XLU_DISP =
             SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
