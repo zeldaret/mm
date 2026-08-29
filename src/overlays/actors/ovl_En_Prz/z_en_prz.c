@@ -158,8 +158,8 @@ s32 func_80A75FA4(EnPrz* this, PlayState* play) {
     WaterBox* waterBox;
     f32 temp_f0;
 
-    if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &this->unk_210,
-                             &waterBox)) {
+    if (BgCheck_GetWaterSurfaceNoBgIdAlt(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
+                                         &this->unk_210, &waterBox)) {
         temp_f0 = BREG(10) + (this->unk_210 - 10.0f);
         if (temp_f0 < this->actor.world.pos.y) {
             this->unk_1D8.y = temp_f0;
@@ -407,8 +407,8 @@ void func_80A76B14(EnPrz* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.shape.rot.z, this->unk_1FC, 5, 0x2710, 0x3E8);
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->unk_1FE, 5, 0x2710, 0x3E8);
 
-    if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &this->unk_210,
-                             &waterBox)) {
+    if (BgCheck_GetWaterSurfaceNoBgIdAlt(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
+                                         &this->unk_210, &waterBox)) {
         if ((this->unk_210 - 15.0f) <= this->actor.world.pos.y) {
             phi_s0 = true;
         } else {

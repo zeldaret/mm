@@ -522,8 +522,8 @@ void EnPr2_Attack(EnPr2* this, PlayState* play) {
             Math_Vec3f_Copy(&this->newHome, &this->actor.world.pos);
         }
 
-        if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
-                                 &this->waterSurfaceHeight, &waterBox)) {
+        if (BgCheck_GetWaterSurfaceNoBgIdAlt(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
+                                             &this->waterSurfaceHeight, &waterBox)) {
             if (this->waypointPos.y > (this->waterSurfaceHeight - 40.0f)) {
                 this->waypointPos.y = this->waterSurfaceHeight - 40.0f;
             }
@@ -609,8 +609,8 @@ void EnPr2_Die(EnPr2* this, PlayState* play) {
             this->bubbleToggle = true;
         }
 
-        if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
-                                 &this->waterSurfaceHeight, &waterBox)) {
+        if (BgCheck_GetWaterSurfaceNoBgIdAlt(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
+                                             &this->waterSurfaceHeight, &waterBox)) {
             if (this->actor.world.pos.y >= (this->waterSurfaceHeight - 15.0f)) {
                 nearSurface = true;
             } else {
