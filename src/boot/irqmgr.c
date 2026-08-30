@@ -258,11 +258,9 @@ void IrqMgr_ThreadEntry(void* arg) {
 
     PRINTF(T("ＩＲＱマネージャスレッド実行終了\n", "End of IRQ manager thread execution\n"));
 
-#if MM_VERSION < N64_US
     if (1) {}
     if (1) {}
     if (1) {}
-#endif
 }
 
 void IrqMgr_Init(IrqMgr* irqMgr, void* stack, OSPri pri, u8 retraceCount) {
