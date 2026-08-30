@@ -9,12 +9,9 @@
 #define GFXP_FLAG_ENLARGE (1 << 6)
 #define GFXP_FLAG_OPEN (1 << 7)
 
-#if MM_VERSION < N64_US || DEBUG_FEATURES
-#define GFXPRINT_PRINTF osSyncPrintf
-#elif IDO_PRINTF_WORKAROUND
-#define GFXPRINT_PRINTF(args) (void)0
-#else
-#define GFXPRINT_PRINTF(format, ...) (void)0
+#if MM_VERSION < N64_US
+#undef PRINTF
+#define PRINTF osSyncPrintf
 #endif
 
 u64 sGfxPrintFontTLUT[] = {
@@ -235,7 +232,7 @@ void GfxPrint_Open(GfxPrint* this, Gfx* dList) {
         this->dList = dList;
         GfxPrint_Setup(this);
     } else {
-        GFXPRINT_PRINTF(T("gfxprint_open:２重オープンです\n", "gfxprint_open: Double open\n"));
+        PRINTF(T("gfxprint_open:２重オープンです\n", "gfxprint_open: Double open\n"));
     }
 }
 
