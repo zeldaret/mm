@@ -6,6 +6,7 @@
 
 #include "z_en_neo_reeba.h"
 #include "attributes.h"
+#include "z_en_item00.h"
 #include "assets/objects/object_rb/object_rb.h"
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_HOOKSHOT_PULLS_ACTOR)

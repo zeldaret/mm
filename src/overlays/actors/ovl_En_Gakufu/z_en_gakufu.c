@@ -5,6 +5,7 @@
  */
 
 #include "z_en_gakufu.h"
+#include "z_en_item00.h"
 #include "assets/interface/parameter_static/parameter_static.h"
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_UPDATE_DURING_OCARINA)

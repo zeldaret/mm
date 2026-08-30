@@ -5,6 +5,7 @@
  */
 
 #include "z_en_baguo.h"
+#include "z_en_item00.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 

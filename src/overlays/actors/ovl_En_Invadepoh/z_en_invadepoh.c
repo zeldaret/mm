@@ -32,6 +32,7 @@
 #include "z_en_invadepoh.h"
 
 #include "sys_cfb.h"
+#include "z_en_item00.h"
 #include "z64horse.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"

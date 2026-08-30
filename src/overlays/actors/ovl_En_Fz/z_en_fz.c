@@ -6,6 +6,7 @@
 
 #include "z_en_fz.h"
 #include "attributes.h"
+#include "z_en_item00.h"
 #include "overlays/actors/ovl_En_Wiz/z_en_wiz.h"
 #include "assets/objects/object_fz/object_fz.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"

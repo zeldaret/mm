@@ -5,6 +5,7 @@
  */
 
 #include "z_en_pr2.h"
+#include "z_en_item00.h"
 #include "overlays/actors/ovl_En_Encount1/z_en_encount1.h"
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE | ACTOR_FLAG_UPDATE_CULLING_DISABLED)

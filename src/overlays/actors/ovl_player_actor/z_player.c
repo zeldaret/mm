@@ -6,6 +6,7 @@
 #include "z64player.h"
 
 #include "global.h"
+#include "z_en_item00.h"
 #include "z64horse.h"
 #include "z64lifemeter.h"
 #include "zelda_arena.h"

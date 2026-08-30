@@ -2,6 +2,7 @@
 #define Z_OBJ_MURE3_H
 
 #include "global.h"
+#include "z_en_item00.h"
 
 #define OBJMURE3_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
 #define OBJMURE3_PARAM_RUPEEINDEX(thisx) (((thisx)->params >> 13) & 7)

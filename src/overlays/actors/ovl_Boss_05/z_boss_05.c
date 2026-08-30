@@ -29,6 +29,7 @@
 
 #include "z_boss_05.h"
 #include "attributes.h"
+#include "z_en_item00.h"
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_HOSTILE)
 
