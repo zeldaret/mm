@@ -2865,7 +2865,6 @@ void KaleidoScope_Update(PlayState* play) {
 
             pauseCtx->iconItemSegment = (void*)ALIGN16((uintptr_t)play->objectCtx.spaceStart);
             size0 = SEGMENT_ROM_SIZE(icon_item_static_syms);
-            CmpDma_LoadAllFiles(SEGMENT_ROM_START(icon_item_static_yar), pauseCtx->iconItemSegment, size0);
 
             gSegments[0x08] = OS_K0_TO_PHYSICAL(pauseCtx->iconItemSegment);
 
@@ -2878,7 +2877,6 @@ void KaleidoScope_Update(PlayState* play) {
 
             pauseCtx->iconItem24Segment = (void*)ALIGN16((uintptr_t)pauseCtx->iconItemSegment + size0);
             size1 = SEGMENT_ROM_SIZE(icon_item_24_static_syms);
-            CmpDma_LoadAllFiles(SEGMENT_ROM_START(icon_item_24_static_yar), pauseCtx->iconItem24Segment, size1);
 
             pauseCtx->iconItemAltSegment = (void*)ALIGN16((uintptr_t)pauseCtx->iconItem24Segment + size1);
             if (Map_CurRoomHasMapI(play)) {
@@ -3194,11 +3192,9 @@ void KaleidoScope_Update(PlayState* play) {
             pauseCtx->iconItemSegment =
                 (void*)(((uintptr_t)play->objectCtx.spaceStart + 0x30) & ~0x3F); // Messed up ALIGN64
             size0 = SEGMENT_ROM_SIZE(icon_item_static_syms);
-            CmpDma_LoadAllFiles(SEGMENT_ROM_START(icon_item_static_yar), pauseCtx->iconItemSegment, size0);
 
             pauseCtx->iconItem24Segment = (void*)ALIGN16((uintptr_t)pauseCtx->iconItemSegment + size0);
             size1 = SEGMENT_ROM_SIZE(icon_item_24_static_syms);
-            CmpDma_LoadAllFiles(SEGMENT_ROM_START(icon_item_24_static_yar), pauseCtx->iconItem24Segment, size1);
 
             pauseCtx->iconItemAltSegment = (void*)ALIGN16((uintptr_t)pauseCtx->iconItem24Segment + size1);
             size2 = SEGMENT_ROM_SIZE(icon_item_gameover_static);
@@ -3443,7 +3439,6 @@ void KaleidoScope_Update(PlayState* play) {
 
             pauseCtx->iconItemSegment = (void*)ALIGN16((uintptr_t)play->objectCtx.spaceStart);
             size0 = SEGMENT_ROM_SIZE(icon_item_static_syms);
-            CmpDma_LoadAllFiles(SEGMENT_ROM_START(icon_item_static_yar), pauseCtx->iconItemSegment, size0);
 
             pauseCtx->iconItemAltSegment = (void*)ALIGN16((uintptr_t)pauseCtx->iconItemSegment + size0);
             sInDungeonScene = false;
