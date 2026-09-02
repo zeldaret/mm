@@ -2,6 +2,7 @@
 
 #include "libc64/fixed_point.h"
 #include "libc64/sprintf.h"
+#include "line_numbers.h"
 
 #include "global.h"
 #include "fault.h"
@@ -1589,7 +1590,7 @@ void BgCheck_Allocate(CollisionContext* colCtx, PlayState* play, CollisionHeader
         &play->state.tha,
         colCtx->subdivAmount.x * sizeof(StaticLookup) * colCtx->subdivAmount.y * colCtx->subdivAmount.z, ~1);
     if (colCtx->lookupTbl == NULL) {
-        Fault_AddHungupAndCrash("../z_bgcheck.c", 3955);
+        Fault_AddHungupAndCrash("../z_bgcheck.c", LN1(3952, 3955));
     }
     colCtx->minBounds.x = colCtx->colHeader->minBounds.x;
     colCtx->minBounds.y = colCtx->colHeader->minBounds.y;
@@ -1613,7 +1614,7 @@ void BgCheck_Allocate(CollisionContext* colCtx, PlayState* play, CollisionHeader
         tblMax = customNodeListMax;
     } else {
         if (colCtx->memSize < memSize) {
-            Fault_AddHungupAndCrash("../z_bgcheck.c", 4011);
+            Fault_AddHungupAndCrash("../z_bgcheck.c", LN1(4008, 4011));
         }
         tblMax = (colCtx->memSize - memSize) / sizeof(SSNode);
     }
@@ -4308,7 +4309,13 @@ s32 SurfaceType_IsFloorConveyor(CollisionContext* colCtx, CollisionPoly* poly, s
     if (BgCheck_GetCollisionHeader(colCtx, bgId) == NULL) {
         return true;
     }
+#if MM_VERSION < N64_US
     if (poly == NULL) {
+        PRINTF("T_BGCheck_checkBelt: ppoly == NULL\n");
+    }
+#endif
+    if (poly == NULL) {
+        PRINTF("T_BGCheck_checkBelt: ppoly == NULL\n");
         return false;
     }
     flags = COLPOLY_VTX_CHECK_FLAGS_ANY(poly->flags_vIB, COLPOLY_IS_FLOOR_CONVEYOR);
