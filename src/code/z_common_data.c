@@ -24,7 +24,11 @@ void SaveContext_Init(void) {
     gSaveContext.nextTransitionType = TRANS_NEXT_TYPE_DEFAULT;
     gSaveContext.prevHudVisibility = HUD_VISIBILITY_ALL;
 
+#if MM_VERSION >= N64_US
     gSaveContext.options.language = LANGUAGE_ENG;
+#else
+    gSaveContext.options.language = LANGUAGE_JPN;
+#endif
     gSaveContext.options.audioSetting = SAVE_AUDIO_STEREO;
     gSaveContext.options.zTargetSetting = 0;
 }
