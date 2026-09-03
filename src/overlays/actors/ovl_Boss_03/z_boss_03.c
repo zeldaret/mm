@@ -483,10 +483,6 @@ void Boss03_Init(Actor* thisx, PlayState* play2) {
 
     PRINTF(VT_FGCOL(CYAN) T(" ☆ ボス１発生 ☆ \n", " ☆ Boss 1 appears ☆ \n") VT_RST);
 
-#if MM_VERSION < N64_US
-    if (1) {}
-#endif
-
     this->actor.world.pos = sGyorgInitialPos;
 
     // Since Boss03_RandZeroOne is only used on this Init function, the resulting values end up being deterministic
@@ -1971,10 +1967,6 @@ void Boss03_Update(Actor* thisx, PlayState* play2) {
     f32 yRot;
 
     PRINTF("FISH COUNT %d\n", this->numSpawnedSmallFish);
-
-#if MM_VERSION < N64_US
-    if (1) {}
-#endif
 
     this->actor.hintId = TATL_HINT_ID_GYORG;
 
