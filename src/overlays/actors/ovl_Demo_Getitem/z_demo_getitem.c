@@ -5,6 +5,7 @@
  */
 
 #include "z_demo_getitem.h"
+#include "z64draw.h"
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
 

@@ -5,6 +5,7 @@
  */
 
 #include "z_en_ishi.h"
+#include "z_en_item00.h"
 #include "z64quake.h"
 #include "z64rumble.h"
 #include "assets/objects/gameplay_field_keep/gameplay_field_keep.h"
@@ -395,7 +396,7 @@ s32 EnIshi_IsUnderwater(EnIshi* this, PlayState* play) {
     f32 waterSurface;
     s32 bgId;
 
-    if (WaterBox_GetSurfaceImpl(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &waterSurface,
+    if (BgCheck_GetWaterSurface(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &waterSurface,
                                 &waterBox, &bgId) &&
         (this->actor.world.pos.y < waterSurface)) {
         return true;
@@ -779,7 +780,7 @@ void EnIshi_DrawGameplayKeepBoulder(EnIshi* this, PlayState* play) {
 
         Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
-        gSPSegment(POLY_OPA_DISP++, 0x08, D_801AEFA0); // empty displaylist
+        gSPSegment(POLY_OPA_DISP++, 0x08, gActorSetupOpaDL);
         MATRIX_FINALIZE_AND_LOAD(POLY_OPA_DISP++, play->state.gfxCtx);
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
         gSPDisplayList(POLY_OPA_DISP++, gFieldSilverBoulderDL);
@@ -791,7 +792,7 @@ void EnIshi_DrawGameplayKeepBoulder(EnIshi* this, PlayState* play) {
 
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
-        gSPSegment(POLY_XLU_DISP++, 0x08, D_801AEF88); // in z_actor, transparency dl I think
+        gSPSegment(POLY_XLU_DISP++, 0x08, gActorSetupXluDL);
         MATRIX_FINALIZE_AND_LOAD(POLY_XLU_DISP++, play->state.gfxCtx);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (s32)alpha);
         gSPDisplayList(POLY_XLU_DISP++, gFieldSilverBoulderDL);

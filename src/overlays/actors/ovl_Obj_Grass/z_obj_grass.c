@@ -7,6 +7,7 @@
  */
 
 #include "z_obj_grass.h"
+#include "z_en_item00.h"
 #include "overlays/actors/ovl_Obj_Grass_Carry/z_obj_grass_carry.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 

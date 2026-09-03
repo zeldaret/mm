@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_nozoki.h"
+#include "z64draw.h"
 #include "assets/objects/object_secom_obj/object_secom_obj.h"
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)

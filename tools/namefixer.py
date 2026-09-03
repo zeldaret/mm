@@ -572,10 +572,10 @@ wordReplace = {
     "func_800C9E18": "SurfaceType_GetConveyorSpeed",
     "func_800C9E40": "SurfaceType_GetConveyorDirection",
     "func_800C9E88": "SurfaceType_IsWallDamage",
-    "func_800C9EBC": "WaterBox_GetSurfaceImpl",
-    "func_800CA1AC": "WaterBox_GetSurface1",
-    "func_800CA1E8": "WaterBox_GetSurface1_2",
-    "func_800CA22C": "WaterBox_GetSurface2",
+    "func_800C9EBC": "BgCheck_GetWaterSurface",
+    "func_800CA1AC": "BgCheck_GetWaterSurfaceNoBgIdAlt",
+    "func_800CA1E8": "BgCheck_GetWaterSurfaceNoBgId",
+    "func_800CA22C": "BgCheck_FindWaterBox",
     "func_800CA6D8": "WaterBox_GetLightSettingIndex",
 
     "func_8017D668": "Math3D_PointDistSqToLine2DImpl",
@@ -1362,6 +1362,8 @@ wordReplace = {
     "D_801D1DE0": "gIdentityMtx",
     "D_801D1E20": "gIdentityMtxF",
     "sSetupDL": "gSetupDLs",
+    "D_801AEFA0": "gActorSetupOpaDL",
+    "D_801AEF88": "gActorSetupXluDL",
 
     "gFaultStruct": "gFaultMgr",
 

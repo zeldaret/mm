@@ -4,6 +4,7 @@
  */
 
 #include "global.h"
+#include "z64draw.h"
 
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 

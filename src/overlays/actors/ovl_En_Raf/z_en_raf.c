@@ -739,8 +739,8 @@ void EnRaf_Update(Actor* thisx, PlayState* play) {
 
     if (this->mainType != CARNIVOROUS_LILY_TYPE_NO_WATER_INTERACTIONS) {
         ySurface = BREG(60) + (this->dyna.actor.world.pos.y - 60.0f);
-        if (WaterBox_GetSurface1(play, &play->colCtx, this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.z,
-                                 &ySurface, &waterBox)) {
+        if (BgCheck_GetWaterSurfaceNoBgIdAlt(play, &play->colCtx, this->dyna.actor.world.pos.x,
+                                             this->dyna.actor.world.pos.z, &ySurface, &waterBox)) {
             ySurface -= this->bobOffset + BREG(59);
             Math_ApproachF(&this->dyna.actor.world.pos.y, this->heightDiffFromPlayer + ySurface, 0.5f, 40.0f);
             if (this->rippleTimer == 0) {

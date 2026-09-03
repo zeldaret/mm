@@ -5,6 +5,7 @@
  */
 
 #include "z_en_grasshopper.h"
+#include "z_en_item00.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
@@ -650,8 +651,8 @@ void EnGrasshopper_ApproachPlayer(EnGrasshopper* this, PlayState* play) {
     Math_ApproachF(&this->actor.world.pos.z, this->targetApproachPos.z, 0.3f, this->approachSpeed);
     Math_ApproachF(&this->approachSpeed, 7.0f, 0.3f, 1.0f);
 
-    if (WaterBox_GetSurface1(play, &play->colCtx, this->tailTipPos.x, this->tailTipPos.z, &this->waterSurface,
-                             &waterBox)) {
+    if (BgCheck_GetWaterSurfaceNoBgIdAlt(play, &play->colCtx, this->tailTipPos.x, this->tailTipPos.z,
+                                         &this->waterSurface, &waterBox)) {
         if (this->tailTipPos.y < this->waterSurface) {
             if ((this->splashCount < 3) || !(play->gameplayFrames % 8)) {
                 this->splashCount++;
@@ -700,8 +701,8 @@ void EnGrasshopper_Attack(EnGrasshopper* this, PlayState* play) {
         EnGrasshopper_InitializeEffect(this, &this->tailTipPos);
     }
 
-    if (WaterBox_GetSurface1(play, &play->colCtx, this->tailTipPos.x, this->tailTipPos.z, &this->waterSurface,
-                             &waterBox)) {
+    if (BgCheck_GetWaterSurfaceNoBgIdAlt(play, &play->colCtx, this->tailTipPos.x, this->tailTipPos.z,
+                                         &this->waterSurface, &waterBox)) {
         if (this->tailTipPos.y < this->waterSurface) {
             if ((this->splashCount < 3) || !(play->gameplayFrames % 8)) {
                 this->splashCount++;
@@ -861,8 +862,8 @@ void EnGrasshopper_Fall(EnGrasshopper* this, PlayState* play) {
         return;
     }
 
-    if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &waterSurface,
-                             &waterBox)) {
+    if (BgCheck_GetWaterSurfaceNoBgIdAlt(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
+                                         &waterSurface, &waterBox)) {
         if (this->actor.world.pos.y < waterSurface) {
             Vec3f splashPos;
             s32 i;
@@ -902,8 +903,8 @@ void EnGrasshopper_Fall(EnGrasshopper* this, PlayState* play) {
             firePos.x += Rand_CenteredFloat(30.0f);
             if (!isUnderWater) {
                 firePos.y = this->actor.floorHeight;
-            } else if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
-                                            &waterSurface, &waterBox)) {
+            } else if (BgCheck_GetWaterSurfaceNoBgIdAlt(play, &play->colCtx, this->actor.world.pos.x,
+                                                        this->actor.world.pos.z, &waterSurface, &waterBox)) {
                 firePos.y = waterSurface;
             }
 

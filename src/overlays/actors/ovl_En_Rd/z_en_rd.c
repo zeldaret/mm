@@ -23,6 +23,7 @@
  */
 
 #include "z_en_rd.h"
+#include "z_en_item00.h"
 #include "z64rumble.h"
 #include "attributes.h"
 #include "assets/objects/object_rd/object_rd.h"
@@ -1347,7 +1348,7 @@ void EnRd_Draw(Actor* thisx, PlayState* play) {
         Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, this->alpha);
-        gSPSegment(POLY_OPA_DISP++, 0x08, D_801AEFA0);
+        gSPSegment(POLY_OPA_DISP++, 0x08, gActorSetupOpaDL);
 
         POLY_OPA_DISP =
             SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
@@ -1358,7 +1359,7 @@ void EnRd_Draw(Actor* thisx, PlayState* play) {
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
         gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->alpha);
-        gSPSegment(POLY_XLU_DISP++, 0x08, D_801AEF88);
+        gSPSegment(POLY_XLU_DISP++, 0x08, gActorSetupXluDL);
 
         POLY_XLU_DISP =
             SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,

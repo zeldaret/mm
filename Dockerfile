@@ -5,10 +5,12 @@ ENV LANG=C.UTF-8
 
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-# Add source for practicerom-dev install
+# Add source from practicerom-dev install
+# PracticeRom installation instructions: https://github.com/PracticeROM/packages 
+
 RUN apt-get update && apt-get install -y curl && \
-    curl -o /usr/share/keyrings/practicerom-archive-keyring.gpg https://practicerom.com/public/packages/debian/practicerom-archive-keyring.gpg && \
-    echo 'deb [arch=all,amd64 signed-by=/usr/share/keyrings/practicerom-archive-keyring.gpg] http://practicerom.com/public/packages/debian unstable main' > /etc/apt/sources.list.d/practicerom.list
+ curl -O https://practicerom.com/public/packages/debian/dists/stable/practicerom-repository_latest_$(dpkg --print-architecture).deb && \
+dpkg -i practicerom-repository_latest_$(dpkg --print-architecture).deb
 
 # Install Required Dependencies
 RUN apt-get update && apt-get install -y \

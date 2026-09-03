@@ -6,6 +6,7 @@
 
 #include "z_en_hint_skb.h"
 #include "attributes.h"
+#include "z_en_item00.h"
 #include "overlays/actors/ovl_En_Part/z_en_part.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 

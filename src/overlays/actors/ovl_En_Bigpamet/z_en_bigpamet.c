@@ -5,6 +5,7 @@
  */
 
 #include "z_en_bigpamet.h"
+#include "z_en_item00.h"
 #include "z64quake.h"
 #include "z64rumble.h"
 #include "overlays/actors/ovl_En_Pametfrog/z_en_pametfrog.h"
@@ -372,12 +373,12 @@ void func_80A281B4(EnBigpamet* this) {
 
 void func_80A281DC(EnBigpamet* this, PlayState* play) {
     WaterBox* waterBox;
-    f32 sp28;
+    f32 waterSurface;
 
     if (this->actor.parent->params == GEKKO_GET_SNAPPER) {
-        if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp28,
-                                 &waterBox)) {
-            this->actor.depthInWater = sp28 - this->actor.world.pos.y;
+        if (BgCheck_GetWaterSurfaceNoBgIdAlt(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
+                                             &waterSurface, &waterBox)) {
+            this->actor.depthInWater = waterSurface - this->actor.world.pos.y;
         } else {
             this->actor.depthInWater = this->actor.world.pos.y;
         }

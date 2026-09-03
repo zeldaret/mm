@@ -4,6 +4,7 @@
  * Description: Breakable Pot With Grass
  */
 #include "z_obj_flowerpot.h"
+#include "z_en_item00.h"
 #include "assets/objects/object_flowerpot/object_flowerpot.h"
 
 #define FLAGS 0x00000000
