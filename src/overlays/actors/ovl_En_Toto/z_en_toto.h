@@ -8,24 +8,24 @@
 struct EnToto;
 
 typedef void (*EnTotoActionFunc)(struct EnToto*, PlayState*);
-typedef s32 (*EnTotoUnkFunc)(struct EnToto*, PlayState*);
+typedef s32 (*EnTotoTalkFunc)(struct EnToto*, PlayState*);
 
-#define ENTOTO_GET_SWITCH_FLAG_1(thisx) ((thisx)->params & 0x7F)
-#define ENTOTO_GET_SWITCH_FLAG_2(thisx) (((thisx)->params >> 7) & 0x7F)
-#define ENTOTO_GET_SWITCH_FLAG_3(thisx) ((thisx)->home.rot.x)
+#define ENTOTO_GET_ZORA_SPOKEN_FLAG(thisx) ((thisx)->params & 0x7F)
+#define ENTOTO_GET_OTHER_SPOKEN_FLAG(thisx) (((thisx)->params >> 7) & 0x7F)
+#define ENTOTO_GET_DEKU_SPOKEN_FLAG(thisx) ((thisx)->home.rot.x)
 
-typedef struct EnTotoText {
-    /* 0x0 */ u8 unk0;
-    /* 0x1 */ u8 unk1;
+typedef struct EnTotoSpeakData {
+    /* 0x0 */ u8 talkActionIndex;
+    /* 0x1 */ u8 argument;              // Used for various functions, including as a timer
     /* 0x2 */ u16 textId;
-} EnTotoText; // size = 0x4
+} EnTotoSpeakData; // size = 0x4
 
-typedef struct EnTotoUnkStruct2 {
-    /* 0x0 */ u16 unk0;
-    /* 0x2 */ u16 unk2;
-    /* 0x4 */ u16 unk4;
-    /* 0x6 */ Vec3s unk6;
-} EnTotoUnkStruct2; // size = 0xC
+typedef struct EnTotoSpotlight {
+    /* 0x0 */ u16 promptTextId;
+    /* 0x2 */ u16 wrongLightTextId;
+    /* 0x4 */ u16 rightLightTextId;
+    /* 0x6 */ Vec3s pos;
+} EnTotoSpotlight; // size = 0xC
 
 typedef struct EnToto {
     /* 0x000 */ Actor actor;
@@ -35,14 +35,14 @@ typedef struct EnToto {
     /* 0x260 */ FaceChange faceChange;
     /* 0x264 */ ColliderCylinder collider;
     /* 0x2B0 */ u8 actionFuncIndex;
-    /* 0x2B1 */ u8 unk2B1;
+    /* 0x2B1 */ u8 timer;          // Used for various timers?
     /* 0x2B2 */ s8 csId;
-    /* 0x2B3 */ u8 unk2B3;
+    /* 0x2B3 */ u8 windFishFormsPlayed;
     /* 0x2B4 */ u8 animIndex;
-    /* 0x2B5 */ u8 cueId;
-    /* 0x2B6 */ u8 unk2B6;
-    /* 0x2B7 */ u8 unk2B7;
-    /* 0x2B8 */ EnTotoText* text;
+    /* 0x2B5 */ u8 cueId;     /* Cue 4: Give Circus Leader's Mask // Cue 3: "Okay! That feels good!" // Cue 2: Turn around to look at Gorman // Cue 1: Turn back around to stage*/
+    /* 0x2B6 */ bool shouldCancelSoundCheck;
+    /* 0x2B7 */ bool shouldPlaySoundCheckCompleteCutscene;
+    /* 0x2B8 */ EnTotoSpeakData* text;
     /* 0x2BC */ PlayerOverrideInputEntry overrideInputEntry;
     /* 0x2C4 */ Actor* spotlights;
     /* 0x2C8 */ s32 pad2C8;

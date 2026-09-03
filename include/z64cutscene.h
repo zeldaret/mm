@@ -457,7 +457,7 @@ typedef enum {
     /* 0x20A */ CS_CMD_ACTOR_CUE_522,
     /* 0x20B */ CS_CMD_ACTOR_CUE_523,
     /* 0x20C */ CS_CMD_ACTOR_CUE_524,
-    /* 0x20D */ CS_CMD_ACTOR_CUE_525,
+    /* 0x20D */ CS_CMD_ACTOR_CUE_525, // Toto and Gorman interaction in Milk Bar
     /* 0x20E */ CS_CMD_ACTOR_CUE_526,
     /* 0x20F */ CS_CMD_ACTOR_CUE_527,
     /* 0x210 */ CS_CMD_ACTOR_CUE_528,
