@@ -134,7 +134,7 @@ void Player_Action_13(Player* this, PlayState* play);
 void Player_Action_14(Player* this, PlayState* play);
 void Player_Action_15(Player* this, PlayState* play);
 void Player_Action_16(Player* this, PlayState* play);
-void Player_Action_17(Player* this, PlayState* play);
+void Player_Action_PlantMagicBean(Player* this, PlayState* play);
 void Player_Action_18(Player* this, PlayState* play);
 void Player_Action_19(Player* this, PlayState* play);
 void Player_Action_20(Player* this, PlayState* play);
@@ -7859,11 +7859,13 @@ s32 Player_ActionHandler_13(Player* this, PlayState* play) {
                                                 ((this->exchangeItemAction != PLAYER_IA_MAGIC_BEANS) &&
                                                  (this->exchangeItemAction > PLAYER_IA_NONE)))) {
                         this->stateFlags1 |= (PLAYER_STATE1_20000000 | PLAYER_STATE1_TALKING);
+                        // Plant Magic Beans. See `Player_Action_PlantMagicBean` and `func_80937FC8` in z_obj_bean.c
                         if (this->exchangeItemAction == PLAYER_IA_MAGIC_BEANS) {
                             Inventory_ChangeAmmo(ITEM_MAGIC_BEANS, -1);
-                            Player_SetAction_PreserveItemAction(play, this, Player_Action_17, 0);
+                            Player_SetAction_PreserveItemAction(play, this, Player_Action_PlantMagicBean, 0);
                             this->yaw = talkActor->yawTowardsPlayer + 0x8000;
                             this->actor.shape.rot.y = this->yaw;
+                            // Max plant bean distance is 28.0f
                             if (talkActor->xzDistToPlayer < 40.0f) {
                                 Player_Anim_PlayOnceAdjusted(play, this, &gPlayerAnim_link_normal_backspace);
                                 Player_AnimReplace_Setup(play, this,
@@ -7872,7 +7874,7 @@ s32 Player_ActionHandler_13(Player* this, PlayState* play) {
                                 Player_Anim_PlayOnceMorph(play, this, D_8085BE84[31][this->modelAnimType]);
                             }
                             this->stateFlags1 |= PLAYER_STATE1_20000000;
-                            this->av2.actionVar2 = 80;
+                            this->av2.plantBeanTimer = 80;
                             this->av1.actionVar1 = -1;
                             this->focusActor = this->talkActor;
                         } else {
@@ -14855,7 +14857,15 @@ void Player_Action_16(Player* this, PlayState* play) {
     }
 }
 
-void Player_Action_17(Player* this, PlayState* play) {
+/**
+ * Watch as Magic Bean gets planted. Animation only action:
+ * Finish backwalk, plant ("check"), watch ("check_wait"), stand up ("check_end").
+ * On animation finish, remove talk flag and setup idle.
+ * The interaction with the soil actor (ACTOR_OBJ_BEAN) is an exchange item talk interaction,
+ * see `func_80937FC8` in z_obj_bean.c and the setup in `Player_ActionHandler_13`.
+ * The camera mode is set through the actor talk flag.
+ */
+void Player_Action_PlantMagicBean(Player* this, PlayState* play) {
     if (this->skelAnime.animation == &gPlayerAnim_link_normal_backspace) {
         if (PlayerAnimation_Update(play, &this->skelAnime)) {
             Player_Anim_ResetMove(this);
@@ -14865,10 +14875,11 @@ void Player_Action_17(Player* this, PlayState* play) {
         Player_Anim_PlayLoopOnceFinished(play, this, D_8085BE84[PLAYER_ANIMGROUP_check_wait][this->modelAnimType]);
     }
 
-    if (DECR(this->av2.actionVar2) == 0) {
+    if (DECR(this->av2.plantBeanTimer) == 0) {
         if (!Player_ActionHandler_13(this, play)) {
             func_80836A98(this, D_8085BE84[PLAYER_ANIMGROUP_check_end][this->modelAnimType], play);
         }
+
         this->actor.flags &= ~ACTOR_FLAG_TALK;
         Camera_SetFinishedFlag(Play_GetCamera(play, CAM_ID_MAIN));
     }
