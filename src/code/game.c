@@ -191,6 +191,8 @@ void GameState_InitArena(GameState* gameState, size_t size) {
     }
 }
 
+#define ARENA_NODE_SIZE 0x10
+
 void GameState_Realloc(GameState* gameState, size_t size) {
     GameAlloc* alloc = &gameState->alloc;
     void* gameArena;
@@ -202,9 +204,9 @@ void GameState_Realloc(GameState* gameState, size_t size) {
     THA_Destroy(&gameState->tha);
     GameAlloc_Free(alloc, heapStart);
     GetFreeArena(&systemMaxFree, &bytesFree, &bytesAllocated);
-    size = ((systemMaxFree - 0x10) < size) ? 0 : size;
+    size = ((systemMaxFree - ARENA_NODE_SIZE) < size) ? 0 : size;
     if (size == 0) {
-        size = systemMaxFree - 0x10;
+        size = systemMaxFree - ARENA_NODE_SIZE;
     }
 
     gameArena = GameAlloc_Malloc(alloc, size);
