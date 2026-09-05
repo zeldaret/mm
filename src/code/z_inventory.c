@@ -107,6 +107,7 @@ u32 gGsFlagsShift[] = {
     24,
 };
 
+// TODO: Symbolize 0x08000000 when icon_item_static is done for N64 JP 1.1
 TexturePtr gItemIcons[] = {
     gItemIconOcarinaOfTimeTex,       // ITEM_OCARINA_OF_TIME
     gItemIconBowTex,                 // ITEM_BOW
@@ -144,154 +145,238 @@ TexturePtr gItemIcons[] = {
     gItemIconBottledZoraEggTex,      // ITEM_ZORA_EGG
     gItemIconBottledGoldDustTex,     // ITEM_GOLD_DUST
     gItemIconBottledMushroomTex,     // ITEM_MUSHROOM
-    gItemIconBottledSeahorseTex,     // ITEM_SEAHORSE
-    gItemIconChateauRomaniTex,       // ITEM_CHATEAU
-    gItemIconBottledHylianLoachTex,  // ITEM_HYLIAN_LOACH
-    gItemIconEmptyBottle2Tex,        // ITEM_OBABA_DRINK
-    gItemIconMoonsTearTex,           // ITEM_MOONS_TEAR
-    gItemIconLandDeedTex,            // ITEM_DEED_LAND
-    gItemIconSwampDeedTex,           // ITEM_DEED_SWAMP
-    gItemIconMountainDeedTex,        // ITEM_DEED_MOUNTAIN
-    gItemIconOceanDeedTex,           // ITEM_DEED_OCEAN
-    gItemIconRoomKeyTex,             // ITEM_ROOM_KEY
-    gItemIconLetterToMamaTex,        // ITEM_LETTER_MAMA
-    gItemIconLetterToKafeiTex,       // ITEM_LETTER_TO_KAFEI
-    gItemIconPendantOfMemoriesTex,   // ITEM_PENDANT_OF_MEMORIES
-    gItemIconTingleMapTex,           // ITEM_TINGLE_MAP
-    gItemIconDekuMaskTex,            // ITEM_MASK_DEKU
-    gItemIconGoronMaskTex,           // ITEM_MASK_GORON
-    gItemIconZoraMaskTex,            // ITEM_MASK_ZORA
-    gItemIconFierceDeityMaskTex,     // ITEM_MASK_FIERCE_DEITY
-    gItemIconMaskOfTruthTex,         // ITEM_MASK_TRUTH
-    gItemIconKafeisMaskTex,          // ITEM_MASK_KAFEIS_MASK
-    gItemIconAllNightMaskTex,        // ITEM_MASK_ALL_NIGHT
-    gItemIconBunnyHoodTex,           // ITEM_MASK_BUNNY
-    gItemIconKeatonMaskTex,          // ITEM_MASK_KEATON
-    gItemIconGaroMaskTex,            // ITEM_MASK_GARO
-    gItemIconRomaniMaskTex,          // ITEM_MASK_ROMANI
-    gItemIconCircusLeaderMaskTex,    // ITEM_MASK_CIRCUS_LEADER
-    gItemIconPostmansHatTex,         // ITEM_MASK_POSTMAN
-    gItemIconCouplesMaskTex,         // ITEM_MASK_COUPLE
-    gItemIconGreatFairyMaskTex,      // ITEM_MASK_GREAT_FAIRY
-    gItemIconGibdoMaskTex,           // ITEM_MASK_GIBDO
-    gItemIconDonGeroMaskTex,         // ITEM_MASK_DON_GERO
-    gItemIconKamaroMaskTex,          // ITEM_MASK_KAMARO
-    gItemIconCaptainsHatTex,         // ITEM_MASK_CAPTAIN
-    gItemIconStoneMaskTex,           // ITEM_MASK_STONE
-    gItemIconBremenMaskTex,          // ITEM_MASK_BREMEN
-    gItemIconBlastMaskTex,           // ITEM_MASK_BLAST
-    gItemIconMaskOfScentsTex,        // ITEM_MASK_SCENTS
-    gItemIconGiantsMaskTex,          // ITEM_MASK_GIANT
-    gItemIconBowFireTex,             // ITEM_BOW_FIRE
-    gItemIconBowIceTex,              // ITEM_BOW_ICE
-    gItemIconBowLightTex,            // ITEM_BOW_LIGHT
-    gItemIconKokiriSwordTex,         // ITEM_SWORD_KOKIRI
-    gItemIconRazorSwordTex,          // ITEM_SWORD_RAZOR
-    gItemIconGildedSwordTex,         // ITEM_SWORD_GILDED
-    gItemIconFierceDeitySwordTex,    // ITEM_SWORD_DEITY
-    gItemIconHerosShieldTex,         // ITEM_SHIELD_HERO
-    gItemIconMirrorShieldTex,        // ITEM_SHIELD_MIRROR
-    gItemIconQuiver30Tex,            // ITEM_QUIVER_30
-    gItemIconQuiver40Tex,            // ITEM_QUIVER_40
-    gItemIconQuiver50Tex,            // ITEM_QUIVER_50
-    gItemIconBombBag20Tex,           // ITEM_BOMB_BAG_20
-    gItemIconBombBag30Tex,           // ITEM_BOMB_BAG_30
-    gItemIconBombBag40Tex,           // ITEM_BOMB_BAG_40
-    gItemIconDefaultWalletTex,       // ITEM_WALLET_DEFAULT
-    gItemIconAdultsWalletTex,        // ITEM_WALLET_ADULT
-    gItemIconGiantsWalletTex,        // ITEM_WALLET_GIANT
-    gItemIconFishingRodTex,          // ITEM_FISHING_ROD
-    gItemIconOdolwasRemainsTex,      // ITEM_REMAINS_ODOLWA
-    gItemIconGohtsRemainsTex,        // ITEM_REMAINS_GOHT
-    gItemIconGyorgsRemainsTex,       // ITEM_REMAINS_GYORG
-    gItemIconTwinmoldsRemainsTex,    // ITEM_REMAINS_TWINMOLD
-    gItemIconSongNoteTex,            // ITEM_SONG_SONATA
-    gItemIconSongNoteTex,            // ITEM_SONG_LULLABY
-    gItemIconSongNoteTex,            // ITEM_SONG_NOVA
-    gItemIconSongNoteTex,            // ITEM_SONG_ELEGY
-    gItemIconSongNoteTex,            // ITEM_SONG_OATH
-    gItemIconSongNoteTex,            // ITEM_SONG_SARIA
-    gItemIconSongNoteTex,            // ITEM_SONG_TIME
-    gItemIconSongNoteTex,            // ITEM_SONG_HEALING
-    gItemIconSongNoteTex,            // ITEM_SONG_EPONA
-    gItemIconSongNoteTex,            // ITEM_SONG_SOARING
-    gItemIconSongNoteTex,            // ITEM_SONG_STORMS
-    gItemIconSongNoteTex,            // ITEM_SONG_SUN
-    gItemIconBombersNotebookTex,     // ITEM_BOMBERS_NOTEBOOK
-    gQuestIconGoldSkulltulaTex,      // ITEM_SKULL_TOKEN
-    gQuestIconHeartContainerTex,     // ITEM_HEART_CONTAINER
-    gQuestIconPieceOfHeartTex,       // ITEM_HEART_PIECE
-    gItemIconSongNoteTex,            // ITEM_71
-    gItemIconSongNoteTex,            // ITEM_72
-    gItemIconSongNoteTex,            // ITEM_SONG_LULLABY_INTRO
-    gQuestIconBossKeyTex,            // ITEM_KEY_BOSS
-    gQuestIconDungeonMapTex,         // ITEM_COMPASS
-    gQuestIconCompassTex,            // ITEM_DUNGEON_MAP
-    gQuestIconGoldSkulltula2Tex,     // ITEM_STRAY_FAIRIES
-    gQuestIconSmallKeyTex,           // ITEM_KEY_SMALL
-    gQuestIconSmallMagicJarTex,      // ITEM_MAGIC_JAR_SMALL
-    gQuestIconBigMagicJarTex,        // ITEM_MAGIC_JAR_BIG
-    gItemIconHeartPiece1Tex,         // ITEM_HEART_PIECE_2
-    gItemIconHeartPiece2Tex,         // ITEM_INVALID_1
-    gItemIconHeartPiece3Tex,         // ITEM_INVALID_2
-    gOcarinaCUpTex,                  // ITEM_INVALID_3
-    gOcarinaCDownTex,                // ITEM_INVALID_4
-    gOcarinaCLeftTex,                // ITEM_INVALID_5
-    gOcarinaCRightTex,               // ITEM_INVALID_6
-    gOcarinaATex,                    // ITEM_INVALID_7
+#if MM_VERSION < N64_US
+    (TexturePtr*)0x08000000, // ITEM_24_JP
+    (TexturePtr*)0x08000000, // ITEM_25_JP
+#endif
+    gItemIconBottledSeahorseTex,    // ITEM_SEAHORSE
+    gItemIconChateauRomaniTex,      // ITEM_CHATEAU
+    gItemIconBottledHylianLoachTex, // ITEM_HYLIAN_LOACH
+#if MM_VERSION < N64_US
+    (TexturePtr*)0x08000000, // ITEM_29_JP
+    (TexturePtr*)0x08000000, // ITEM_2A_JP
+    (TexturePtr*)0x08000000, // ITEM_2B_JP
+    (TexturePtr*)0x08000000, // ITEM_2C_JP
+    (TexturePtr*)0x08000000, // ITEM_2D_JP
+    (TexturePtr*)0x08000000, // ITEM_2E_JP
+#endif
+    gItemIconEmptyBottle2Tex, // ITEM_OBABA_DRINK
+    gItemIconMoonsTearTex,    // ITEM_MOONS_TEAR
+    gItemIconLandDeedTex,     // ITEM_DEED_LAND
+    gItemIconSwampDeedTex,    // ITEM_DEED_SWAMP
+    gItemIconMountainDeedTex, // ITEM_DEED_MOUNTAIN
+    gItemIconOceanDeedTex,    // ITEM_DEED_OCEAN
+#if MM_VERSION < N64_US
+    (TexturePtr*)0x08000000, // ITEM_35_JP
+    (TexturePtr*)0x08000000, // ITEM_36_JP
+    (TexturePtr*)0x08000000, // ITEM_37_JP
+    (TexturePtr*)0x08000000, // ITEM_38_JP
+    (TexturePtr*)0x08000000, // ITEM_39_JP
+#endif
+    gItemIconRoomKeyTex,      // ITEM_ROOM_KEY
+    gItemIconLetterToMamaTex, // ITEM_LETTER_MAMA
+#if MM_VERSION < N64_US
+    (TexturePtr*)0x08000000, // ITEM_3C_JP
+    (TexturePtr*)0x08000000, // ITEM_3D_JP
+    (TexturePtr*)0x08000000, // ITEM_3E_JP
+    (TexturePtr*)0x08000000, // ITEM_3F_JP
+    (TexturePtr*)0x08000000, // ITEM_40_JP
+    (TexturePtr*)0x08000000, // ITEM_41_JP
+    (TexturePtr*)0x08000000, // ITEM_42_JP
+    (TexturePtr*)0x08000000, // ITEM_43_JP
+#endif
+    gItemIconLetterToKafeiTex,     // ITEM_LETTER_TO_KAFEI
+    gItemIconPendantOfMemoriesTex, // ITEM_PENDANT_OF_MEMORIES
+#if MM_VERSION < N64_US
+    (TexturePtr*)0x08000000, // ITEM_46_JP
+    (TexturePtr*)0x08000000, // ITEM_47_JP
+    (TexturePtr*)0x08000000, // ITEM_48_JP
+    (TexturePtr*)0x08000000, // ITEM_49_JP
+    (TexturePtr*)0x08000000, // ITEM_4A_JP
+    (TexturePtr*)0x08000000, // ITEM_4B_JP
+    (TexturePtr*)0x08000000, // ITEM_4C_JP
+#endif
+    gItemIconTingleMapTex,        // ITEM_TINGLE_MAP
+    gItemIconDekuMaskTex,         // ITEM_MASK_DEKU
+    gItemIconGoronMaskTex,        // ITEM_MASK_GORON
+    gItemIconZoraMaskTex,         // ITEM_MASK_ZORA
+    gItemIconFierceDeityMaskTex,  // ITEM_MASK_FIERCE_DEITY
+    gItemIconMaskOfTruthTex,      // ITEM_MASK_TRUTH
+    gItemIconKafeisMaskTex,       // ITEM_MASK_KAFEIS_MASK
+    gItemIconAllNightMaskTex,     // ITEM_MASK_ALL_NIGHT
+    gItemIconBunnyHoodTex,        // ITEM_MASK_BUNNY
+    gItemIconKeatonMaskTex,       // ITEM_MASK_KEATON
+    gItemIconGaroMaskTex,         // ITEM_MASK_GARO
+    gItemIconRomaniMaskTex,       // ITEM_MASK_ROMANI
+    gItemIconCircusLeaderMaskTex, // ITEM_MASK_CIRCUS_LEADER
+    gItemIconPostmansHatTex,      // ITEM_MASK_POSTMAN
+    gItemIconCouplesMaskTex,      // ITEM_MASK_COUPLE
+    gItemIconGreatFairyMaskTex,   // ITEM_MASK_GREAT_FAIRY
+    gItemIconGibdoMaskTex,        // ITEM_MASK_GIBDO
+    gItemIconDonGeroMaskTex,      // ITEM_MASK_DON_GERO
+    gItemIconKamaroMaskTex,       // ITEM_MASK_KAMARO
+    gItemIconCaptainsHatTex,      // ITEM_MASK_CAPTAIN
+    gItemIconStoneMaskTex,        // ITEM_MASK_STONE
+    gItemIconBremenMaskTex,       // ITEM_MASK_BREMEN
+    gItemIconBlastMaskTex,        // ITEM_MASK_BLAST
+    gItemIconMaskOfScentsTex,     // ITEM_MASK_SCENTS
+    gItemIconGiantsMaskTex,       // ITEM_MASK_GIANT
+    gItemIconBowFireTex,          // ITEM_BOW_FIRE
+    gItemIconBowIceTex,           // ITEM_BOW_ICE
+    gItemIconBowLightTex,         // ITEM_BOW_LIGHT
+#if MM_VERSION < N64_US
+    (TexturePtr*)0x08000000, // ITEM_69_JP
+    (TexturePtr*)0x08000000, // ITEM_6A_JP
+    (TexturePtr*)0x08000000, // ITEM_6B_JP
+#endif
+    gItemIconKokiriSwordTex,      // ITEM_SWORD_KOKIRI
+    gItemIconRazorSwordTex,       // ITEM_SWORD_RAZOR
+    gItemIconGildedSwordTex,      // ITEM_SWORD_GILDED
+    gItemIconFierceDeitySwordTex, // ITEM_SWORD_DEITY
+    gItemIconHerosShieldTex,      // ITEM_SHIELD_HERO
+    gItemIconMirrorShieldTex,     // ITEM_SHIELD_MIRROR
+#if MM_VERSION < N64_US
+    (TexturePtr*)0x08000000, // ITEM_72_JP
+#endif
+    gItemIconQuiver30Tex,         // ITEM_QUIVER_30
+    gItemIconQuiver40Tex,         // ITEM_QUIVER_40
+    gItemIconQuiver50Tex,         // ITEM_QUIVER_50
+    gItemIconBombBag20Tex,        // ITEM_BOMB_BAG_20
+    gItemIconBombBag30Tex,        // ITEM_BOMB_BAG_30
+    gItemIconBombBag40Tex,        // ITEM_BOMB_BAG_40
+    gItemIconDefaultWalletTex,    // ITEM_WALLET_DEFAULT
+    gItemIconAdultsWalletTex,     // ITEM_WALLET_ADULT
+    gItemIconGiantsWalletTex,     // ITEM_WALLET_GIANT
+    gItemIconFishingRodTex,       // ITEM_FISHING_ROD
+    gItemIconOdolwasRemainsTex,   // ITEM_REMAINS_ODOLWA
+    gItemIconGohtsRemainsTex,     // ITEM_REMAINS_GOHT
+    gItemIconGyorgsRemainsTex,    // ITEM_REMAINS_GYORG
+    gItemIconTwinmoldsRemainsTex, // ITEM_REMAINS_TWINMOLD
+    gItemIconSongNoteTex,         // ITEM_SONG_SONATA
+    gItemIconSongNoteTex,         // ITEM_SONG_LULLABY
+    gItemIconSongNoteTex,         // ITEM_SONG_NOVA
+    gItemIconSongNoteTex,         // ITEM_SONG_ELEGY
+    gItemIconSongNoteTex,         // ITEM_SONG_OATH
+    gItemIconSongNoteTex,         // ITEM_SONG_SARIA
+    gItemIconSongNoteTex,         // ITEM_SONG_TIME
+    gItemIconSongNoteTex,         // ITEM_SONG_HEALING
+    gItemIconSongNoteTex,         // ITEM_SONG_EPONA
+    gItemIconSongNoteTex,         // ITEM_SONG_SOARING
+    gItemIconSongNoteTex,         // ITEM_SONG_STORMS
+    gItemIconSongNoteTex,         // ITEM_SONG_SUN
+    gItemIconBombersNotebookTex,  // ITEM_BOMBERS_NOTEBOOK
+    gQuestIconGoldSkulltulaTex,   // ITEM_SKULL_TOKEN
+    gQuestIconHeartContainerTex,  // ITEM_HEART_CONTAINER
+    gQuestIconPieceOfHeartTex,    // ITEM_HEART_PIECE
+    gItemIconSongNoteTex,         // ITEM_71
+    gItemIconSongNoteTex,         // ITEM_72
+    gItemIconSongNoteTex,         // ITEM_SONG_LULLABY_INTRO
+    gQuestIconBossKeyTex,         // ITEM_KEY_BOSS
+    gQuestIconDungeonMapTex,      // ITEM_COMPASS
+    gQuestIconCompassTex,         // ITEM_DUNGEON_MAP
+    gQuestIconGoldSkulltula2Tex,  // ITEM_STRAY_FAIRIES
+    gQuestIconSmallKeyTex,        // ITEM_KEY_SMALL
+    gQuestIconSmallMagicJarTex,   // ITEM_MAGIC_JAR_SMALL
+    gQuestIconBigMagicJarTex,     // ITEM_MAGIC_JAR_BIG
+    gItemIconHeartPiece1Tex,      // ITEM_HEART_PIECE_2
+    gItemIconHeartPiece2Tex,      // ITEM_INVALID_1
+    gItemIconHeartPiece3Tex,      // ITEM_INVALID_2
+    gOcarinaCUpTex,               // ITEM_INVALID_3
+    gOcarinaCDownTex,             // ITEM_INVALID_4
+    gOcarinaCLeftTex,             // ITEM_INVALID_5
+    gOcarinaCRightTex,            // ITEM_INVALID_6
+    gOcarinaATex,                 // ITEM_INVALID_7
 };
 
 // Used to map item IDs to inventory slots
 u8 gItemSlots[] = {
-    SLOT_OCARINA,            // ITEM_OCARINA_OF_TIME
-    SLOT_BOW,                // ITEM_BOW
-    SLOT_ARROW_FIRE,         // ITEM_ARROW_FIRE
-    SLOT_ARROW_ICE,          // ITEM_ARROW_ICE
-    SLOT_ARROW_LIGHT,        // ITEM_ARROW_LIGHT
-    SLOT_TRADE_DEED,         // ITEM_OCARINA_FAIRY
-    SLOT_BOMB,               // ITEM_BOMB
-    SLOT_BOMBCHU,            // ITEM_BOMBCHU
-    SLOT_DEKU_STICK,         // ITEM_DEKU_STICK
-    SLOT_DEKU_NUT,           // ITEM_DEKU_NUT
-    SLOT_MAGIC_BEANS,        // ITEM_MAGIC_BEANS
-    SLOT_TRADE_KEY_MAMA,     // ITEM_SLINGSHOT
-    SLOT_POWDER_KEG,         // ITEM_POWDER_KEG
-    SLOT_PICTOGRAPH_BOX,     // ITEM_PICTOGRAPH_BOX
-    SLOT_LENS_OF_TRUTH,      // ITEM_LENS_OF_TRUTH
-    SLOT_HOOKSHOT,           // ITEM_HOOKSHOT
-    SLOT_SWORD_GREAT_FAIRY,  // ITEM_SWORD_GREAT_FAIRY
-    SLOT_BOTTLE_1,           // ITEM_LONGSHOT
-    SLOT_BOTTLE_1,           // ITEM_BOTTLE
-    SLOT_BOTTLE_1,           // ITEM_POTION_RED
-    SLOT_BOTTLE_1,           // ITEM_POTION_GREEN
-    SLOT_BOTTLE_1,           // ITEM_POTION_BLUE
-    SLOT_BOTTLE_1,           // ITEM_FAIRY
-    SLOT_BOTTLE_1,           // ITEM_DEKU_PRINCESS
-    SLOT_BOTTLE_1,           // ITEM_MILK_BOTTLE
-    SLOT_BOTTLE_1,           // ITEM_MILK_HALF
-    SLOT_BOTTLE_1,           // ITEM_FISH
-    SLOT_BOTTLE_1,           // ITEM_BUG
-    SLOT_BOTTLE_1,           // ITEM_BLUE_FIRE
-    SLOT_BOTTLE_1,           // ITEM_POE
-    SLOT_BOTTLE_1,           // ITEM_BIG_POE
-    SLOT_BOTTLE_1,           // ITEM_SPRING_WATER
-    SLOT_BOTTLE_1,           // ITEM_HOT_SPRING_WATER
-    SLOT_BOTTLE_1,           // ITEM_ZORA_EGG
-    SLOT_BOTTLE_1,           // ITEM_GOLD_DUST
-    SLOT_BOTTLE_1,           // ITEM_MUSHROOM
-    SLOT_BOTTLE_1,           // ITEM_SEAHORSE
-    SLOT_BOTTLE_1,           // ITEM_CHATEAU
-    SLOT_BOTTLE_1,           // ITEM_HYLIAN_LOACH
-    SLOT_BOTTLE_1,           // ITEM_OBABA_DRINK
-    SLOT_TRADE_DEED,         // ITEM_MOONS_TEAR
-    SLOT_TRADE_DEED,         // ITEM_DEED_LAND
-    SLOT_TRADE_DEED,         // ITEM_DEED_SWAMP
-    SLOT_TRADE_DEED,         // ITEM_DEED_MOUNTAIN
-    SLOT_TRADE_DEED,         // ITEM_DEED_OCEAN
-    SLOT_TRADE_KEY_MAMA,     // ITEM_ROOM_KEY
-    SLOT_TRADE_KEY_MAMA,     // ITEM_LETTER_MAMA
-    SLOT_TRADE_COUPLE,       // ITEM_LETTER_TO_KAFEI
-    SLOT_TRADE_COUPLE,       // ITEM_PENDANT_OF_MEMORIES
+    SLOT_OCARINA,           // ITEM_OCARINA_OF_TIME
+    SLOT_BOW,               // ITEM_BOW
+    SLOT_ARROW_FIRE,        // ITEM_ARROW_FIRE
+    SLOT_ARROW_ICE,         // ITEM_ARROW_ICE
+    SLOT_ARROW_LIGHT,       // ITEM_ARROW_LIGHT
+    SLOT_TRADE_DEED,        // ITEM_OCARINA_FAIRY
+    SLOT_BOMB,              // ITEM_BOMB
+    SLOT_BOMBCHU,           // ITEM_BOMBCHU
+    SLOT_DEKU_STICK,        // ITEM_DEKU_STICK
+    SLOT_DEKU_NUT,          // ITEM_DEKU_NUT
+    SLOT_MAGIC_BEANS,       // ITEM_MAGIC_BEANS
+    SLOT_TRADE_KEY_MAMA,    // ITEM_SLINGSHOT
+    SLOT_POWDER_KEG,        // ITEM_POWDER_KEG
+    SLOT_PICTOGRAPH_BOX,    // ITEM_PICTOGRAPH_BOX
+    SLOT_LENS_OF_TRUTH,     // ITEM_LENS_OF_TRUTH
+    SLOT_HOOKSHOT,          // ITEM_HOOKSHOT
+    SLOT_SWORD_GREAT_FAIRY, // ITEM_SWORD_GREAT_FAIRY
+    SLOT_BOTTLE_1,          // ITEM_LONGSHOT
+    SLOT_BOTTLE_1,          // ITEM_BOTTLE
+    SLOT_BOTTLE_1,          // ITEM_POTION_RED
+    SLOT_BOTTLE_1,          // ITEM_POTION_GREEN
+    SLOT_BOTTLE_1,          // ITEM_POTION_BLUE
+    SLOT_BOTTLE_1,          // ITEM_FAIRY
+    SLOT_BOTTLE_1,          // ITEM_DEKU_PRINCESS
+    SLOT_BOTTLE_1,          // ITEM_MILK_BOTTLE
+    SLOT_BOTTLE_1,          // ITEM_MILK_HALF
+    SLOT_BOTTLE_1,          // ITEM_FISH
+    SLOT_BOTTLE_1,          // ITEM_BUG
+    SLOT_BOTTLE_1,          // ITEM_BLUE_FIRE
+    SLOT_BOTTLE_1,          // ITEM_POE
+    SLOT_BOTTLE_1,          // ITEM_BIG_POE
+    SLOT_BOTTLE_1,          // ITEM_SPRING_WATER
+    SLOT_BOTTLE_1,          // ITEM_HOT_SPRING_WATER
+    SLOT_BOTTLE_1,          // ITEM_ZORA_EGG
+    SLOT_BOTTLE_1,          // ITEM_GOLD_DUST
+    SLOT_BOTTLE_1,          // ITEM_MUSHROOM
+#if MM_VERSION < N64_US
+    SLOT_BOTTLE_1, // ITEM_24_JP
+    SLOT_BOTTLE_1, // ITEM_25_JP
+#endif
+    SLOT_BOTTLE_1, // ITEM_SEAHORSE
+    SLOT_BOTTLE_1, // ITEM_CHATEAU
+    SLOT_BOTTLE_1, // ITEM_HYLIAN_LOACH
+#if MM_VERSION < N64_US
+    SLOT_BOTTLE_1, // ITEM_29_JP
+    SLOT_BOTTLE_1, // ITEM_2A_JP
+    SLOT_BOTTLE_1, // ITEM_2B_JP
+    SLOT_BOTTLE_1, // ITEM_2C_JP
+    SLOT_BOTTLE_1, // ITEM_2D_JP
+    SLOT_BOTTLE_1, // ITEM_2E_JP
+#endif
+    SLOT_BOTTLE_1,   // ITEM_OBABA_DRINK
+    SLOT_TRADE_DEED, // ITEM_MOONS_TEAR
+    SLOT_TRADE_DEED, // ITEM_DEED_LAND
+    SLOT_TRADE_DEED, // ITEM_DEED_SWAMP
+    SLOT_TRADE_DEED, // ITEM_DEED_MOUNTAIN
+    SLOT_TRADE_DEED, // ITEM_DEED_OCEAN
+#if MM_VERSION < N64_US
+    SLOT_TRADE_DEED, // ITEM_35_JP
+    SLOT_TRADE_DEED, // ITEM_36_JP
+    SLOT_TRADE_DEED, // ITEM_37_JP
+    SLOT_TRADE_DEED, // ITEM_38_JP
+    SLOT_TRADE_DEED, // ITEM_39_JP
+#endif
+    SLOT_TRADE_KEY_MAMA, // ITEM_ROOM_KEY
+    SLOT_TRADE_KEY_MAMA, // ITEM_LETTER_MAMA
+#if MM_VERSION < N64_US
+    SLOT_TRADE_KEY_MAMA, // ITEM_3C_JP
+    SLOT_TRADE_KEY_MAMA, // ITEM_3D_JP
+    SLOT_TRADE_KEY_MAMA, // ITEM_3E_JP
+    SLOT_TRADE_KEY_MAMA, // ITEM_3F_JP
+    SLOT_TRADE_KEY_MAMA, // ITEM_40_JP
+    SLOT_TRADE_KEY_MAMA, // ITEM_41_JP
+    SLOT_TRADE_KEY_MAMA, // ITEM_42_JP
+    SLOT_TRADE_KEY_MAMA, // ITEM_43_JP
+#endif
+    SLOT_TRADE_COUPLE, // ITEM_LETTER_TO_KAFEI
+    SLOT_TRADE_COUPLE, // ITEM_PENDANT_OF_MEMORIES
+#if MM_VERSION < N64_US
+    SLOT_TRADE_COUPLE, // ITEM_46_JP
+    SLOT_TRADE_COUPLE, // ITEM_47_JP
+    SLOT_TRADE_COUPLE, // ITEM_48_JP
+    SLOT_TRADE_COUPLE, // ITEM_49_JP
+    SLOT_TRADE_COUPLE, // ITEM_4A_JP
+    SLOT_TRADE_COUPLE, // ITEM_4B_JP
+    SLOT_TRADE_COUPLE, // ITEM_4C_JP
+#endif
     SLOT_TRADE_COUPLE,       // ITEM_TINGLE_MAP
     SLOT_MASK_DEKU,          // ITEM_MASK_DEKU
     SLOT_MASK_GORON,         // ITEM_MASK_GORON
@@ -359,20 +444,59 @@ s16 gItemPrices[] = {
     20,  // ITEM_ZORA_EGG
     200, // ITEM_GOLD_DUST
     5,   // ITEM_MUSHROOM
+#if MM_VERSION < N64_US
+    5, // ITEM_24_JP
+    0, // ITEM_25_JP
+#endif
     0,   // ITEM_SEAHORSE
     200, // ITEM_CHATEAU
     20,  // ITEM_HYLIAN_LOACH
-    0,   // ITEM_OBABA_DRINK
-    0,   // ITEM_MOONS_TEAR
-    0,   // ITEM_DEED_LAND
-    0,   // ITEM_DEED_SWAMP
-    0,   // ITEM_DEED_MOUNTAIN
-    0,   // ITEM_DEED_OCEAN
-    0,   // ITEM_ROOM_KEY
-    0,   // ITEM_LETTER_MAMA
-    0,   // ITEM_LETTER_KAFEI
-    0,   // ITEM_PENDANT_OF_MEMORIES
-    0,   // ITEM_TINGLE_MAP
+#if MM_VERSION < N64_US
+    0, // ITEM_29_JP
+    0, // ITEM_2A_JP
+    0, // ITEM_2B_JP
+    0, // ITEM_2C_JP
+    0, // ITEM_2D_JP
+    0, // ITEM_2E_JP
+#endif
+    0, // ITEM_OBABA_DRINK
+    0, // ITEM_MOONS_TEAR
+    0, // ITEM_DEED_LAND
+    0, // ITEM_DEED_SWAMP
+    0, // ITEM_DEED_MOUNTAIN
+    0, // ITEM_DEED_OCEAN
+#if MM_VERSION < N64_US
+    0, // ITEM_35_JP
+    0, // ITEM_36_JP
+    0, // ITEM_37_JP
+    0, // ITEM_38_JP
+    0, // ITEM_39_JP
+#endif
+    0, // ITEM_ROOM_KEY
+    0, // ITEM_LETTER_MAMA
+#if MM_VERSION < N64_US
+    0, // ITEM_3C_JP
+    0, // ITEM_3D_JP
+    0, // ITEM_3E_JP
+    0, // ITEM_3F_JP
+    0, // ITEM_40_JP
+    0, // ITEM_41_JP
+    0, // ITEM_42_JP
+    0, // ITEM_43_JP
+#endif
+    0, // ITEM_LETTER_TO_KAFEI
+    0, // ITEM_PENDANT_OF_MEMORIES
+#if MM_VERSION < N64_US
+    0, // ITEM_46_JP
+    0, // ITEM_47_JP
+    0, // ITEM_48_JP
+    0, // ITEM_49_JP
+    0, // ITEM_4A_JP
+    0, // ITEM_4B_JP
+    0, // ITEM_4C_JP
+#endif
+    0, // ITEM_TINGLE_MAP
+
 };
 
 // Used to map scene indexes to their region in Termina
@@ -481,6 +605,18 @@ u16 gSceneIdsPerRegion[REGION_MAX][27] = {
         0xFFFF,
     },
 };
+
+#if MM_VERSION < N64_US
+//! TODO: Determine where these go
+// "MAP acquisition bit registration map_type=%d\n"
+static const char unusedString1[] = "ＭＡＰ獲得Ｂｉｔ登録 map_type=%d\n";
+// "MAP acquisition bit registration map_type=%d\n"
+static const char unusedString2[] = "ＭＡＰ獲得Ｂｉｔ登録 map_type=%d\n";
+// "MAP acquisition bit registration map_type=%d\n"
+static const char unusedString3[] = "ＭＡＰ獲得Ｂｉｔ登録 map_type=%d\n";
+// "MAP acquisition bit registration map_type=%d\n"
+static const char unusedString4[] = "ＭＡＰ獲得Ｂｉｔ登録 map_type=%d\n";
+#endif
 
 s32 Inventory_GetBtnBItem(PlayState* play) {
     if (gSaveContext.buttonStatus[EQUIP_SLOT_B] == BTN_DISABLED) {
@@ -775,10 +911,11 @@ u8 gPlayerFormItemRestrictions[PLAYER_FORM_MAX][114] = {
         true,  // ITEM_ZORA_EGG
         true,  // ITEM_GOLD_DUST
         true,  // ITEM_MUSHROOM
-        true,  // ITEM_SEAHORSE
-        true,  // ITEM_CHATEAU
-        true,  // ITEM_HYLIAN_LOACH
-        true,  // ITEM_OBABA_DRINK
+        true,  // ITEM_SEAHORSE/ITEM_24_JP
+        true,  // ITEM_CHATEAU/ITEM_25_JP
+        true,  // ITEM_HYLIAN_LOACH/ITEM_SEAHORSE
+        true,  // ITEM_OBABA_DRINK/ITEM_CHATEAU
+#if MM_VERSION >= N64_US
         false, // ITEM_MOONS_TEAR
         false, // ITEM_DEED_LAND
         false, // ITEM_DEED_SWAMP
@@ -787,72 +924,90 @@ u8 gPlayerFormItemRestrictions[PLAYER_FORM_MAX][114] = {
         false, // ITEM_ROOM_KEY
         false, // ITEM_LETTER_MAMA
         false, // ITEM_LETTER_TO_KAFEI
-        false, // ITEM_PENDANT_OF_MEMORIES
-        false, // ITEM_TINGLE_MAP
-        false, // ITEM_MASK_DEKU
-        false, // ITEM_MASK_GORON
-        false, // ITEM_MASK_ZORA
-        true,  // ITEM_MASK_FIERCE_DEITY
-        false, // ITEM_MASK_TRUTH
-        false, // ITEM_MASK_KAFEIS_MASK
-        false, // ITEM_MASK_ALL_NIGHT
-        false, // ITEM_MASK_BUNNY
-        false, // ITEM_MASK_KEATON
-        false, // ITEM_MASK_GARO
-        false, // ITEM_MASK_ROMANI
-        false, // ITEM_MASK_CIRCUS_LEADER
-        false, // ITEM_MASK_POSTMAN
-        false, // ITEM_MASK_COUPLE
-        false, // ITEM_MASK_GREAT_FAIRY
-        false, // ITEM_MASK_GIBDO
-        false, // ITEM_MASK_DON_GERO
-        false, // ITEM_MASK_KAMARO
-        false, // ITEM_MASK_CAPTAIN
-        false, // ITEM_MASK_STONE
-        false, // ITEM_MASK_BREMEN
-        false, // ITEM_MASK_BLAST
-        false, // ITEM_MASK_SCENTS
-        false, // ITEM_MASK_GIANT
-        false, // ITEM_BOW_FIRE
-        false, // ITEM_BOW_ICE
-        false, // ITEM_BOW_LIGHT
-        false, // ITEM_SWORD_KOKIRI
-        false, // ITEM_SWORD_RAZOR
-        false, // ITEM_SWORD_GILDED
-        false, // ITEM_SWORD_DEITY
+#else
+        true,  // ITEM_HYLIAN_LOACH
+        true,  // ITEM_29_JP
+        true,  // ITEM_2A_JP
+        true,  // ITEM_2B_JP
+        true,  // ITEM_2C_JP
+        true,  // ITEM_2D_JP
+        true,  // ITEM_2E_JP
+        true,  // ITEM_OBABA_DRINK
+#endif
+        false, // ITEM_PENDANT_OF_MEMORIES/ITEM_MOONS_TEAR
+        false, // ITEM_TINGLE_MAP/ITEM_DEED_LAND
+        false, // ITEM_MASK_DEKU/ITEM_DEED_SWAMP
+        false, // ITEM_MASK_GORON/ITEM_DEED_MOUNTAIN
+        false, // ITEM_MASK_ZORA/ITEM_DEED_OCEAN
+#if MM_VERSION >= N64_US
+        true, // ITEM_MASK_FIERCE_DEITY
+#else
+        false, // ITEM_35_JP
+#endif
+        false, // ITEM_MASK_TRUTH/ITEM_36_JP
+        false, // ITEM_MASK_KAFEIS_MASK/ITEM_37_JP
+        false, // ITEM_MASK_ALL_NIGHT/ITEM_38_JP
+        false, // ITEM_MASK_BUNNY/ITEM_39_JP
+        false, // ITEM_MASK_KEATON/ITEM_ROOM_KEY
+        false, // ITEM_MASK_GARO/ITEM_LETTER_MAMA
+        false, // ITEM_MASK_ROMANI/ITEM_3C_JP
+        false, // ITEM_MASK_CIRCUS_LEADER/ITEM_3D_JP
+        false, // ITEM_MASK_POSTMAN/ITEM_3E_JP
+        false, // ITEM_MASK_COUPLE/ITEM_3F_JP
+        false, // ITEM_MASK_GREAT_FAIRY/ITEM_40_JP
+        false, // ITEM_MASK_GIBDO/ITEM_41_JP
+        false, // ITEM_MASK_DON_GERO/ITEM_42_JP
+        false, // ITEM_MASK_KAMARO/ITEM_43_JP
+        false, // ITEM_MASK_CAPTAIN/ITEM_LETTER_TO_KAFEI
+        false, // ITEM_MASK_STONE/ITEM_PENDANT_OF_MEMORIES
+        false, // ITEM_MASK_BREMEN/ITEM_46_JP
+        false, // ITEM_MASK_BLAST/ITEM_47_JP
+        false, // ITEM_MASK_SCENTS/ITEM_48_JP
+        false, // ITEM_MASK_GIANT/ITEM_49_JP
+        false, // ITEM_BOW_FIRE/ITEM_4A_JP
+        false, // ITEM_BOW_ICE/ITEM_4B_JP
+        false, // ITEM_BOW_LIGHT/ITEM_4C_JP
+        false, // ITEM_SWORD_KOKIRI/ITEM_TINGLE_MAP
+        false, // ITEM_SWORD_RAZOR/ITEM_MASK_DEKU
+        false, // ITEM_SWORD_GILDED/ITEM_MASK_GORON
+        false, // ITEM_SWORD_DEITY/ITEM_MASK_ZORA
+#if MM_VERSION >= N64_US
         false, // ITEM_SHIELD_HERO
-        false, // ITEM_SHIELD_MIRROR
-        false, // ITEM_QUIVER_30
-        false, // ITEM_QUIVER_40
-        false, // ITEM_QUIVER_50
-        false, // ITEM_BOMB_BAG_20
-        false, // ITEM_BOMB_BAG_30
-        false, // ITEM_BOMB_BAG_40
-        false, // ITEM_WALLET_DEFAULT
-        false, // ITEM_WALLET_ADULT
-        false, // ITEM_WALLET_GIANT
-        false, // ITEM_FISHING_ROD
-        false, // ITEM_REMAINS_ODOLWA
-        false, // ITEM_REMAINS_GOHT
-        false, // ITEM_REMAINS_GYORG
-        false, // ITEM_REMAINS_TWINMOLD
-        false, // ITEM_SONG_SONATA
-        false, // ITEM_SONG_LULLABY
-        false, // ITEM_SONG_NOVA
-        false, // ITEM_SONG_ELEGY
-        false, // ITEM_SONG_OATH
-        false, // ITEM_SONG_SARIA
-        false, // ITEM_SONG_TIME
-        false, // ITEM_SONG_HEALING
-        false, // ITEM_SONG_EPONA
-        false, // ITEM_SONG_SOARING
-        false, // ITEM_SONG_STORMS
-        false, // ITEM_SONG_SUN
-        false, // ITEM_BOMBERS_NOTEBOOK
-        false, // ITEM_SKULL_TOKEN
-        false, // ITEM_HEART_CONTAINER
-        false, // ITEM_HEART_PIECE
-        false, // ITEM_71
+#else
+        true,  // ITEM_MASK_FIERCE_DEITY
+#endif
+        false, // ITEM_SHIELD_MIRROR/ITEM_MASK_TRUTH
+        false, // ITEM_QUIVER_30/ITEM_MASK_KAFEIS_MASK
+        false, // ITEM_QUIVER_40/ITEM_MASK_ALL_NIGHT
+        false, // ITEM_QUIVER_50/ITEM_MASK_BUNNY
+        false, // ITEM_BOMB_BAG_20/ITEM_MASK_KEATON
+        false, // ITEM_BOMB_BAG_30/ITEM_MASK_GARO
+        false, // ITEM_BOMB_BAG_40/ITEM_MASK_ROMANI
+        false, // ITEM_WALLET_DEFAULT/ITEM_MASK_CIRCUS_LEADER
+        false, // ITEM_WALLET_ADULT/ITEM_MASK_POSTMAN
+        false, // ITEM_WALLET_GIANT/ITEM_MASK_COUPLE
+        false, // ITEM_FISHING_ROD/ITEM_MASK_GREAT_FAIRY
+        false, // ITEM_REMAINS_ODOLWA/ITEM_MASK_GIBDO
+        false, // ITEM_REMAINS_GOHT/ITEM_MASK_DON_GERO
+        false, // ITEM_REMAINS_GYORG/ITEM_MASK_KAMARO
+        false, // ITEM_REMAINS_TWINMOLD/ITEM_MASK_CAPTAIN
+        false, // ITEM_SONG_SONATA/ITEM_MASK_STONE
+        false, // ITEM_SONG_LULLABY/ITEM_MASK_BREMEN
+        false, // ITEM_SONG_NOVA/ITEM_MASK_BLAST
+        false, // ITEM_SONG_ELEGY/ITEM_MASK_SCENTS
+        false, // ITEM_SONG_OATH/ITEM_MASK_GIANT
+        false, // ITEM_SONG_SARIA/ITEM_BOW_FIRE
+        false, // ITEM_SONG_TIME/ITEM_BOW_ICE
+        false, // ITEM_SONG_HEALING/ITEM_BOW_LIGHT
+        false, // ITEM_SONG_EPONA/ITEM_69_JP
+        false, // ITEM_SONG_SOARING/ITEM_6A_JP
+        false, // ITEM_SONG_STORMS/ITEM_6B_JP
+        false, // ITEM_SONG_SUN/ITEM_SWORD_KOKIRI
+        false, // ITEM_BOMBERS_NOTEBOOK/ITEM_SWORD_RAZOR
+        false, // ITEM_SKULL_TOKEN/ITEM_SWORD_GILDED
+        false, // ITEM_HEART_CONTAINER/ITEM_SWORD_DEITY
+        false, // ITEM_HEART_PIECE/ITEM_SHIELD_HERO
+        false, // ITEM_71/ITEM_SHIELD_MIRROR
     },
     // PLAYER_FORM_GORON
     {
@@ -892,24 +1047,25 @@ u8 gPlayerFormItemRestrictions[PLAYER_FORM_MAX][114] = {
         true,  // ITEM_ZORA_EGG
         true,  // ITEM_GOLD_DUST
         true,  // ITEM_MUSHROOM
-        true,  // ITEM_SEAHORSE
-        true,  // ITEM_CHATEAU
-        true,  // ITEM_HYLIAN_LOACH
-        true,  // ITEM_OBABA_DRINK
-        true,  // ITEM_MOONS_TEAR
-        true,  // ITEM_DEED_LAND
-        true,  // ITEM_DEED_SWAMP
-        true,  // ITEM_DEED_MOUNTAIN
-        true,  // ITEM_DEED_OCEAN
-        true,  // ITEM_ROOM_KEY
-        true,  // ITEM_LETTER_MAMA
-        true,  // ITEM_LETTER_TO_KAFEI
-        true,  // ITEM_PENDANT_OF_MEMORIES
-        true,  // ITEM_TINGLE_MAP
-        true,  // ITEM_MASK_DEKU
-        true,  // ITEM_MASK_GORON
-        true,  // ITEM_MASK_ZORA
-        true,  // ITEM_MASK_FIERCE_DEITY
+        true,  // ITEM_SEAHORSE/ITEM_24_JP
+        true,  // ITEM_CHATEAU/ITEM_25_JP
+        true,  // ITEM_HYLIAN_LOACH/ITEM_SEAHORSE
+        true,  // ITEM_OBABA_DRINK/ITEM_CHATEAU
+        true,  // ITEM_MOONS_TEAR/ITEM_HYLIAN_LOACH
+        true,  // ITEM_DEED_LAND/ITEM_29_JP
+        true,  // ITEM_DEED_SWAMP/ITEM_2A_JP
+        true,  // ITEM_DEED_MOUNTAIN/ITEM_2B_JP
+        true,  // ITEM_DEED_OCEAN/ITEM_2C_JP
+        true,  // ITEM_ROOM_KEY/ITEM_2D_JP
+        true,  // ITEM_LETTER_MAMA/ITEM_2E_JP
+        true,  // ITEM_LETTER_TO_KAFEI/ITEM_OBABA_DRINK
+        true,  // ITEM_PENDANT_OF_MEMORIES/ITEM_MOONS_TEAR
+        true,  // ITEM_TINGLE_MAP/ITEM_DEED_LAND
+        true,  // ITEM_MASK_DEKU/ITEM_DEED_SWAMP
+        true,  // ITEM_MASK_GORON/ITEM_DEED_MOUNTAIN
+        true,  // ITEM_MASK_ZORA/ITEM_DEED_OCEAN
+        true,  // ITEM_MASK_FIERCE_DEITY/ITEM_35_JP
+#if MM_VERSION >= N64_US
         false, // ITEM_MASK_TRUTH
         false, // ITEM_MASK_KAFEIS_MASK
         false, // ITEM_MASK_ALL_NIGHT
@@ -938,38 +1094,72 @@ u8 gPlayerFormItemRestrictions[PLAYER_FORM_MAX][114] = {
         false, // ITEM_SWORD_GILDED
         false, // ITEM_SWORD_DEITY
         false, // ITEM_SHIELD_HERO
-        false, // ITEM_SHIELD_MIRROR
-        false, // ITEM_QUIVER_30
-        false, // ITEM_QUIVER_40
-        false, // ITEM_QUIVER_50
-        false, // ITEM_BOMB_BAG_20
-        false, // ITEM_BOMB_BAG_30
-        false, // ITEM_BOMB_BAG_40
-        false, // ITEM_WALLET_DEFAULT
-        false, // ITEM_WALLET_ADULT
-        false, // ITEM_WALLET_GIANT
-        false, // ITEM_FISHING_ROD
-        false, // ITEM_REMAINS_ODOLWA
-        false, // ITEM_REMAINS_GOHT
-        false, // ITEM_REMAINS_GYORG
-        false, // ITEM_REMAINS_TWINMOLD
-        false, // ITEM_SONG_SONATA
-        false, // ITEM_SONG_LULLABY
-        false, // ITEM_SONG_NOVA
-        false, // ITEM_SONG_ELEGY
-        false, // ITEM_SONG_OATH
-        false, // ITEM_SONG_SARIA
-        false, // ITEM_SONG_TIME
-        false, // ITEM_SONG_HEALING
+#else
+        true,  // ITEM_36_JP
+        true,  // ITEM_37_JP
+        true,  // ITEM_38_JP
+        true,  // ITEM_39_JP
+        true,  // ITEM_ROOM_KEY
+        true,  // ITEM_LETTER_MAMA
+        true,  // ITEM_3C_JP
+        true,  // ITEM_3D_JP
+        true,  // ITEM_3E_JP
+        true,  // ITEM_3F_JP
+        true,  // ITEM_40_JP
+        true,  // ITEM_41_JP
+        true,  // ITEM_42_JP
+        true,  // ITEM_43_JP
+        true,  // ITEM_LETTER_TO_KAFEI
+        true,  // ITEM_PENDANT_OF_MEMORIES
+        true,  // ITEM_46_JP
+        true,  // ITEM_47_JP
+        true,  // ITEM_48_JP
+        true,  // ITEM_49_JP
+        true,  // ITEM_4A_JP
+        true,  // ITEM_4B_JP
+        true,  // ITEM_4C_JP
+        true,  // ITEM_TINGLE_MAP
+        true,  // ITEM_MASK_DEKU
+        true,  // ITEM_MASK_GORON
+        true,  // ITEM_MASK_ZORA
+        true,  // ITEM_MASK_FIERCE_DEITY
+#endif
+        false, // ITEM_SHIELD_MIRROR/ITEM_MASK_TRUTH
+        false, // ITEM_QUIVER_30/ITEM_MASK_KAFEIS_MASK
+        false, // ITEM_QUIVER_40/ITEM_MASK_ALL_NIGHT
+        false, // ITEM_QUIVER_50/ITEM_MASK_BUNNY
+        false, // ITEM_BOMB_BAG_20/ITEM_MASK_KEATON
+        false, // ITEM_BOMB_BAG_30/ITEM_MASK_GARO
+        false, // ITEM_BOMB_BAG_40/ITEM_MASK_ROMANI
+        false, // ITEM_WALLET_DEFAULT/ITEM_MASK_CIRCUS_LEADER
+        false, // ITEM_WALLET_ADULT/ITEM_MASK_POSTMAN
+        false, // ITEM_WALLET_GIANT/ITEM_MASK_COUPLE
+        false, // ITEM_FISHING_ROD/ITEM_MASK_GREAT_FAIRY
+        false, // ITEM_REMAINS_ODOLWA/ITEM_MASK_GIBDO
+        false, // ITEM_REMAINS_GOHT/ITEM_MASK_DON_GERO
+        false, // ITEM_REMAINS_GYORG/ITEM_MASK_KAMARO
+        false, // ITEM_REMAINS_TWINMOLD/ITEM_MASK_CAPTAIN
+        false, // ITEM_SONG_SONATA/ITEM_MASK_STONE
+        false, // ITEM_SONG_LULLABY/ITEM_MASK_BREMEN
+        false, // ITEM_SONG_NOVA/ITEM_MASK_BLAST
+        false, // ITEM_SONG_ELEGY/ITEM_MASK_SCENTS
+        false, // ITEM_SONG_OATH/ITEM_MASK_GIANT
+        false, // ITEM_SONG_SARIA/ITEM_BOW_FIRE
+        false, // ITEM_SONG_TIME/ITEM_BOW_ICE
+        false, // ITEM_SONG_HEALING/ITEM_BOW_LIGHT
+#if MM_VERSION >= N64_US
         false, // ITEM_SONG_EPONA
-        false, // ITEM_SONG_SOARING
-        false, // ITEM_SONG_STORMS
-        false, // ITEM_SONG_SUN
-        false, // ITEM_BOMBERS_NOTEBOOK
-        false, // ITEM_SKULL_TOKEN
-        false, // ITEM_HEART_CONTAINER
-        false, // ITEM_HEART_PIECE
-        false, // ITEM_71
+#else
+        true,  // ITEM_69_JP
+#endif
+        false, // ITEM_SONG_SOARING/ITEM_6A_JP
+        false, // ITEM_SONG_STORMS/ITEM_6B_JP
+        false, // ITEM_SONG_SUN/ITEM_SWORD_KOKIRI
+        false, // ITEM_BOMBERS_NOTEBOOK/ITEM_SWORD_RAZOR
+        false, // ITEM_SKULL_TOKEN/ITEM_SWORD_GILDED
+        false, // ITEM_HEART_CONTAINER/ITEM_SWORD_DEITY
+        false, // ITEM_HEART_PIECE/ITEM_SHIELD_HERO
+        false, // ITEM_71/ITEM_SHIELD_MIRROR
     },
     // PLAYER_FORM_ZORA
     {
@@ -1009,24 +1199,25 @@ u8 gPlayerFormItemRestrictions[PLAYER_FORM_MAX][114] = {
         true,  // ITEM_ZORA_EGG
         true,  // ITEM_GOLD_DUST
         true,  // ITEM_MUSHROOM
-        true,  // ITEM_SEAHORSE
-        true,  // ITEM_CHATEAU
-        true,  // ITEM_HYLIAN_LOACH
-        true,  // ITEM_OBABA_DRINK
-        true,  // ITEM_MOONS_TEAR
-        true,  // ITEM_DEED_LAND
-        true,  // ITEM_DEED_SWAMP
-        true,  // ITEM_DEED_MOUNTAIN
-        true,  // ITEM_DEED_OCEAN
-        true,  // ITEM_ROOM_KEY
-        true,  // ITEM_LETTER_MAMA
-        true,  // ITEM_LETTER_TO_KAFEI
-        true,  // ITEM_PENDANT_OF_MEMORIES
-        true,  // ITEM_TINGLE_MAP
-        true,  // ITEM_MASK_DEKU
-        true,  // ITEM_MASK_GORON
-        true,  // ITEM_MASK_ZORA
-        true,  // ITEM_MASK_FIERCE_DEITY
+        true,  // ITEM_SEAHORSE/ITEM_24_JP
+        true,  // ITEM_CHATEAU/ITEM_25_JP
+        true,  // ITEM_HYLIAN_LOACH/ITEM_SEAHORSE
+        true,  // ITEM_OBABA_DRINK/ITEM_CHATEAU
+        true,  // ITEM_MOONS_TEAR/ITEM_HYLIAN_LOACH
+        true,  // ITEM_DEED_LAND/ITEM_29_JP
+        true,  // ITEM_DEED_SWAMP/ITEM_2A_JP
+        true,  // ITEM_DEED_MOUNTAIN/ITEM_2B_JP
+        true,  // ITEM_DEED_OCEAN/ITEM_2C_JP
+        true,  // ITEM_ROOM_KEY/ITEM_2D_JP
+        true,  // ITEM_LETTER_MAMA/ITEM_2E_JP
+        true,  // ITEM_LETTER_TO_KAFEI/ITEM_OBABA_DRINK
+        true,  // ITEM_PENDANT_OF_MEMORIES/ITEM_MOONS_TEAR
+        true,  // ITEM_TINGLE_MAP/ITEM_DEED_LAND
+        true,  // ITEM_MASK_DEKU/ITEM_DEED_SWAMP
+        true,  // ITEM_MASK_GORON/ITEM_DEED_MOUNTAIN
+        true,  // ITEM_MASK_ZORA/ITEM_DEED_OCEAN
+        true,  // ITEM_MASK_FIERCE_DEITY/ITEM_35_JP
+#if MM_VERSION >= N64_US
         false, // ITEM_MASK_TRUTH
         false, // ITEM_MASK_KAFEIS_MASK
         false, // ITEM_MASK_ALL_NIGHT
@@ -1055,38 +1246,72 @@ u8 gPlayerFormItemRestrictions[PLAYER_FORM_MAX][114] = {
         false, // ITEM_SWORD_GILDED
         false, // ITEM_SWORD_DEITY
         false, // ITEM_SHIELD_HERO
-        false, // ITEM_SHIELD_MIRROR
-        false, // ITEM_QUIVER_30
-        false, // ITEM_QUIVER_40
-        false, // ITEM_QUIVER_50
-        false, // ITEM_BOMB_BAG_20
-        false, // ITEM_BOMB_BAG_30
-        false, // ITEM_BOMB_BAG_40
-        false, // ITEM_WALLET_DEFAULT
-        false, // ITEM_WALLET_ADULT
-        false, // ITEM_WALLET_GIANT
-        false, // ITEM_FISHING_ROD
-        false, // ITEM_REMAINS_ODOLWA
-        false, // ITEM_REMAINS_GOHT
-        false, // ITEM_REMAINS_GYORG
-        false, // ITEM_REMAINS_TWINMOLD
-        false, // ITEM_SONG_SONATA
-        false, // ITEM_SONG_LULLABY
-        false, // ITEM_SONG_NOVA
-        false, // ITEM_SONG_ELEGY
-        false, // ITEM_SONG_OATH
-        false, // ITEM_SONG_SARIA
-        false, // ITEM_SONG_TIME
-        false, // ITEM_SONG_HEALING
-        false, // ITEM_SONG_EPONA
+#else
+        true,  // ITEM_36_JP
+        true,  // ITEM_37_JP
+        true,  // ITEM_38_JP
+        true,  // ITEM_39_JP
+        true,  // ITEM_ROOM_KEY
+        true,  // ITEM_LETTER_MAMA
+        true,  // ITEM_3C_JP
+        true,  // ITEM_3D_JP
+        true,  // ITEM_3E_JP
+        true,  // ITEM_3F_JP
+        true,  // ITEM_40_JP
+        true,  // ITEM_41_JP
+        true,  // ITEM_42_JP
+        true,  // ITEM_43_JP
+        true,  // ITEM_LETTER_TO_KAFEI
+        true,  // ITEM_PENDANT_OF_MEMORIES
+        true,  // ITEM_46_JP
+        true,  // ITEM_47_JP
+        true,  // ITEM_48_JP
+        true,  // ITEM_49_JP
+        true,  // ITEM_4A_JP
+        true,  // ITEM_4B_JP
+        true,  // ITEM_4C_JP
+        true,  // ITEM_TINGLE_MAP
+        true,  // ITEM_MASK_DEKU
+        true,  // ITEM_MASK_GORON
+        true,  // ITEM_MASK_ZORA
+        true,  // ITEM_MASK_FIERCE_DEITY
+#endif
+        false, // ITEM_SHIELD_MIRROR/ITEM_MASK_TRUTH
+        false, // ITEM_QUIVER_30/ITEM_MASK_KAFEIS_MASK
+        false, // ITEM_QUIVER_40/ITEM_MASK_ALL_NIGHT
+        false, // ITEM_QUIVER_50/ITEM_MASK_BUNNY
+        false, // ITEM_BOMB_BAG_20/ITEM_MASK_KEATON
+        false, // ITEM_BOMB_BAG_30/ITEM_MASK_GARO
+        false, // ITEM_BOMB_BAG_40/ITEM_MASK_ROMANI
+        false, // ITEM_WALLET_DEFAULT/ITEM_MASK_CIRCUS_LEADER
+        false, // ITEM_WALLET_ADULT/ITEM_MASK_POSTMAN
+        false, // ITEM_WALLET_GIANT/ITEM_MASK_COUPLE
+        false, // ITEM_FISHING_ROD/ITEM_MASK_GREAT_FAIRY
+        false, // ITEM_REMAINS_ODOLWA/ITEM_MASK_GIBDO
+        false, // ITEM_REMAINS_GOHT/ITEM_MASK_DON_GERO
+        false, // ITEM_REMAINS_GYORG/ITEM_MASK_KAMARO
+        false, // ITEM_REMAINS_TWINMOLD/ITEM_MASK_CAPTAIN
+        false, // ITEM_SONG_SONATA/ITEM_MASK_STONE
+        false, // ITEM_SONG_LULLABY/ITEM_MASK_BREMEN
+        false, // ITEM_SONG_NOVA/ITEM_MASK_BLAST
+        false, // ITEM_SONG_ELEGY/ITEM_MASK_SCENTS
+        false, // ITEM_SONG_OATH/ITEM_MASK_GIANT
+        false, // ITEM_SONG_SARIA/ITEM_BOW_FIRE
+        false, // ITEM_SONG_TIME/ITEM_BOW_ICE
+        false, // ITEM_SONG_HEALING/ITEM_BOW_LIGHT
+        false, // ITEM_SONG_EPONA/ITEM_69_JP
+#if MM_VERSION >= N64_US
         false, // ITEM_SONG_SOARING
-        false, // ITEM_SONG_STORMS
-        false, // ITEM_SONG_SUN
-        false, // ITEM_BOMBERS_NOTEBOOK
-        false, // ITEM_SKULL_TOKEN
-        false, // ITEM_HEART_CONTAINER
-        false, // ITEM_HEART_PIECE
-        false, // ITEM_71
+#else
+        true,  // ITEM_6A_JP
+#endif
+        false, // ITEM_SONG_STORMS/ITEM_6B_JP
+        false, // ITEM_SONG_SUN/ITEM_SWORD_KOKIRI
+        false, // ITEM_BOMBERS_NOTEBOOK/ITEM_SWORD_RAZOR
+        false, // ITEM_SKULL_TOKEN/ITEM_SWORD_GILDED
+        false, // ITEM_HEART_CONTAINER/ITEM_SWORD_DEITY
+        false, // ITEM_HEART_PIECE/ITEM_SHIELD_HERO
+        false, // ITEM_71/ITEM_SHIELD_MIRROR
     },
     // PLAYER_FORM_DEKU
     {
@@ -1126,24 +1351,25 @@ u8 gPlayerFormItemRestrictions[PLAYER_FORM_MAX][114] = {
         true,  // ITEM_ZORA_EGG
         true,  // ITEM_GOLD_DUST
         true,  // ITEM_MUSHROOM
-        true,  // ITEM_SEAHORSE
-        true,  // ITEM_CHATEAU
-        true,  // ITEM_HYLIAN_LOACH
-        true,  // ITEM_OBABA_DRINK
-        true,  // ITEM_MOONS_TEAR
-        true,  // ITEM_DEED_LAND
-        true,  // ITEM_DEED_SWAMP
-        true,  // ITEM_DEED_MOUNTAIN
-        true,  // ITEM_DEED_OCEAN
-        true,  // ITEM_ROOM_KEY
-        true,  // ITEM_LETTER_MAMA
-        true,  // ITEM_LETTER_TO_KAFEI
-        true,  // ITEM_PENDANT_OF_MEMORIES
-        true,  // ITEM_TINGLE_MAP
-        true,  // ITEM_MASK_DEKU
-        true,  // ITEM_MASK_GORON
-        true,  // ITEM_MASK_ZORA
-        true,  // ITEM_MASK_FIERCE_DEITY
+        true,  // ITEM_SEAHORSE/ITEM_24_JP
+        true,  // ITEM_CHATEAU/ITEM_25_JP
+        true,  // ITEM_HYLIAN_LOACH/ITEM_SEAHORSE
+        true,  // ITEM_OBABA_DRINK/ITEM_CHATEAU
+        true,  // ITEM_MOONS_TEAR/ITEM_HYLIAN_LOACH
+        true,  // ITEM_DEED_LAND/ITEM_29_JP
+        true,  // ITEM_DEED_SWAMP/ITEM_2A_JP
+        true,  // ITEM_DEED_MOUNTAIN/ITEM_2B_JP
+        true,  // ITEM_DEED_OCEAN/ITEM_2C_JP
+        true,  // ITEM_ROOM_KEY/ITEM_2D_JP
+        true,  // ITEM_LETTER_MAMA/ITEM_2E_JP
+        true,  // ITEM_LETTER_TO_KAFEI/ITEM_OBABA_DRINK
+        true,  // ITEM_PENDANT_OF_MEMORIES/ITEM_MOONS_TEAR
+        true,  // ITEM_TINGLE_MAP/ITEM_DEED_LAND
+        true,  // ITEM_MASK_DEKU/ITEM_DEED_SWAMP
+        true,  // ITEM_MASK_GORON/ITEM_DEED_MOUNTAIN
+        true,  // ITEM_MASK_ZORA/ITEM_DEED_OCEAN
+        true,  // ITEM_MASK_FIERCE_DEITY/ITEM_35_JP
+#if MM_VERSION >= N64_US
         false, // ITEM_MASK_TRUTH
         false, // ITEM_MASK_KAFEIS_MASK
         false, // ITEM_MASK_ALL_NIGHT
@@ -1172,38 +1398,72 @@ u8 gPlayerFormItemRestrictions[PLAYER_FORM_MAX][114] = {
         false, // ITEM_SWORD_GILDED
         false, // ITEM_SWORD_DEITY
         false, // ITEM_SHIELD_HERO
-        false, // ITEM_SHIELD_MIRROR
-        false, // ITEM_QUIVER_30
-        false, // ITEM_QUIVER_40
-        false, // ITEM_QUIVER_50
-        false, // ITEM_BOMB_BAG_20
-        false, // ITEM_BOMB_BAG_30
-        false, // ITEM_BOMB_BAG_40
-        false, // ITEM_WALLET_DEFAULT
-        false, // ITEM_WALLET_ADULT
-        false, // ITEM_WALLET_GIANT
-        false, // ITEM_FISHING_ROD
-        false, // ITEM_REMAINS_ODOLWA
-        false, // ITEM_REMAINS_GOHT
-        false, // ITEM_REMAINS_GYORG
-        false, // ITEM_REMAINS_TWINMOLD
-        false, // ITEM_SONG_SONATA
-        false, // ITEM_SONG_LULLABY
-        false, // ITEM_SONG_NOVA
-        false, // ITEM_SONG_ELEGY
-        false, // ITEM_SONG_OATH
-        false, // ITEM_SONG_SARIA
-        false, // ITEM_SONG_TIME
-        false, // ITEM_SONG_HEALING
-        false, // ITEM_SONG_EPONA
-        false, // ITEM_SONG_SOARING
+#else
+        true,  // ITEM_36_JP
+        true,  // ITEM_37_JP
+        true,  // ITEM_38_JP
+        true,  // ITEM_39_JP
+        true,  // ITEM_ROOM_KEY
+        true,  // ITEM_LETTER_MAMA
+        true,  // ITEM_3C_JP
+        true,  // ITEM_3D_JP
+        true,  // ITEM_3E_JP
+        true,  // ITEM_3F_JP
+        true,  // ITEM_40_JP
+        true,  // ITEM_41_JP
+        true,  // ITEM_42_JP
+        true,  // ITEM_43_JP
+        true,  // ITEM_LETTER_TO_KAFEI
+        true,  // ITEM_PENDANT_OF_MEMORIES
+        true,  // ITEM_46_JP
+        true,  // ITEM_47_JP
+        true,  // ITEM_48_JP
+        true,  // ITEM_49_JP
+        true,  // ITEM_4A_JP
+        true,  // ITEM_4B_JP
+        true,  // ITEM_4C_JP
+        true,  // ITEM_TINGLE_MAP
+        true,  // ITEM_MASK_DEKU
+        true,  // ITEM_MASK_GORON
+        true,  // ITEM_MASK_ZORA
+        true,  // ITEM_MASK_FIERCE_DEITY
+#endif
+        false, // ITEM_SHIELD_MIRROR/ITEM_MASK_TRUTH
+        false, // ITEM_QUIVER_30/ITEM_MASK_KAFEIS_MASK
+        false, // ITEM_QUIVER_40/ITEM_MASK_ALL_NIGHT
+        false, // ITEM_QUIVER_50/ITEM_MASK_BUNNY
+        false, // ITEM_BOMB_BAG_20/ITEM_MASK_KEATON
+        false, // ITEM_BOMB_BAG_30/ITEM_MASK_GARO
+        false, // ITEM_BOMB_BAG_40/ITEM_MASK_ROMANI
+        false, // ITEM_WALLET_DEFAULT/ITEM_MASK_CIRCUS_LEADER
+        false, // ITEM_WALLET_ADULT/ITEM_MASK_POSTMAN
+        false, // ITEM_WALLET_GIANT/ITEM_MASK_COUPLE
+        false, // ITEM_FISHING_ROD/ITEM_MASK_GREAT_FAIRY
+        false, // ITEM_REMAINS_ODOLWA/ITEM_MASK_GIBDO
+        false, // ITEM_REMAINS_GOHT/ITEM_MASK_DON_GERO
+        false, // ITEM_REMAINS_GYORG/ITEM_MASK_KAMARO
+        false, // ITEM_REMAINS_TWINMOLD/ITEM_MASK_CAPTAIN
+        false, // ITEM_SONG_SONATA/ITEM_MASK_STONE
+        false, // ITEM_SONG_LULLABY/ITEM_MASK_BREMEN
+        false, // ITEM_SONG_NOVA/ITEM_MASK_BLAST
+        false, // ITEM_SONG_ELEGY/ITEM_MASK_SCENTS
+        false, // ITEM_SONG_OATH/ITEM_MASK_GIANT
+        false, // ITEM_SONG_SARIA/ITEM_BOW_FIRE
+        false, // ITEM_SONG_TIME/ITEM_BOW_ICE
+        false, // ITEM_SONG_HEALING/ITEM_BOW_LIGHT
+        false, // ITEM_SONG_EPONA/ITEM_69_JP
+        false, // ITEM_SONG_SOARING/ITEM_6A_JP
+#if MM_VERSION >= N64_US
         false, // ITEM_SONG_STORMS
-        false, // ITEM_SONG_SUN
-        false, // ITEM_BOMBERS_NOTEBOOK
-        false, // ITEM_SKULL_TOKEN
-        false, // ITEM_HEART_CONTAINER
-        false, // ITEM_HEART_PIECE
-        false, // ITEM_71
+#else
+        true,  // ITEM_6B_JP
+#endif
+        false, // ITEM_SONG_SUN/ITEM_SWORD_KOKIRI
+        false, // ITEM_BOMBERS_NOTEBOOK/ITEM_SWORD_RAZOR
+        false, // ITEM_SKULL_TOKEN/ITEM_SWORD_GILDED
+        false, // ITEM_HEART_CONTAINER/ITEM_SWORD_DEITY
+        false, // ITEM_HEART_PIECE/ITEM_SHIELD_HERO
+        false, // ITEM_71/ITEM_SHIELD_MIRROR
     },
     // PLAYER_FORM_HUMAN
     {
@@ -1243,47 +1503,48 @@ u8 gPlayerFormItemRestrictions[PLAYER_FORM_MAX][114] = {
         true,  // ITEM_ZORA_EGG
         true,  // ITEM_GOLD_DUST
         true,  // ITEM_MUSHROOM
-        true,  // ITEM_SEAHORSE
-        true,  // ITEM_CHATEAU
-        true,  // ITEM_HYLIAN_LOACH
-        true,  // ITEM_OBABA_DRINK
-        true,  // ITEM_MOONS_TEAR
-        true,  // ITEM_DEED_LAND
-        true,  // ITEM_DEED_SWAMP
-        true,  // ITEM_DEED_MOUNTAIN
-        true,  // ITEM_DEED_OCEAN
-        true,  // ITEM_ROOM_KEY
-        true,  // ITEM_LETTER_MAMA
-        true,  // ITEM_LETTER_TO_KAFEI
-        true,  // ITEM_PENDANT_OF_MEMORIES
-        true,  // ITEM_TINGLE_MAP
-        true,  // ITEM_MASK_DEKU
-        true,  // ITEM_MASK_GORON
-        true,  // ITEM_MASK_ZORA
-        true,  // ITEM_MASK_FIERCE_DEITY
-        true,  // ITEM_MASK_TRUTH
-        true,  // ITEM_MASK_KAFEIS_MASK
-        true,  // ITEM_MASK_ALL_NIGHT
-        true,  // ITEM_MASK_BUNNY
-        true,  // ITEM_MASK_KEATON
-        true,  // ITEM_MASK_GARO
-        true,  // ITEM_MASK_ROMANI
-        true,  // ITEM_MASK_CIRCUS_LEADER
-        true,  // ITEM_MASK_POSTMAN
-        true,  // ITEM_MASK_COUPLE
-        true,  // ITEM_MASK_GREAT_FAIRY
-        true,  // ITEM_MASK_GIBDO
-        true,  // ITEM_MASK_DON_GERO
-        true,  // ITEM_MASK_KAMARO
-        true,  // ITEM_MASK_CAPTAIN
-        true,  // ITEM_MASK_STONE
-        true,  // ITEM_MASK_BREMEN
-        true,  // ITEM_MASK_BLAST
-        true,  // ITEM_MASK_SCENTS
-        true,  // ITEM_MASK_GIANT
-        true,  // ITEM_BOW_FIRE
-        true,  // ITEM_BOW_ICE
-        true,  // ITEM_BOW_LIGHT
+        true,  // ITEM_SEAHORSE/ITEM_24_JP
+        true,  // ITEM_CHATEAU/ITEM_25_JP
+        true,  // ITEM_HYLIAN_LOACH/ITEM_SEAHORSE
+        true,  // ITEM_OBABA_DRINK/ITEM_CHATEAU
+        true,  // ITEM_MOONS_TEAR/ITEM_HYLIAN_LOACH
+        true,  // ITEM_DEED_LAND/ITEM_29_JP
+        true,  // ITEM_DEED_SWAMP/ITEM_2A_JP
+        true,  // ITEM_DEED_MOUNTAIN/ITEM_2B_JP
+        true,  // ITEM_DEED_OCEAN/ITEM_2C_JP
+        true,  // ITEM_ROOM_KEY/ITEM_2D_JP
+        true,  // ITEM_LETTER_MAMA/ITEM_2E_JP
+        true,  // ITEM_LETTER_TO_KAFEI/ITEM_OBABA_DRINK
+        true,  // ITEM_PENDANT_OF_MEMORIES/ITEM_MOONS_TEAR
+        true,  // ITEM_TINGLE_MAP/ITEM_DEED_LAND
+        true,  // ITEM_MASK_DEKU/ITEM_DEED_SWAMP
+        true,  // ITEM_MASK_GORON/ITEM_DEED_MOUNTAIN
+        true,  // ITEM_MASK_ZORA/ITEM_DEED_OCEAN
+        true,  // ITEM_MASK_FIERCE_DEITY/ITEM_35_JP
+        true,  // ITEM_MASK_TRUTH/ITEM_36_JP
+        true,  // ITEM_MASK_KAFEIS_MASK/ITEM_37_JP
+        true,  // ITEM_MASK_ALL_NIGHT/ITEM_38_JP
+        true,  // ITEM_MASK_BUNNY/ITEM_39_JP
+        true,  // ITEM_MASK_KEATON/ITEM_ROOM_KEY
+        true,  // ITEM_MASK_GARO/ITEM_LETTER_MAMA
+        true,  // ITEM_MASK_ROMANI/ITEM_3C_JP
+        true,  // ITEM_MASK_CIRCUS_LEADER/ITEM_3D_JP
+        true,  // ITEM_MASK_POSTMAN/ITEM_3E_JP
+        true,  // ITEM_MASK_COUPLE/ITEM_3F_JP
+        true,  // ITEM_MASK_GREAT_FAIRY/ITEM_40_JP
+        true,  // ITEM_MASK_GIBDO/ITEM_41_JP
+        true,  // ITEM_MASK_DON_GERO/ITEM_42_JP
+        true,  // ITEM_MASK_KAMARO/ITEM_43_JP
+        true,  // ITEM_MASK_CAPTAIN/ITEM_LETTER_TO_KAFEI
+        true,  // ITEM_MASK_STONE/ITEM_PENDANT_OF_MEMORIES
+        true,  // ITEM_MASK_BREMEN/ITEM_46_JP
+        true,  // ITEM_MASK_BLAST/ITEM_47_JP
+        true,  // ITEM_MASK_SCENTS/ITEM_48_JP
+        true,  // ITEM_MASK_GIANT/ITEM_49_JP
+        true,  // ITEM_BOW_FIRE/ITEM_4A_JP
+        true,  // ITEM_BOW_ICE/ITEM_4B_JP
+        true,  // ITEM_BOW_LIGHT/ITEM_4C_JP
+#if MM_VERSION >= N64_US
         false, // ITEM_SWORD_KOKIRI
         false, // ITEM_SWORD_RAZOR
         false, // ITEM_SWORD_GILDED
@@ -1312,14 +1573,44 @@ u8 gPlayerFormItemRestrictions[PLAYER_FORM_MAX][114] = {
         false, // ITEM_SONG_SARIA
         false, // ITEM_SONG_TIME
         false, // ITEM_SONG_HEALING
-        false, // ITEM_SONG_EPONA
-        false, // ITEM_SONG_SOARING
-        false, // ITEM_SONG_STORMS
-        false, // ITEM_SONG_SUN
-        false, // ITEM_BOMBERS_NOTEBOOK
-        false, // ITEM_SKULL_TOKEN
-        false, // ITEM_HEART_CONTAINER
-        false, // ITEM_HEART_PIECE
-        false, // ITEM_71
+#else
+        true,  // ITEM_TINGLE_MAP
+        true,  // ITEM_MASK_DEKU
+        true,  // ITEM_MASK_GORON
+        true,  // ITEM_MASK_ZORA
+        true,  // ITEM_MASK_FIERCE_DEITY
+        true,  // ITEM_MASK_TRUTH
+        true,  // ITEM_MASK_KAFEIS_MASK
+        true,  // ITEM_MASK_ALL_NIGHT
+        true,  // ITEM_MASK_BUNNY
+        true,  // ITEM_MASK_KEATON
+        true,  // ITEM_MASK_GARO
+        true,  // ITEM_MASK_ROMANI
+        true,  // ITEM_MASK_CIRCUS_LEADER
+        true,  // ITEM_MASK_POSTMAN
+        true,  // ITEM_MASK_COUPLE
+        true,  // ITEM_MASK_GREAT_FAIRY
+        true,  // ITEM_MASK_GIBDO
+        true,  // ITEM_MASK_DON_GERO
+        true,  // ITEM_MASK_KAMARO
+        true,  // ITEM_MASK_CAPTAIN
+        true,  // ITEM_MASK_STONE
+        true,  // ITEM_MASK_BREMEN
+        true,  // ITEM_MASK_BLAST
+        true,  // ITEM_MASK_SCENTS
+        true,  // ITEM_MASK_GIANT
+        true,  // ITEM_BOW_FIRE
+        true,  // ITEM_BOW_ICE
+        true,  // ITEM_BOW_LIGHT
+#endif
+        false, // ITEM_SONG_EPONA/ITEM_69_JP
+        false, // ITEM_SONG_SOARING/ITEM_6A_JP
+        false, // ITEM_SONG_STORMS/ITEM_6B_JP
+        false, // ITEM_SONG_SUN/ITEM_SWORD_KOKIRI
+        false, // ITEM_BOMBERS_NOTEBOOK/ITEM_SWORD_RAZOR
+        false, // ITEM_SKULL_TOKEN/ITEM_SWORD_GILDED
+        false, // ITEM_HEART_CONTAINER/ITEM_SWORD_DEITY
+        false, // ITEM_HEART_PIECE/ITEM_SHIELD_HERO
+        false, // ITEM_71/ITEM_SHIELD_MIRROR
     },
 };
