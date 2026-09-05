@@ -53,6 +53,8 @@ void Main(void* arg) {
     s32 exit;
     s16* msg;
 
+    PRINTF(T("mainproc 実行開始\n", "mainproc Start running\n"));
+
     gScreenWidth = SCREEN_WIDTH;
     gScreenHeight = SCREEN_HEIGHT;
 
@@ -64,6 +66,8 @@ void Main(void* arg) {
     sysHeap = (uintptr_t)SEGMENT_END(buffers);
     fb = FRAMEBUFFERS_START_ADDR;
     gSystemHeapSize = fb - sysHeap;
+    PRINTF(T("システムヒープ初期化 %08x-%08x %08x\n", "System heap initialization %08x-%08x %08x\n"), systemHeapStart,
+           fb, sysHeap);
     SystemHeap_Init((void*)sysHeap, gSystemHeapSize);
 
     Regs_Init();
@@ -79,6 +83,9 @@ void Main(void* arg) {
     Sched_Init(&gScheduler, STACK_TOP(sSchedStack), Z_PRIORITY_SCHED, gViConfigModeType, 1, &gIrqMgr);
 
     CIC6105_AddRomInfoFaultPage();
+#if MM_VERSION < N64_US
+    CIC6105_ScheduleCICTask();
+#endif
 
     IrqMgr_AddClient(&gIrqMgr, &sIrqClient, &sIrqMgrMsgQueue);
 
@@ -105,15 +112,19 @@ void Main(void* arg) {
 
         switch (*msg) {
             case OS_SC_PRE_NMI_MSG:
+                PRINTF(T("main.c: リセットされたみたいだよ\n", "main.c: Looks like it's been reset\n"));
                 Nmi_SetPrenmiStart();
                 break;
 
             case OS_SC_NMI_MSG:
+                PRINTF("main.c IRQMGR_PRENMI500_MSG\n");
                 exit = true;
                 break;
         }
     }
 
     IrqMgr_RemoveClient(&gIrqMgr, &sIrqClient);
+    PRINTF(T("mainproc 後始末\n", "mainproc Cleanup\n"));
     osDestroyThread(&gGraphThread);
+    PRINTF(T("mainproc 実行終了\n", "mainproc End of execution\n"));
 }

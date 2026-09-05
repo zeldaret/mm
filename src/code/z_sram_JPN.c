@@ -1878,9 +1878,8 @@ void Sram_SyncWriteToFlash(SramContext* sramCtx, s32 curPage, s32 numPages) {
 /**
  * Saves the game on the very first time Player enters South Clock Town from the Clock Tower
  */
-void Sram_SaveSpecialEnterClockTown(PlayState* play) {
+void Sram_SaveSpecialEnterClockTown(SramContext* sramCtx) {
     s32 pad[2];
-    SramContext* sramCtx = &play->sramCtx;
 
     gSaveContext.save.isFirstCycle = true;
     gSaveContext.save.isOwlSave = false;

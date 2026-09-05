@@ -40,7 +40,11 @@ void Slowly_Main(SlowlyMgr* slowly) {
 void Slowly_ThreadEntry(void* arg) {
     SlowlyMgr* slowly = (SlowlyMgr*)arg;
 
+    PRINTF(T("SLOWLYスレッド実行開始\n", "SLOWLY thread execution started\n"));
+
     Slowly_Main(slowly);
+
+    PRINTF(T("SLOWLYスレッド実行終了\n", "SLOWLY thread execution finished\n"));
 }
 
 void Slowly_Init(SlowlyMgr* slowly, void* stack, SlowlyCallbackTwo callback, void* arg0, void* arg1) {

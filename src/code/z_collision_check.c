@@ -3814,16 +3814,20 @@ void Collider_UpdateSpheres(s32 limb, ColliderJntSph* jntSph) {
  * Updates the world spheres for the specified ColliderJntSph element
  */
 void Collider_UpdateSpheresElement(ColliderJntSph* jntSph, s32 elemIndex, Actor* actor) {
-    if (elemIndex < jntSph->count) {
-        jntSph->elements[elemIndex].dim.worldSphere.center.x =
-            jntSph->elements[elemIndex].dim.modelSphere.center.x + actor->world.pos.x;
-        jntSph->elements[elemIndex].dim.worldSphere.center.y =
-            jntSph->elements[elemIndex].dim.modelSphere.center.y + actor->world.pos.y;
-        jntSph->elements[elemIndex].dim.worldSphere.center.z =
-            jntSph->elements[elemIndex].dim.modelSphere.center.z + actor->world.pos.z;
-        jntSph->elements[elemIndex].dim.worldSphere.radius =
-            jntSph->elements[elemIndex].dim.modelSphere.radius * jntSph->elements[elemIndex].dim.scale;
+    if (elemIndex >= jntSph->count) {
+        PRINTF(T("CollisionCheck_Uty_convJntSphSetActorPos():idミス\n",
+                 "CollisionCheck_Uty_convJntSphSetActorPos():id error\n"));
+        return;
     }
+
+    jntSph->elements[elemIndex].dim.worldSphere.center.x =
+        jntSph->elements[elemIndex].dim.modelSphere.center.x + actor->world.pos.x;
+    jntSph->elements[elemIndex].dim.worldSphere.center.y =
+        jntSph->elements[elemIndex].dim.modelSphere.center.y + actor->world.pos.y;
+    jntSph->elements[elemIndex].dim.worldSphere.center.z =
+        jntSph->elements[elemIndex].dim.modelSphere.center.z + actor->world.pos.z;
+    jntSph->elements[elemIndex].dim.worldSphere.radius =
+        jntSph->elements[elemIndex].dim.modelSphere.radius * jntSph->elements[elemIndex].dim.scale;
 }
 
 /**

@@ -30,7 +30,7 @@ APPLY_OPTS = ""
 # Compiler options used with Clang-Tidy
 # Normal warnings are disabled with -Wno-everything to focus only on tidying
 INCLUDES = "-Iinclude -Isrc -Ibuild/n64-us -I."
-DEFINES = "-D_LANGUAGE_C -DNON_MATCHING"
+DEFINES = "-D_LANGUAGE_C -DNON_MATCHING -DBUILD_CREATOR=\"\" -DBUILD_DATE=__DATE__ -DBUILD_TIME=__TIME__"
 COMPILER_OPTS = f"-fno-builtin -std=gnu90 -m32 -Wno-everything {INCLUDES} {DEFINES}"
 
 
