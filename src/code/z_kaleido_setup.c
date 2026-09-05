@@ -33,12 +33,17 @@ void func_800F4A10(PlayState* play) {
 
     Rumble_StateReset();
 
+    PRINTF("ＯＮ／ＯＦＦ  kscope->kscp_pos=%d\n", pauseCtx->pageIndex);
+    PRINTF("eye.x=%f  eye.z=%f\n", sKaleidoSetupRightPageEyeX[pauseCtx->pageIndex],
+           sKaleidoSetupRightPageEyeZ[pauseCtx->pageIndex]);
+
     pauseCtx->switchPageTimer = 0;
     pauseCtx->mainState = PAUSE_MAIN_STATE_SWITCHING_PAGE;
 
     // Set eye position and pageIndex such that scrolling left brings to the desired page
     pauseCtx->eye.x = sKaleidoSetupRightPageEyeX[pauseCtx->pageIndex];
     pauseCtx->eye.z = sKaleidoSetupRightPageEyeZ[pauseCtx->pageIndex];
+
     pauseCtx->pageIndex = sKaleidoSetupRightPageIndex[pauseCtx->pageIndex];
     pauseCtx->infoPanelOffsetY = -40;
 
@@ -47,17 +52,21 @@ void func_800F4A10(PlayState* play) {
     }
 
     if (pauseCtx->state == PAUSE_STATE_OPENING_0) {
+        PRINTF("AreaArrival=%x\n", gSaveContext.save.saveInfo.regionsVisited);
         for (i = 0; i < REGION_MAX; i++) {
             if ((gSaveContext.save.saveInfo.regionsVisited >> i) & 1) {
                 pauseCtx->worldMapPoints[i] = true;
             }
         }
     } else {
+        PRINTF("memory_warp_point=%x\n", gSaveContext.save.saveInfo.playerData.owlActivationFlags);
         for (i = OWL_WARP_STONE_TOWER; i >= OWL_WARP_GREAT_BAY_COAST; i--) {
+            PRINTF("n=%d  ", i);
             if ((gSaveContext.save.saveInfo.playerData.owlActivationFlags >> i) & 1) {
                 pauseCtx->worldMapPoints[i] = true;
                 pauseCtx->cursorPoint[PAUSE_WORLD_MAP] = i;
             }
+            PRINTF("field_map_evt[%d]=%d\n", i, pauseCtx->worldMapPoints[i]);
         }
 
         if ((gSaveContext.save.saveInfo.playerData.owlActivationFlags >> 4) & 1) {
@@ -131,6 +140,8 @@ void KaleidoSetup_Update(PlayState* play) {
             // Set next page mode to scroll left
             pauseCtx->nextPageMode = pauseCtx->pageIndex * 2 + 1;
             Audio_SetPauseState(true);
+            PRINTF("Ｍｏｄｅ=%d  eye.x=%f,  eye.z=%f  kscp_pos=%d\n", pauseCtx->nextPageMode, pauseCtx->eye.x,
+                   pauseCtx->eye.z, pauseCtx->pageIndex);
         }
 
         if (pauseCtx->state == PAUSE_STATE_OPENING_0) {
