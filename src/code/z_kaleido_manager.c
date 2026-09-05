@@ -41,6 +41,9 @@ uintptr_t KaleidoManager_FaultAddrConv(uintptr_t address, void* param) {
 void KaleidoManager_LoadOvl(KaleidoMgrOverlay* ovl) {
     ovl->loadedRamAddr = sKaleidoAreaPtr;
     Overlay_Load(ovl->file.vromStart, ovl->file.vromEnd, ovl->vramStart, ovl->vramEnd, ovl->loadedRamAddr);
+    PRINTF("OVL(k):Seg:%08x-%08x Ram:%08x-%08x Off:%08x %s\n", ovl->vramStart, ovl->vramEnd, ovl->loadedRamAddr,
+           (uintptr_t)ovl->loadedRamAddr + (uintptr_t)ovl->vramEnd - (uintptr_t)ovl->vramStart,
+           (uintptr_t)ovl->vramStart - (uintptr_t)ovl->loadedRamAddr, ovl->name);
     ovl->offset = (uintptr_t)ovl->loadedRamAddr - (uintptr_t)ovl->vramStart;
     gKaleidoMgrCurOvl = ovl;
 }
@@ -66,7 +69,13 @@ void KaleidoManager_Init(PlayState* play) {
         }
     }
 
+    PRINTF(T("KaleidoArea の最大サイズは %d バイトを確保します\n", "The maximum size of KaleidoArea is %d bytes\n"),
+           largestSize);
+
     sKaleidoAreaPtr = THA_AllocTailAlign16(&play->state.tha, largestSize);
+
+    PRINTF("KaleidoArea %08x - %08x\n", sKaleidoAreaPtr, (uintptr_t)sKaleidoAreaPtr + largestSize);
+
     gKaleidoMgrCurOvl = NULL;
     Fault_AddAddrConvClient(&sKaleidoMgrFaultAddrConvClient, KaleidoManager_FaultAddrConv, NULL);
 }
@@ -95,9 +104,11 @@ void* KaleidoManager_GetRamAddr(void* vram) {
             ovl++;
         } while (ovl != (KaleidoMgrOverlay*)&sKaleidoAreaPtr);
 
+        PRINTF(T("KaleidoArea_dllcnv ポインタ異常:%08x\n", "KaleidoArea_dllcnv Pointer error: %08x\n"), vram);
         return NULL;
     } else if (((uintptr_t)vram < (uintptr_t)gKaleidoMgrCurOvl->vramStart) ||
                ((uintptr_t)vram >= (uintptr_t)gKaleidoMgrCurOvl->vramEnd)) {
+        PRINTF(T("KaleidoArea_dllcnv ポインタ異常:%08x\n", "KaleidoArea_dllcnv Pointer error: %08x\n"), vram);
         return NULL;
     }
 
