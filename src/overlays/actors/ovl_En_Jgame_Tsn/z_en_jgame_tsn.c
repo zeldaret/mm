@@ -11,6 +11,11 @@
     (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
      ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
+typedef enum {
+    /* 0 */ FISHERMAN_EYE_OPEN,
+    /* 1 */ FISHERMAN_EYE_CLOSED
+} EnJgameTsnEyes;
+
 void EnJgameTsn_Init(Actor* thisx, PlayState* play);
 void EnJgameTsn_Destroy(Actor* thisx, PlayState* play);
 void EnJgameTsn_Update(Actor* thisx, PlayState* play);
@@ -82,10 +87,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 30, 40, 0, { 0, 0, 0 } },
 };
 
-TexturePtr sEyeTextures[] = {
-    gFishermanEyeOpen,
-    gFishermanEyeClosed,
-};
+static TexturePtr sFishermanEyeTextures[] = { gFishermanEyeOpen, gFishermanEyeClosed };
 
 void EnJgameTsn_Init(Actor* thisx, PlayState* play) {
     s32 pad;
@@ -108,7 +110,7 @@ void EnJgameTsn_Init(Actor* thisx, PlayState* play) {
 
     this->hasSpoken = false;
     this->blinkTimer = 0;
-    this->eyeIndex = 0;
+    this->eyeIndex = FISHERMAN_EYE_OPEN;
     this->linkStoodInMiddle = false;
 
     EnJgameTsn_SetupIslandBounds(this, play);
@@ -609,9 +611,9 @@ void EnJgameTsn_Blink(EnJgameTsn* this, PlayState* play) {
     }
 
     if ((this->blinkTimer == 1) || (this->blinkTimer == 3)) {
-        this->eyeIndex = 1;
+        this->eyeIndex = FISHERMAN_EYE_CLOSED;
     } else {
-        this->eyeIndex = 0;
+        this->eyeIndex = FISHERMAN_EYE_OPEN;
     }
 }
 
@@ -652,8 +654,8 @@ void EnJgameTsn_Draw(Actor* thisx, PlayState* play) {
 
     Gfx_SetupDL37_Opa(play->state.gfxCtx);
 
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeIndex]));
-    gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sEyeTextures[this->eyeIndex]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sFishermanEyeTextures[this->eyeIndex]));
+    gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sFishermanEyeTextures[this->eyeIndex]));
 
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnJgameTsn_OverrideLimbDraw, EnJgameTsn_PostLimbDraw, &this->actor);
