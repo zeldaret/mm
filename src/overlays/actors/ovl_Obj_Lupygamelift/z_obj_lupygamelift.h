@@ -4,8 +4,8 @@
 #include "global.h"
 
 #define OBJLUPYGAMELIFT_GET_PATH_INDEX(thisx) ((thisx)->params & 0x7F)
-#define OBJLUPYGAMELIFT_GET_7(thisx) (((thisx)->params >> 7) & 0x1F)
-#define OBJLUPYGAMELIFT_GET_C(thisx) (((thisx)->params >> 0xC) & 1)
+#define OBJLUPYGAMELIFT_GET_START_POINT(thisx) (((thisx)->params >> 7) & 0x1F)
+#define OBJLUPYGAMELIFT_GET_RUPEE_COLOR(thisx) (((thisx)->params >> 0xC) & 1)
 
 struct ObjLupygamelift;
 
