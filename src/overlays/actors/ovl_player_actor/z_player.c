@@ -18600,11 +18600,11 @@ void func_80855218(PlayState* play, Player* this, struct_8085D910** arg2) {
 }
 
 //! @bug This array may be indexed with PLAYER_FORM_HUMAN, causing an out-of-bounds access
-u16 D_8085D908[] = {
-    WEEKEVENTREG_30_80, // PLAYER_FORM_FIERCE_DEITY
-    WEEKEVENTREG_30_20, // PLAYER_FORM_GORON
-    WEEKEVENTREG_30_40, // PLAYER_FORM_ZORA
-    WEEKEVENTREG_30_10, // PLAYER_FORM_DEKU
+u16 gPlayerTransformMaskFlags[] = {
+    WEEKEVENTREG_WORE_FIERCE_DEITY_MASK, // PLAYER_FORM_FIERCE_DEITY
+    WEEKEVENTREG_WORE_GORON_MASK,        // PLAYER_FORM_GORON
+    WEEKEVENTREG_WORE_ZORA_MASK,         // PLAYER_FORM_ZORA
+    WEEKEVENTREG_WORE_DEKU_MASK,         // PLAYER_FORM_DEKU
 #ifdef AVOID_UB
     // Avoid UB: Provide the data that would be read by indexing this with PLAYER_FORM_HUMAN.
     // Both this array and D_8085D910 are read-only so this is not expected to change.
@@ -18643,14 +18643,14 @@ void Player_Action_86(Player* this, PlayState* play) {
             this->actor.draw = NULL;
             this->av1.actionVar1 = 0;
             Play_DisableMotionBlurPriority();
-            SET_WEEKEVENTREG(D_8085D908[GET_PLAYER_FORM]);
+            SET_WEEKEVENTREG(gPlayerTransformMaskFlags[GET_PLAYER_FORM]);
         }
     } else if ((this->av1.actionVar1++ > ((this->transformation == PLAYER_FORM_HUMAN) ? 0x53 : 0x37)) ||
                ((this->av1.actionVar1 >= 5) &&
-                (sp48 =
-                     ((this->transformation != PLAYER_FORM_HUMAN) || CHECK_WEEKEVENTREG(D_8085D908[GET_PLAYER_FORM])) &&
-                     CHECK_BTN_ANY(sPlayerControlInput->press.button,
-                                   BTN_CRIGHT | BTN_CLEFT | BTN_CDOWN | BTN_CUP | BTN_B | BTN_A)))) {
+                (sp48 = ((this->transformation != PLAYER_FORM_HUMAN) ||
+                         CHECK_WEEKEVENTREG(gPlayerTransformMaskFlags[GET_PLAYER_FORM])) &&
+                        CHECK_BTN_ANY(sPlayerControlInput->press.button,
+                                      BTN_CRIGHT | BTN_CLEFT | BTN_CDOWN | BTN_CUP | BTN_B | BTN_A)))) {
         R_PLAY_FILL_SCREEN_ON = 45;
         R_PLAY_FILL_SCREEN_R = 220;
         R_PLAY_FILL_SCREEN_G = 220;
