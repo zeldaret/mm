@@ -75,9 +75,9 @@ void ObjLupygamelift_Init(Actor* thisx, PlayState* play) {
                        this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, this->dyna.actor.shape.rot.x,
                        this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z, 0);
     if (OBJLUPYGAMELIFT_GET_RUPEE_COLOR(thisx) != ENGAMELUPY_TYPE_GREEN) {
-        params = 1;
+        params = ENGAMELUPY_TYPE_BLUE;
     } else {
-        params = 0;
+        params = ENGAMELUPY_TYPE_GREEN;
     }
     Actor_Spawn(&play->actorCtx, play, ACTOR_EN_GAMELUPY, this->dyna.actor.home.pos.x, this->dyna.actor.home.pos.y,
                 this->dyna.actor.home.pos.z, 0, 0, 0, params);
