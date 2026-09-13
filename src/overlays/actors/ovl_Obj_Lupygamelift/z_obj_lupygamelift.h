@@ -15,7 +15,7 @@ typedef struct ObjLupygamelift {
     /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ ObjLupygameliftActionFunc actionFunc;
     /* 0x160 */ f32 targetSpeedXZ;
-    /* 0x164 */ s32 count;
+    /* 0x164 */ s32 pointCount;
     /* 0x168 */ s32 pointIndex;
     /* 0x16C */ Vec3s* pathPoints;
     /* 0x170 */ s16 timer;

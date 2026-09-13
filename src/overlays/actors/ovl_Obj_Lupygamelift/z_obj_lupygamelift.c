@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_lupygamelift.h"
+#include "overlays/actors/ovl_En_Gamelupy/z_en_gamelupy.h"
 #include "assets/objects/object_raillift/object_raillift.h"
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
@@ -16,8 +17,8 @@ void ObjLupygamelift_Draw(Actor* thisx, PlayState* play);
 
 void ObjLupygamelift_SetupWait(ObjLupygamelift* this);
 void ObjLupygamelift_Wait(ObjLupygamelift* this, PlayState* play);
-void ObjLupygamelift_StartMoving(ObjLupygamelift* this);
-void ObjLupygamelift_Moving(ObjLupygamelift* this, PlayState* play);
+void ObjLupygamelift_SetupMove(ObjLupygamelift* this);
+void ObjLupygamelift_Move(ObjLupygamelift* this, PlayState* play);
 
 ActorProfile Obj_Lupygamelift_Profile = {
     /**/ ACTOR_OBJ_LUPYGAMELIFT,
@@ -65,15 +66,15 @@ void ObjLupygamelift_Init(Actor* thisx, PlayState* play) {
 
     path = &play->setupPathList[OBJLUPYGAMELIFT_GET_PATH_INDEX(thisx)];
     this->pointIndex = OBJLUPYGAMELIFT_GET_START_POINT(thisx);
-    this->count = path->count;
-    if (this->pointIndex >= this->count) {
+    this->pointCount = path->count;
+    if (this->pointIndex >= this->pointCount) {
         this->pointIndex = 0;
     }
     this->pathPoints = Lib_SegmentedToVirtual(path->points);
     Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, ACTOR_OBJ_ETCETERA, this->dyna.actor.world.pos.x,
                        this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, this->dyna.actor.shape.rot.x,
                        this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z, 0);
-    if (OBJLUPYGAMELIFT_GET_RUPEE_COLOR(thisx) != 0) {
+    if (OBJLUPYGAMELIFT_GET_RUPEE_COLOR(thisx) != ENGAMELUPY_TYPE_GREEN) {
         params = 1;
     } else {
         params = 0;
@@ -121,18 +122,18 @@ void ObjLupygamelift_SetupWait(ObjLupygamelift* this) {
 
 void ObjLupygamelift_Wait(ObjLupygamelift* this, PlayState* play) {
     if (this->timer == 0) {
-        ObjLupygamelift_StartMoving(this);
+        ObjLupygamelift_SetupMove(this);
     } else {
         this->timer--;
     }
 }
 
-void ObjLupygamelift_StartMoving(ObjLupygamelift* this) {
-    this->actionFunc = ObjLupygamelift_Moving;
+void ObjLupygamelift_SetupMove(ObjLupygamelift* this) {
+    this->actionFunc = ObjLupygamelift_Move;
     this->dyna.actor.speed = this->targetSpeedXZ;
 }
 
-void ObjLupygamelift_Moving(ObjLupygamelift* this, PlayState* play) {
+void ObjLupygamelift_Move(ObjLupygamelift* this, PlayState* play) {
     f32 distRemaining;
     Vec3f target;
 
@@ -145,7 +146,7 @@ void ObjLupygamelift_Moving(ObjLupygamelift* this, PlayState* play) {
     } else if (distRemaining > 0.0f) {
         Math_SmoothStepToF(&this->dyna.actor.speed, 5.0f, 0.5f, 5.0f, 1.0f);
     } else {
-        if (this->pointIndex < (this->count - 1)) {
+        if (this->pointIndex < (this->pointCount - 1)) {
             this->pointIndex++;
         } else {
             this->pointIndex = 0;
