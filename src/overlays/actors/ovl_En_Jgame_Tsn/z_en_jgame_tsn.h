@@ -33,7 +33,7 @@ typedef struct EnJgameTsn {
     /* 0x2F8 */ s16 hasSpoken;
     /* 0x2FA */ s16 blinkTimer;
     /* 0x2FC */ s16 torchTimer;
-    /* 0x2FE */ s16 linkStoodInMiddle;
+    /* 0x2FE */ s16 playerStoodInMiddle;
     /* 0x300 */ u16 textId;
 } EnJgameTsn; // size = 0x304
 

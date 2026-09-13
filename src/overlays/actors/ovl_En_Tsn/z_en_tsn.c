@@ -1,7 +1,7 @@
 /*
  * File: z_en_tsn.c
  * Overlay: ovl_En_Tsn
- * Description: Fisherman, seahorse and pirate poster
+ * Description: Fisherman, seahorse, and pirate poster
  */
 
 #include "z_en_tsn.h"
@@ -12,15 +12,10 @@
     (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
      ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
-#define FLAG_LOOK_AT_PLAYER (1 << 0)
-#define FLAG_PLAYER_LOOKS_AT_FISHERMAN (1 << 1)
-#define FLAG_CS_QUEUED (1 << 2)
-#define FLAG_OFFERING_ITEM (1 << 3)
-
-typedef enum {
-    /* 0 */ ENTSN_OBJ_SEAHORSE,
-    /* 1 */ ENTSN_OBJ_POSTER,
-} EnTsnObjectType;
+#define ENTSN_LOOK_AT_PLAYER (1 << 0)
+#define ENTSN_PLAYER_LOOKS_AT_FISHERMAN (1 << 1)
+#define ENTSN_CS_QUEUED (1 << 2)
+#define ENTSN_OFFERING_ITEM (1 << 3)
 
 void EnTsn_Init(Actor* thisx, PlayState* play);
 void EnTsn_Destroy(Actor* thisx, PlayState* play);
@@ -50,6 +45,16 @@ ActorProfile En_Tsn_Profile = {
     /**/ EnTsn_Update,
     /**/ EnTsn_Draw,
 };
+
+typedef enum {
+    /* 0 */ ENTSN_OBJ_SEAHORSE,
+    /* 1 */ ENTSN_OBJ_POSTER
+} EnTsnObjectType;
+
+typedef enum {
+    /* 0 */ FISHERMAN_EYE_OPEN,
+    /* 1 */ FISHERMAN_EYE_CLOSED
+} EnTsnEyes;
 
 static ColliderCylinderInit sCylinderInit = {
     {
@@ -167,7 +172,7 @@ void EnTsn_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-void EnTsn_Fisherman_StartTalk(EnTsn* this, PlayState* play) {
+void EnTsn_Fisherman_SetupTalk(EnTsn* this, PlayState* play) {
     u16 textId;
 
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_SEAHORSE)) {
@@ -282,15 +287,15 @@ void EnTsn_Fisherman_Talk(EnTsn* this, PlayState* play) {
 void EnTsn_Fisherman_Idle(EnTsn* this, PlayState* play) {
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = EnTsn_Fisherman_Talk;
-        this->flags |= FLAG_LOOK_AT_PLAYER;
+        this->flags |= ENTSN_LOOK_AT_PLAYER;
         if (this->actor.textId == 0) {
-            EnTsn_Fisherman_StartTalk(this, play);
+            EnTsn_Fisherman_SetupTalk(this, play);
         }
     } else if ((this->actor.xzDistToPlayer < 150.0f) && Player_IsFacingActor(&this->actor, 0x3000, play)) {
         Actor_OfferTalk(&this->actor, play, 160.0f);
-        this->flags |= FLAG_LOOK_AT_PLAYER;
+        this->flags |= ENTSN_LOOK_AT_PLAYER;
     } else {
-        this->flags &= ~FLAG_LOOK_AT_PLAYER;
+        this->flags &= ~ENTSN_LOOK_AT_PLAYER;
     }
     if (ENTSN_GET_Z(&this->actor)) {
         Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 6, 0x1838, 0x64);
@@ -340,35 +345,23 @@ void EnTsn_Object_ItemExchange(EnTsn* this, PlayState* play) {
                 if (CHECK_QUEST_ITEM(QUEST_PICTOGRAPH)) {
                     if (Snap_CheckFlag(PICTO_VALID_PIRATE_GOOD)) {
                         player->actor.textId = 0x107B;
-                        return;
-                    }
-
-                    if (Snap_CheckFlag(PICTO_VALID_PIRATE_TOO_FAR)) {
+                    } else if (Snap_CheckFlag(PICTO_VALID_PIRATE_TOO_FAR)) {
                         player->actor.textId = 0x10A9;
-                        return;
+                    } else {
+                        player->actor.textId = 0x1078;
+                        this->flags |= ENTSN_OFFERING_ITEM;
                     }
-
+                } else {
                     player->actor.textId = 0x1078;
-                    this->flags |= FLAG_OFFERING_ITEM;
-                    return;
+                    this->flags |= ENTSN_OFFERING_ITEM;
                 }
-
-                player->actor.textId = 0x1078;
-                this->flags |= FLAG_OFFERING_ITEM;
-                return;
-            }
-
-            if (itemAction == PLAYER_IA_HOOKSHOT) {
+            } else if (itemAction == PLAYER_IA_HOOKSHOT) {
                 player->actor.textId = 0x1075;
-                return;
+            } else {
+                player->actor.textId = 0x1078;
+                this->flags |= ENTSN_OFFERING_ITEM;
             }
-
-            player->actor.textId = 0x1078;
-            this->flags |= FLAG_OFFERING_ITEM;
-            return;
-        }
-
-        if (itemAction <= PLAYER_IA_MINUS1) {
+        } else if (itemAction <= PLAYER_IA_MINUS1) {
             Message_ContinueTextbox(play, 0x1078);
             Animation_MorphToLoop(&this->fisherman->skelAnime, &gFishermanTwoHandTalkAnim, -10.0f);
             this->actionFunc = EnTsn_Object_Talk;
@@ -379,7 +372,7 @@ void EnTsn_Object_ItemExchange(EnTsn* this, PlayState* play) {
 void EnTsn_Object_EndTalk(EnTsn* this, PlayState* play) {
     Message_CloseTextbox(play);
     this->actionFunc = EnTsn_Object_Idle;
-    this->flags &= ~FLAG_PLAYER_LOOKS_AT_FISHERMAN;
+    this->flags &= ~ENTSN_PLAYER_LOOKS_AT_FISHERMAN;
     this->actor.focus.pos = this->actor.world.pos;
     CutsceneManager_Stop(this->actor.csId);
     ENTSN_SET_Z(&this->fisherman->actor, false);
@@ -389,8 +382,8 @@ void EnTsn_Object_Talk(EnTsn* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 pad[2];
 
-    if ((this->flags & FLAG_OFFERING_ITEM) && (play->msgCtx.currentTextId == 0x1078)) {
-        this->flags &= ~FLAG_OFFERING_ITEM;
+    if ((this->flags & ENTSN_OFFERING_ITEM) && (play->msgCtx.currentTextId == 0x1078)) {
+        this->flags &= ~ENTSN_OFFERING_ITEM;
         Animation_MorphToLoop(&this->fisherman->skelAnime, &gFishermanTwoHandTalkAnim, -10.0f);
     }
 
@@ -407,10 +400,10 @@ void EnTsn_Object_Talk(EnTsn* this, PlayState* play) {
                         } else {
                             Message_ContinueTextbox(play, 0x106F);
                         }
-                        this->flags |= FLAG_PLAYER_LOOKS_AT_FISHERMAN;
+                        this->flags |= ENTSN_PLAYER_LOOKS_AT_FISHERMAN;
                         SET_WEEKEVENTREG(WEEKEVENTREG_TALKED_FISHERMANS_SEAHORSE);
                         ENTSN_SET_Z(&this->fisherman->actor, true);
-                        this->flags |= FLAG_CS_QUEUED;
+                        this->flags |= ENTSN_CS_QUEUED;
                         break;
 
                     case 0x106F:
@@ -443,7 +436,7 @@ void EnTsn_Object_Talk(EnTsn* this, PlayState* play) {
                             Message_CloseTextbox(play);
                             this->actionFunc = EnTsn_GiveSeahorse;
                             EnTsn_GiveSeahorse(this, play);
-                            this->flags &= ~FLAG_PLAYER_LOOKS_AT_FISHERMAN;
+                            this->flags &= ~ENTSN_PLAYER_LOOKS_AT_FISHERMAN;
                             this->actor.focus.pos = this->actor.world.pos;
                             CutsceneManager_Stop(this->actor.csId);
                             this->actor.flags &= ~ACTOR_FLAG_TALK;
@@ -478,7 +471,7 @@ void EnTsn_Object_Talk(EnTsn* this, PlayState* play) {
                     case 0x1091:
                         SET_WEEKEVENTREG(WEEKEVENTREG_LOOKED_AT_PIRATE_POSTER);
                         Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
-                        this->flags |= FLAG_PLAYER_LOOKS_AT_FISHERMAN;
+                        this->flags |= ENTSN_PLAYER_LOOKS_AT_FISHERMAN;
                         this->actor.textId = 0x1091;
                         break;
 
@@ -524,7 +517,7 @@ void EnTsn_Object_Talk(EnTsn* this, PlayState* play) {
             break;
     }
 
-    if (this->flags & FLAG_PLAYER_LOOKS_AT_FISHERMAN) {
+    if (this->flags & ENTSN_PLAYER_LOOKS_AT_FISHERMAN) {
         if (this->fisherman != NULL) {
             Math_SmoothStepToF(&this->actor.focus.pos.x, this->fisherman->actor.focus.pos.x, 0.8f, 100.0f, 5.0f);
             Math_SmoothStepToF(&this->actor.focus.pos.y, this->fisherman->actor.focus.pos.y, 0.8f, 100.0f, 5.0f);
@@ -532,15 +525,15 @@ void EnTsn_Object_Talk(EnTsn* this, PlayState* play) {
         }
     }
 
-    if (this->flags & FLAG_CS_QUEUED) {
+    if (this->flags & ENTSN_CS_QUEUED) {
         if (this->actor.csId == CS_ID_NONE) {
-            this->flags &= ~FLAG_CS_QUEUED;
+            this->flags &= ~ENTSN_CS_QUEUED;
         } else if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
             CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
             CutsceneManager_Queue(this->actor.csId);
         } else if (CutsceneManager_IsNext(this->actor.csId)) {
             CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
-            this->flags &= ~FLAG_CS_QUEUED;
+            this->flags &= ~ENTSN_CS_QUEUED;
         } else {
             CutsceneManager_Queue(this->actor.csId);
         }
@@ -551,7 +544,7 @@ void EnTsn_Object_Idle(EnTsn* this, PlayState* play) {
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = EnTsn_Object_Talk;
         if ((this->actor.textId == 0x108A) || (this->actor.textId == 0x1091)) {
-            this->flags |= FLAG_CS_QUEUED;
+            this->flags |= ENTSN_CS_QUEUED;
             ENTSN_SET_Z(&this->fisherman->actor, true);
         }
     } else if (this->actor.isLockedOn) {
@@ -570,7 +563,7 @@ void EnTsn_Seahorse_Talk(EnTsn* this, PlayState* play) {
 void EnTsn_Seahorse_Idle(EnTsn* this, PlayState* play) {
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actionFunc = EnTsn_Seahorse_Talk;
-        this->flags |= FLAG_CS_QUEUED;
+        this->flags |= ENTSN_CS_QUEUED;
     } else if (this->actor.isLockedOn) {
         Actor_OfferTalk(&this->actor, play, 1000.0f);
     }
@@ -588,7 +581,7 @@ void EnTsn_Update(Actor* thisx, PlayState* play) {
     Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 25.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     SkelAnime_Update(&this->skelAnime);
 
-    if (this->flags & FLAG_LOOK_AT_PLAYER) {
+    if (this->flags & ENTSN_LOOK_AT_PLAYER) {
         Actor_TrackPlayer(play, &this->actor, &this->headRot, &this->torsoRot, this->actor.focus.pos);
     } else {
         Math_SmoothStepToS(&this->headRot.x, 0, 6, 0x1838, 0x64);
@@ -602,9 +595,9 @@ void EnTsn_Update(Actor* thisx, PlayState* play) {
     }
 
     if ((this->blinkTimer == 1) || (this->blinkTimer == 3)) {
-        this->eyeIndex = 1;
+        this->eyeIndex = FISHERMAN_EYE_CLOSED;
     } else {
-        this->eyeIndex = 0;
+        this->eyeIndex = FISHERMAN_EYE_OPEN;
     }
 }
 

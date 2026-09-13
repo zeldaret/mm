@@ -11,11 +11,6 @@
     (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
      ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
-typedef enum {
-    /* 0 */ FISHERMAN_EYE_OPEN,
-    /* 1 */ FISHERMAN_EYE_CLOSED
-} EnJgameTsnEyes;
-
 void EnJgameTsn_Init(Actor* thisx, PlayState* play);
 void EnJgameTsn_Destroy(Actor* thisx, PlayState* play);
 void EnJgameTsn_Update(Actor* thisx, PlayState* play);
@@ -24,22 +19,22 @@ void EnJgameTsn_Draw(Actor* thisx, PlayState* play);
 void EnJgameTsn_SetupIslandBounds(EnJgameTsn* this, PlayState* play);
 void EnJgameTsn_SetupIdle(EnJgameTsn* this);
 void EnJgameTsn_Idle(EnJgameTsn* this, PlayState* play);
-void EnJgameTsn_SetupLinkInMiddle(EnJgameTsn* this);
-void EnJgameTsn_LinkInMiddle(EnJgameTsn* this, PlayState* play);
-void EnJgameTsn_ExplainingRules(EnJgameTsn* this, PlayState* play);
-void EnJgameTsn_SetupHandleMessageState(EnJgameTsn* this);
-void EnJgameTsn_HandleMessageState(EnJgameTsn* this, PlayState* play);
+void EnJgameTsn_SetupPlayerInMiddle(EnJgameTsn* this);
+void EnJgameTsn_PlayerInMiddle(EnJgameTsn* this, PlayState* play);
+void EnJgameTsn_ExplainRules(EnJgameTsn* this, PlayState* play);
+void EnJgameTsn_SetupTalk(EnJgameTsn* this);
+void EnJgameTsn_Talk(EnJgameTsn* this, PlayState* play);
 void EnJgameTsn_Countdown(EnJgameTsn* this, PlayState* play);
-void EnJgameTsn_StartMinigame(EnJgameTsn* this);
-void EnJgameTsn_HandleMinigame(EnJgameTsn* this, PlayState* play);
-void EnJgameTsn_MinigameOver(EnJgameTsn* this, PlayState* play);
+void EnJgameTsn_SetupMinigame(EnJgameTsn* this);
+void EnJgameTsn_RunMinigame(EnJgameTsn* this, PlayState* play);
+void EnJgameTsn_EndMinigame(EnJgameTsn* this, PlayState* play);
 void EnJgameTsn_GiveReward(EnJgameTsn* this, PlayState* play);
 void EnJgameTsn_SetupAfterReward(EnJgameTsn* this);
 void EnJgameTsn_AfterReward(EnJgameTsn* this, PlayState* play);
 void EnJgameTsn_HandleMessageChoices(EnJgameTsn* this, PlayState* play);
 void EnJgameTsn_HandleMessageEvents(EnJgameTsn* this, PlayState* play);
-s32 EnJgameTsn_LinkOnIsland(PlayState* play, EnJgameTsnIslandBounds* island);
-s32 EnJgameTsn_LinkOnCorrectIsland(EnJgameTsn* this, PlayState* play);
+s32 EnJgameTsn_PlayerOnIsland(PlayState* play, EnJgameTsnIslandBounds* island);
+s32 EnJgameTsn_PlayerOnCorrectIsland(EnJgameTsn* this, PlayState* play);
 
 ActorProfile En_Jgame_Tsn_Profile = {
     /**/ ACTOR_EN_JGAME_TSN,
@@ -60,6 +55,11 @@ typedef enum EnJgameTsnAnimation {
     /*  2 */ ENJGAMETSN_ANIM_TALK_BOTH_HANDS,
     /*  3 */ ENJGAMETSN_ANIM_MAX
 } EnJgameTsnAnimation;
+
+typedef enum {
+    /* 0 */ FISHERMAN_EYE_OPEN,
+    /* 1 */ FISHERMAN_EYE_CLOSED
+} EnJgameTsnEyes;
 
 static AnimationInfo sAnimationInfo[ENJGAMETSN_ANIM_MAX] = {
     { &gFishermanIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -6.0f },        // ENJGAMETSN_ANIM_IDLE
@@ -87,7 +87,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 30, 40, 0, { 0, 0, 0 } },
 };
 
-static TexturePtr sFishermanEyeTextures[] = { gFishermanEyeOpen, gFishermanEyeClosed };
+static TexturePtr sFishermanEyeTextures[] = { gFishermanEyeOpenTex, gFishermanEyeClosedTex };
 
 void EnJgameTsn_Init(Actor* thisx, PlayState* play) {
     s32 pad;
@@ -111,7 +111,7 @@ void EnJgameTsn_Init(Actor* thisx, PlayState* play) {
     this->hasSpoken = false;
     this->blinkTimer = 0;
     this->eyeIndex = FISHERMAN_EYE_OPEN;
-    this->linkStoodInMiddle = false;
+    this->playerStoodInMiddle = false;
 
     EnJgameTsn_SetupIslandBounds(this, play);
     EnJgameTsn_SetupIdle(this);
@@ -192,7 +192,7 @@ void EnJgameTsn_Idle(EnJgameTsn* this, PlayState* play) {
             Message_StartTextbox(play, 0x1096, &this->actor);
             this->textId = 0x1096;
         }
-        EnJgameTsn_SetupHandleMessageState(this);
+        EnJgameTsn_SetupTalk(this);
     } else if (this->actor.flags & ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED) {
         Actor_OfferTalk(&this->actor, play, 200.0f);
     } else {
@@ -200,24 +200,24 @@ void EnJgameTsn_Idle(EnJgameTsn* this, PlayState* play) {
     }
 
     if ((player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && !(player->stateFlags1 & PLAYER_STATE1_2000) &&
-        (!this->linkStoodInMiddle) && (GET_PLAYER_FORM == PLAYER_FORM_HUMAN) &&
-        EnJgameTsn_LinkOnIsland(play, &this->middleIsland)) {
-        this->linkStoodInMiddle = true;
-        EnJgameTsn_SetupLinkInMiddle(this);
+        (!this->playerStoodInMiddle) && (GET_PLAYER_FORM == PLAYER_FORM_HUMAN) &&
+        EnJgameTsn_PlayerOnIsland(play, &this->middleIsland)) {
+        this->playerStoodInMiddle = true;
+        EnJgameTsn_SetupPlayerInMiddle(this);
     } else if (!(player->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
-        this->linkStoodInMiddle = false;
+        this->playerStoodInMiddle = false;
     }
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 5, 0x71C, 0xB6);
     this->actor.world.rot.y = this->actor.shape.rot.y;
 }
 
-void EnJgameTsn_SetupLinkInMiddle(EnJgameTsn* this) {
+void EnJgameTsn_SetupPlayerInMiddle(EnJgameTsn* this) {
     this->actor.flags |= ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
-    this->actionFunc = EnJgameTsn_LinkInMiddle;
+    this->actionFunc = EnJgameTsn_PlayerInMiddle;
 }
 
-void EnJgameTsn_LinkInMiddle(EnJgameTsn* this, PlayState* play) {
+void EnJgameTsn_PlayerInMiddle(EnJgameTsn* this, PlayState* play) {
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         this->actor.flags &= ~ACTOR_FLAG_TALK_OFFER_AUTO_ACCEPTED;
         if (((CURRENT_TIME > CLOCK_TIME(4, 0)) && (CURRENT_TIME < CLOCK_TIME(7, 0))) ||
@@ -230,21 +230,21 @@ void EnJgameTsn_LinkInMiddle(EnJgameTsn* this, PlayState* play) {
             Message_StartTextbox(play, 0x1098, &this->actor);
             this->textId = 0x1098;
         }
-        EnJgameTsn_SetupHandleMessageState(this);
+        EnJgameTsn_SetupTalk(this);
     } else {
         Actor_OfferTalk(&this->actor, play, 1000.0f);
     }
 }
 
-void EnJgameTsn_SetupExplainingRules(EnJgameTsn* this) {
-    this->actionFunc = EnJgameTsn_ExplainingRules;
+void EnJgameTsn_SetupExplainRules(EnJgameTsn* this) {
+    this->actionFunc = EnJgameTsn_ExplainRules;
 }
 
-void EnJgameTsn_ExplainingRules(EnJgameTsn* this, PlayState* play) {
+void EnJgameTsn_ExplainRules(EnJgameTsn* this, PlayState* play) {
     if (this->actor.csId != CS_ID_NONE) {
         if (CutsceneManager_IsNext(this->actor.csId)) {
             CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
-            EnJgameTsn_SetupHandleMessageState(this);
+            EnJgameTsn_SetupTalk(this);
         } else {
             if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
                 CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
@@ -252,15 +252,15 @@ void EnJgameTsn_ExplainingRules(EnJgameTsn* this, PlayState* play) {
             CutsceneManager_Queue(this->actor.csId);
         }
     } else {
-        EnJgameTsn_SetupHandleMessageState(this);
+        EnJgameTsn_SetupTalk(this);
     }
 }
 
-void EnJgameTsn_SetupHandleMessageState(EnJgameTsn* this) {
-    this->actionFunc = EnJgameTsn_HandleMessageState;
+void EnJgameTsn_SetupTalk(EnJgameTsn* this) {
+    this->actionFunc = EnJgameTsn_Talk;
 }
 
-void EnJgameTsn_HandleMessageState(EnJgameTsn* this, PlayState* play) {
+void EnJgameTsn_Talk(EnJgameTsn* this, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
         case TEXT_STATE_NONE:
         case TEXT_STATE_NEXT:
@@ -309,24 +309,24 @@ void EnJgameTsn_Countdown(EnJgameTsn* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (play->interfaceCtx.minigameState == MINIGAME_STATE_COUNTDOWN_GO) {
-        EnJgameTsn_StartMinigame(this);
+        EnJgameTsn_SetupMinigame(this);
         player->stateFlags1 &= ~PLAYER_STATE1_20;
     }
 }
 
-void EnJgameTsn_StartMinigame(EnJgameTsn* this) {
+void EnJgameTsn_SetupMinigame(EnJgameTsn* this) {
     this->torchIndex = Rand_Next() & 3;
     this->torchTimer = 0;
     *this->torchFlags[this->torchIndex] |= OBJJGAMELIGHT_IGNITE_FIRE;
-    this->actionFunc = EnJgameTsn_HandleMinigame;
+    this->actionFunc = EnJgameTsn_RunMinigame;
 }
 
-void EnJgameTsn_HandleMinigame(EnJgameTsn* this, PlayState* play) {
+void EnJgameTsn_RunMinigame(EnJgameTsn* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 i;
     s32 nextTorchIndex;
 
-    if ((this->torchTimer > 100) || EnJgameTsn_LinkOnCorrectIsland(this, play)) {
+    if ((this->torchTimer > 100) || EnJgameTsn_PlayerOnCorrectIsland(this, play)) {
         nextTorchIndex = Rand_Next() % 3;
 
         this->torchTimer = 0;
@@ -348,14 +348,14 @@ void EnJgameTsn_HandleMinigame(EnJgameTsn* this, PlayState* play) {
 
     this->torchTimer++;
 
-    if ((player->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) && EnJgameTsn_LinkOnIsland(play, &this->treeIsland)) {
+    if ((player->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) && EnJgameTsn_PlayerOnIsland(play, &this->treeIsland)) {
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENJGAMETSN_ANIM_TALK_BOTH_HANDS);
         Message_StartTextbox(play, 0x109F, &this->actor);
         this->textId = 0x109F;
         player->stateFlags1 |= PLAYER_STATE1_20;
         *this->torchFlags[this->torchIndex] &= ~OBJJGAMELIGHT_IGNITE_FIRE;
         Audio_StopSubBgm();
-        EnJgameTsn_SetupHandleMessageState(this);
+        EnJgameTsn_SetupTalk(this);
     } else if ((player->actor.bgCheckFlags & BGCHECKFLAG_WATER_TOUCH) ||
                (player->actor.bgCheckFlags & BGCHECKFLAG_WATER)) {
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENJGAMETSN_ANIM_TALK_BOTH_HANDS);
@@ -364,7 +364,7 @@ void EnJgameTsn_HandleMinigame(EnJgameTsn* this, PlayState* play) {
         player->stateFlags1 |= PLAYER_STATE1_20;
         *this->torchFlags[this->torchIndex] &= ~OBJJGAMELIGHT_IGNITE_FIRE;
         Audio_StopSubBgm();
-        EnJgameTsn_SetupHandleMessageState(this);
+        EnJgameTsn_SetupTalk(this);
     }
 
     if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] == SECONDS_TO_TIMER(0)) {
@@ -373,15 +373,15 @@ void EnJgameTsn_HandleMinigame(EnJgameTsn* this, PlayState* play) {
         player->stateFlags1 |= PLAYER_STATE1_20;
         *this->torchFlags[this->torchIndex] &= ~OBJJGAMELIGHT_IGNITE_FIRE;
         Audio_StopSubBgm();
-        EnJgameTsn_SetupHandleMessageState(this);
+        EnJgameTsn_SetupTalk(this);
     }
 }
 
-void EnJgameTsn_EndMinigame(EnJgameTsn* this) {
-    this->actionFunc = EnJgameTsn_MinigameOver;
+void EnJgameTsn_SetupEndMinigame(EnJgameTsn* this) {
+    this->actionFunc = EnJgameTsn_EndMinigame;
 }
 
-void EnJgameTsn_MinigameOver(EnJgameTsn* this, PlayState* play) {
+void EnJgameTsn_EndMinigame(EnJgameTsn* this, PlayState* play) {
     play->nextEntrance = ENTRANCE(GREAT_BAY_COAST, 13);
     play->transitionTrigger = TRANS_TRIGGER_START;
     play->transitionType = TRANS_TYPE_80;
@@ -413,7 +413,7 @@ void EnJgameTsn_AfterReward(EnJgameTsn* this, PlayState* play) {
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
         Message_StartTextbox(play, 0x10A4, &this->actor);
         this->textId = 0x10A4;
-        EnJgameTsn_SetupHandleMessageState(this);
+        EnJgameTsn_SetupTalk(this);
     } else {
         Actor_OfferTalkExchangeEquiCylinder(&this->actor, play, 200.0f, PLAYER_IA_MINUS1);
     }
@@ -466,7 +466,7 @@ void EnJgameTsn_HandleMessageEvents(EnJgameTsn* this, PlayState* play) {
             case 0x1098:
                 Message_StartTextbox(play, 0x1099, &this->actor);
                 this->textId = 0x1099;
-                EnJgameTsn_SetupExplainingRules(this);
+                EnJgameTsn_SetupExplainRules(this);
                 break;
 
             case 0x1099:
@@ -496,7 +496,7 @@ void EnJgameTsn_HandleMessageEvents(EnJgameTsn* this, PlayState* play) {
                 gSaveContext.minigameStatus = MINIGAME_STATUS_END;
                 gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_STOP;
                 CLEAR_WEEKEVENTREG(WEEKEVENTREG_PLAYING_FISHERMAN_JUMPING_GAME);
-                EnJgameTsn_EndMinigame(this);
+                EnJgameTsn_SetupEndMinigame(this);
                 break;
 
             case 0x10A3:
@@ -511,7 +511,7 @@ void EnJgameTsn_HandleMessageEvents(EnJgameTsn* this, PlayState* play) {
     }
 }
 
-s32 EnJgameTsn_LinkSideOfLine(Vec2f currentPointDiff, Vec2f nextPointDiff) {
+s32 EnJgameTsn_PlayerSideOfLine(Vec2f currentPointDiff, Vec2f nextPointDiff) {
     s32 side;
 
     if ((nextPointDiff.x * currentPointDiff.z) < (currentPointDiff.x * nextPointDiff.z)) {
@@ -522,13 +522,13 @@ s32 EnJgameTsn_LinkSideOfLine(Vec2f currentPointDiff, Vec2f nextPointDiff) {
     return side;
 }
 
-s32 EnJgameTsn_LinkOnIsland(PlayState* play, EnJgameTsnIslandBounds* island) {
+s32 EnJgameTsn_PlayerOnIsland(PlayState* play, EnJgameTsnIslandBounds* island) {
     s32 nextPointIndex = 1;
     s32 side;
     Player* player = GET_PLAYER(play);
     Vec2f currentPointDiff;
     Vec2f nextPointDiff;
-    s32 linkIsHere = true;
+    s32 playerIsHere = true;
     s32 pad;
     s32 currentPointIndex = 0;
     f32 playerZ = player->actor.world.pos.z;
@@ -538,7 +538,7 @@ s32 EnJgameTsn_LinkOnIsland(PlayState* play, EnJgameTsnIslandBounds* island) {
     currentPointDiff.z = island->points[0].x - playerX;
     nextPointDiff.x = island->points[1].z - playerZ;
     nextPointDiff.z = island->points[1].x - playerX;
-    side = EnJgameTsn_LinkSideOfLine(currentPointDiff, nextPointDiff);
+    side = EnJgameTsn_PlayerSideOfLine(currentPointDiff, nextPointDiff);
 
     while (nextPointIndex != 0) {
         currentPointIndex++;
@@ -553,23 +553,23 @@ s32 EnJgameTsn_LinkOnIsland(PlayState* play, EnJgameTsnIslandBounds* island) {
         nextPointDiff.x = island->points[nextPointIndex].z - playerZ;
         nextPointDiff.z = island->points[nextPointIndex].x - playerX;
 
-        if (EnJgameTsn_LinkSideOfLine(currentPointDiff, nextPointDiff) != side) {
-            linkIsHere = false;
+        if (EnJgameTsn_PlayerSideOfLine(currentPointDiff, nextPointDiff) != side) {
+            playerIsHere = false;
             break;
         }
     }
 
-    return linkIsHere;
+    return playerIsHere;
 }
 
-s32 EnJgameTsn_LinkOnCorrectIsland(EnJgameTsn* this, PlayState* play) {
+s32 EnJgameTsn_PlayerOnCorrectIsland(EnJgameTsn* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 i;
     s32 torchIndex = -1;
 
     if (player->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
         for (i = 0; i < ARRAY_COUNT(this->torchIslands); i++) {
-            if (EnJgameTsn_LinkOnIsland(play, &this->torchIslands[i])) {
+            if (EnJgameTsn_PlayerOnIsland(play, &this->torchIslands[i])) {
                 torchIndex = i;
             }
         }
