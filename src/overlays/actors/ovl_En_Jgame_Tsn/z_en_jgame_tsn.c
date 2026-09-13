@@ -31,8 +31,8 @@ void EnJgameTsn_EndMinigame(EnJgameTsn* this, PlayState* play);
 void EnJgameTsn_GiveReward(EnJgameTsn* this, PlayState* play);
 void EnJgameTsn_SetupAfterReward(EnJgameTsn* this);
 void EnJgameTsn_AfterReward(EnJgameTsn* this, PlayState* play);
-void EnJgameTsn_HandleMessageChoices(EnJgameTsn* this, PlayState* play);
-void EnJgameTsn_HandleMessageEvents(EnJgameTsn* this, PlayState* play);
+void EnJgameTsn_HandleMessageChoice(EnJgameTsn* this, PlayState* play);
+void EnJgameTsn_HandleMessageEvent(EnJgameTsn* this, PlayState* play);
 s32 EnJgameTsn_PlayerOnIsland(PlayState* play, EnJgameTsnIslandBounds* island);
 s32 EnJgameTsn_PlayerOnCorrectIsland(EnJgameTsn* this, PlayState* play);
 
@@ -269,11 +269,11 @@ void EnJgameTsn_Talk(EnJgameTsn* this, PlayState* play) {
             break;
 
         case TEXT_STATE_CHOICE:
-            EnJgameTsn_HandleMessageChoices(this, play);
+            EnJgameTsn_HandleMessageChoice(this, play);
             break;
 
         case TEXT_STATE_EVENT:
-            EnJgameTsn_HandleMessageEvents(this, play);
+            EnJgameTsn_HandleMessageEvent(this, play);
             break;
 
         case TEXT_STATE_DONE:
@@ -293,7 +293,7 @@ void EnJgameTsn_Talk(EnJgameTsn* this, PlayState* play) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
 }
 
-void EnJgameTsn_StartCountdown(EnJgameTsn* this, PlayState* play) {
+void EnJgameTsn_SetupCountdown(EnJgameTsn* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     player->stateFlags1 |= PLAYER_STATE1_20;
@@ -419,7 +419,7 @@ void EnJgameTsn_AfterReward(EnJgameTsn* this, PlayState* play) {
     }
 }
 
-void EnJgameTsn_HandleMessageChoices(EnJgameTsn* this, PlayState* play) {
+void EnJgameTsn_HandleMessageChoice(EnJgameTsn* this, PlayState* play) {
     if (Message_ShouldAdvance(play)) {
         if (play->msgCtx.choiceIndex == 0) {
             if (gSaveContext.save.saveInfo.playerData.rupees >= 20) {
@@ -450,7 +450,7 @@ void EnJgameTsn_GetTorchFlags(EnJgameTsn* this, PlayState* play) {
     }
 }
 
-void EnJgameTsn_HandleMessageEvents(EnJgameTsn* this, PlayState* play) {
+void EnJgameTsn_HandleMessageEvent(EnJgameTsn* this, PlayState* play) {
     if (Message_ShouldAdvance(play)) {
         switch (this->textId) {
             case 0x1095:
@@ -486,7 +486,7 @@ void EnJgameTsn_HandleMessageEvents(EnJgameTsn* this, PlayState* play) {
                 }
                 Message_CloseTextbox(play);
                 EnJgameTsn_GetTorchFlags(this, play);
-                EnJgameTsn_StartCountdown(this, play);
+                EnJgameTsn_SetupCountdown(this, play);
                 break;
 
             case 0x109F:
