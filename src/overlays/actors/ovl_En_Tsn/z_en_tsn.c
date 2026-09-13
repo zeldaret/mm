@@ -633,7 +633,7 @@ void EnTsn_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
 }
 
 void EnTsn_Draw(Actor* thisx, PlayState* play) {
-    static TexturePtr sEyeTextures[] = { gFishermanEyeOpen, gFishermanEyeClosed };
+    static TexturePtr sEyeTextures[] = { gFishermanEyeOpenTex, gFishermanEyeClosedTex };
     s32 pad;
     EnTsn* this = (EnTsn*)thisx;
 
