@@ -315,7 +315,7 @@ void EnJgameTsn_Countdown(EnJgameTsn* this, PlayState* play) {
 }
 
 void EnJgameTsn_SetupMinigame(EnJgameTsn* this) {
-    this->torchIndex = Rand_Next() & 3;
+    this->torchIndex = Rand_Next() % 4;
     this->torchTimer = 0;
     *this->torchFlags[this->torchIndex] |= OBJJGAMELIGHT_IGNITE_FIRE;
     this->actionFunc = EnJgameTsn_RunMinigame;
