@@ -86,8 +86,8 @@ void Room_DrawCullable(PlayState* play, Room* room, u32 flags) {
         func_800BCBF4(&sZeroVec, play);
 
         gSPSegment(POLY_OPA_DISP++, 0x03, room->segment);
-        if (play->roomCtx.unk74 != NULL) {
-            gSPSegment(POLY_OPA_DISP++, 0x06, play->roomCtx.unk74);
+        if (play->roomCtx.sceneTextureSegment != NULL) {
+            gSPSegment(POLY_OPA_DISP++, 0x06, play->roomCtx.sceneTextureSegment);
         }
         func_8012C268(&play->state);
         gSPMatrix(POLY_OPA_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -96,8 +96,8 @@ void Room_DrawCullable(PlayState* play, Room* room, u32 flags) {
     if (flags & ROOM_DRAW_XLU) {
         func_800BCC68(&sZeroVec, play);
         gSPSegment(POLY_XLU_DISP++, 0x03, room->segment);
-        if (play->roomCtx.unk74 != NULL) {
-            gSPSegment(POLY_XLU_DISP++, 0x06, play->roomCtx.unk74);
+        if (play->roomCtx.sceneTextureSegment != NULL) {
+            gSPSegment(POLY_XLU_DISP++, 0x06, play->roomCtx.sceneTextureSegment);
         }
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         gSPMatrix(POLY_XLU_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

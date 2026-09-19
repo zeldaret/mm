@@ -1881,7 +1881,7 @@ void Play_InitScene(PlayState* this, s32 spawn) {
     this->naviQuestHints = NULL;
     this->setupPathList = NULL;
     this->sceneMaterialAnims = NULL;
-    this->roomCtx.unk74 = NULL;
+    this->roomCtx.sceneTextureSegment = NULL;
     this->numSetupActors = 0;
     Object_InitContext(&this->state, &this->objectCtx);
     LightContext_Init(this, &this->lightCtx);
