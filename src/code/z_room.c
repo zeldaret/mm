@@ -1,4 +1,5 @@
 #include "global.h"
+#include "line_numbers.h"
 #include "PR/gs2dex.h"
 #include "libu64/debug.h"
 #include "sys_ucode.h"
@@ -383,7 +384,11 @@ RoomShapeImageMultiBgEntry* Room_GetImageMultiBgEntry(RoomShapeImageMulti* roomS
         bgEntry++;
     }
 
-    _dbg_hungup("../z_room.c", 849);
+    PRINTF(T("z_room.c:カメラＩＤに一致するデータが存在しません camid=%d\n",
+             "z_room.c: Data consistent with camera id does not exist camid=%d\n"),
+           bgCamIndex);
+
+    _dbg_hungup("../z_room.c", LN1(846, 849));
 
     return NULL;
 }
@@ -465,7 +470,7 @@ void Room_DrawImage(PlayState* play, Room* room, u32 flags) {
     } else if (roomShape->amountType == ROOM_SHAPE_IMAGE_AMOUNT_MULTI) {
         Room_DrawImageMulti(play, room, flags);
     } else {
-        _dbg_hungup("../z_room.c", 965);
+        _dbg_hungup("../z_room.c", LN1(962, 965));
     }
 }
 
@@ -504,6 +509,10 @@ size_t Room_SetupFirstRoom(PlayState* play, RoomContext* roomCtx) {
 
         for (i = 0; i < play->roomList.count; i++) {
             roomSize = roomList[i].vromEnd - roomList[i].vromStart;
+            PRINTF("ROOM%d size=%d\n", i, roomSize);
+#if MM_VERSION < N64_US
+            if (1) {}
+#endif
             roomBufferSize = MAX(roomSize, roomBufferSize);
         }
     }
@@ -520,6 +529,8 @@ size_t Room_SetupFirstRoom(PlayState* play, RoomContext* roomCtx) {
             backRoomSize = (backRoom < 0) ? 0 : roomList[backRoom].vromEnd - roomList[backRoom].vromStart;
             cumulRoomSize = (frontRoom != backRoom) ? frontRoomSize + backRoomSize : frontRoomSize;
 
+            PRINTF("DOOR%d=<%d> ROOM1=<%d, %d> ROOM2=<%d, %d>\n", j, cumulRoomSize, frontRoom, frontRoomSize, backRoom,
+                   backRoomSize);
             roomBufferSize = MAX(cumulRoomSize, roomBufferSize);
             transitionActor++;
         }
@@ -527,7 +538,7 @@ size_t Room_SetupFirstRoom(PlayState* play, RoomContext* roomCtx) {
 
     roomCtx->bufPtrs[0] = THA_AllocTailAlign16(&play->state.tha, roomBufferSize);
     if (roomCtx->bufPtrs[0] == NULL) {
-        _dbg_hungup("../z_room.c", 1078);
+        _dbg_hungup("../z_room.c", LN1(1075, 1078));
     }
     roomCtx->bufPtrs[1] = (void*)((uintptr_t)roomCtx->bufPtrs[0] + roomBufferSize);
     roomCtx->activeBufPage = 0;
