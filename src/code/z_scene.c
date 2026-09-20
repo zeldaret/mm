@@ -139,7 +139,7 @@ void Object_LoadAll(ObjectContext* objectCtx) {
 void* func_8012F73C(ObjectContext* objectCtx, s32 slot, s16 id) {
     ObjectEntry* entry = &objectCtx->slots[slot];
     RomFile* objectFile = &gObjectTable[id];
-    u32 size;
+    size_t size;
     void* nextPtr;
 
     entry->id = -id;
