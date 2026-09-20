@@ -2993,16 +2993,16 @@ void Player_SetUpperAction(PlayState* play, Player* this, PlayerUpperActionFunc 
 
 void Player_InitItemActionWithAnim(PlayState* play, Player* this, PlayerItemAction itemAction) {
     PlayerAnimationHeader* curAnim = this->skelAnime.animation;
-    PlayerAnimationHeader** iter = &GET_PLAYER_ANIM(0, this->modelAnimType);
+    PlayerAnimationHeader*(*iter)[PLAYER_ANIMTYPE_MAX] = (void*)&D_8085BE84[0][this->modelAnimType];
     s32 animGroup;
 
     this->stateFlags1 &= ~(PLAYER_STATE1_8 | PLAYER_STATE1_USING_ZORA_BOOMERANG);
 
     for (animGroup = 0; animGroup < PLAYER_ANIMGROUP_MAX; animGroup++) {
-        if (curAnim == *iter) {
+        if (curAnim == **iter) {
             break;
         }
-        iter += PLAYER_ANIMTYPE_MAX;
+        iter++;
     }
 
     Player_InitItemAction(play, this, itemAction);
