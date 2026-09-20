@@ -93,14 +93,37 @@ void KaleidoSetup_Update(PlayState* play) {
         if (msgCtx && msgCtx) {}
     }
 
-    if ((IS_PAUSED(pauseCtx) || (play->gameOverCtx.state != GAMEOVER_INACTIVE)) ||
-        ((play->transitionTrigger != TRANS_TRIGGER_OFF) || (play->transitionMode != TRANS_MODE_OFF)) ||
-        ((gSaveContext.save.cutsceneIndex >= 0xFFF0) || (gSaveContext.nextCutsceneIndex >= 0xFFF0)) ||
-        (Play_InCsMode(play) && ((msgCtx->msgMode == MSGMODE_NONE) || (msgCtx->currentTextId != 0xFF))) ||
-        (play->bButtonAmmoPlusOne >= 2) ||
-        ((gSaveContext.magicState == MAGIC_STATE_STEP_CAPACITY) || (gSaveContext.magicState == MAGIC_STATE_FILL)) ||
-        (CHECK_EVENTINF(EVENTINF_17) || (player->stateFlags1 & PLAYER_STATE1_20)) ||
-        (play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON) || (play->actorCtx.flags & ACTORCTX_FLAG_PICTO_BOX_ON)) {
+    if (IS_PAUSED(pauseCtx) || (play->gameOverCtx.state != GAMEOVER_INACTIVE)) {
+        return;
+    }
+
+    if ((play->transitionTrigger != TRANS_TRIGGER_OFF) || (play->transitionMode != TRANS_MODE_OFF)) {
+        return;
+    }
+
+    if ((gSaveContext.save.cutsceneIndex >= 0xFFF0) || (gSaveContext.nextCutsceneIndex >= 0xFFF0)) {
+        return;
+    }
+
+    if (Play_InCsMode(play) && ((msgCtx->msgMode == MSGMODE_NONE) || (msgCtx->currentTextId != 0xFF))) {
+        return;
+    }
+
+    if (1) {}
+
+    if (play->bButtonAmmoPlusOne >= 2) {
+        return;
+    }
+
+    if ((gSaveContext.magicState == MAGIC_STATE_STEP_CAPACITY) || (gSaveContext.magicState == MAGIC_STATE_FILL)) {
+        return;
+    }
+
+    if (CHECK_EVENTINF(EVENTINF_17) || (player->stateFlags1 & PLAYER_STATE1_20)) {
+        return;
+    }
+
+    if ((play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON) || (play->actorCtx.flags & ACTORCTX_FLAG_PICTO_BOX_ON)) {
         return;
     }
 
