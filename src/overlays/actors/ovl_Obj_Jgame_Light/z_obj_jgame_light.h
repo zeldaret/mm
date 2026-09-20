@@ -5,11 +5,11 @@
 
 struct ObjJgameLight;
 
-#define OBJJGAMELIGHT_GET_7F(thisx) ((thisx)->params & 0x7F)
-#define OBJLUPYGAMELIFT_IGNITE_FIRE (1 << 0)
-#define OBJLUPYGAMELIFT_DISPLAY_CORRECT (1 << 1)
-#define OBJLUPYGAMELIFT_DISPLAY_INCORRECT (1 << 2)
-#define OBJLUPYGAMELIFT_SNUFF_FIRE (1 << 3)
+#define OBJJGAMELIGHT_GET_FLAGS(thisx) ((thisx)->params & 0x7F)
+#define OBJJGAMELIGHT_IGNITE_FIRE (1 << 0)
+#define OBJJGAMELIGHT_DISPLAY_CORRECT (1 << 1)
+#define OBJJGAMELIGHT_DISPLAY_INCORRECT (1 << 2)
+#define OBJJGAMELIGHT_SNUFF_FIRE (1 << 3)
 
 typedef struct ObjJgameLight {
     /* 0x000 */ Actor actor;

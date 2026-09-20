@@ -1752,7 +1752,7 @@ void Interface_UpdateButtonsPart2(PlayState* play) {
             }
             gSaveContext.buttonStatus[EQUIP_SLOT_B] = BTN_ENABLED;
         }
-    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_90_20)) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_PLAYING_FISHERMAN_JUMPING_GAME)) {
         // Fishermans's jumping minigame
         for (i = EQUIP_SLOT_C_LEFT; i <= EQUIP_SLOT_C_RIGHT; i++) {
             if (gSaveContext.buttonStatus[i] == BTN_ENABLED) {
