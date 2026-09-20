@@ -74,6 +74,9 @@ typedef enum {
     /* 4 */ DOORWARP1_REMAINS_TWINMOLD
 } DoorWarp1Remains;
 
+#define GI_REMAINS (GI_REMAINS_ODOLWA - DOORWARP1_REMAINS_ODOLWA)
+#define ITEM_REMAINS (ITEM_REMAINS_ODOLWA - DOORWARP1_REMAINS_ODOLWA)
+
 void DoorWarp1_SetupAction(DoorWarp1* this, DoorWarp1ActionFunc actionFunc) {
     this->actionFunc = actionFunc;
 }
@@ -561,9 +564,7 @@ void func_808B9CE8(DoorWarp1* this, PlayState* play) {
     }
 
     if (!Actor_HasParent(&this->dyna.actor, play)) {
-        Actor_OfferGetItem(&this->dyna.actor, play,
-                           DoorWarp1_GetRemains(this, play) + (GI_REMAINS_ODOLWA - DOORWARP1_REMAINS_ODOLWA), 30.0f,
-                           80.0f);
+        Actor_OfferGetItem(&this->dyna.actor, play, DoorWarp1_GetRemains(this, play) + GI_REMAINS, 30.0f, 80.0f);
         return;
     }
 
@@ -594,7 +595,7 @@ void func_808B9CE8(DoorWarp1* this, PlayState* play) {
 
     gSaveContext.save.saveInfo.unk_EA8[1] = (gSaveContext.save.saveInfo.unk_EA8[1] & 0xFFFFFF00) |
                                             ((((u8)gSaveContext.save.saveInfo.unk_EA8[1]) + 1) & 0xFF);
-    Item_Give(play, DoorWarp1_GetRemains(this, play) + (ITEM_REMAINS_ODOLWA - DOORWARP1_REMAINS_ODOLWA));
+    Item_Give(play, DoorWarp1_GetRemains(this, play) + ITEM_REMAINS);
     DoorWarp1_SetupAction(this, func_808B9E94);
 }
 
