@@ -137,15 +137,15 @@ static EnTotoSpeakData sDialogSpeakData[] = {
     /* Mayor's Residence */
     { ENTOTO_TALK_SET_UP_MAYORS_RESIDENCE, 0, 0x2A94 }, // Greet in mayor's residence
     { ENTOTO_TALK_EVENT, 0, 0x2A95 },                   // Speak as Zora first time
-    { ENTOTO_TALK_NEXT_MESSAGE, 0, 0x2A96 },            // 
-    { ENTOTO_TALK_NEXT_MESSAGE, 0, 0x2A97 },            // 
+    { ENTOTO_TALK_NEXT_MESSAGE, 0, 0x2A96 },            //
+    { ENTOTO_TALK_NEXT_MESSAGE, 0, 0x2A97 },            //
     { ENTOTO_TALK_EVENT, 0, 0x2A98 },                   // Greet as human or Goron (first time)
-    { ENTOTO_TALK_EVENT, 0, 0x2A99 },                   // 
-    { ENTOTO_TALK_NEXT_MESSAGE, 0, 0x2A9A },            // 
+    { ENTOTO_TALK_EVENT, 0, 0x2A99 },                   //
+    { ENTOTO_TALK_NEXT_MESSAGE, 0, 0x2A9A },            //
     { ENTOTO_TALK_NEXT_MESSAGE, 0, 0x2A9B },            // Talk as human or Goron
     { ENTOTO_TALK_EVENT, 0, 0x2AE1 },                   // Greet as Deku (first time)
-    { ENTOTO_TALK_EVENT, 0, 0x2AE2 },                   // 
-    { ENTOTO_TALK_NEXT_MESSAGE, 0, 0x2AE3 },            // 
+    { ENTOTO_TALK_EVENT, 0, 0x2AE2 },                   //
+    { ENTOTO_TALK_NEXT_MESSAGE, 0, 0x2AE3 },            //
     { ENTOTO_TALK_NEXT_MESSAGE, 0, 0x2AE4 },            // Talk as Deku
 };
 
@@ -364,18 +364,14 @@ void EnToto_Idle(EnToto* this, PlayState* play) {
                         this->speakData = &sDialogSpeakData[ENTOTO_SPEAKDATA_MAYORS_RESIDENCE_REPEAT_DEKU];
                     }
                 } else {
-                    this->speakData =
-                        &sDialogSpeakData[ENTOTO_SPEAKDATA_MAYORS_RESIDENCE_GREET_NON_DEKU];
-                                                                                             
+                    this->speakData = &sDialogSpeakData[ENTOTO_SPEAKDATA_MAYORS_RESIDENCE_GREET_NON_DEKU];
                 }
             } else if (ENTOTO_HELPED_GORMAN) {
-                this->speakData =
-                    &sDialogSpeakData[ENTOTO_SPEAKDATA_SOUND_CHECK_REPLAY]; 
+                this->speakData = &sDialogSpeakData[ENTOTO_SPEAKDATA_SOUND_CHECK_REPLAY];
             } else if (!Flags_GetSwitch(play, ENTOTO_GET_ZORA_SPOKEN_FLAG(&this->actor))) {
-                this->speakData =
-                    &sDialogSpeakData[ENTOTO_SPEAKDATA_SOUND_CHECK_INTRO]; 
+                this->speakData = &sDialogSpeakData[ENTOTO_SPEAKDATA_SOUND_CHECK_INTRO];
             } else {
-                this->speakData = &sDialogSpeakData[ENTOTO_SPEAKDATA_SOUND_CHECK_ASK_FOR_HELP]; 
+                this->speakData = &sDialogSpeakData[ENTOTO_SPEAKDATA_SOUND_CHECK_ASK_FOR_HELP];
             }
         }
 
@@ -540,7 +536,7 @@ s32 EnToto_HandleTalk_SoundCheck_WaitAdvanceText(EnToto* this, PlayState* play) 
             targetSpotlight = &sSpotlightList[gSaveContext.save.playerForm - 1];
             Message_StartTextbox(play,
                                  (this->speakData->talkActionIndex == 6) ? targetSpotlight->promptTextId
-                                                                    : targetSpotlight->rightLightTextId,
+                                                                         : targetSpotlight->rightLightTextId,
                                  NULL);
         }
         return 1;
