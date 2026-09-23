@@ -16,7 +16,7 @@ typedef s32 (*EnTotoTalkFunc)(struct EnToto*, PlayState*);
 
 typedef struct EnTotoSpeakData {
     /* 0x0 */ u8 talkActionIndex;
-    /* 0x1 */ u8 argument;              // Used for various functions, including as a timer
+    /* 0x1 */ u8 arg;              // Used for various functions, including as a timer
     /* 0x2 */ u16 textId;
 } EnTotoSpeakData; // size = 0x4
 
@@ -35,14 +35,14 @@ typedef struct EnToto {
     /* 0x260 */ FaceChange faceChange;
     /* 0x264 */ ColliderCylinder collider;
     /* 0x2B0 */ u8 actionFuncIndex;
-    /* 0x2B1 */ u8 timer;          // Used for various timers?
+    /* 0x2B1 */ u8 timer;
     /* 0x2B2 */ s8 csId;
     /* 0x2B3 */ u8 windFishFormsPlayed;
     /* 0x2B4 */ u8 animIndex;
-    /* 0x2B5 */ u8 cueId;     /* Cue 4: Give Circus Leader's Mask // Cue 3: "Okay! That feels good!" // Cue 2: Turn around to look at Gorman // Cue 1: Turn back around to stage*/
+    /* 0x2B5 */ u8 cueId;     /* Cue 4: Give Circus Leader's Mask // Cue 3: Feel good text // Cue 2: Turn around to look at Gorman // Cue 1: Turn back around to stage*/
     /* 0x2B6 */ bool shouldCancelSoundCheck;
     /* 0x2B7 */ bool shouldPlaySoundCheckCompleteCutscene;
-    /* 0x2B8 */ EnTotoSpeakData* text;
+    /* 0x2B8 */ EnTotoSpeakData* speakData;
     /* 0x2BC */ PlayerOverrideInputEntry overrideInputEntry;
     /* 0x2C4 */ Actor* spotlights;
     /* 0x2C8 */ s32 pad2C8;
