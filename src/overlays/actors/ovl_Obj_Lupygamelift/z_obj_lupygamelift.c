@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_lupygamelift.h"
+#include "overlays/actors/ovl_En_Gamelupy/z_en_gamelupy.h"
 #include "assets/objects/object_raillift/object_raillift.h"
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED)
@@ -14,10 +15,10 @@ void ObjLupygamelift_Destroy(Actor* thisx, PlayState* play);
 void ObjLupygamelift_Update(Actor* thisx, PlayState* play);
 void ObjLupygamelift_Draw(Actor* thisx, PlayState* play);
 
-void func_80AF04BC(ObjLupygamelift* this);
-void func_80AF04D8(ObjLupygamelift* this, PlayState* play);
-void func_80AF0514(ObjLupygamelift* this);
-void func_80AF0530(ObjLupygamelift* this, PlayState* play);
+void ObjLupygamelift_SetupWait(ObjLupygamelift* this);
+void ObjLupygamelift_Wait(ObjLupygamelift* this, PlayState* play);
+void ObjLupygamelift_SetupMove(ObjLupygamelift* this);
+void ObjLupygamelift_Move(ObjLupygamelift* this, PlayState* play);
 
 ActorProfile Obj_Lupygamelift_Profile = {
     /**/ ACTOR_OBJ_LUPYGAMELIFT,
@@ -64,23 +65,23 @@ void ObjLupygamelift_Init(Actor* thisx, PlayState* play) {
     this->dyna.actor.home.rot.z = 0;
 
     path = &play->setupPathList[OBJLUPYGAMELIFT_GET_PATH_INDEX(thisx)];
-    this->pointIndex = OBJLUPYGAMELIFT_GET_7(thisx);
-    this->count = path->count;
-    if (this->pointIndex >= this->count) {
+    this->pointIndex = OBJLUPYGAMELIFT_GET_START_POINT(thisx);
+    this->pointCount = path->count;
+    if (this->pointIndex >= this->pointCount) {
         this->pointIndex = 0;
     }
     this->pathPoints = Lib_SegmentedToVirtual(path->points);
     Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, ACTOR_OBJ_ETCETERA, this->dyna.actor.world.pos.x,
                        this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, this->dyna.actor.shape.rot.x,
                        this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z, 0);
-    if (OBJLUPYGAMELIFT_GET_C(thisx) != 0) {
-        params = 1;
+    if (OBJLUPYGAMELIFT_GET_RUPEE_COLOR(thisx) != ENGAMELUPY_TYPE_GREEN) {
+        params = ENGAMELUPY_TYPE_BLUE;
     } else {
-        params = 0;
+        params = ENGAMELUPY_TYPE_GREEN;
     }
     Actor_Spawn(&play->actorCtx, play, ACTOR_EN_GAMELUPY, this->dyna.actor.home.pos.x, this->dyna.actor.home.pos.y,
                 this->dyna.actor.home.pos.z, 0, 0, 0, params);
-    func_80AF04BC(this);
+    ObjLupygamelift_SetupWait(this);
 }
 
 void ObjLupygamelift_Destroy(Actor* thisx, PlayState* play) {
@@ -89,50 +90,50 @@ void ObjLupygamelift_Destroy(Actor* thisx, PlayState* play) {
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
-void func_80AF0394(ObjLupygamelift* this) {
-    static f32 D_80AF0750 = 100.0f;
-    static f32 D_80AF0754 = 255.0f;
-    static f32 D_80AF0758 = 5.0f;
-    static f32 D_80AF075C = 10.0f;
-    static f32 D_80AF0760 = -240.0f;
-    static f32 D_80AF0764 = 30.0f;
-    f32 new_var = D_80AF0754 - D_80AF0750;
-    f32 new_var2 = D_80AF0764 - D_80AF0760;
-    f32 new_var3 = D_80AF075C - D_80AF0758;
-    f32 temp_fa0;
-    f32 phi_fa1;
+void ObjLupygamelift_UpdateShadow(ObjLupygamelift* this) {
+    static f32 sShadowAlphaMin = 100.0f;
+    static f32 sShadowAlphaMax = 255.0f;
+    static f32 sShadowScaleMin = 5.0f;
+    static f32 sShadowScaleMax = 10.0f;
+    static f32 sLiftHeightMin = -240.0f;
+    static f32 sLiftHeightMax = 30.0f;
+    f32 shadowAlphaRange = sShadowAlphaMax - sShadowAlphaMin;
+    f32 liftHeightRange = sLiftHeightMax - sLiftHeightMin;
+    f32 shadowScaleRange = sShadowScaleMax - sShadowScaleMin;
+    f32 liftHeight;
+    f32 percent;
 
-    temp_fa0 = this->dyna.actor.world.pos.y - D_80AF0760;
-    if (temp_fa0 < 0.0f) {
-        phi_fa1 = 0.0f;
-    } else if (new_var2 < temp_fa0) {
-        phi_fa1 = 1.0f;
+    liftHeight = this->dyna.actor.world.pos.y - sLiftHeightMin;
+    if (liftHeight < 0.0f) {
+        percent = 0.0f;
+    } else if (liftHeightRange < liftHeight) {
+        percent = 1.0f;
     } else {
-        phi_fa1 = temp_fa0 / new_var2;
+        percent = liftHeight / liftHeightRange;
     }
-    this->dyna.actor.shape.shadowAlpha = D_80AF0754 - (phi_fa1 * new_var);
-    this->dyna.actor.shape.shadowScale = D_80AF075C - (phi_fa1 * new_var3);
+    this->dyna.actor.shape.shadowAlpha = sShadowAlphaMax - (percent * shadowAlphaRange);
+    this->dyna.actor.shape.shadowScale = sShadowScaleMax - (percent * shadowScaleRange);
 }
 
-void func_80AF04BC(ObjLupygamelift* this) {
+void ObjLupygamelift_SetupWait(ObjLupygamelift* this) {
     this->timer = 5;
-    this->actionFunc = func_80AF04D8;
+    this->actionFunc = ObjLupygamelift_Wait;
 }
 
-void func_80AF04D8(ObjLupygamelift* this, PlayState* play) {
+void ObjLupygamelift_Wait(ObjLupygamelift* this, PlayState* play) {
     if (this->timer == 0) {
-        func_80AF0514(this);
+        ObjLupygamelift_SetupMove(this);
     } else {
         this->timer--;
     }
 }
 
-void func_80AF0514(ObjLupygamelift* this) {
-    this->actionFunc = func_80AF0530;
+void ObjLupygamelift_SetupMove(ObjLupygamelift* this) {
+    this->actionFunc = ObjLupygamelift_Move;
     this->dyna.actor.speed = this->targetSpeedXZ;
 }
 
-void func_80AF0530(ObjLupygamelift* this, PlayState* play) {
+void ObjLupygamelift_Move(ObjLupygamelift* this, PlayState* play) {
     f32 distRemaining;
     Vec3f target;
 
@@ -145,7 +146,7 @@ void func_80AF0530(ObjLupygamelift* this, PlayState* play) {
     } else if (distRemaining > 0.0f) {
         Math_SmoothStepToF(&this->dyna.actor.speed, 5.0f, 0.5f, 5.0f, 1.0f);
     } else {
-        if (this->pointIndex < (this->count - 1)) {
+        if (this->pointIndex < (this->pointCount - 1)) {
             this->pointIndex++;
         } else {
             this->pointIndex = 0;
@@ -158,7 +159,7 @@ void func_80AF0530(ObjLupygamelift* this, PlayState* play) {
         this->dyna.actor.child->world.pos.y = this->dyna.actor.world.pos.y;
         this->dyna.actor.child->world.pos.z = this->dyna.actor.world.pos.z;
     }
-    func_80AF0394(this);
+    ObjLupygamelift_UpdateShadow(this);
 }
 
 void ObjLupygamelift_Update(Actor* thisx, PlayState* play) {

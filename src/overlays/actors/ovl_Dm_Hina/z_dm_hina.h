@@ -7,6 +7,13 @@ struct DmHina;
 
 typedef void (*DmHinaActionFunc)(struct DmHina*, PlayState*);
 
+typedef enum DmHinaRemainsType {
+    /* 0 */ DMHINA_REMAINS_ODOLWA,
+    /* 1 */ DMHINA_REMAINS_GOHT,
+    /* 2 */ DMHINA_REMAINS_GYORG,
+    /* 3 */ DMHINA_REMAINS_TWINMOLD
+} DmHinaRemainsType;
+
 typedef struct DmHina {
     /* 0x000 */ Actor actor;
     /* 0x144 */ DmHinaActionFunc actionFunc;

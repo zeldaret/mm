@@ -1,7 +1,7 @@
 ﻿<Root>
     <File Name="object_tsn" Segment="6">
-        <Animation Name="object_tsn_Anim_000964" Offset="0x964" /> <!-- Original name is "tsn_talk02" -->
-        <Animation Name="object_tsn_Anim_001198" Offset="0x1198" /> <!-- Original name is "tsn_talk03" -->
+        <Animation Name="gFishermanOneHandTalkAnim" Offset="0x964" /> <!-- Original name is "tsn_talk02" -->
+        <Animation Name="gFishermanTwoHandTalkAnim" Offset="0x1198" /> <!-- Original name is "tsn_talk03" -->
         <DList Name="object_tsn_DL_0043A0" Offset="0x43A0" />
         <DList Name="object_tsn_DL_0044F0" Offset="0x44F0" />
         <DList Name="object_tsn_DL_0047C0" Offset="0x47C0" />
@@ -26,11 +26,11 @@
         <Texture Name="object_tsn_Tex_006CB8" OutName="tex_006CB8" Format="ci8" Width="32" Height="32" Offset="0x6CB8" TlutOffset="0x61F8"/>
         <Texture Name="object_tsn_Tex_0070B8" OutName="tex_0070B8" Format="rgba16" Width="16" Height="16" Offset="0x70B8" />
         <Texture Name="object_tsn_Tex_0072B8" OutName="tex_0072B8" Format="ci8" Width="16" Height="16" Offset="0x72B8" TlutOffset="0x61F8"/>
-        <Texture Name="object_tsn_Tex_0073B8" OutName="tex_0073B8" Format="ci8" Width="32" Height="32" Offset="0x73B8" TlutOffset="0x61F8"/>
+        <Texture Name="gFishermanEyeOpenTex" OutName="tex_0073B8" Format="ci8" Width="32" Height="32" Offset="0x73B8" TlutOffset="0x61F8"/>
         <Texture Name="object_tsn_Tex_0077B8" OutName="tex_0077B8" Format="rgba16" Width="16" Height="32" Offset="0x77B8" />
         <Texture Name="object_tsn_Tex_007BB8" OutName="tex_007BB8" Format="rgba16" Width="16" Height="16" Offset="0x7BB8" />
         <Texture Name="object_tsn_Tex_007DB8" OutName="tex_007DB8" Format="rgba16" Width="32" Height="32" Offset="0x7DB8" />
-        <Texture Name="object_tsn_Tex_0085B8" OutName="tex_0085B8" Format="ci8" Width="32" Height="32" Offset="0x85B8" TlutOffset="0x61F8"/>
+        <Texture Name="gFishermanEyeClosedTex" OutName="tex_0085B8" Format="ci8" Width="32" Height="32" Offset="0x85B8" TlutOffset="0x61F8"/>
         <Limb Name="object_tsn_Standardlimb_0089B8" Type="Standard" EnumName="OBJECT_TSN_LIMB_01" Offset="0x89B8" />
         <Limb Name="object_tsn_Standardlimb_0089C4" Type="Standard" EnumName="OBJECT_TSN_LIMB_02" Offset="0x89C4" />
         <Limb Name="object_tsn_Standardlimb_0089D0" Type="Standard" EnumName="OBJECT_TSN_LIMB_03" Offset="0x89D0" />
@@ -47,7 +47,7 @@
         <Limb Name="object_tsn_Standardlimb_008A54" Type="Standard" EnumName="OBJECT_TSN_LIMB_0E" Offset="0x8A54" />
         <Limb Name="object_tsn_Standardlimb_008A60" Type="Standard" EnumName="OBJECT_TSN_LIMB_0F" Offset="0x8A60" />
         <Limb Name="object_tsn_Standardlimb_008A6C" Type="Standard" EnumName="OBJECT_TSN_LIMB_10" Offset="0x8A6C" />
-        <Skeleton Name="object_tsn_Skel_008AB8" Type="Flex" LimbType="Standard" LimbNone="OBJECT_TSN_LIMB_NONE" LimbMax="OBJECT_TSN_LIMB_MAX" EnumName="ObjectTsnLimb" Offset="0x8AB8" />
-        <Animation Name="object_tsn_Anim_0092FC" Offset="0x92FC" /> <!-- Original name is "tsn_waitnew" -->
+        <Skeleton Name="gFishermanSkel" Type="Flex" LimbType="Standard" LimbNone="OBJECT_TSN_LIMB_NONE" LimbMax="OBJECT_TSN_LIMB_MAX" EnumName="ObjectTsnLimb" Offset="0x8AB8" />
+        <Animation Name="gFishermanIdleAnim" Offset="0x92FC" /> <!-- Original name is "tsn_waitnew" -->
     </File>
 </Root>
