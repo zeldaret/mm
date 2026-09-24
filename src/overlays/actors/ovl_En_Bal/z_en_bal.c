@@ -465,7 +465,7 @@ void EnBal_SetupGroundIdle(EnBal* this) {
         this->eyeTexIndex = TINGLE_EYETEX_OPEN;
         this->idleAnimStage = TINGLE_IDLESTAGE_WAIT;
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_ANIM_IDLE);
-    } else if (Rand_Next() & 1) {
+    } else if ((Rand_Next() % 2) != 0) {
         this->idleAnimStage = TINGLE_IDLESTAGE_ACTIVITY;
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_ANIM_TALK);
     } else {
@@ -559,7 +559,7 @@ void EnBal_GroundIdle(EnBal* this, PlayState* play) {
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_ANIM_IDLE);
                 this->idleAnimStage++;
             } else if (this->idleAnimStage == TINGLE_IDLESTAGE_WAIT) {
-                if (Rand_Next() & 1) {
+                if ((Rand_Next() % 2) != 0) {
                     this->forceEyesShut = false;
                     this->eyeTexIndex = TINGLE_EYETEX_OPEN;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_ANIM_TALK);
