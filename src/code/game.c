@@ -2,6 +2,7 @@
 
 #include "global.h"
 #include "audiomgr.h"
+#include "line_numbers.h"
 #include "libu64/debug.h"
 #include "gfx.h"
 #include "gfxalloc.h"
@@ -150,9 +151,13 @@ void GameState_GetInput(GameState* gameState) {
 }
 
 void GameState_Update(GameState* gameState) {
-    GraphicsContext* gfxCtx = gameState->gfxCtx;
+    GraphicsContext* gfxCtx;
 
-    GameState_SetFrameBuffer(gameState->gfxCtx);
+    PRINTF("game_main_move START %d\n", gameState->frames);
+
+    gfxCtx = gameState->gfxCtx;
+
+    GameState_SetFrameBuffer(gfxCtx);
 
     gameState->main(gameState);
 
@@ -160,6 +165,8 @@ void GameState_Update(GameState* gameState) {
         GameState_Draw(gameState, gfxCtx);
         GameState_DrawEnd(gfxCtx);
     }
+
+    PRINTF("game_main_move END %d\n", gameState->frames);
 }
 
 void GameState_IncrementFrameCount(GameState* gameState) {
@@ -168,17 +175,23 @@ void GameState_IncrementFrameCount(GameState* gameState) {
 }
 
 void GameState_InitArena(GameState* gameState, size_t size) {
-    GameAlloc* alloc = &gameState->alloc;
-    void* buf = GameAlloc_Malloc(alloc, size);
+    void* arena;
 
-    if (buf) {
-        THA_Init(&gameState->tha, buf, size);
-        return;
+    PRINTF(T("game_alloc領域確保 サイズ＝%u バイト\n", "game_alloc memory allocation size = %u bytes\n"), size);
+    arena = GameAlloc_Malloc(&gameState->alloc, size);
+
+    if (arena != NULL) {
+        PRINTF("game_init_hyral:bzero(%08x, %08x)\n", arena, size);
+        THA_Init(&gameState->tha, arena, size);
+        PRINTF(T("game_alloc領域確保成功\n", "game_alloc area successfully secured"));
+    } else {
+        THA_Init(&gameState->tha, NULL, 0);
+        PRINTF(T("game_alloc領域確保失敗\n", "game_alloc area allocation failure\n"));
+        _dbg_hungup("../game.c", LN1(1026, 1035));
     }
-
-    THA_Init(&gameState->tha, NULL, 0);
-    _dbg_hungup("../game.c", 1035);
 }
+
+#define ARENA_NODE_SIZE 0x10
 
 void GameState_Realloc(GameState* gameState, size_t size) {
     GameAlloc* alloc = &gameState->alloc;
@@ -191,9 +204,9 @@ void GameState_Realloc(GameState* gameState, size_t size) {
     THA_Destroy(&gameState->tha);
     GameAlloc_Free(alloc, heapStart);
     GetFreeArena(&systemMaxFree, &bytesFree, &bytesAllocated);
-    size = ((systemMaxFree - sizeof(ArenaNode)) < size) ? 0 : size;
+    size = ((systemMaxFree - ARENA_NODE_SIZE) < size) ? 0 : size;
     if (size == 0) {
-        size = systemMaxFree - sizeof(ArenaNode);
+        size = systemMaxFree - ARENA_NODE_SIZE;
     }
 
     gameArena = GameAlloc_Malloc(alloc, size);
@@ -201,11 +214,13 @@ void GameState_Realloc(GameState* gameState, size_t size) {
         THA_Init(&gameState->tha, gameArena, size);
     } else {
         THA_Init(&gameState->tha, NULL, 0);
-        _dbg_hungup("../game.c", 1074);
+        _dbg_hungup("../game.c", LN1(1065, 1074));
     }
 }
 
 void GameState_Init(GameState* gameState, GameStateFunc init, GraphicsContext* gfxCtx) {
+    PRINTF(T("\n***** game コンストラクタ開始 *****\n\n", "\n***** game constructor start *****\n\n"));
+
     gameState->gfxCtx = gfxCtx;
     gameState->frames = 0;
     gameState->main = NULL;
@@ -237,9 +252,13 @@ void GameState_Init(GameState* gameState, GameStateFunc init, GraphicsContext* g
     Rumble_Init();
 
     osSendMesg(&gameState->gfxCtx->queue, NULL, OS_MESG_BLOCK);
+
+    PRINTF(T("\n***** game コンストラクタ終了 *****\n\n", "\n***** game constructor end *****\n\n"));
 }
 
 void GameState_Destroy(GameState* gameState) {
+    PRINTF(T("\n***** game デストラクタ開始 *****\n\n", "\n***** game destructor start *****\n\n"));
+
     AudioMgr_StopAllSfxExceptSystem();
     Audio_Update();
     osRecvMesg(&gameState->gfxCtx->queue, NULL, OS_MESG_BLOCK);
@@ -256,6 +275,10 @@ void GameState_Destroy(GameState* gameState) {
     ViMode_Destroy(&sGameViMode);
     THA_Destroy(&gameState->tha);
     GameAlloc_Cleanup(&gameState->alloc);
+
+    PRINTF(T("\n***** game デストラクタ終了 *****\n\n", "\n***** game destructor end *****\n\n"));
+
+    if (1) {}
 }
 
 GameStateFunc GameState_GetInit(GameState* gameState) {

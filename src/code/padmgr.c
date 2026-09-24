@@ -33,6 +33,7 @@
 
 #include "padmgr.h"
 
+#include "line_numbers.h"
 #include "libc64/sprintf.h"
 #include "libu64/padsetup.h"
 #include "PR/os_motor.h"
@@ -282,7 +283,7 @@ void PadMgr_UpdateRumble(void) {
                 // No controller pak
             } else {
                 // Unrecognized return code
-                Fault_AddHungupAndCrash("../padmgr.c", 594);
+                Fault_AddHungupAndCrash("../padmgr.c", LN1(541, 594));
             }
         }
     }
@@ -291,19 +292,31 @@ void PadMgr_UpdateRumble(void) {
 }
 
 /**
- * Immediately stops rumble on all controllers
+ * Immediately stops controller rumbling.
+ *
+ * On N64 US onward stop rumbling on all controllers.
+ *
+ * The older implementation only handled a single controller at a time
+ * based on the current retrace (`sPadMgrRetraceCount`).
  */
 void PadMgr_RumbleStop(void) {
+    s32 i = sPadMgrRetraceCount % MAXCONTROLLERS;
     OSMesgQueue* serialEventQueue = PadMgr_AcquireSerialEventQueue();
-    s32 i;
+    s32 pad;
 
+#if MM_VERSION >= N64_US
     for (i = 0; i < MAXCONTROLLERS; i++) {
-        if ((sPadMgrInstance->ctrlrType[i] == PADMGR_CONT_NORMAL) &&
-            (osMotorInit(serialEventQueue, &sPadMgrInstance->rumblePfs[i], i) == 0)) {
-            // If there is a rumble pak attached to this controller, stop it
-            osMotorStop(&sPadMgrInstance->rumblePfs[i]);
+        if (sPadMgrInstance->ctrlrType[i] == PADMGR_CONT_NORMAL) {
+#endif
+            if (osMotorInit(serialEventQueue, &sPadMgrInstance->rumblePfs[i], i) == 0) {
+                // If there is a rumble pak attached to this controller, stop it
+                osMotorStop(&sPadMgrInstance->rumblePfs[i]);
+            }
+#if MM_VERSION >= N64_US
         }
     }
+#endif
+
     PadMgr_ReleaseSerialEventQueue(serialEventQueue);
 }
 
@@ -483,7 +496,7 @@ void PadMgr_UpdateInputs(void) {
 
                 default:
                     // Unknown error response
-                    Fault_AddHungupAndCrash("../padmgr.c", 1098);
+                    Fault_AddHungupAndCrash("../padmgr.c", LN1(976, 1098));
                     break;
             }
         } else {
@@ -530,14 +543,18 @@ void PadMgr_InitVoice(void) {
 
             PadMgr_ReleaseSerialEventQueue(serialEventQueue);
 
+            if (1) {}
+
             if (ret != 0) {
-                // error
+                PRINTF("osVoiceInit rt=%d\n", ret);
             } else {
                 sPadMgrInstance->ctrlrType[i] = PADMGR_CONT_VOICE;
                 sVoiceInitStatus = VOICE_INIT_SUCCESS;
                 AudioVoice_Noop();
             }
         }
+
+        if (0) {}
     }
     // If sVoiceInitStatus is still VOICE_INIT_TRY after the first attempt to initialize a VRU, don't try again
     if (sVoiceInitStatus == VOICE_INIT_TRY) {
@@ -551,7 +568,6 @@ void PadMgr_InitVoice(void) {
 void PadMgr_UpdateConnections(void) {
     s32 ctrlrMask = 0;
     s32 i;
-    char msg[50];
 
     for (i = 0; i < MAXCONTROLLERS; i++) {
         if (sPadMgrInstance->padStatus[i].errno == 0) {
@@ -583,18 +599,31 @@ void PadMgr_UpdateConnections(void) {
                     // Other/Unrecognized
                     if (sPadMgrInstance->ctrlrType[i] == PADMGR_CONT_NONE) {
                         sPadMgrInstance->ctrlrType[i] = PADMGR_CONT_UNK;
-                        sprintf(msg,
-                                T("知らない種類のコントローラ(%04x)を認識しました",
-                                  "Recognized an unknown type of controller (%04x)"),
-                                sPadMgrInstance->padStatus[i].type);
+#if MM_VERSION >= N64_US
+                        {
+                            char msg[50];
+                            sprintf(msg,
+                                    T("知らない種類のコントローラ(%04x)を認識しました",
+                                      "Recognized an unknown type of controller (%04x)"),
+                                    sPadMgrInstance->padStatus[i].type);
+                        }
+#endif
                     }
                     // Missing break required for matching
             }
         } else if (sPadMgrInstance->ctrlrType[i] != PADMGR_CONT_NONE) {
             // Plugged controller errored
+#if MM_VERSION >= N64_US
             sPadMgrInstance->ctrlrType[i] = PADMGR_CONT_NONE;
             sPadMgrInstance->pakType[i] = CONT_PAK_NONE;
             sPadMgrInstance->rumbleTimer[i] = 0xFF;
+#else
+            if (sPadMgrInstance->ctrlrType[i] == PADMGR_CONT_NORMAL) {
+                sPadMgrInstance->pakType[i] = CONT_PAK_NONE;
+                sPadMgrInstance->rumbleTimer[i] = 0xFF;
+            }
+            sPadMgrInstance->ctrlrType[i] = PADMGR_CONT_NONE;
+#endif
         }
     }
     sPadMgrInstance->validCtrlrsMask = ctrlrMask;
@@ -746,6 +775,8 @@ void PadMgr_ThreadEntry(void) {
     s32 actionBits;
     s32 exit;
 
+    PRINTF(T("コントローラスレッド実行開始\n", "Controller thread execution started\n"));
+
     osCreateMesgQueue(&sPadMgrInstance->interruptQueue, sPadMgrInstance->interruptMsgBuf,
                       ARRAY_COUNT(sPadMgrInstance->interruptMsgBuf));
     IrqMgr_AddClient(sPadMgrInstance->irqMgr, &sPadMgrInstance->irqClient, &sPadMgrInstance->interruptQueue);
@@ -789,6 +820,8 @@ void PadMgr_ThreadEntry(void) {
     }
 
     IrqMgr_RemoveClient(sPadMgrInstance->irqMgr, &sPadMgrInstance->irqClient);
+
+    PRINTF(T("コントローラスレッド実行終了\n", "Controller thread execution finished\n"));
 }
 
 void PadMgr_Init(OSMesgQueue* siEvtQ, IrqMgr* irqMgr, OSId threadId, OSPri pri, void* stack) {
@@ -797,13 +830,21 @@ void PadMgr_Init(OSMesgQueue* siEvtQ, IrqMgr* irqMgr, OSId threadId, OSPri pri, 
 
     // These are unique access tokens, there should only ever be room for one OSMesg in these queues
     osCreateMesgQueue(&sPadMgrInstance->serialLockQueue, &sPadMgrInstance->serialMsg, 1);
+
+#if MM_VERSION < N64_US
+    PadMgr_ReleaseSerialEventQueue(siEvtQ);
+#endif
+
     osCreateMesgQueue(&sPadMgrInstance->lockQueue, &sPadMgrInstance->lockMsg, 1);
 
     PadMgr_UnlockPadData();
     PadSetup_Init(siEvtQ, &sPadMgrInstance->validCtrlrsMask, sPadMgrInstance->padStatus);
     sPadMgrInstance->nControllers = MAXCONTROLLERS;
     osContSetCh(sPadMgrInstance->nControllers);
+
+#if MM_VERSION >= N64_US
     PadMgr_ReleaseSerialEventQueue(siEvtQ);
+#endif
 
     osCreateThread(&sPadMgrInstance->thread, threadId, (void*)PadMgr_ThreadEntry, sPadMgrInstance, stack, pri);
     osStartThread(&sPadMgrInstance->thread);

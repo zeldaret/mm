@@ -1,5 +1,5 @@
 #include "build.h"
 
-const char gBuildCreator[] = "zelda@srd44";
-const char gBuildDate[] = "00-07-31 17:04:16";
+const char gBuildCreator[] = BUILD_CREATOR;
+const char gBuildDate[] = BUILD_DATE " " BUILD_TIME;
 const char gBuildMakeOption[] = "";

@@ -1777,7 +1777,11 @@ void Sram_InitSave(struct FileSelectState* fileSelect2, SramContext* sramCtx);
 void Sram_WriteSaveOptionsToBuffer(SramContext* sramCtx);
 void Sram_InitSram(struct GameState* gameState, SramContext* sramCtx);
 void Sram_Alloc(struct GameState* gameState, SramContext* sramCtx);
+#if MM_VERSION >= N64_US
 void Sram_SaveSpecialEnterClockTown(struct PlayState* play);
+#else
+void Sram_SaveSpecialEnterClockTown(SramContext* sramCtx);
+#endif
 void Sram_SaveSpecialNewDay(struct PlayState* play);
 void Sram_SetFlashPagesDefault(SramContext* sramCtx, u32 curPage, u32 numPages);
 void Sram_StartWriteToFlashDefault(SramContext* sramCtx);

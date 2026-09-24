@@ -180,6 +180,8 @@ void EffectSs_Spawn(PlayState* play, s32 type, s32 priority, void* initData) {
     overlaySize = (uintptr_t)overlayEntry->vramEnd - (uintptr_t)overlayEntry->vramStart;
 
     if (overlayEntry->vramStart == NULL) {
+        PRINTF(T("EffectSoftSprite2_makeEffect():オーバーレイではありません。\n",
+                 "EffectSoftSprite2_makeEffect(): Not an overlay.\n"));
         profile = overlayEntry->profile;
     } else {
         if (overlayEntry->loadedRamAddr == NULL) {

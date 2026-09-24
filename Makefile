@@ -77,10 +77,16 @@ export LANG := C
 CFLAGS :=
 CPPFLAGS :=
 
+# Version-specific settings
 ifeq ($(VERSION),n64-jp-1.1)
   COMPARE := 0
+  BUILD_CREATOR := zelda@srd44
+  BUILD_DATE := 00-04-04
+  BUILD_TIME := 09:34:16
 else ifeq ($(VERSION),n64-us)
-# Intentionally blank for now
+  BUILD_CREATOR := zelda@srd44
+  BUILD_DATE := 00-07-31
+  BUILD_TIME := 17:04:16
 else
 $(error Unsupported version $(VERSION))
 endif
@@ -417,6 +423,8 @@ $(shell mkdir -p $(foreach dir, \
                       $(ASSET_BIN_DIRS_EXTRACTED),\
                     $(dir:$(EXTRACTED_DIR)/%=$(BUILD_DIR)/%)))
 endif
+
+$(BUILD_DIR)/src/boot/build.o: C_DEFINES += -DBUILD_CREATOR="\"$(BUILD_CREATOR)\"" -DBUILD_DATE="\"$(BUILD_DATE)\"" -DBUILD_TIME="\"$(BUILD_TIME)\""
 
 $(BUILD_DIR)/src/audio/lib/seqplayer.o: C_DEFINES += -DMML_VERSION=MML_VERSION_MM
 

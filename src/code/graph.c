@@ -2,6 +2,8 @@
 
 #include "scheduler.h"
 
+#pragma increment_block_number "n64-jp-1.1:0 n64-us:0"
+
 // Variables are put before most headers as a hacky way to bypass bss reordering
 struct FaultAddrConvClient sGraphFaultAddrConvClient;
 struct FaultClient sGraphFaultClient;
@@ -18,6 +20,7 @@ OSTime sGraphPrevUpdateEndTime;
 #include "sys_cfb.h"
 #include "sys_ucode.h"
 #include "libc64/malloc.h"
+#include "line_numbers.h"
 #include "z64DLF.h"
 #include "z64speed_meter.h"
 
@@ -141,20 +144,23 @@ void Graph_Destroy(GraphicsContext* gfxCtx) {
  * If it does not signal completion in that time, retry or trigger a crash.
  */
 void Graph_TaskSet00(GraphicsContext* gfxCtx, GameState* gameState) {
-    static s32 sRetryCount = 10;
-    static s32 sCfbIndex = 0;
     OSTask_t* task = &gfxCtx->task.list.t;
     OSScTask* scTask = &gfxCtx->task;
     OSTimer timer;
     OSMesg msg;
-    s32 pad;
 
+#if MM_VERSION >= N64_US
 retry:
+#endif
     osSetTimer(&timer, OS_USEC_TO_CYCLES(3 * 1000 * 1000), 0, &gfxCtx->queue, (OSMesg)666);
     osRecvMesg(&gfxCtx->queue, &msg, OS_MESG_BLOCK);
     osStopTimer(&timer);
 
     if (msg == (OSMesg)666) {
+#if MM_VERSION >= N64_US
+        static s32 sRetryCount = 10;
+        s32 pad;
+
         osSyncPrintf("GRAPH SP TIMEOUT\n");
         if (sRetryCount >= 0) {
             sRetryCount--;
@@ -164,9 +170,17 @@ retry:
             osSyncPrintf(T("graph.c:もうダメ！死ぬ！\n", "graph.c: I can't go on! I'm dying!\n"));
             Fault_AddHungupAndCrashImpl("RCP is HUNG UP!!", "Oh! MY GOD!!");
         }
+#else
+        Fault_AddHungupAndCrashImpl("RCP is HUNG UP!!", "Oh! MY GOD!!");
+#endif
     }
 
+#if MM_VERSION < N64_US
+    osRecvMesg(&gfxCtx->queue, &msg, OS_MESG_NOBLOCK);
+#endif
+
     gfxCtx->masterList = gGfxMasterDL;
+
     if (gfxCtx->callback != NULL) {
         gfxCtx->callback(gfxCtx, gfxCtx->callbackArg);
     }
@@ -201,6 +215,7 @@ retry:
     scTask->msg = NULL;
 
     {
+        static s32 sCfbIndex = 0;
         CfbInfo* cfb = &sGraphCfbInfos[sCfbIndex];
 
         sCfbIndex = (sCfbIndex + 1) % ARRAY_COUNT(sGraphCfbInfos);
@@ -223,9 +238,11 @@ retry:
         scTask->framebuffer = cfb;
     }
 
+#if MM_VERSION >= N64_US
     while (gfxCtx->queue.validCount != 0) {
         osRecvMesg(&gfxCtx->queue, NULL, OS_MESG_NOBLOCK);
     }
+#endif
 
     gfxCtx->schedMsgQ = &gScheduler.cmdQueue;
     osSendMesg(&gScheduler.cmdQueue, (OSMesg)scTask, OS_MESG_BLOCK);
@@ -283,26 +300,31 @@ void Graph_ExecuteAndDraw(GraphicsContext* gfxCtx, GameState* gameState) {
         GfxPool* pool = &gGfxPools[gfxCtx->gfxPoolIdx % 2];
 
         if (pool->headMagic != GFXPOOL_HEAD_MAGIC) {
-            Fault_AddHungupAndCrash("../graph.c", 1054);
+            Fault_AddHungupAndCrash("../graph.c", LN1(1046, 1054));
         }
         if (pool->tailMagic != GFXPOOL_TAIL_MAGIC) {
-            Fault_AddHungupAndCrash("../graph.c", 1066);
+            Fault_AddHungupAndCrash("../graph.c", LN1(1058, 1066));
         }
     }
 
     if (THGA_IsCrash(&gfxCtx->polyOpa)) {
+        PRINTF(T("POLY_OPA領域死亡\n", "POLY_OPA area death\n"));
         problem = true;
     }
     if (THGA_IsCrash(&gfxCtx->polyXlu)) {
+        PRINTF(T("POLY_XLU領域死亡\n", "POLY_XLU area death\n"));
         problem = true;
     }
     if (THGA_IsCrash(&gfxCtx->overlay)) {
+        PRINTF(T("OVERLAY領域死亡\n", "OVERLAY area death\n"));
         problem = true;
     }
     if (THGA_IsCrash(&gfxCtx->work)) {
+        PRINTF(T("WORK領域死亡\n", "WORK area death\n"));
         problem = true;
     }
     if (THGA_IsCrash(&gfxCtx->debug)) {
+        PRINTF(T("DEBUG領域死亡\n", "DEBUG area death\n"));
         problem = true;
     }
 
@@ -339,10 +361,8 @@ void Graph_Update(GraphicsContext* gfxCtx, GameState* gameState) {
 void Graph_ThreadEntry(void* arg) {
     GraphicsContext gfxCtx;
     GameStateOverlay* nextOvl = &gGameStateOverlayTable[0];
-    GameStateOverlay* ovl;
-    GameState* gameState;
-    size_t size;
-    s32 pad[2];
+
+    PRINTF(T("グラフィックスレッド実行開始\n", "Start graphic thread execution\n"));
 
     gZBufferLoRes = malloc(sizeof(*gZBufferLoRes) + sizeof(*gWorkBufferLoRes) + 64 - 1);
     gZBufferLoRes = (void*)ALIGN64((uintptr_t)gZBufferLoRes);
@@ -359,13 +379,19 @@ void Graph_ThreadEntry(void* arg) {
     Graph_Init(&gfxCtx);
 
     while (nextOvl) {
-        ovl = nextOvl;
+        GameStateOverlay* ovl = nextOvl;
+        GameState* gameState;
+        size_t size;
+        const char* name = "";
+        s32 pad;
 
         Overlay_LoadGameState(ovl);
 
         size = ovl->instanceSize;
 
-        func_800809F4(ovl->file.vromStart);
+        name = func_800809F4(ovl->file.vromStart);
+
+        PRINTF(T("ゲームクラス %s サイズ＝%dバイト\n", "Game class %s Size = %d bytes\n"), name, size);
 
         gameState = malloc(size);
 
@@ -385,5 +411,8 @@ void Graph_ThreadEntry(void* arg) {
 
         Overlay_FreeGameState(ovl);
     }
+
     Graph_Destroy(&gfxCtx);
+
+    PRINTF(T("グラフィックスレッド実行終了\n", "End of graphic thread execution\n"));
 }
