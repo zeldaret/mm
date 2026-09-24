@@ -59,7 +59,7 @@ void Object_InitContext(GameState* gameState, ObjectContext* objectCtx) {
     objectCtx->subKeepSlot = 0;
 
     // clang-format off
-    for (i = 0; i < ARRAY_COUNT(objectCtx->slots); i++) { objectCtx->slots[i].id = 0; }
+    for (i = 0; i < ARRAY_COUNT(objectCtx->slots); i++) { objectCtx->slots[i].id = OBJECT_INVALID; }
     // clang-format on
 
     objectCtx->spaceStart = objectCtx->slots[0].segment = THA_AllocTailAlign16(&gameState->tha, spaceSize);
@@ -84,7 +84,7 @@ void Object_UpdateEntries(ObjectContext* objectCtx) {
                 size = objectFile->vromEnd - objectFile->vromStart;
 
                 if (size == 0) {
-                    entry->id = 0;
+                    entry->id = OBJECT_INVALID;
                 } else {
                     osCreateMesgQueue(&entry->loadQueue, &entry->loadMsg, 1);
                     DmaMgr_RequestAsync(&entry->dmaReq, entry->segment, objectFile->vromStart, size, 0,
@@ -238,7 +238,7 @@ void Scene_CommandSpecialFiles(PlayState* play, SceneCmd* cmd) {
         ROM_FILE(elf_message_ydan),
     };
 
-    if (cmd->specialFiles.subKeepId != 0) {
+    if (cmd->specialFiles.subKeepId != OBJECT_INVALID) {
         play->objectCtx.subKeepSlot = Object_SpawnPersistent(&play->objectCtx, cmd->specialFiles.subKeepId);
         // TODO: Segment number enum?
         gSegments[0x05] = OS_K0_TO_PHYSICAL(play->objectCtx.slots[play->objectCtx.subKeepSlot].segment);
@@ -286,7 +286,7 @@ void Scene_CommandObjectList(PlayState* play, SceneCmd* cmd) {
             invalidatedEntry = &play->objectCtx.slots[i];
 
             for (j = i; j < play->objectCtx.numEntries; j++) {
-                invalidatedEntry->id = 0;
+                invalidatedEntry->id = OBJECT_INVALID;
                 invalidatedEntry++;
             }
 

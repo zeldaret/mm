@@ -460,7 +460,7 @@ getItemDrawId_names = {
 }
 
 objectId_names = {
-    0x000: "OBJECT_UNSET_0",
+    0x000: "OBJECT_INVALID",
     0x001: "GAMEPLAY_KEEP",
     0x002: "GAMEPLAY_FIELD_KEEP",
     0x003: "GAMEPLAY_DANGEON_KEEP",
