@@ -40,7 +40,7 @@ s32 EnToto_HandleTalk_SoundCheck_WaitForPromptTextbox(EnToto* this, PlayState* p
 s32 EnToto_SetupTalk_StopCutsceneAndResetTimer(EnToto* this, PlayState* play);
 s32 EnToto_HandleTalk_SoundCheck_WaitForPlayerToEnterSpotlight(EnToto* this, PlayState* play);
 s32 EnToto_SetupTalk_InitWindFishOcarinaStaff(EnToto* this, PlayState* play);
-s32 EnToto_HandleTalk_SoundCheck_SetPlayedFlags(EnToto* this, PlayState* play);
+s32 EnToto_HandleTalk_SoundCheck_UpdatePlayedFlags(EnToto* this, PlayState* play);
 s32 EnToto_SetupTalk_InitWindFishPlayback(EnToto* this, PlayState* play);
 s32 EnToto_SetupTalk_StartWindFishPlayback(EnToto* this, PlayState* play);
 s32 EnToto_HandleTalk_SoundCheck_EndWindFishCutscene(EnToto* this, PlayState* play);
@@ -124,6 +124,15 @@ typedef enum EnTotoSpeakDataIndex {
     /* 15 */ ENTOTO_SPEAKDATA_MAYORS_RESIDENCE_GREET_DEKU = 15,
     /* 18 */ ENTOTO_SPEAKDATA_MAYORS_RESIDENCE_REPEAT_DEKU = 18
 } EnTotoSpeakDataIndex;
+
+typedef enum EnTotoWindFishFormsPlayed {
+    WIND_FISH_PLAYED_NONE = 0,
+    WIND_FISH_PLAYED_HUMAN = 1 << 0,
+    WIND_FISH_PLAYED_DEKU = 1 << 1,
+    WIND_FISH_PLAYED_ZORA = 1 << 2,
+    WIND_FISH_PLAYED_GORON = 1 << 3,
+    WIND_FISH_PLAYED_ALL = (1 << 4) - 1
+};
 
 static EnTotoSpeakData sDialogSpeakData[] = {
     /* Milk Bar */
@@ -249,7 +258,7 @@ static EnTotoTalkFunc sTalkStateHandlerFuncs[] = {
     /* 8  */ EnToto_HandleTalk_SoundCheck_WaitForPlayerToEnterSpotlight,
     /* 9  */ EnToto_HandleTalk_SoundCheck_WaitAdvanceText,
     /* 10 */ EnToto_HandleTalk_StartCutscene,
-    /* 11 */ EnToto_HandleTalk_SoundCheck_SetPlayedFlags,
+    /* 11 */ EnToto_HandleTalk_SoundCheck_UpdatePlayedFlags,
     /* 12 */ EnToto_HandleTalk_StartCutscene,
     /* 13 */ EnToto_HandleTalk_SoundCheck_EndWindFishCutscene,
     /* 14 */ EnToto_HandleTalk_Wait,
@@ -384,7 +393,7 @@ void EnToto_SetupTalk(EnToto* this, PlayState* play) {
         Animation_MorphToPlayOnce(&this->skelAnime, &gTotoWaveHelloAnim, -4.0f);
         this->animIndex = ENTOTO_ANIM_TALK_SITTING;
     } else {
-        if (this->speakData->talkActionIndex == 4) {
+        if (this->speakData->talkActionIndex == ENTOTO_TALK_NEXT_MESSAGE) {
             Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_TOTO);
         }
         Animation_MorphToLoop(&this->skelAnime, &gTotoTalkStandingAnim, -4.0f);
@@ -464,7 +473,7 @@ s32 EnToto_SetupTalk_NextMessage(EnToto* this, PlayState* play) {
         Message_CloseTextbox(play);
         EnToto_HandleTalk_AfterChoice(this, play);
     }
-    if (this->speakData->talkActionIndex == 4) {
+    if (this->speakData->talkActionIndex == ENTOTO_TALK_NEXT_MESSAGE) {
         Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_TOTO);
     }
     return 0;
@@ -535,8 +544,9 @@ s32 EnToto_HandleTalk_SoundCheck_WaitAdvanceText(EnToto* this, PlayState* play) 
         if (!ENTOTO_HELPED_GORMAN) {
             targetSpotlight = &sSpotlightList[gSaveContext.save.playerForm - 1];
             Message_StartTextbox(play,
-                                 (this->speakData->talkActionIndex == 6) ? targetSpotlight->promptTextId
-                                                                         : targetSpotlight->rightLightTextId,
+                                 (this->speakData->talkActionIndex == ENTOTO_TALK_MOVE_PLAYER_TO_STAGE)
+                                     ? targetSpotlight->promptTextId
+                                     : targetSpotlight->rightLightTextId,
                                  NULL);
         }
         return 1;
@@ -653,7 +663,7 @@ s32 EnToto_SetupTalk_InitWindFishOcarinaStaff(EnToto* this, PlayState* play) {
     return 0;
 }
 
-s32 EnToto_HandleTalk_SoundCheck_SetPlayedFlags(EnToto* this, PlayState* play) {
+s32 EnToto_HandleTalk_SoundCheck_UpdatePlayedFlags(EnToto* this, PlayState* play) {
     if (play->msgCtx.ocarinaMode == OCARINA_MODE_END) {
         if (GET_PLAYER_FORM == PLAYER_FORM_HUMAN) {
             SET_WEEKEVENTREG(WEEKEVENTREG_PLAYED_WIND_FISH_AS_HUMAN);
@@ -678,16 +688,16 @@ s32 EnToto_SetupTalk_InitWindFishPlayback(EnToto* this, PlayState* play) {
 
     this->windFishFormsPlayed = 0;
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_PLAYED_WIND_FISH_AS_HUMAN)) {
-        this->windFishFormsPlayed += 1;
+        this->windFishFormsPlayed += WIND_FISH_PLAYED_HUMAN;
     }
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_PLAYED_WIND_FISH_AS_DEKU)) {
-        this->windFishFormsPlayed += 2;
+        this->windFishFormsPlayed += WIND_FISH_PLAYED_DEKU;
     }
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_PLAYED_WIND_FISH_AS_ZORA)) {
-        this->windFishFormsPlayed += 4;
+        this->windFishFormsPlayed += WIND_FISH_PLAYED_ZORA;
     }
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_PLAYED_WIND_FISH_AS_GORON)) {
-        this->windFishFormsPlayed += 8;
+        this->windFishFormsPlayed += WIND_FISH_PLAYED_GORON;
     }
     for (i = 0; i < ARRAY_COUNT(sSpotlightList); i++) {
         if ((GET_PLAYER_FORM != (i + 1)) && (sSpotlightIndexToForm[i] & this->windFishFormsPlayed)) {
@@ -706,7 +716,8 @@ s32 EnToto_SetupTalk_InitWindFishPlayback(EnToto* this, PlayState* play) {
 
 s32 EnToto_SetupTalk_StartWindFishPlayback(EnToto* this, PlayState* play) {
     Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_68);
-    Audio_PlayFanfareWithPlayerIOCustomPort(NA_BGM_BALLAD_OF_THE_WIND_FISH, 4, this->windFishFormsPlayed ^ 0xF);
+    Audio_PlayFanfareWithPlayerIOCustomPort(NA_BGM_BALLAD_OF_THE_WIND_FISH, 4,
+                                            this->windFishFormsPlayed ^ WIND_FISH_PLAYED_ALL);
     this->timer = 4;
     return 0;
 }
@@ -730,7 +741,7 @@ s32 EnToto_HandleTalk_SoundCheck_EndWindFishCutscene(EnToto* this, PlayState* pl
 
             Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_69);
 
-            if (this->windFishFormsPlayed == 0xF) {
+            if (this->windFishFormsPlayed == WIND_FISH_PLAYED_ALL) {
                 if (CURRENT_DAY == 1) {
                     SET_WEEKEVENTREG(WEEKEVENTREG_HELPED_GORMAN_DAY_1);
                 } else {
@@ -799,7 +810,7 @@ void EnToto_HandleGormanCutscene(EnToto* this, PlayState* play) {
             } else {
                 Animation_PlayOnce(&this->skelAnime,
                                    (this->cueId == 1) ? &gTotoTurnLookAtStageAnim : &gTotoTurnLookAtGormanAnim);
-                if ((this->cueId == 2) && (this->windFishFormsPlayed != 0xF)) {
+                if ((this->cueId == 2) && (this->windFishFormsPlayed != WIND_FISH_PLAYED_ALL)) {
                     Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_TOTO);
                     Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN);
                 }
