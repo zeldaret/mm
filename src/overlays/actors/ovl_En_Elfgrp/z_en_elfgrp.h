@@ -1,23 +1,24 @@
 #ifndef Z_EN_ELFGRP_H
 #define Z_EN_ELFGRP_H
 
-#include "global.h"
-#include "overlays/actors/ovl_Bg_Dy_Yoseizo/z_bg_dy_yoseizo.h"
+#include "z64actor.h"
 
 struct EnElfgrp;
+struct PlayState;
 
-typedef void (*EnElfgrpActionFunc)(struct EnElfgrp*, PlayState*);
+typedef void (*EnElfgrpActionFunc)(struct EnElfgrp*, struct PlayState*);
 
 #define ENELFGRP_GET_TYPE(thisx) ((thisx)->params & 0xF) //!< Same type as Great Fairies
 #define ENELFGRP_GET_SWITCH_FLAG_PARAMS(thisx) (((thisx)->params & 0xFE00) >> 9)
 #define ENELFGRP_GET_SWITCHFLAG_ROT(thisx) ((thisx)->home.rot.z)
 
+// Corresponds to GreatFairyType
 typedef enum ElfgrpType {
-    /* 0 */ ENELFGRP_TYPE_MAGIC = GREAT_FAIRY_TYPE_MAGIC,
-    /* 1 */ ENELFGRP_TYPE_POWER = GREAT_FAIRY_TYPE_POWER,
-    /* 2 */ ENELFGRP_TYPE_WISDOM = GREAT_FAIRY_TYPE_WISDOM,
-    /* 3 */ ENELFGRP_TYPE_COURAGE = GREAT_FAIRY_TYPE_COURAGE,
-    /* 4 */ ENELFGRP_TYPE_KINDNESS = GREAT_FAIRY_TYPE_KINDNESS,
+    /* 0 */ ENELFGRP_TYPE_MAGIC,
+    /* 1 */ ENELFGRP_TYPE_POWER,
+    /* 2 */ ENELFGRP_TYPE_WISDOM,
+    /* 3 */ ENELFGRP_TYPE_COURAGE,
+    /* 4 */ ENELFGRP_TYPE_KINDNESS,
     /* 5 */ ENELFGRP_TYPE_MAX
 } ElfgrpType;
 

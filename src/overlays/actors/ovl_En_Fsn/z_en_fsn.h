@@ -1,8 +1,10 @@
 #ifndef Z_EN_FSN_H
 #define Z_EN_FSN_H
 
-#include "global.h"
+#include "z64actor.h"
 #include "overlays/actors/ovl_En_GirlA/z_en_girla.h"
+
+#include "global.h"
 #include "assets/objects/object_fsn/object_fsn.h"
 
 #define ENFSN_IS_BACKROOM(thisx) ((thisx)->params & 1)
@@ -16,8 +18,9 @@
 #define ENFSN_LIMB_MAX FSN_LIMB_MAX + 1 // Note: adding 1 to FSN_LIMB_MAX due to bug in the skeleton, see bug in object_fsn.xml
 
 struct EnFsn;
+struct PlayState;
 
-typedef void (*EnFsnActionFunc)(struct EnFsn*, PlayState*);
+typedef void (*EnFsnActionFunc)(struct EnFsn*, struct PlayState*);
 
 typedef struct EnFsn {
     /* 0x000 */ Actor actor;

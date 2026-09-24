@@ -6,6 +6,10 @@
 
 #include "z_elf_msg5.h"
 
+#include "ichain.h"
+#include "macros.h"
+#include "z64play.h"
+
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void ElfMsg5_Init(Actor* thisx, PlayState* play);

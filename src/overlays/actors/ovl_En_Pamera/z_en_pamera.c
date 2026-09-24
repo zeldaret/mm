@@ -8,6 +8,16 @@
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
 
+#include "gfx.h"
+#include "gfx_setupdl.h"
+#include "macros.h"
+#include "segmented_address.h"
+#include "sequence.h"
+#include "sfx.h"
+#include "sys_matrix.h"
+#include "z64lib.h"
+#include "z64play.h"
+
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void EnPamera_Init(Actor* thisx, PlayState* play);

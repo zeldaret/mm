@@ -5,12 +5,27 @@
  */
 
 #include "z_en_test3.h"
-
-#include "zelda_arena.h"
-
-#include "assets/objects/object_test3/object_test3.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
+
+#include "gfx.h"
+#include "gfx_setupdl.h"
+#include "macros.h"
+#include "regs.h"
+#include "seqcmd.h"
+#include "sequence.h"
+#include "sfx.h"
+#include "sys_matrix.h"
+#include "zelda_arena.h"
+#include "z64effect.h"
+#include "z64lib.h"
+#include "z64play.h"
+#include "z64schedule.h"
+#include "z64skin_matrix.h"
+#include "z64subs.h"
+
+#include "global.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
+#include "assets/objects/object_test3/object_test3.h"
 #include "assets/objects/object_mask_ki_tan/object_mask_ki_tan.h"
 
 #pragma increment_block_number "n64-us:128"

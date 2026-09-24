@@ -5,6 +5,7 @@
  */
 
 #include "z_en_fz.h"
+#include "z_en_item00.h"
 #include "attributes.h"
 #include "z_en_item00.h"
 #include "overlays/actors/ovl_En_Wiz/z_en_wiz.h"

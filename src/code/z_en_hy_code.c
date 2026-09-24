@@ -5,6 +5,13 @@
 
 #include "z_en_hy_code.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
+
+#include "segmented_address.h"
+#include "sfx.h"
+#include "macros.h"
+#include "z64play.h"
+#include "z64subs.h"
+
 #include "assets/objects/object_aob/object_aob.h"
 #include "assets/objects/object_bba/object_bba.h"
 #include "assets/objects/object_bji/object_bji.h"

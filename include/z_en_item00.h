@@ -40,6 +40,7 @@ typedef enum Item00Type {
 } Item00Type;
 
 struct EnItem00;
+struct PlayState;
 
 typedef void (*EnItem00ActionFunc)(struct EnItem00*, struct PlayState*);
 

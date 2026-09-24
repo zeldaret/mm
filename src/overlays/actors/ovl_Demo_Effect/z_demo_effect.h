@@ -1,12 +1,13 @@
 #ifndef Z_DEMO_EFFECT_H
 #define Z_DEMO_EFFECT_H
 
-#include "global.h"
+#include "z64actor.h"
 #include "z64curve.h"
 
 struct DemoEffect;
+struct PlayState;
 
-typedef void (*DemoEffectActionFunc)(struct DemoEffect*, PlayState*);
+typedef void (*DemoEffectActionFunc)(struct DemoEffect*, struct PlayState*);
 
 #define DEMO_EFFECT_GET_TYPE(thisx) ((thisx)->params & 0xFF)
 

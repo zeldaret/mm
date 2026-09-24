@@ -6,6 +6,13 @@
 
 #include "z_obj_lightblock.h"
 #include "overlays/actors/ovl_Demo_Effect/z_demo_effect.h"
+
+#include "gfx.h"
+#include "gfx_setupdl.h"
+#include "ichain.h"
+#include "sys_matrix.h"
+#include "z64play.h"
+
 #include "assets/objects/object_lightblock/object_lightblock.h"
 
 #define FLAGS 0x00000000

@@ -1,6 +1,8 @@
 #ifndef Z_EN_INVADEPOH_H
 #define Z_EN_INVADEPOH_H
 
+#include "unk.h"
+#include "z64actor.h"
 #include "global.h"
 #include "assets/objects/object_cow/object_cow.h"
 #include "assets/objects/object_dog/object_dog.h"
@@ -10,10 +12,11 @@
 
 struct EnInvadepoh;
 struct EnInvadepohEffect;
+struct PlayState;
 
-typedef void (*EnInvadepohActionFunc)(struct EnInvadepoh* this, PlayState* play);
-typedef void (*EnInvadepohInitFunc)(struct EnInvadepoh* this, PlayState* play);
-typedef void (*EnInvadepohDestroyFunc)(struct EnInvadepoh* this, PlayState* play);
+typedef void (*EnInvadepohActionFunc)(struct EnInvadepoh* this, struct PlayState* play);
+typedef void (*EnInvadepohInitFunc)(struct EnInvadepoh* this, struct PlayState* play);
+typedef void (*EnInvadepohDestroyFunc)(struct EnInvadepoh* this, struct PlayState* play);
 typedef void (*EnInvadepohEffectUpdateFunc)(struct EnInvadepohEffect* warpEffect);
 
 #define EN_INVADEPOH_GET_INDEX(thisx) ((thisx)->params & 7)
@@ -52,7 +55,7 @@ typedef enum EnInvadepohAlienAbductorIndex {
     /* 1 */ EN_INVADEPOH_ALIEN_ABDUCTOR_INDEX_COW_1,
     /* 2 */ EN_INVADEPOH_ALIEN_ABDUCTOR_INDEX_COW_2,
     /* 3 */ EN_INVADEPOH_ALIEN_ABDUCTOR_INDEX_COW_MAX,
-    
+
     // Any alien abductor with an index of 3 or higher will be carrying Romani
     /* 3 */ EN_INVADEPOH_ALIEN_ABDUCTOR_INDEX_ROMANI = 3
 } EnInvadepohAlienAbductorIndex;

@@ -1,11 +1,12 @@
 #ifndef Z_ELF_MSG6_H
 #define Z_ELF_MSG6_H
 
-#include "global.h"
+#include "z64actor.h"
 
 struct ElfMsg6;
+struct PlayState;
 
-typedef void (*ElfMsg6ActionFunc)(struct ElfMsg6*, PlayState*);
+typedef void (*ElfMsg6ActionFunc)(struct ElfMsg6*, struct PlayState*);
 
 #define ELFMSG6_GET_F(thisx) ((thisx)->params & 0xF)
 #define ELFMSG6_GET_F0(thisx) (((thisx)->params & 0xF0) >> 4)
