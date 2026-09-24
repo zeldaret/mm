@@ -227,7 +227,7 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, PlayState* play) {
         MtxF spFC;
         CollisionPoly* poly;
         s32 bgId;
-        f32 floorHeight[2];
+        f32 floorHeight[ACTOR_SHAPE_FOOT_MAX];
         Light* firstLight = &mapper->l.l[0];
         f32 shadowAlpha;
         f32 shadowScaleX;
@@ -240,7 +240,7 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, PlayState* play) {
         Vec3f* feetPosPtr;
         s32 numLights;
         f32* floorHeightPtr;
-        s32 spB8;
+        s32 footstepFlagCur;
 
         numLights = mapper->numLights - 2;
         feetPosPtr = actor->shape.feetPos;
@@ -249,10 +249,10 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, PlayState* play) {
         OPEN_DISPS(play->state.gfxCtx);
 
         POLY_OPA_DISP = Gfx_SetupDL(POLY_OPA_DISP, SETUPDL_44);
-        actor->shape.feetFloorFlags = 0;
-        spB8 = 2;
+        actor->shape.footstepFloorFlags = 0;
+        footstepFlagCur = (1 << (ACTOR_SHAPE_FOOT_MAX - 1)); // Start at ACTOR_SHAPE_FOOTSTEP_LEFT
 
-        for (i = 0; i < ARRAY_COUNT(floorHeight); i++, spB8 >>= 1) {
+        for (i = 0; i < ACTOR_SHAPE_FOOT_MAX; i++, footstepFlagCur >>= 1) {
             feetPosPtr->y += 50.0f;
             *floorHeightPtr = Play_GetFloorSurfaceImpl(play, &sp13C, &poly, &bgId, feetPosPtr);
             feetPosPtr->y -= 50.0f;
@@ -262,9 +262,10 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, PlayState* play) {
                 lightNumMax = 0;
 
                 if (distToFloor <= 10.0f) {
-                    actor->shape.feetFloorFlags |= spB8;
+                    actor->shape.footstepFloorFlags |= footstepFlagCur;
 
-                    if ((actor->depthInWater < 0.0f) && (bgId == BGCHECK_SCENE) && (actor->shape.unk_17 & spB8)) {
+                    if ((actor->depthInWater < 0.0f) && (bgId == BGCHECK_SCENE) &&
+                        (actor->shape.footprintFlags & footstepFlagCur)) {
                         if (SurfaceType_HasMaterialProperty(&play->colCtx, poly, bgId,
                                                             MATERIAL_PROPERTY_SOFT_IMPRINT)) {
                             SkinMatrix_MtxFCopy(&sp13C, &spFC);
@@ -272,7 +273,7 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, PlayState* play) {
                             EffFootmark_Add(play, &spFC, actor, i, feetPosPtr, (actor->shape.shadowScale * 0.3f),
                                             IREG(88) + 80, IREG(89) + 60, IREG(90) + 40, 30000, 200, 60);
                         }
-                        actor->shape.unk_17 &= ~spB8;
+                        actor->shape.footprintFlags &= ~footstepFlagCur;
                     }
                 }
 
@@ -317,14 +318,15 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, PlayState* play) {
         }
 
         if (!(actor->bgCheckFlags & BGCHECKFLAG_GROUND)) {
-            actor->shape.feetFloorFlags = 0;
-        } else if (actor->shape.feetFloorFlags == 3) {
-            f32 footDistY = actor->shape.feetPos[FOOT_LEFT].y - actor->shape.feetPos[FOOT_RIGHT].y;
+            actor->shape.footstepFloorFlags = 0;
+        } else if (actor->shape.footstepFloorFlags == (ACTOR_SHAPE_FOOTSTEP_RIGHT | ACTOR_SHAPE_FOOTSTEP_LEFT)) {
+            f32 footDistY =
+                actor->shape.feetPos[ACTOR_SHAPE_FOOT_LEFT].y - actor->shape.feetPos[ACTOR_SHAPE_FOOT_RIGHT].y;
 
-            if ((floorHeight[0] + footDistY) < (floorHeight[1] - footDistY)) {
-                actor->shape.feetFloorFlags = 2;
+            if ((floorHeight[ACTOR_SHAPE_FOOT_LEFT] + footDistY) < (floorHeight[ACTOR_SHAPE_FOOT_RIGHT] - footDistY)) {
+                actor->shape.footstepFloorFlags = ACTOR_SHAPE_FOOTSTEP_LEFT;
             } else {
-                actor->shape.feetFloorFlags = 1;
+                actor->shape.footstepFloorFlags = ACTOR_SHAPE_FOOTSTEP_RIGHT;
             }
         }
 
@@ -335,9 +337,9 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, PlayState* play) {
 void Actor_SetFeetPos(Actor* actor, s32 limbIndex, s32 leftFootIndex, Vec3f* leftFootPos, s32 rightFootIndex,
                       Vec3f* rightFootPos) {
     if (limbIndex == leftFootIndex) {
-        Matrix_MultVec3f(leftFootPos, &actor->shape.feetPos[FOOT_LEFT]);
+        Matrix_MultVec3f(leftFootPos, &actor->shape.feetPos[ACTOR_SHAPE_FOOT_LEFT]);
     } else if (limbIndex == rightFootIndex) {
-        Matrix_MultVec3f(rightFootPos, &actor->shape.feetPos[FOOT_RIGHT]);
+        Matrix_MultVec3f(rightFootPos, &actor->shape.feetPos[ACTOR_SHAPE_FOOT_RIGHT]);
     }
 }
 
