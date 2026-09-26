@@ -791,6 +791,7 @@ DamageTable sDamageTablePresets[] = {
  */
 DamageTable* DamageTable_Get(s32 index) {
     if ((index < 0) || (index >= ARRAY_COUNT(sDamageTablePresets))) {
+        PRINTF(T("CollisionBtlTbl_get():インデックスオーバー\n", "CollisionBtlTbl_get(): Index over\n"));
         return NULL;
     }
 

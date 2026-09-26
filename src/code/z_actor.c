@@ -928,46 +928,62 @@ void TitleCard_Update(GameState* gameState, TitleCardContext* titleCtx) {
 }
 
 void TitleCard_Draw(GameState* gameState, TitleCardContext* titleCtx) {
+    s32 width;
+    s32 height;
+    s32 doubleWidth;
+    s32 titleX1;
+    s32 titleX2;
+    s32 titleY1;
+    s32 titleY2;
+    s32 textureLanguageOffset;
+
     if (titleCtx->alpha != 0) {
-        s32 width = titleCtx->width;
-        s32 height = titleCtx->height;
-        s32 doubleWidth = width * 2;
-        s32 titleX = (titleCtx->x * 4) - doubleWidth;
-        s32 doubleHeight = height * 2;
-        s32 titleY = (titleCtx->y * 4) - doubleHeight;
-        s32 titleSecondY;
-        s32 textureLanguageOffset;
+        width = titleCtx->width;
+        height = titleCtx->height;
+        doubleWidth = width * 2;
+        titleX1 = (titleCtx->x * 4) - (width * 2);
+        titleX2 = titleX1 + (doubleWidth * 2) - 4;
+        titleY1 = (titleCtx->y * 4) - (height * 2);
+        textureLanguageOffset = 0;
 
         OPEN_DISPS(gameState->gfxCtx);
+
+#if MM_VERSION < N64_US
+        if (gSaveContext.options.language == LANGUAGE_JPN) {
+            textureLanguageOffset = 0;
+        } else {
+            textureLanguageOffset = width * height;
+        }
+#endif
 
         if (width * height > TMEM_SIZE) {
             height = TMEM_SIZE / width;
         }
 
-        titleSecondY = titleY + (height * 4);
+        titleY2 = titleY1 + (height * 4);
 
         OVERLAY_DISP = Gfx_SetupDL52_NoCD(OVERLAY_DISP);
 
         gDPSetPrimColor(OVERLAY_DISP++, 0, 0, (u8)titleCtx->intensity, (u8)titleCtx->intensity, (u8)titleCtx->intensity,
                         (u8)titleCtx->alpha);
 
-        gDPLoadTextureBlock(OVERLAY_DISP++, titleCtx->texture, G_IM_FMT_IA, G_IM_SIZ_8b, width, height, 0,
-                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
-                            G_TX_NOLOD);
+        gDPLoadTextureBlock(OVERLAY_DISP++, (uintptr_t)titleCtx->texture + textureLanguageOffset, G_IM_FMT_IA,
+                            G_IM_SIZ_8b, width, height, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP,
+                            G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
-        gSPTextureRectangle(OVERLAY_DISP++, titleX, titleY, ((doubleWidth * 2) + titleX) - 4, titleY + (height * 4) - 1,
-                            G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
+        gSPTextureRectangle(OVERLAY_DISP++, titleX1, titleY1, titleX2, titleY2 - 1, G_TX_RENDERTILE, 0, 0, 1 << 10,
+                            1 << 10);
 
         height = titleCtx->height - height;
 
         // If texture is bigger than 0x1000, display the rest
         if (height > 0) {
-            gDPLoadTextureBlock(OVERLAY_DISP++, (uintptr_t)titleCtx->texture + 0x1000, G_IM_FMT_IA, G_IM_SIZ_8b, width,
-                                height, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK,
-                                G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+            gDPLoadTextureBlock(OVERLAY_DISP++, (uintptr_t)titleCtx->texture + TMEM_SIZE + textureLanguageOffset,
+                                G_IM_FMT_IA, G_IM_SIZ_8b, width, height, 0, G_TX_NOMIRROR | G_TX_WRAP,
+                                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
-            gSPTextureRectangle(OVERLAY_DISP++, titleX, titleSecondY, ((doubleWidth * 2) + titleX) - 4,
-                                titleSecondY + (height * 4) - 1, G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
+            gSPTextureRectangle(OVERLAY_DISP++, titleX1, titleY2, titleX2, titleY2 + (height * 4) - 1, G_TX_RENDERTILE,
+                                0, 0, 1 << 10, 1 << 10);
         }
 
         CLOSE_DISPS(gameState->gfxCtx);
@@ -1694,12 +1710,15 @@ void Actor_UpdateBgCheckInfo(PlayState* play, Actor* actor, f32 wallCheckHeight,
 
             actor->bgCheckFlags |= BGCHECKFLAG_WALL;
             if ((updBgCheckInfoFlags & UPDBGCHECKINFO_FLAG_200) && (actor->bgCheckFlags & BGCHECKFLAG_PLAYER_1000) &&
-                ((s32)sp7C->normal.y > 0) && (sqrtf(SQXYZ(actor->colChkInfo.displacement)) < 10.0f)) {
+                ((s32)sp7C->normal.y > 0)
+#if MM_VERSION >= N64_US
+                && (sqrtf(SQXYZ(actor->colChkInfo.displacement)) < 10.0f)
+#endif
+            ) {
                 actor->bgCheckFlags &= ~BGCHECKFLAG_WALL;
             } else if (actor->bgCheckFlags & BGCHECKFLAG_WALL) {
                 Math_Vec3f_Copy(&actor->world.pos, &pos);
             }
-
             actor->wallYaw = Math_Atan2S_XY(sp7C->normal.z, sp7C->normal.x);
             actor->wallBgId = bgId;
         } else {
@@ -1710,13 +1729,18 @@ void Actor_UpdateBgCheckInfo(PlayState* play, Actor* actor, f32 wallCheckHeight,
     pos.x = actor->world.pos.x;
     pos.z = actor->world.pos.z;
     if (updBgCheckInfoFlags & UPDBGCHECKINFO_FLAG_2) {
+#if MM_VERSION >= N64_US
+#define Y_OFFSET 4.0f
+#else
+#define Y_OFFSET 10.0f
+#endif
         f32 y;
 
-        pos.y = actor->prevPos.y + 4.0f;
-        if (BgCheck_EntityCheckCeiling(&play->colCtx, &y, &pos, (ceilingCheckHeight + sp94) - 4.0f, &D_801ED8B0,
+        pos.y = actor->prevPos.y + Y_OFFSET;
+        if (BgCheck_EntityCheckCeiling(&play->colCtx, &y, &pos, (ceilingCheckHeight + sp94) - Y_OFFSET, &D_801ED8B0,
                                        &D_801ED8B4, actor)) {
             actor->bgCheckFlags |= BGCHECKFLAG_CEILING;
-            actor->world.pos.y = (y + sp94) - 4.0f;
+            actor->world.pos.y = (y + sp94) - Y_OFFSET;
         } else {
             actor->bgCheckFlags &= ~BGCHECKFLAG_CEILING;
         }
@@ -2221,7 +2245,9 @@ s32 Actor_OfferGetItem(Actor* actor, PlayState* play, GetItemId getItemId, f32 x
         (Player_GetExplosiveHeld(player) <= PLAYER_EXPLOSIVE_NONE)) {
         if ((actor->xzDistToPlayer <= xzRange) && (fabsf(actor->playerHeightRel) <= fabsf(yRange))) {
             if (((getItemId == GI_MASK_CIRCUS_LEADER) || (getItemId == GI_PENDANT_OF_MEMORIES) ||
+#if MM_VERSION >= N64_US
                  (getItemId == GI_DEED_LAND) ||
+#endif
                  (((player->heldActor != NULL) || (actor == player->talkActor)) &&
                   ((getItemId > GI_NONE) && (getItemId < GI_MAX)))) ||
                 !(player->stateFlags1 & (PLAYER_STATE1_CARRYING_ACTOR | PLAYER_STATE1_20000000))) {
@@ -2879,6 +2905,8 @@ void Actor_ResetLensActors(PlayState* play) {
 
 s32 Actor_AddToLensActors(PlayState* play, Actor* actor) {
     if (play->actorCtx.numLensActors >= LENS_ACTOR_MAX) {
+        PRINTF(
+            T("見えないアクターの数が限界を超えました\n", "The number of invisible actors has exceeded the limit\n"));
         return false;
     }
 
@@ -3400,18 +3428,23 @@ Actor* Actor_RemoveFromCategory(PlayState* play, ActorContext* actorCtx, Actor* 
 
 void Actor_FreeOverlay(ActorOverlay* entry) {
     if (entry->numLoaded == 0) {
-        void* ramAddr = entry->loadedRamAddr;
+        PRINTF(T("アクタークライアントが０になりました\n", "Actor clients are now 0\n"));
 
-        if (ramAddr != NULL) {
-            if (!(entry->allocType & ALLOCTYPE_PERMANENT)) {
-                if (entry->allocType & ALLOCTYPE_ABSOLUTE) {
-                    entry->loadedRamAddr = NULL;
-                } else {
-                    ZeldaArena_Free(ramAddr);
-                    entry->loadedRamAddr = NULL;
-                }
+        if (entry->loadedRamAddr != NULL) {
+            if (entry->allocType & ALLOCTYPE_PERMANENT) {
+                PRINTF(T("オーバーレイ解放しません\n", "Overlay will not be deallocated\n"));
+            } else if (entry->allocType & ALLOCTYPE_ABSOLUTE) {
+                PRINTF(T("絶対魔法領域確保なので解放しません\n",
+                         "Absolute magic field reserved, so deallocation will not occur\n"));
+                entry->loadedRamAddr = NULL;
+            } else {
+                PRINTF(T("オーバーレイ解放します\n", "Overlay deallocated\n"));
+                ZeldaArena_Free(entry->loadedRamAddr);
+                entry->loadedRamAddr = NULL;
             }
         }
+    } else {
+        PRINTF(T("アクタークライアントはあと %d 残っています\n", "%d of actor client remaining\n"), entry->numLoaded);
     }
 }
 
@@ -3471,11 +3504,13 @@ Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, PlayState* play, s1
     ActorOverlay* overlayEntry;
 
     if (actorCtx->totalLoadedActors >= 255) {
+        PRINTF(T("Ａｃｔｏｒセット数オーバー\n", "Actor set number exceeded\n"));
         return NULL;
     }
 
     profile = Actor_LoadOverlay(actorCtx, index);
     if (profile == NULL) {
+        PRINTF(T("オーバーレイではありません\n", "Not an overlay\n"));
         return NULL;
     }
 
@@ -3497,6 +3532,8 @@ Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, PlayState* play, s1
     if (overlayEntry->vramStart != NULL) {
         overlayEntry->numLoaded++;
     }
+
+    PRINTF(T("アクタークライアントは %d 個目です\n", "Actor client No. %d\n"), overlayEntry->numLoaded);
 
     bzero(actor, profile->instanceSize);
     actor->overlayEntry = overlayEntry;
@@ -3646,7 +3683,9 @@ Actor* Actor_Delete(ActorContext* actorCtx, Actor* actor, PlayState* play) {
     newHead = Actor_RemoveFromCategory(play, actorCtx, actor);
     ZeldaArena_Free(actor);
 
-    if (overlayEntry->vramStart != NULL) {
+    if (overlayEntry->vramStart == NULL) {
+        PRINTF(T("オーバーレイではありません\n", "Not an overlay\n"));
+    } else {
         overlayEntry->numLoaded--;
         Actor_FreeOverlay(overlayEntry);
     }

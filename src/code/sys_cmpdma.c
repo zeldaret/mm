@@ -3,6 +3,7 @@
 #include "libc64/malloc.h"
 #include "color.h"
 #include "versions.h"
+#include "macros.h"
 #include "yaz0.h"
 #include "z64dma.h"
 
@@ -87,6 +88,7 @@ void CmpDma_LoadFileImpl(uintptr_t segmentRom, s32 id, void* dst, size_t size) {
     s32 flag;
 
     CmpDma_GetFileInfo(segmentRom, id, &romStart, &compressedSize, &flag);
+    PRINTF(T("cmpdma_getinfo no異常 %d", "cmpdma_getinfo no error %d"), flag);
     if (flag & 1) {
         void* tempBuf = malloc(0x1000);
 
@@ -102,6 +104,7 @@ void CmpDma_LoadFile(uintptr_t segmentVrom, s32 id, void* dst, size_t size) {
     CmpDma_LoadFileImpl(DmaMgr_TranslateVromToRom(segmentVrom), id, dst, size);
 }
 
+#if MM_VERSION >= N64_US
 void CmpDma_LoadAllFiles(uintptr_t segmentVrom, void* dst, size_t size) {
     uintptr_t rom = DmaMgr_TranslateVromToRom(segmentVrom);
     u32 i;
@@ -117,8 +120,7 @@ void CmpDma_LoadAllFiles(uintptr_t segmentVrom, void* dst, size_t size) {
 
     for (i = 0; i < end; i++) {
         CmpDma_LoadFileImpl(rom, i, nextDst, 0);
-#if MM_VERSION >= N64_US
         nextDst = gYaz0DecompressDstEnd;
-#endif
     }
 }
+#endif
