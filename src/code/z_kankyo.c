@@ -1,4 +1,5 @@
 #include "ultra64.h"
+#include "vt.h"
 #include "z64light.h"
 #include "z64math.h"
 
@@ -741,6 +742,8 @@ void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
     }
 
     if (envCtx->skyboxConfig >= SKYBOX_CONFIG_MAX) {
+        PRINTF(T("\nVR-BOX種類が大きすぎます。Global_kankyo_ct",
+                 "\nThe number of VR-BOX types is too large Global_kankyo_ct"));
         envCtx->skyboxConfig = SKYBOX_CONFIG_0;
         envCtx->changeSkyboxNextConfig = SKYBOX_CONFIG_0;
     }
@@ -919,6 +922,9 @@ f32 Environment_LerpWeightAccelDecel(u16 endFrame, u16 startFrame, u16 curFrame,
     decelDurationF = (s32)decelDuration;
 
     if ((startFrameF >= endFrameF) || (accelDurationF + decelDurationF > totalFrames)) {
+        PRINTF(T("\nend_frameとstart_frameのフレーム関係がおかしい!!!",
+                 "\nThe frame relation between end_frame and start_frame is wrong!!!"));
+        PRINTF("\nby get_parcent_forAccelBrake!!!!!!!!!");
         return 0.0f;
     }
 
@@ -1080,6 +1086,11 @@ void Environment_UpdateSkybox(u8 skyboxId, EnvironmentContext* envCtx, SkyboxCon
                 envCtx->changeSkyboxState = CHANGE_SKYBOX_INACTIVE;
                 envCtx->skyboxConfig = envCtx->changeSkyboxNextConfig;
             }
+        }
+
+        if (skybox1Index == 0xFF) {
+            PRINTF(T("\n環境ＶＲデータ取得失敗！ ささきまでご報告を！",
+                     "\nEnvironment VR data acquisition failed! Report to Sasaki!"));
         }
 
         if ((envCtx->skybox1Index != skybox1Index) && (envCtx->skyboxDmaState == SKYBOX_DMA_INACTIVE)) {
@@ -1338,13 +1349,27 @@ void Environment_UpdateLights(PlayState* play, EnvironmentContext* envCtx, Light
                     u8 blend8[2];   // sp90
                     s16 blend16[2]; // sp8C
 
+#if MM_VERSION < N64_US
+                    //! FAKE:
+                    if (1) {}
+                    if (1) {}
+                    if (1) {}
+#endif
+
                     func_800F6CEC(play, sp97, &spA4[0], lightSettingsList);
                     func_800F6CEC(play, sp95, &spA4[1], lightSettingsList);
                     func_800F6CEC(play, sp96, &spA4[2], lightSettingsList);
                     func_800F6CEC(play, sp94, &spA4[3], lightSettingsList);
 
-                    if ((sp94 >= envCtx->numLightSettings) && !D_801BDBA8) {
-                        D_801BDBA8 = true;
+                    if (sp94 >= envCtx->numLightSettings) {
+                        PRINTF(T("\nカラーパレットの設定がおかしいようです！",
+                                 "\nThe color palette setting seems to be wrong!"));
+                        PRINTF(T("\n設定パレット＝[%d] 最後パレット番号＝[%d]\n",
+                                 "\nPalette setting = [%d] Last palette number = [%d]\n") VT_RST,
+                               sp94, envCtx->numLightSettings);
+                        if (!D_801BDBA8) {
+                            D_801BDBA8 = true;
+                        }
                     }
 
                     if ((sp97 >= envCtx->numLightSettings) || (sp95 >= envCtx->numLightSettings) ||
@@ -1453,8 +1478,15 @@ void Environment_UpdateLights(PlayState* play, EnvironmentContext* envCtx, Light
             u8 lightSetting;
             u8 var_v0_3;
 
-            if ((envCtx->lightSetting >= envCtx->numLightSettings) && !D_801BDBA8) {
-                D_801BDBA8 = true;
+            if ((envCtx->lightSetting >= envCtx->numLightSettings)) {
+                PRINTF(T("カラーパレットがおかしいようです！", "The color palette seems to be wrong!"));
+
+                PRINTF(T("設定パレット＝[%d] パレット数＝[%d]\n", "Palette setting = [%d] Last palette number = [%d]\n")
+                           VT_RST,
+                       envCtx->lightSetting, envCtx->numLightSettings);
+                if (!D_801BDBA8) {
+                    D_801BDBA8 = true;
+                }
             }
 
             if (!envCtx->lightBlendEnabled) {
@@ -1522,6 +1554,14 @@ void Environment_UpdateLights(PlayState* play, EnvironmentContext* envCtx, Light
                 envCtx->lightSettings.zFar = LERPIMP_ALT(lightSettingsList[(s32)envCtx->prevLightSetting].zFar,
                                                          lightSettingsList[(s32)lightSetting].zFar, envCtx->lightBlend);
             }
+        }
+
+        if (0) {
+            PRINTF("\n" VT_FGCOL(RED) T("カラーパレットがおかしいようです！", "The color palette seems to be wrong!"));
+
+            PRINTF("\n" VT_FGCOL(YELLOW) T("設定パレット＝[%d] パレット数＝[%d]\n",
+                                           "Palette setting = [%d] Last palette number = [%d]\n") VT_RST,
+                   envCtx->lightSetting, envCtx->numLightSettings);
         }
     }
 
@@ -1750,7 +1790,13 @@ void Environment_UpdatePostmanEvents(PlayState* play) {
 
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_90_01)) {
         temp_a2_2 = CURRENT_TIME - D_801F4E78;
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_89_40) && ((u16)SCRIPT_TIME_NOW >= (u16)SCRIPT_TIME(5, 0))) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_89_40) &&
+#if MM_VERSION >= N64_US
+            ((u16)SCRIPT_TIME_NOW >= (u16)SCRIPT_TIME(5, 0))
+#else
+            (SCRIPT_TIME_NOW >= (u16)(SCRIPT_TIME(6, 0) - 1))
+#endif
+        ) {
             SET_WEEKEVENTREG(WEEKEVENTREG_90_01);
         } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_89_08) && (temp_a2_2 >= CLOCK_TIME(0, 23))) {
             SET_WEEKEVENTREG(WEEKEVENTREG_89_40);
