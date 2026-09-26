@@ -13,6 +13,16 @@
  */
 
 #include "z_en_bba_01.h"
+
+#include "gfx.h"
+#include "gfx_setupdl.h"
+#include "segmented_address.h"
+#include "sys_matrix.h"
+#include "z64play.h"
+#include "z64subs.h"
+
+#include "macros.h"
+#include "global.h"
 #include "assets/objects/object_bba/object_bba.h"
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED)
