@@ -125,15 +125,6 @@ typedef enum EnTotoSpeakDataIndex {
     /* 18 */ ENTOTO_SPEAKDATA_MAYORS_RESIDENCE_REPEAT_DEKU = 18
 } EnTotoSpeakDataIndex;
 
-typedef enum EnTotoWindFishFormsPlayed {
-    WIND_FISH_PLAYED_NONE = 0,
-    WIND_FISH_PLAYED_HUMAN = 1 << 0,
-    WIND_FISH_PLAYED_DEKU = 1 << 1,
-    WIND_FISH_PLAYED_ZORA = 1 << 2,
-    WIND_FISH_PLAYED_GORON = 1 << 3,
-    WIND_FISH_PLAYED_ALL = (1 << 4) - 1
-};
-
 static EnTotoSpeakData sDialogSpeakData[] = {
     /* Milk Bar */
     { ENTOTO_TALK_EVENT, 0, 0x2B21 }, // After completed Sound Check

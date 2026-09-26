@@ -14,6 +14,12 @@ typedef s32 (*EnTotoTalkFunc)(struct EnToto*, PlayState*);
 #define ENTOTO_GET_OTHER_SPOKEN_FLAG(thisx) (((thisx)->params >> 7) & 0x7F)
 #define ENTOTO_GET_DEKU_SPOKEN_FLAG(thisx) ((thisx)->home.rot.x)
 
+#define WIND_FISH_PLAYED_HUMAN  (1 << 0)
+#define WIND_FISH_PLAYED_DEKU  (1 << 1)
+#define WIND_FISH_PLAYED_ZORA (1 << 2)
+#define WIND_FISH_PLAYED_GORON (1 << 3)
+#define WIND_FISH_PLAYED_ALL (WIND_FISH_PLAYED_HUMAN  + WIND_FISH_PLAYED_DEKU  + WIND_FISH_PLAYED_ZORA + WIND_FISH_PLAYED_GORON)
+
 typedef struct EnTotoSpeakData {
     /* 0x0 */ u8 talkActionIndex;
     /* 0x1 */ u8 arg;              // Used for various functions, including as a timer
