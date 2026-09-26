@@ -1289,6 +1289,11 @@ void SkelAnime_InitPlayer(PlayState* play, SkelAnime* skelAnime, FlexSkeletonHea
         skelAnime->morphTable = (void*)ALIGN16((uintptr_t)morphTableBuffer);
     }
 
+    if ((skelAnime->jointTable == NULL) || (skelAnime->morphTable == NULL)) {
+        PRINTF(T("Skeleton_Info_Rom_SV_ct メモリアロケーションエラー\n",
+                 "Skeleton_Info_Rom_SV_ct Memory allocation error\n"));
+    }
+
     PlayerAnimation_Change(play, skelAnime, animation, PLAYER_ANIM_NORMAL_SPEED, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f);
 }
 
@@ -1598,6 +1603,10 @@ void SkelAnime_Init(PlayState* play, SkelAnime* skelAnime, SkeletonHeader* skele
         skelAnime->morphTable = morphTable;
     }
 
+    if ((skelAnime->jointTable == NULL) || (skelAnime->morphTable == NULL)) {
+        PRINTF(T("Skeleton_Info2_ct メモリアロケーションエラー\n", "Skeleton_Info2_ct Memory allocation error\n"));
+    }
+
     if (animation != NULL) {
         Animation_PlayLoop(skelAnime, animation);
     }
@@ -1623,6 +1632,11 @@ void SkelAnime_InitFlex(PlayState* play, SkelAnime* skelAnime, FlexSkeletonHeade
         skelAnime->morphTable = morphTable;
     }
 
+    if ((skelAnime->jointTable == NULL) || (skelAnime->morphTable == NULL)) {
+        PRINTF(T("Skeleton_Info_Rom_SV_ct メモリアロケーションエラー\n",
+                 "Skeleton_Info_Rom_SV_ct Memory allocation error\n"));
+    }
+
     if (animation != NULL) {
         Animation_PlayLoop(skelAnime, animation);
     }
@@ -1641,8 +1655,10 @@ void SkelAnime_InitSkin(GameState* gameState, SkelAnime* skelAnime, SkeletonHead
     skelAnime->jointTable = ZeldaArena_Malloc(sizeof(*skelAnime->jointTable) * skelAnime->limbCount);
     skelAnime->morphTable = ZeldaArena_Malloc(sizeof(*skelAnime->morphTable) * skelAnime->limbCount);
 
-    // Debug prints here, required to match.
-    if (1) {}
+    if ((skelAnime->jointTable == NULL) || (skelAnime->morphTable == NULL)) {
+        PRINTF(T("Skeleton_Info2_skin2_ct メモリアロケーションエラー\n",
+                 "Skeleton_Info2_skin2_ct Memory allocation error\n"));
+    }
 
     if (animation != NULL) {
         Animation_PlayLoop(skelAnime, animation);
@@ -2025,10 +2041,14 @@ s32 Animation_OnFrame(SkelAnime* skelAnime, f32 frame) {
 void SkelAnime_Free(SkelAnime* skelAnime, PlayState* play) {
     if (skelAnime->jointTable != NULL) {
         ZeldaArena_Free(skelAnime->jointTable);
+    } else {
+        PRINTF(T("now_joint あきまへん！！\n", "now_joint is freed!!\n"));
     }
 
     if (skelAnime->morphTable != NULL) {
         ZeldaArena_Free(skelAnime->morphTable);
+    } else {
+        PRINTF(T("morf_joint あきまへん！！\n", "morf_joint is freed!!\n"));
     }
 }
 

@@ -1,4 +1,5 @@
 #include "PR/ultratypes.h"
+#include "line_numbers.h"
 
 // Variables are put before most headers as a hacky way to bypass bss reordering
 s16 sTransitionFillTimer;
@@ -39,6 +40,8 @@ u8 sMotionBlurStatus;
 
 s32 gDbgCamEnabled = false;
 u8 D_801D0D54 = false;
+
+void Play_SpawnScene(PlayState* this, s32 sceneId, s32 spawn);
 
 typedef enum {
     /* 0 */ MOTION_BLUR_OFF,
@@ -339,12 +342,12 @@ void Play_SetupTransition(PlayState* this, s32 transitionType) {
 
             default:
                 fbdemoType = -1;
-                _dbg_hungup("../z_play.c", 1420);
+                _dbg_hungup("../z_play.c", LN1(1390, 1420));
                 break;
         }
     } else {
         fbdemoType = -1;
-        _dbg_hungup("../z_play.c", 1423);
+        _dbg_hungup("../z_play.c", LN1(1393, 1423));
     }
 
     transitionCtx->transitionType = transitionType;
@@ -423,6 +426,8 @@ void Play_Destroy(GameState* thisx) {
     VisFbuf_Destroy(sPlayVisFbufInstance);
     sPlayVisFbufInstance = NULL;
 
+    PRINTF(T("Actor_info後始末  CtDtCk9280=%d\n", "Actor_info cleanup CtDtCk9280=%d\n"),
+           CHECK_WEEKEVENTREG(WEEKEVENTREG_92_80));
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_92_80)) {
         Actor_CleanupContext(&this->actorCtx, this);
     }
@@ -492,6 +497,290 @@ void Play_DecompressI5ToI8(void* srcI5, void* destI8, size_t size) {
         bitsLeft = shift;
     }
 }
+
+#if MM_VERSION < N64_US
+void Play_Init(GameState* thisx) {
+    PlayState* this = (PlayState*)thisx;
+    GraphicsContext* gfxCtx = this->state.gfxCtx;
+    s32 pad;
+    uintptr_t zAlloc;
+    s32 zAllocSize;
+    Player* player;
+    s32 i;
+    s32 scene;
+    u8 sceneLayer;
+    s32 pad2;
+
+    if ((gSaveContext.respawnFlag == -4) || (gSaveContext.respawnFlag == -0x63)) {
+        if (CHECK_EVENTINF(EVENTINF_TRIGGER_DAYTELOP)) {
+            PRINTF(T("*** play_initを途中で抜けます1(日替わりシーン切り替え) ***\n",
+                     "*** Exiting play_init midway (daily scene switching) ***\n"));
+            CLEAR_EVENTINF(EVENTINF_TRIGGER_DAYTELOP);
+            STOP_GAMESTATE(&this->state);
+            SET_NEXT_GAMESTATE(&this->state, DayTelop_Init, sizeof(DayTelopState));
+            return;
+        }
+
+        gSaveContext.unk_3CA7 = 1;
+        if (gSaveContext.respawnFlag == -0x63) {
+            gSaveContext.respawnFlag = 2;
+        }
+    } else {
+        gSaveContext.unk_3CA7 = 0;
+    }
+
+    if (gSaveContext.save.entrance == -1) {
+        PRINTF(T("*** play_initを途中で抜けます2(scene_noが-1のため) ***\n",
+                 "*** Exiting play_init midway (because scene_no is -1) ***\n"));
+        gSaveContext.save.entrance = 0;
+        STOP_GAMESTATE(&this->state);
+        SET_NEXT_GAMESTATE(&this->state, TitleSetup_Init, sizeof(TitleSetupState));
+        return;
+    }
+
+    if ((gSaveContext.nextCutsceneIndex == 0xFFEF) || (gSaveContext.nextCutsceneIndex == 0xFFF0)) {
+        scene = ((void)0, gSaveContext.save.entrance) >> 9;
+
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_SNOWHEAD_TEMPLE)) {
+            if (scene == ENTR_SCENE_MOUNTAIN_VILLAGE_WINTER) {
+                scene = ENTR_SCENE_MOUNTAIN_VILLAGE_SPRING;
+            } else if (scene == ENTR_SCENE_GORON_VILLAGE_WINTER) {
+                scene = ENTR_SCENE_GORON_VILLAGE_SPRING;
+            } else if (scene == ENTR_SCENE_PATH_TO_GORON_VILLAGE_WINTER) {
+                scene = ENTR_SCENE_PATH_TO_GORON_VILLAGE_SPRING;
+            } else if ((scene == ENTR_SCENE_SNOWHEAD) || (scene == ENTR_SCENE_PATH_TO_SNOWHEAD) ||
+                       (scene == ENTR_SCENE_PATH_TO_MOUNTAIN_VILLAGE) || (scene == ENTR_SCENE_GORON_SHRINE) ||
+                       (scene == ENTR_SCENE_GORON_RACETRACK)) {
+                gSaveContext.nextCutsceneIndex = 0xFFF0;
+            }
+        }
+
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_WOODFALL_TEMPLE)) {
+            if (scene == ENTR_SCENE_SOUTHERN_SWAMP_POISONED) {
+                scene = ENTR_SCENE_SOUTHERN_SWAMP_CLEARED;
+            } else if (scene == ENTR_SCENE_WOODFALL) {
+                gSaveContext.nextCutsceneIndex = 0xFFF1;
+            }
+        }
+
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE) && (scene == ENTR_SCENE_IKANA_CANYON)) {
+            gSaveContext.nextCutsceneIndex = 0xFFF2;
+        }
+
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE) &&
+            ((scene == ENTR_SCENE_GREAT_BAY_COAST) || (scene == ENTR_SCENE_ZORA_CAPE))) {
+            gSaveContext.nextCutsceneIndex = 0xFFF0;
+        }
+
+        // "First cycle" Termina Field
+        if (INV_CONTENT(ITEM_OCARINA_OF_TIME) != ITEM_OCARINA_OF_TIME) {
+            if ((scene == ENTR_SCENE_TERMINA_FIELD) &&
+                (((void)0, gSaveContext.save.entrance) != ENTRANCE(TERMINA_FIELD, 10))) {
+                gSaveContext.nextCutsceneIndex = 0xFFF4;
+            }
+        }
+        gSaveContext.save.entrance = Entrance_Create(scene, (((void)0, gSaveContext.save.entrance) >> 4) & 0x1F,
+                                                     ((void)0, gSaveContext.save.entrance) & 0xF);
+    }
+
+    GameState_Realloc(&this->state, 0);
+    KaleidoManager_Init(this);
+    ShrinkWindow_Init();
+    View_Init(&this->view, gfxCtx);
+    Audio_SetExtraFilter(0);
+    Quake_Init();
+    Distortion_Init(this);
+
+    for (i = 0; i < ARRAY_COUNT(this->cameraPtrs); i++) {
+        this->cameraPtrs[i] = NULL;
+    }
+
+    Camera_Init(&this->mainCamera, &this->view, &this->colCtx, this);
+    Camera_ChangeStatus(&this->mainCamera, CAM_STATUS_ACTIVE);
+
+    for (i = 0; i < ARRAY_COUNT(this->subCameras); i++) {
+        Camera_Init(&this->subCameras[i], &this->view, &this->colCtx, this);
+        Camera_ChangeStatus(&this->subCameras[i], CAM_STATUS_INACTIVE);
+    }
+
+    this->cameraPtrs[CAM_ID_MAIN] = &this->mainCamera;
+    this->cameraPtrs[CAM_ID_MAIN]->uid = CAM_ID_MAIN;
+    this->activeCamId = CAM_ID_MAIN;
+
+    Camera_OverwriteStateFlags(&this->mainCamera, CAM_STATE_0 | CAM_STATE_CHECK_WATER | CAM_STATE_2 | CAM_STATE_3 |
+                                                      CAM_STATE_4 | CAM_STATE_DISABLE_MODE_CHANGE | CAM_STATE_6);
+    Sram_Alloc(&this->state, &this->sramCtx);
+    Regs_InitData(this);
+    Message_Init(this);
+    GameOver_Init(this);
+    SoundSource_InitAll(this);
+    EffFootmark_Init(this);
+    Effect_Init(this);
+    EffectSs_InitInfo(this, 100);
+    CollisionCheck_InitContext(this, &this->colChkCtx);
+    AnimTaskQueue_Reset(&this->animTaskQueue);
+    Cutscene_InitContext(this, &this->csCtx);
+
+    if (gSaveContext.nextCutsceneIndex != 0xFFEF) {
+        gSaveContext.save.cutsceneIndex = gSaveContext.nextCutsceneIndex;
+        gSaveContext.nextCutsceneIndex = 0xFFEF;
+    }
+
+    if (gSaveContext.save.cutsceneIndex == 0xFFFD) {
+        gSaveContext.save.cutsceneIndex = 0;
+    }
+
+    if (gSaveContext.nextDayTime != NEXT_TIME_NONE) {
+        gSaveContext.save.time = gSaveContext.nextDayTime;
+        gSaveContext.skyboxTime = gSaveContext.nextDayTime;
+    }
+
+    if ((CURRENT_TIME >= CLOCK_TIME(18, 0)) || (CURRENT_TIME < CLOCK_TIME(6, 30))) {
+        gSaveContext.save.isNight = true;
+    } else {
+        gSaveContext.save.isNight = false;
+    }
+
+    func_800EDDB0(this);
+
+    if (((gSaveContext.gameMode != GAMEMODE_NORMAL) && (gSaveContext.gameMode != GAMEMODE_TITLE_SCREEN)) ||
+        (gSaveContext.save.cutsceneIndex >= 0xFFF0)) {
+        gSaveContext.nayrusLoveTimer = 0;
+        Magic_Reset(this);
+        gSaveContext.sceneLayer = (gSaveContext.save.cutsceneIndex & 0xF) + 1;
+
+        // Set saved cutscene to 0 so it doesn't immediately play, but instead let the `CutsceneManager` handle it.
+        gSaveContext.save.cutsceneIndex = 0;
+    } else {
+        gSaveContext.sceneLayer = 0;
+    }
+
+    sceneLayer = gSaveContext.sceneLayer;
+
+    Play_SpawnScene(
+        this, Entrance_GetSceneIdAbsolute(((void)0, gSaveContext.save.entrance) + ((void)0, gSaveContext.sceneLayer)),
+        Entrance_GetSpawnNum(((void)0, gSaveContext.save.entrance) + ((void)0, gSaveContext.sceneLayer)));
+
+    PRINTF("\nSCENE_NO=%d COUNTER=%d\n", ((void)0, gSaveContext.save.entrance), gSaveContext.sceneLayer);
+
+    KaleidoScopeCall_Init(this);
+    Interface_Init(this);
+
+    if (gSaveContext.nextDayTime != NEXT_TIME_NONE) {
+        if (gSaveContext.nextDayTime == NEXT_TIME_DAY) {
+            gSaveContext.save.day++;
+            gSaveContext.save.eventDayCount++;
+            gSaveContext.dogIsLost = true;
+            gSaveContext.nextDayTime = NEXT_TIME_DAY_SET;
+        } else {
+            gSaveContext.nextDayTime = NEXT_TIME_NIGHT_SET;
+        }
+    }
+
+    Play_InitMotionBlur();
+
+    R_PAUSE_BG_PRERENDER_STATE = PAUSE_BG_PRERENDER_OFF;
+    R_PICTO_PHOTO_STATE = PICTO_PHOTO_STATE_OFF;
+
+    PreRender_Init(&this->pauseBgPreRender);
+    PreRender_SetValuesSave(&this->pauseBgPreRender, gCfbWidth, gCfbHeight, NULL, NULL, NULL);
+    PreRender_SetValues(&this->pauseBgPreRender, gCfbWidth, gCfbHeight, NULL, NULL);
+
+    this->unk_18E64 = gWorkBuffer;
+    this->pictoPhotoI8 = gHiBuffer.pictoPhotoI8;
+    this->unk_18E68 = gHiBuffer.D_80784600;
+    this->unk_18E58 = gHiBuffer.D_80784600;
+    this->unk_18E60 = gHiBuffer.D_80784600;
+    gTransitionTileState = TRANS_TILE_OFF;
+    this->transitionMode = TRANS_MODE_OFF;
+    D_801D0D54 = false;
+
+    FrameAdvance_Init(&this->frameAdvCtx);
+    Rand_Seed(osGetTime());
+    Matrix_Init(&this->state);
+
+    this->state.main = Play_Main;
+    this->state.destroy = Play_Destroy;
+
+    this->transitionTrigger = TRANS_TRIGGER_END;
+    this->worldCoverAlpha = 0;
+    this->bgCoverAlpha = 0;
+    this->haltAllActors = false;
+    this->soaringCsOrSoTCsPlaying = false;
+
+    if (gSaveContext.gameMode != GAMEMODE_TITLE_SCREEN) {
+        if (gSaveContext.nextTransitionType == TRANS_NEXT_TYPE_DEFAULT) {
+            this->transitionType =
+                (Entrance_GetTransitionFlags(((void)0, gSaveContext.save.entrance) + sceneLayer) >> 7) & 0x7F;
+        } else {
+            this->transitionType = gSaveContext.nextTransitionType;
+            gSaveContext.nextTransitionType = TRANS_NEXT_TYPE_DEFAULT;
+        }
+    } else {
+        this->transitionType = TRANS_TYPE_FADE_BLACK;
+    }
+
+    TransitionFade_Init(&this->unk_18E48);
+    TransitionFade_SetType(&this->unk_18E48, 3);
+    TransitionFade_SetColor(&this->unk_18E48, RGBA8(160, 160, 160, 255));
+    TransitionFade_Start(&this->unk_18E48);
+    VisMono_Init(&sPlayVisMono);
+
+    gPlayVisMonoColor.a = 0;
+    sPlayVisFbufInstance = &sPlayVisFbuf;
+    VisFbuf_Init(sPlayVisFbufInstance);
+    sPlayVisFbufInstance->lodProportion = 0.0f;
+    sPlayVisFbufInstance->mode = VIS_FBUF_MODE_GENERAL;
+    sPlayVisFbufInstance->primColor.r = 0;
+    sPlayVisFbufInstance->primColor.g = 0;
+    sPlayVisFbufInstance->primColor.b = 0;
+    sPlayVisFbufInstance->primColor.a = 0;
+    sPlayVisFbufInstance->envColor.r = 0;
+    sPlayVisFbufInstance->envColor.g = 0;
+    sPlayVisFbufInstance->envColor.b = 0;
+    sPlayVisFbufInstance->envColor.a = 0;
+    CutsceneFlags_UnsetAll(this);
+    PRINTF("ZELDA ALLOC SIZE=%x\n", THA_GetRemaining(&this->state.tha));
+    zAllocSize = THA_GetRemaining(&this->state.tha);
+    zAlloc = (uintptr_t)THA_AllocTailAlign16(&this->state.tha, zAllocSize);
+
+    //! @bug: Incorrect ALIGN16s
+    ZeldaArena_Init((void*)((zAlloc + 8) & ~0xF), (zAllocSize - ((zAlloc + 8) & ~0xF)) + zAlloc);
+
+    PRINTF(T("ゼルダヒープ %08x-%08x\n", "Zelda Heap %08x-%08x\n"), zAllocAligned,
+           (u8*)zAllocAligned + zAllocSize - (s32)(zAllocAligned - zAlloc));
+
+    Actor_InitContext(this, &this->actorCtx, this->linkActorEntry);
+
+    // Busyloop until the room loads
+    while (!Room_ProcessRoomRequest(this, &this->roomCtx)) {}
+
+    if ((CURRENT_DAY != 0) &&
+        ((this->roomCtx.curRoom.type == ROOM_TYPE_DUNGEON) || (this->roomCtx.curRoom.type == ROOM_TYPE_BOSS))) {
+        Actor_Spawn(&this->actorCtx, this, ACTOR_EN_TEST4, 0.0f, 0.0f, 0.0f, 0, 0, 0, 0);
+    }
+
+    player = GET_PLAYER(this);
+
+    Camera_InitFocalActorSettings(&this->mainCamera, &player->actor);
+    gDbgCamEnabled = false;
+
+    if (PLAYER_GET_BG_CAM_INDEX(&player->actor) != 0xFF) {
+        Camera_ChangeActorCsCamIndex(&this->mainCamera, PLAYER_GET_BG_CAM_INDEX(&player->actor));
+    }
+
+    CutsceneManager_StoreCamera(&this->mainCamera);
+    Interface_SetSceneRestrictions(this);
+    Environment_PlaySceneSequence(this);
+    gSaveContext.seqId = this->sceneSequences.seqId;
+    gSaveContext.ambienceId = this->sceneSequences.ambienceId;
+    AnimTaskQueue_Update(this, &this->animTaskQueue);
+    Cutscene_HandleEntranceTriggers(this);
+    gSaveContext.respawnFlag = 0;
+    sBombersNotebookOpen = false;
+    BombersNotebook_Init(&sBombersNotebook);
+}
+#endif
 
 f32 Play_GetWaterSurface(PlayState* this, Vec3f* pos, s32* lightIndex) {
     Player* player = GET_PLAYER(this);
@@ -580,17 +869,21 @@ void Play_UpdateTransition(PlayState* this) {
                     sceneLayer = (gSaveContext.nextCutsceneIndex & 0xF) + 1;
                 }
 
-                if ((!(Entrance_GetTransitionFlags(this->nextEntrance + sceneLayer) & 0x8000) ||
-                     ((this->nextEntrance == ENTRANCE(PATH_TO_MOUNTAIN_VILLAGE, 1)) &&
-                      !CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_SNOWHEAD_TEMPLE)) ||
+                if ((!(Entrance_GetTransitionFlags(this->nextEntrance + sceneLayer) & 0x8000)
+#if MM_VERSION >= N64_US
+                     || ((this->nextEntrance == ENTRANCE(PATH_TO_MOUNTAIN_VILLAGE, 1)) &&
+                         !CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_SNOWHEAD_TEMPLE)) ||
                      ((this->nextEntrance == ENTRANCE(ROAD_TO_SOUTHERN_SWAMP, 1)) &&
                       !CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_WOODFALL_TEMPLE)) ||
                      ((this->nextEntrance == ENTRANCE(TERMINA_FIELD, 2)) &&
                       !CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) ||
                      ((this->nextEntrance == ENTRANCE(ROAD_TO_IKANA, 1)) &&
-                      !CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE))) &&
+                      !CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE))
+#endif
+                         ) &&
                     (!Environment_IsFinalHours(this) || (Entrance_GetSceneId(this->nextEntrance + sceneLayer) < 0) ||
                      (AudioSeq_GetActiveSeqId(SEQ_PLAYER_BGM_MAIN) != NA_BGM_FINAL_HOURS))) {
+                    PRINTF(T("\n\n\nサウンドイニシャル来ました。111\n", "\n\n\nSound initialized. 111\n"));
                     Audio_MuteAllSeqExceptSystemAndOcarina(20);
                     gSaveContext.seqId = (u8)NA_BGM_DISABLED;
                     gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
@@ -698,6 +991,9 @@ void Play_UpdateTransition(PlayState* this) {
                 this->transitionMode = TRANS_MODE_INSTANCE_RUNNING;
             }
             break;
+
+            //! FAKE:
+            if (this->transitionCtx.transitionType) {}
         }
 
         case TRANS_MODE_INSTANCE_RUNNING:
@@ -707,20 +1003,25 @@ void Play_UpdateTransition(PlayState* this) {
                         D_801D0D54 = false;
                     }
 
+#if MM_VERSION >= N64_US
                     if (gSaveContext.gameMode == GAMEMODE_OWL_SAVE) {
                         STOP_GAMESTATE(&this->state);
                         SET_NEXT_GAMESTATE(&this->state, TitleSetup_Init, sizeof(TitleSetupState));
-                    } else if (gSaveContext.gameMode != GAMEMODE_FILE_SELECT) {
-                        STOP_GAMESTATE(&this->state);
-                        SET_NEXT_GAMESTATE(&this->state, Play_Init, sizeof(PlayState));
-                        gSaveContext.save.entrance = this->nextEntrance;
+                    } else
+#endif
+                    {
+                        if (gSaveContext.gameMode != GAMEMODE_FILE_SELECT) {
+                            STOP_GAMESTATE(&this->state);
+                            SET_NEXT_GAMESTATE(&this->state, Play_Init, sizeof(PlayState));
+                            gSaveContext.save.entrance = this->nextEntrance;
 
-                        if (gSaveContext.minigameStatus == MINIGAME_STATUS_ACTIVE) {
-                            gSaveContext.minigameStatus = MINIGAME_STATUS_END;
+                            if (gSaveContext.minigameStatus == MINIGAME_STATUS_ACTIVE) {
+                                gSaveContext.minigameStatus = MINIGAME_STATUS_END;
+                            }
+                        } else { // GAMEMODE_FILE_SELECT
+                            STOP_GAMESTATE(&this->state);
+                            SET_NEXT_GAMESTATE(&this->state, FileSelect_Init, sizeof(FileSelectState));
                         }
-                    } else { // GAMEMODE_FILE_SELECT
-                        STOP_GAMESTATE(&this->state);
-                        SET_NEXT_GAMESTATE(&this->state, FileSelect_Init, sizeof(FileSelectState));
                     }
                 } else {
                     if (this->transitionCtx.transitionType == TRANS_TYPE_CIRCLE) {
@@ -910,12 +1211,7 @@ void Play_UpdateTransition(PlayState* this) {
     }
 }
 
-const char D_801DFA34[][4] = {
-    "all", "a",  "a",  "b",  "b",  "c",  "c",  "d",   "d",   "e",  "e",  "f",  "fa", "fa", "fb", "fb",
-    "fc",  "fc", "fd", "fd", "fe", "fe", "fg", "fg",  "fh",  "fh", "fi", "fi", "fj", "fj", "fk", "fk",
-    "f",   "g",  "g",  "h",  "h",  "i",  "i",  "all", "all", "a",  "b",  "c",  "d",  "e",  "f",  "g",
-    "h",   "i",  "f",  "fa", "fb", "fc", "fd", "fe",  "ff",  "fg", "fh", "fi", "fj", "fk",
-};
+const char D_801DFA34[][4] = { "all", "a", "a", "b", "b", "c" };
 
 void Play_UpdateMain(PlayState* this) {
     s32 pad;
@@ -945,6 +1241,7 @@ void Play_UpdateMain(PlayState* this) {
             switch (gTransitionTileState) {
                 case TRANS_TILE_PROCESS:
                     if (TransitionTile_Init(&sTransitionTile, 10, 7) == NULL) {
+                        PRINTF(T("fbdemo_init呼出し失敗！\n", "fbdemo_init call failed!\n"));
                         gTransitionTileState = TRANS_TILE_OFF;
                     } else {
                         sTransitionTile.zBuffer = gZBufferPtr;
@@ -1052,13 +1349,22 @@ void Play_UpdateMain(PlayState* this) {
                        this->state.gfxCtx);
 
     if (this->sramCtx.status != 0) {
+#if MM_VERSION >= N64_US
         if (gSaveContext.save.isOwlSave) {
             Sram_UpdateWriteToFlashOwlSave(&this->sramCtx);
-        } else {
+        } else
+#endif
+        {
             Sram_UpdateWriteToFlashDefault(&this->sramCtx);
         }
     }
 }
+
+const char D_801DFA4C[][4] = {
+    "c",  "d",  "d",  "e",  "e",  "f",  "fa", "fa", "fb", "fb", "fc", "fc", "fd", "fd", "fe",  "fe",  "fg", "fg", "fh",
+    "fh", "fi", "fi", "fj", "fj", "fk", "fk", "f",  "g",  "g",  "h",  "h",  "i",  "i",  "all", "all", "a",  "b",  "c",
+    "d",  "e",  "f",  "g",  "h",  "i",  "f",  "fa", "fb", "fc", "fd", "fe", "ff", "fg", "fh",  "fi",  "fj", "fk",
+};
 
 void Play_Update(PlayState* this) {
     if (!sBombersNotebookOpen) {
@@ -1575,7 +1881,7 @@ void Play_InitScene(PlayState* this, s32 spawn) {
     this->naviQuestHints = NULL;
     this->setupPathList = NULL;
     this->sceneMaterialAnims = NULL;
-    this->roomCtx.unk74 = NULL;
+    this->roomCtx.sceneTextureSegment = NULL;
     this->numSetupActors = 0;
     Object_InitContext(&this->state, &this->objectCtx);
     LightContext_Init(this, &this->lightCtx);
@@ -1587,18 +1893,23 @@ void Play_InitScene(PlayState* this, s32 spawn) {
 }
 
 void Play_SpawnScene(PlayState* this, s32 sceneId, s32 spawn) {
-    s32 pad;
     SceneTableEntry* scene = &gSceneTable[sceneId];
+    size_t roomSize;
 
     scene->unk_D = 0;
     this->loadedScene = scene;
     this->sceneId = sceneId;
     this->sceneConfig = scene->drawConfig;
+
+    PRINTF("\nSCENE SIZE %fK\n", (scene->sceneFile.vromEnd - scene->sceneFile.vromStart) / 1024.0f);
+
     this->sceneSegment = Play_LoadFile(this, &scene->segment);
     scene->unk_D = 0;
     gSegments[0x02] = OS_K0_TO_PHYSICAL(this->sceneSegment);
     Play_InitScene(this, spawn);
-    Room_SetupFirstRoom(this, &this->roomCtx);
+    roomSize = Room_SetupFirstRoom(this, &this->roomCtx);
+
+    PRINTF("ROOM SIZE=%fK\n", roomSize / 1024.0f);
 }
 
 void Play_GetScreenPos(PlayState* this, Vec3f* worldPos, Vec3f* screenPos) {
@@ -2055,6 +2366,10 @@ void Play_AssignPlayerCsIdsFromScene(PlayState* this, s32 spawnCsId) {
                 break;
             }
         }
+        PRINTF("======== EVENT CHECK i=%d START=%d\n", i, *curPlayerCsId);
+#if MM_VERSION < N64_US
+        if (1) {}
+#endif
     }
 }
 
@@ -2067,6 +2382,7 @@ void Play_FillScreen(PlayState* this, s16 fillScreenOn, u8 red, u8 green, u8 blu
     R_PLAY_FILL_SCREEN_ALPHA = alpha;
 }
 
+#if MM_VERSION >= N64_US
 void Play_Init(GameState* thisx) {
     PlayState* this = (PlayState*)thisx;
     GraphicsContext* gfxCtx = this->state.gfxCtx;
@@ -2338,3 +2654,4 @@ void Play_Init(GameState* thisx) {
     sBombersNotebookOpen = false;
     BombersNotebook_Init(&sBombersNotebook);
 }
+#endif

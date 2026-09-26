@@ -353,7 +353,7 @@ typedef struct RoomContext {
     /* 0x38 */ DmaRequest dmaRequest;
     /* 0x58 */ OSMesgQueue loadQueue;
     /* 0x70 */ OSMesg loadMsg[1];
-    /* 0x74 */ void* unk74;
+    /* 0x74 */ void* sceneTextureSegment;
     /* 0x78 */ s8 unk78;
     /* 0x79 */ s8 unk79;
     /* 0x7A */ UNK_TYPE2 unk7A[3];

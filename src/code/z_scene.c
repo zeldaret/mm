@@ -18,10 +18,13 @@ s32 Object_SpawnPersistent(ObjectContext* objectCtx, s16 id) {
     objectCtx->slots[objectCtx->numEntries].id = id;
     size = gObjectTable[id].vromEnd - gObjectTable[id].vromStart;
 
-    //! FAKE:
-    if (1) {}
+    if (size == 0) {
+        PRINTF(T("無効なバンクです(%d)\n", "Invalid bank (%d)\n"), objectCtx->numEntries);
+    } else {
+        PRINTF("OBJECT[%d] SIZE %fK SEG=%x\n", id, size / 1024.0f, objectCtx->slots[objectCtx->numEntries].segment);
 
-    if (size != 0) {
+        PRINTF("num=%d adrs=%x end=%x\n", objectCtx->numEntries,
+               (uintptr_t)objectCtx->slots[objectCtx->numEntries].segment + size, objectCtx->spaceEnd);
         DmaMgr_RequestSync(objectCtx->slots[objectCtx->numEntries].segment, gObjectTable[id].vromStart, size);
     }
 
@@ -84,6 +87,9 @@ void Object_UpdateEntries(ObjectContext* objectCtx) {
                 size = objectFile->vromEnd - objectFile->vromStart;
 
                 if (size == 0) {
+                    PRINTF(T("Object_Exchange_check: 無効なバンクです(%d)\n",
+                             "Object_Exchange_check: Invalid bank (%d)\n"),
+                           i);
                     entry->id = OBJECT_INVALID;
                 } else {
                     osCreateMesgQueue(&entry->loadQueue, &entry->loadMsg, 1);
@@ -122,17 +128,24 @@ s32 Object_IsLoaded(ObjectContext* objectCtx, s32 slot) {
 void Object_LoadAll(ObjectContext* objectCtx) {
     s32 i;
     s32 id;
-    uintptr_t vromSize;
+    size_t size;
 
     for (i = 0; i < objectCtx->numEntries; i++) {
         id = objectCtx->slots[i].id;
-        vromSize = gObjectTable[id].vromEnd - gObjectTable[id].vromStart;
+        size = gObjectTable[id].vromEnd - gObjectTable[id].vromStart;
 
-        if (vromSize == 0) {
-            continue;
+        if (size == 0) {
+            if (1) {}
+            PRINTF(
+                T("Object_Exchange_read_all: 無効なバンクです(%d)\n", "Object_Exchange_read_all: Invalid bank (%d)\n"),
+                i);
+        } else {
+            PRINTF("OBJECT[%d] SIZE %fK SEG=%x\n", objectCtx->slots[i].id, size / 1024.0f, objectCtx->slots[i].segment);
+            PRINTF("num=%d adrs=%x end=%x\n", objectCtx->numEntries, (uintptr_t)objectCtx->slots[i].segment + size,
+                   objectCtx->spaceEnd);
+
+            DmaMgr_RequestSync(objectCtx->slots[i].segment, gObjectTable[id].vromStart, size);
         }
-
-        DmaMgr_RequestSync(objectCtx->slots[i].segment, gObjectTable[id].vromStart, vromSize);
     }
 }
 
@@ -370,9 +383,12 @@ void Scene_LoadAreaTextures(PlayState* play, s32 fileIndex) {
     uintptr_t vromStart = sSceneTextureFiles[fileIndex].vromStart;
     size_t size = sSceneTextureFiles[fileIndex].vromEnd - vromStart;
 
-    if (size != 0) {
-        play->roomCtx.unk74 = THA_AllocTailAlign16(&play->state.tha, size);
-        DmaMgr_RequestSync(play->roomCtx.unk74, vromStart, size);
+    if (size == 0) {
+        PRINTF(T("無効なシーンテクスチャーバンクです(%d)\n", "Invalid scene texture bank (%d)\n"), fileIndex);
+    } else {
+        play->roomCtx.sceneTextureSegment = THA_AllocTailAlign16(&play->state.tha, size);
+        PRINTF("SCENE TEXTURE[%d] SIZE %fK SEG=%x\n", fileIndex, size / 1024.0f, play->roomCtx.sceneTextureSegment);
+        DmaMgr_RequestSync(play->roomCtx.sceneTextureSegment, vromStart, size);
     }
 }
 
@@ -480,6 +496,10 @@ void Scene_CommandAltHeaderList(PlayState* play, SceneCmd* cmd) {
         if (altHeader != NULL) {
             Scene_ExecuteCommands(play, Lib_SegmentedToVirtual(altHeader));
             (cmd + 1)->base.code = 0x14;
+        } else {
+            PRINTF(
+                T("\n指定されたデモステージデータが存在しません。", "The specified demo stage data does not exist."));
+            PRINTF(T("\nなので、通常ステージが採用されます。", "Therefore, the standard stage will be used."));
         }
     }
 }
@@ -533,6 +553,7 @@ void Scene_CommandSetRegionVisitedFlag(PlayState* play, SceneCmd* cmd) {
     }
 
     if (i < REGION_MAX) {
+        PRINTF("\ncounter=[%d]", i);
         gSaveContext.save.saveInfo.regionsVisited =
             (gBitFlags[i] | gSaveContext.save.saveInfo.regionsVisited) | gSaveContext.save.saveInfo.regionsVisited;
     }
@@ -599,6 +620,10 @@ s32 Scene_ExecuteCommands(PlayState* play, SceneCmd* sceneCmd) {
 
         if (cmdId < SCENE_CMD_MAX) {
             sSceneCmdHandlers[cmdId](play, sceneCmd);
+        } else {
+            if (1) {}
+            PRINTF(T("code の値(%d)が異常です\n", "code variable (%d) is abnormal\n"), cmdId);
+            if (1) {}
         }
 
         sceneCmd++;

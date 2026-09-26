@@ -37,6 +37,7 @@ void GameOver_Update(PlayState* play) {
             CLEAR_EVENTINF_ALT(EVENTINF_10);
 
             if (CUR_FORM == 0) {
+                PRINTF(T("プレイヤーＢボタン【剣】チェック\n", "Player B button [Sword] check\n"));
                 if (CUR_FORM_EQUIP(EQUIP_SLOT_B) != ITEM_SWORD_KOKIRI &&
                     CUR_FORM_EQUIP(EQUIP_SLOT_B) != ITEM_SWORD_RAZOR &&
                     CUR_FORM_EQUIP(EQUIP_SLOT_B) != ITEM_SWORD_GILDED &&
@@ -125,6 +126,10 @@ void GameOver_Update(PlayState* play) {
             if (sGameOverTimer == 0) {
                 gameOverCtx->state = GAMEOVER_INACTIVE;
             }
+            break;
+
+        default:
+            PRINTF("??????????????????????\n");
             break;
     }
 }

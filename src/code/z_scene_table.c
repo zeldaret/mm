@@ -267,18 +267,23 @@ static EntranceTableEntry sIkanaCanyonEntrance14[] = {
     { SCENE_IKANA, 14, 0x8102 },
 };
 
+#if MM_VERSION >= N64_US
 static EntranceTableEntry sIkanaCanyonEntrance15[] = {
     { SCENE_IKANA, 15, 0x8102 },
     { SCENE_IKANA, 15, 0x8102 },
     { SCENE_IKANA, 15, 0x8102 },
     { SCENE_IKANA, 15, 0x0183 },
 };
+#endif
 
 static EntranceTableEntry* sIkanaCanyonEntranceTable[] = {
     sIkanaCanyonEntrance0,  sIkanaCanyonEntrance1,  sIkanaCanyonEntrance2,  sIkanaCanyonEntrance3,
     sIkanaCanyonEntrance4,  sIkanaCanyonEntrance5,  sIkanaCanyonEntrance6,  sIkanaCanyonEntrance7,
     sIkanaCanyonEntrance8,  sIkanaCanyonEntrance9,  sIkanaCanyonEntrance10, sIkanaCanyonEntrance11,
-    sIkanaCanyonEntrance12, sIkanaCanyonEntrance13, sIkanaCanyonEntrance14, sIkanaCanyonEntrance15,
+    sIkanaCanyonEntrance12, sIkanaCanyonEntrance13, sIkanaCanyonEntrance14,
+#if MM_VERSION >= N64_US
+    sIkanaCanyonEntrance15,
+#endif
 };
 
 static EntranceTableEntry sPiratesFortressEntrance0[] = {
@@ -2413,6 +2418,16 @@ static EntranceTableEntry* sLaundryPoolEntranceTable[] = {
     sLaundryPoolEntrance2,
 };
 
+#if MM_VERSION < N64_US
+static EntranceTableEntry sTest01Entrance0[] = {
+    { SCENE_TEST01, 0, 0x4102 },
+};
+
+static EntranceTableEntry* sTest01EntranceTable[] = {
+    sTest01Entrance0,
+};
+#endif
+
 static EntranceTableEntry sGrottosEntrance0[] = {
     { SCENE_KAKUSIANA, 0, 0x0102 },
 };
@@ -2578,7 +2593,11 @@ static SceneEntranceTableEntry sSceneEntranceTable[] = {
     /* 0x05 */ SCENE_ENTRANCE(sBeneathTheGraveryardEntranceTable, "Z2_HAKASHITA"),
     /* 0x06 */ SCENE_ENTRANCE(sSouthernSwampClearedEntranceTable, "Z2_20SICHITAI2"),
     /* 0x07 */ SCENE_ENTRANCE(sCuriosityShopEntranceTable, "Z2_AYASHIISHOP"),
+#if MM_VERSION >= N64_US
     /* 0x08 */ SCENE_ENTRANCE_NONE(),
+#else
+    /* 0x08 */ SCENE_ENTRANCE(sTest01EntranceTable, "TEST01"),
+#endif
     /* 0x09 */ SCENE_ENTRANCE_NONE(),
     /* 0x0A */ SCENE_ENTRANCE(sGrottosEntranceTable, "KAKUSIANA"),
     /* 0x0B */ SCENE_ENTRANCE_NONE(),
