@@ -910,36 +910,36 @@ typedef enum PlayerCueId {
 } PlayerCueId;
 
 
-// 
+//
 #define PLAYER_STATE1_1          (1 << 0)
-// 
+//
 #define PLAYER_STATE1_2          (1 << 1)
 // Climbing ledge
 #define PLAYER_STATE1_4          (1 << 2)
-// 
+//
 #define PLAYER_STATE1_8          (1 << 3)
 // Zora electric shield
 #define PLAYER_STATE1_10         (1 << 4)
-// 
+//
 #define PLAYER_STATE1_20         (1 << 5)
 // Currently talking to an actor. This includes item exchanges.
 #define PLAYER_STATE1_TALKING (1 << 6)
 // Player has died. Note that this gets set when the death cutscene has started, after landing from the air.
 // This also gets set when either deku/zora forms touches lava floor, or goron form enters water and the scene resets.
 #define PLAYER_STATE1_DEAD         (1 << 7)
-// 
+//
 #define PLAYER_STATE1_100        (1 << 8)
-// 
+//
 #define PLAYER_STATE1_200        (1 << 9)
-// 
+//
 #define PLAYER_STATE1_400        (1 << 10)
 // Currently carrying an actor
 #define PLAYER_STATE1_CARRYING_ACTOR (1 << 11)
 // Currently charging a spin attack (by holding down the B button)
 #define PLAYER_STATE1_CHARGING_SPIN_ATTACK (1 << 12)
-// 
+//
 #define PLAYER_STATE1_2000       (1 << 13)
-// 
+//
 #define PLAYER_STATE1_4000       (1 << 14)
 // Either lock-on or parallel is active. This flag is never checked for and is practically unused.
 #define PLAYER_STATE1_Z_TARGETING       (1 << 15)
@@ -947,27 +947,27 @@ typedef enum PlayerCueId {
 #define PLAYER_STATE1_FRIENDLY_ACTOR_FOCUS      (1 << 16)
 // "Parallel" mode, Z-Target without an actor lock-on
 #define PLAYER_STATE1_PARALLEL   (1 << 17)
-// 
+//
 #define PLAYER_STATE1_40000      (1 << 18)
-// 
+//
 #define PLAYER_STATE1_80000      (1 << 19)
-// 
+//
 #define PLAYER_STATE1_100000     (1 << 20)
-// 
+//
 #define PLAYER_STATE1_200000     (1 << 21)
-// 
+//
 #define PLAYER_STATE1_400000     (1 << 22)
-// 
+//
 #define PLAYER_STATE1_800000     (1 << 23)
 // Currently using the zora boomerang. This includes all phases (aiming, throwing, and catching).
 #define PLAYER_STATE1_USING_ZORA_BOOMERANG (1 << 24)
 // Zora boomerang has been thrown and is flying in the air
 #define PLAYER_STATE1_ZORA_BOOMERANG_THROWN (1 << 25)
-// 
+//
 #define PLAYER_STATE1_4000000    (1 << 26)
 // Swimming?
 #define PLAYER_STATE1_8000000    (1 << 27)
-// 
+//
 #define PLAYER_STATE1_10000000   (1 << 28)
 // Time is stopped but Link & NPC animations continue
 #define PLAYER_STATE1_20000000   (1 << 29)
@@ -977,59 +977,59 @@ typedef enum PlayerCueId {
 #define PLAYER_STATE1_80000000   (1 << 31)
 
 
-// 
+//
 #define PLAYER_STATE2_1          (1 << 0)
 // Can accept a talk offer. "Speak" or "Check" is shown on the A button.
 #define PLAYER_STATE2_CAN_ACCEPT_TALK_OFFER          (1 << 1)
-// 
+//
 #define PLAYER_STATE2_4          (1 << 2)
-// 
+//
 #define PLAYER_STATE2_8          (1 << 3)
-// 
+//
 #define PLAYER_STATE2_10         (1 << 4)
-// 
+//
 #define PLAYER_STATE2_20         (1 << 5)
-// 
+//
 #define PLAYER_STATE2_40         (1 << 6)
-// 
+//
 #define PLAYER_STATE2_80         (1 << 7)
-// 
+//
 #define PLAYER_STATE2_100        (1 << 8)
-// 
+//
 #define PLAYER_STATE2_FORCE_SAND_FLOOR_SOUND (1 << 9)
-// 
+//
 #define PLAYER_STATE2_400        (1 << 10)
 // Diving
 #define PLAYER_STATE2_800        (1 << 11)
-// 
+//
 #define PLAYER_STATE2_1000       (1 << 12)
 // Actor lock-on is active, specifically with Switch Targeting. Hold Targeting checks the state of the Z button instead of this flag.
 #define PLAYER_STATE2_LOCK_ON_WITH_SWITCH       (1 << 13)
-// 
+//
 #define PLAYER_STATE2_4000       (1 << 14)
-// 
+//
 #define PLAYER_STATE2_8000       (1 << 15)
-// 
+//
 #define PLAYER_STATE2_10000      (1 << 16)
 // A non-magic spin attack
 #define PLAYER_STATE2_20000      (1 << 17)
-// 
+//
 #define PLAYER_STATE2_40000      (1 << 18)
-// 
+//
 #define PLAYER_STATE2_80000      (1 << 19)
-// 
+//
 #define PLAYER_STATE2_100000     (1 << 20)
-// 
+//
 #define PLAYER_STATE2_200000     (1 << 21)
-// 
+//
 #define PLAYER_STATE2_400000     (1 << 22)
-// 
+//
 #define PLAYER_STATE2_800000     (1 << 23)
-// 
+//
 #define PLAYER_STATE2_1000000    (1 << 24)
-// 
+//
 #define PLAYER_STATE2_2000000    (1 << 25)
-// 
+//
 #define PLAYER_STATE2_4000000    (1 << 26)
 // Playing the ocarina
 #define PLAYER_STATE2_USING_OCARINA  (1 << 27)
@@ -1045,61 +1045,61 @@ typedef enum PlayerCueId {
 
 // Ignores collision with floor?
 #define PLAYER_STATE3_1          (1 << 0)
-// 
+//
 #define PLAYER_STATE3_2          (1 << 1)
-// 
+//
 #define PLAYER_STATE3_4          (1 << 2)
-// 
+//
 #define PLAYER_STATE3_8          (1 << 3)
-// 
+//
 #define PLAYER_STATE3_10         (1 << 4)
-// 
+//
 #define PLAYER_STATE3_20         (1 << 5)
-// 
+//
 #define PLAYER_STATE3_40         (1 << 6)
 // Flying in the air with the hookshot as it pulls Player toward its destination
 #define PLAYER_STATE3_FLYING_WITH_HOOKSHOT (1 << 7)
 // Deku flower dive
 #define PLAYER_STATE3_100        (1 << 8)
-// 
+//
 #define PLAYER_STATE3_200        (1 << 9)
-// 
+//
 #define PLAYER_STATE3_400        (1 << 10)
-// 
+//
 #define PLAYER_STATE3_800        (1 << 11)
 // goron curled
 #define PLAYER_STATE3_1000       (1 << 12)
-// 
+//
 #define PLAYER_STATE3_2000       (1 << 13)
-// 
+//
 #define PLAYER_STATE3_4000       (1 << 14)
 // Swimming Zora
 #define PLAYER_STATE3_8000       (1 << 15)
-// 
+//
 #define PLAYER_STATE3_10000      (1 << 16)
-// 
+//
 #define PLAYER_STATE3_20000      (1 << 17)
 // Related to form Deku
 #define PLAYER_STATE3_40000      (1 << 18)
-// 
+//
 #define PLAYER_STATE3_80000      (1 << 19)
-// 
+//
 #define PLAYER_STATE3_100000     (1 << 20)
 // Deku hopping?
 #define PLAYER_STATE3_200000     (1 << 21)
-// 
+//
 #define PLAYER_STATE3_400000     (1 << 22)
 // A Zora boomerang has been caught this frame
 #define PLAYER_STATE3_ZORA_BOOMERANG_CAUGHT (1 << 23)
-// 
+//
 #define PLAYER_STATE3_1000000    (1 << 24)
-// 
+//
 #define PLAYER_STATE3_2000000    (1 << 25)
-// 
+//
 #define PLAYER_STATE3_4000000    (1 << 26)
-// 
+//
 #define PLAYER_STATE3_8000000    (1 << 27)
-// 
+//
 #define PLAYER_STATE3_10000000   (1 << 28)
 // breman mask march?
 #define PLAYER_STATE3_20000000   (1 << 29)
@@ -1296,7 +1296,7 @@ typedef struct Player {
     /* 0xB30 */ s16 windAngleX;
     /* 0xB32 */ s16 windAngleY;
     /* 0xB34 */ f32 unk_B34;
-    /* 0xB38 */ f32 unk_B38;
+    /* 0xB38 */ f32 walkAnimFrame; // assumes a 29 frame [0, 29) walk animation cycle.
     /* 0xB3C */ f32 unk_B3C;
     /* 0xB40 */ f32 unk_B40;
     /* 0xB44 */ f32 unk_B44;
