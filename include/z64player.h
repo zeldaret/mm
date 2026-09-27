@@ -1280,6 +1280,7 @@ typedef struct Player {
         s16 csDelayTimer; // Player_Action_WaitForCutscene: Number of frames to wait before responding to a cutscene
         s16 playedLandingSfx; // Player_Action_BlueWarpArrive: Played sfx when landing on the ground
         s16 dismountDown; // Player_Action_DismountLadder: True if player is dismounting the ladder downwards
+        s16 plantBeanTimer; // Player_Action_PlantMagicBean: Timer for planting Magic Bean sequence (80 frames)
     } av2; // "Action Variable 2": context dependent variable that has different meanings depending on what action is currently running
     /* 0xAEC */ f32 unk_AEC;
     /* 0xAF0 */ union {
