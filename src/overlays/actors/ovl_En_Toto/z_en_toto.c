@@ -23,7 +23,7 @@ void EnToto_SetupTalk(EnToto* this, PlayState* play);
 void EnToto_Talk(EnToto* this, PlayState* play);
 void EnToto_SetupSoundCheck(EnToto* this, PlayState* play);
 s32 EnToto_SetupTalk_ReturnTrue(EnToto* this, PlayState* play);
-s32 EnToto_SetupTalk_DoNothing(EnToto* this, PlayState* play);
+s32 EnToto_SetupTalk_ReturnFalse(EnToto* this, PlayState* play);
 s32 EnToto_HandleTalk_AfterChoice(EnToto* this, PlayState* play);
 s32 EnToto_SetupTalk_NextMessage(EnToto* this, PlayState* play);
 s32 EnToto_SetupTalk_SetNextMessageTimer(EnToto* this, PlayState* play);
@@ -97,7 +97,8 @@ typedef enum EnTotoTalkActionIndex {
     /* 2  */ ENTOTO_TALK_CHOICE,
     /* 3  */ ENTOTO_TALK_AFTER_CHOICE,
     /* 4  */ ENTOTO_TALK_NEXT_MESSAGE, // Also used for declining Sound Check request
-                                       // 5 - 15: Sound Check Actions
+
+    /* 5 - 15: Sound Check Actions */
     /* 5  */ ENTOTO_TALK_START_CUTSCENE,
     /* 6  */ ENTOTO_TALK_MOVE_PLAYER_TO_STAGE,
     /* 7  */ ENTOTO_TALK_SPOTLIGHT_PROMPT,
@@ -109,7 +110,8 @@ typedef enum EnTotoTalkActionIndex {
     /* 13 */ ENTOTO_TALK_WAIT_WIND_FISH_CUTSCENE,
     /* 14 */ ENTOTO_TALK_WAIT_AFTER_WIND_FISH,
     /* 15 */ ENTOTO_TALK_START_GORMAN_CUTSCENE,
-    // 16 - 17: Mayor's Residence Dialog
+
+    /* 16 - 17: Mayor's Residence Dialog */
     /* 16 */ ENTOTO_TALK_SET_UP_MAYORS_RESIDENCE,
     /* 17 */ ENTOTO_TALK_RETURN_TRUE // Only in SetupFuncs
 } EnTotoTalkActionIndex;
@@ -191,10 +193,10 @@ static EnTotoSpeakData sSoundCheckSpeakData[] = {
 };
 
 static EnTotoSpotlight sSpotlightList[] = {
-    /* Goron */ { 0x2B2F, 0x2B30, 0x2B31, { 0xFF96, 0x0016, 0xFE16 } },
-    /* Zora  */ { 0x2B26, 0x2B27, 0x2B28, { 0x0072, 0x0016, 0xFE3C } },
-    /* Deku  */ { 0x2B29, 0x2B2A, 0x2B2B, { 0xFF67, 0x0016, 0xFE6E } },
-    /* Human */ { 0x2B2C, 0x2B2D, 0x2B2E, { 0xFFF1, 0x0016, 0xFE74 } },
+    /* PLAYER_FORM_GORON */ { 0x2B2F, 0x2B30, 0x2B31, { 0xFF96, 0x0016, 0xFE16 } },
+    /* PLAYER_FORM_ZORA */ { 0x2B26, 0x2B27, 0x2B28, { 0x0072, 0x0016, 0xFE3C } },
+    /* PLAYER_FORM_DEKU */ { 0x2B29, 0x2B2A, 0x2B2B, { 0xFF67, 0x0016, 0xFE6E } },
+    /* PLAYER_FORM_HUMAN */ { 0x2B2C, 0x2B2D, 0x2B2E, { 0xFFF1, 0x0016, 0xFE74 } },
 };
 
 static Vec3s sPlayerOverrideInputPosList[] = {
@@ -214,13 +216,13 @@ static u8 sSpotlightIndexToForm[] = { 8, 4, 2, 1 }; // Spotlight index to form f
 
 static EnTotoTalkFunc sTalkStateSetupFuncs[] = {
     /* 0  */ EnToto_SetupTalk_NextMessage,
-    /* 1  */ EnToto_SetupTalk_DoNothing,
+    /* 1  */ EnToto_SetupTalk_ReturnFalse,
     /* 2  */ EnToto_SetupTalk_NextMessage,
     /* 3  */ EnToto_SetupTalk_NextMessage,
     /* 4  */ EnToto_SetupTalk_NextMessage,
-    /* 5  */ EnToto_SetupTalk_DoNothing,
+    /* 5  */ EnToto_SetupTalk_ReturnFalse,
     /* 6  */ EnToto_SetupTalk_InitSoundCheck,
-    /* 7  */ EnToto_SetupTalk_DoNothing,
+    /* 7  */ EnToto_SetupTalk_ReturnFalse,
     /* 8  */ EnToto_SetupTalk_StopCutsceneAndResetTimer,
     /* 9  */ EnToto_SetupTalk_SetNextMessageTimer,
     /* 10 */ EnToto_SetupTalk_StartAdditionalCutscene,
@@ -324,9 +326,9 @@ s32 EnToto_IsFacingPlayer(EnToto* this, s16 angle) {
 
     diff = this->actor.yawTowardsPlayer - this->actor.home.rot.y;
     if (ABS_ALT(diff) < angle) {
-        return 1;
+        return true;
     }
-    return 0;
+    return false;
 }
 
 void EnToto_Idle(EnToto* this, PlayState* play) {
@@ -443,11 +445,11 @@ void EnToto_SoundCheck(EnToto* this, PlayState* play) {
 }
 
 s32 EnToto_SetupTalk_ReturnTrue(EnToto* this, PlayState* play) {
-    return 1;
+    return true;
 }
 
-s32 EnToto_SetupTalk_DoNothing(EnToto* this, PlayState* play) {
-    return 0;
+s32 EnToto_SetupTalk_ReturnFalse(EnToto* this, PlayState* play) {
+    return false;
 }
 
 s32 EnToto_HandleTalk_AfterChoice(EnToto* this, PlayState* play) {
@@ -467,12 +469,12 @@ s32 EnToto_SetupTalk_NextMessage(EnToto* this, PlayState* play) {
     if (this->speakData->talkActionIndex == ENTOTO_TALK_NEXT_MESSAGE) {
         Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_TOTO);
     }
-    return 0;
+    return false;
 }
 
 s32 EnToto_SetupTalk_SetNextMessageTimer(EnToto* this, PlayState* play) {
     this->timer = this->speakData->arg;
-    return 0;
+    return false;
 }
 
 s32 EnToto_HandleTalk_Wait(EnToto* this, PlayState* play) {
@@ -489,7 +491,7 @@ s32 EnToto_SetupTalk_StartAdditionalCutscene(EnToto* this, PlayState* play) {
     this->csId = CutsceneManager_GetAdditionalCsId(this->csId);
     CutsceneManager_Queue(this->csId);
     CutsceneManager_Stop(prevCsId);
-    return 0;
+    return false;
 }
 
 s32 EnToto_HandleTalk_StartCutscene(EnToto* this, PlayState* play) {
@@ -567,7 +569,7 @@ s32 EnToto_SetupTalk_InitSoundCheck(EnToto* this, PlayState* play) {
     }
     Player_InitOverrideInput(play, &this->overrideInputEntry, numPoints, endPosListPtr - numPoints);
     this->spotlights = Actor_Spawn(&play->actorCtx, play, ACTOR_DM_CHAR07, 0.0f, 0.0f, 0.0f, 0, 0, 0, 0xF02);
-    return 0;
+    return false;
 }
 
 s32 EnToto_HandleTalk_SoundCheck_MovePlayerToStage(EnToto* this, PlayState* play) {
@@ -590,7 +592,7 @@ s32 EnToto_HandleTalk_SoundCheck_WaitForPromptTextbox(EnToto* this, PlayState* p
 s32 EnToto_SetupTalk_StopCutsceneAndResetTimer(EnToto* this, PlayState* play) {
     CutsceneManager_Stop(this->csId);
     this->timer = 0;
-    return 0;
+    return false;
 }
 
 s32 EnToto_CheckIfPlayerInSpotlight(EnTotoSpotlight* spotlight, Player* player) {
@@ -598,9 +600,9 @@ s32 EnToto_CheckIfPlayerInSpotlight(EnTotoSpotlight* spotlight, Player* player) 
 
     Math_Vec3s_ToVec3f(&pos, &spotlight->pos);
     if (Math_Vec3f_DistXZ(&player->actor.world.pos, &pos) < 10.0f) {
-        return 1;
+        return true;
     }
-    return 0;
+    return false;
 }
 
 s32 EnToto_HandleTalk_SoundCheck_WaitForPlayerToEnterSpotlight(EnToto* this, PlayState* play) {
@@ -651,7 +653,7 @@ s32 EnToto_HandleTalk_SoundCheck_WaitForPlayerToEnterSpotlight(EnToto* this, Pla
 s32 EnToto_SetupTalk_InitWindFishOcarinaStaff(EnToto* this, PlayState* play) {
     Player_SetCsActionWithHaltedActors(play, NULL, PLAYER_CSACTION_68);
     Message_DisplayOcarinaStaff(play, sOcarinaActionWindFishPrompts[CUR_FORM]);
-    return 0;
+    return false;
 }
 
 s32 EnToto_HandleTalk_SoundCheck_UpdatePlayedFlags(EnToto* this, PlayState* play) {
@@ -702,7 +704,7 @@ s32 EnToto_SetupTalk_InitWindFishPlayback(EnToto* this, PlayState* play) {
     if (ENTOTO_HELPED_GORMAN) {
         EnToto_SetupTalk_StartAdditionalCutscene(this, play);
     }
-    return 0;
+    return false;
 }
 
 s32 EnToto_SetupTalk_StartWindFishPlayback(EnToto* this, PlayState* play) {
@@ -710,7 +712,7 @@ s32 EnToto_SetupTalk_StartWindFishPlayback(EnToto* this, PlayState* play) {
     Audio_PlayFanfareWithPlayerIOCustomPort(NA_BGM_BALLAD_OF_THE_WIND_FISH, 4,
                                             this->windFishFormsPlayed ^ WIND_FISH_PLAYED_ALL);
     this->timer = 4;
-    return 0;
+    return false;
 }
 
 s32 EnToto_HandleTalk_SoundCheck_EndWindFishCutscene(EnToto* this, PlayState* play) {
@@ -787,9 +789,15 @@ s32 EnToto_RunTalkStateHandlerFunc(EnToto* this, PlayState* play) {
         this->speakData += nextOffset;
         return EnToto_RunTalkStateSetupFunc(this, play);
     }
-    return 0;
+    return false;
 }
 
+/**
+ * Cue 4: Gorman gives Circus Leader's Mask
+ * Cue 3: Toto feel good text
+ * Cue 2: Toto turns around to look at Gorman
+ * Cue 1: Toto turn back around to stage
+ */
 void EnToto_HandleGormanCutscene(EnToto* this, PlayState* play) {
     CsCmdActorCue* cue = play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_525)];
 
