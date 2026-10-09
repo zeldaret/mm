@@ -210,8 +210,8 @@ static MsgScript D_80951B98[] = {
 
 static MsgScript D_80951BE8[] = {
     /* 0x0000 0x03 */ MSCRIPT_CMD_CHECK_CALLBACK(0x0),
-    /* 0x0003 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_50_01, 0x0039 - 0x0008),
-    /* 0x0008 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_51_80, 0x0039 - 0x000D),
+    /* 0x0003 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_HELPED_GORMAN_DAY_1, 0x0039 - 0x0008),
+    /* 0x0008 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_HELPED_GORMAN_DAY_2, 0x0039 - 0x000D),
     /* 0x000D 0x05 */ MSCRIPT_CMD_CHECK_WEEK_EVENT_REG(WEEKEVENTREG_75_02, 0x001F - 0x0012),
     /* 0x0012 0x03 */ MSCRIPT_CMD_BEGIN_TEXT(0x2B13),
     /* 0x0015 0x03 */ MSCRIPT_CMD_NOTEBOOK_EVENT(BOMBERS_NOTEBOOK_EVENT_MET_GORMAN),
@@ -758,8 +758,8 @@ s32 func_8094EB1C(Actor* thisx, PlayState* play) {
 
     switch (this->unk_3E0) {
         case 0:
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_50_01) || CHECK_WEEKEVENTREG(WEEKEVENTREG_51_80) ||
-                CHECK_WEEKEVENTREG(WEEKEVENTREG_75_02)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_HELPED_GORMAN_DAY_1) ||
+                CHECK_WEEKEVENTREG(WEEKEVENTREG_HELPED_GORMAN_DAY_2) || CHECK_WEEKEVENTREG(WEEKEVENTREG_75_02)) {
                 ret = true;
                 break;
             }
@@ -865,8 +865,8 @@ s32 func_8094EE84(EnGm* this, PlayState* play) {
         this->actor.child = this->unk_268;
         this->msgScript = EnGm_GetMsgScript(this, play);
 
-        if ((this->scheduleResult == 5) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_50_01) &&
-            !CHECK_WEEKEVENTREG(WEEKEVENTREG_51_80) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_75_02)) {
+        if ((this->scheduleResult == 5) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_HELPED_GORMAN_DAY_1) &&
+            !CHECK_WEEKEVENTREG(WEEKEVENTREG_HELPED_GORMAN_DAY_2) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_75_02)) {
             this->unk_3A4 |= 0x20;
         } else if ((this->scheduleResult != 1) && (this->scheduleResult != 5) && (this->scheduleResult != 7)) {
             this->unk_3A4 |= 0x20;
@@ -1481,7 +1481,7 @@ s32 func_80950490(EnGm* this, PlayState* play) {
     };
     s32 pad;
 
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_50_01) || CHECK_WEEKEVENTREG(WEEKEVENTREG_51_80)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_HELPED_GORMAN_DAY_1) || CHECK_WEEKEVENTREG(WEEKEVENTREG_HELPED_GORMAN_DAY_2)) {
         if (this->unk_400 == 0) {
             this->unk_3C8 = 1;
             this->unk_3CA = 1;
