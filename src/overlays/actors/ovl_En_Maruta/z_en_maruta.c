@@ -440,8 +440,8 @@ void EnMaruta_SetupRecoilAfterCut(EnMaruta* this, PlayState* play) {
 
     spinAxis = sRecoilSpinAxesForShapes[this->shape];
 
-    EnMaruta_RotateVector(&spinAxis, &this->recoilSpinAxis, Rand_Next() & 0xFFF, Rand_Next() & 0xFFF, 0);
-    this->recoilSpinRate = Rand_Next() & 0x7FF;
+    EnMaruta_RotateVector(&spinAxis, &this->recoilSpinAxis, Rand_Next() % 0x1000, Rand_Next() % 0x1000, 0);
+    this->recoilSpinRate = Rand_Next() % 0x800;
 
     if (this->shape == ENMARUTA_SHAPE_HORIZONTAL_CUT_BOTTOM_HALF) {
         this->recoilSpinRate |= 0x3F;

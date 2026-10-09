@@ -58,10 +58,10 @@ typedef struct {
     /* 0x0 */ u8  code;
     /* 0x1 */ u8  data1;
     /* 0x2 */ UNK_TYPE1 pad2[2];
-    /* 0x4 */ s8  west;
-    /* 0x5 */ s8  vertical;
-    /* 0x6 */ s8  south;
-    /* 0x7 */ u8  clothIntensity;
+    /* 0x4 */ s8  x;
+    /* 0x5 */ s8  y;
+    /* 0x6 */ s8  z;
+    /* 0x7 */ u8  speed;
 } SCmdWindSettings; // size = 0x8
 
 typedef struct {
