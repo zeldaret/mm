@@ -2,10 +2,12 @@
 #define Z_EN_CNE_01_H
 
 #include "z_en_hy_code.h"
+#include "unk.h"
 
 struct EnCne01;
+struct PlayState;
 
-typedef void (*EnCne01ActionFunc)(struct EnCne01*, PlayState*);
+typedef void (*EnCne01ActionFunc)(struct EnCne01*, struct PlayState*);
 
 #define ENCNE01_GET_PATH_INDEX(thisx) (((thisx)->params & 0x7E00) >> 9)
 

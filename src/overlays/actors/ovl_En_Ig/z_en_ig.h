@@ -1,13 +1,16 @@
 #ifndef Z_EN_IG_H
 #define Z_EN_IG_H
 
-#include "global.h"
+#include "z64actor.h"
+#include "z64msgevent.h"
 #include "assets/objects/object_dai/object_dai.h"
 
 struct EnIg;
+struct Path;
+struct PlayState;
 
-typedef void (*EnIgActionFunc)(struct EnIg*, PlayState*);
-typedef void (*EnIgUnkFunc2)(struct EnIg*, PlayState*);
+typedef void (*EnIgActionFunc)(struct EnIg*, struct PlayState*);
+typedef void (*EnIgUnkFunc2)(struct EnIg*, struct PlayState*);
 
 #define ENIG_GET_PATH_INDEX(thisx) ((thisx)->params & 0xFF)
 
@@ -19,7 +22,7 @@ typedef struct EnIg {
     /* 0x190 */ MtxF unk_190;
     /* 0x1D0 */ ColliderCylinder collider1;
     /* 0x21C */ ColliderSphere collider2;
-    /* 0x274 */ Path* timePath;
+    /* 0x274 */ struct Path* timePath;
     /* 0x278 */ Vec3f timePathTargetPos;
     /* 0x284 */ f32 timePathProgress;
     /* 0x288 */ s32 timePathTotalTime;

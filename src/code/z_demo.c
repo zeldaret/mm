@@ -13,6 +13,14 @@ static s16 sBssPad;
 u8 gDisablePlayerCsActionStartPos;
 s16 gDungeonBossWarpSceneId;
 
+#include "macros.h"
+#include "regs.h"
+#include "seqcmd.h"
+#include "sequence.h"
+#include "sfx.h"
+#include "z64lib.h"
+#include "z64ocarina.h"
+#include "z64play.h"
 #include "z64quake.h"
 #include "z64rumble.h"
 #include "z64shrink_window.h"

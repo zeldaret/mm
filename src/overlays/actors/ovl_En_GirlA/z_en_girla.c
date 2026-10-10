@@ -7,6 +7,9 @@
 #include "z_en_girla.h"
 
 #include "z64draw.h"
+#include "macros.h"
+#include "z64play.h"
+#include "sys_matrix.h"
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
