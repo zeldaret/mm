@@ -52,6 +52,15 @@ typedef struct ActorProfile {
 
 typedef void (*ActorShadowFunc)(struct Actor* actor, struct Lights* mapper, struct PlayState* play);
 
+#define ACTOR_SHAPE_FOOTSTEP_RIGHT (1 << 0)
+#define ACTOR_SHAPE_FOOTSTEP_LEFT (1 << 1)
+
+typedef enum {
+    /* 0 */ ACTOR_SHAPE_FOOT_LEFT,
+    /* 1 */ ACTOR_SHAPE_FOOT_RIGHT,
+    /* 2 */ ACTOR_SHAPE_FOOT_MAX
+} ActorShapeFootIndex;
+
 typedef struct {
     /* 0x00 */ Vec3s rot; // Current actor shape rotation
     /* 0x06 */ s16 face; // Used to index eyes and mouth textures. Only used by player
@@ -59,9 +68,9 @@ typedef struct {
     /* 0x0C */ ActorShadowFunc shadowDraw; // Shadow draw function
     /* 0x10 */ f32 shadowScale; // Changes the size of the shadow
     /* 0x14 */ u8 shadowAlpha; // Default is 255
-    /* 0x15 */ u8 feetFloorFlags; // Set if the actor's foot is clipped under the floor. & 1 is right foot, & 2 is left
+    /* 0x15 */ u8 footstepFloorFlags; // 0 if actor or feet aren't on ground, ACTOR_SHAPE_FOOTSTEP_RIGHT or ACTOR_SHAPE_FOOTSTEP_LEFT depending on feet positions
     /* 0x16 */ u8 unk_16;
-    /* 0x17 */ u8 unk_17;
+    /* 0x17 */ u8 footprintFlags; // Stores ACTOR_SHAPE_FOOTSTEP_RIGHT or ACTOR_SHAPE_FOOTSTEP_LEFT if the actor's foot could leave behind a footprint.
     /* 0x18 */ Vec3f feetPos[2]; // Update by using `Actor_SetFeetPos` in PostLimbDrawOpa
 } ActorShape; // size = 0x30
 
@@ -154,11 +163,6 @@ typedef struct Actor {
     /* 0x13C */ ActorFunc draw; // Draw Routine. Called by `Actor_Draw`
     /* 0x140 */ struct ActorOverlay* overlayEntry; // Pointer to the overlay table entry for this actor
 } Actor; // size = 0x144
-
-typedef enum {
-    /* 0 */ FOOT_LEFT,
-    /* 1 */ FOOT_RIGHT
-} ActorFootIndex;
 
 #define DYNA_TRANSFORM_POS (1 << 0) // Position of the actors on top follows the dynapoly actor's movement.
 #define DYNA_TRANSFORM_ROT_Y (1 << 1) // The Y rotation of the actors on top follows the dynapoly actor's Y rotation.

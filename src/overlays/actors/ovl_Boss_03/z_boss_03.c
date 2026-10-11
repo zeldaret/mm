@@ -787,7 +787,7 @@ void Boss03_CatchPlayer(Boss03* this, PlayState* play) {
     // If either (Player is standing on ground && Player is above water) or (WORK_TIMER_CURRENT_ACTION timer runs out)
     // then stop trying to catch Player
     if (((player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) &&
-         (player->actor.shape.feetPos[FOOT_LEFT].y >= WATER_HEIGHT + 8.0f)) ||
+         (player->actor.shape.feetPos[ACTOR_SHAPE_FOOT_LEFT].y >= WATER_HEIGHT + 8.0f)) ||
         (this->workTimer[WORK_TIMER_CURRENT_ACTION] == 0)) {
         if (&this->actor == player->actor.parent) {
             player->av2.actionVar2 = 101;
@@ -2115,7 +2115,7 @@ void Boss03_Update(Actor* thisx, PlayState* play2) {
 
     // Player is standing on ground && Player is above water
     if ((player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) &&
-        (player->actor.shape.feetPos[FOOT_LEFT].y >= WATER_HEIGHT + 8.0f)) {
+        (player->actor.shape.feetPos[ACTOR_SHAPE_FOOT_LEFT].y >= WATER_HEIGHT + 8.0f)) {
         if (this->wetSpotEffectSpawnCount != 0) {
             this->wetSpotEffectSpawnCount--;
 

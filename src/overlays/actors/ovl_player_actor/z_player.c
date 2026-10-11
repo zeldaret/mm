@@ -8272,7 +8272,7 @@ s32 Player_ActionHandler_10(Player* this, PlayState* play) {
 
 void func_80839CD8(Player* this, PlayState* play) {
     PlayerAnimationHeader* anim;
-    f32 var_fv0 = this->unk_B38 - 3.0f;
+    f32 var_fv0 = this->walkAnimFrame - 3.0f;
 
     if (var_fv0 < 0.0f) {
         var_fv0 += 29.0f;
@@ -8517,7 +8517,7 @@ void func_8083A794(Player* this, PlayState* play) {
     if ((Player_Action_13 != this->actionFunc) && (Player_Action_14 != this->actionFunc)) {
         this->unk_B70 = 0;
         this->unk_B34 = 0.0f;
-        this->unk_B38 = 0.0f;
+        this->walkAnimFrame = 0.0f;
         Player_Anim_PlayLoopMorph(play, this, D_8085BE84[PLAYER_ANIMGROUP_run][this->modelAnimType]);
     }
 
@@ -8703,7 +8703,7 @@ void Player_StartMode_F(PlayState* play, Player* this) {
 void func_8083AECC(Player* this, s16 yaw, PlayState* play) {
     Player_SetAction(play, this, Player_Action_6, 1);
     PlayerAnimation_CopyJointToMorph(play, &this->skelAnime);
-    this->unk_B38 = 0.0f;
+    this->walkAnimFrame = 0.0f;
     this->unk_B34 = 0.0f;
     this->yaw = yaw;
 }
@@ -8724,7 +8724,7 @@ void func_8083AF8C(Player* this, s16 yaw, PlayState* play) {
 void func_8083B030(Player* this, PlayState* play) {
     Player_SetAction(play, this, Player_Action_9, 1);
     Player_Anim_PlayLoopMorph(play, this, D_8085BE84[PLAYER_ANIMGROUP_side_walkR][this->modelAnimType]);
-    this->unk_B38 = 0.0f;
+    this->walkAnimFrame = 0.0f;
 }
 
 void func_8083B090(Player* this, PlayState* play) {
@@ -9979,49 +9979,82 @@ void func_8083E8E0(Player* this, f32 arg1, s16 arg2) {
 }
 
 void func_8083E958(PlayState* play, Player* this) {
-    PlayerAnimation_BlendToJoint(play, &this->skelAnime, func_8082EF54(this), this->unk_B38, func_8082EF9C(this),
-                                 this->unk_B38, this->unk_B40, this->blendTableBuffer);
+    PlayerAnimation_BlendToJoint(play, &this->skelAnime, func_8082EF54(this), this->walkAnimFrame, func_8082EF9C(this),
+                                 this->walkAnimFrame, this->unk_B40, this->blendTableBuffer);
 }
 
-s32 func_8083E9C4(f32 arg0, f32 arg1, f32 arg2, f32 arg3) {
-    f32 temp_fv0;
-
-    if ((arg3 == 0.0f) && (arg1 > 0.0f)) {
-        arg3 = arg2;
+/**
+ * Tests if the player's current walk animation will strike the ground this update.
+ *
+ * @param prevAnimFrame the frame that the animation is starting at.
+ * @param playSpeed the amount that the animation frame will change by.
+ * @param animLength the duration of the animation.
+ * @param targetFrame the frame at which the walk animation will step on the ground.
+ *
+ * @returns true if prevAnimFrame + playSpeed will cross targetFrame
+ *
+ * @note prevAnimFrame must be in [0, animLength)
+ */
+s32 Player_CheckFootStrike(f32 prevAnimFrame, f32 playSpeed, f32 animLength, f32 targetFrame) {
+    //! @bug When `prevAnimFrame` + `playSpeed` exceeds the range [0, animLength), the code does not account for the
+    //! case where a wraparound would cross the `targetFrame`, missing the foot strike.
+    //!
+    //! This if statement appears to be an attempt to address this, but does nothing as `targetFrame` is never 0.
+    if ((targetFrame == 0.0f) && (playSpeed > 0.0f)) {
+        targetFrame = animLength;
     }
-    temp_fv0 = (arg0 + arg1) - arg3;
-    if (((temp_fv0 * arg1) >= 0.0f) && (((temp_fv0 - arg1) * arg1) < 0.0f)) {
+
+    // Logically, this section is optimized to perform the following checks:
+    // when playSpeed > 0, return true if...
+    // prevAnimFrame < targetFrame AND prevAnimFrame + playSpeed >= targetFrame
+    // when playSpeed < 0, return true if...
+    // prevAnimFrame > targetFrame AND prevAnimFrame + playSpeed <= targetFrame
+    // when playSpeed == 0, always return false. A stationary player should not count as a strike.
+    if (((((prevAnimFrame + playSpeed) - targetFrame) * playSpeed) >= 0.0f) &&
+        (((((prevAnimFrame + playSpeed) - targetFrame) - playSpeed) * playSpeed) < 0.0f)) {
         return true;
     }
     return false;
 }
 
-void func_8083EA44(Player* this, f32 arg1) {
-    s32 sp24;
+/**
+ * Advances the walking animation frame state.
+ * @param playSpeed desired animation playback rate in 30 Hz (25 Hz PAL) frame units.
+ *
+ * @note In this system, walk animations are assumed to be 29 frames long at 30 Hz. Only changes in `R_UPDATE_RATE` are
+ * accounted for.
+ */
+void Player_UpdateWalkAnimation(Player* this, f32 playSpeed) {
+    s32 footStrikeRight;
     f32 updateScale = R_UPDATE_RATE / 2.0f;
 
-    arg1 *= updateScale;
-    if (arg1 < -7.25f) {
-        arg1 = -7.25f;
-    } else if (arg1 > 7.25f) {
-        arg1 = 7.25f;
+    playSpeed *= updateScale;
+
+    // Ideally, playSpeed should be clamped before applying updateScale, so that the animation updates consistently
+    // regardless of `R_UPDATE_RATE`
+    if (playSpeed < -7.25f) {
+        playSpeed = -7.25f;
+    } else if (playSpeed > 7.25f) {
+        playSpeed = 7.25f;
     }
 
-    sp24 = func_8083E9C4(this->unk_B38, arg1, 29.0f, 10.0f);
+    footStrikeRight = Player_CheckFootStrike(this->walkAnimFrame, playSpeed, 29.0f, 10.0f);
 
-    if (sp24 || func_8083E9C4(this->unk_B38, arg1, 29.0f, 24.0f)) {
+    if (footStrikeRight || Player_CheckFootStrike(this->walkAnimFrame, playSpeed, 29.0f, 24.0f)) {
         Player_AnimSfx_PlayFloorWalk(this, this->speedXZ);
         if (this->speedXZ > 4.0f) {
             this->stateFlags2 |= PLAYER_STATE2_8;
         }
-        this->actor.shape.unk_17 = sp24 ? 1 : 2;
+        this->actor.shape.footprintFlags = footStrikeRight ? ACTOR_SHAPE_FOOTSTEP_RIGHT : ACTOR_SHAPE_FOOTSTEP_LEFT;
     }
 
-    this->unk_B38 += arg1;
-    if (this->unk_B38 < 0.0f) {
-        this->unk_B38 += 29.0f;
-    } else if (this->unk_B38 >= 29.0f) {
-        this->unk_B38 -= 29.0f;
+    this->walkAnimFrame += playSpeed;
+
+    // clamp the animation between 0 and 29
+    if (this->walkAnimFrame < 0.0f) {
+        this->walkAnimFrame += 29.0f;
+    } else if (this->walkAnimFrame >= 29.0f) {
+        this->walkAnimFrame -= 29.0f;
     }
 }
 
@@ -10129,9 +10162,9 @@ void func_8083EE60(Player* this, PlayState* play) {
     if (this->unk_B34 < 1.0f) {
         f32 temp_fs0 = R_UPDATE_RATE / 2.0f;
 
-        func_8083EA44(this, REG(35) / 1000.0f);
+        Player_UpdateWalkAnimation(this, REG(35) / 1000.0f);
         PlayerAnimation_LoadToJoint(play, &this->skelAnime, D_8085BE84[PLAYER_ANIMGROUP_back_walk][this->modelAnimType],
-                                    this->unk_B38);
+                                    this->walkAnimFrame);
         this->unk_B34 += (1.0f * 1.0f) * temp_fs0;
         if (this->unk_B34 >= 1.0f) {
             this->unk_B34 = 1.0f;
@@ -10142,23 +10175,25 @@ void func_8083EE60(Player* this, PlayState* play) {
 
         if (temp_fv0 < 0.0f) {
             var_fs0 = 1.0f;
-            func_8083EA44(this, ((REG(35)) / 1000.0f) + (((REG(36)) / 1000.0f) * this->speedXZ));
+            Player_UpdateWalkAnimation(this, ((REG(35)) / 1000.0f) + (((REG(36)) / 1000.0f) * this->speedXZ));
 
             PlayerAnimation_LoadToJoint(play, &this->skelAnime,
-                                        D_8085BE84[PLAYER_ANIMGROUP_back_walk][this->modelAnimType], this->unk_B38);
+                                        D_8085BE84[PLAYER_ANIMGROUP_back_walk][this->modelAnimType],
+                                        this->walkAnimFrame);
         } else {
             var_fs0 = (REG(37) / 1000.0f) * temp_fv0;
             if (var_fs0 < 1.0f) {
-                func_8083EA44(this, (REG(35) / 1000.0f) + ((REG(36) / 1000.0f) * this->speedXZ));
+                Player_UpdateWalkAnimation(this, (REG(35) / 1000.0f) + ((REG(36) / 1000.0f) * this->speedXZ));
             } else {
                 var_fs0 = 1.0f;
-                func_8083EA44(this, (REG(39) / 100.0f) + ((REG(38) / 1000.0f) * temp_fv0));
+                Player_UpdateWalkAnimation(this, (REG(39) / 100.0f) + ((REG(38) / 1000.0f) * temp_fv0));
             }
 
             PlayerAnimation_LoadToMorph(play, &this->skelAnime,
-                                        D_8085BE84[PLAYER_ANIMGROUP_back_walk][this->modelAnimType], this->unk_B38);
+                                        D_8085BE84[PLAYER_ANIMGROUP_back_walk][this->modelAnimType],
+                                        this->walkAnimFrame);
             PlayerAnimation_LoadToJoint(play, &this->skelAnime, &gPlayerAnim_link_normal_back_run,
-                                        this->unk_B38 * (16.0f / 29.0f));
+                                        this->walkAnimFrame * (16.0f / 29.0f));
         }
     }
     if (var_fs0 < 1.0f) {
@@ -10203,9 +10238,9 @@ void func_8083F27C(PlayState* play, Player* this) {
 
     this->skelAnime.animation = sp38;
 
-    func_8083EA44(this, (REG(30) / 1000.0f) + ((REG(32) / 1000.0f) * this->speedXZ));
+    Player_UpdateWalkAnimation(this, (REG(30) / 1000.0f) + ((REG(32) / 1000.0f) * this->speedXZ));
 
-    temp_fv0 = this->unk_B38 * (16.0f / 29.0f);
+    temp_fv0 = this->walkAnimFrame * (16.0f / 29.0f);
     PlayerAnimation_BlendToJoint(play, &this->skelAnime, sp34, temp_fv0, sp38, temp_fv0, this->unk_B40,
                                  this->blendTableBuffer);
 }
@@ -10225,10 +10260,10 @@ void func_8083F358(Player* this, s32 arg1, PlayState* play) {
     if ((this->modelAnimType == PLAYER_ANIMTYPE_3) || ((this->unk_B70 == 0) && (this->unk_AB8 <= 0.0f))) {
         if (!arg1) {
             PlayerAnimation_LoadToJoint(play, &this->skelAnime, D_8085BE84[PLAYER_ANIMGROUP_walk][this->modelAnimType],
-                                        this->unk_B38);
+                                        this->walkAnimFrame);
         } else {
             PlayerAnimation_LoadToMorph(play, &this->skelAnime, D_8085BE84[PLAYER_ANIMGROUP_walk][this->modelAnimType],
-                                        this->unk_B38);
+                                        this->walkAnimFrame);
         }
         return;
     }
@@ -10253,10 +10288,12 @@ void func_8083F358(Player* this, s32 arg1, PlayState* play) {
 
     if (!arg1) {
         PlayerAnimation_BlendToJoint(play, &this->skelAnime, D_8085BE84[PLAYER_ANIMGROUP_walk][this->modelAnimType],
-                                     this->unk_B38, climbAnim, this->unk_B38, var_fv1, this->blendTableBuffer);
+                                     this->walkAnimFrame, climbAnim, this->walkAnimFrame, var_fv1,
+                                     this->blendTableBuffer);
     } else {
         PlayerAnimation_BlendToMorph(play, &this->skelAnime, D_8085BE84[PLAYER_ANIMGROUP_walk][this->modelAnimType],
-                                     this->unk_B38, climbAnim, this->unk_B38, var_fv1, this->blendTableBuffer);
+                                     this->walkAnimFrame, climbAnim, this->walkAnimFrame, var_fv1,
+                                     this->blendTableBuffer);
     }
 }
 
@@ -10268,9 +10305,9 @@ void func_8083F57C(Player* this, PlayState* play) {
         f32 temp_fs0;
 
         temp_fs0 = R_UPDATE_RATE / 2.0f;
-        func_8083EA44(this, REG(35) / 1000.0f);
+        Player_UpdateWalkAnimation(this, REG(35) / 1000.0f);
         PlayerAnimation_LoadToJoint(play, &this->skelAnime, D_8085BE84[PLAYER_ANIMGROUP_walk][this->modelAnimType],
-                                    this->unk_B38);
+                                    this->walkAnimFrame);
 
         // required
         this->unk_B34 += 1 * temp_fs0;
@@ -10282,18 +10319,19 @@ void func_8083F57C(Player* this, PlayState* play) {
         temp_fv0 = (this->speedXZ - (REG(48) / 100.0f));
         if (temp_fv0 < 0.0f) {
             var_fs0 = 1.0f;
-            func_8083EA44(this, (REG(35) / 1000.0f) + ((REG(36) / 1000.0f) * this->speedXZ));
+            Player_UpdateWalkAnimation(this, (REG(35) / 1000.0f) + ((REG(36) / 1000.0f) * this->speedXZ));
             func_8083F358(this, false, play);
         } else {
             var_fs0 = (REG(37) / 1000.0f) * temp_fv0;
             if (var_fs0 < 1.0f) {
-                func_8083EA44(this, (REG(35) / 1000.0f) + ((REG(36) / 1000.0f) * this->speedXZ));
+                Player_UpdateWalkAnimation(this, (REG(35) / 1000.0f) + ((REG(36) / 1000.0f) * this->speedXZ));
             } else {
                 var_fs0 = 1.0f;
-                func_8083EA44(this, (REG(39) / 100.0f) + ((REG(38) / 1000.0f) * temp_fv0));
+                Player_UpdateWalkAnimation(this, (REG(39) / 100.0f) + ((REG(38) / 1000.0f) * temp_fv0));
             }
             func_8083F358(this, true, play);
-            PlayerAnimation_LoadToJoint(play, &this->skelAnime, func_8082EEE0(this), this->unk_B38 * (20.0f / 29.0f));
+            PlayerAnimation_LoadToJoint(play, &this->skelAnime, func_8082EEE0(this),
+                                        this->walkAnimFrame * (20.0f / 29.0f));
         }
     }
 
@@ -10807,7 +10845,7 @@ void func_80840EC0(Player* this, PlayState* play) {
     Player_SetAction(play, this, Player_Action_30, 1);
     Player_Anim_PlayLoop(play, this, D_8085CF60[Player_IsHoldingTwoHandedWeapon(this)]);
     this->av2.actionVar2 = 1;
-    this->unk_B38 = 0.0f;
+    this->walkAnimFrame = 0.0f;
 }
 
 // Spin attack size
@@ -14267,10 +14305,10 @@ void Player_Action_2(Player* this, PlayState* play) {
     } else {
         u32 temp_v0_2;
 
-        func_8083EA44(this, this->speedXZ * 0.3f + 1.0f);
+        Player_UpdateWalkAnimation(this, this->speedXZ * 0.3f + 1.0f);
         func_8083E8E0(this, speedTarget, yawTarget);
 
-        temp_v0_2 = this->unk_B38;
+        temp_v0_2 = this->walkAnimFrame;
         if ((temp_v0_2 < 6) || ((temp_v0_2 - 0xE) < 6)) {
             Math_StepToF(&this->speedXZ, 0.0f, 1.5f);
         } else {
@@ -15471,13 +15509,13 @@ void Player_Action_31(Player* this, PlayState* play) {
 
     var_fa0 = ((var_v1 < 0x4000) ? -1.0f : 1.0f) * var_fa0;
 
-    func_8083EA44(this, var_fa0);
+    Player_UpdateWalkAnimation(this, var_fa0);
 
     var_fa0 = CLAMP(temp_ft4 * 0.5f, 0.5f, 1.0f);
 
     PlayerAnimation_BlendToJoint(play, &this->skelAnime, D_8085CF60[Player_IsHoldingTwoHandedWeapon(this)], 0.0f,
-                                 D_8085CF70[Player_IsHoldingTwoHandedWeapon(this)], this->unk_B38 * 0.7241379f, var_fa0,
-                                 this->blendTableBuffer);
+                                 D_8085CF70[Player_IsHoldingTwoHandedWeapon(this)], this->walkAnimFrame * 0.7241379f,
+                                 var_fa0, this->blendTableBuffer);
     if (!func_8083FE38(this, play) && !func_80840CD4(this, play)) {
         func_80840F34(this);
         Player_GetMovementSpeedAndYaw(this, &speedTarget, &yawTarget, SPEED_MODE_LINEAR, play);
@@ -15520,18 +15558,18 @@ void Player_Action_32(Player* this, PlayState* play) {
             sp5C = 0.0f;
         }
 
-        func_8083EA44(this, ((this->unk_B4C >= 0) ? 1 : -1) * sp5C);
+        Player_UpdateWalkAnimation(this, ((this->unk_B4C >= 0) ? 1 : -1) * sp5C);
     } else {
         var_fa0 = sp5C * 1.5f;
         var_fa0 = CLAMP_MIN(var_fa0, 1.5f);
-        func_8083EA44(this, var_fa0);
+        Player_UpdateWalkAnimation(this, var_fa0);
     }
 
     var_fa0 = CLAMP(sp5C * 0.5f, 0.5f, 1.0f);
 
     PlayerAnimation_BlendToJoint(play, &this->skelAnime, D_8085CF60[Player_IsHoldingTwoHandedWeapon(this)], 0.0f,
-                                 D_8085CF78[Player_IsHoldingTwoHandedWeapon(this)], this->unk_B38 * 0.7241379f, var_fa0,
-                                 this->blendTableBuffer);
+                                 D_8085CF78[Player_IsHoldingTwoHandedWeapon(this)], this->walkAnimFrame * 0.7241379f,
+                                 var_fa0, this->blendTableBuffer);
     if (!func_8083FE38(this, play) && !func_80840CD4(this, play)) {
         f32 speedTarget;
         s16 yawTarget;
@@ -16291,7 +16329,8 @@ void Player_Action_48(Player* this, PlayState* play) {
                           (this->av1.actionVar1 > 0) ? D_8085BE84[PLAYER_ANIMGROUP_fall_up][this->modelAnimType]
                                                      : D_8085BE84[PLAYER_ANIMGROUP_jump_climb_up][this->modelAnimType],
                           play);
-        } else if (CHECK_BTN_ALL(sPlayerControlInput->cur.button, BTN_A) || (this->actor.shape.feetFloorFlags != 0)) {
+        } else if (CHECK_BTN_ALL(sPlayerControlInput->cur.button, BTN_A) ||
+                   (this->actor.shape.footstepFloorFlags != 0)) {
             func_80833A64(this);
 
             if (this->av1.actionVar1 < 0) {
