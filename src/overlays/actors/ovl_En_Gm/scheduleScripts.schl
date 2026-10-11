@@ -68,7 +68,7 @@ D_80951820 {
             return_none
         }
     } else if_day (2) {
-        if_week_event_reg (WEEKEVENTREG_50_01) {
+        if_week_event_reg (WEEKEVENTREG_HELPED_GORMAN_DAY_1) {
             if_scene (SCENE_YADOYA) {
                 if_time_range (6, 0, 18, 0) {
                     return_time (6, 0, 18, 0, 7)
