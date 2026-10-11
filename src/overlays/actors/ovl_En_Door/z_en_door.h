@@ -1,8 +1,10 @@
 #ifndef Z_EN_DOOR_H
 #define Z_EN_DOOR_H
 
-#include "global.h"
+#include "z64actor.h"
 #include "z64door.h"
+
+#include "global.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 /**
@@ -37,8 +39,9 @@
  */
 
 struct EnDoor;
+struct PlayState;
 
-typedef void (*EnDoorActionFunc)(struct EnDoor*, PlayState*);
+typedef void (*EnDoorActionFunc)(struct EnDoor*, struct PlayState*);
 
 typedef enum EnDoorType {
     /* 0 */ ENDOOR_TYPE_WHOLE_DAY, // Allows to specify the door may be closed for full specific days. Which days the door is closed is controlled by the "half day bit index" part of the parameter

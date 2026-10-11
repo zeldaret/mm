@@ -3,6 +3,7 @@
 
 #include "global.h"
 #include "z_en_item00.h"
+#include "z64actor.h"
 #include "assets/objects/object_crow/object_crow.h"
 
 #define ENRUPPECROW_GET_PATH_INDEX(thisx) (((thisx)->params & 0xFC00) >> 0xA)
@@ -12,8 +13,10 @@
 #define ENRUPPECROW_RUPEE_COUNT 20
 
 struct EnRuppecrow;
+struct Path;
+struct PlayState;
 
-typedef void (*EnRuppecrowActionFunc)(struct EnRuppecrow*, PlayState*);
+typedef void (*EnRuppecrowActionFunc)(struct EnRuppecrow*, struct PlayState*);
 
 typedef enum EnRuppecrowBodyPart {
     /* 0 */ ENRUPPECROW_BODYPART_0,
@@ -31,7 +34,7 @@ typedef struct EnRuppecrow {
     /* 0x1DC */ UNK_TYPE1 unk_1DC[0x4];
     /* 0x1E0 */ Vec3s jointTable[OBJECT_CROW_LIMB_MAX];
     /* 0x216 */ Vec3s morphTable[OBJECT_CROW_LIMB_MAX];
-    /* 0x24C */ Path* path;
+    /* 0x24C */ struct Path* path;
     /* 0x250 */ s32 currentPoint;
     /* 0x254 */ ColliderJntSph collider;
     /* 0x274 */ ColliderJntSphElement colliderElements[1];

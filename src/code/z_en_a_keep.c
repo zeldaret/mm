@@ -1,5 +1,9 @@
-#include "global.h"
 #include "z_en_a_keep.h"
+#include "gfx.h"
+#include "ichain.h"
+#include "z64play.h"
+
+#include "global.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY)

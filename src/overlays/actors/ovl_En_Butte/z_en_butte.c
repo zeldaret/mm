@@ -6,6 +6,14 @@
 
 #include "z_en_butte.h"
 #include "overlays/actors/ovl_En_Elf/z_en_elf.h"
+#include "libc64/qrand.h"
+#include "gfx.h"
+#include "gfx_setupdl.h"
+#include "ichain.h"
+#include "macros.h"
+#include "sfx.h"
+#include "sys_matrix.h"
+#include "z64play.h"
 #include "assets/objects/gameplay_field_keep/gameplay_field_keep.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 

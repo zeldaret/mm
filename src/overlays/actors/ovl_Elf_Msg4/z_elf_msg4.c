@@ -8,6 +8,9 @@
 #include "overlays/actors/ovl_En_Elf/z_en_elf.h"
 #include "overlays/actors/ovl_Elf_Msg5/z_elf_msg5.h"
 
+#include "ichain.h"
+#include "z64play.h"
+
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 
 void ElfMsg4_Init(Actor* thisx, PlayState* play);

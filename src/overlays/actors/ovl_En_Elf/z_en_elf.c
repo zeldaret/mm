@@ -5,8 +5,22 @@
  */
 
 #include "z_en_elf.h"
+#include "libc64/qrand.h"
 #include "attributes.h"
+#include "gfx.h"
+#include "gfx_setupdl.h"
+#include "ichain.h"
+#include "macros.h"
+#include "rand.h"
+#include "regs.h"
+#include "sfx.h"
+#include "sys_matrix.h"
+#include "z64effect.h"
 #include "z64elf_message.h"
+#include "z64play.h"
+
+#include "global.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED | ACTOR_FLAG_DRAW_CULLING_DISABLED | ACTOR_FLAG_UPDATE_DURING_OCARINA)
 

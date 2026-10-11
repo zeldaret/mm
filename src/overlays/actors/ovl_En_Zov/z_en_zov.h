@@ -1,13 +1,13 @@
 #ifndef Z_EN_ZOV_H
 #define Z_EN_ZOV_H
 
-#include "global.h"
+#include "z64actor.h"
 #include "z64snap.h"
 #include "assets/objects/object_zov/object_zov.h"
 
 struct EnZov;
 
-typedef void (*EnZovActionFunc)(struct EnZov*, PlayState*);
+typedef void (*EnZovActionFunc)(struct EnZov*, struct PlayState*);
 
 #define ENZOV_GET_F(thisx) ((thisx)->params & 0xF)
 #define ENZOV_GET_FE00(thisx) (((thisx)->params & 0xFE00) >> 9)
