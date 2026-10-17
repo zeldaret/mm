@@ -92,25 +92,26 @@ void KaleidoManager_Destroy(void) {
 }
 
 void* KaleidoManager_GetRamAddr(void* vram) {
-    if (gKaleidoMgrCurOvl == NULL) {
-        s32 pad[2];
-        KaleidoMgrOverlay* ovl = &gKaleidoMgrOverlayTable[0];
+    KaleidoMgrOverlay* ovl = gKaleidoMgrCurOvl;
 
-        do {
+    if (ovl == NULL) {
+        s32 i;
+
+        for (i = 0; i < ARRAY_COUNT(gKaleidoMgrOverlayTable); i++) {
+            ovl = &gKaleidoMgrOverlayTable[i];
             if (((uintptr_t)vram >= (uintptr_t)ovl->vramStart) && ((uintptr_t)ovl->vramEnd >= (uintptr_t)vram)) {
                 KaleidoManager_LoadOvl(ovl);
                 return (void*)((uintptr_t)vram + ovl->offset);
             }
-            ovl++;
-        } while (ovl != (KaleidoMgrOverlay*)&sKaleidoAreaPtr);
-
-        PRINTF(T("KaleidoArea_dllcnv ポインタ異常:%08x\n", "KaleidoArea_dllcnv Pointer error: %08x\n"), vram);
-        return NULL;
-    } else if (((uintptr_t)vram < (uintptr_t)gKaleidoMgrCurOvl->vramStart) ||
-               ((uintptr_t)vram >= (uintptr_t)gKaleidoMgrCurOvl->vramEnd)) {
+        }
         PRINTF(T("KaleidoArea_dllcnv ポインタ異常:%08x\n", "KaleidoArea_dllcnv Pointer error: %08x\n"), vram);
         return NULL;
     }
 
-    return (void*)((uintptr_t)vram + gKaleidoMgrCurOvl->offset);
+    if (((uintptr_t)vram < (uintptr_t)ovl->vramStart) || ((uintptr_t)vram >= (uintptr_t)ovl->vramEnd)) {
+        PRINTF(T("KaleidoArea_dllcnv ポインタ異常:%08x\n", "KaleidoArea_dllcnv Pointer error: %08x\n"), vram);
+        return NULL;
+    }
+
+    return (void*)((uintptr_t)vram + ovl->offset);
 }

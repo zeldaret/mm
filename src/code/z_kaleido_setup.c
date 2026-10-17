@@ -69,8 +69,8 @@ void func_800F4A10(PlayState* play) {
             PRINTF("field_map_evt[%d]=%d\n", i, pauseCtx->worldMapPoints[i]);
         }
 
-        if ((gSaveContext.save.saveInfo.playerData.owlActivationFlags >> 4) & 1) {
-            pauseCtx->cursorPoint[PAUSE_WORLD_MAP] = 4;
+        if ((gSaveContext.save.saveInfo.playerData.owlActivationFlags >> OWL_WARP_CLOCK_TOWN) & 1) {
+            pauseCtx->cursorPoint[PAUSE_WORLD_MAP] = OWL_WARP_CLOCK_TOWN;
         }
     }
 
@@ -114,43 +114,46 @@ void KaleidoSetup_Update(PlayState* play) {
         return;
     }
 
-    if (!Play_InCsMode(play) || ((msgCtx->msgMode != MSGMODE_NONE) && (msgCtx->currentTextId == 0xFF))) {
-        if (play->bButtonAmmoPlusOne >= 2) {
-            return;
-        }
+    if (Play_InCsMode(play) && ((msgCtx->msgMode == MSGMODE_NONE) || (msgCtx->currentTextId != 0xFF))) {
+        return;
+    }
 
-        if ((gSaveContext.magicState == MAGIC_STATE_STEP_CAPACITY) || (gSaveContext.magicState == MAGIC_STATE_FILL)) {
-            return;
-        }
+    if (1) {}
 
-        if (CHECK_EVENTINF(EVENTINF_17) || (player->stateFlags1 & PLAYER_STATE1_20)) {
-            return;
-        }
+    if (play->bButtonAmmoPlusOne >= 2) {
+        return;
+    }
 
-        if ((play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON) ||
-            (play->actorCtx.flags & ACTORCTX_FLAG_PICTO_BOX_ON)) {
-            return;
-        }
+    if ((gSaveContext.magicState == MAGIC_STATE_STEP_CAPACITY) || (gSaveContext.magicState == MAGIC_STATE_FILL)) {
+        return;
+    }
 
-        if (!play->actorCtx.isOverrideInputOn && CHECK_BTN_ALL(input->press.button, BTN_START)) {
-            gSaveContext.prevHudVisibility = gSaveContext.hudVisibility;
-            pauseCtx->itemDescriptionOn = false;
-            pauseCtx->state = PAUSE_STATE_OPENING_0;
-            func_800F4A10(play);
-            // Set next page mode to scroll left
-            pauseCtx->nextPageMode = pauseCtx->pageIndex * 2 + 1;
-            Audio_SetPauseState(true);
-            PRINTF("Ｍｏｄｅ=%d  eye.x=%f,  eye.z=%f  kscp_pos=%d\n", pauseCtx->nextPageMode, pauseCtx->eye.x,
-                   pauseCtx->eye.z, pauseCtx->pageIndex);
-        }
+    if (CHECK_EVENTINF(EVENTINF_17) || (player->stateFlags1 & PLAYER_STATE1_20)) {
+        return;
+    }
 
-        if (pauseCtx->state == PAUSE_STATE_OPENING_0) {
-            GameState_SetFramerateDivisor(&play->state, 2);
-            if (ShrinkWindow_Letterbox_GetSizeTarget() != 0) {
-                ShrinkWindow_Letterbox_SetSizeTarget(0);
-            }
-            Audio_PlaySfx_PauseMenuOpenOrClose(SFX_PAUSE_MENU_OPEN);
+    if ((play->actorCtx.flags & ACTORCTX_FLAG_TELESCOPE_ON) || (play->actorCtx.flags & ACTORCTX_FLAG_PICTO_BOX_ON)) {
+        return;
+    }
+
+    if (!play->actorCtx.isOverrideInputOn && CHECK_BTN_ALL(input->press.button, BTN_START)) {
+        gSaveContext.prevHudVisibility = gSaveContext.hudVisibility;
+        pauseCtx->itemDescriptionOn = false;
+        pauseCtx->state = PAUSE_STATE_OPENING_0;
+        func_800F4A10(play);
+        // Set next page mode to scroll left
+        pauseCtx->nextPageMode = pauseCtx->pageIndex * 2 + 1;
+        Audio_SetPauseState(true);
+        PRINTF("Ｍｏｄｅ=%d  eye.x=%f,  eye.z=%f  kscp_pos=%d\n", pauseCtx->nextPageMode, pauseCtx->eye.x,
+               pauseCtx->eye.z, pauseCtx->pageIndex);
+    }
+
+    if (pauseCtx->state == PAUSE_STATE_OPENING_0) {
+        GameState_SetFramerateDivisor(&play->state, 2);
+        if (ShrinkWindow_Letterbox_GetSizeTarget() != 0) {
+            ShrinkWindow_Letterbox_SetSizeTarget(0);
         }
+        Audio_PlaySfx_PauseMenuOpenOrClose(SFX_PAUSE_MENU_OPEN);
     }
 }
 

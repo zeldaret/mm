@@ -549,7 +549,7 @@ void EnMkk_Draw(Actor* thisx, PlayState* play) {
             gSPDisplayList(&gfx[6], modelInfo->modelDL);
 
             matrix->mf[3][0] = this->unk_160.x;
-            matrix->mf[3][1] = this->unk_160.y + 7.2250004f;
+            matrix->mf[3][1] = this->unk_160.y + 7225.0f * 0.001f;
             matrix->mf[3][2] = this->unk_160.z;
 
             Matrix_Scale(0.85f, 0.85f, 0.85f, MTXMODE_APPLY);
