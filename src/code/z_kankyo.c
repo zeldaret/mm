@@ -1478,7 +1478,7 @@ void Environment_UpdateLights(PlayState* play, EnvironmentContext* envCtx, Light
             u8 lightSetting;
             u8 var_v0_3;
 
-            if ((envCtx->lightSetting >= envCtx->numLightSettings)) {
+            if (envCtx->lightSetting >= envCtx->numLightSettings) {
                 PRINTF(T("カラーパレットがおかしいようです！", "The color palette seems to be wrong!"));
 
                 PRINTF(T("設定パレット＝[%d] パレット数＝[%d]\n", "Palette setting = [%d] Last palette number = [%d]\n")

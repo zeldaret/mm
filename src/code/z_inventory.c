@@ -872,6 +872,10 @@ void Inventory_SaveLotteryCodeGuess(PlayState* play) {
     HS_SET_LOTTERY_CODE_GUESS(lotteryCodeGuess);
 }
 
+/*
+ * Unused items were not removed from later versions, so each value may correspond to different a enum value.
+ * When the enums do not match between versions, the enum comments are in the form US/JP.
+ */
 u8 gPlayerFormItemRestrictions[PLAYER_FORM_MAX][114] = {
     // PLAYER_FORM_FIERCE_DEITY
     {
