@@ -340,7 +340,7 @@ void EnInsect_Dig(EnInsect* this, PlayState* play) {
     Vec3f velocity;
 
     Math_SmoothStepToF(&this->actor.speed, 0.0f, 0.1f, 0.5f, 0.0f);
-    Math_StepToS(&this->actor.shape.rot.x, 10922, 352);
+    Math_StepToS(&this->actor.shape.rot.x, 0x2AAA, 0x160);
     Actor_SetScale(&this->actor, CLAMP_MIN(this->actor.scale.x - 0.0002f, 0.001f));
 
     this->actor.shape.yOffset -= 0.8f;
