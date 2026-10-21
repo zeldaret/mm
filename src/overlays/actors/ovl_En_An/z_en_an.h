@@ -3,11 +3,8 @@
 
 #include "unk.h"
 #include "z64actor.h"
-#include "z64msgevent.h"
 
 #include "global.h"
-
-#include "z64msgevent.h"
 
 #include "assets/objects/object_an1/object_an1.h"
 
