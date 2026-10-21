@@ -861,7 +861,7 @@ void Actor_ChangeAnimationByInfo(SkelAnime* skelAnime, AnimationInfo* animInfo, 
 void Actor_Noop(Actor* actor, struct PlayState* play);
 
 Actor* Actor_FindNearby(struct PlayState* play, Actor* inActor, s16 actorId, u8 actorCategory, f32 distance);
-s32 func_800BE184(struct PlayState* play, Actor* actor, f32 xzDist, s16 arg3, s16 arg4, s16 arg5);
+s32 Actor_MeleeCombatResponse(struct PlayState* play, Actor* actor, f32 range, s16 actorFaceMax, s16 playerFaceMax, s16 actorShapeRotY);
 u8 Actor_ApplyDamage(Actor* actor);
 void Actor_SetDropFlag(Actor* actor, ColliderElement* elem);
 void Actor_SetDropFlagJntSph(Actor* actor, ColliderJntSph* jntSph);

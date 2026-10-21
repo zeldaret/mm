@@ -408,13 +408,13 @@ s32 func_80990948(PlayState* play, EnWf* this, s16 arg2) {
         return true;
     }
 
-    if (func_800BE184(play, &this->actor, 100.0f, 10000, 12000, this->actor.shape.rot.y) &&
+    if (Actor_MeleeCombatResponse(play, &this->actor, 100.0f, 10000, 12000, this->actor.shape.rot.y) &&
         ((player->meleeWeaponAnimation == PLAYER_MWA_JUMPSLASH_START) || ((play->gameplayFrames % 2) != 0))) {
         func_8099282C(this);
         return true;
     }
 
-    if (func_800BE184(play, &this->actor, 100.0f, 24000, 0x2AA8, this->actor.shape.rot.y)) {
+    if (Actor_MeleeCombatResponse(play, &this->actor, 100.0f, 24000, 0x2AA8, this->actor.shape.rot.y)) {
         this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
         this->actor.world.rot.y = this->actor.yawTowardsPlayer;
         if ((this->actor.bgCheckFlags & BGCHECKFLAG_WALL) && (sp38 < 12000)) {
@@ -1073,7 +1073,7 @@ void func_809928CC(EnWf* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime)) {
         if (this->unk_2A0 != 0) {
             this->unk_2A0--;
-        } else if (func_800BE184(play, &this->actor, 100.0f, 10000, 0x4000, this->actor.shape.rot.y)) {
+        } else if (Actor_MeleeCombatResponse(play, &this->actor, 100.0f, 10000, 0x4000, this->actor.shape.rot.y)) {
             if ((player->meleeWeaponAnimation != PLAYER_MWA_JUMPSLASH_START) || ((play->gameplayFrames % 2) != 0)) {
                 this->unk_2A0 = 10;
             } else {

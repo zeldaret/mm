@@ -333,7 +333,7 @@ void EnIk_HitArmor(EnIk* this, PlayState* play) {
 
 s32 EnIk_IsChangingAction(EnIk* this, PlayState* play) {
     if ((this->drawArmorFlags) && (this->actionFunc != EnIk_Block) &&
-        func_800BE184(play, &this->actor, 100.0f, 0x2710, 0x4000, this->actor.shape.rot.y)) {
+        Actor_MeleeCombatResponse(play, &this->actor, 100.0f, 0x2710, 0x4000, this->actor.shape.rot.y)) {
         EnIk_SetupBlock(this);
         return true;
     }

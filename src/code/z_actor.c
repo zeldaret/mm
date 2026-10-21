@@ -4920,17 +4920,29 @@ Actor* Actor_FindNearby(PlayState* play, Actor* inActor, s16 actorId, u8 actorCa
     return NULL;
 }
 
-s32 func_800BE184(PlayState* play, Actor* actor, f32 xzDist, s16 arg3, s16 arg4, s16 arg5) {
+/**
+ * Tests if the player is swinging a melee weapon, when both enemy and player are facing one another within a close
+ * combat range.
+ * @param play
+ * @param actor the actor in combat
+ * @param range the maximum distance between the player and actor
+ * @param actorFaceMax the maximum angle the actor can be facing away from the player
+ * @param playerFaceMax the maximum angle the player can be facing away from the actor
+ * @param actorShapeRotY the actor's shape rotation
+ *
+ * @returns true if the conditions are met, else false
+ */
+s32 Actor_MeleeCombatResponse(PlayState* play, Actor* actor, f32 range, s16 actorFaceMax, s16 playerFaceMax,
+                              s16 actorShapeRotY) {
     Player* player = GET_PLAYER(play);
-    s16 phi_v0 = BINANG_SUB(BINANG_ROT180(actor->yawTowardsPlayer), player->actor.shape.rot.y);
-    s16 temp_t0 = actor->yawTowardsPlayer - arg5;
+    s16 playerFaceActorYawDiff = BINANG_SUB(BINANG_ROT180(actor->yawTowardsPlayer), player->actor.shape.rot.y);
+    s16 actorFacePlayerYawDiff = actor->yawTowardsPlayer - actorShapeRotY;
 
-    if ((actor->xzDistToPlayer <= xzDist) && (player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0)) {
-        if ((arg4 >= ABS_ALT(phi_v0)) && (arg3 >= ABS_ALT(temp_t0))) {
+    if ((actor->xzDistToPlayer <= range) && (player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0)) {
+        if ((playerFaceMax >= ABS_ALT(playerFaceActorYawDiff)) && (actorFaceMax >= ABS_ALT(actorFacePlayerYawDiff))) {
             return true;
         }
     }
-
     return false;
 }
 
