@@ -80,7 +80,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(cullingVolumeDownward, 30, ICHAIN_STOP),
 };
 
-static Vec3f accel = { 0.0f, 0.0f, 0.0f };
+static Vec3f sAccel = { 0.0f, 0.0f, 0.0f };
 
 void EnInsect_InitFlags(EnInsect* this) {
     this->insectFlags = sInitInsectFlags[ENINSECT_GET_INIT_FLAGS(&this->actor)];
@@ -179,18 +179,12 @@ void EnInsect_SetupSlowDown(EnInsect* this) {
 }
 
 void EnInsect_SlowDown(EnInsect* this, PlayState* play) {
-    f32 temp_f2;
+    f32 playSpeed;
 
     Math_SmoothStepToF(&this->actor.speed, 0.0f, 0.1f, 0.5f, 0.0f);
 
-    temp_f2 = (Rand_ZeroOne() * 0.8f) + (this->actor.speed * 1.2f);
-    if (temp_f2 < 0.0f) {
-        this->skelAnime.playSpeed = 0.0f;
-    } else {
-        f32 clamped = CLAMP_MAX(temp_f2, 1.9f);
-
-        this->skelAnime.playSpeed = clamped;
-    }
+    playSpeed = (Rand_ZeroOne() * 0.8f) + (this->actor.speed * 1.2f);
+    this->skelAnime.playSpeed = CLAMP(playSpeed, 0.0f, 1.9f);
 
     SkelAnime_Update(&this->skelAnime);
     this->actor.shape.rot.y = this->actor.world.rot.y;
@@ -216,7 +210,7 @@ void EnInsect_SetupCrawl(EnInsect* this) {
 
 void EnInsect_Crawl(EnInsect* this, PlayState* play) {
     s32 pad;
-    f32 temp_f0;
+    f32 playSpeed;
     s16 yaw;
 
     Math_SmoothStepToF(&this->actor.speed, 1.5f, 0.1f, 0.5f, 0.0f);
@@ -232,8 +226,8 @@ void EnInsect_Crawl(EnInsect* this, PlayState* play) {
 
     this->actor.shape.rot.y = this->actor.world.rot.y;
 
-    temp_f0 = this->actor.speed * 1.4f;
-    this->skelAnime.playSpeed = CLAMP(temp_f0, 0.7f, 1.9f);
+    playSpeed = this->actor.speed * 1.4f;
+    this->skelAnime.playSpeed = CLAMP(playSpeed, 0.7f, 1.9f);
     SkelAnime_Update(&this->skelAnime);
 
     if (this->actionTimer <= 0) {
@@ -257,7 +251,7 @@ void EnInsect_SetupRunFromPlayer(EnInsect* this) {
 
 void EnInsect_RunFromPlayer(EnInsect* this, PlayState* play) {
     s32 pad;
-    f32 speed;
+    f32 playSpeed;
     s16 frames;
     s16 yaw;
     s32 playerIsClose = this->actor.xzDistToPlayer < 40.0f;
@@ -287,8 +281,8 @@ void EnInsect_RunFromPlayer(EnInsect* this, PlayState* play) {
 
     this->actor.shape.rot.y = this->actor.world.rot.y;
 
-    speed = this->actor.speed * 1.6f;
-    this->skelAnime.playSpeed = CLAMP(speed, 0.8f, 1.9f);
+    playSpeed = this->actor.speed * 1.6f;
+    this->skelAnime.playSpeed = CLAMP(playSpeed, 0.8f, 1.9f);
     SkelAnime_Update(&this->skelAnime);
 
     if ((this->actionTimer <= 0) || !playerIsClose) {
@@ -353,7 +347,7 @@ void EnInsect_Dig(EnInsect* this, PlayState* play) {
         velocity.x = Math_SinS(this->actor.shape.rot.y) * -0.6f;
         velocity.y = Math_SinS(this->actor.shape.rot.x) * 0.6f;
         velocity.z = Math_CosS(this->actor.shape.rot.y) * -0.6f;
-        func_800B1210(play, &this->actor.world.pos, &velocity, &accel, (Rand_ZeroOne() * 5.0f) + 8.0f,
+        func_800B1210(play, &this->actor.world.pos, &velocity, &sAccel, (Rand_ZeroOne() * 5.0f) + 8.0f,
                       (Rand_ZeroOne() * 5.0f) + 8.0f);
     }
 
@@ -373,7 +367,7 @@ void EnInsect_SetupWalkOnWater(EnInsect* this) {
 void EnInsect_WalkOnWater(EnInsect* this, PlayState* play) {
     s32 pad[2];
     s16 temp;
-    Vec3f sp40;
+    Vec3f ripplePos;
 
     if (this->actionTimer > 80) {
         Math_StepToF(&this->actor.speed, 0.6f, 0.08f);
@@ -404,10 +398,10 @@ void EnInsect_WalkOnWater(EnInsect* this, PlayState* play) {
     this->actor.shape.rot.x = this->actor.world.rot.x;
 
     if (Rand_ZeroOne() < 0.03f) {
-        sp40.x = this->actor.world.pos.x;
-        sp40.y = this->actor.world.pos.y + this->actor.depthInWater;
-        sp40.z = this->actor.world.pos.z;
-        EffectSsGRipple_Spawn(play, &sp40, 40, 200, 4);
+        ripplePos.x = this->actor.world.pos.x;
+        ripplePos.y = this->actor.world.pos.y + this->actor.depthInWater;
+        ripplePos.z = this->actor.world.pos.z;
+        EffectSsGRipple_Spawn(play, &ripplePos, 40, 200, 4);
     }
 
     if ((this->actionTimer <= 0) || ((this->insectFlags & INSECT_FLAG_IS_SHORT_LIVED) && (this->lifeTimer <= 0))) {
