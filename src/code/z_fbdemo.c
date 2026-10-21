@@ -111,6 +111,8 @@ void TransitionTile_InitVtxData(TransitionTile* this) {
 }
 
 void TransitionTile_Destroy(TransitionTile* this) {
+    PRINTF("fbdemo_cleanup(%08x)\n", this);
+    PRINTF("msleep(100);\n");
     msleep(100);
 
     if (this->vtxData != NULL) {
@@ -129,11 +131,13 @@ void TransitionTile_Destroy(TransitionTile* this) {
         free(this->gfx);
         this->gfx = NULL;
     }
+    if (1) {}
 }
 
 TransitionTile* TransitionTile_Init(TransitionTile* this, s32 cols, s32 rows) {
     s32 gridSize;
 
+    PRINTF("fbdemo_init(%08x, %d, %d)\n", this, cols, rows);
     bzero(this, sizeof(TransitionTile));
     this->frame = 0;
     this->cols = cols;
@@ -145,6 +149,8 @@ TransitionTile* TransitionTile_Init(TransitionTile* this, s32 cols, s32 rows) {
     this->gfx = malloc(((cols * 9 + 1) * rows + 2) * sizeof(Gfx));
 
     if ((this->vtxData == NULL) || (this->vtxFrame1 == NULL) || (this->vtxFrame2 == NULL) || (this->gfx == NULL)) {
+        PRINTF("fbdemo_init allocation error\n");
+
         if (this->vtxData != NULL) {
             free(this->vtxData);
             this->vtxData = NULL;

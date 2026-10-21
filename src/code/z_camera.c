@@ -3121,6 +3121,7 @@ s32 Camera_Jump2(Camera* camera) {
         rwData->unk_06 = 0;
 
         if (rwData->unk_00 == BGCHECK_Y_MIN) {
+            PRINTF("camera: climb: no floor \n");
             rwData->unk_0A = -1;
             rwData->unk_00 = focalActorPosRot->pos.y - 1000.0f;
         } else if ((focalActorPosRot->pos.y - rwData->unk_00) < focalActorHeight) {
@@ -3131,6 +3132,11 @@ s32 Camera_Jump2(Camera* camera) {
 
         yawDiff = BINANG_SUB(BINANG_ROT180(focalActorPosRot->rot.y), spA4.yaw);
         rwData->unk_06 = ((yawDiff / 6) / 4) * 3;
+
+#if MM_VERSION < N64_US
+        //! FAKE:
+        if (rwData) {}
+#endif
 
         if (roData->interfaceFlags & JUMP2_FLAG_1) {
             rwData->unk_08 = 10;

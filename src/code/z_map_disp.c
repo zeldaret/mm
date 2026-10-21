@@ -40,6 +40,11 @@ static Color_RGBA8 sMinimapActorCategoryColors[12] = {
 TransitionActorEntry sTransitionActors[ROOM_TRANSITION_MAX];
 PauseDungeonMap sPauseDungeonMap;
 
+#if MM_VERSION < N64_US
+//! TODO: Determine where this goes
+static const char unusedString[] = "pmri->type %d->%d\n";
+#endif
+
 void MapDisp_GetMapITexture(void* dst, s32 mapCompactId) {
     if (MapDisp_GetSizeOfMapITex(mapCompactId) != 0) {
         CmpDma_LoadFile(SEGMENT_ROM_START(map_i_static), mapCompactId, dst, MapDisp_GetSizeOfMapITex(mapCompactId));

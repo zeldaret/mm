@@ -6,6 +6,7 @@
 
 #include "z64transition.h"
 
+#include "macros.h"
 #include "libu64/loadfragment.h"
 #include "z64lib.h"
 #include "zelda_arena.h"
@@ -28,7 +29,7 @@ void TransitionOverlay_VramToRamArray(TransitionOverlay* overlayEntry, void** vr
 }
 
 TransitionOverlayStatus TransitionOverlay_Load(TransitionOverlay* overlayEntry) {
-    s32 count;
+    u32 count;
     void* loadedRamAddr;
 
     if (overlayEntry->file.vromStart == 0) {
@@ -55,6 +56,8 @@ TransitionOverlayStatus TransitionOverlay_Load(TransitionOverlay* overlayEntry) 
         overlayEntry->loadInfo.count = count;
 
         if (count == 0) {
+            PRINTF(T("z_overlay_link オーバーレイのし過ぎです。もう解放できません\n",
+                     "z_overlay_link You've overlaid too much. You can't release it anymore.\n"));
             return TRANSITION_OVERLAY_STATUS_LOADED_NO_INSTANCES;
         } else {
             return TRANSITION_OVERLAY_STATUS_ADD_REMOVAL;
@@ -65,7 +68,7 @@ TransitionOverlayStatus TransitionOverlay_Load(TransitionOverlay* overlayEntry) 
 }
 
 TransitionOverlayStatus TransitionOverlay_Free(TransitionOverlay* overlayEntry) {
-    s32 count;
+    u32 count;
     void* loadedRamAddr;
 
     if (overlayEntry->file.vromStart == 0) {
@@ -87,6 +90,9 @@ TransitionOverlayStatus TransitionOverlay_Free(TransitionOverlay* overlayEntry) 
         }
         return TRANSITION_OVERLAY_STATUS_LOADED_NO_INSTANCES;
     }
+
+    PRINTF(T("z_overlay_unlink: 確保されていないのに解放しようとした/または解放しすぎ\n",
+             "z_overlay_unlink: Attempted to free a resource that was not allocated / or freed too much resource\n"));
     return TRANSITION_OVERLAY_STATUS_FAILED;
 }
 

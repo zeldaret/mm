@@ -346,6 +346,10 @@ void Skybox_Init(GameState* gameState, SkyboxContext* skyboxCtx, s16 skyboxId) {
     skyboxCtx->rot.x = skyboxCtx->rot.y = skyboxCtx->rot.z = 0.0f;
 
     Skybox_Setup(gameState, skyboxCtx, skyboxId);
+    PRINTF("\n\n\n＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊\n\n\n"
+           "ＴＹＰＥ＝%d"
+           "\n\n\n＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊\n\n\n",
+           skyboxId);
 
     if (skyboxId != SKYBOX_NONE) {
         skyboxCtx->dListBuf = THA_AllocTailAlign16(&gameState->tha, 12 * 150 * sizeof(Gfx));

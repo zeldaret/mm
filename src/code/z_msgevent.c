@@ -1174,10 +1174,16 @@ s32 MsgEvent_RunScript(Actor* actor, PlayState* play, MsgScript* script, MsgScri
     u8 cmdId;
     s32 stop;
 
+    if (sREG(95) != 0) {
+        PRINTF("------Msgevent_Read Start\n");
+    }
+
     start = script;
     script += *pos;
 
-    if (sREG(95) != 0) {}
+    if (sREG(95) != 0) {
+        PRINTF("%08x:", script);
+    }
 
     cmdLen = 0;
     do {
@@ -1195,9 +1201,23 @@ s32 MsgEvent_RunScript(Actor* actor, PlayState* play, MsgScript* script, MsgScri
             //! @bug command handler still runs even if cmdId is invalid
         }
 
-        // Debug loop?
         if (sREG(95) != 0) {
-            for (i = 0; i < cmdLen; i++) {}
+            for (i = 0; i < cmdLen; i++) {
+                MsgScript* cmd = &script[i];
+
+                PRINTF("%02x ", *cmd);
+#if MM_VERSION < N64_US
+                //! FAKE:
+                continue;
+                if (1) {}
+                if (1) {}
+                if (1) {}
+                if (1) {}
+                if (1) {}
+                if (1) {}
+#endif
+            }
+            PRINTF("\n");
         }
 
         stop = sMsgScriptCmdHandlers[cmdId](actor, play, &script, callback, &scriptDone);
@@ -1209,5 +1229,10 @@ s32 MsgEvent_RunScript(Actor* actor, PlayState* play, MsgScript* script, MsgScri
     } else {
         *pos = 0;
     }
+
+    if (sREG(95) != 0) {
+        PRINTF("------Msgevent_Read End\n");
+    }
+
     return scriptDone;
 }

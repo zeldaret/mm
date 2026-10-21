@@ -178,11 +178,16 @@ void Map_InitRoomData(PlayState* play, s16 room) {
 
     MapDisp_SwapRooms(room);
 
+    PRINTF("＊＊＊＊＊＊＊\n＊＊＊＊＊＊＊\nroom_no=%d (%d)(%d)\n＊＊＊＊＊＊＊\n＊＊＊＊＊＊＊\n", room, mapIndex,
+           play->sceneId);
+
     if (room >= 0) {
         if (Map_IsInDungeonOrBossScene(play)) {
             SET_ROOM_VISITED(Play_GetOriginalSceneId(play->sceneId), room);
+            PRINTF("ＲＯＯＭ＿ＩＮＦ＝%d\n", gSaveContext.save.info.sceneFlags[mapIndex].rooms);
             interfaceCtx->mapRoomNum = room;
             interfaceCtx->dungeonSceneIndex = mapIndex;
+            PRINTF(T("部屋No.＝%d\n", "Room No. = %d\n"), room);
         }
     } else {
         interfaceCtx->mapRoomNum = 0;
@@ -205,6 +210,10 @@ void Map_Init(PlayState* play) {
     interfaceCtx->unk_278 = -1;
     interfaceCtx->dungeonSceneIndex = -1;
     interfaceCtx->mapSegment = THA_AllocTailAlign16(&play->state.tha, 0x1000);
+
+    PRINTF(T("\n\n\nＭＡＰ テクスチャ初期化   scene_data_ID=%d\nmapSegment=%x\n\n",
+             "\n\n\nMAP texture initialization   scene_data_ID=%d\nmapSegment=%x\n\n"),
+           play->sceneId, interfaceCtx->mapSegment);
 
     //! This block does pretty much nothing, as z_map_exp.c and other map systems were heavily rewritten after OoT to no
     //! longer need mapIndex to retrieve minimap data.
@@ -272,6 +281,8 @@ void Map_Update(PlayState* play) {
                 SET_DUNGEON_FLOOR_VISITED(Play_GetOriginalSceneId(play->sceneId), FLOOR_INDEX_MAX - floor);
                 R_PLAYER_FLOOR_REVERSE_INDEX = FLOOR_INDEX_MAX - floor;
                 if (interfaceCtx->mapRoomNum != sLastRoomNum) {
+                    PRINTF(T("現在階＝%d  現在部屋＝%x\n", "Current floor = %d  Current room = %x\n"), floor,
+                           interfaceCtx->mapRoomNum);
                     sLastRoomNum = interfaceCtx->mapRoomNum;
                 }
             }

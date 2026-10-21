@@ -1115,14 +1115,23 @@ void BombersNotebook_LoadFiles(BombersNotebook* this, s32 flag) {
             }
 #if MM_VERSION >= N64_US
             CmpDma_LoadAllFiles(this->scheduleDmaSegmentStart, this->scheduleDmaSegment, this->scheduleDmaSegmentSize);
+#else
+            osCreateMesgQueue(&this->scheduleDmaLoadQueue, this->scheduleDmaLoadMsg,
+                              ARRAY_COUNT(this->scheduleDmaLoadMsg));
+            DmaMgr_RequestAsync(&this->scheduleDmaDmaRequest, this->scheduleDmaSegment, this->scheduleDmaSegmentStart,
+                                this->scheduleDmaSegmentSize, 0, &this->scheduleDmaLoadQueue, NULL);
 #endif
-            osCreateMesgQueue(&this->loadQueue, this->loadMsg, ARRAY_COUNT(this->loadMsg));
-            DmaMgr_RequestAsync(&this->dmaRequest, this->scheduleSegment, this->scheduleSegmentStart,
-                                this->scheduleSegmentSize, 0, &this->loadQueue, NULL);
+            osCreateMesgQueue(&this->scheduleLoadQueue, this->scheduleLoadMsg, ARRAY_COUNT(this->scheduleLoadMsg));
+            DmaMgr_RequestAsync(&this->scheduleDmaRequest, this->scheduleSegment, this->scheduleSegmentStart,
+                                this->scheduleSegmentSize, 0, &this->scheduleLoadQueue, NULL);
             this->loadState = BOMBERS_NOTEBOOK_LOAD_STATE_STARTED;
             FALLTHROUGH;
         case BOMBERS_NOTEBOOK_LOAD_STATE_STARTED:
-            if (osRecvMesg(&this->loadQueue, NULL, flag) == 0) {
+            if (
+#if MM_VERSION < N64_US
+                (osRecvMesg(&this->scheduleDmaLoadQueue, NULL, flag) == 0) &&
+#endif
+                (osRecvMesg(&this->scheduleLoadQueue, NULL, flag) == 0)) {
                 this->loadState = BOMBERS_NOTEBOOK_LOAD_STATE_DONE;
             }
             break;
@@ -1151,8 +1160,15 @@ void BombersNotebook_Update(PlayState* play, BombersNotebook* this, Input* input
     s32 stickAdjY = input->rel.stick_y;
     s32 cursorEntryScan;
 
+#if MM_VERSION == N64_US
     this->scheduleDmaSegmentStart = SEGMENT_ROM_START(schedule_dma_static_yar);
     this->scheduleDmaSegmentSize = SEGMENT_ROM_SIZE(schedule_dma_static_syms);
+#else
+    //! TODO: schedule_dma_static_syms should just be schedule_dma_static when that segment has been introduced
+    this->scheduleDmaSegmentStart = SEGMENT_ROM_START(schedule_dma_static_syms);
+    this->scheduleDmaSegmentSize = SEGMENT_ROM_SIZE(schedule_dma_static_syms);
+#endif
+
     this->scheduleSegmentStart = SEGMENT_ROM_START(schedule_static);
     this->scheduleSegmentSize = SEGMENT_ROM_SIZE(schedule_static);
 

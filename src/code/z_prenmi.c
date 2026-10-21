@@ -8,6 +8,8 @@ void PreNMI_Stop(PreNMIState* this) {
 }
 
 void PreNMI_Update(PreNMIState* this) {
+    PRINTF("prenmi_move\n");
+
     if (this->timer == 0) {
         ViConfig_UpdateVi(true);
         PreNMI_Stop(this);
@@ -18,6 +20,8 @@ void PreNMI_Update(PreNMIState* this) {
 
 void PreNMI_Draw(PreNMIState* this) {
     GraphicsContext* gfxCtx = this->state.gfxCtx;
+
+    PRINTF("prenmi_draw\n");
 
     func_8012CF0C(gfxCtx, true, true, 0, 0, 0);
 

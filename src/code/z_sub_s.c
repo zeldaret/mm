@@ -12,7 +12,9 @@ s16 sPathDayFlags[] = { 0x40, 0x20, 0x10, 8, 4, 2, 1, 0 };
 
 Vec3f gOneVec3f = { 1.0f, 1.0f, 1.0f };
 
+#if MM_VERSION >= N64_US
 s32 D_801C5DBC[] = { 0, 1 }; // Unused
+#endif
 
 /**
  * Finds the first EnDoor instance of type `ENDOOR_TYPE_SCHEDULE` and the specified schType (a value from the

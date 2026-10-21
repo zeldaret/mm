@@ -8,6 +8,7 @@
 
 #include "string.h"
 #include "attributes.h"
+#include "vt.h"
 
 #include "global.h"
 #include "z64olib.h"
@@ -126,6 +127,8 @@ CutsceneEntry* CutsceneManager_GetCutsceneEntryImpl(s16 csId) {
 
 void CutsceneManager_Init(PlayState* play, CutsceneEntry* cutsceneList, s16 numEntries) {
     s32 i;
+
+    PRINTF(VT_FGCOL(BLUE) "eventmgr: refresh %#x %d ---" VT_RST "\n\n", cutsceneList, numEntries);
 
     sSceneCutsceneList = cutsceneList;
     sSceneCutsceneCount = numEntries;

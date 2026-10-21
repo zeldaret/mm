@@ -36,13 +36,15 @@ typedef enum BombersNotebookEvent {
 
 typedef struct BombersNotebook {
     /* 0x00 */ u8 loadState;
-    /* 0x01 */ UNK_TYPE1 pad01[0x3F];
+    /* 0x04 */ DmaRequest scheduleDmaDmaRequest;
+    /* 0x24 */ OSMesgQueue scheduleDmaLoadQueue;
+    /* 0x3C */ OSMesg scheduleDmaLoadMsg[1];
     /* 0x40 */ void* scheduleDmaSegment;
     /* 0x44 */ uintptr_t scheduleDmaSegmentStart;
     /* 0x48 */ size_t scheduleDmaSegmentSize;
-    /* 0x4C */ DmaRequest dmaRequest;
-    /* 0x6C */ OSMesgQueue loadQueue;
-    /* 0x84 */ OSMesg loadMsg[1];
+    /* 0x4C */ DmaRequest scheduleDmaRequest;
+    /* 0x6C */ OSMesgQueue scheduleLoadQueue;
+    /* 0x84 */ OSMesg scheduleLoadMsg[1];
     /* 0x88 */ void* scheduleSegment;
     /* 0x8C */ uintptr_t scheduleSegmentStart;
     /* 0x90 */ size_t scheduleSegmentSize;
