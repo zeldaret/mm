@@ -1,12 +1,15 @@
 #ifndef Z_EN_BUTTE_H
 #define Z_EN_BUTTE_H
 
+#include "z64actor.h"
+
 #include "global.h"
 #include "assets/objects/gameplay_field_keep/gameplay_field_keep.h"
 
 struct EnButte;
+struct PlayState;
 
-typedef void (*EnButteActionFunc)(struct EnButte*, PlayState*);
+typedef void (*EnButteActionFunc)(struct EnButte*, struct PlayState*);
 
 #define BUTTERFLY_GET(thisx) ((thisx)->params)
 #define BUTTERFLY_GET_1(thisx) ((thisx)->params & 1)

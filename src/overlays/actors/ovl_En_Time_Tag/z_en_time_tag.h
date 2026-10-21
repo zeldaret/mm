@@ -1,11 +1,12 @@
 #ifndef Z_EN_TIME_TAG_H
 #define Z_EN_TIME_TAG_H
 
-#include "global.h"
+#include "z64actor.h"
 
 struct EnTimeTag;
+struct PlayState;
 
-typedef void (*EnTimeTagActionFunc)(struct EnTimeTag*, PlayState*);
+typedef void (*EnTimeTagActionFunc)(struct EnTimeTag*, struct PlayState*);
 
 #define TIMETAG_GET_TYPE(thisx) (((thisx)->params & 0xE000) >> 0xD)
 
