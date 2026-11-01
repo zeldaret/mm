@@ -106,10 +106,13 @@ void Check_DrawRegionLockErrorMessage(void) {
 void Check_ExpansionPak(void) {
     // Expansion pak installed
     if (osMemSize >= 0x800000) {
+        PRINTF(T("メモリサイズチェック OK\n", "Memory size check OK\n"));
         return;
     }
 
+    PRINTF(T("メモリサイズチェック NG\n", "Memory size check failed\n"));
     Check_DrawExpansionPakErrorMessage();
+    PRINTF(T("システム停止します\n", "The system will shut down\n"));
     osDestroyThread(NULL);
     while (true) {}
 }
@@ -120,12 +123,19 @@ void Check_ExpansionPak(void) {
 void Check_RegionIsSupported(void) {
     s32 regionSupported = false;
 
-    if ((osTvType == OS_TV_NTSC) || (osTvType == OS_TV_MPAL)) {
+    PRINTF(T("指向国チェック osTvType=%d\n", "Checking the country of origin: osTvType=%d\n"), osTvType);
+    if ((osTvType == OS_TV_NTSC)
+#if MM_VERSION >= N64_US
+        || (osTvType == OS_TV_MPAL)
+#endif
+    ) {
         regionSupported = true;
     }
 
     if (!regionSupported) {
+        PRINTF(T("指向国チェックNG\n", "Country of origin check failed\n"));
         Check_DrawRegionLockErrorMessage();
+        PRINTF(T("システム停止します\n", "The system will shut down\n"));
         osDestroyThread(NULL);
         while (true) {}
     }

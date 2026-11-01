@@ -1113,7 +1113,9 @@ void BombersNotebook_LoadFiles(BombersNotebook* this, s32 flag) {
             if (this->scheduleDmaSegment == NULL) {
                 break;
             }
+#if MM_VERSION >= N64_US
             CmpDma_LoadAllFiles(this->scheduleDmaSegmentStart, this->scheduleDmaSegment, this->scheduleDmaSegmentSize);
+#endif
             osCreateMesgQueue(&this->loadQueue, this->loadMsg, ARRAY_COUNT(this->loadMsg));
             DmaMgr_RequestAsync(&this->dmaRequest, this->scheduleSegment, this->scheduleSegmentStart,
                                 this->scheduleSegmentSize, 0, &this->loadQueue, NULL);

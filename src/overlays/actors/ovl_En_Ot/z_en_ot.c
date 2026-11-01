@@ -274,7 +274,7 @@ void EnOt_Init(Actor* thisx, PlayState* play) {
             break;
 
         case SEAHORSE_TYPE_3:
-            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_26_08)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_SEAHORSE)) {
                 this->actor.flags |= ACTOR_FLAG_LOCK_ON_DISABLED;
                 this->actor.flags &= ~(ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY);
                 Actor_SetScale(&this->actor, 0.0064999997f);
@@ -501,7 +501,7 @@ void func_80B5C634(EnOt* this, PlayState* play) {
 }
 
 void func_80B5C64C(EnOt* this, PlayState* play) {
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_26_08)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_SEAHORSE)) {
         Actor_Kill(&this->actor);
     }
 }

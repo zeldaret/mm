@@ -202,7 +202,7 @@ void func_80BD4A14(BgIkanaBombwall* this, PlayState* play) {
         velocity.y = (Rand_ZeroOne() * 18.0f) + 4.0f;
         velocity.z = ((Rand_ZeroOne() - 0.5f) * 3.0f * temp_fs1) + ((temp_fs1 * temp_fs3) * (1.0f / 30.0f));
 
-        scale = (Rand_Next() & 3) + (i >> 1) + 6;
+        scale = (Rand_Next() % 4) + (i >> 1) + 6;
 
         if ((i & 3) == 0) {
             phi_v0 = 32;

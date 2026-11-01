@@ -14,7 +14,7 @@
  *    - Argument 0: Name of the object segment in spec
  *    - Argument 1: Enum value for this object
  */
-/* 0x000 */ DEFINE_OBJECT_UNSET(OBJECT_UNSET_0)
+/* 0x000 */ DEFINE_OBJECT_UNSET(OBJECT_INVALID) // Object ID 0 isn't usable and should remain unset
 /* 0x001 */ DEFINE_OBJECT(gameplay_keep, GAMEPLAY_KEEP)
 /* 0x002 */ DEFINE_OBJECT(gameplay_field_keep, GAMEPLAY_FIELD_KEEP)
 /* 0x003 */ DEFINE_OBJECT(gameplay_dangeon_keep, GAMEPLAY_DANGEON_KEEP)

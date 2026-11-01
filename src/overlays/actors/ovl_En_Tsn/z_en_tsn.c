@@ -1,7 +1,7 @@
 /*
  * File: z_en_tsn.c
  * Overlay: ovl_En_Tsn
- * Description: Great Bay - Fisherman
+ * Description: Fisherman, seahorse, and pirate poster
  */
 
 #include "z_en_tsn.h"
@@ -12,22 +12,27 @@
     (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED | \
      ACTOR_FLAG_UPDATE_DURING_OCARINA)
 
+#define ENTSN_LOOK_AT_PLAYER (1 << 0)
+#define ENTSN_PLAYER_LOOKS_AT_FISHERMAN (1 << 1)
+#define ENTSN_CS_QUEUED (1 << 2)
+#define ENTSN_OFFERING_ITEM (1 << 3)
+
 void EnTsn_Init(Actor* thisx, PlayState* play);
 void EnTsn_Destroy(Actor* thisx, PlayState* play);
 void EnTsn_Update(Actor* thisx, PlayState* play);
 void EnTsn_Draw(Actor* thisx, PlayState* play);
 
-void func_80AE0010(EnTsn* this, PlayState* play);
-void func_80AE0304(EnTsn* this, PlayState* play);
-void func_80AE0418(EnTsn* this, PlayState* play);
-void func_80AE0460(EnTsn* this, PlayState* play);
-void func_80AE04C4(EnTsn* this, PlayState* play);
-void func_80AE04FC(EnTsn* this, PlayState* play);
-void func_80AE0704(EnTsn* this, PlayState* play);
-void func_80AE0C88(EnTsn* this, PlayState* play);
-void func_80AE0D10(EnTsn* this, PlayState* play);
-void func_80AE0D78(EnTsn* this, PlayState* play);
-void func_80AE0F84(Actor* thisx, PlayState* play);
+void EnTsn_Fisherman_Talk(EnTsn* this, PlayState* play);
+void EnTsn_Fisherman_Idle(EnTsn* this, PlayState* play);
+void EnTsn_Seahorse_RemoveFromFishbowl(EnTsn* this, PlayState* play);
+void EnTsn_GiveSeahorse(EnTsn* this, PlayState* play);
+void EnTsn_Object_WaitForTextboxClose(EnTsn* this, PlayState* play);
+void EnTsn_Object_ItemExchange(EnTsn* this, PlayState* play);
+void EnTsn_Object_Talk(EnTsn* this, PlayState* play);
+void EnTsn_Object_Idle(EnTsn* this, PlayState* play);
+void EnTsn_Seahorse_Talk(EnTsn* this, PlayState* play);
+void EnTsn_Seahorse_Idle(EnTsn* this, PlayState* play);
+void EnTsn_UpdateObject(Actor* thisx, PlayState* play);
 
 ActorProfile En_Tsn_Profile = {
     /**/ ACTOR_EN_TSN,
@@ -40,6 +45,16 @@ ActorProfile En_Tsn_Profile = {
     /**/ EnTsn_Update,
     /**/ EnTsn_Draw,
 };
+
+typedef enum {
+    /* 0 */ ENTSN_OBJ_SEAHORSE,
+    /* 1 */ ENTSN_OBJ_POSTER
+} EnTsnObjectType;
+
+typedef enum {
+    /* 0 */ FISHERMAN_EYE_OPEN,
+    /* 1 */ FISHERMAN_EYE_CLOSED
+} EnTsnEyes;
 
 static ColliderCylinderInit sCylinderInit = {
     {
@@ -61,11 +76,11 @@ static ColliderCylinderInit sCylinderInit = {
     { 30, 40, 0, { 0, 0, 0 } },
 };
 
-EnTsn* func_80ADFCA0(PlayState* play) {
+EnTsn* EnTsn_FindFisherman(PlayState* play) {
     Actor* npc = play->actorCtx.actorLists[ACTORCAT_NPC].first;
 
     while (npc != NULL) {
-        if ((npc->id == ACTOR_EN_TSN) && !ENTSN_GET_100(npc)) {
+        if ((npc->id == ACTOR_EN_TSN) && !ENTSN_IS_OBJECT(npc)) {
             return (EnTsn*)npc;
         }
         npc = npc->next;
@@ -74,24 +89,24 @@ EnTsn* func_80ADFCA0(PlayState* play) {
     return NULL;
 }
 
-void func_80ADFCEC(EnTsn* this, PlayState* play) {
-    this->actionFunc = func_80AE0C88;
-    this->actor.update = func_80AE0F84;
+void EnTsn_InitObject(EnTsn* this, PlayState* play) {
+    this->actionFunc = EnTsn_Object_Idle;
+    this->actor.update = EnTsn_UpdateObject;
     this->actor.destroy = NULL;
     this->actor.draw = NULL;
     this->actor.attentionRangeType = ATTENTION_RANGE_7;
 
-    switch (ENTSN_GET_F(&this->actor)) {
-        case ENTSN_F_0:
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_26_08)) {
+    switch (ENTSN_GET_OBJECT_TYPE(&this->actor)) {
+        case ENTSN_OBJ_SEAHORSE:
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_SEAHORSE)) {
                 Actor_Kill(&this->actor);
                 return;
             }
             this->actor.textId = 0x106E;
             break;
 
-        case ENTSN_F_1:
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_26_04)) {
+        case ENTSN_OBJ_POSTER:
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_LOOKED_AT_PIRATE_POSTER)) {
                 this->actor.textId = 0x1091;
             } else {
                 this->actor.textId = 0x108A;
@@ -103,23 +118,23 @@ void func_80ADFCEC(EnTsn* this, PlayState* play) {
     }
 
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
-        if ((ENTSN_GET_F(&this->actor)) == ENTSN_F_0) {
-            this->actionFunc = func_80AE0D78;
+        if ((ENTSN_GET_OBJECT_TYPE(&this->actor)) == ENTSN_OBJ_SEAHORSE) {
+            this->actionFunc = EnTsn_Seahorse_Idle;
         } else {
             Actor_Kill(&this->actor);
         }
         return;
     }
 
-    this->unk_1D8 = func_80ADFCA0(play);
-    this->unk_220 = 0;
+    this->fisherman = EnTsn_FindFisherman(play);
+    this->flags = 0;
 
-    if (this->unk_1D8 == NULL) {
+    if (this->fisherman == NULL) {
         Actor_Kill(&this->actor);
         return;
     }
 
-    if ((ENTSN_GET_F(&this->actor)) == ENTSN_F_1) {
+    if ((ENTSN_GET_OBJECT_TYPE(&this->actor)) == ENTSN_OBJ_POSTER) {
         Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_PROP);
     }
 }
@@ -127,20 +142,20 @@ void func_80ADFCEC(EnTsn* this, PlayState* play) {
 void EnTsn_Init(Actor* thisx, PlayState* play) {
     EnTsn* this = (EnTsn*)thisx;
 
-    if (ENTSN_GET_100(&this->actor)) {
-        func_80ADFCEC(this, play);
+    if (ENTSN_IS_OBJECT(&this->actor)) {
+        EnTsn_InitObject(this, play);
         return;
     }
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_tsn_Skel_008AB8, &object_tsn_Anim_0092FC, NULL, NULL, 0);
-    Animation_PlayLoop(&this->skelAnime, &object_tsn_Anim_0092FC);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gFishermanSkel, &gFishermanIdleAnim, NULL, NULL, 0);
+    Animation_PlayLoop(&this->skelAnime, &gFishermanIdleAnim);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->unk_220 = 0;
-    this->actionFunc = func_80AE0304;
+    this->flags = 0;
+    this->actionFunc = EnTsn_Fisherman_Idle;
     this->actor.textId = 0;
     this->actor.velocity.y = 0.0f;
     this->actor.terminalVelocity = -9.0f;
@@ -157,18 +172,18 @@ void EnTsn_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-void func_80ADFF84(EnTsn* this, PlayState* play) {
+void EnTsn_Fisherman_SetupTalk(EnTsn* this, PlayState* play) {
     u16 textId;
 
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_26_08)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_SEAHORSE)) {
         textId = 0x107E;
     } else if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_25_80)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_FISHERMAN_AS_ZORA)) {
             textId = 0x1083;
         } else {
             textId = 0x107F;
         }
-    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_26_01)) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_FISHERMAN_AS_HUMAN)) {
         textId = 0x1089;
     } else {
         textId = 0x1084;
@@ -177,7 +192,7 @@ void func_80ADFF84(EnTsn* this, PlayState* play) {
     Message_StartTextbox(play, textId, &this->actor);
 }
 
-void func_80AE0010(EnTsn* this, PlayState* play) {
+void EnTsn_Fisherman_Talk(EnTsn* this, PlayState* play) {
     switch (play->msgCtx.currentTextId) {
         case 0x107F:
         case 0x1080:
@@ -205,27 +220,27 @@ void func_80AE0010(EnTsn* this, PlayState* play) {
 
             case 0x1080:
                 Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
-                Animation_MorphToLoop(&this->skelAnime, &object_tsn_Anim_001198, -10.0f);
+                Animation_MorphToLoop(&this->skelAnime, &gFishermanTwoHandTalkAnim, -10.0f);
                 break;
 
             case 0x1082:
-                Animation_MorphToLoop(&this->skelAnime, &object_tsn_Anim_0092FC, -10.0f);
-                SET_WEEKEVENTREG(WEEKEVENTREG_25_80);
+                Animation_MorphToLoop(&this->skelAnime, &gFishermanIdleAnim, -10.0f);
+                SET_WEEKEVENTREG(WEEKEVENTREG_TALKED_FISHERMAN_AS_ZORA);
                 Message_CloseTextbox(play);
-                this->actionFunc = func_80AE0304;
+                this->actionFunc = EnTsn_Fisherman_Idle;
                 this->actor.textId = 0;
                 break;
 
             case 0x1083:
-                SET_WEEKEVENTREG(WEEKEVENTREG_25_80);
+                SET_WEEKEVENTREG(WEEKEVENTREG_TALKED_FISHERMAN_AS_ZORA);
                 Message_CloseTextbox(play);
-                this->actionFunc = func_80AE0304;
+                this->actionFunc = EnTsn_Fisherman_Idle;
                 this->actor.textId = 0;
                 break;
 
             case 0x1084:
                 Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
-                Animation_MorphToLoop(&this->skelAnime, &object_tsn_Anim_000964, -10.0f);
+                Animation_MorphToLoop(&this->skelAnime, &gFishermanOneHandTalkAnim, -10.0f);
                 break;
 
             case 0x1085:
@@ -235,52 +250,52 @@ void func_80AE0010(EnTsn* this, PlayState* play) {
 
             case 0x1089:
             case 0x1093:
-                SET_WEEKEVENTREG(WEEKEVENTREG_26_01);
+                SET_WEEKEVENTREG(WEEKEVENTREG_TALKED_FISHERMAN_AS_HUMAN);
                 Message_CloseTextbox(play);
-                Animation_MorphToLoop(&this->skelAnime, &object_tsn_Anim_0092FC, -10.0f);
-                this->actionFunc = func_80AE0304;
+                Animation_MorphToLoop(&this->skelAnime, &gFishermanIdleAnim, -10.0f);
+                this->actionFunc = EnTsn_Fisherman_Idle;
                 this->actor.textId = 0;
                 break;
 
             case 0x1087:
-                Animation_MorphToLoop(&this->skelAnime, &object_tsn_Anim_001198, -10.0f);
+                Animation_MorphToLoop(&this->skelAnime, &gFishermanTwoHandTalkAnim, -10.0f);
                 Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                 break;
 
             case 0x1088:
-                SET_WEEKEVENTREG(WEEKEVENTREG_26_01);
+                SET_WEEKEVENTREG(WEEKEVENTREG_TALKED_FISHERMAN_AS_HUMAN);
                 if (INV_CONTENT(ITEM_MASK_ZORA) == ITEM_MASK_ZORA) {
                     Message_CloseTextbox(play);
-                    Animation_MorphToLoop(&this->skelAnime, &object_tsn_Anim_0092FC, -10.0f);
-                    this->actionFunc = func_80AE0304;
+                    Animation_MorphToLoop(&this->skelAnime, &gFishermanIdleAnim, -10.0f);
+                    this->actionFunc = EnTsn_Fisherman_Idle;
                     this->actor.textId = 0;
                 } else {
                     Message_ContinueTextbox(play, 0x1093);
-                    Animation_MorphToLoop(&this->skelAnime, &object_tsn_Anim_0092FC, -10.0f);
+                    Animation_MorphToLoop(&this->skelAnime, &gFishermanIdleAnim, -10.0f);
                 }
                 break;
 
             case 0x107E:
                 Message_CloseTextbox(play);
-                this->actionFunc = func_80AE0304;
+                this->actionFunc = EnTsn_Fisherman_Idle;
                 this->actor.textId = 0;
                 break;
         }
     }
 }
 
-void func_80AE0304(EnTsn* this, PlayState* play) {
+void EnTsn_Fisherman_Idle(EnTsn* this, PlayState* play) {
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
-        this->actionFunc = func_80AE0010;
-        this->unk_220 |= 1;
+        this->actionFunc = EnTsn_Fisherman_Talk;
+        this->flags |= ENTSN_LOOK_AT_PLAYER;
         if (this->actor.textId == 0) {
-            func_80ADFF84(this, play);
+            EnTsn_Fisherman_SetupTalk(this, play);
         }
     } else if ((this->actor.xzDistToPlayer < 150.0f) && Player_IsFacingActor(&this->actor, 0x3000, play)) {
         Actor_OfferTalk(&this->actor, play, 160.0f);
-        this->unk_220 |= 1;
+        this->flags |= ENTSN_LOOK_AT_PLAYER;
     } else {
-        this->unk_220 &= ~1;
+        this->flags &= ~ENTSN_LOOK_AT_PLAYER;
     }
     if (ENTSN_GET_Z(&this->actor)) {
         Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 6, 0x1838, 0x64);
@@ -290,29 +305,29 @@ void func_80AE0304(EnTsn* this, PlayState* play) {
     this->actor.shape.rot.y = this->actor.world.rot.y;
 }
 
-void func_80AE0418(EnTsn* this, PlayState* play) {
+void EnTsn_Seahorse_RemoveFromFishbowl(EnTsn* this, PlayState* play) {
     if (Actor_TextboxIsClosing(&this->actor, play)) {
         Message_StartTextbox(play, 0x107D, NULL);
         Actor_Kill(&this->actor);
     }
 }
 
-void func_80AE0460(EnTsn* this, PlayState* play) {
+void EnTsn_GiveSeahorse(EnTsn* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
-        ENTSN_SET_Z(&this->unk_1D8->actor, false);
-        this->actionFunc = func_80AE0418;
+        ENTSN_SET_Z(&this->fisherman->actor, false);
+        this->actionFunc = EnTsn_Seahorse_RemoveFromFishbowl;
     } else {
         Actor_OfferGetItem(&this->actor, play, GI_SEAHORSE_CAUGHT, 2000.0f, 1000.0f);
     }
 }
 
-void func_80AE04C4(EnTsn* this, PlayState* play) {
+void EnTsn_Object_WaitForTextboxClose(EnTsn* this, PlayState* play) {
     if (Actor_TextboxIsClosing(&this->actor, play)) {
-        this->actionFunc = func_80AE0C88;
+        this->actionFunc = EnTsn_Object_Idle;
     }
 }
 
-void func_80AE04FC(EnTsn* this, PlayState* play) {
+void EnTsn_Object_ItemExchange(EnTsn* this, PlayState* play) {
     PlayerItemAction itemAction;
     Player* player = GET_PLAYER(play);
 
@@ -325,63 +340,51 @@ void func_80AE04FC(EnTsn* this, PlayState* play) {
 
         if (itemAction > PLAYER_IA_NONE) {
             Message_CloseTextbox(play);
-            this->actionFunc = func_80AE0704;
+            this->actionFunc = EnTsn_Object_Talk;
             if (itemAction == PLAYER_IA_PICTOGRAPH_BOX) {
                 if (CHECK_QUEST_ITEM(QUEST_PICTOGRAPH)) {
                     if (Snap_CheckFlag(PICTO_VALID_PIRATE_GOOD)) {
                         player->actor.textId = 0x107B;
-                        return;
-                    }
-
-                    if (Snap_CheckFlag(PICTO_VALID_PIRATE_TOO_FAR)) {
+                    } else if (Snap_CheckFlag(PICTO_VALID_PIRATE_TOO_FAR)) {
                         player->actor.textId = 0x10A9;
-                        return;
+                    } else {
+                        player->actor.textId = 0x1078;
+                        this->flags |= ENTSN_OFFERING_ITEM;
                     }
-
+                } else {
                     player->actor.textId = 0x1078;
-                    this->unk_220 |= 8;
-                    return;
+                    this->flags |= ENTSN_OFFERING_ITEM;
                 }
-
-                player->actor.textId = 0x1078;
-                this->unk_220 |= 8;
-                return;
-            }
-
-            if (itemAction == PLAYER_IA_HOOKSHOT) {
+            } else if (itemAction == PLAYER_IA_HOOKSHOT) {
                 player->actor.textId = 0x1075;
-                return;
+            } else {
+                player->actor.textId = 0x1078;
+                this->flags |= ENTSN_OFFERING_ITEM;
             }
-
-            player->actor.textId = 0x1078;
-            this->unk_220 |= 8;
-            return;
-        }
-
-        if (itemAction <= PLAYER_IA_MINUS1) {
+        } else if (itemAction <= PLAYER_IA_MINUS1) {
             Message_ContinueTextbox(play, 0x1078);
-            Animation_MorphToLoop(&this->unk_1D8->skelAnime, &object_tsn_Anim_001198, -10.0f);
-            this->actionFunc = func_80AE0704;
+            Animation_MorphToLoop(&this->fisherman->skelAnime, &gFishermanTwoHandTalkAnim, -10.0f);
+            this->actionFunc = EnTsn_Object_Talk;
         }
     }
 }
 
-void func_80AE0698(EnTsn* this, PlayState* play) {
+void EnTsn_Object_EndTalk(EnTsn* this, PlayState* play) {
     Message_CloseTextbox(play);
-    this->actionFunc = func_80AE0C88;
-    this->unk_220 &= ~2;
+    this->actionFunc = EnTsn_Object_Idle;
+    this->flags &= ~ENTSN_PLAYER_LOOKS_AT_FISHERMAN;
     this->actor.focus.pos = this->actor.world.pos;
     CutsceneManager_Stop(this->actor.csId);
-    ENTSN_SET_Z(&this->unk_1D8->actor, false);
+    ENTSN_SET_Z(&this->fisherman->actor, false);
 }
 
-void func_80AE0704(EnTsn* this, PlayState* play) {
+void EnTsn_Object_Talk(EnTsn* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 pad[2];
 
-    if ((this->unk_220 & 8) && (play->msgCtx.currentTextId == 0x1078)) {
-        this->unk_220 &= ~8;
-        Animation_MorphToLoop(&this->unk_1D8->skelAnime, &object_tsn_Anim_001198, -10.0f);
+    if ((this->flags & ENTSN_OFFERING_ITEM) && (play->msgCtx.currentTextId == 0x1078)) {
+        this->flags &= ~ENTSN_OFFERING_ITEM;
+        Animation_MorphToLoop(&this->fisherman->skelAnime, &gFishermanTwoHandTalkAnim, -10.0f);
     }
 
     switch (Message_GetState(&play->msgCtx)) {
@@ -392,15 +395,15 @@ void func_80AE0704(EnTsn* this, PlayState* play) {
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x106E:
-                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_25_40)) {
+                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_FISHERMANS_SEAHORSE)) {
                             Message_ContinueTextbox(play, 0x1074);
                         } else {
                             Message_ContinueTextbox(play, 0x106F);
                         }
-                        this->unk_220 |= 2;
-                        SET_WEEKEVENTREG(WEEKEVENTREG_25_40);
-                        ENTSN_SET_Z(&this->unk_1D8->actor, true);
-                        this->unk_220 |= 4;
+                        this->flags |= ENTSN_PLAYER_LOOKS_AT_FISHERMAN;
+                        SET_WEEKEVENTREG(WEEKEVENTREG_TALKED_FISHERMANS_SEAHORSE);
+                        ENTSN_SET_Z(&this->fisherman->actor, true);
+                        this->flags |= ENTSN_CS_QUEUED;
                         break;
 
                     case 0x106F:
@@ -412,7 +415,7 @@ void func_80AE0704(EnTsn* this, PlayState* play) {
 
                     case 0x1076:
                     case 0x1079:
-                        Animation_MorphToLoop(&this->unk_1D8->skelAnime, &object_tsn_Anim_000964, -10.0f);
+                        Animation_MorphToLoop(&this->fisherman->skelAnime, &gFishermanOneHandTalkAnim, -10.0f);
                         Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         break;
 
@@ -424,16 +427,16 @@ void func_80AE0704(EnTsn* this, PlayState* play) {
                     case 0x1078:
                         player->exchangeItemAction = PLAYER_IA_NONE;
                         Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
-                        Animation_MorphToLoop(&this->unk_1D8->skelAnime, &object_tsn_Anim_0092FC, -10.0f);
+                        Animation_MorphToLoop(&this->fisherman->skelAnime, &gFishermanIdleAnim, -10.0f);
                         break;
 
                     case 0x107C:
                         if (Inventory_HasEmptyBottle()) {
-                            SET_WEEKEVENTREG(WEEKEVENTREG_26_08);
+                            SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_SEAHORSE);
                             Message_CloseTextbox(play);
-                            this->actionFunc = func_80AE0460;
-                            func_80AE0460(this, play);
-                            this->unk_220 &= ~2;
+                            this->actionFunc = EnTsn_GiveSeahorse;
+                            EnTsn_GiveSeahorse(this, play);
+                            this->flags &= ~ENTSN_PLAYER_LOOKS_AT_FISHERMAN;
                             this->actor.focus.pos = this->actor.world.pos;
                             CutsceneManager_Stop(this->actor.csId);
                             this->actor.flags &= ~ACTOR_FLAG_TALK;
@@ -446,29 +449,29 @@ void func_80AE0704(EnTsn* this, PlayState* play) {
                     case 0x1073:
                     case 0x1074:
                         Message_ContinueTextbox(play, 0xFF);
-                        this->actionFunc = func_80AE04FC;
+                        this->actionFunc = EnTsn_Object_ItemExchange;
                         break;
 
                     case 0x107B:
                         player->exchangeItemAction = PLAYER_IA_NONE;
                         Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
-                        Animation_MorphToLoop(&this->unk_1D8->skelAnime, &object_tsn_Anim_0092FC, -10.0f);
+                        Animation_MorphToLoop(&this->fisherman->skelAnime, &gFishermanIdleAnim, -10.0f);
                         break;
 
                     case 0x1077:
                     case 0x10A6:
                     case 0x10A8:
-                        Animation_MorphToLoop(&this->unk_1D8->skelAnime, &object_tsn_Anim_0092FC, -10.0f);
-                        func_80AE0698(this, play);
+                        Animation_MorphToLoop(&this->fisherman->skelAnime, &gFishermanIdleAnim, -10.0f);
+                        EnTsn_Object_EndTalk(this, play);
                         this->actor.flags &= ~ACTOR_FLAG_TALK;
-                        this->actionFunc = func_80AE04C4;
+                        this->actionFunc = EnTsn_Object_WaitForTextboxClose;
                         break;
 
                     case 0x108A:
                     case 0x1091:
-                        SET_WEEKEVENTREG(WEEKEVENTREG_26_04);
+                        SET_WEEKEVENTREG(WEEKEVENTREG_LOOKED_AT_PIRATE_POSTER);
                         Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
-                        this->unk_220 |= 2;
+                        this->flags |= ENTSN_PLAYER_LOOKS_AT_FISHERMAN;
                         this->actor.textId = 0x1091;
                         break;
 
@@ -481,27 +484,27 @@ void func_80AE0704(EnTsn* this, PlayState* play) {
                         break;
 
                     case 0x1092:
-                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_26_08)) {
-                            func_80AE0698(this, play);
+                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_SEAHORSE)) {
+                            EnTsn_Object_EndTalk(this, play);
                         } else {
                             Message_ContinueTextbox(play, 0x10A7);
-                            Animation_MorphToLoop(&this->unk_1D8->skelAnime, &object_tsn_Anim_000964, -10.0f);
+                            Animation_MorphToLoop(&this->fisherman->skelAnime, &gFishermanOneHandTalkAnim, -10.0f);
                         }
                         break;
 
                     case 0x10A7:
-                        Animation_MorphToLoop(&this->unk_1D8->skelAnime, &object_tsn_Anim_0092FC, -10.0f);
-                        func_80AE0698(this, play);
+                        Animation_MorphToLoop(&this->fisherman->skelAnime, &gFishermanIdleAnim, -10.0f);
+                        EnTsn_Object_EndTalk(this, play);
                         break;
 
                     case 0x1090:
-                        func_80AE0698(this, play);
+                        EnTsn_Object_EndTalk(this, play);
                         break;
 
                     case 0x10A9:
-                        func_80AE0698(this, play);
+                        EnTsn_Object_EndTalk(this, play);
                         this->actor.flags &= ~ACTOR_FLAG_TALK;
-                        this->actionFunc = func_80AE04C4;
+                        this->actionFunc = EnTsn_Object_WaitForTextboxClose;
                         break;
 
                     default:
@@ -514,53 +517,53 @@ void func_80AE0704(EnTsn* this, PlayState* play) {
             break;
     }
 
-    if (this->unk_220 & 2) {
-        if (this->unk_1D8 != NULL) {
-            Math_SmoothStepToF(&this->actor.focus.pos.x, this->unk_1D8->actor.focus.pos.x, 0.8f, 100.0f, 5.0f);
-            Math_SmoothStepToF(&this->actor.focus.pos.y, this->unk_1D8->actor.focus.pos.y, 0.8f, 100.0f, 5.0f);
-            Math_SmoothStepToF(&this->actor.focus.pos.z, this->unk_1D8->actor.focus.pos.z, 0.8f, 100.0f, 5.0f);
+    if (this->flags & ENTSN_PLAYER_LOOKS_AT_FISHERMAN) {
+        if (this->fisherman != NULL) {
+            Math_SmoothStepToF(&this->actor.focus.pos.x, this->fisherman->actor.focus.pos.x, 0.8f, 100.0f, 5.0f);
+            Math_SmoothStepToF(&this->actor.focus.pos.y, this->fisherman->actor.focus.pos.y, 0.8f, 100.0f, 5.0f);
+            Math_SmoothStepToF(&this->actor.focus.pos.z, this->fisherman->actor.focus.pos.z, 0.8f, 100.0f, 5.0f);
         }
     }
 
-    if (this->unk_220 & 4) {
+    if (this->flags & ENTSN_CS_QUEUED) {
         if (this->actor.csId == CS_ID_NONE) {
-            this->unk_220 &= ~4;
+            this->flags &= ~ENTSN_CS_QUEUED;
         } else if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
             CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
             CutsceneManager_Queue(this->actor.csId);
         } else if (CutsceneManager_IsNext(this->actor.csId)) {
             CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
-            this->unk_220 &= ~4;
+            this->flags &= ~ENTSN_CS_QUEUED;
         } else {
             CutsceneManager_Queue(this->actor.csId);
         }
     }
 }
 
-void func_80AE0C88(EnTsn* this, PlayState* play) {
+void EnTsn_Object_Idle(EnTsn* this, PlayState* play) {
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
-        this->actionFunc = func_80AE0704;
+        this->actionFunc = EnTsn_Object_Talk;
         if ((this->actor.textId == 0x108A) || (this->actor.textId == 0x1091)) {
-            this->unk_220 |= 4;
-            ENTSN_SET_Z(&this->unk_1D8->actor, true);
+            this->flags |= ENTSN_CS_QUEUED;
+            ENTSN_SET_Z(&this->fisherman->actor, true);
         }
     } else if (this->actor.isLockedOn) {
         Actor_OfferTalk(&this->actor, play, 1000.0f);
     }
 }
 
-void func_80AE0D10(EnTsn* this, PlayState* play) {
+void EnTsn_Seahorse_Talk(EnTsn* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_EVENT) && Message_ShouldAdvance(play)) {
         Message_CloseTextbox(play);
-        this->actionFunc = func_80AE0D78;
+        this->actionFunc = EnTsn_Seahorse_Idle;
         CutsceneManager_Stop(this->actor.csId);
     }
 }
 
-void func_80AE0D78(EnTsn* this, PlayState* play) {
+void EnTsn_Seahorse_Idle(EnTsn* this, PlayState* play) {
     if (Actor_TalkOfferAccepted(&this->actor, &play->state)) {
-        this->actionFunc = func_80AE0D10;
-        this->unk_220 |= 4;
+        this->actionFunc = EnTsn_Seahorse_Talk;
+        this->flags |= ENTSN_CS_QUEUED;
     } else if (this->actor.isLockedOn) {
         Actor_OfferTalk(&this->actor, play, 1000.0f);
     }
@@ -578,7 +581,7 @@ void EnTsn_Update(Actor* thisx, PlayState* play) {
     Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 25.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     SkelAnime_Update(&this->skelAnime);
 
-    if (this->unk_220 & 1) {
+    if (this->flags & ENTSN_LOOK_AT_PLAYER) {
         Actor_TrackPlayer(play, &this->actor, &this->headRot, &this->torsoRot, this->actor.focus.pos);
     } else {
         Math_SmoothStepToS(&this->headRot.x, 0, 6, 0x1838, 0x64);
@@ -587,18 +590,18 @@ void EnTsn_Update(Actor* thisx, PlayState* play) {
         Math_SmoothStepToS(&this->torsoRot.y, 0, 6, 0x1838, 0x64);
     }
 
-    if (DECR(this->unk_230) == 0) {
-        this->unk_230 = Rand_S16Offset(60, 60);
+    if (DECR(this->blinkTimer) == 0) {
+        this->blinkTimer = Rand_S16Offset(60, 60);
     }
 
-    if ((this->unk_230 == 1) || (this->unk_230 == 3)) {
-        this->unk_22E = 1;
+    if ((this->blinkTimer == 1) || (this->blinkTimer == 3)) {
+        this->eyeIndex = FISHERMAN_EYE_CLOSED;
     } else {
-        this->unk_22E = 0;
+        this->eyeIndex = FISHERMAN_EYE_OPEN;
     }
 }
 
-void func_80AE0F84(Actor* thisx, PlayState* play) {
+void EnTsn_UpdateObject(Actor* thisx, PlayState* play) {
     EnTsn* this = (EnTsn*)thisx;
 
     this->actionFunc(this, play);
@@ -606,16 +609,16 @@ void func_80AE0F84(Actor* thisx, PlayState* play) {
 
 s32 EnTsn_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnTsn* this = (EnTsn*)thisx;
-    s16 shifted = this->headRot.x >> 1;
+    s16 halfRotX = this->headRot.x >> 1;
 
     if (limbIndex == OBJECT_TSN_LIMB_0F) {
         rot->x += this->headRot.y;
-        rot->z += shifted;
+        rot->z += halfRotX;
     }
 
     if (limbIndex == OBJECT_TSN_LIMB_08) {
         rot->x += this->torsoRot.y;
-        rot->z += shifted;
+        rot->z += halfRotX;
     }
     return false;
 }
@@ -630,7 +633,7 @@ void EnTsn_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
 }
 
 void EnTsn_Draw(Actor* thisx, PlayState* play) {
-    static TexturePtr D_80AE11C8[] = { object_tsn_Tex_0073B8, object_tsn_Tex_0085B8 };
+    static TexturePtr sEyeTextures[] = { gFishermanEyeOpenTex, gFishermanEyeClosedTex };
     s32 pad;
     EnTsn* this = (EnTsn*)thisx;
 
@@ -638,8 +641,8 @@ void EnTsn_Draw(Actor* thisx, PlayState* play) {
 
     Gfx_SetupDL37_Opa(play->state.gfxCtx);
 
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80AE11C8[this->unk_22E]));
-    gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80AE11C8[this->unk_22E]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeIndex]));
+    gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sEyeTextures[this->eyeIndex]));
 
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnTsn_OverrideLimbDraw, EnTsn_PostLimbDraw, &this->actor);

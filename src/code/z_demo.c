@@ -49,7 +49,9 @@ void Cutscene_InitContext(PlayState* play, CutsceneContext* csCtx) {
 
     gDisablePlayerCsActionStartPos = false;
 
+#if MM_VERSION >= N64_US
     Audio_SetCutsceneFlag(false);
+#endif
 }
 
 void Cutscene_StartManual(PlayState* play, CutsceneContext* csCtx) {
@@ -191,6 +193,11 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
             if (isFirstFrame && (csCtx->state != CS_STATE_RUN_UNSTOPPABLE)) {
                 csCtx->state = CS_STATE_STOP;
             }
+            break;
+
+        case CS_MISC_UNIMPLEMENTED_6:
+            PRINTF(T("『上からみる（プリレンダ）』はもう無いよ〜\n",
+                     "The 'view from above (pre-rendered)' option is gone now~\n"));
             break;
 
         case CS_MISC_SHOW_TITLE_CARD:
@@ -349,13 +356,19 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
 
         case CS_MISC_SAVE_ENTER_CLOCK_TOWN:
             if (isFirstFrame) {
+#if MM_VERSION >= N64_US
                 Sram_SaveSpecialEnterClockTown(play);
+#else
+                Sram_SaveSpecialEnterClockTown(&play->sramCtx);
+#endif
             }
             break;
 
         case CS_MISC_RESET_SAVE_FROM_MOON_CRASH:
             if (isFirstFrame) {
+                PRINTF(T("\nフラッシュの内容をロードします！", "\nLoading the contents of the flash!"));
                 Sram_ResetSaveFromMoonCrash(&play->sramCtx);
+                PRINTF(T("\nフラッシュの内容をロードしましたよ。", "\nThe contents of the flash have been loaded."));
             }
             break;
 
@@ -1068,6 +1081,8 @@ void CutsceneCmd_Text(PlayState* play, CutsceneContext* csCtx, CsCmdText* cmd) {
                         if (cmd->type == CS_TEXT_TYPE_3) {
                             sCutsceneTextboxType = CS_TEXT_TYPE_3;
                             if (cmd->altTextId2 != 0xFFFF) {
+                                PRINTF(T("\nコード３デモメッセージにffffが有りません。!",
+                                         "\nThe code 3 demo message is missing ffff"));
                                 csCtx->curFrame++;
                             }
                         }
@@ -1086,6 +1101,8 @@ void CutsceneCmd_Text(PlayState* play, CutsceneContext* csCtx, CsCmdText* cmd) {
                         if (cmd->type == CS_TEXT_TYPE_3) {
                             sCutsceneTextboxType = CS_TEXT_TYPE_3;
                             if (cmd->altTextId1 != 0xFFFF) {
+                                PRINTF(T("\nコード３デモメッセージにffffが有りません。!",
+                                         "\nThe code 3 demo message is missing ffff"));
                                 csCtx->curFrame++;
                             }
                         }
@@ -1182,6 +1199,8 @@ void Cutscene_ProcessScript(PlayState* play, CutsceneContext* csCtx, u8* script)
 
     if ((csCtx->curFrame > (u16)csFrameCount) && (play->transitionTrigger != TRANS_TRIGGER_START) &&
         (csCtx->state != CS_STATE_RUN_UNSTOPPABLE)) {
+        PRINTF(T("\nデモ指令が多すぎの可能性あり。要調査",
+                 "\nThere may be too many demonstration orders. Further investigation is needed."));
         csCtx->state = CS_STATE_STOP;
         return;
     }

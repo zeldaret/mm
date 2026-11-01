@@ -170,19 +170,19 @@ void DmHina_Draw(Actor* thisx, PlayState* play) {
         scale = this->unk148 * (1.0f - this->unk14C) * this->unk15C;
         Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
         switch (this->actor.params) {
-            case 0:
+            case DMHINA_REMAINS_ODOLWA:
                 GetItem_Draw(play, GID_REMAINS_ODOLWA);
                 break;
 
-            case 1:
+            case DMHINA_REMAINS_GOHT:
                 GetItem_Draw(play, GID_REMAINS_GOHT);
                 break;
 
-            case 2:
+            case DMHINA_REMAINS_GYORG:
                 GetItem_Draw(play, GID_REMAINS_GYORG);
                 break;
 
-            case 3:
+            case DMHINA_REMAINS_TWINMOLD:
                 GetItem_Draw(play, GID_REMAINS_TWINMOLD);
                 break;
 

@@ -5,10 +5,13 @@
 
 void Setup_InitRegs(void) {
     XREG(2) = 0;
+
+#if MM_VERSION >= N64_US
     XREG(10) = 26;
     XREG(11) = 20;
     XREG(12) = 14;
     XREG(13) = 0;
+#endif
     R_A_BTN_Y_OFFSET = 0;
     R_MAGIC_CONSUME_TIMER_GIANTS_MASK = 80;
 
