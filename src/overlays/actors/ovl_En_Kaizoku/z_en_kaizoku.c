@@ -387,7 +387,8 @@ s32 EnKaizoku_ReactToPlayer(EnKaizoku* this, PlayState* play, s16 arg2) {
     s16 angleToPlayer = ABS_ALT(this->picto.actor.yawTowardsPlayer - this->picto.actor.shape.rot.y);
     Actor* explosiveActor;
 
-    if (Actor_MeleeCombatResponse(play, &this->picto.actor, 100.0f, 0x2710, 0x4000, this->picto.actor.shape.rot.y)) {
+    if (Actor_ShouldRespondToMeleeCombat(play, &this->picto.actor, 100.0f, 0x2710, 0x4000,
+                                         this->picto.actor.shape.rot.y)) {
         if (player->meleeWeaponAnimation == PLAYER_MWA_JUMPSLASH_START) {
             if (this->action != KAIZOKU_ACTION_SPIN_DODGE) {
                 EnKaizoku_SetupSpinDodge(this, play);
@@ -397,8 +398,8 @@ s32 EnKaizoku_ReactToPlayer(EnKaizoku* this, PlayState* play, s16 arg2) {
             EnKaizoku_SetupBlock(this);
             return true;
         }
-    } else if (Actor_MeleeCombatResponse(play, &this->picto.actor, 100.0f, 0x5DC0, 0x2AA8,
-                                         this->picto.actor.shape.rot.y)) {
+    } else if (Actor_ShouldRespondToMeleeCombat(play, &this->picto.actor, 100.0f, 0x5DC0, 0x2AA8,
+                                                this->picto.actor.shape.rot.y)) {
         this->picto.actor.shape.rot.y = this->picto.actor.world.rot.y = this->picto.actor.yawTowardsPlayer;
         if ((this->picto.actor.bgCheckFlags & BGCHECKFLAG_WALL) && (ABS_ALT(angleToWall) < 0x2EE0) &&
             (this->picto.actor.xzDistToPlayer < 90.0f)) {
@@ -1085,8 +1086,8 @@ void EnKaizoku_Block(EnKaizoku* this, PlayState* play) {
         angleToPlayer = this->picto.actor.yawTowardsPlayer - this->picto.actor.shape.rot.y;
         if ((ABS_ALT(angleToPlayer) <= 0x4000) && (this->picto.actor.xzDistToPlayer < 40.0f) &&
             (fabsf(this->picto.actor.playerHeightRel) < 50.0f)) {
-            if (Actor_MeleeCombatResponse(play, &this->picto.actor, 100.0f, 10000, 0x4000,
-                                          this->picto.actor.shape.rot.y)) {
+            if (Actor_ShouldRespondToMeleeCombat(play, &this->picto.actor, 100.0f, 10000, 0x4000,
+                                                 this->picto.actor.shape.rot.y)) {
                 if (player->meleeWeaponAnimation == PLAYER_MWA_JUMPSLASH_START) {
                     this->bodyCollider.base.acFlags &= ~AC_HARD;
                     EnKaizoku_SetupSpinDodge(this, play);
@@ -1110,8 +1111,8 @@ void EnKaizoku_Block(EnKaizoku* this, PlayState* play) {
             this->bodyCollider.base.acFlags &= ~AC_HARD;
             EnKaizoku_SetupCircle(this);
         }
-    } else if ((this->combatTimer == 0) && Actor_MeleeCombatResponse(play, &this->picto.actor, 100.0f, 10000, 0x4000,
-                                                                     this->picto.actor.shape.rot.y)) {
+    } else if ((this->combatTimer == 0) && Actor_ShouldRespondToMeleeCombat(play, &this->picto.actor, 100.0f, 10000,
+                                                                            0x4000, this->picto.actor.shape.rot.y)) {
         if (player->meleeWeaponAnimation == PLAYER_MWA_JUMPSLASH_START) {
             this->bodyCollider.base.acFlags &= ~AC_HARD;
             EnKaizoku_SetupSpinDodge(this, play);

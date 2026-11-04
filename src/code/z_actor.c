@@ -4932,8 +4932,8 @@ Actor* Actor_FindNearby(PlayState* play, Actor* inActor, s16 actorId, u8 actorCa
  *
  * @returns true if the conditions are met, else false
  */
-s32 Actor_MeleeCombatResponse(PlayState* play, Actor* actor, f32 range, s16 actorFaceMax, s16 playerFaceMax,
-                              s16 actorShapeRotY) {
+s32 Actor_ShouldRespondToMeleeCombat(PlayState* play, Actor* actor, f32 range, s16 actorFaceMax, s16 playerFaceMax,
+                                     s16 actorShapeRotY) {
     Player* player = GET_PLAYER(play);
     s16 playerFaceActorYawDiff = BINANG_SUB(BINANG_ROT180(actor->yawTowardsPlayer), player->actor.shape.rot.y);
     s16 actorFacePlayerYawDiff = actor->yawTowardsPlayer - actorShapeRotY;
