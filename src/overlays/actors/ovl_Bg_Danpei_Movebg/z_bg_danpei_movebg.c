@@ -6,6 +6,13 @@
 
 #include "z_bg_danpei_movebg.h"
 
+#include "gfx.h"
+#include "ichain.h"
+#include "macros.h"
+#include "segmented_address.h"
+#include "sfx.h"
+#include "z64play.h"
+
 #include "assets/objects/object_d_lift/object_d_lift.h"
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)

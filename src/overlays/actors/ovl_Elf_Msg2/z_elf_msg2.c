@@ -5,6 +5,9 @@
  */
 
 #include "z_elf_msg2.h"
+#include "ichain.h"
+#include "macros.h"
+#include "z64play.h"
 
 #define FLAGS (ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 

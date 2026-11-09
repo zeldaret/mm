@@ -28,6 +28,7 @@
  */
 
 #include "z_boss_05.h"
+#include "z_en_item00.h"
 #include "attributes.h"
 #include "z_en_item00.h"
 

@@ -2,10 +2,12 @@
 #define Z_EN_BBA_01_H
 
 #include "z_en_hy_code.h"
+#include "unk.h"
+#include "z64actor.h"
 
 struct EnBba01;
 
-typedef void (*EnBba01ActionFunc)(struct EnBba01*, PlayState*);
+typedef void (*EnBba01ActionFunc)(struct EnBba01*, struct PlayState*);
 
 #define ENBBA01_GET_PATH_INDEX(thisx) (((thisx)->params & 0x7E00) >> 9)
 
