@@ -2,6 +2,7 @@
 #define Z64ENHY_CODE_H
 
 #include "global.h"
+#include "versions.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
 
 struct EnHy;
@@ -124,11 +125,18 @@ s32 EnHy_Init(EnHy* enHy, PlayState* play, FlexSkeletonHeader* skeletonHeaderSeg
 void func_800F0BB4(EnHy* enHy, PlayState* play, EnDoor* door, s16 arg3, s16 arg4);
 s32 func_800F0CE4(EnHy* enHy, PlayState* play, ActorFunc draw, s16 arg3, s16 arg4, f32 arg5);
 s32 func_800F0DD4(EnHy* enHy, PlayState* play, s16 arg2, s16 arg3);
-s32 EnHy_SetPointFowards(EnHy* enHy, PlayState* play, f32 gravity, s16 animIndex);
-s32 EnHy_SetPointBackwards(EnHy* enHy, PlayState* play, s16 animIndex);
 s32 EnHy_MoveForwards(EnHy* enHy, f32 speedTarget);
 s32 EnHy_MoveBackwards(EnHy* enHy, f32 speedTarget);
 void EnHy_UpdateCollider(EnHy* enHy, PlayState* play);
 s32 EnHy_PlayWalkingSound(EnHy* enHy, PlayState* play, f32 distAboveThreshold);
+
+#if MM_VERSION >= N64_US
+#define SetPointReturn s32
+#else
+#define SetPointReturn void
+#endif
+
+SetPointReturn EnHy_SetPointFowards(EnHy* enHy, PlayState* play, f32 gravity, s16 animIndex);
+SetPointReturn EnHy_SetPointBackwards(EnHy* enHy, PlayState* play, s16 animIndex);
 
 #endif // Z_EN_HY_CODE_H

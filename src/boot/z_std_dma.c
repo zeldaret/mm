@@ -22,6 +22,7 @@
 
 #include "carthandle.h"
 #include "fault.h"
+#include "line_numbers.h"
 #include "macros.h"
 #include "segment_symbols.h"
 #include "stack.h"
@@ -177,11 +178,7 @@ void DmaMgr_ProcessRequest(DmaRequest* req) {
             // only part of their content loaded into RAM, so DMA only the requested region.
             if (entry->file.vromEnd < (vrom + size)) {
                 // Error, vrom + size ends up in a different file than it started in
-#if MM_VERSION >= N64_US
-                Fault_AddHungupAndCrash("../z_std_dma.c", 499);
-#else
-                Fault_AddHungupAndCrash("../z_std_dma.c", 496);
-#endif
+                Fault_AddHungupAndCrash("../z_std_dma.c", LN1(496, 499));
             }
             DmaMgr_DmaRomToRam((entry->romStart + vrom) - entry->file.vromStart, ram, size);
         } else {
@@ -192,20 +189,12 @@ void DmaMgr_ProcessRequest(DmaRequest* req) {
 
             if (vrom != entry->file.vromStart) {
                 // Error, requested vrom is not the start of a file
-#if MM_VERSION >= N64_US
-                Fault_AddHungupAndCrash("../z_std_dma.c", 518);
-#else
-                Fault_AddHungupAndCrash("../z_std_dma.c", 515);
-#endif
+                Fault_AddHungupAndCrash("../z_std_dma.c", LN1(515, 518));
             }
 
             if (size != (entry->file.vromEnd - entry->file.vromStart)) {
                 // Error, only part of the file was requested
-#if MM_VERSION >= N64_US
-                Fault_AddHungupAndCrash("../z_std_dma.c", 525);
-#else
-                Fault_AddHungupAndCrash("../z_std_dma.c", 522);
-#endif
+                Fault_AddHungupAndCrash("../z_std_dma.c", LN1(522, 525));
             }
 
             // Reduce the thread priority and decompress the file, the decompression routine handles the DMA
@@ -216,11 +205,7 @@ void DmaMgr_ProcessRequest(DmaRequest* req) {
         }
     } else {
         // Error, invalid index
-#if MM_VERSION >= N64_US
-        Fault_AddHungupAndCrash("../z_std_dma.c", 558);
-#else
-        Fault_AddHungupAndCrash("../z_std_dma.c", 555);
-#endif
+        Fault_AddHungupAndCrash("../z_std_dma.c", LN1(555, 558));
     }
 }
 

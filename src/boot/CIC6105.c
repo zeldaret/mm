@@ -63,6 +63,9 @@ void CIC6105_Destroy(void) {
 }
 
 #if MM_VERSION < N64_US
+//! TODO: Determine where this goes
+static const char unusedString[] = "flag:%08x data:%08x\n";
+
 void CIC6105_ScheduleCICTask(void) {
     // TODO: do something with the hardcoded sizes
     static OSTask D_80097AA0_unknown = {
@@ -104,8 +107,6 @@ void CIC6105_ScheduleCICTask(void) {
     gCICValue1 = IO_READ(SP_DMEM_START + 0xFF4);
     gCICValue2 = IO_READ(SP_DMEM_START + 0xFFC);
     CIC6105_ILoveYou();
-
-    (void)"flag:%08x data:%08x\n";
 }
 
 s32 CIC6105_ILoveYou(void) {

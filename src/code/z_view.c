@@ -131,6 +131,7 @@ void View_GetViewport(View* view, Viewport* viewport) {
 void View_SetScissor(Gfx** gfx, s32 ulx, s32 uly, s32 lrx, s32 lry) {
     Gfx* gfxP = *gfx;
 
+    PRINTF("setScissorX:ul=[%3d %3d] lr=[%3d %3d]\n", ulx, uly, lrx, lry);
     gDPSetScissor(gfxP++, G_SC_NON_INTERLACE, ulx, uly, lrx, lry);
 
     *gfx = gfxP;

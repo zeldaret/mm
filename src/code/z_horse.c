@@ -86,7 +86,11 @@ void Horse_ResetHorseData(PlayState* play) {
     gSaveContext.save.saveInfo.horseData.pos.x = -1420;
     gSaveContext.save.saveInfo.horseData.pos.y = 257;
     gSaveContext.save.saveInfo.horseData.pos.z = -1285;
+#if MM_VERSION >= N64_US
     gSaveContext.save.saveInfo.horseData.yaw = 0x2AAA;
+#else
+    gSaveContext.save.saveInfo.horseData.yaw = -0x7554;
+#endif
 }
 
 s32 gHorseIsMounted = false;
@@ -140,6 +144,8 @@ void Horse_SpawnOverworld(PlayState* play, Player* player) {
         Player_MountHorse(play, player, player->rideActor);
         Player_SetCameraHorseSetting(play, player);
     } else if ((play->sceneId == gSaveContext.save.saveInfo.horseData.sceneId) && CHECK_QUEST_ITEM(QUEST_SONG_EPONA)) {
+        PRINTF(T("馬存在によるセット %d %d\n", "Set by existence of horse %d %d\n"),
+               gSaveContext.save.saveInfo.horseData.sceneId, CHECK_QUEST_ITEM(QUEST_SONG_EPONA));
         if (Horse_IsValidSpawn(gSaveContext.save.saveInfo.horseData.sceneId)) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, gSaveContext.save.saveInfo.horseData.pos.x,
                         gSaveContext.save.saveInfo.horseData.pos.y, gSaveContext.save.saveInfo.horseData.pos.z, 0,
@@ -148,7 +154,12 @@ void Horse_SpawnOverworld(PlayState* play, Player* player) {
             Horse_ResetHorseData(play);
         }
     } else if ((play->sceneId == SCENE_F01) && !CHECK_QUEST_ITEM(QUEST_SONG_EPONA)) {
-        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, -1420.0f, 257.0f, -1285.0f, 0, 0x2AAA, 0,
+#if MM_VERSION >= N64_US
+#define ROT_Y 0x2AAA
+#else
+#define ROT_Y 0
+#endif
+        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, -1420.0f, 257.0f, -1285.0f, 0, ROT_Y, 0,
                     ENHORSE_PARAMS(ENHORSE_PARAM_4000, ENHORSE_1));
     } else if (CHECK_QUEST_ITEM(QUEST_SONG_EPONA) && Horse_IsValidSpawn(play->sceneId)) {
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, player->actor.world.pos.x, player->actor.world.pos.y,
@@ -188,8 +199,10 @@ void Horse_Spawn(PlayState* play, Player* player) {
           (GET_WEEKEVENTREG_HORSE_RACE_STATE == WEEKEVENTREG_HORSE_RACE_STATE_2)))) {
         // Gorman Track and horse state is either STATE_START, STATE_2 or STATE_3
         // or Romani Ranch, Player is Human and scene layer is either 1 or 5
+        PRINTF(T("デモセット開始\n", "Demo set starting\n"));
         Horse_SpawnMinigame(play, player);
     } else {
+        PRINTF(T("通常セット開始\n", "Standard set starts\n"));
         Horse_SpawnOverworld(play, player);
     }
 
