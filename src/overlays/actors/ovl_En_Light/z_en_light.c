@@ -104,8 +104,8 @@ void EnLight_Update(Actor* thisx, PlayState* play) {
         f32 temp_f2 = (Rand_ZeroOne() * 0.5f) + 0.5f;
         s32 radius = (this->actor.params < 0) ? 100 : ENLIGHT_GET_2000(&this->actor) ? 730 : 300;
 
-        Lights_PointSetColorAndRadius(&this->lightInfo, (u8)(sp28->primColor.r * temp_f2), (u8)(sp28->primColor.g * temp_f2),
-                                      (u8)(sp28->primColor.b * temp_f2), radius);
+        Lights_PointSetColorAndRadius(&this->lightInfo, (u8)(sp28->primColor.r * temp_f2),
+                                      (u8)(sp28->primColor.g * temp_f2), (u8)(sp28->primColor.b * temp_f2), radius);
     }
 
     EnLight_UpdatePosRot(this, play);
@@ -148,8 +148,9 @@ void EnLight_UpdateSwitch(Actor* thisx, PlayState* play) {
 
     if (!ENLIGHT_GET_4000(&this->actor)) {
         temp_f2 = (Rand_ZeroOne() * 0.5f) + 0.5f;
-        Lights_PointSetColorAndRadius(&this->lightInfo, (u8)(sp38->primColor.r * temp_f2), (u8)(sp38->primColor.g * temp_f2),
-                                      (u8)(sp38->primColor.b * temp_f2), 300.0f * scale);
+        Lights_PointSetColorAndRadius(&this->lightInfo, (u8)(sp38->primColor.r * temp_f2),
+                                      (u8)(sp38->primColor.g * temp_f2), (u8)(sp38->primColor.b * temp_f2),
+                                      300.0f * scale);
     }
 
     EnLight_UpdatePosRot(this, play);
@@ -174,7 +175,8 @@ void EnLight_Draw(Actor* thisx, PlayState* play) {
             POLY_XLU_DISP++, 0x08,
             Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0, (this->timer * -20) & 0x1FF, 0x20, 0x80));
         dList = gEffFire1DL;
-        gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, sp6C->primColor.r, sp6C->primColor.g, sp6C->primColor.b, sp6C->primColor.a);
+        gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, sp6C->primColor.r, sp6C->primColor.g, sp6C->primColor.b,
+                        sp6C->primColor.a);
         gDPSetEnvColor(POLY_XLU_DISP++, sp6C->envColor.r, sp6C->envColor.g, sp6C->envColor.b, 0);
     } else {
         gSPSegment(POLY_XLU_DISP++, 0x08,
