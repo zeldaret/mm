@@ -81,8 +81,8 @@ Vec3f D_801EDDF0;
  * runtime. If a small f32 is being stored as an s16, it is common to store that value 100 times larger than the
  * original value. This is then scaled back down during runtime with the CAM_RODATA_UNSCALE macro.
  */
-#define CAM_RODATA_SCALE(x) ((x)*100.0f)
-#define CAM_RODATA_UNSCALE(x) ((x)*0.01f)
+#define CAM_RODATA_SCALE(x) ((x) * 100.0f)
+#define CAM_RODATA_UNSCALE(x) ((x) * 0.01f)
 
 // Load the next value from camera read-only data stored in CameraModeValue
 #define GET_NEXT_RO_DATA(values) ((values++)->val)

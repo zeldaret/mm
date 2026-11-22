@@ -8,8 +8,7 @@ AudioCustomReverbFunction gAudioCustomReverbFunction;
 AudioCustomSynthFunction gAudioCustomSynthFunction;
 static s32 sBssPad2[3];
 
-#define REVERB_INDEX_0_SETTINGS \
-    { 1, 0x30, 0x3000, 0, 0, 0x7FFF, 0x0000, 0x0000, REVERB_INDEX_NONE, 0x3000, 0, 0 }
+#define REVERB_INDEX_0_SETTINGS { 1, 0x30, 0x3000, 0, 0, 0x7FFF, 0x0000, 0x0000, REVERB_INDEX_NONE, 0x3000, 0, 0 }
 
 ReverbSettings reverbSettings0[3] = {
     REVERB_INDEX_0_SETTINGS,

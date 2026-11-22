@@ -17,7 +17,7 @@
 #define BOMBERS_NOTEBOOK_ENTRY_GET_END_TIME(row, entry) ((&sBombersNotebookEntries[row][entry])[2])
 
 #define BOMBERS_NOTEBOOK_ENTRY(pos, day, event, startTime, endTime) \
-    ((pos)&0xF000) | (((day)&0xF) << 8) | ((event)&0xFF), (startTime), (endTime)
+    ((pos) & 0xF000) | (((day) & 0xF) << 8) | ((event) & 0xFF), (startTime), (endTime)
 #define BOMBERS_NOTEBOOK_ENTRY_END 0x9999
 
 #define BOMBERS_NOTEBOOK_ENTRY_POS_CENTER 0x0000

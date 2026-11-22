@@ -2071,11 +2071,9 @@ CameraModeValue sSetDungeon4ModeStillData[] = {
  * =====================================================================
  */
 
-#define CAM_SETTING_MODE_ENTRY(func, data) \
-    { func, ARRAY_COUNT(data), data }
+#define CAM_SETTING_MODE_ENTRY(func, data) { func, ARRAY_COUNT(data), data }
 
-#define CAM_SETTING_MODE_NULL \
-    { CAM_FUNC_NONE, 0, NULL }
+#define CAM_SETTING_MODE_NULL { CAM_FUNC_NONE, 0, NULL }
 
 CameraMode sCamSetNormal0Modes[] = {
     CAM_SETTING_MODE_ENTRY(CAM_FUNC_NORMAL1, sSetNormal0ModeNormalData),          // CAM_MODE_NORMAL

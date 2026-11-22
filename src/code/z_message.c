@@ -113,7 +113,7 @@ u16 gBombersNotebookWeekEventFlags[BOMBERS_NOTEBOOK_EVENT_MAX] = {
 #undef DEFINE_PERSON
 #undef DEFINE_EVENT
 
-#define DEFINE_MESSAGE(textId, type, yPos, msg) { textId, (((type)&0xF) << 4) | ((yPos)&0xF), _message_##textId },
+#define DEFINE_MESSAGE(textId, type, yPos, msg) { textId, (((type) & 0xF) << 4) | ((yPos) & 0xF), _message_##textId },
 
 MessageTableEntry sMessageTableNES[] = {
 #include "assets/text/message_data.h"
@@ -123,7 +123,7 @@ MessageTableEntry sMessageTableNES[] = {
 #undef DEFINE_MESSAGE
 
 #define DEFINE_MESSAGE(textId, type, yPos, msg) \
-    { textId, (((type)&0xF) << 4) | ((yPos)&0xF), _message_##textId##_staff },
+    { textId, (((type) & 0xF) << 4) | ((yPos) & 0xF), _message_##textId##_staff },
 
 MessageTableEntry sMessageTableCredits[] = {
 #include "assets/text/message_data_staff.h"
@@ -2146,28 +2146,17 @@ void Message_LoadTime(PlayState* play, u16 curChar, s32* offset, f32* arg3, s16*
     *arg3 = f;
 }
 
-#define GREAT_BAY_COAST_STR \
-    { 'グ', 'レ', 'ー', 'ト', 'ベ', 'イ', 'の', '海', '岸' }
-#define ZORA_CAPE_STR \
-    { 'ゾ', 'ー', 'ラ', 'の', 'み', 'さ', 'き' }
-#define SNOWHEAD_STR \
-    { 'ス', 'ノ', 'ー', 'ヘ', 'ッ', 'ド' }
-#define MOUNTAIN_VILLAGE_STR \
-    { '山', '里' }
-#define CLOCK_TOWN_STR \
-    { 'ク', 'ロ', 'ッ', 'ク', 'タ', 'ウ', 'ン' }
-#define MILK_ROAD_STR \
-    { 'ミ', 'ル', 'ク', 'ロ', 'ー', 'ド' }
-#define WOODFALL_STR \
-    { 'ウ', 'ッ', 'ド', 'フ', 'ォ', 'ー', 'ル' }
-#define SOUTHERN_SWAMP_STR \
-    { '沼', '地' }
-#define IKANA_CANYON_STR \
-    { 'イ', 'カ', 'ー', 'ナ', '渓', '谷' }
-#define STONE_TOWER_STR \
-    { 'ロ', 'ッ', 'ク', 'ビ', 'ル' }
-#define ENTRANCE_STR \
-    { '入', 'り', '口' }
+#define GREAT_BAY_COAST_STR { 'グ', 'レ', 'ー', 'ト', 'ベ', 'イ', 'の', '海', '岸' }
+#define ZORA_CAPE_STR { 'ゾ', 'ー', 'ラ', 'の', 'み', 'さ', 'き' }
+#define SNOWHEAD_STR { 'ス', 'ノ', 'ー', 'ヘ', 'ッ', 'ド' }
+#define MOUNTAIN_VILLAGE_STR { '山', '里' }
+#define CLOCK_TOWN_STR { 'ク', 'ロ', 'ッ', 'ク', 'タ', 'ウ', 'ン' }
+#define MILK_ROAD_STR { 'ミ', 'ル', 'ク', 'ロ', 'ー', 'ド' }
+#define WOODFALL_STR { 'ウ', 'ッ', 'ド', 'フ', 'ォ', 'ー', 'ル' }
+#define SOUTHERN_SWAMP_STR { '沼', '地' }
+#define IKANA_CANYON_STR { 'イ', 'カ', 'ー', 'ナ', '渓', '谷' }
+#define STONE_TOWER_STR { 'ロ', 'ッ', 'ク', 'ビ', 'ル' }
+#define ENTRANCE_STR { '入', 'り', '口' }
 
 u16 sOwlWarpTextJPN[OWL_WARP_MAX][9] = {
     GREAT_BAY_COAST_STR,  // OWL_WARP_GREAT_BAY_COAST
