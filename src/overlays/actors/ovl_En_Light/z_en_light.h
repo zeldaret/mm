@@ -15,7 +15,7 @@ struct EnLight;
 
 typedef struct EnLight {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ u8 unk_144;
+    /* 0x144 */ u8 timer;
     /* 0x148 */ LightNode* lightNode;
     /* 0x14C */ LightInfo lightInfo;
 } EnLight; // size = 0x15C
