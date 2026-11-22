@@ -23,9 +23,9 @@ brew install coreutils make python3 libpng bash libxml2 libiconv
 
 (The repository expects Homebrew-installed programs to be either linked correctly in `$PATH` etc. or in their default locations.)
 
-Homebrew does not have clang-format-14 but MacPorts does
+Homebrew does not have clang-format-19
 
-(Have been unable to confirm actual commands with somone that has a Mac)
+(Have been unable to confirm actual commands with someone that has a Mac)
 
 ## Building mips-linux-binutils
 

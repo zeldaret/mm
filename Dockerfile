@@ -26,8 +26,8 @@ RUN apt-get update && apt-get install -y \
     unzip \
     vbindiff \
     vim \
-    clang-tidy-14 \
-    clang-format-14 \
+    clang-tidy-19 \
+    clang-format-19 \
     libpng-dev \
     practicerom-dev
 
