@@ -1,7 +1,7 @@
 #ifndef Z_SHOT_SUN_H
 #define Z_SHOT_SUN_H
 
-#include "global.h"
+#include "z64actor.h"
 
 #define SHOTSUN_GET_TYPE(thisx) ((thisx)->params & 0xFF)
 #define SHOTSUN_FAIRY_SPAWNER_SUNS 0x40
@@ -9,7 +9,7 @@
 
 struct ShotSun;
 
-typedef void (*ShotSunActionFunc)(struct ShotSun*, PlayState*);
+typedef void (*ShotSunActionFunc)(struct ShotSun*, struct PlayState*);
 
 typedef struct ShotSun {
     /* 0x000 */ Actor actor;

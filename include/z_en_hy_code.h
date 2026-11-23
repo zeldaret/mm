@@ -1,12 +1,14 @@
 #ifndef Z64ENHY_CODE_H
 #define Z64ENHY_CODE_H
 
-#include "global.h"
-#include "overlays/actors/ovl_En_Door/z_en_door.h"
+#include "z64actor.h"
 
+struct EnDoor;
 struct EnHy;
+struct Path;
+struct PlayState;
 
-//! @note: any actor that uses the EnHy system should 
+//! @note: any actor that uses the EnHy system should
 //! have a skeleton that aligns with the enum below.
 typedef enum EnHyLimb {
     /* 0x00 */ ENHY_LIMB_NONE,
@@ -55,7 +57,7 @@ typedef enum {
     /* 21 */ ENHY_ANIM_MAX
 } EnHyAnimation;
 
-typedef void (*EnHyActionFunc)(struct EnHy*, PlayState*);
+typedef void (*EnHyActionFunc)(struct EnHy*, struct PlayState*);
 
 typedef enum EnHyBodyPart {
     /*  0 */ ENHY_BODYPART_0,
@@ -89,7 +91,7 @@ typedef struct EnHy {
     /* 0x1E0 */ u16 textId;
     /* 0x1E2 */ u8 waitingOnInit;
     /* 0x1E3 */ u8 msgFading;
-    /* 0x1E4 */ Path* path;
+    /* 0x1E4 */ struct Path* path;
     /* 0x1E8 */ s16 curPoint;
     /* 0x1EC */ Vec3f leftFootPos;
     /* 0x1F8 */ Vec3f rightFootPos;
@@ -116,19 +118,19 @@ extern s8 gEnHyParentShadowBodyParts[];
 extern u8 gEnHyShadowSizes[];
 
 s32 EnHy_ChangeAnim(SkelAnime* skelAnime, s16 animIndex);
-EnDoor* EnHy_FindNearestDoor(Actor* actor, PlayState* play);
-void EnHy_ChangeObjectAndAnim(EnHy* enHy, PlayState* play, s16 animIndex);
-s32 EnHy_UpdateSkelAnime(EnHy* enHy, PlayState* play);
+struct EnDoor* EnHy_FindNearestDoor(Actor* actor, struct PlayState* play);
+void EnHy_ChangeObjectAndAnim(EnHy* enHy, struct PlayState* play, s16 animIndex);
+s32 EnHy_UpdateSkelAnime(EnHy* enHy, struct PlayState* play);
 void EnHy_Blink(EnHy* enHy, s32 eyeTexMaxIndex);
-s32 EnHy_Init(EnHy* enHy, PlayState* play, FlexSkeletonHeader* skeletonHeaderSeg, s16 animIndex);
-void func_800F0BB4(EnHy* enHy, PlayState* play, EnDoor* door, s16 arg3, s16 arg4);
-s32 func_800F0CE4(EnHy* enHy, PlayState* play, ActorFunc draw, s16 arg3, s16 arg4, f32 arg5);
-s32 func_800F0DD4(EnHy* enHy, PlayState* play, s16 arg2, s16 arg3);
-s32 EnHy_SetPointFowards(EnHy* enHy, PlayState* play, f32 gravity, s16 animIndex);
-s32 EnHy_SetPointBackwards(EnHy* enHy, PlayState* play, s16 animIndex);
+s32 EnHy_Init(EnHy* enHy, struct PlayState* play, FlexSkeletonHeader* skeletonHeaderSeg, s16 animIndex);
+void func_800F0BB4(EnHy* enHy, struct PlayState* play, struct EnDoor* door, s16 arg3, s16 arg4);
+s32 func_800F0CE4(EnHy* enHy, struct PlayState* play, ActorFunc draw, s16 arg3, s16 arg4, f32 arg5);
+s32 func_800F0DD4(EnHy* enHy, struct PlayState* play, s16 arg2, s16 arg3);
+s32 EnHy_SetPointFowards(EnHy* enHy, struct PlayState* play, f32 gravity, s16 animIndex);
+s32 EnHy_SetPointBackwards(EnHy* enHy, struct PlayState* play, s16 animIndex);
 s32 EnHy_MoveForwards(EnHy* enHy, f32 speedTarget);
 s32 EnHy_MoveBackwards(EnHy* enHy, f32 speedTarget);
-void EnHy_UpdateCollider(EnHy* enHy, PlayState* play);
-s32 EnHy_PlayWalkingSound(EnHy* enHy, PlayState* play, f32 distAboveThreshold);
+void EnHy_UpdateCollider(EnHy* enHy, struct PlayState* play);
+s32 EnHy_PlayWalkingSound(EnHy* enHy, struct PlayState* play, f32 distAboveThreshold);
 
 #endif // Z_EN_HY_CODE_H

@@ -5,8 +5,19 @@
  */
 
 #include "z_en_ig.h"
-#include "attributes.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
+#include "attributes.h"
+#include "gfx.h"
+#include "gfx_setupdl.h"
+#include "macros.h"
+#include "regs.h"
+#include "sfx.h"
+#include "sys_matrix.h"
+#include "z64lib.h"
+#include "z64play.h"
+#include "z64schedule.h"
+#include "z64subs.h"
+#include "assets/objects/object_dai/object_dai.h"
 
 #define FLAGS (ACTOR_FLAG_ATTENTION_ENABLED | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_UPDATE_CULLING_DISABLED)
 

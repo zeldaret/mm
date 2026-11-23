@@ -5,6 +5,7 @@
  */
 
 #include "z_en_hint_skb.h"
+#include "z_en_item00.h"
 #include "attributes.h"
 #include "z_en_item00.h"
 #include "overlays/actors/ovl_En_Part/z_en_part.h"

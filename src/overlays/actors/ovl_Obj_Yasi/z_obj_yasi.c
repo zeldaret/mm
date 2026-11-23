@@ -6,6 +6,7 @@
 
 #include "z_obj_yasi.h"
 #include "z_en_item00.h"
+
 #include "assets/objects/object_obj_yasi/object_obj_yasi.h"
 
 #define FLAGS 0x00000000

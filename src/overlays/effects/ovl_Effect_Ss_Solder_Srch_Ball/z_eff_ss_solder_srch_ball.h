@@ -1,7 +1,8 @@
 #ifndef _Z64_EFFECT_SS_SOLDER_SRCH_BALL_H_
 #define _Z64_EFFECT_SS_SOLDER_SRCH_BALL_H_
 
-#include "global.h"
+#include "ultra64.h"
+#include "z64math.h"
 
 #define SOLDERSRCHBALL_INVISIBLE (1 << 0)
 #define SOLDERSRCHBALL_SMALL_DETECT_RADIUS (1 << 1)
