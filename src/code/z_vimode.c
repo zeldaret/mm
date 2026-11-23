@@ -151,6 +151,7 @@ void ViMode_Configure(OSViMode* viMode, s32 type, s32 tvType, s32 loRes, s32 ant
         viMode->fldRegs[0].vBurst = ptr->vBurst;
         viMode->fldRegs[1].vBurst = ptr->vBurst;
     } else {
+        PRINTF(T("TVTYPE の値が異常です\n", "TVTYPE variable is abnormal\n"));
         _dbg_hungup("../z_vimode.c", 216);
     }
 
@@ -199,14 +200,17 @@ void ViMode_Save(ViMode* viMode) {
         SREG(58) = 0;
         switch (SREG(59)) {
             case 1:
+                PRINTF("osViModePalLan1\n");
                 ViMode_LogPrint(&osViModePalLan1);
                 break;
 
             case 2:
+                PRINTF("osViModeFpalLan1\n");
                 ViMode_LogPrint(&osViModeFpalLan1);
                 break;
 
             default:
+                PRINTF("Custom\n");
                 ViMode_LogPrint(&viMode->customViMode);
                 break;
         }
