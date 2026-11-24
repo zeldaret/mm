@@ -20,12 +20,12 @@ typedef struct EnBaisen {
     /* 0x282 */ s16 headRotYTarget;
     /* 0x284 */ s16 headRotXTarget;
     /* 0x288 */ s32 animIndex;
-    /* 0x28C */ s32 paramCopy;
-    /* 0x290 */ s32 unk290;
+    /* 0x28C */ s32 isInMayorsRoom;
+    /* 0x290 */ s32 shouldSetHeadRotation;
     /* 0x294 */ s16 unusedCounter;
     /* 0x298 */ f32 animEndFrame;
-    /* 0x29C */ s16 unk29C;
-    /* 0x29E */ s16 unk29E;
+    /* 0x29C */ s16 isInDialogue;
+    /* 0x29E */ s16 yawTowardsTarget;
     /* 0x2A0 */ s16 textIdIndex;
     /* 0x2A4 */ Actor* targetActor;
     /* 0x2A8 */ Actor* heishiPointer;
