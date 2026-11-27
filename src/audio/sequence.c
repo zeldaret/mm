@@ -22,7 +22,7 @@
 // Direct audio command (skips the queueing system)
 #define SEQCMD_SET_SEQPLAYER_VOLUME_NOW(seqPlayerIndex, duration, volume)                          \
     AudioSeq_ProcessSeqCmd((SEQCMD_OP_SET_SEQPLAYER_VOLUME << 28) | ((u8)(seqPlayerIndex) << 24) | \
-                           ((u8)(duration) << 16) | ((u8)((volume)*127.0f)));
+                           ((u8)(duration) << 16) | ((u8)((volume) * 127.0f)));
 
 SeqRequest sSeqRequests[5][5];
 u8 sNumSeqRequests[5];

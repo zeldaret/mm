@@ -65,10 +65,10 @@ Input sPostmanTimerInput[MAXCONTROLLERS];
 
 #define RESTRICTIONS_SET(hGauge, bButton, aButton, tradeItems, songOfTime, songOfDoubleTime, invSongOfTime, \
                          songOfSoaring, songOfStorms, masks, pictoBox, all)                                 \
-    ((((hGauge)&3) << 6) | (((bButton)&3) << 4) | (((aButton)&3) << 2) | (((tradeItems)&3) << 0)),          \
-        ((((songOfTime)&3) << 6) | (((songOfDoubleTime)&3) << 4) | (((invSongOfTime)&3) << 2) |             \
-         (((songOfSoaring)&3) << 0)),                                                                       \
-        ((((songOfStorms)&3) << 6) | (((masks)&3) << 4) | (((pictoBox)&3) << 2) | (((all)&3) << 0))
+    ((((hGauge) & 3) << 6) | (((bButton) & 3) << 4) | (((aButton) & 3) << 2) | (((tradeItems) & 3) << 0)),  \
+        ((((songOfTime) & 3) << 6) | (((songOfDoubleTime) & 3) << 4) | (((invSongOfTime) & 3) << 2) |       \
+         (((songOfSoaring) & 3) << 0)),                                                                     \
+        ((((songOfStorms) & 3) << 6) | (((masks) & 3) << 4) | (((pictoBox) & 3) << 2) | (((all) & 3) << 0))
 
 // Common patterns
 #define RESTRICTIONS_NONE RESTRICTIONS_SET(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)

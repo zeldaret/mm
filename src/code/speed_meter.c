@@ -73,20 +73,20 @@ typedef struct {
 
 //! FAKE: if(1) in macro
 
-#define gDrawRect(gfx, color, ulx, uly, lrx, lry)                      \
-    do {                                                               \
-        if (gSysCfbHiResEnabled == true) {                             \
-            u32 c = color;                                             \
-            gDPPipeSync(gfx);                                          \
-            gDPSetFillColor(gfx, ((c) << 16) | (c));                   \
-            gDPFillRectangle(gfx, (ulx)*2, (uly)*2, (lrx)*2, (lry)*2); \
-            if (1) {}                                                  \
-        } else {                                                       \
-            u32 c = color;                                             \
-            gDPPipeSync(gfx);                                          \
-            gDPSetFillColor(gfx, ((c) << 16) | (c));                   \
-            gDPFillRectangle(gfx, (ulx), (uly), (lrx), (lry));         \
-        }                                                              \
+#define gDrawRect(gfx, color, ulx, uly, lrx, lry)                              \
+    do {                                                                       \
+        if (gSysCfbHiResEnabled == true) {                                     \
+            u32 c = color;                                                     \
+            gDPPipeSync(gfx);                                                  \
+            gDPSetFillColor(gfx, ((c) << 16) | (c));                           \
+            gDPFillRectangle(gfx, (ulx) * 2, (uly) * 2, (lrx) * 2, (lry) * 2); \
+            if (1) {}                                                          \
+        } else {                                                               \
+            u32 c = color;                                                     \
+            gDPPipeSync(gfx);                                                  \
+            gDPSetFillColor(gfx, ((c) << 16) | (c));                           \
+            gDPFillRectangle(gfx, (ulx), (uly), (lrx), (lry));                 \
+        }                                                                      \
     } while (0)
 
 void SpeedMeter_InitImpl(SpeedMeter* this, s32 x, s32 y) {

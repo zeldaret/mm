@@ -612,9 +612,9 @@ void EnOsk_Draw(Actor* thisx, PlayState* play) {
         sp62 = Math_Vec3f_Yaw(&sp54, &this->actor.focus.pos);
         sp60 = -Math_Vec3f_Pitch(&sp54, &this->actor.focus.pos);
 
-        sp80.x = -(15.0f * (Math_SinS(sp62)) * Math_CosS(sp60));
+        sp80.x = -(15.0f * (Math_SinS(sp62))*Math_CosS(sp60));
         sp80.y = -(15.0f * Math_SinS(sp60));
-        sp80.z = -(15.0f * (Math_CosS(sp62)) * Math_CosS(sp60));
+        sp80.z = -(15.0f * (Math_CosS(sp62))*Math_CosS(sp60));
 
         Matrix_Translate(this->actor.focus.pos.x + sp80.x, this->actor.focus.pos.y + sp80.y,
                          sp80.z = this->actor.focus.pos.z + sp80.z, MTXMODE_NEW);

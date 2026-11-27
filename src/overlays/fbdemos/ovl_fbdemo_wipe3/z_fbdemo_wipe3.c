@@ -30,7 +30,7 @@ TransitionProfile TransitionWipe3_Profile = {
     TransitionWipe3_SetColor, TransitionWipe3_SetEnvColor, TransitionWipe3_IsDone,
 };
 
-#define TRANS3_GET_SPEED(type) ((type)&1)
+#define TRANS3_GET_SPEED(type) ((type) & 1)
 #define TRANS3_GET_TEX_INDEX(type) (((type) >> 1) & 7)
 #define TRANS3_GET_COLOR(type) (((type) >> 4) & 3)
 

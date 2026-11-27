@@ -2563,11 +2563,9 @@ static EntranceTableEntry* sCutsceneEntranceTable[] = {
     sCutsceneEntrance5, sCutsceneEntrance6, sCutsceneEntrance7, sCutsceneEntrance8, sCutsceneEntrance9,
 };
 
-#define SCENE_ENTRANCE(entranceTable, name) \
-    { ARRAY_COUNT(entranceTable), entranceTable, name }
+#define SCENE_ENTRANCE(entranceTable, name) { ARRAY_COUNT(entranceTable), entranceTable, name }
 
-#define SCENE_ENTRANCE_NONE() \
-    { 0, NULL, NULL }
+#define SCENE_ENTRANCE_NONE() { 0, NULL, NULL }
 
 static SceneEntranceTableEntry sSceneEntranceTable[] = {
     /* 0x00 */ SCENE_ENTRANCE(sMayorsResidenceEntranceTable, "Z2_SONCHONOIE"),

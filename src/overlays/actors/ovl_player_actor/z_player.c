@@ -103,13 +103,12 @@ typedef enum AnimSfxType {
 #define ANIMSFX_STOP (0)
 
 #define ANIMSFX_FLAGS(type, frame, cont) \
-    (((ANIMSFX_##cont) == ANIMSFX_STOP ? -1 : 1) * (ANIMSFX_SHIFT_TYPE(type) | ((frame)&0x7FF)))
+    (((ANIMSFX_##cont) == ANIMSFX_STOP ? -1 : 1) * (ANIMSFX_SHIFT_TYPE(type) | ((frame) & 0x7FF)))
 
-#define ANIMSFX(type, frame, sfxId, cont) \
-    { (sfxId), ANIMSFX_FLAGS(type, frame, cont) }
+#define ANIMSFX(type, frame, sfxId, cont) { (sfxId), ANIMSFX_FLAGS(type, frame, cont) }
 
-#define ANIMSFX_GET_TYPE(data) ((data)&0x7800)
-#define ANIMSFX_GET_FRAME(data) ((data)&0x7FF)
+#define ANIMSFX_GET_TYPE(data) ((data) & 0x7800)
+#define ANIMSFX_GET_FRAME(data) ((data) & 0x7FF)
 
 typedef struct AnimSfxEntry {
     /* 0x0 */ u16 sfxId;
@@ -2063,7 +2062,7 @@ s32 Player_IsUsingZoraBoomerang(Player* this) {
 #define GET_ITEM(itemId, objectId, drawId, textId, field, chestAnim) \
     { itemId, field, (chestAnim != CHEST_ANIM_SHORT ? 1 : -1) * (drawId + 1), textId, objectId }
 
-#define GIFIELD_GET_DROP_TYPE(field) ((field)&0x1F)
+#define GIFIELD_GET_DROP_TYPE(field) ((field) & 0x1F)
 #define GIFIELD_20 (1 << 5)
 #define GIFIELD_40 (1 << 6)
 #define GIFIELD_NO_COLLECTIBLE (1 << 7)
