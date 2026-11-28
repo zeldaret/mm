@@ -35,7 +35,7 @@ void EnEndingHero2_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.attentionRangeType = ATTENTION_RANGE_6;
     this->actor.gravity = -3.0f;
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_bai_Skel_007908, &object_bai_Anim_0011C0, this->jointTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_bai_Skel_007908, &gViscenWaitAnim, this->jointTable,
                        this->morphTable, OBJECT_BAI_LIMB_MAX);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
     EnEndingHero2_SetupIdle(this);

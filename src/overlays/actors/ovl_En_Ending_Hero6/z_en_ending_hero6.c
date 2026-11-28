@@ -55,7 +55,7 @@ static FlexSkeletonHeader* sSkeletons[ENDING_HERO6_TYPE_MAX] = {
 
 static AnimationHeader* sAnimations[ENDING_HERO6_TYPE_MAX] = {
     &gDotourUprightAnim,         // ENDING_HERO6_TYPE_DT
-    &object_bai_Anim_0011C0,     // ENDING_HERO6_TYPE_BAI
+    &gViscenWaitAnim,            // ENDING_HERO6_TYPE_BAI
     &object_toryo_Anim_000E50,   // ENDING_HERO6_TYPE_TORYO
     &gSoldierCheerWithSpearAnim, // ENDING_HERO6_TYPE_SOLDIER
     &object_daiku_Anim_002FA0,   // ENDING_HERO6_TYPE_DAIKU_RED
